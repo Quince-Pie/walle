@@ -5,6 +5,7 @@ a wayland wallpaper engine
 ### FEATURES
 
 - multi image support
+- directory support
 - smooth transition (frost glass) so you don't get flash banged
 - fill with cropping area (high, low, center, attention, entropy)
 - hot config reload
@@ -20,6 +21,7 @@ a wayland wallpaper engine
 - inih
 - jemalloc
 - libglvnd
+- libvips
 - systemd-dev (for dbus)
 - wayland
 - wayland-protocols
