@@ -70,16 +70,24 @@
 
 #define WALLE_VERSION "0.0.1"
 
-/* Liquid Glass preprocess (vips): heavy background blur + moderate vibrancy.
- * Apple: the material "has no inherent color" — the legibility lift happens
- * adaptively in the fragment shader, not as a baked-in tint here. */
-constexpr double GLASS_SATURATION_BOOST = 1.45;
-constexpr double GLASS_BLUR_SIGMA       = 42.0;
-constexpr int    GLASS_DOWN_FACTOR      = 8;
+/* Liquid Glass preprocess (vips): per-variant background blur + a touch of
+ * vibrancy. Blur scales with the output diagonal — the material's own scale
+ * — using sigma/diameter ratios measured directly off the HIG "Materials"
+ * variant photos: regular ~0.038 (structure obliterated into the platter),
+ * clear ~0.013 (structure clearly survives). The saturation nudge only
+ * compensates the hue mixing of the blur (measured chroma retention: clear
+ * ~86% of background, regular ~45% after the shader's platter mapping).
+ * Apple: the material "has no inherent color" — the legibility treatment
+ * happens adaptively in the fragment shader, not as a baked-in tint here. */
+constexpr double GLASS_SIGMA_FRAC_CLEAR   = 0.013;
+constexpr double GLASS_SIGMA_FRAC_REGULAR = 0.038;
+constexpr double GLASS_SAT_CLEAR          = 1.10;
+constexpr double GLASS_SAT_REGULAR        = 1.15;
+constexpr int    GLASS_DOWN_FACTOR        = 8;
 
 /* Bump whenever the cached pixel pipeline changes shape (layout, band count,
  * preprocess constants). Hashed into every cache key. */
-constexpr uint32_t CACHE_SCHEMA_VERSION = 2;
+constexpr uint32_t CACHE_SCHEMA_VERSION = 3;
 
 constexpr float DEFAULT_TRANSITION_DUR = 0.6f;
 constexpr int   INOTIFY_BUF_LEN        = 4096;
@@ -128,6 +136,16 @@ enum transition_state : uint8_t
     T_STATE_RUNNING
 };
 
+/* HIG "Materials": Liquid Glass "provides two variants — regular and clear".
+ * Clear is the zero value: a wallpaper is exactly the "media background"
+ * the HIG prescribes the clear variant for ("components that float above
+ * media backgrounds — such as photos and videos"). */
+enum glass_variant : uint8_t
+{
+    GLASS_VARIANT_CLEAR = 0,
+    GLASS_VARIANT_REGULAR
+};
+
 typedef enum : uint8_t
 {
     F_CONFIGURED    = 1 << 0,
@@ -156,14 +174,15 @@ struct item_list
 
 struct output_config
 {
-    struct wl_list   link;
-    char*            output_name;
-    struct item_list items;
-    int              timeout;
-    bool             randomize;
-    bool             transition_on;
-    bool             gamemode;
-    float            transition_duration;
+    struct wl_list     link;
+    char*              output_name;
+    struct item_list   items;
+    int                timeout;
+    bool               randomize;
+    bool               transition_on;
+    bool               gamemode;
+    enum glass_variant variant;
+    float              transition_duration;
 };
 
 struct config_parse_ctx
@@ -249,14 +268,16 @@ struct wallpaper_output
     size_t                 current_item_index;
     int                    timeout;
     bool                   gamemode_enabled;
+    enum glass_variant     glass_variant;
 
     bool pending_reload;
 
     /* Snapshot taken on the main thread immediately before pthread_create
      * (the create is the happens-before edge); the worker must never read
      * render.width/height, which a configure event can mutate mid-render. */
-    int32_t job_w;
-    int32_t job_h;
+    int32_t            job_w;
+    int32_t            job_h;
+    enum glass_variant job_variant;
 };
 
 static_assert(sizeof(((struct wallpaper_output*)0)->render) == 64,
@@ -349,7 +370,7 @@ struct wallpaper_state
 
     GLuint shader_program_t1;
     GLint  u_TexA, u_TexGlassA, u_TexB, u_TexGlassB;
-    GLint  u_Time, u_CenterPointPixels, u_Resolution, u_MaxRadiusPixels;
+    GLint  u_Time, u_CenterPointPixels, u_Resolution, u_MaxRadiusPixels, u_Variant;
 
     int   inotify_fd;
     int   config_wd;
@@ -1315,6 +1336,7 @@ static bool init_gl_resources(struct wallpaper_state* state)
         = glGetUniformLocation(state->shader_program_t1, "CenterPointPixels");
     state->u_Resolution      = glGetUniformLocation(state->shader_program_t1, "Resolution");
     state->u_MaxRadiusPixels = glGetUniformLocation(state->shader_program_t1, "MaxRadiusPixels");
+    state->u_Variant         = glGetUniformLocation(state->shader_program_t1, "Variant");
     glUseProgram(0);
     eglMakeCurrent(state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     return true;
@@ -1446,7 +1468,7 @@ static int write_pipeline_to_buffer_direct(VipsImage* in, void* dest, size_t len
 }
 
 [[nodiscard]]
-static VipsImage* apply_liquid_glass_effect_vips(VipsImage* input, double sigma)
+static VipsImage* apply_liquid_glass_effect_vips(VipsImage* input, double sigma, double saturation)
 {
     VipsImage *curr = input, *temp = nullptr;
     g_object_ref(curr);
@@ -1462,8 +1484,8 @@ static VipsImage* apply_liquid_glass_effect_vips(VipsImage* input, double sigma)
     curr = temp;
 
     /* Vibrancy only. No baked-in tint: Apple's material "has no inherent
-     * color"; the legibility lift happens adaptively in the shader. */
-    double m[]   = {1.0, GLASS_SATURATION_BOOST, 1.0, 1.0};
+     * color"; the legibility treatment happens adaptively in the shader. */
+    double m[]   = {1.0, saturation, 1.0, 1.0};
     double o[]   = {0.0, 0.0, 0.0, 0.0};
     int    bands = vips_image_get_bands(curr);
     if (vips_linear(curr, &temp, m, o, bands, nullptr))
@@ -1509,6 +1531,14 @@ static void* render_thread_worker(void* arg)
     auto                 item      = &output->items[output->current_item_index];
     int                  w         = output->job_w;
     int                  h         = output->job_h;
+    enum glass_variant   variant   = output->job_variant;
+
+    /* Per-variant material blur, relative to the output's own scale
+     * (sigma/diameter ratios measured off the HIG variant photos). */
+    bool   is_regular  = variant == GLASS_VARIANT_REGULAR;
+    double glass_sigma = hypot((double)w, (double)h)
+                         * (is_regular ? GLASS_SIGMA_FRAC_REGULAR : GLASS_SIGMA_FRAC_CLEAR);
+    double glass_sat   = is_regular ? GLASS_SAT_REGULAR : GLASS_SAT_CLEAR;
     long                 page_size = sysconf(_SC_PAGESIZE);
     char*                cpath     = nullptr;
     char*                cdir      = nullptr;
@@ -1566,9 +1596,10 @@ static void* render_thread_worker(void* arg)
     XXH64_update(xxh, &st.st_size, sizeof(st.st_size));
     XXH64_update(xxh, &w, sizeof(w));
     XXH64_update(xxh, &h, sizeof(h));
-    XXH64_update(xxh, &GLASS_BLUR_SIGMA, sizeof(GLASS_BLUR_SIGMA));
+    XXH64_update(xxh, &variant, sizeof(variant));
+    XXH64_update(xxh, &glass_sigma, sizeof(glass_sigma));
     XXH64_update(xxh, &GLASS_DOWN_FACTOR, sizeof(GLASS_DOWN_FACTOR));
-    XXH64_update(xxh, &GLASS_SATURATION_BOOST, sizeof(GLASS_SATURATION_BOOST));
+    XXH64_update(xxh, &glass_sat, sizeof(glass_sat));
     XXH64_update(xxh, &item->mode, sizeof(item->mode));
     if (item->mode == MODE_FILL) {
         XXH64_update(xxh, &item->crop_strategy, sizeof(item->crop_strategy));
@@ -1740,7 +1771,8 @@ static void* render_thread_worker(void* arg)
     g_object_unref(from_map);
     VipsImage* g_in = tmp;
 
-    VipsImage* g_out = apply_liquid_glass_effect_vips(g_in, GLASS_BLUR_SIGMA / GLASS_DOWN_FACTOR);
+    VipsImage* g_out
+        = apply_liquid_glass_effect_vips(g_in, glass_sigma / GLASS_DOWN_FACTOR, glass_sat);
     g_object_unref(g_in);
     if (!g_out)
         goto vips_err;
@@ -1872,6 +1904,8 @@ static void render_frame(struct wallpaper_output* output)
                 (float)output->render.height);
     glUniform2f(output->render.state->u_CenterPointPixels, output->t_center_x, output->t_center_y);
     glUniform1f(output->render.state->u_MaxRadiusPixels, output->t_max_radius);
+    glUniform1f(output->render.state->u_Variant,
+                output->glass_variant == GLASS_VARIANT_REGULAR ? 1.0f : 0.0f);
 
     glBindVertexArray(output->render.vao);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -2194,8 +2228,9 @@ static void launch_async_render(struct wallpaper_output* o)
     uint64_t c;
     while (read(o->event_fd, &c, sizeof(c)) > 0)
         ;
-    o->job_w = o->render.width;
-    o->job_h = o->render.height;
+    o->job_w       = o->render.width;
+    o->job_h       = o->render.height;
+    o->job_variant = o->glass_variant;
     if (pthread_create(&o->render_thread, nullptr, render_thread_worker, o) == 0)
         o->render.flags |= F_THREAD_ACTIVE;
 }
@@ -2549,6 +2584,17 @@ static int config_handler(void* user, const char* section, const char* name, con
         oc->transition_on = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     } else if (strcasecmp(name, "transition_duration") == 0) {
         oc->transition_duration = parse_duration_setting(value);
+    } else if (strcasecmp(name, "transition_variant") == 0) {
+        if (strcasecmp(value, "regular") == 0) {
+            oc->variant = GLASS_VARIANT_REGULAR;
+        } else if (strcasecmp(value, "clear") == 0) {
+            oc->variant = GLASS_VARIANT_CLEAR;
+        } else {
+            fprintf(stderr,
+                    "[CONFIG] Unknown transition_variant '%s' (regular|clear); using clear\n",
+                    value);
+            oc->variant = GLASS_VARIANT_CLEAR;
+        }
     } else if (strcasecmp(name, "gamemode") == 0) {
         oc->gamemode = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     }
@@ -2610,6 +2656,7 @@ static void apply_config_to_output(struct wallpaper_output* output, struct outpu
     else
         output->render.flags &= ~F_TRANSITION_ON;
     output->transition_duration = config->transition_duration;
+    output->glass_variant       = config->variant;
 
     if (output->current_item_index >= output->num_items)
         output->current_item_index = 0;
@@ -2873,6 +2920,7 @@ static void initialize_output(struct wallpaper_output* output)
         if (config->transition_on)
             output->render.flags |= F_TRANSITION_ON;
         output->transition_duration = config->transition_duration;
+        output->glass_variant       = config->variant;
 
         if (output->render.flags & F_RANDOMIZE) {
             output->current_item_index = (size_t)xoshiro256pp_bounded(&g_rng, output->num_items);
