@@ -6,21 +6,28 @@ a wayland wallpaper engine
 
 - multi image support
 - directory support
-- smooth transition (frost glass) so you don't get flash banged
+- Liquid Glass transition (lensing, specular highlights, content-aware
+  shadow — modeled on Apple's material spec) so you don't get flash banged
 - fill with cropping area (high, low, center, attention, entropy)
-- hot config reload
+- hot config reload (including adding/removing output sections at runtime)
 - per monitor config
+- HiDPI aware (integer `wl_output.scale`; buffers are rendered at native pixels)
 - gamemode compatibility (no transition while on)
 - random/timeout/speed knobs
-- supports for various image format and pdf if you want for some reason (relies on: [libvips](https://github.com/libvips/libvips))
-
+- io_uring event core: single wait syscall per wakeup, zero idle overhead,
+  timers coalesced onto a whole-second grid so multi-monitor setups wake once
+- supports for various image format and pdf if you want for some reason
+  (relies on: [libvips](https://github.com/libvips/libvips))
 
 ### REQUIREMENT
 
+- linux kernel >= 5.15 (io_uring with NODROP + EXT_ARG; 6.0+ adds
+  single-issuer/sync-cancel fast paths, probed at runtime)
 - c23 compiler with embed support
 - inih
 - jemalloc
 - libglvnd
+- liburing (>= 2.4)
 - libvips
 - systemd-dev (for dbus)
 - wayland
@@ -28,11 +35,34 @@ a wayland wallpaper engine
 - wlr-protocols
 - xxHash
 
+The compositor must implement `zwlr_layer_shell_v1` (wlroots-based
+compositors, KWin, Mir...; not GNOME).
+
+**NixOS note:** binaries built from this flake load the *system's* GL driver
+(`/run/opengl-driver`) at runtime, so the flake's nixpkgs must not be older
+than the system's — an outdated `flake.lock` produces
+`FATAL: no EGL display` because the pinned glibc cannot load the system's
+mesa. If you see that error, run `nix flake update` and rebuild (and re-enter
+`nix develop` so the shell picks up liburing and the matching toolchain).
+
+### USAGE
+
+```
+walle [-c /path/to/config.ini] [--help] [--version]
+```
+
 ### CONFIGURATION
 
-Read config.ini for all options and config format. Place the config in your $XDG_CONFIG_HOME (or ~/.config/walle).
+Read config.ini for all options and config format. Place the config in your
+$XDG_CONFIG_HOME (or ~/.config/walle), or pass one explicitly with `-c`.
 
+Note: the system inih parser limits a config line to 199 characters; keep
+per-line paths under that (use directories for long collections).
 
 ### NOTE ON CACHING
 
-In order to make the transition as smooth as possible, walle places cached bin files in XDG_CACHE_HOME (or ~/.cache/walle). The cache gets cleaned automatically and should not exceed 512mb.
+In order to make the transition as smooth as possible, walle places cached
+bin files in XDG_CACHE_HOME (or ~/.cache/walle). Entries are published
+atomically (a crash can never leave a torn cache file), evicted LRU, and the
+cache is trimmed back below 512 MB in the background — at startup and
+periodically while the daemon runs.

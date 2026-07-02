@@ -3,16 +3,14 @@ $(error FATAL: requires GNU Make 4.4 or later.)
 endif
 
 # Rigor: Eliminate legacy behavior and ensure clean termination.
-.POSIX:
 .SUFFIXES:
 .DELETE_ON_ERROR:
 
 # Efficiency and Control: Disable implicit logic.
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables
-# Parallelism with synchronized output (Make 4.0+)
-MAKEFLAGS += -j -Otarget
-# GNU specific flags (Make 4.0+): Enforce variable definition rigor (Make 4.4 control).
-GNUMAKEFLAGS += --warn=undefined-vars
+# Synchronized output when the user runs with -j (Make 4.0+).
+MAKEFLAGS += -Otarget
+MAKEFLAGS += --warn-undefined-variables
 
 # 2. Project Structure
 # =============================================================================
@@ -32,9 +30,21 @@ APP_SOURCES ::= walle.c shiro.c
 # 3. Toolchain and C23 Compliance Flags
 # =============================================================================
 
-CC?::= gcc
-PKG_CONFIG?::= pkg-config
+# NOT `?=`: at parse time the builtin CC ('cc') still counts as defined, so
+# `?=` skips — and --no-builtin-variables then strips the builtin, leaving CC
+# empty. Only an environment/command-line value may override.
+ifneq ($(origin CC),environment)
+ifneq ($(origin CC),command line)
+CC := gcc
+endif
+endif
+ifneq ($(origin PKG_CONFIG),environment)
+ifneq ($(origin PKG_CONFIG),command line)
+PKG_CONFIG := pkg-config
+endif
+endif
 RM ::= rm -f
+CPPFLAGS ::=
 
 C23_STRICT ::=\
     -std=c23 \
@@ -46,12 +56,17 @@ C23_STRICT ::=\
 #   make              (Debug: Assertions ON, Symbols ON, -O0/O2)
 #   make MODE=release (Release: NDEBUG Defined, -O3, LTO, Strip Symbols)
 MODE ?= DEBUG
+# NATIVE=1 additionally enables -march=native (host-specific binary; never for
+# distributed/packaged builds).
+NATIVE ?= 0
 
 ifeq ($(MODE),release)
-    # -march=native: Unlocks AVX/SIMD instructions for the host CPU.
     # -flto=auto: Link Time Optimization.
     CPPFLAGS += -DNDEBUG
-    C23_OPTIMIZE := -O3 -march=native -flto=auto -fno-plt
+    C23_OPTIMIZE := -O3 -flto=auto -fno-plt
+    ifeq ($(NATIVE),1)
+        C23_OPTIMIZE += -march=native
+    endif
 else
     # -g3: Maximal debug information (macros included).
     # -ggdb: Expressive GDB extensions.
@@ -66,16 +81,20 @@ C23_SECURITY ::=\
 # Static Analysis
 # Usage: make ANALYZE=1
 # Note: For Clang, use 'scan-build make' instead of setting ANALYZE=1.
+ANALYZE ?=
+SANITIZER ?=
 ifneq ($(strip $(ANALYZE)),)
     C23_SECURITY += -fanalyzer
 endif
 
+SANITIZER_FLAGS ::=
 ifneq ($(strip $(SANITIZER)),)
-    C23_SECURITY += -fsanitize=address
+    SANITIZER_FLAGS ::= -fsanitize=address,undefined
 endif
 
-CFLAGS  ::= $(C23_STRICT) $(C23_OPTIMIZE) $(C23_SECURITY)
-LDFLAGS ::=
+CFLAGS  ::= $(C23_STRICT) $(C23_OPTIMIZE) $(C23_SECURITY) $(SANITIZER_FLAGS)
+# Sanitizer runtimes and LTO both require the codegen flags at link time.
+LDFLAGS ::= $(SANITIZER_FLAGS)
 LDLIBS  ::= -lm
 
 # Automatic Dependency Generation (Tracks headers and C23 #embed assets like shaders)
@@ -183,6 +202,21 @@ $(call CHECK_STATUS)
 CFLAGS += $(SYSTEMD_CFLAGS)
 LDLIBS += $(SYSTEMD_LDLIBS)
 
+# 5.6 System Probing (io_uring Event Core)
+# =============================================================================
+# liburing >= 2.4 (sync-cancel API); runtime kernel floor is 5.15, probed at
+# startup — see the event-core section in walle.c.
+URING_DEPS ::= liburing >= 2.4
+
+URING_CFLAGS != $(PKG_CONFIG) --cflags '$(URING_DEPS)'
+$(call CHECK_STATUS)
+URING_LDLIBS != $(PKG_CONFIG) --libs '$(URING_DEPS)'
+$(call CHECK_STATUS)
+
+# -isystem: liburing's UAPI headers use zero-size arrays that trip -Wpedantic.
+CFLAGS += $(patsubst -I%,-isystem %,$(URING_CFLAGS))
+LDLIBS += $(URING_LDLIBS)
+
 # 6. Wayland Protocol Definitions
 # =============================================================================
 
@@ -203,13 +237,13 @@ WLR_H ::= $(PROTOCOL_DIR)/wlr-layer-shell-unstable-v1.h
 GENERATED_SOURCES ::= $(XDG_C)
 GENERATED_HEADERS ::= $(XDG_H)
 
-# Conditionally add WLR support
+# wlr-layer-shell is a hard requirement: walle renders exclusively onto
+# zwlr_layer_shell_v1 background surfaces and is useless without it.
 ifeq ($(WLR_LAYER_SHELL_XML),)
-$(warning WARNING: wlr-layer-shell XML not found. Building without layer shell support.)
-else
+$(error FATAL: wlr-layer-shell-unstable-v1.xml not found (install wlr-protocols))
+endif
 GENERATED_SOURCES += $(WLR_C)
 GENERATED_HEADERS += $(WLR_H)
-endif
 
 # Prevent Make from deleting generated files (Make 4.4)
 .NOTINTERMEDIATE: $(GENERATED_SOURCES) $(GENERATED_HEADERS)
@@ -234,7 +268,7 @@ all: $(TARGET)
 $(TARGET): $(OBJECTS) | $(BIN_DIR)
 	@echo "MODE: $(MODE)"
 	@echo "[LD] $@"
-	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 # --- Unified Compilation Rule ---
 # This single pattern handles sources in the root, vendor/, and protocols/ directories.
@@ -243,6 +277,11 @@ $(OBJ_DIR)/%.c.o: %.c
 	@# Ensure the specific output subdirectory (e.g., build/obj/vendor/inih/src) exists.
 	@mkdir -p $(@D)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
+
+# Cold-start correctness: on the first build no .d files exist yet, so objects
+# must explicitly depend on the generated protocol headers or a parallel build
+# races the scanner (walle.c includes wlr-layer-shell-unstable-v1.h).
+$(OBJECTS): $(GENERATED_HEADERS)
 
 # --- Protocol Generation Rules (Grouped Targets - Make 4.3+) ---
 

@@ -18,19 +18,25 @@
 #endif
 
 #include <EGL/egl.h>
+#include <EGL/eglext.h>
 #include <GLES3/gl3.h>
+#include <assert.h>
 #include <dirent.h>
 #include <fcntl.h>
+#include <getopt.h>
 #include <ini.h>
+#include <liburing.h>
 #include <poll.h>
 #include <pthread.h>
 #include <pwd.h>
 #include <sched.h>
+#include <stdatomic.h>
 #include <strings.h>
 #include <sys/eventfd.h>
 #include <sys/inotify.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
+#include <sys/signalfd.h>
 #include <sys/stat.h>
 #include <sys/syscall.h>
 #include <sys/timerfd.h>
@@ -62,18 +68,30 @@
 
 /* -- Constants ----------------------------------------------------------- */
 
-constexpr double GLASS_SATURATION_BOOST = 2.1;
-constexpr double GLASS_TINT_OPACITY     = 0.25;
+#define WALLE_VERSION "0.0.1"
+
+/* Liquid Glass preprocess (vips): heavy background blur + moderate vibrancy.
+ * Apple: the material "has no inherent color" — the legibility lift happens
+ * adaptively in the fragment shader, not as a baked-in tint here. */
+constexpr double GLASS_SATURATION_BOOST = 1.45;
 constexpr double GLASS_BLUR_SIGMA       = 42.0;
 constexpr int    GLASS_DOWN_FACTOR      = 8;
 
+/* Bump whenever the cached pixel pipeline changes shape (layout, band count,
+ * preprocess constants). Hashed into every cache key. */
+constexpr uint32_t CACHE_SCHEMA_VERSION = 2;
+
 constexpr float DEFAULT_TRANSITION_DUR = 0.6f;
-constexpr int   MAX_POLL_FDS           = 128;
 constexpr int   INOTIFY_BUF_LEN        = 4096;
+
+/* The transition circle must overshoot the farthest corner slightly so the
+ * anti-aliased rim finishes off-screen. */
+constexpr float RADIUS_MARGIN = 1.03f;
 
 constexpr size_t CACHE_HIGH_WATERMARK    = 512UL * 1024UL * 1024UL;
 constexpr size_t CACHE_LOW_WATERMARK     = 384UL * 1024UL * 1024UL;
 constexpr int    CACHE_STARTUP_YIELD_SEC = 10;
+constexpr uint32_t GC_RENDER_PERIOD      = 64; /* re-run cache GC every N uploads */
 
 #ifndef MFD_CLOEXEC
 #    define MFD_CLOEXEC 0x0001U
@@ -82,8 +100,10 @@ constexpr int    CACHE_STARTUP_YIELD_SEC = 10;
 #    define SCHED_IDLE 5
 #endif
 
-static volatile sig_atomic_t g_running = 1;
-static XoshiroState          g_rng     = {};
+static XoshiroState g_rng = {};
+
+/* -c/--config override; consulted by get_config_path(). */
+static const char* g_config_override = nullptr;
 
 const char VERTEX_SHADER_SRC[] = {
 #embed "shaders/vert.glsl" limit(4096) if_empty(0) suffix(, )
@@ -151,26 +171,33 @@ struct config_parse_ctx
     struct wl_list* config_list;
 };
 
-struct image_data_buffer
+struct image_layer
 {
-    int     fd;
-    size_t  buffer_size;
-    int32_t width, height, stride;
+    size_t  offset; /* byte offset within the shared buffer fd */
+    size_t  size;
+    int32_t width, height;
 };
 
+/* Pixels are always tightly packed RGBA8 (sRGB): a single band count keeps
+ * texture storage, PBO sizing, and row alignment uniform for every image. */
 struct render_result
 {
-    struct image_data_buffer standard;
-    struct image_data_buffer glass;
-    GLenum                   pixel_format;
-    bool                     success;
+    int                fd; /* one fd for both layers; -1 = none */
+    bool               success;
+    struct image_layer standard;
+    struct image_layer glass;
 };
 
 struct wallpaper_state;
 
 struct wallpaper_output
 {
-    alignas(64) struct
+    /* Deliberately NOT alignas(64): a type-level alignment requirement makes
+     * the wl_list_for_each head-sentinel container_of computation formally
+     * UB (UBSan: "misaligned address for type"). Cache-line placement is
+     * instead provided best-effort by the aligned_alloc(64) in
+     * registry_global. */
+    struct
     {
         struct wallpaper_state* state;
         EGLSurface              egl_surface;
@@ -198,6 +225,11 @@ struct wallpaper_output
     float     transition_duration;
     int       event_fd;
     int       timer_fd;
+    int       slot_event; /* ev_core slot indices; -1 = none */
+    int       slot_timer;
+    int32_t   scale; /* wl_output.scale; buffer px = logical px * scale */
+    int32_t   logical_w;
+    int32_t   logical_h;
     pthread_t render_thread;
 
     struct render_result async_result;
@@ -219,12 +251,84 @@ struct wallpaper_output
     bool                   gamemode_enabled;
 
     bool pending_reload;
+
+    /* Snapshot taken on the main thread immediately before pthread_create
+     * (the create is the happens-before edge); the worker must never read
+     * render.width/height, which a configure event can mutate mid-render. */
+    int32_t job_w;
+    int32_t job_h;
 };
 
 static_assert(sizeof(((struct wallpaper_output*)0)->render) == 64,
               "Render struct must be exactly 64 bytes (1 cache line)");
 static_assert(offsetof(struct wallpaper_output, render) == 0,
               "Render struct must be at offset 0 for cache alignment");
+
+/* -- io_uring Event Core: Types ------------------------------------------ */
+
+/*
+ * Every event source is a ONESHOT IORING_OP_POLL_ADD re-armed by a
+ * declarative reconciler at the top of each loop turn. Oneshot poll is
+ * level-triggered at every arm, so partially drained fds (the Wayland
+ * socket above all) can never strand the loop. Multishot poll must NOT be
+ * introduced here without a full-drain proof: per io_uring_enter(2),
+ * multishot completions after the first are edge-triggered, and
+ * wl_display_read_events() performs a single bounded recvmsg with no
+ * drain-to-EAGAIN guarantee — leftover bytes plus edge semantics equals a
+ * permanent freeze.
+ *
+ * user_data packs { slot index | generation << 32 | kind << 48 } and never a
+ * pointer, so a stale CQE (op canceled, slot reused, output destroyed) is
+ * dropped by a generation compare before any state is touched.
+ *
+ * Kernel matrix: 6.1+ runs SINGLE_ISSUER|DEFER_TASKRUN|SUBMIT_ALL; 6.0 drops
+ * DEFER_TASKRUN; 5.19 drops SINGLE_ISSUER; 5.15-5.18 runs a plain ring with
+ * the async-cancel fallback — semantics identical throughout. Below 5.15 (or
+ * with io_uring disabled) startup fails with a clear diagnostic. Features are
+ * probed by init/register results, never by uname sniffing.
+ */
+
+enum ev_kind : uint8_t
+{
+    EV_WL_IN = 0, /* fixed slots 0..4 */
+    EV_WL_OUT,
+    EV_INOTIFY,
+    EV_DBUS,
+    EV_SIGNAL,
+    EV_FIXED_COUNT,
+    EV_TIMER,       /* dynamic, per output */
+    EV_RENDER_DONE, /* dynamic, per output */
+    EV_CANCEL       /* async-cancel ops themselves; always ignored */
+};
+
+struct ev_slot
+{
+    int                      fd;        /* -1 = slot free */
+    uint32_t                 want_mask; /* poll mask to keep armed; 0 = idle */
+    uint32_t                 armed_mask;
+    struct wallpaper_output* owner;
+    enum ev_kind             kind;
+    bool                     pending; /* SQE in flight, CQE not yet consumed */
+    bool                     zombie;  /* async-canceled; awaiting stale CQE before reuse */
+    uint16_t                 gen;
+};
+
+/* Slot storage grows in fixed-size chunks with STABLE addresses — never
+ * realloc: a moving buffer would invalidate every held ev_slot* and is the
+ * kind of latent use-after-free no generation tag can catch. 64 chunks of 32
+ * slots = 2048 slots = 1000+ outputs; exhaustion is loud, not silent. */
+constexpr size_t EV_SLOT_CHUNK_SZ = 32;
+constexpr size_t EV_SLOT_CHUNKS   = 64;
+
+struct ev_core
+{
+    struct io_uring ring;
+    struct ev_slot* chunks[EV_SLOT_CHUNKS];
+    size_t          n_slots;
+    bool            ring_ok;
+    bool            sync_cancel_ok;
+    pid_t           owner_tid; /* SINGLE_ISSUER discipline assert */
+};
 
 struct wallpaper_state
 {
@@ -240,6 +344,7 @@ struct wallpaper_state
     EGLDisplay egl_display;
     EGLConfig  egl_config;
     EGLContext egl_context;
+    EGLSurface util_surface; /* 1x1 pbuffer fallback when surfaceless is unsupported */
     bool       egl_initialized;
 
     GLuint shader_program_t1;
@@ -255,6 +360,11 @@ struct wallpaper_state
     sd_bus*      bus;
     sd_bus_slot* gamemode_slot;
     bool         gamemode_active;
+
+    struct ev_core ev;
+    int            signal_fd;
+    bool           shutting_down;
+    uint32_t       renders_since_gc;
 };
 
 static void initialize_output(struct wallpaper_output* output);
@@ -262,20 +372,242 @@ static void apply_config_to_output(struct wallpaper_output* output, struct outpu
 static void update_wallpaper(struct wallpaper_output* output);
 static void launch_async_render(struct wallpaper_output* output);
 static struct output_config* get_config_for_output(struct wallpaper_state* state, const char* name);
+static void launch_cache_maintenance_service(void);
 
-/* -- Path Expansion ------------------------------------------------------ */
+/* Applied when an output's section disappears on hot reload: empties the
+ * item list, disarms rotation, keeps the last frame on screen. */
+static struct output_config g_frozen_config = {.transition_duration = DEFAULT_TRANSITION_DUR,
+                                               .gamemode            = true};
 
-static float ease_in_out_cubic(float t) [[unsequenced]]
+/* -- io_uring Event Core: Implementation ---------------------------------- */
+
+static inline uint64_t ev_pack(uint32_t idx, uint16_t gen, enum ev_kind kind)
 {
-    t = fmaxf(0.0f, fminf(1.0f, t));
+    return (uint64_t)idx | ((uint64_t)gen << 32) | ((uint64_t)kind << 48);
+}
 
-    if (t < 0.5f) {
-        return 4.0f * t * t * t;
+static inline uint32_t ev_ud_idx(uint64_t ud)
+{
+    return (uint32_t)ud;
+}
+
+static inline uint16_t ev_ud_gen(uint64_t ud)
+{
+    return (uint16_t)(ud >> 32);
+}
+
+#if defined(NDEBUG)
+#    define EV_ASSERT_OWNER(core) ((void)0)
+#else
+#    define EV_ASSERT_OWNER(core) assert((core)->owner_tid == gettid())
+#endif
+
+static inline struct ev_slot* ev_slot_at(struct ev_core* core, size_t idx)
+{
+    return &core->chunks[idx / EV_SLOT_CHUNK_SZ][idx % EV_SLOT_CHUNK_SZ];
+}
+
+/* Allocate (calloc) one more chunk of slots, all marked free. */
+[[nodiscard]]
+static bool ev_add_chunk(struct ev_core* core, size_t chunk)
+{
+    if (chunk >= EV_SLOT_CHUNKS)
+        return false;
+    struct ev_slot* c = calloc(EV_SLOT_CHUNK_SZ, sizeof(struct ev_slot));
+    if (!c)
+        return false;
+    for (size_t i = 0; i < EV_SLOT_CHUNK_SZ; i++)
+        c[i].fd = -1;
+    core->chunks[chunk] = c;
+    return true;
+}
+
+[[nodiscard]]
+static bool ev_init(struct ev_core* core)
+{
+    *core           = (struct ev_core){};
+    core->owner_tid = gettid();
+
+    /* Flag ladder, retried on -EINVAL: 6.1+ / 6.0 / 5.19 / 5.15. */
+    static const unsigned LADDER[] = {
+        IORING_SETUP_SINGLE_ISSUER | IORING_SETUP_DEFER_TASKRUN | IORING_SETUP_SUBMIT_ALL,
+        IORING_SETUP_SINGLE_ISSUER | IORING_SETUP_COOP_TASKRUN | IORING_SETUP_SUBMIT_ALL,
+        IORING_SETUP_COOP_TASKRUN,
+        0,
+    };
+
+    int                    r = -EINVAL;
+    struct io_uring_params p;
+    for (size_t i = 0; i < sizeof LADDER / sizeof *LADDER; i++) {
+        memset(&p, 0, sizeof(p));
+        p.flags      = LADDER[i] | IORING_SETUP_CQSIZE;
+        p.cq_entries = 256;
+        r            = io_uring_queue_init_params(64, &core->ring, &p);
+        if (r != -EINVAL)
+            break;
+    }
+    if (r < 0) {
+        const char* why = "io_uring_queue_init failed";
+        if (r == -ENOSYS)
+            why = "kernel lacks io_uring";
+        else if (r == -EPERM)
+            why = "io_uring disabled (kernel.io_uring_disabled sysctl (6.6+) or seccomp)";
+        else if (r == -EINVAL)
+            why = "kernel too old for io_uring (< 5.5)";
+        fprintf(stderr, "[FATAL] %s: %s\n", why, strerror(-r));
+        return false;
+    }
+    if (!(p.features & IORING_FEAT_NODROP) || !(p.features & IORING_FEAT_EXT_ARG)) {
+        fprintf(stderr, "[FATAL] io_uring lacks NODROP/EXT_ARG; kernel >= 5.15 required.\n");
+        io_uring_queue_exit(&core->ring);
+        return false;
+    }
+    (void)io_uring_register_ring_fd(&core->ring); /* best effort */
+
+    /* Probe IORING_REGISTER_SYNC_CANCEL (kernel 6.0): a guaranteed-no-match
+     * cancel returns -ENOENT when supported, -EINVAL when not. */
+    struct io_uring_sync_cancel_reg probe = {.addr = ~0ULL, .fd = -1};
+    core->sync_cancel_ok = (io_uring_register_sync_cancel(&core->ring, &probe) != -EINVAL);
+
+    if (!ev_add_chunk(core, 0)) {
+        io_uring_queue_exit(&core->ring);
+        return false;
+    }
+    core->n_slots = EV_FIXED_COUNT;
+    for (size_t i = 0; i < EV_FIXED_COUNT; i++)
+        ev_slot_at(core, i)->kind = (enum ev_kind)i;
+    core->ring_ok = true;
+    return true;
+}
+
+static struct io_uring_sqe* ev_get_sqe(struct ev_core* core)
+{
+    struct io_uring_sqe* sqe = io_uring_get_sqe(&core->ring);
+    if (!sqe) {
+        (void)io_uring_submit(&core->ring);
+        sqe = io_uring_get_sqe(&core->ring);
+    }
+    return sqe;
+}
+
+[[nodiscard]]
+static int ev_slot_alloc(struct ev_core*          core,
+                         enum ev_kind             kind,
+                         int                      fd,
+                         uint32_t                 mask,
+                         struct wallpaper_output* owner)
+{
+    EV_ASSERT_OWNER(core);
+    size_t idx = SIZE_MAX;
+    for (size_t i = EV_FIXED_COUNT; i < core->n_slots; i++) {
+        struct ev_slot* c = ev_slot_at(core, i);
+        if (c->fd < 0 && !c->pending && !c->zombie) {
+            idx = i;
+            break;
+        }
+    }
+    if (idx == SIZE_MAX) {
+        size_t chunk = core->n_slots / EV_SLOT_CHUNK_SZ;
+        if (core->n_slots % EV_SLOT_CHUNK_SZ == 0 && !core->chunks[chunk]
+            && !ev_add_chunk(core, chunk)) {
+            fprintf(stderr, "[EV] slot pool exhausted (%zu slots)\n", core->n_slots);
+            return -1;
+        }
+        idx = core->n_slots++;
+    }
+    struct ev_slot* s        = ev_slot_at(core, idx);
+    uint16_t        keep_gen = s->gen;
+    *s                       = (struct ev_slot){
+                              .fd = fd, .want_mask = mask, .owner = owner, .kind = kind, .gen = keep_gen};
+    return (int)idx;
+}
+
+/* Invalidate the slot's in-flight op (if any). After return, no CQE for the
+ * old op can reach a handler: the generation bump makes it inert. On the
+ * sync-cancel path (kernel 6.0+) the op is fully quiesced on return; on the
+ * fallback path the slot stays a zombie (unreusable) until the stale CQE is
+ * consumed by the dispatcher. */
+static void ev_slot_cancel(struct ev_core* core, size_t idx)
+{
+    EV_ASSERT_OWNER(core);
+    struct ev_slot* s  = ev_slot_at(core, idx);
+    uint64_t        ud = ev_pack((uint32_t)idx, s->gen, s->kind);
+    s->gen++;
+    s->want_mask = 0;
+    if (!s->pending)
+        return;
+
+    if (core->sync_cancel_ok) {
+        struct io_uring_sync_cancel_reg reg
+            = {.addr = ud, .fd = -1, .timeout = {.tv_sec = 1, .tv_nsec = 0}};
+        int r = io_uring_register_sync_cancel(&core->ring, &reg);
+        if (r == -ETIME) {
+            fprintf(stderr, "[EV] sync cancel timed out (slot %zu); retrying\n", idx);
+            r = io_uring_register_sync_cancel(&core->ring, &reg);
+        }
+        /* 0 / -ENOENT / -EALREADY all converge: the op is done or its CQE is
+         * already queued, and the gen bump made that CQE inert. */
+        (void)r;
+        s->pending = false;
     } else {
-        float f = -2.0f * t + 2.0f;
-        return 1.0f - (f * f * f) * 0.5f;
+        struct io_uring_sqe* sqe = ev_get_sqe(core);
+        if (sqe) {
+            io_uring_prep_cancel64(sqe, ud, 0);
+            io_uring_sqe_set_data64(sqe, ev_pack(UINT32_MAX, 0, EV_CANCEL));
+            (void)io_uring_submit(&core->ring);
+        }
+        s->zombie = true;
     }
 }
+
+/* Cancel + close + free. The output-side fd mirror must be reset by the
+ * caller; slots own their fds. */
+static void ev_slot_release(struct ev_core* core, size_t idx)
+{
+    struct ev_slot* s = ev_slot_at(core, idx);
+    if (s->fd < 0 && !s->pending)
+        return;
+    ev_slot_cancel(core, idx);
+    if (s->fd >= 0)
+        close(s->fd);
+    s->fd        = -1;
+    s->owner     = nullptr;
+    s->want_mask = 0;
+}
+
+/* Declarative re-arm: handlers only clear `pending`; nothing arms an SQE
+ * outside this function. */
+static void ev_reconcile(struct ev_core* core)
+{
+    EV_ASSERT_OWNER(core);
+    for (size_t i = 0; i < core->n_slots; i++) {
+        struct ev_slot* s = ev_slot_at(core, i);
+        if (s->fd < 0 || s->pending || !s->want_mask)
+            continue;
+        struct io_uring_sqe* sqe = ev_get_sqe(core);
+        if (!sqe) {
+            fprintf(stderr, "[EV] SQ exhausted; slot %zu deferred one turn\n", i);
+            continue;
+        }
+        io_uring_prep_poll_add(sqe, s->fd, s->want_mask);
+        io_uring_sqe_set_data64(sqe, ev_pack((uint32_t)i, s->gen, s->kind));
+        s->pending    = true;
+        s->armed_mask = s->want_mask;
+    }
+}
+
+static void ev_exit(struct ev_core* core)
+{
+    if (core->ring_ok)
+        io_uring_queue_exit(&core->ring);
+    core->ring_ok = false;
+    for (size_t i = 0; i < EV_SLOT_CHUNKS; i++) {
+        free(core->chunks[i]);
+        core->chunks[i] = nullptr;
+    }
+}
+
+/* -- Path Expansion ------------------------------------------------------ */
 
 constexpr size_t INITIAL_BUFFER_CAPACITY = 256;
 constexpr size_t NAME_SBO_SIZE           = 128;
@@ -546,31 +878,59 @@ char* expand_path(const char* input)
 struct cache_maintenance_entry
 {
     char*  path;
-    time_t atime;
+    time_t mtime; /* LRU key: bumped via futimens() on every cache hit */
     off_t  size;
 };
+
+static _Atomic bool g_gc_running = false;
 
 static int compare_cache_entries(const void* a, const void* b)
 {
     auto ea = (const struct cache_maintenance_entry*)a;
     auto eb = (const struct cache_maintenance_entry*)b;
-    return (ea->atime < eb->atime) ? -1 : (ea->atime > eb->atime);
+    return (ea->mtime < eb->mtime) ? -1 : (ea->mtime > eb->mtime);
 }
 
+/* $XDG_CACHE_HOME/walle (or ~/.cache/walle), created if missing. Never
+ * passes an unset HOME to a format string; falls back to the passwd db. */
 [[nodiscard]]
 static char* resolve_cache_dir(void)
 {
-    const char* xdg = getenv("XDG_CACHE_HOME");
     char        dir[PATH_MAX];
+    const char* xdg = getenv("XDG_CACHE_HOME");
 
-    if (xdg) {
-        snprintf(dir, sizeof(dir), "%s/walle", xdg);
-    } else {
-        snprintf(dir, sizeof(dir), "%s/.cache/walle", getenv("HOME"));
-    }
-    struct stat st;
-    if (stat(dir, &st) == -1)
+    if (xdg && *xdg) {
+        if (snprintf(dir, sizeof(dir), "%s/walle", xdg) >= (int)sizeof(dir))
+            return nullptr;
         mkdir(dir, 0700);
+    } else {
+        const char*   home   = getenv("HOME");
+        char*         pw_buf = nullptr;
+        struct passwd pwd;
+        if (!home || !*home) {
+            if (get_passwd_buffered(getuid(), nullptr, &pwd, &pw_buf) == 0)
+                home = pwd.pw_dir;
+        }
+        if (!home || !*home) {
+            free(pw_buf);
+            return nullptr;
+        }
+        char parent[PATH_MAX];
+        if (snprintf(parent, sizeof(parent), "%s/.cache", home) >= (int)sizeof(parent)
+            || snprintf(dir, sizeof(dir), "%s/.cache/walle", home) >= (int)sizeof(dir)) {
+            free(pw_buf);
+            return nullptr;
+        }
+        free(pw_buf);
+        mkdir(parent, 0700);
+        mkdir(dir, 0700);
+    }
+
+    struct stat st;
+    if (stat(dir, &st) == -1 || !S_ISDIR(st.st_mode)) {
+        fprintf(stderr, "[CACHE] Unusable cache dir '%s'\n", dir);
+        return nullptr;
+    }
     return strdup(dir);
 }
 
@@ -590,6 +950,7 @@ static void* cache_maintenance_worker(void* arg)
     DIR* d = opendir(cache_dir);
     if (!d) {
         free(cache_dir);
+        atomic_store(&g_gc_running, false);
         return nullptr;
     }
 
@@ -626,7 +987,7 @@ static void* cache_maintenance_worker(void* arg)
 
             entries[count].path = strdup(full_path);
             if (entries[count].path) {
-                entries[count].atime = st.st_atime;
+                entries[count].mtime = st.st_mtime;
                 entries[count].size  = st.st_size;
 
                 size_t next_total;
@@ -659,19 +1020,28 @@ static void* cache_maintenance_worker(void* arg)
         free(entries[i].path);
     free(entries);
     free(cache_dir);
+    atomic_store(&g_gc_running, false);
     return nullptr;
 }
 
+/* Idempotent and re-runnable: called at startup and every GC_RENDER_PERIOD
+ * uploads, so a long-lived daemon keeps honoring the watermark. */
 static void launch_cache_maintenance_service(void)
 {
-    char* dir = resolve_cache_dir();
-    if (!dir)
+    bool expected = false;
+    if (!atomic_compare_exchange_strong(&g_gc_running, &expected, true))
         return;
+    char* dir = resolve_cache_dir();
+    if (!dir) {
+        atomic_store(&g_gc_running, false);
+        return;
+    }
     pthread_t th;
     if (pthread_create(&th, nullptr, cache_maintenance_worker, dir) == 0) {
         pthread_detach(th);
     } else {
         free(dir);
+        atomic_store(&g_gc_running, false);
     }
 }
 
@@ -683,6 +1053,27 @@ constexpr char GAMEMODE_INTERFACE[]   = "org.freedesktop.portal.GameMode";
 constexpr char GAMEMODE_PROPERTY[]    = "Active";
 constexpr char DBUS_PROPS_INTERFACE[] = "org.freedesktop.DBus.Properties";
 
+/* Arm on a whole-second absolute grid so outputs sharing a rotation period
+ * expire in a single wakeup (documented <1 s first-fire shift). Disarm zeroes
+ * the timer entirely: zero wakeups while GameMode is active. */
+static void arm_rotation_timer(struct wallpaper_output* o, bool disarm)
+{
+    if (o->timer_fd < 0)
+        return;
+    struct itimerspec ts = {};
+    int               flags = 0;
+    if (!disarm && o->timeout > 0) {
+        struct timespec now;
+        clock_gettime(CLOCK_MONOTONIC, &now);
+        ts.it_value.tv_sec    = now.tv_sec + o->timeout + (now.tv_nsec > 0 ? 1 : 0);
+        ts.it_interval.tv_sec = o->timeout;
+        flags                 = TFD_TIMER_ABSTIME;
+    }
+    if (timerfd_settime(o->timer_fd, flags, &ts, nullptr) < 0) {
+        fprintf(stderr, "[ERROR] timerfd_settime for %s: %s\n", o->name, strerror(errno));
+    }
+}
+
 static void toggle_gamemode_timers(struct wallpaper_state* state, bool active)
 {
     struct wallpaper_output* o;
@@ -690,21 +1081,9 @@ static void toggle_gamemode_timers(struct wallpaper_state* state, bool active)
     {
         if ((o->render.flags & F_DEAD) || o->timer_fd < 0 || !o->gamemode_enabled)
             continue;
-
-        struct itimerspec ts = {};
-
-        if (!active && o->timeout > 0) {
-            ts.it_interval.tv_sec = o->timeout;
-            ts.it_value.tv_sec    = o->timeout;
-        }
-
-        if (timerfd_settime(o->timer_fd, 0, &ts, nullptr) < 0) {
-            fprintf(
-                stderr, "[ERROR] Failed to toggle timer for %s: %s\n", o->name, strerror(errno));
-        } else {
-            dbg_print(
-                "[GAMEMODE] Output '%s': %s", o->name, active ? "DISARMED (Zero-Wakeup)" : "ARMED");
-        }
+        arm_rotation_timer(o, active);
+        dbg_print(
+            "[GAMEMODE] Output '%s': %s", o->name, active ? "DISARMED (Zero-Wakeup)" : "ARMED");
     }
 }
 
@@ -795,8 +1174,11 @@ static bool gamemode_init(struct wallpaper_state* state)
 
     int r = sd_bus_add_match(
         state->bus, &state->gamemode_slot, match_rule, gamemode_property_changed, state);
-    if (r < 0)
+    if (r < 0) {
+        sd_bus_unref(state->bus);
+        state->bus = nullptr;
         return false;
+    }
 
     r = sd_bus_call_method_async(state->bus,
                                  nullptr,
@@ -825,27 +1207,103 @@ static void gamemode_cleanup(struct wallpaper_state* state)
     }
 }
 
+/* Bus died (broker restart, session teardown). Tear the connection down and,
+ * crucially, re-arm any rotation timers a stale gamemode_active=true had
+ * disarmed — otherwise rotation stays dead until the daemon restarts. */
+static void gamemode_handle_disconnect(struct wallpaper_state* state, int err)
+{
+    fprintf(stderr,
+            "[GAMEMODE] Session bus lost (%s); continuing without GameMode.\n",
+            strerror(-err));
+    gamemode_cleanup(state);
+    if (state->gamemode_active) {
+        state->gamemode_active = false;
+        toggle_gamemode_timers(state, false);
+    }
+}
+
 /* -- OpenGL -------------------------------------------------------------- */
 
-static void init_gl_resources(struct wallpaper_state* state)
+/* Make the shared context current without a window surface: surfaceless if
+ * the driver supports it (EGL_KHR_surfaceless_context), else a 1x1 pbuffer
+ * created from the same config. Needed for resource init and for texture
+ * cleanup of outputs whose window surface is already gone. */
+[[nodiscard]]
+static bool egl_make_current_utility(struct wallpaper_state* state)
 {
-    GLuint      vs    = glCreateShader(GL_VERTEX_SHADER);
-    const char* v_src = VERTEX_SHADER_SRC;
-    glShaderSource(vs, 1, &v_src, nullptr);
-    glCompileShader(vs);
+    if (eglMakeCurrent(state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, state->egl_context))
+        return true;
 
-    GLuint      fs    = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* f_src = FRAGMENT_SHADER_T1_SRC;
-    glShaderSource(fs, 1, &f_src, nullptr);
-    glCompileShader(fs);
+    if (state->util_surface == EGL_NO_SURFACE) {
+        EGLint pba[]        = {EGL_WIDTH, 1, EGL_HEIGHT, 1, EGL_NONE};
+        state->util_surface = eglCreatePbufferSurface(state->egl_display, state->egl_config, pba);
+    }
+    return state->util_surface != EGL_NO_SURFACE
+           && eglMakeCurrent(
+               state->egl_display, state->util_surface, state->util_surface, state->egl_context);
+}
+
+[[nodiscard]]
+static GLuint compile_shader(GLenum type, const char* src)
+{
+    GLuint sh = glCreateShader(type);
+    glShaderSource(sh, 1, &src, nullptr);
+    glCompileShader(sh);
+    GLint ok = GL_FALSE;
+    glGetShaderiv(sh, GL_COMPILE_STATUS, &ok);
+    if (!ok) {
+        char    log[2048];
+        GLsizei len = 0;
+        glGetShaderInfoLog(sh, sizeof(log), &len, log);
+        fprintf(stderr,
+                "[GLES] %s shader compile failed:\n%.*s\n",
+                type == GL_VERTEX_SHADER ? "vertex" : "fragment",
+                (int)len,
+                log);
+        glDeleteShader(sh);
+        return 0;
+    }
+    return sh;
+}
+
+[[nodiscard]]
+static bool init_gl_resources(struct wallpaper_state* state)
+{
+    if (!egl_make_current_utility(state)) {
+        fprintf(stderr, "[EGL] No surfaceless/pbuffer context available.\n");
+        return false;
+    }
+
+    GLuint vs = compile_shader(GL_VERTEX_SHADER, VERTEX_SHADER_SRC);
+    GLuint fs = compile_shader(GL_FRAGMENT_SHADER, FRAGMENT_SHADER_T1_SRC);
+    if (!vs || !fs) {
+        if (vs)
+            glDeleteShader(vs);
+        if (fs)
+            glDeleteShader(fs);
+        return false;
+    }
 
     state->shader_program_t1 = glCreateProgram();
     glAttachShader(state->shader_program_t1, vs);
     glAttachShader(state->shader_program_t1, fs);
     glLinkProgram(state->shader_program_t1);
-
     glDeleteShader(vs);
     glDeleteShader(fs);
+
+    GLint linked = GL_FALSE;
+    glGetProgramiv(state->shader_program_t1, GL_LINK_STATUS, &linked);
+    if (!linked) {
+        char    log[2048];
+        GLsizei len = 0;
+        glGetProgramInfoLog(state->shader_program_t1, sizeof(log), &len, log);
+        fprintf(stderr, "[GLES] Program link failed:\n%.*s\n", (int)len, log);
+        return false;
+    }
+
+    /* Cache rows are tightly packed; never let the default alignment of 4
+     * reinterpret (or reject) uploads. Context state: set once. */
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     glUseProgram(state->shader_program_t1);
     state->u_TexA      = glGetUniformLocation(state->shader_program_t1, "TexA");
@@ -858,6 +1316,8 @@ static void init_gl_resources(struct wallpaper_state* state)
     state->u_Resolution      = glGetUniformLocation(state->shader_program_t1, "Resolution");
     state->u_MaxRadiusPixels = glGetUniformLocation(state->shader_program_t1, "MaxRadiusPixels");
     glUseProgram(0);
+    eglMakeCurrent(state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    return true;
 }
 
 static void init_output_gl(struct wallpaper_output* output)
@@ -865,10 +1325,17 @@ static void init_output_gl(struct wallpaper_output* output)
     if (!output->render.state->egl_initialized)
         return;
 
-    eglMakeCurrent(output->render.state->egl_display,
-                   output->render.egl_surface,
-                   output->render.egl_surface,
-                   output->render.state->egl_context);
+    if (!eglMakeCurrent(output->render.state->egl_display,
+                        output->render.egl_surface,
+                        output->render.egl_surface,
+                        output->render.state->egl_context)) {
+        fprintf(stderr, "[EGL] eglMakeCurrent failed for %s\n", output->name);
+        return;
+    }
+
+    /* Redraws are paced by frame callbacks; a nonzero swap interval would
+     * add a second throttle (and can block in eglSwapBuffers). */
+    eglSwapInterval(output->render.state->egl_display, 0);
 
     float vertices[] = {-1.0f,
                         -1.0f,
@@ -923,19 +1390,18 @@ static void init_output_gl(struct wallpaper_output* output)
 }
 
 [[nodiscard]]
-static char* get_cache_filename(uint64_t hash)
+static char* get_cache_filename(uint64_t hash, char** dir_out)
 {
-    const char* xdg = getenv("XDG_CACHE_HOME");
-    char        dir[PATH_MAX];
-    if (xdg)
-        snprintf(dir, sizeof(dir), "%s/walle", xdg);
-    else
-        snprintf(dir, sizeof(dir), "%s/.cache/walle", getenv("HOME"));
-    mkdir(dir, 0700);
-
-    char* path;
-    if (asprintf(&path, "%s/%016w64x.bin", dir, hash) < 0)
+    char* dir = resolve_cache_dir();
+    if (!dir)
         return nullptr;
+    char* path = nullptr;
+    if (asprintf(&path, "%s/%016w64x.bin", dir, hash) < 0)
+        path = nullptr;
+    if (dir_out && path)
+        *dir_out = dir;
+    else
+        free(dir);
     return path;
 }
 
@@ -995,6 +1461,8 @@ static VipsImage* apply_liquid_glass_effect_vips(VipsImage* input, double sigma)
     g_object_unref(curr);
     curr = temp;
 
+    /* Vibrancy only. No baked-in tint: Apple's material "has no inherent
+     * color"; the legibility lift happens adaptively in the shader. */
     double m[]   = {1.0, GLASS_SATURATION_BOOST, 1.0, 1.0};
     double o[]   = {0.0, 0.0, 0.0, 0.0};
     int    bands = vips_image_get_bands(curr);
@@ -1004,16 +1472,6 @@ static VipsImage* apply_liquid_glass_effect_vips(VipsImage* input, double sigma)
     curr = temp;
 
     if (vips_colourspace(curr, &temp, VIPS_INTERPRETATION_sRGB, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    double mult = 1.0 - GLASS_TINT_OPACITY;
-    double off  = 255.0 * GLASS_TINT_OPACITY;
-    double mt[] = {mult, mult, mult, 1.0};
-    double ot[] = {off, off, off, 0.0};
-
-    if (vips_linear(curr, &temp, mt, ot, bands, nullptr))
         goto err;
     g_object_unref(curr);
     curr = temp;
@@ -1039,11 +1497,28 @@ static void* render_thread_worker(void* arg)
     snprintf(thread_name, sizeof(thread_name), "wrk-%s", output->name ? output->name : "anon");
     pthread_setname_np(pthread_self(), thread_name);
 
-    struct render_result result    = {.success = false, .standard.fd = -1, .glass.fd = -1};
+#if !defined(NDEBUG)
+    /* Canary: SIGINT/SIGTERM must have been blocked process-wide before any
+     * thread spawned, or the signalfd shutdown protocol is broken. */
+    sigset_t sigcur;
+    pthread_sigmask(SIG_SETMASK, nullptr, &sigcur);
+    assert(sigismember(&sigcur, SIGINT) && sigismember(&sigcur, SIGTERM));
+#endif
+
+    struct render_result result    = {.success = false, .fd = -1};
     auto                 item      = &output->items[output->current_item_index];
-    int                  w         = output->render.width;
-    int                  h         = output->render.height;
+    int                  w         = output->job_w;
+    int                  h         = output->job_h;
     long                 page_size = sysconf(_SC_PAGESIZE);
+    char*                cpath     = nullptr;
+    char*                cdir      = nullptr;
+    int                  fd        = -1;
+    bool                 cache_backed = false;
+    uint8_t*             map          = nullptr;
+
+    /* Always decode to RGBA: one band count keeps texture storage, PBO
+     * sizing, and row alignment uniform for every image and resolution. */
+    constexpr int bands = 4;
 
     VipsImage* header
         = vips_image_new_from_file(item->filename, "access", VIPS_ACCESS_SEQUENTIAL, nullptr);
@@ -1051,7 +1526,6 @@ static void* render_thread_worker(void* arg)
         vips_error_clear();
         goto finalize;
     }
-    int bands = vips_image_hasalpha(header) ? 4 : 3;
 
     int interlaced = 0;
     if (vips_image_get_int(header, "interlaced", &interlaced) == 0 && interlaced) {
@@ -1086,13 +1560,15 @@ static void* render_thread_worker(void* arg)
     if (!xxh)
         goto finalize;
     XXH64_reset(xxh, 0);
+    XXH64_update(xxh, &CACHE_SCHEMA_VERSION, sizeof(CACHE_SCHEMA_VERSION));
     XXH64_update(xxh, item->filename, strlen(item->filename));
-    XXH64_update(xxh, &st.st_mtime, sizeof(st.st_mtime));
+    XXH64_update(xxh, &st.st_mtim, sizeof(st.st_mtim));
+    XXH64_update(xxh, &st.st_size, sizeof(st.st_size));
     XXH64_update(xxh, &w, sizeof(w));
     XXH64_update(xxh, &h, sizeof(h));
-    XXH64_update(xxh, &bands, sizeof(bands));
     XXH64_update(xxh, &GLASS_BLUR_SIGMA, sizeof(GLASS_BLUR_SIGMA));
     XXH64_update(xxh, &GLASS_DOWN_FACTOR, sizeof(GLASS_DOWN_FACTOR));
+    XXH64_update(xxh, &GLASS_SATURATION_BOOST, sizeof(GLASS_SATURATION_BOOST));
     XXH64_update(xxh, &item->mode, sizeof(item->mode));
     if (item->mode == MODE_FILL) {
         XXH64_update(xxh, &item->crop_strategy, sizeof(item->crop_strategy));
@@ -1100,44 +1576,61 @@ static void* render_thread_worker(void* arg)
     uint64_t hash = XXH64_digest(xxh);
     XXH64_freeState(xxh);
 
-    char* cpath = get_cache_filename(hash);
-    if (!cpath)
-        goto finalize;
+    cpath = get_cache_filename(hash, &cdir);
 
-    int fd = open(cpath, O_RDONLY);
-    if (fd >= 0) {
-        struct stat cst;
-        if (fstat(fd, &cst) == 0 && (size_t)cst.st_size == total_sz) {
-            result.standard = (struct image_data_buffer){
-                .fd = fd, .buffer_size = raw_sz, .width = w, .height = h, .stride = 0};
-            result.glass = (struct image_data_buffer){
-                .fd = dup(fd), .buffer_size = glass_sz, .width = gw, .height = gh, .stride = 0};
-            result.pixel_format = (bands == 4) ? GL_RGBA : GL_RGB;
-            result.success      = true;
-            free(cpath);
-            goto finalize;
+    if (cpath) {
+        int cfd = open(cpath, O_RDONLY | O_CLOEXEC);
+        if (cfd >= 0) {
+            struct stat cst;
+            if (fstat(cfd, &cst) == 0 && (size_t)cst.st_size == total_sz) {
+                futimens(cfd, nullptr); /* LRU bump for the mtime-keyed GC */
+                posix_fadvise(cfd, 0, 0, POSIX_FADV_WILLNEED);
+                result.fd       = cfd;
+                result.standard = (struct image_layer){
+                    .offset = 0, .size = raw_sz, .width = w, .height = h};
+                result.glass = (struct image_layer){
+                    .offset = aligned_raw_sz, .size = glass_sz, .width = gw, .height = gh};
+                result.success = true;
+                goto finalize;
+            }
+            /* Wrong size = torn/stale entry: remove it so it can be
+             * republished instead of failing validation forever. */
+            close(cfd);
+            unlink(cpath);
         }
-        close(fd);
     }
 
-    fd = open(cpath, O_RDWR | O_CREAT | O_TRUNC, 0600);
+    /* Build into an anonymous file and publish atomically on success, so a
+     * crash mid-write can never leave a half-written cache entry and
+     * same-key sibling renders never observe in-progress bytes. */
+    if (cdir) {
+        fd           = open(cdir, O_TMPFILE | O_RDWR | O_CLOEXEC, 0600);
+        cache_backed = fd >= 0;
+    }
     if (fd < 0) {
-        free(cpath);
+        fd           = (int)memfd_create("walle-render", MFD_CLOEXEC);
+        cache_backed = false;
+    }
+    if (fd < 0)
+        goto finalize;
+
+    int fal;
+    do {
+        fal = posix_fallocate(fd, 0, (off_t)total_sz);
+    } while (fal == EINTR);
+    if (fal != 0) {
+        /* No ftruncate fallback: a sparse file whose blocks cannot be
+         * allocated turns the mmap writes below into SIGBUS. */
+        close(fd);
+        fd = -1;
         goto finalize;
     }
 
-    if (posix_fallocate(fd, 0, total_sz) != 0) {
-        if (ftruncate(fd, total_sz) < 0) {
-            close(fd);
-            free(cpath);
-            goto finalize;
-        }
-    }
-
-    uint8_t* map = mmap(nullptr, total_sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    map = mmap(nullptr, total_sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (map == MAP_FAILED) {
         close(fd);
-        free(cpath);
+        fd  = -1;
+        map = nullptr;
         goto finalize;
     }
 
@@ -1210,48 +1703,38 @@ static void* render_thread_worker(void* arg)
     g_object_unref(img);
     img = tmp;
 
-    if (vips_image_get_bands(img) != bands) {
-        if (bands == 4) {
-            if (vips_addalpha(img, &tmp, nullptr)) {
-                g_object_unref(img);
-                goto vips_err;
-            }
-        } else {
-            if (vips_extract_band(img, &tmp, 0, "n", 3, nullptr)) {
-                g_object_unref(img);
-                goto vips_err;
-            }
-        }
+    /* Normalize to exactly RGBA. */
+    if (vips_image_get_bands(img) < 4) {
+        if (vips_addalpha(img, &tmp, nullptr))
+            goto vips_err;
+        g_object_unref(img);
+        img = tmp;
+    } else if (vips_image_get_bands(img) > 4) {
+        if (vips_extract_band(img, &tmp, 0, "n", 4, nullptr))
+            goto vips_err;
         g_object_unref(img);
         img = tmp;
     }
 
     if (vips_image_get_format(img) != VIPS_FORMAT_UCHAR) {
-        if (vips_cast(img, &tmp, VIPS_FORMAT_UCHAR, nullptr)) {
-            g_object_unref(img);
+        if (vips_cast(img, &tmp, VIPS_FORMAT_UCHAR, nullptr))
             goto vips_err;
-        }
         g_object_unref(img);
         img = tmp;
     }
 
-    if (write_pipeline_to_buffer_direct(img, map, raw_sz) != 0) {
-        g_object_unref(img);
+    if (write_pipeline_to_buffer_direct(img, map, raw_sz) != 0)
         goto vips_err;
-    }
 
     /* Wrap mmap'd standard layer as source for glass. Single decode, not two. */
     VipsImage* from_map = vips_image_new_from_memory(map, raw_sz, w, h, bands, VIPS_FORMAT_UCHAR);
-    if (!from_map) {
-        g_object_unref(img);
+    if (!from_map)
         goto vips_err;
-    }
 
     double scale_x = (double)gw / (double)w;
     double scale_y = (double)gh / (double)h;
     if (vips_resize(from_map, &tmp, scale_x, "vscale", scale_y, nullptr)) {
         g_object_unref(from_map);
-        g_object_unref(img);
         goto vips_err;
     }
     g_object_unref(from_map);
@@ -1259,34 +1742,50 @@ static void* render_thread_worker(void* arg)
 
     VipsImage* g_out = apply_liquid_glass_effect_vips(g_in, GLASS_BLUR_SIGMA / GLASS_DOWN_FACTOR);
     g_object_unref(g_in);
-    if (!g_out) {
-        g_object_unref(img);
+    if (!g_out)
+        goto vips_err;
+
+    if (write_pipeline_to_buffer_direct(g_out, map + aligned_raw_sz, glass_sz) != 0) {
+        g_object_unref(g_out);
         goto vips_err;
     }
-
-    write_pipeline_to_buffer_direct(g_out, map + aligned_raw_sz, glass_sz);
     g_object_unref(g_out);
     g_object_unref(img);
+    img = nullptr;
 
     munmap(map, total_sz);
-    result.standard = (struct image_data_buffer){
-        .fd = fd, .buffer_size = raw_sz, .width = w, .height = h, .stride = 0};
-    result.glass = (struct image_data_buffer){
-        .fd = dup(fd), .buffer_size = glass_sz, .width = gw, .height = gh, .stride = 0};
-    result.pixel_format = (bands == 4) ? GL_RGBA : GL_RGB;
-    result.success      = true;
-    free(cpath);
+    map = nullptr;
+
+    /* Publish the finished entry atomically; a racing sibling render of the
+     * same key produced identical bytes, so EEXIST is a win, not an error. */
+    if (cache_backed && cpath) {
+        char proc[64];
+        snprintf(proc, sizeof(proc), "/proc/self/fd/%d", fd);
+        if (linkat(AT_FDCWD, proc, AT_FDCWD, cpath, AT_SYMLINK_FOLLOW) < 0 && errno != EEXIST)
+            dbg_print("cache publish failed: %s", strerror(errno));
+    }
+
+    result.fd       = fd;
+    fd              = -1; /* ownership moved into result */
+    result.standard = (struct image_layer){.offset = 0, .size = raw_sz, .width = w, .height = h};
+    result.glass
+        = (struct image_layer){.offset = aligned_raw_sz, .size = glass_sz, .width = gw, .height = gh};
+    result.success = true;
     goto finalize;
 
 vips_err:
     if (img)
         g_object_unref(img);
-    munmap(map, total_sz);
-    close(fd);
-    unlink(cpath);
-    free(cpath);
+    if (map)
+        munmap(map, total_sz);
+    if (fd >= 0) {
+        close(fd); /* anonymous (never linked): no torn entry to unlink */
+        fd = -1;
+    }
 
 finalize:
+    free(cpath);
+    free(cdir);
     cleanup_vips_thread();
 
     [[maybe_unused]]
@@ -1332,13 +1831,19 @@ static void render_frame(struct wallpaper_output* output)
         finished = true;
     }
 
-    float t_input = ease_in_out_cubic(t_norm);
-
     if (!eglMakeCurrent(output->render.state->egl_display,
                         output->render.egl_surface,
                         output->render.egl_surface,
-                        output->render.state->egl_context))
+                        output->render.state->egl_context)) {
+        /* Transient EGL failure (GPU reset, context loss): don't leave a
+         * fired callback dangling and the animation wedged mid-transition. */
+        if (output->frame_callback) {
+            wl_callback_destroy(output->frame_callback);
+            output->frame_callback = nullptr;
+        }
+        output->render.t_state = T_STATE_IDLE;
         return;
+    }
 
     glViewport(0, 0, output->render.width, output->render.height);
     glUseProgram(output->render.state->shader_program_t1);
@@ -1359,7 +1864,9 @@ static void render_frame(struct wallpaper_output* output)
     glBindTexture(GL_TEXTURE_2D, output->render.tex_GlassB);
     glUniform1i(output->render.state->u_TexGlassB, 3);
 
-    glUniform1f(output->render.state->u_Time, t_input);
+    /* Linear time: all easing/phase shaping lives in the shader, so the
+     * configured duration is honest wall-clock. */
+    glUniform1f(output->render.state->u_Time, t_norm);
     glUniform2f(output->render.state->u_Resolution,
                 (float)output->render.width,
                 (float)output->render.height);
@@ -1403,24 +1910,44 @@ static void frame_callback_handler(void* data, struct wl_callback* callback, uin
     render_frame((struct wallpaper_output*)data);
 }
 
-static void upload_texture(
-    struct wallpaper_output* o, GLuint tex, struct image_data_buffer* b, off_t off, GLenum fmt)
+/* The pread here is deliberately synchronous rather than an io_uring op: the
+ * cache file was just written (or WILLNEED-prefetched) by the render thread,
+ * so it is page-cache-hot; the copy is 0.2-3.3 ms once per rotation and must
+ * complete before the transition's first frame anyway. An async version
+ * would hold a GL-mapped PBO across loop turns and output teardown for no
+ * latency win. */
+static void upload_texture(struct wallpaper_output* o,
+                           GLuint                   tex,
+                           int                      fd,
+                           const struct image_layer* l)
 {
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, o->render.pbo);
-    glBufferData(GL_PIXEL_UNPACK_BUFFER, b->buffer_size, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, (GLsizeiptr)l->size, nullptr, GL_STREAM_DRAW);
 
-    void* ptr = glMapBufferRange(
-        GL_PIXEL_UNPACK_BUFFER, 0, b->buffer_size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+    void* ptr = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER,
+                                 0,
+                                 (GLsizeiptr)l->size,
+                                 GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
     if (ptr) {
-        ssize_t n = pread(b->fd, ptr, b->buffer_size, off);
-        if (n < 0 || (size_t)n != b->buffer_size) {
-            fprintf(stderr, "[GLES] PBO read failed or partial: %zd/%zu\n", n, b->buffer_size);
-        }
+        ssize_t n  = pread(fd, ptr, l->size, (off_t)l->offset);
+        bool    ok = (n >= 0 && (size_t)n == l->size);
+        if (!ok)
+            fprintf(stderr, "[GLES] PBO read failed or partial: %zd/%zu\n", n, l->size);
         glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-        glBindTexture(GL_TEXTURE_2D, tex);
-        GLint internal_fmt = (fmt == GL_RGB) ? GL_RGB8 : GL_RGBA8;
-        glTexImage2D(
-            GL_TEXTURE_2D, 0, internal_fmt, b->width, b->height, 0, fmt, GL_UNSIGNED_BYTE, 0);
+        if (ok) {
+            glBindTexture(GL_TEXTURE_2D, tex);
+            /* sRGB storage: sampling decodes to linear light for free, so
+             * every blend in the shader happens in linear space. */
+            glTexImage2D(GL_TEXTURE_2D,
+                         0,
+                         GL_SRGB8_ALPHA8,
+                         l->width,
+                         l->height,
+                         0,
+                         GL_RGBA,
+                         GL_UNSIGNED_BYTE,
+                         0);
+        }
     }
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 }
@@ -1432,75 +1959,80 @@ static void finalize_render(struct wallpaper_output* output)
     pthread_join(output->render_thread, nullptr);
     output->render.flags &= ~F_THREAD_ACTIVE;
 
-    if (output->render.flags & F_DEAD) {
-        if (output->event_fd >= 0) {
-            close(output->event_fd);
-            output->event_fd = -1;
-        }
-    }
+    struct wallpaper_state* state = output->render.state;
 
     struct render_result res = output->async_result;
-    output->async_result     = (struct render_result){.standard.fd = -1, .glass.fd = -1};
+    output->async_result     = (struct render_result){.fd = -1};
 
     if (output->render.flags & F_DEAD) {
-        if (res.standard.fd >= 0)
-            close(res.standard.fd);
-        if (res.glass.fd >= 0)
-            close(res.glass.fd);
+        if (res.fd >= 0)
+            close(res.fd);
+        /* Deferred teardown: the thread is joined, its completion CQE is
+         * consumed — the event slot (and its fd) can go now. */
+        if (output->slot_event >= 0) {
+            ev_slot_release(&state->ev, (size_t)output->slot_event);
+            output->slot_event = -1;
+            output->event_fd   = -1;
+        }
         return;
     }
 
-    /* Deferred reload: config changed while render was in-flight. Discard stale result. */
+    /* Deferred reload: config changed while render was in-flight. Discard
+     * the stale result; a section that vanished freezes the output. */
     if (output->pending_reload) {
         output->pending_reload    = false;
-        struct output_config* cfg = get_config_for_output(output->render.state, output->name);
-        if (cfg) {
-            apply_config_to_output(output, cfg);
-            update_wallpaper(output);
-            if (res.standard.fd >= 0)
-                close(res.standard.fd);
-            if (res.glass.fd >= 0)
-                close(res.glass.fd);
-            return;
+        struct output_config* cfg = get_config_for_output(state, output->name);
+        if (!cfg || cfg->items.count == 0) {
+            printf("[CONFIG] Output '%s' no longer configured; freezing.\n", output->name);
+            cfg = &g_frozen_config;
         }
+        apply_config_to_output(output, cfg);
+        update_wallpaper(output);
+        if (res.fd >= 0)
+            close(res.fd);
+        return;
     }
 
     if (!res.success || output->render.egl_surface == EGL_NO_SURFACE) {
-        if (res.standard.fd >= 0)
-            close(res.standard.fd);
-        if (res.glass.fd >= 0)
-            close(res.glass.fd);
+        if (res.fd >= 0)
+            close(res.fd);
         return;
     }
 
     if (res.standard.width != output->render.width
         || res.standard.height != output->render.height) {
-        close(res.standard.fd);
-        close(res.glass.fd);
+        close(res.fd);
+        /* The surface was reconfigured while this render was in flight;
+         * relaunch at the current size instead of dropping the redraw. */
+        launch_async_render(output);
         return;
     }
 
-    eglMakeCurrent(output->render.state->egl_display,
-                   output->render.egl_surface,
-                   output->render.egl_surface,
-                   output->render.state->egl_context);
+    if (!eglMakeCurrent(state->egl_display,
+                        output->render.egl_surface,
+                        output->render.egl_surface,
+                        state->egl_context)) {
+        close(res.fd);
+        return;
+    }
 
-    long   pg  = sysconf(_SC_PAGESIZE);
-    size_t off = (res.standard.buffer_size + (pg - 1))
-                 & ~(pg - 1); /* Glass layer starts at page boundary in cache file */
-
-    upload_texture(output, output->render.tex_B, &res.standard, 0, res.pixel_format);
-    upload_texture(output, output->render.tex_GlassB, &res.glass, off, res.pixel_format);
+    upload_texture(output, output->render.tex_B, res.fd, &res.standard);
+    upload_texture(output, output->render.tex_GlassB, res.fd, &res.glass);
 
     bool first_boot = !(output->render.flags & F_BOOT_COMPLETE);
     if (first_boot) {
-        upload_texture(output, output->render.tex_A, &res.standard, 0, res.pixel_format);
-        upload_texture(output, output->render.tex_GlassA, &res.glass, off, res.pixel_format);
+        upload_texture(output, output->render.tex_A, res.fd, &res.standard);
+        upload_texture(output, output->render.tex_GlassA, res.fd, &res.glass);
         output->render.flags |= F_BOOT_COMPLETE;
     }
 
-    close(res.standard.fd);
-    close(res.glass.fd);
+    close(res.fd);
+
+    /* Keep the cache watermark honored on long-lived daemons. */
+    if (++state->renders_since_gc >= GC_RENDER_PERIOD) {
+        state->renders_since_gc = 0;
+        launch_cache_maintenance_service();
+    }
 
     glUseProgram(output->render.state->shader_program_t1);
     glUniform2f(output->render.state->u_Resolution,
@@ -1526,7 +2058,7 @@ static void finalize_render(struct wallpaper_output* output)
         float d3 = hypotf((float)cx, (float)(output->render.height - output->t_center_y));
         float d4 = hypotf((float)(output->render.width - cx),
                           (float)(output->render.height - output->t_center_y));
-        output->t_max_radius = fmaxf(d1, fmaxf(d2, fmaxf(d3, d4)));
+        output->t_max_radius = fmaxf(d1, fmaxf(d2, fmaxf(d3, d4))) * RADIUS_MARGIN;
 
         float duration              = output->transition_duration > 0 ? output->transition_duration
                                                                       : DEFAULT_TRANSITION_DUR;
@@ -1544,7 +2076,13 @@ static void finalize_render(struct wallpaper_output* output)
         uint64_t now_ns              = (uint64_t)ts.tv_sec * 1000000000ULL + (uint64_t)ts.tv_nsec;
         output->render.anim_start_ns = now_ns - offset_ns;
 
-        output->t_max_radius = 1.0f;
+        /* Single frame at Time=1: the circle mask must already cover the
+         * whole screen, because nothing outside the circle ever fades to the
+         * incoming image (a tiny radius would leave the OLD wallpaper up). */
+        output->t_center_x   = (float)output->render.width * 0.5f;
+        output->t_center_y   = (float)output->render.height * 0.5f;
+        output->t_max_radius = hypotf((float)output->render.width, (float)output->render.height)
+                               * RADIUS_MARGIN;
     }
 
     glUniform1f(output->render.state->u_MaxRadiusPixels, output->t_max_radius);
@@ -1569,38 +2107,41 @@ static void destroy_output(struct wallpaper_output* o)
         return;
     o->render.flags |= F_DEAD;
 
-    dbg_print("[INFO] Deactivating output: '%s' (ID: %u)\n",
+    dbg_print("[INFO] Deactivating output: '%s' (ID: %u)",
               o->name ? o->name : "unknown",
               o->wl_output_name);
 
-    if (o->timer_fd >= 0) {
-        close(o->timer_fd);
-        o->timer_fd = -1;
+    struct wallpaper_state* state = o->render.state;
+
+    /* Slots own their fds: cancel-then-close makes a CQE-after-free
+     * impossible (generation bump) before the fd is released. */
+    if (o->slot_timer >= 0) {
+        ev_slot_release(&state->ev, (size_t)o->slot_timer);
+        o->slot_timer = -1;
+        o->timer_fd   = -1;
     }
 
     if (!(o->render.flags & F_THREAD_ACTIVE)) {
-        if (o->event_fd >= 0) {
-            close(o->event_fd);
-            o->event_fd = -1;
+        if (o->slot_event >= 0) {
+            ev_slot_release(&state->ev, (size_t)o->slot_event);
+            o->slot_event = -1;
+            o->event_fd   = -1;
         }
-        if (o->async_result.standard.fd >= 0) {
-            close(o->async_result.standard.fd);
-            o->async_result.standard.fd = -1;
-        }
-        if (o->async_result.glass.fd >= 0) {
-            close(o->async_result.glass.fd);
-            o->async_result.glass.fd = -1;
+        if (o->async_result.fd >= 0) {
+            close(o->async_result.fd);
+            o->async_result.fd = -1;
         }
     } else {
-        dbg_print("[INFO] Render thread active on '%s'. Deferring cleanup.\n", o->name);
+        /* Render thread in flight: keep the event slot armed so its
+         * completion CQE drives finalize_render's join + deferred cleanup. */
+        dbg_print("[INFO] Render thread active on '%s'. Deferring cleanup.", o->name);
     }
 
-    if (o->render.state->egl_initialized) {
-        EGLDisplay display = o->render.state->egl_display;
-        EGLContext context = o->render.state->egl_context;
+    if (state->egl_initialized) {
+        EGLDisplay display = state->egl_display;
 
         if (o->render.flags & F_TEX_INIT) {
-            if (eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, context)) {
+            if (egl_make_current_utility(state)) {
                 glDeleteTextures(1, &o->render.tex_A);
                 glDeleteTextures(1, &o->render.tex_GlassA);
                 glDeleteTextures(1, &o->render.tex_B);
@@ -1653,6 +2194,8 @@ static void launch_async_render(struct wallpaper_output* o)
     uint64_t c;
     while (read(o->event_fd, &c, sizeof(c)) > 0)
         ;
+    o->job_w = o->render.width;
+    o->job_h = o->render.height;
     if (pthread_create(&o->render_thread, nullptr, render_thread_worker, o) == 0)
         o->render.flags |= F_THREAD_ACTIVE;
 }
@@ -1661,6 +2204,8 @@ static void update_wallpaper(struct wallpaper_output* o)
 {
     if ((o->render.flags & F_DEAD) || (o->render.flags & F_THREAD_ACTIVE))
         return;
+    if (o->num_items == 0)
+        return; /* hot reload can empty the list; %0 below would be UB */
     if (o->render.flags & F_RANDOMIZE) {
         size_t next;
         do {
@@ -1822,6 +2367,16 @@ static char* trim_whitespace(char* str)
 [[nodiscard]]
 static char* get_config_path(void)
 {
+    if (g_config_override) {
+        if (access(g_config_override, R_OK) == 0)
+            return strdup(g_config_override);
+        fprintf(stderr,
+                "FATAL: config '%s' is not readable: %s\n",
+                g_config_override,
+                strerror(errno));
+        return nullptr;
+    }
+
     auto cfg_home = getenv("XDG_CONFIG_HOME");
     auto home     = getenv("HOME");
     char path[PATH_MAX];
@@ -1901,6 +2456,12 @@ static bool process_single_config_entry(struct item_list* list, const char* valu
     char*       expanded   = expand_path(trimmed);
     const char* final_path = expanded ? expanded : trimmed;
 
+    if (!*final_path) { /* e.g. "files = $UNSET_VAR" expands to nothing */
+        free(copy);
+        free(expanded);
+        return true;
+    }
+
     bool ok = true;
     if (is_directory(final_path)) {
         if (scan_directory(list, final_path, mode, strategy) < 0)
@@ -1930,9 +2491,45 @@ static struct output_config* get_or_create_config_in_list(struct wl_list* list, 
     *new_oc = (struct output_config){
         .transition_on = false, .gamemode = true, .transition_duration = DEFAULT_TRANSITION_DUR};
     new_oc->output_name = strdup(name);
+    if (!new_oc->output_name) {
+        free(new_oc);
+        return nullptr;
+    }
     init_item_list(&new_oc->items);
     wl_list_insert(list, &new_oc->link);
     return new_oc;
+}
+
+static int parse_int_setting(const char* value, int lo, int hi, int fallback)
+{
+    errno     = 0;
+    char* end = nullptr;
+    long  v   = strtol(value, &end, 10);
+    if (errno != 0 || end == value || v < lo || v > hi) {
+        fprintf(stderr,
+                "[CONFIG] Invalid integer '%s' (allowed %d..%d); using %d\n",
+                value,
+                lo,
+                hi,
+                fallback);
+        return fallback;
+    }
+    return (int)v;
+}
+
+static float parse_duration_setting(const char* value)
+{
+    errno     = 0;
+    char* end = nullptr;
+    float v   = strtof(value, &end);
+    if (errno != 0 || end == value || !isfinite(v) || v <= 0.0f || v > 600.0f) {
+        fprintf(stderr,
+                "[CONFIG] Invalid transition_duration '%s'; using %.2fs\n",
+                value,
+                (double)DEFAULT_TRANSITION_DUR);
+        return DEFAULT_TRANSITION_DUR;
+    }
+    return v;
 }
 
 static int config_handler(void* user, const char* section, const char* name, const char* value)
@@ -1945,13 +2542,13 @@ static int config_handler(void* user, const char* section, const char* name, con
     if (strcasecmp(name, "files") == 0 || strcasecmp(name, "paths") == 0) {
         process_single_config_entry(&oc->items, value);
     } else if (strcasecmp(name, "timeout") == 0) {
-        oc->timeout = atoi(value);
+        oc->timeout = parse_int_setting(value, 0, 366 * 24 * 3600, 0);
     } else if (strcasecmp(name, "randomize") == 0) {
         oc->randomize = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     } else if (strcasecmp(name, "transition") == 0) {
         oc->transition_on = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     } else if (strcasecmp(name, "transition_duration") == 0) {
-        oc->transition_duration = strtof(value, nullptr);
+        oc->transition_duration = parse_duration_setting(value);
     } else if (strcasecmp(name, "gamemode") == 0) {
         oc->gamemode = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     }
@@ -1959,6 +2556,35 @@ static int config_handler(void* user, const char* section, const char* name, con
 }
 
 /* -- Config Application -------------------------------------------------- */
+
+/* (Re)create the rotation timerfd and its event-core slot. TFD_NONBLOCK is
+ * load-bearing: a disarm/re-arm in the same loop turn as an expiry must make
+ * the drain read return EAGAIN instead of blocking the daemon. */
+static void setup_rotation_timer(struct wallpaper_output* o)
+{
+    struct wallpaper_state* state = o->render.state;
+    if (o->slot_timer >= 0) {
+        ev_slot_release(&state->ev, (size_t)o->slot_timer);
+        o->slot_timer = -1;
+        o->timer_fd   = -1;
+    }
+    if (o->num_items <= 1 || o->timeout <= 0)
+        return;
+
+    int tfd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC | TFD_NONBLOCK);
+    if (tfd < 0) {
+        fprintf(stderr, "[ERROR] timerfd_create for %s: %s\n", o->name, strerror(errno));
+        return;
+    }
+    int slot = ev_slot_alloc(&state->ev, EV_TIMER, tfd, POLLIN, o);
+    if (slot < 0) {
+        close(tfd);
+        return;
+    }
+    o->timer_fd   = tfd;
+    o->slot_timer = slot;
+    arm_rotation_timer(o, state->gamemode_active && o->gamemode_enabled);
+}
 
 static void apply_config_to_output(struct wallpaper_output* output, struct output_config* config)
 {
@@ -1988,22 +2614,7 @@ static void apply_config_to_output(struct wallpaper_output* output, struct outpu
     if (output->current_item_index >= output->num_items)
         output->current_item_index = 0;
 
-    if (output->timer_fd >= 0) {
-        close(output->timer_fd);
-        output->timer_fd = -1;
-    }
-    if (output->num_items > 1 && output->timeout > 0) {
-        output->timer_fd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC);
-
-        if (output->render.state->gamemode_active && output->gamemode_enabled) {
-            struct itimerspec ts = {};
-            timerfd_settime(output->timer_fd, 0, &ts, nullptr);
-        } else {
-            struct itimerspec ts
-                = {.it_interval = {output->timeout, 0}, .it_value = {output->timeout, 0}};
-            timerfd_settime(output->timer_fd, 0, &ts, nullptr);
-        }
-    }
+    setup_rotation_timer(output);
 }
 
 static void reload_global_config(struct wallpaper_state* state)
@@ -2016,8 +2627,12 @@ static void reload_global_config(struct wallpaper_state* state)
     wl_list_init(&new_configs);
     struct config_parse_ctx ctx = {.config_list = &new_configs};
 
-    if (ini_parse(state->config_path, config_handler, &ctx) < 0) {
-        fprintf(stderr, "[CONFIG] Parse failed. Keeping old config.\n");
+    int perr = ini_parse(state->config_path, config_handler, &ctx);
+    if (perr != 0) {
+        if (perr > 0)
+            fprintf(stderr, "[CONFIG] Parse error at line %d. Keeping old config.\n", perr);
+        else
+            fprintf(stderr, "[CONFIG] Could not read config. Keeping old config.\n");
         struct output_config *oc, *tmp;
         wl_list_for_each_safe(oc, tmp, &new_configs, link)
         {
@@ -2046,12 +2661,27 @@ static void reload_global_config(struct wallpaper_state* state)
             continue;
 
         struct output_config* cfg = get_config_for_output(output->render.state, output->name);
-        if (cfg) {
-            if (output->render.flags & F_THREAD_ACTIVE) {
+        if (cfg && cfg->items.count > 0) {
+            if (!output->surface && (output->render.flags & F_INITIALIZED)) {
+                /* Had no usable config at discovery and was parked without a
+                 * surface: a hot-added section must activate it now. */
+                output->render.flags &= ~F_INITIALIZED;
+                initialize_output(output);
+            } else if (output->render.flags & F_THREAD_ACTIVE) {
                 output->pending_reload = true;
             } else {
                 apply_config_to_output(output, cfg);
                 update_wallpaper(output);
+            }
+        } else if (output->surface) {
+            /* Section removed or emptied: stop rotating, keep the last
+             * frame. NEVER free the item list under an active render thread
+             * — defer to finalize_render like any other reload. */
+            if (output->render.flags & F_THREAD_ACTIVE) {
+                output->pending_reload = true;
+            } else {
+                printf("[CONFIG] Output '%s' no longer configured; freezing.\n", output->name);
+                apply_config_to_output(output, &g_frozen_config);
             }
         }
     }
@@ -2076,7 +2706,7 @@ static struct output_config* get_config_for_output(struct wallpaper_state* state
 static void layer_surface_configure(
     void* data, struct zwlr_layer_surface_v1* surf, uint32_t serial, uint32_t w, uint32_t h)
 {
-    dbg_print("layer_surface_configure: %ux%u\n", w, h);
+    dbg_print("layer_surface_configure: %ux%u", w, h);
     auto output = (struct wallpaper_output*)data;
 
     if (output->render.flags & F_DEAD) {
@@ -2084,22 +2714,46 @@ static void layer_surface_configure(
         return;
     }
 
-    output->render.width  = w;
-    output->render.height = h;
+    zwlr_layer_surface_v1_ack_configure(surf, serial);
+
+    if (w == 0 || h == 0) {
+        /* Layer shell 0 means "client decides"; an anchored fullscreen
+         * background cannot decide meaningfully — wait for a real size. */
+        dbg_print("Ignoring 0x0 configure for '%s'", output->name);
+        return;
+    }
+
+    int32_t scale         = output->scale > 0 ? output->scale : 1;
+    output->logical_w     = (int32_t)w;
+    output->logical_h     = (int32_t)h;
+    output->render.width  = (int32_t)w * scale;
+    output->render.height = (int32_t)h * scale;
     output->render.flags |= F_CONFIGURED;
 
-    zwlr_layer_surface_v1_ack_configure(surf, serial);
+    /* Keep buffer scale in lockstep with the buffer size chosen here; a
+     * scale change that lands between init and this configure would
+     * otherwise leave a scale-1 surface with a scale-N buffer forever. */
+    if (wl_proxy_get_version((struct wl_proxy*)output->surface)
+        >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
+        wl_surface_set_buffer_scale(output->surface, scale);
 
     if (output->render.state->egl_initialized) {
         if (output->egl_window) {
-            wl_egl_window_resize(output->egl_window, w, h, 0, 0);
+            wl_egl_window_resize(
+                output->egl_window, output->render.width, output->render.height, 0, 0);
         } else {
-            output->egl_window = wl_egl_window_create(output->surface, w, h);
+            output->egl_window
+                = wl_egl_window_create(output->surface, output->render.width, output->render.height);
             output->render.egl_surface
                 = eglCreateWindowSurface(output->render.state->egl_display,
                                          output->render.state->egl_config,
                                          (EGLNativeWindowType)output->egl_window,
                                          nullptr);
+            if (output->render.egl_surface == EGL_NO_SURFACE) {
+                fprintf(stderr, "[EGL] Window surface creation failed for %s\n", output->name);
+                destroy_output(output);
+                return;
+            }
             init_output_gl(output);
         }
     }
@@ -2133,8 +2787,11 @@ static void output_handle_geometry(void*,
 static void output_handle_mode(void*, struct wl_output*, uint32_t, int32_t, int32_t, int32_t)
 {
 }
-static void output_handle_scale(void*, struct wl_output*, int32_t)
+static void output_handle_scale(void* data, struct wl_output*, int32_t factor)
 {
+    auto output = (struct wallpaper_output*)data;
+    if (factor > 0)
+        output->scale = factor;
 }
 static void output_handle_description(void*, struct wl_output*, const char*)
 {
@@ -2145,13 +2802,31 @@ static void output_handle_name(void* data, struct wl_output*, const char* name)
     auto output = (struct wallpaper_output*)data;
     free(output->name);
     output->name = strdup(name);
-    dbg_print("Discovered output: '%s'\n", name);
+    dbg_print("Discovered output: '%s'", name);
 }
 
 static void output_handle_done(void* data, struct wl_output* wl_output)
 {
     (void)wl_output;
-    initialize_output((struct wallpaper_output*)data);
+    auto output = (struct wallpaper_output*)data;
+    initialize_output(output);
+
+    /* Scale changed after init (display settings): rescale the buffer. */
+    if (!(output->render.flags & F_DEAD) && output->surface && output->egl_window
+        && output->logical_w > 0) {
+        int32_t scale = output->scale > 0 ? output->scale : 1;
+        int32_t bw    = output->logical_w * scale;
+        int32_t bh    = output->logical_h * scale;
+        if (bw != output->render.width || bh != output->render.height) {
+            if (wl_proxy_get_version((struct wl_proxy*)output->surface)
+                >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
+                wl_surface_set_buffer_scale(output->surface, scale);
+            wl_egl_window_resize(output->egl_window, bw, bh, 0, 0);
+            output->render.width  = bw;
+            output->render.height = bh;
+            launch_async_render(output);
+        }
+    }
 }
 
 static const struct wl_output_listener output_listener = {
@@ -2171,6 +2846,8 @@ static void initialize_output(struct wallpaper_output* output)
         return;
 
     struct wallpaper_state* state = output->render.state;
+    if (state->shutting_down)
+        return;
 
     struct output_config* config = get_config_for_output(state, output->name);
 
@@ -2209,26 +2886,21 @@ static void initialize_output(struct wallpaper_output* output)
     }
 
     if (output->event_fd < 0) {
-        output->event_fd = eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
-        if (output->event_fd < 0) {
+        int efd = eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
+        if (efd < 0) {
             fprintf(stderr, "[ERROR] eventfd failed for %s: %s\n", output->name, strerror(errno));
             goto init_failed;
         }
-    }
-
-    output->timer_fd = -1;
-    if (output->timeout > 0 && output->num_items > 1) {
-        output->timer_fd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC);
-
-        if (state->gamemode_active && output->gamemode_enabled) {
-            struct itimerspec ts = {};
-            timerfd_settime(output->timer_fd, 0, &ts, nullptr);
-        } else {
-            struct itimerspec ts
-                = {.it_interval = {output->timeout, 0}, .it_value = {output->timeout, 0}};
-            timerfd_settime(output->timer_fd, 0, &ts, nullptr);
+        int slot = ev_slot_alloc(&state->ev, EV_RENDER_DONE, efd, POLLIN, output);
+        if (slot < 0) {
+            close(efd);
+            goto init_failed;
         }
+        output->event_fd   = efd;
+        output->slot_event = slot;
     }
+
+    setup_rotation_timer(output);
 
     if (!state->compositor || !state->layer_shell) {
         fprintf(stderr, "[ERROR] Missing Wayland globals for %s\n", output->name);
@@ -2240,6 +2912,21 @@ static void initialize_output(struct wallpaper_output* output)
         fprintf(stderr, "[ERROR] wl_surface creation failed for %s\n", output->name);
         goto init_failed;
     }
+
+    /* A wallpaper is always fully opaque. Declaring that lets the compositor
+     * skip alpha-blending the entire background plane every repaint and use
+     * the surface for occlusion culling. */
+    struct wl_region* opaque = wl_compositor_create_region(state->compositor);
+    if (opaque) {
+        wl_region_add(opaque, 0, 0, INT32_MAX, INT32_MAX);
+        wl_surface_set_opaque_region(output->surface, opaque);
+        wl_region_destroy(opaque);
+    }
+
+    if (output->scale > 1
+        && wl_proxy_get_version((struct wl_proxy*)output->surface)
+               >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
+        wl_surface_set_buffer_scale(output->surface, output->scale);
 
     output->layer_surface
         = zwlr_layer_shell_v1_get_layer_surface(state->layer_shell,
@@ -2253,7 +2940,11 @@ static void initialize_output(struct wallpaper_output* output)
         goto init_failed;
     }
 
-    zwlr_layer_surface_v1_set_anchor(output->layer_surface, 15);
+    zwlr_layer_surface_v1_set_anchor(output->layer_surface,
+                                     ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP
+                                         | ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM
+                                         | ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT
+                                         | ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT);
     zwlr_layer_surface_v1_set_exclusive_zone(output->layer_surface, -1);
     zwlr_layer_surface_v1_add_listener(output->layer_surface, &layer_surface_listener, output);
 
@@ -2266,32 +2957,58 @@ init_failed:
     destroy_output(output);
 }
 
-static void registry_global(void*                     data,
-                            struct wl_registry*       reg,
-                            uint32_t                  name,
-                            const char*               interface,
-                            [[maybe_unused]] uint32_t ver)
+static void registry_global(
+    void* data, struct wl_registry* reg, uint32_t name, const char* interface, uint32_t ver)
 {
     auto state = (struct wallpaper_state*)data;
 
+    /* Never bind above the advertised version: the server answers that with
+     * a fatal "invalid version for global" protocol error. */
     if (strcmp(interface, wl_compositor_interface.name) == 0) {
-        state->compositor = wl_registry_bind(reg, name, &wl_compositor_interface, 4);
+        state->compositor = wl_registry_bind(
+            reg, name, &wl_compositor_interface, ver < 4 ? ver : 4);
     } else if (strcmp(interface, zwlr_layer_shell_v1_interface.name) == 0) {
-        state->layer_shell = wl_registry_bind(reg, name, &zwlr_layer_shell_v1_interface, 1);
+        /* v3+ makes the destroy request legal at shutdown. */
+        state->layer_shell = wl_registry_bind(
+            reg, name, &zwlr_layer_shell_v1_interface, ver < 3 ? ver : 3);
     } else if (strcmp(interface, wl_output_interface.name) == 0) {
-        auto o = (struct wallpaper_output*)malloc(sizeof(struct wallpaper_output));
+        if (state->shutting_down)
+            return; /* a hotplug mid-shutdown must not resurrect the daemon */
+        /* 64 here is a cache-line placement optimization for the hot render
+         * block, not a type requirement (see the struct definition). */
+        constexpr size_t out_align = 64;
+        constexpr size_t out_size
+            = (sizeof(struct wallpaper_output) + out_align - 1) & ~(out_align - 1);
+        auto o = (struct wallpaper_output*)aligned_alloc(out_align, out_size);
         if (!o) {
-            fprintf(stderr, "FATAL: malloc failed\n");
+            fprintf(stderr, "FATAL: aligned_alloc failed\n");
             return;
         }
+        uint32_t v = ver < 4 ? ver : 4;
         *o = (struct wallpaper_output){.render   = {.state = state, .egl_surface = EGL_NO_SURFACE},
                                        .timer_fd = -1,
                                        .event_fd = -1,
+                                       .slot_event     = -1,
+                                       .slot_timer     = -1,
+                                       .scale          = 1,
                                        .wl_output_name = name,
-                                       .async_result   = {.standard.fd = -1, .glass.fd = -1}};
-        o->wl_output = wl_registry_bind(reg, name, &wl_output_interface, 4);
+                                       .async_result   = {.fd = -1}};
+        o->wl_output = wl_registry_bind(reg, name, &wl_output_interface, v);
         wl_output_add_listener(o->wl_output, &output_listener, o);
         wl_list_insert(&state->outputs, &o->link);
+        if (v < 4) {
+            /* No wl_output.name event before v4: this output can only match
+             * the 'default'/'*' config section. */
+            fprintf(stderr,
+                    "[WARN] wl_output v%u has no name event; using the 'default'/'*' section.\n",
+                    v);
+            o->name = strdup("");
+        }
+        /* No done event at v1 either. During the startup burst layer_shell
+         * may not be bound yet — the post-roundtrip sweep in main() picks
+         * those up; hotplugged v1 outputs initialize immediately. */
+        if (v < 2 && state->layer_shell)
+            initialize_output(o);
     }
 }
 
@@ -2314,17 +3031,123 @@ static const struct wl_registry_listener registry_listener
 
 /* -- Main ---------------------------------------------------------------- */
 
-static void signal_handler(int _)
+static void print_usage(const char* argv0)
 {
-    (void)_;
-    g_running = 0;
+    printf("Usage: %s [OPTIONS]\n"
+           "\n"
+           "  -c, --config <path>  use this config file instead of the XDG lookup\n"
+           "  -h, --help           show this help and exit\n"
+           "  -V, --version        print version and exit\n",
+           argv0);
+}
+
+/* Watch the config's parent directory; editors replace files via rename, so
+ * watching the file itself would miss most saves. */
+static void add_config_watch(struct wallpaper_state* state)
+{
+    state->config_wd
+        = inotify_add_watch(state->inotify_fd, state->config_dir, IN_CLOSE_WRITE | IN_MOVED_TO);
+    if (state->config_wd < 0)
+        fprintf(stderr,
+                "[CONFIG] inotify watch on '%s' failed: %s (hot reload disabled)\n",
+                state->config_dir,
+                strerror(errno));
+}
+
+/* Drain the inotify fd; true when the config file changed. Re-establishes
+ * the watch if the directory itself was replaced (stow/chezmoi deploys). */
+static bool drain_inotify(struct wallpaper_state* state)
+{
+    bool dirty = false;
+    alignas(struct inotify_event) char buf[INOTIFY_BUF_LEN];
+    ssize_t len;
+    while ((len = read(state->inotify_fd, buf, sizeof(buf))) > 0) {
+        for (char* ptr = buf; ptr < buf + len;) {
+            const struct inotify_event* ev = (const struct inotify_event*)ptr;
+            if (ev->mask & IN_IGNORED) {
+                add_config_watch(state);
+                dirty = true;
+            } else if (ev->len > 0 && state->config_filename
+                       && strcmp(ev->name, state->config_filename) == 0) {
+                dirty = true;
+            }
+            ptr += sizeof(struct inotify_event) + ev->len;
+        }
+    }
+    return dirty;
+}
+
+/* Stage-1 shutdown: tear surfaces down but keep the loop running so
+ * in-flight render threads are joined via their completion CQEs. */
+static void begin_shutdown(struct wallpaper_state* state)
+{
+    if (state->shutting_down)
+        return;
+    printf("\n[INFO] Shutting down...\n");
+    state->shutting_down = true;
+    struct wallpaper_output* o;
+    wl_list_for_each(o, &state->outputs, link)
+    {
+        destroy_output(o);
+    }
+}
+
+static inline uint64_t monotonic_usec(void)
+{
+    struct timespec now;
+    clock_gettime(CLOCK_MONOTONIC, &now);
+    return (uint64_t)now.tv_sec * 1000000ULL + (uint64_t)now.tv_nsec / 1000ULL;
 }
 
 int main(int argc, char* argv[])
 {
-    (void)argc;
+    static const struct option LONG_OPTS[] = {{"config", required_argument, nullptr, 'c'},
+                                              {"help", no_argument, nullptr, 'h'},
+                                              {"version", no_argument, nullptr, 'V'},
+                                              {}};
+    for (int opt; (opt = getopt_long(argc, argv, "c:hV", LONG_OPTS, nullptr)) != -1;) {
+        switch (opt) {
+            case 'c':
+                g_config_override = optarg;
+                break;
+            case 'h':
+                print_usage(argv[0]);
+                return 0;
+            case 'V':
+                printf("walle %s\n", WALLE_VERSION);
+                return 0;
+            default:
+                print_usage(argv[0]);
+                return 1;
+        }
+    }
+    if (optind < argc) {
+        fprintf(stderr, "Unexpected argument: %s\n", argv[optind]);
+        print_usage(argv[0]);
+        return 1;
+    }
 
+    /* Block SIGINT/SIGTERM before ANY thread exists (vips spawns workers,
+     * which inherit the mask); both are consumed via signalfd in the loop. */
+    sigset_t sigmask;
+    sigemptyset(&sigmask);
+    sigaddset(&sigmask, SIGINT);
+    sigaddset(&sigmask, SIGTERM);
+    if (sigprocmask(SIG_BLOCK, &sigmask, nullptr) < 0) {
+        perror("sigprocmask");
+        return 1;
+    }
     signal(SIGPIPE, SIG_IGN);
+
+    struct wallpaper_state state
+        = {.util_surface = EGL_NO_SURFACE, .signal_fd = -1, .inotify_fd = -1};
+    int rc = 0;
+
+    state.signal_fd = signalfd(-1, &sigmask, SFD_CLOEXEC | SFD_NONBLOCK);
+    if (state.signal_fd < 0) {
+        perror("signalfd");
+        return 1;
+    }
 
     if (VIPS_INIT(argv[0]))
         vips_error_exit(nullptr);
@@ -2337,27 +3160,54 @@ int main(int argc, char* argv[])
 
     launch_cache_maintenance_service();
 
-    struct wallpaper_state state = {};
     wl_list_init(&state.outputs);
     wl_list_init(&state.output_configs);
 
-    struct sigaction sa = {};
-    sa.sa_handler       = signal_handler;
-    sigemptyset(&sa.sa_mask);
-    sigaction(SIGINT, &sa, nullptr);
-    sigaction(SIGTERM, &sa, nullptr);
+    if (!ev_init(&state.ev)) {
+        rc = 1;
+        goto teardown;
+    }
+    ev_slot_at(&state.ev, EV_SIGNAL)->fd        = state.signal_fd;
+    ev_slot_at(&state.ev, EV_SIGNAL)->want_mask = POLLIN;
 
     state.display = wl_display_connect(nullptr);
-    if (!state.display)
-        return 1;
+    if (!state.display) {
+        fprintf(stderr, "FATAL: cannot connect to a Wayland display.\n");
+        rc = 1;
+        goto teardown;
+    }
+    ev_slot_at(&state.ev, EV_WL_IN)->fd        = wl_display_get_fd(state.display);
+    ev_slot_at(&state.ev, EV_WL_IN)->want_mask = POLLIN;
+    /* Armed only while a flush is blocked on EAGAIN. */
+    ev_slot_at(&state.ev, EV_WL_OUT)->fd = wl_display_get_fd(state.display);
 
-    state.egl_display = eglGetDisplay((EGLNativeDisplayType)state.display);
+    /* Prefer the explicit Wayland platform over legacy display guessing. */
+    state.egl_display = EGL_NO_DISPLAY;
+    const char* cexts = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
+    if (cexts
+        && (strstr(cexts, "EGL_KHR_platform_wayland")
+            || strstr(cexts, "EGL_EXT_platform_wayland"))) {
+        auto get_platform_display
+            = (PFNEGLGETPLATFORMDISPLAYEXTPROC)eglGetProcAddress("eglGetPlatformDisplayEXT");
+        if (get_platform_display)
+            state.egl_display
+                = get_platform_display(EGL_PLATFORM_WAYLAND_KHR, state.display, nullptr);
+    }
     if (state.egl_display == EGL_NO_DISPLAY)
-        return 1;
+        state.egl_display = eglGetDisplay((EGLNativeDisplayType)state.display);
+    if (state.egl_display == EGL_NO_DISPLAY) {
+        fprintf(stderr, "FATAL: no EGL display (missing GL driver / glvnd vendor config?).\n");
+        rc = 1;
+        goto teardown;
+    }
 
     EGLint major, minor;
-    if (!eglInitialize(state.egl_display, &major, &minor))
-        return 1;
+    if (!eglInitialize(state.egl_display, &major, &minor)) {
+        fprintf(stderr, "FATAL: eglInitialize failed (0x%04x).\n", eglGetError());
+        state.egl_display = EGL_NO_DISPLAY;
+        rc                = 1;
+        goto teardown;
+    }
 
     EGLint config_attribs[] = {EGL_SURFACE_TYPE,
                                EGL_WINDOW_BIT,
@@ -2374,30 +3224,41 @@ int main(int argc, char* argv[])
                                EGL_NONE};
     EGLint n_config;
     if (!eglChooseConfig(state.egl_display, config_attribs, &state.egl_config, 1, &n_config)
-        || n_config != 1)
-        return 1;
+        || n_config != 1) {
+        fprintf(stderr, "FATAL: no RGBA8888 GLES3 EGL config available.\n");
+        rc = 1;
+        goto teardown;
+    }
 
-    if (!eglBindAPI(EGL_OPENGL_ES_API))
-        return 1;
+    if (!eglBindAPI(EGL_OPENGL_ES_API)) {
+        fprintf(stderr, "FATAL: eglBindAPI(EGL_OPENGL_ES_API) failed.\n");
+        rc = 1;
+        goto teardown;
+    }
 
     EGLint ctx_attribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE};
     state.egl_context
         = eglCreateContext(state.egl_display, state.egl_config, EGL_NO_CONTEXT, ctx_attribs);
     state.egl_initialized = (state.egl_context != EGL_NO_CONTEXT);
 
-    if (state.egl_initialized) {
-        if (eglMakeCurrent(state.egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, state.egl_context)) {
-            init_gl_resources(&state);
-            eglMakeCurrent(state.egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        }
+    if (!state.egl_initialized || !init_gl_resources(&state)) {
+        fprintf(stderr, "FATAL: GLES3 initialization failed; nothing could ever render.\n");
+        rc = 1;
+        goto teardown;
     }
 
     state.config_path = get_config_path();
     if (state.config_path) {
-        struct config_parse_ctx ctx = {.config_list = &state.output_configs};
-        if (ini_parse(state.config_path, config_handler, &ctx) < 0) {
-            fprintf(stderr, "FATAL: Could not parse config file: %s\n", state.config_path);
-            return 1;
+        struct config_parse_ctx ctx  = {.config_list = &state.output_configs};
+        int                     perr = ini_parse(state.config_path, config_handler, &ctx);
+        if (perr != 0) {
+            if (perr > 0)
+                fprintf(
+                    stderr, "FATAL: config parse error at %s:%d\n", state.config_path, perr);
+            else
+                fprintf(stderr, "FATAL: Could not parse config file: %s\n", state.config_path);
+            rc = 1;
+            goto teardown;
         }
 
         state.inotify_fd = inotify_init1(IN_CLOEXEC | IN_NONBLOCK);
@@ -2414,13 +3275,17 @@ int main(int argc, char* argv[])
                     state.config_filename = strdup(tmp);
                 }
                 free(tmp);
-                state.config_wd = inotify_add_watch(
-                    state.inotify_fd, state.config_dir, IN_CLOSE_WRITE | IN_MOVED_TO);
+                if (state.config_dir && state.config_filename) {
+                    add_config_watch(&state);
+                    ev_slot_at(&state.ev, EV_INOTIFY)->fd        = state.inotify_fd;
+                    ev_slot_at(&state.ev, EV_INOTIFY)->want_mask = POLLIN;
+                }
             }
         }
     } else {
         fprintf(stderr, "FATAL: Configuration file 'config.ini' not found.\n");
-        return 1;
+        rc = 1;
+        goto teardown;
     }
 
     if (!gamemode_init(&state)) {
@@ -2432,157 +3297,270 @@ int main(int argc, char* argv[])
     wl_display_roundtrip(state.display);
     wl_display_roundtrip(state.display);
 
-    struct pollfd            fds[MAX_POLL_FDS];
-    struct wallpaper_output* map[MAX_POLL_FDS];
+    if (!state.compositor) {
+        fprintf(stderr, "FATAL: compositor lacks wl_compositor?!\n");
+        rc = 1;
+        goto teardown;
+    }
+    if (!state.layer_shell) {
+        fprintf(stderr,
+                "FATAL: compositor does not support zwlr_layer_shell_v1; "
+                "walle cannot place background surfaces on it.\n");
+        rc = 1;
+        goto teardown;
+    }
 
-    while (g_running) {
+    /* Outputs whose events all arrived within the initial burst (e.g. a v1
+     * wl_output announced before the layer shell) initialize here, once all
+     * globals are guaranteed bound. Guarded by F_INITIALIZED: a no-op for
+     * outputs the done-event path already handled. */
+    struct wallpaper_output* boot_output;
+    wl_list_for_each(boot_output, &state.outputs, link)
+    {
+        initialize_output(boot_output);
+    }
+
+    bool running  = true;
+    bool wl_error = false;
+
+    while (running) {
+        /* Reap outputs whose teardown fully completed: dead, thread joined,
+         * and both event-core slots released (no CQE can reference them). */
         struct wallpaper_output *output, *tmp_output;
         wl_list_for_each_safe(output, tmp_output, &state.outputs, link)
         {
-            if ((output->render.flags & F_DEAD) && !(output->render.flags & F_THREAD_ACTIVE)) {
-                dbg_print("Freeing memory for dead output: '%s'\n",
+            if ((output->render.flags & F_DEAD) && !(output->render.flags & F_THREAD_ACTIVE)
+                && output->slot_event < 0 && output->slot_timer < 0) {
+                dbg_print("Freeing memory for dead output: '%s'",
                           output->name ? output->name : "unknown");
                 wl_list_remove(&output->link);
                 for (size_t i = 0; i < output->num_items; i++)
                     free(output->items[i].filename);
                 free(output->items);
                 free(output->name);
-                if (output->event_fd >= 0)
-                    close(output->event_fd);
                 free(output);
             }
         }
 
-        if (wl_list_empty(&state.outputs) && wl_list_empty(&state.output_configs)) {
-            printf("[INFO] No configured outputs remaining. Terminating.\n");
+        if (state.shutting_down && wl_list_empty(&state.outputs))
             break;
-        }
 
         while (wl_display_prepare_read(state.display) != 0)
             wl_display_dispatch_pending(state.display);
 
-        if (wl_display_flush(state.display) < 0 && errno != EAGAIN) {
+        int fl;
+        do {
+            fl = wl_display_flush(state.display);
+        } while (fl < 0 && errno == EINTR);
+        bool flush_blocked = (fl < 0 && errno == EAGAIN);
+        if (fl < 0 && !flush_blocked) {
             if (errno != EPIPE)
                 fprintf(stderr, "wl_display_flush failed: %s\n", strerror(errno));
+            wl_display_cancel_read(state.display);
+            wl_error = true;
             break;
         }
+        /* Blocked flush: watch writability, retry at the next loop top. */
+        ev_slot_at(&state.ev, EV_WL_OUT)->want_mask = flush_blocked ? POLLOUT : 0;
 
-        fds[0]  = (struct pollfd){.fd = wl_display_get_fd(state.display), .events = POLLIN};
-        int idx = 1;
-
-        int inotify_poll_idx = -1;
-        if (state.inotify_fd >= 0) {
-            inotify_poll_idx = idx;
-            fds[idx]         = (struct pollfd){.fd = state.inotify_fd, .events = POLLIN};
-            map[idx++]       = nullptr;
-        }
-
-        int      dbus_poll_idx     = -1;
-        uint64_t dbus_timeout_usec = UINT64_MAX;
-
-        if (state.bus) {
-            int fd     = sd_bus_get_fd(state.bus);
-            int events = sd_bus_get_events(state.bus);
-            sd_bus_get_timeout(state.bus, &dbus_timeout_usec);
-
-            if (fd >= 0) {
-                dbus_poll_idx = idx;
-                fds[idx]      = (struct pollfd){.fd = fd, .events = (short)events};
-                map[idx++]    = nullptr;
-            }
-        }
-
-        wl_list_for_each(output, &state.outputs, link)
+        /* The D-Bus slot's fd and mask are dynamic; a mask change on an
+         * armed op needs cancel + rearm (oneshot makes this race-free). */
+        uint64_t dbus_deadline = UINT64_MAX;
         {
-            if (idx < MAX_POLL_FDS && output->event_fd >= 0) {
-                fds[idx]   = (struct pollfd){.fd = output->event_fd, .events = POLLIN};
-                map[idx++] = output;
+            struct ev_slot* ds  = ev_slot_at(&state.ev, EV_DBUS);
+            int             bfd = state.bus ? sd_bus_get_fd(state.bus) : -1;
+            uint32_t        bev = 0;
+            if (state.bus && bfd >= 0) {
+                int e = sd_bus_get_events(state.bus);
+                if (e > 0)
+                    bev = (uint32_t)e;
+                (void)sd_bus_get_timeout(state.bus, &dbus_deadline);
             }
-            if (!(output->render.flags & F_DEAD) && output->timer_fd >= 0 && idx < MAX_POLL_FDS) {
-                fds[idx]   = (struct pollfd){.fd = output->timer_fd, .events = POLLIN};
-                map[idx++] = output;
-            }
+            if (ds->pending && (ds->fd != bfd || ds->armed_mask != bev))
+                ev_slot_cancel(&state.ev, EV_DBUS);
+            ds->fd        = bfd;
+            ds->want_mask = bev;
         }
 
-        int poll_timeout = -1;
-        if (dbus_timeout_usec != UINT64_MAX) {
-            struct timespec now;
-            clock_gettime(CLOCK_MONOTONIC, &now);
-            uint64_t now_usec = (uint64_t)now.tv_sec * 1000000ULL + (uint64_t)now.tv_nsec / 1000ULL;
+        ev_reconcile(&state.ev);
 
-            if (dbus_timeout_usec > now_usec) {
-                uint64_t diff = dbus_timeout_usec - now_usec;
-                poll_timeout  = (diff > (uint64_t)INT_MAX) ? INT_MAX : (int)(diff / 1000ULL);
-            } else {
-                poll_timeout = 0;
-            }
+        /* Single wait point. The sd-bus deadline bounds the sleep via
+         * EXT_ARG (nanosecond-precision, no timeout SQE, no rounding spin). */
+        struct __kernel_timespec  ts;
+        struct __kernel_timespec* tsp = nullptr;
+        if (dbus_deadline != UINT64_MAX) {
+            uint64_t now_usec = monotonic_usec();
+            uint64_t rel      = dbus_deadline > now_usec ? dbus_deadline - now_usec : 0;
+            ts.tv_sec         = (long long)(rel / 1000000ULL);
+            ts.tv_nsec        = (long long)((rel % 1000000ULL) * 1000ULL);
+            tsp               = &ts;
         }
 
-        if (poll(fds, idx, poll_timeout) < 0) {
-            if (errno == EINTR) {
-                wl_display_cancel_read(state.display);
-                continue;
-            }
-            perror("poll");
+        struct io_uring_cqe* wait_cqe = nullptr;
+        int wr = io_uring_submit_and_wait_timeout(&state.ev.ring, &wait_cqe, 1, tsp, nullptr);
+        if (wr < 0 && wr != -ETIME && wr != -EINTR && wr != -EAGAIN) {
+            fprintf(stderr, "[EV] submit_and_wait: %s\n", strerror(-wr));
+            wl_display_cancel_read(state.display);
+            wl_error = true;
             break;
         }
 
-        if (fds[0].revents & (POLLIN | POLLHUP | POLLERR)) {
-            if (wl_display_read_events(state.display) == -1
-                || wl_display_dispatch_pending(state.display) == -1) {
-                fprintf(stderr, "[Wayland] Connection error.\n");
-                break;
+        if (io_uring_cq_has_overflow(&state.ev.ring)) {
+            /* NODROP guarantees delivery, but overflow costs syscalls and
+             * indicates the CQ sizing assumption broke — say so loudly. */
+            fprintf(stderr, "[EV] CQ overflow — event burst exceeded CQ sizing.\n");
+            (void)io_uring_get_events(&state.ev.ring);
+        }
+
+        /* Phase 1: resolve the prepare_read intent BEFORE any handler runs
+         * (handlers may call into libwayland). Non-consuming CQ scan. */
+        bool wl_readable = false;
+        {
+            unsigned             scan_head;
+            struct io_uring_cqe* scan_cqe;
+            io_uring_for_each_cqe(&state.ev.ring, scan_head, scan_cqe)
+            {
+                uint64_t ud = io_uring_cqe_get_data64(scan_cqe);
+                if (ev_ud_idx(ud) == EV_WL_IN && ev_ud_gen(ud) == ev_slot_at(&state.ev, EV_WL_IN)->gen
+                    && scan_cqe->res > 0) {
+                    wl_readable = true;
+                    break;
+                }
             }
+        }
+        if (wl_readable) {
+            if (wl_display_read_events(state.display) == -1)
+                wl_error = true;
         } else {
             wl_display_cancel_read(state.display);
         }
+        if (!wl_error && wl_display_dispatch_pending(state.display) == -1)
+            wl_error = true;
+        if (wl_error) {
+            fprintf(stderr, "[Wayland] Connection error.\n");
+            break;
+        }
 
-        if (inotify_poll_idx >= 0 && (fds[inotify_poll_idx].revents & POLLIN)) {
-            alignas(struct inotify_event) char buf[INOTIFY_BUF_LEN];
-            ssize_t                            len;
-            while ((len = read(state.inotify_fd, buf, sizeof(buf))) > 0) {
-                const struct inotify_event* ev;
-                for (char* ptr = buf; ptr < buf + len;
-                     ptr += sizeof(struct inotify_event) + ev->len) {
-                    ev = (const struct inotify_event*)ptr;
-                    if (ev->len > 0 && strcmp(ev->name, state.config_filename) == 0) {
-                        reload_global_config(&state);
-                    }
+        /* Phase 2: consume the whole CQ, recording live events; dispatch
+         * only after cq_advance so handlers may freely cancel/re-arm/free
+         * slots without invalidating the iteration. */
+        struct fired_event
+        {
+            enum ev_kind             kind;
+            struct wallpaper_output* owner;
+        } fired[256];
+        size_t               n_fired = 0;
+        unsigned             head;
+        unsigned             seen = 0;
+        struct io_uring_cqe* cqe;
+        io_uring_for_each_cqe(&state.ev.ring, head, cqe)
+        {
+            seen++;
+            uint64_t ud  = io_uring_cqe_get_data64(cqe);
+            uint32_t idx = ev_ud_idx(ud);
+            if (idx == UINT32_MAX || idx >= state.ev.n_slots)
+                continue; /* cancel-op completions */
+            struct ev_slot* s = ev_slot_at(&state.ev, idx);
+            if (ev_ud_gen(ud) != s->gen) {
+                /* Stale: generation moved on. If this was the zombie's CQE,
+                 * the slot becomes reusable now. */
+                if (s->zombie) {
+                    s->zombie  = false;
+                    s->pending = false;
                 }
+                continue;
+            }
+            s->pending = false;
+            if (cqe->res < 0) {
+                if (cqe->res != -ECANCELED) {
+                    fprintf(stderr,
+                            "[EV] poll (kind %d) failed: %s — disarming\n",
+                            (int)s->kind,
+                            strerror(-cqe->res));
+                    s->want_mask = 0;
+                }
+                continue;
+            }
+            if (n_fired < sizeof fired / sizeof *fired)
+                fired[n_fired++] = (struct fired_event){.kind = s->kind, .owner = s->owner};
+        }
+        io_uring_cq_advance(&state.ev.ring, seen);
+
+        bool dbus_fired   = false;
+        bool config_dirty = false;
+        for (size_t i = 0; i < n_fired; i++) {
+            struct wallpaper_output* o = fired[i].owner;
+            switch (fired[i].kind) {
+                case EV_SIGNAL: {
+                    struct signalfd_siginfo si;
+                    while (read(state.signal_fd, &si, sizeof(si)) == (ssize_t)sizeof(si)) { }
+                    if (state.shutting_down) {
+                        /* Second signal: restore default disposition (the
+                         * third force-kills) and stop waiting for threads. */
+                        sigprocmask(SIG_UNBLOCK, &sigmask, nullptr);
+                        running = false;
+                    } else {
+                        begin_shutdown(&state);
+                    }
+                    break;
+                }
+                case EV_INOTIFY:
+                    if (drain_inotify(&state))
+                        config_dirty = true;
+                    break;
+                case EV_DBUS:
+                    dbus_fired = true;
+                    break;
+                case EV_TIMER: {
+                    uint64_t expirations;
+                    if (o && o->timer_fd >= 0
+                        && read(o->timer_fd, &expirations, sizeof(expirations))
+                               == (ssize_t)sizeof(expirations)) {
+                        if (!(o->render.flags & F_DEAD))
+                            update_wallpaper(o);
+                    } /* EAGAIN: disarmed/re-armed this turn — spurious */
+                    break;
+                }
+                case EV_RENDER_DONE: {
+                    uint64_t sig;
+                    if (o && o->event_fd >= 0
+                        && read(o->event_fd, &sig, sizeof(sig)) == (ssize_t)sizeof(sig))
+                        finalize_render(o);
+                    break;
+                }
+                case EV_WL_IN:  /* handled in phase 1 */
+                case EV_WL_OUT: /* flush retried at loop top */
+                default:
+                    break;
             }
         }
 
-        if (dbus_poll_idx >= 0) {
-            if ((fds[dbus_poll_idx].revents & (POLLIN | POLLOUT | POLLERR)) || poll_timeout == 0) {
-                while (sd_bus_process(state.bus, nullptr) > 0)
-                    ;
-            }
-        }
+        /* Coalesced: one reload per turn, however many inotify events hit. */
+        if (config_dirty)
+            reload_global_config(&state);
 
-        int start_idx = 1;
-        if (inotify_poll_idx >= 0)
-            start_idx++;
-        if (dbus_poll_idx >= 0)
-            start_idx++;
-        for (int i = start_idx; i < idx; i++) {
-            if (fds[i].revents & (POLLIN | POLLHUP | POLLERR)) {
-                struct wallpaper_output* cur = map[i];
-                uint64_t                 u;
-                ssize_t                  n_read = read(fds[i].fd, &u, sizeof(u));
-                if (n_read != (ssize_t)sizeof(u))
-                    continue;
-
-                if (fds[i].fd == cur->event_fd) {
-                    finalize_render(cur);
-                } else if (fds[i].fd == cur->timer_fd) {
-                    if (!(cur->render.flags & F_DEAD)) {
-                        update_wallpaper(cur);
-                    }
-                }
+        if (state.bus
+            && (dbus_fired
+                || (dbus_deadline != UINT64_MAX && monotonic_usec() >= dbus_deadline))) {
+            int pr;
+            while ((pr = sd_bus_process(state.bus, nullptr)) > 0)
+                ;
+            if (pr < 0) {
+                ev_slot_cancel(&state.ev, EV_DBUS);
+                ev_slot_at(&state.ev, EV_DBUS)->fd = -1;
+                gamemode_handle_disconnect(&state, pr);
             }
         }
     }
 
+    if (wl_error)
+        rc = 1;
+
+teardown:
+    /* Stage 2: hard stop. Join stragglers, then tear the ring down BEFORE
+     * closing the fds it may still reference. Every resource below is
+     * null/-1-guarded, so this path is also the early-fatal exit — a failed
+     * startup must be just as leak-free as a clean shutdown. */
     struct wallpaper_output *output, *tmp_output;
     wl_list_for_each_safe(output, tmp_output, &state.outputs, link)
     {
@@ -2591,12 +3569,12 @@ int main(int argc, char* argv[])
         if (output->render.flags & F_THREAD_ACTIVE) {
             pthread_join(output->render_thread, nullptr);
             output->render.flags &= ~F_THREAD_ACTIVE;
-            if (output->event_fd >= 0)
-                close(output->event_fd);
-            if (output->async_result.standard.fd >= 0)
-                close(output->async_result.standard.fd);
-            if (output->async_result.glass.fd >= 0)
-                close(output->async_result.glass.fd);
+            if (output->async_result.fd >= 0)
+                close(output->async_result.fd);
+            if (output->slot_event >= 0) {
+                ev_slot_release(&state.ev, (size_t)output->slot_event);
+                output->slot_event = -1;
+            }
         }
 
         wl_list_remove(&output->link);
@@ -2616,8 +3594,12 @@ int main(int argc, char* argv[])
         free(oc);
     }
 
+    ev_exit(&state.ev);
+
     if (state.inotify_fd >= 0)
         close(state.inotify_fd);
+    if (state.signal_fd >= 0)
+        close(state.signal_fd);
     free(state.config_path);
     free(state.config_dir);
     free(state.config_filename);
@@ -2626,12 +3608,21 @@ int main(int argc, char* argv[])
 
     if (state.egl_initialized) {
         eglMakeCurrent(state.egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        if (state.util_surface != EGL_NO_SURFACE)
+            eglDestroySurface(state.egl_display, state.util_surface);
         eglDestroyContext(state.egl_display, state.egl_context);
-        eglTerminate(state.egl_display);
     }
+    if (state.egl_display != EGL_NO_DISPLAY)
+        eglTerminate(state.egl_display);
 
-    if (state.layer_shell)
-        zwlr_layer_shell_v1_destroy(state.layer_shell);
+    if (state.layer_shell) {
+        /* The destroy request only exists since v3; on an older bind just
+         * drop the client-side proxy. */
+        if (wl_proxy_get_version((struct wl_proxy*)state.layer_shell) >= 3)
+            zwlr_layer_shell_v1_destroy(state.layer_shell);
+        else
+            wl_proxy_destroy((struct wl_proxy*)state.layer_shell);
+    }
     if (state.compositor)
         wl_compositor_destroy(state.compositor);
     if (state.registry)
@@ -2640,5 +3631,5 @@ int main(int argc, char* argv[])
         wl_display_disconnect(state.display);
 
     vips_shutdown();
-    return 0;
+    return rc;
 }

@@ -4,9 +4,10 @@
   outputs =
     { nixpkgs, ... }:
     let
+      # Wayland + wlroots protocols + io_uring: Linux only.
       forAllSystems =
         f:
-        nixpkgs.lib.genAttrs nixpkgs.lib.platforms.unix (
+        nixpkgs.lib.genAttrs nixpkgs.lib.platforms.linux (
           system:
           f {
             pkgs = import nixpkgs { inherit system; };
@@ -15,7 +16,7 @@
     in
     {
       packages = forAllSystems ({ pkgs }: {
-        default = pkgs.callPackage ./default.nix {};
+        default = pkgs.callPackage ./default.nix { };
       });
       formatter = forAllSystems ({ pkgs }: pkgs.nixfmt-rfc-style);
       devShells = forAllSystems (
@@ -46,8 +47,7 @@
               libglvnd.dev
               inih
               xxHash
-            ]
-            ++ lib.optionals stdenv.isLinux [
+              liburing
               valgrind
               gdb
             ];
@@ -62,36 +62,34 @@
             gcc15
             # ccls
           ];
+          # mkShell ignores a plain `stdenv = ...;` attribute; the stdenv (and
+          # therefore the shell's cc/linker wrappers) must be injected via
+          # mkShell.override.
+          mkShellWith = stdenv: pkgs.mkShell.override { inherit stdenv; };
         in
         {
-          default = pkgs.mkShell {
-            stdenv = pkgs.gcc15Stdenv;
+          default = (mkShellWith pkgs.gcc15Stdenv) {
             packages = tools ++ gccToolchain;
             TRACY_SRC = "${pkgs.tracy.src}";
           };
 
-          gccMold = pkgs.mkShell {
-            stdenv = pkgs.stdenvAdapters.useMoldLinker pkgs.gcc15Stdenv;
+          gccMold = (mkShellWith (pkgs.stdenvAdapters.useMoldLinker pkgs.gcc15Stdenv)) {
             packages = tools ++ gccToolchain;
           };
 
-          gccGold = pkgs.mkShell {
-            stdenv = pkgs.stdenvAdapters.useGoldLinker pkgs.gcc15Stdenv;
+          gccGold = (mkShellWith (pkgs.stdenvAdapters.useGoldLinker pkgs.gcc15Stdenv)) {
             packages = tools ++ gccToolchain;
           };
 
-          llvm = pkgs.mkShell {
-            stdenv = pkgs.llvmPackages_21.stdenv;
+          llvm = (mkShellWith pkgs.llvmPackages_21.stdenv) {
             packages = tools ++ llvmToolchain;
           };
 
-          llvmMold = pkgs.mkShell {
-            stdenv = pkgs.stdenvAdapters.useMoldLinker pkgs.llvmPackages_21.stdenv;
+          llvmMold = (mkShellWith (pkgs.stdenvAdapters.useMoldLinker pkgs.llvmPackages_21.stdenv)) {
             packages = tools ++ llvmToolchain;
           };
 
-          llvmGold = pkgs.mkShell {
-            stdenv = pkgs.stdenvAdapters.useGoldLinker pkgs.llvmPackages_21.stdenv;
+          llvmGold = (mkShellWith (pkgs.stdenvAdapters.useGoldLinker pkgs.llvmPackages_21.stdenv)) {
             packages = tools ++ llvmToolchain;
           };
         }
