@@ -6,13 +6,14 @@ a wayland wallpaper engine
 
 - multi image support
 - directory support
-- Liquid Glass transition (lensing, specular highlights, content-aware
-  shadow — fitted to pixel measurements of Apple's HIG material photos) so
-  you don't get flash banged
+- Liquid Glass transition fitted to structured-light measurements of REAL
+  macOS 26 `glassEffect` renders (tone transfer, blur MTF, refraction
+  displacement field), plus the HIG-derived dynamic highlight layer, so you
+  don't get flash banged
 - both Liquid Glass variants, per output (`transition_variant`): `clear`
-  (translucent, wallpaper stays prominent — Apple's pick for media
-  backgrounds, with the HIG 35% adaptive dimming layer) and `regular`
-  (frosted platter whose luminosity adapts to the content behind it)
+  (the measured ~50% sRGB veil over a mega-blur, with the real outward
+  edge-lensing profile) and `regular` (the opaque platter: white over light
+  content, dark over dark, hue-washed by the wallpaper)
 - fill with cropping area (high, low, center, attention, entropy)
 - hot config reload (including adding/removing output sections at runtime)
 - per monitor config

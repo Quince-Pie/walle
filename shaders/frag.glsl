@@ -7,54 +7,67 @@ out vec4 FragColor;
 /*
  * Liquid Glass transition — regular and clear variants.
  *
- * The optical model is fitted to Apple's primary sources: HIG "Materials"
- * (Sep 9 2025 revision) prose plus direct pixel measurements of its variant
- * photos (materials-ios-liquid-glass-{over-light,over-dark,clear}@2x.png,
- * D = element diameter ~316 px). Measured, not folklore:
+ * The STATIC substrate below is fitted to structured-light measurements of
+ * real macOS 26.4 (25E246) `glassEffect` renders over calibration patterns
+ * (3200x2000 @1x, BOTH appearances; capture rig: /tmp/liquid-glass). The
+ * numbers are measured, not folklore:
  *
- *  - REGULAR ("blurs and adjusts the luminosity of background content"):
- *    blur sigma ~ 0.038*D; luminosity is tone-mapped onto a PLATTER whose
- *    level is bimodal in background luminance — over light content the body
- *    sits at ~0.78 linear (p5 luma lifted 0.09 -> 0.51!), over dark content
- *    it is a near-flat dark platter (sRGB ~0.11, interior std 0.4%) that
- *    keeps a hue hint (chroma ~1.9x the blurred bg). Content modulation
- *    survives at ~38% (light) / ~10% (dark).
- *  - CLEAR ("highly translucent... visually rich backgrounds remain
- *    prominent"): blur sigma ~ 0.013*D, chroma ~86% and contrast ~78%
- *    retained, only a whisper of lift (+0.01 linear). HIG mandates an
- *    optional dark dimming layer of 35% opacity when the underlying content
- *    is bright — implemented content-adaptively below.
- *  - HIGHLIGHTS: one specular ring of radius 0.973*R displaced 0.021*R
- *    screen-down; where it meets the rim (bottom) it is a ~0.007*R razor
- *    line, where it floats inside (top) it widens to a ~0.02*R soft glow.
- *    Two intensity lobes on the light axis: +0.20 linear (upper), +0.13
- *    (lower), +0.04 ambient ring. The axis travels during the transition
- *    ("lights move in space, causing light to travel around the material").
- *  - LENSING: refraction band ~0.10*R at the rim. The extreme edge
- *    CONCENTRATES light ("bends, shapes, and concentrates light in real
- *    time"): bright over light content, dark over dark — the photos show no
- *    painted edge line, it is bent content. The platter adaptation is
- *    relieved inside the band (measured: dark photo edge 0.07 sRGB < platter
- *    0.11), so raw bent content reads through at the rim.
- *  - SHADOW: a tight contact ring (penumbra ~0.035*R, slight downward bias),
- *    content-adaptive per HIG, plus a hairline dark outline. Clear carries
- *    only a faint outline — its photo shows no measurable penumbra.
+ *  - REGULAR is a fully opaque platter in both appearances: sRGB 0.980
+ *    (light) / 0.078 (dark) across the whole interior for every background
+ *    gray 0..255 (transmission MTF 0.0000 even 3 px inside the rim), plus a
+ *    hue wash that is symmetric in sRGB space once channel clipping is
+ *    accounted for: platter = Yp + 0.18 (light) / 0.28 (dark) * chroma
+ *    vector of the blurred backdrop, clamped. No rings, no bevel, no shadow
+ *    in the static material — either appearance.
+ *  - CLEAR is an exact affine veil applied in sRGB SPACE over a mega-blurred
+ *    backdrop: out = 0.494*sat(blur) + ADD, with ADD 0.267 / sat 1.102
+ *    (light) and ADD 0.016 / sat 0.85 (dark); each pole fits its whole gray
+ *    sweep to +-0.004. The HIG's "dimming layer over bright content" is
+ *    already this veil (white -> 0.761). The lens copy contrast is 0.36
+ *    (light) / 0.19 (dark, measured MTF 0.051 vs 0.122).
+ *  - `.tint()` measured as a hue-free platter shift on this build (blue and
+ *    orange produce identical pixels in both appearances) — deliberately
+ *    not modeled.
+ *  - BLUR: interior fundamental transmission at p=256 px is 0.011-0.027
+ *    (rect) -> gaussian sigma >= ~110 px at 3774 px window diagonal, i.e.
+ *    sigma ~ 0.032*diagonal. Identical at all three element sizes.
+ *  - LENSING (clear): a faint sharp copy of the backdrop, displaced OUTWARD
+ *    (structured-light phase decode), rides inside an edge band:
+ *      band width  w = min(0.44*R, 0.033*diagonal)   [110 px at R=250;
+ *                    fixed ~125 px at straight edges of huge elements]
+ *      displacement d(s) = dmax * (1 - s^5.2)(0.52 + 0.48 sin(pi/2 min(s/0.508,1)))
+ *                    with s = distance inside rim / w  (rms 0.028 vs decode)
+ *      dmax = min(0.21*R, 1.09*w);  copy contrast ~ 0.36*exp(-s) pre-veil
+ *      (MTF equal at p=64 and p=256 -> the copy itself is near-sharp.)
+ *  - The regular variant transmits nothing, so it gets no lens at all.
  *
- * Objects "materialize in and out by gradually modulating the light bending
- * and lensing" instead of fading — `thickness` drives every material term.
+ * The DYNAMIC layer (specular ring, interaction glow, grounding shadow) does
+ * not exist in the static captures — flat-gray deltas are zero to the AA
+ * edge, and even `.interactive()` buttons rest flat. It appears when the
+ * material moves (WWDC25 219: lights "move in space, causing light to travel
+ * around the material"; materialize "by modulating the light bending"). The
+ * ring/glow/shadow constants therefore come from the HIG variant photos
+ * (fitted earlier at pixel level) and drive only the moving transition:
+ *      ring radius 0.973R, center displaced 0.021R screen-down, razor at the
+ *      bottom rim (~0.007R) widening to a soft glow at the top (~0.02R),
+ *      lobes +0.20/+0.13/+0.04 linear; contact shadow only over dark
+ *      content (macOS light shows none).
  *
- * Textures are sRGB (GL_SRGB8_ALPHA8): sampling yields linear light, all
- * math below is linear, the final value is re-encoded + dithered.
+ * The light/dark pole is selected by content luminance (steep smoothstep on
+ * the blurred backdrop) — walle's stand-in for the system appearance a
+ * wallpaper daemon does not have; both poles are macOS-measured. Textures
+ * are sRGB; blending is linear except the platter wash and the veil, which
+ * are deliberately applied in sRGB space as measured.
  */
 
 // --- Textures ---
 uniform sampler2D TexA;      // outgoing wallpaper, sharp
-uniform sampler2D TexGlassA; // outgoing, pre-blurred (probe: what is under the shadow)
-uniform sampler2D TexB;      // incoming wallpaper, sharp
-uniform sampler2D TexGlassB; // incoming, pre-blurred per variant (glass body)
+uniform sampler2D TexGlassA; // outgoing, pre-blurred (shadow probe)
+uniform sampler2D TexB;      // incoming wallpaper, sharp (lens source)
+uniform sampler2D TexGlassB; // incoming, pre-blurred sigma~0.032*diag (body)
 
 // --- Uniforms ---
-uniform float Time;              // LINEAR normalized time [0,1]
+uniform float Time;              // LINEAR normalized [0,1]
 uniform vec2  Resolution;        // buffer px
 uniform vec2  CenterPointPixels; // transition origin, GL coords (y up)
 uniform float MaxRadiusPixels;
@@ -65,57 +78,68 @@ const float T_EXPAND_END  = 0.62;
 const float T_FADE_START  = 0.66;
 const float T_MATERIALIZE = 0.12;
 
-// --- Lensing ---
-const float LENS_WIDTH_FRAC    = 0.10;  // band as fraction of current radius
-const float LENS_WIDTH_MIN     = 22.0;  // px
-const float LENS_WIDTH_MAXDIAG = 0.035; // cap: fraction of output diagonal
-const float LENS_BEND_CLEAR    = 0.90;  // peak displacement, fraction of band
-const float LENS_BEND_REGULAR  = 0.55;
-const float LENS_DISPERSION    = 0.035; // chromatic split of the bend (motion only)
-const float EDGE_CLARITY       = 0.85;  // clear: bent SHARP content in the band
-const float EDGE_CONCENTRATION = 0.30;  // extreme-edge light concentration gain
-const float EDGE_ADAPT_RELIEF  = 0.55;  // platter adaptation released at the rim
+// --- Clear veil (measured, sRGB space, both appearances) ---
+// Primaries-vs-black responses sum to the white response: the veil is LINEAR
+// in sRGB space with a cross-channel matrix, i.e. a saturation term before
+// the affine map: out = MIX*(Y + SAT*(x - Y)) + ADD, luma-weighted in sRGB.
+// The mix is appearance-invariant; the scrim constant and saturation flip
+// (light: gray scrim + slight boost; dark: near-black scrim + desaturation).
+const float VEIL_MIX       = 0.494;
+const float VEIL_ADD_LIGHT = 0.267;
+const float VEIL_ADD_DARK  = 0.016;
+const float VEIL_SAT_LIGHT = 1.102;
+const float VEIL_SAT_DARK  = 0.85;
 
-// --- Highlights ring (all fractions of current radius) ---
+// --- Lens (measured; fractions of R / window diagonal) ---
+const float LENS_BAND_RFRAC  = 0.44;
+const float LENS_BAND_DIAG   = 0.033;
+const float LENS_DMAX_RFRAC  = 0.21;
+const float LENS_DMAX_WFRAC  = 1.09;
+const float LENS_COPY_LIGHT  = 0.36;  // copy contrast at the rim (pre-veil)
+const float LENS_COPY_DARK   = 0.19;  // measured MTF 0.051 vs 0.122 light
+const float LENS_PROF_POW    = 5.2;   // d(s) closed-form fit, rms 0.028
+const float LENS_PROF_KNEE   = 0.508;
+const float LENS_PROF_RIM    = 0.52;
+const float LENS_DISPERSION  = 0.030; // chromatic split during motion only
+
+// --- Regular platter (measured, both appearances; sRGB space) ---
+// Fully opaque at BOTH poles (flat to the AA edge; dark deltas flat too).
+// The hue wash is symmetric in sRGB space once clipping is accounted for:
+// platter = Yp + (wash - Yw)*WASH_CK, clamped to [0,1].
+const float PLATTER_LIGHT_S = 0.980;  // sRGB (all grays, measured)
+const float PLATTER_DARK_S  = 0.078;  // sRGB (all grays, measured)
+const float WASH_CK_LIGHT   = 0.18;
+const float WASH_CK_DARK    = 0.28;
+
+// --- Dynamic layer (HIG-photo fitted; motion only) ---
 const float RING_RADIUS_FRAC = 0.973;
-const float RING_OFFSET_FRAC = 0.021; // ring center displaced screen-down
-const float RING_W_EDGE_FRAC = 0.007; // razor where ring meets rim (bottom)
-const float RING_W_TOP_FRAC  = 0.020; // soft glow where it floats inside (top)
-const float RING_UP_GAIN     = 0.20;  // linear-light adds
+const float RING_OFFSET_FRAC = 0.021;
+const float RING_W_EDGE_FRAC = 0.007;
+const float RING_W_TOP_FRAC  = 0.020;
+const float RING_UP_GAIN     = 0.20;
 const float RING_DOWN_GAIN   = 0.13;
 const float RING_BASE_GAIN   = 0.04;
+const float SHADOW_OFF_FRAC  = 0.012;
+const float SHADOW_PEN_FRAC  = 0.035;
+const float SHADOW_PEN_MIN   = 10.0;
+const float SHADOW_BASE      = 0.16;
+const float GLOW_INTENSITY   = 0.20;
 
-// --- Regular platter (linear light) ---
-const float PLATTER_DARK_Y  = 0.012; // sRGB ~0.11 measured
-const float PLATTER_LIGHT_Y = 0.78;  // sRGB ~0.91 measured
-const float ADAPT_DARK      = 0.90;  // mix strength toward the platter
-const float ADAPT_LIGHT     = 0.62;
-const float CHROMA_DARK     = 1.89;  // platter chroma vs blurred content
-const float CHROMA_LIGHT    = 0.11;
-
-// --- Clear body ---
-const float CLEAR_GAIN = 0.93;  // slight highlight compression
-const float CLEAR_LIFT = 0.012; // whisper of frost
-const float DIM_MAX    = 0.35;  // HIG: dark dimming layer, 35% over bright content
-
-// --- Grounding ---
-const float SHADOW_OFF_FRAC = 0.012; // downward bias of the contact ring
-const float SHADOW_PEN_FRAC = 0.035; // penumbra
-const float SHADOW_PEN_MIN  = 10.0;  // px
-const float SHADOW_BASE     = 0.16;
-const float OUTLINE_WIDTH   = 2.0;   // px, hairline dark outline
-const float OUTLINE_DARK    = 0.10;
-
-const float GLOW_INTENSITY = 0.20; // interaction illumination at the origin
-const float DITHER_LSB     = 1.0 / 255.0;
-
-const vec3 LUMA = vec3(0.2126, 0.7152, 0.0722);
+const float DITHER_LSB = 1.0 / 255.0;
+const vec3  LUMA = vec3(0.2126, 0.7152, 0.0722);
+const float HALF_PI = 1.57079632679;
 
 float linToSrgb1(float c) {
     return c <= 0.0031308 ? 12.92 * c : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
 }
 vec3 linToSrgb(vec3 c) {
     return vec3(linToSrgb1(c.r), linToSrgb1(c.g), linToSrgb1(c.b));
+}
+float srgbToLin1(float c) {
+    return c <= 0.04045 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4);
+}
+vec3 srgbToLin(vec3 c) {
+    return vec3(srgbToLin1(c.r), srgbToLin1(c.g), srgbToLin1(c.b));
 }
 
 float hash12(vec2 p) {
@@ -130,7 +154,6 @@ float triDither(vec2 p) {
 }
 
 // Gel-like settle: slight overshoot past the target radius, then relax.
-// ("gel-like flexibility... moves in tandem with your interaction")
 float easeGel(float t) {
     float c1 = 0.28;
     float c3 = c1 + 1.0;
@@ -139,14 +162,14 @@ float easeGel(float t) {
 }
 
 void main() {
-    // 1. Timeline. Material thickness modulates every optical term: the
-    // documented alternative to opacity fades.
+    // 1. Timeline. Thickness modulates every material term ("materialize by
+    // modulating the light bending and lensing").
     float t_expand  = easeGel(smoothstep(0.0, T_EXPAND_END, Time));
     float t_fade    = smoothstep(T_FADE_START, 1.0, Time);
     float thickness = smoothstep(0.0, T_MATERIALIZE, Time) * (1.0 - t_fade);
     float regular   = Variant;
 
-    // 2. Geometry (SDF of the expanding circle).
+    // 2. Geometry.
     vec2  frag_px   = gl_FragCoord.xy;
     vec2  delta     = frag_px - CenterPointPixels;
     float dist_px   = length(delta);
@@ -158,106 +181,101 @@ void main() {
     float shadow_off = SHADOW_OFF_FRAC * radius_px;
     float shadow_pen = max(SHADOW_PEN_FRAC * radius_px, SHADOW_PEN_MIN);
 
-    // 3. Early out beyond glass, outline, and shadow reach.
+    // 3. Early out beyond glass and shadow reach.
     if (sdf > shadow_off + shadow_pen + 8.0) {
         FragColor = vec4(linToSrgb(texture(TexA, v_UV).rgb), 1.0);
         return;
     }
 
-    // 4. Grounding: tight contact ring + hairline outline (no big drop
-    // shadow — the photos show a ~0.035*R penumbra hugging the rim with a
-    // slight downward bias). Content-adaptive per HIG ("increases the
-    // opacity of its shadow when it is over text... lowers it over a solid
-    // light background"); probe = blurred OUTGOING image (under the shadow).
+    vec2 uv    = v_UV;
+    vec2 px2uv = 1.0 / Resolution;
+    float diag = length(Resolution);
+
+    // 4. Backdrop wash + platter mode. Wide taps flatten the chroma of the
+    // blurred backdrop (measured: the platter takes a near-uniform hue wash,
+    // not per-pixel color). Light/dark platter selection is walle's stand-in
+    // for the system appearance a wallpaper daemon does not have.
+    vec2 e1 = vec2(0.30, 0.0);
+    vec2 e2 = vec2(0.0, 0.30);
+    vec2 e3 = vec2(0.21, 0.21);
+    vec2 e4 = vec2(0.21, -0.21);
+    vec3 blurB = texture(TexGlassB, uv).rgb;
+    vec3 wash = (blurB + texture(TexGlassB, uv + e1).rgb + texture(TexGlassB, uv - e1).rgb
+                 + texture(TexGlassB, uv + e2).rgb + texture(TexGlassB, uv - e2).rgb
+                 + texture(TexGlassB, uv + e3).rgb + texture(TexGlassB, uv - e3).rgb
+                 + texture(TexGlassB, uv + e4).rgb + texture(TexGlassB, uv - e4).rgb)
+              / 9.0;
+    // Steep mode switch: macOS picks the platter by system appearance, a
+    // binary the wallpaper stands in for. Content at linear Y>=0.10 (sRGB
+    // ~0.35) decisively gets the light platter; only genuinely dark content
+    // gets the dark one. A wide blend would park mid-gray content on a
+    // mid-luminance platter that matches neither measured pole.
+    float Yw        = dot(wash, LUMA);
+    float lightness = smoothstep(0.04, 0.10, Yw);
+
+    // 5. Grounding. The static macOS material casts NO shadow over light
+    // content (flat-gray deltas are zero outside the rim); the HIG-measured
+    // tight contact ring survives only for the dark platter.
     float sdf_sh   = distance(frag_px - vec2(0.0, -shadow_off), CenterPointPixels) - radius_px;
     float penumbra = 1.0 - smoothstep(0.0, shadow_pen, sdf_sh);
     float bg_luma  = dot(texture(TexGlassA, v_UV).rgb, LUMA);
     float sh_adapt = mix(1.25, 0.60, smoothstep(0.03, 0.35, bg_luma));
-    float outline  = smoothstep(-0.5, 0.5, sdf)
-                   * (1.0 - smoothstep(OUTLINE_WIDTH * 0.5, OUTLINE_WIDTH * 1.75, sdf));
-    float sh_alpha = penumbra * SHADOW_BASE * sh_adapt * mix(0.45, 1.0, regular)
-                   + outline * OUTLINE_DARK * mix(0.80, 1.0, regular);
-    sh_alpha *= (1.0 - mask) * thickness;
+    float sh_alpha = penumbra * SHADOW_BASE * sh_adapt
+                   * regular * (1.0 - lightness) * (1.0 - mask) * thickness;
 
-    // 5. Lensing: displacement concentrated in the edge band, zero in the
-    // body. Peaks at the rim so the interior stays optically calm.
-    float diag   = length(Resolution);
-    float lens_w = clamp(radius_px * LENS_WIDTH_FRAC, LENS_WIDTH_MIN, LENS_WIDTH_MAXDIAG * diag);
-    float band   = clamp(-sdf / lens_w, 0.0, 1.0); // 0 at rim -> 1 deep inside
-    float p_lens = (1.0 - band) * step(sdf, 0.0);  // 1 at rim -> 0 inward
-    float bend   = p_lens * p_lens * lens_w * mix(LENS_BEND_CLEAR, LENS_BEND_REGULAR, regular)
-                 * thickness;
+    // 6. Lens band geometry (clear only consumes it; the dark platter's edge
+    // relief reuses the band position).
+    float w_band = min(LENS_BAND_RFRAC * radius_px, LENS_BAND_DIAG * diag);
+    float s_band = (radius_px - dist_px) / max(w_band, 1.0); // 0 at rim, + inward
+    float s01    = clamp(s_band, 0.0, 1.0);
 
-    // v_UV.y is flipped relative to gl_FragCoord.y: negate y for UV offsets.
-    vec2  px2uv = 1.0 / Resolution;
-    vec2  uv    = v_UV;
-    vec2  duv   = vec2(n_out.x, -n_out.y) * bend * px2uv;
-    float disp  = LENS_DISPERSION * mix(1.0, 0.45, regular);
-
-    // The extreme edge concentrates the light it bends: bright content makes
-    // a bright edge, dark content a dark one — never a painted line.
-    float conc = 1.0 + EDGE_CONCENTRATION * p_lens * p_lens * p_lens * p_lens * thickness;
-
-    // 6. Body per variant (uniform control flow: Variant is a uniform).
+    // 7. Body per variant (uniform control flow).
     vec3 glass_col;
     if (regular > 0.5) {
-        // The blurred body itself bends at the edge...
-        vec3 body;
-        body.r = texture(TexGlassB, uv + duv * (1.0 + disp)).r;
-        body.g = texture(TexGlassB, uv + duv).g;
-        body.b = texture(TexGlassB, uv + duv * (1.0 - disp)).b;
-        body *= conc;
-
-        // ...then luminosity is tone-mapped onto the platter. Bimodal in
-        // background luminance; the band is relieved of adaptation so bent
-        // content reads through. The platter's hue wash comes from widely
-        // spaced taps: Apple amplifies the DC chroma of the content behind
-        // the element while flattening its variation (measured over dark:
-        // chroma mean 2x background, chroma std 1/3 background) — per-pixel
-        // chroma keep would let structure bleed through the platter.
-        vec2 e1 = vec2(0.30, 0.0);
-        vec2 e2 = vec2(0.0, 0.30);
-        vec2 e3 = vec2(0.21, 0.21);
-        vec2 e4 = vec2(0.21, -0.21);
-        vec3 wash = (body + texture(TexGlassB, uv + e1).rgb + texture(TexGlassB, uv - e1).rgb
-                     + texture(TexGlassB, uv + e2).rgb + texture(TexGlassB, uv - e2).rgb
-                     + texture(TexGlassB, uv + e3).rgb + texture(TexGlassB, uv - e3).rgb
-                     + texture(TexGlassB, uv + e4).rgb + texture(TexGlassB, uv - e4).rgb)
-                  / 9.0;
-        float Yw        = dot(wash, LUMA);
-        float lightness = smoothstep(0.02, 0.30, Yw);
-        float adapt     = mix(ADAPT_DARK, ADAPT_LIGHT, lightness) * thickness
-                        * (1.0 - EDGE_ADAPT_RELIEF * p_lens);
-        float ck      = mix(CHROMA_DARK, CHROMA_LIGHT, lightness);
-        vec3  platter = vec3(mix(PLATTER_DARK_Y, PLATTER_LIGHT_Y, lightness))
-                      + (wash - vec3(Yw)) * ck;
-        glass_col = mix(body, platter, adapt);
+        // Opaque platter at BOTH poles (measured flat to the AA edge in both
+        // appearances) + symmetric sRGB-space hue wash; the clamp reproduces
+        // the measured channel clipping exactly.
+        vec3  wash_s = linToSrgb(wash);
+        float Yw_s   = dot(wash_s, LUMA);
+        float Yp_s   = mix(PLATTER_DARK_S, PLATTER_LIGHT_S, lightness);
+        float ck     = mix(WASH_CK_DARK, WASH_CK_LIGHT, lightness);
+        vec3  plat_s = clamp(vec3(Yp_s) + (wash_s - vec3(Yw_s)) * ck, 0.0, 1.0);
+        glass_col    = mix(blurB, srgbToLin(plat_s), thickness);
     } else {
-        // Clear: content passes through nearly untouched; the band shows
-        // bent SHARP content ("ensuring visually rich background elements
-        // remain prominent" while the edge visibly refracts).
-        vec3 refracted;
-        refracted.r = texture(TexB, uv + duv * (1.0 + disp)).r;
-        refracted.g = texture(TexB, uv + duv).g;
-        refracted.b = texture(TexB, uv + duv * (1.0 - disp)).b;
-        refracted *= conc;
+        // Clear: faint near-sharp copy of the backdrop, displaced OUTWARD
+        // along the rim normal by the measured profile, mixed over the
+        // mega-blur, then the measured sRGB-space veil on top.
+        float prof = (1.0 - pow(s01, LENS_PROF_POW))
+                   * (LENS_PROF_RIM + (1.0 - LENS_PROF_RIM)
+                                    * sin(HALF_PI * min(s01 / LENS_PROF_KNEE, 1.0)));
+        float dmax = min(LENS_DMAX_RFRAC * radius_px, LENS_DMAX_WFRAC * w_band);
+        float bend = dmax * prof * thickness * step(0.0, s_band);
 
-        vec3  body    = texture(TexGlassB, uv).rgb * CLEAR_GAIN + vec3(CLEAR_LIFT);
-        float clarity = EDGE_CLARITY * p_lens * sqrt(p_lens) * thickness;
-        glass_col     = mix(body, refracted, clarity);
+        // v_UV.y is flipped relative to gl_FragCoord.y: negate y for UV use.
+        vec2 duv = vec2(n_out.x, -n_out.y) * bend * px2uv;
+        vec3 lensed;
+        lensed.r = texture(TexB, uv + duv * (1.0 + LENS_DISPERSION)).r;
+        lensed.g = texture(TexB, uv + duv).g;
+        lensed.b = texture(TexB, uv + duv * (1.0 - LENS_DISPERSION)).b;
 
-        // HIG dimming layer: "if the underlying content is bright, consider
-        // adding a dark dimming layer of 35% opacity; if sufficiently dark,
-        // you don't need one." (Bricks photo Ylin 0.087 -> none. Verified.)
-        float Yb  = dot(texture(TexGlassB, uv).rgb, LUMA);
-        float dim = DIM_MAX * smoothstep(0.10, 0.42, Yb) * thickness;
-        glass_col *= 1.0 - dim;
+        float a_copy = mix(LENS_COPY_DARK, LENS_COPY_LIGHT, lightness)
+                     * exp(-max(s_band, 0.0)) * thickness * step(0.0, s_band);
+        vec3 pre = mix(blurB, lensed, a_copy);
+
+        // The veil is authored in sRGB space (measured affine + saturation
+        // matrix, per appearance); thickness relaxes it toward identity so
+        // the material can materialize.
+        vec3  pre_s = linToSrgb(pre);
+        float Ys    = dot(pre_s, LUMA);
+        float vsat  = mix(VEIL_SAT_DARK, VEIL_SAT_LIGHT, lightness);
+        pre_s       = vec3(Ys) + (pre_s - vec3(Ys)) * mix(1.0, vsat, thickness);
+        float vmix  = mix(1.0, VEIL_MIX, thickness);
+        float vadd  = mix(VEIL_ADD_DARK, VEIL_ADD_LIGHT, lightness) * thickness;
+        glass_col   = srgbToLin(clamp(pre_s * vmix + vec3(vadd), 0.0, 1.0));
     }
 
-    // 7. Highlights: ONE specular ring, radius 0.973*R, center displaced
-    // 0.021*R screen-down (GL -y). Where it meets the rim it is a razor
-    // line; where it floats inside (top) it reads as the soft inner glow.
-    // Both measured variants share it.
+    // 8. Dynamic highlights: the offset specular ring (HIG-fitted). Absent
+    // in static macOS captures; this is the moving-material layer.
     vec2  ring_c   = CenterPointPixels - vec2(0.0, RING_OFFSET_FRAC * radius_px);
     vec2  rd       = frag_px - ring_c;
     float rd_len   = length(rd);
@@ -268,31 +286,26 @@ void main() {
     float ring_w   = mix(w_edge, w_top, smoothstep(0.0, 1.0, max(n_ring.y, 0.0)));
     float ring_pr  = exp(-(ring_sdf * ring_sdf) / (ring_w * ring_w));
 
-    // Light axis travels while the material exists ("light to travel around
-    // the material"): 125 deg -> 95 deg, spanning the measured static axis.
-    float ang   = radians(125.0) - radians(30.0) * Time;
+    float ang   = radians(125.0) - radians(30.0) * Time; // light travels
     vec2  L     = vec2(cos(ang), sin(ang));
     float n_dot = dot(n_ring, L);
     float lobes = RING_BASE_GAIN + RING_UP_GAIN * pow(max(n_dot, 0.0), 1.6)
                 + RING_DOWN_GAIN * pow(max(-n_dot, 0.0), 2.0);
     vec3 ring_light = vec3(ring_pr * lobes * thickness * mask);
 
-    // 8. Interaction illumination: "illuminates from within... starting
-    // right under your fingertips" — the origin — receding as it expands.
+    // 9. Interaction glow at the origin, receding as the circle expands.
     float glow_t = thickness * (1.0 - smoothstep(0.18, 0.55, Time));
     float glow   = exp(-(dist_px * dist_px) / max(radius_px * radius_px * 0.45, 1.0));
     glass_col += vec3(glow * glow_t * GLOW_INTENSITY * mix(0.5, 1.0, regular));
 
-    // 9. Composite (linear). The material thins into the sharp incoming
-    // image; at Time=1 the frame equals TexB bit-exactly.
+    // 10. Composite (linear). At Time=1 the frame equals TexB bit-exactly.
     vec3 incoming    = texture(TexB, v_UV).rgb;
     vec3 inside_col  = mix(glass_col + ring_light, incoming, t_fade);
     vec3 background  = texture(TexA, v_UV).rgb;
     vec3 bg_shadowed = background * (1.0 - sh_alpha);
     vec3 result      = mix(bg_shadowed, inside_col, mask);
 
-    // 10. Encode + triangular dither below the visibility floor (defeats
-    // banding in the blurred body); scales out with the material.
+    // 11. Encode + triangular dither below the visibility floor.
     vec3 encoded = linToSrgb(clamp(result, 0.0, 1.0));
     encoded += triDither(frag_px + vec2(Time * 61.0)) * DITHER_LSB * (1.0 - t_fade);
 

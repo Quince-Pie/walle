@@ -70,24 +70,23 @@
 
 #define WALLE_VERSION "0.0.1"
 
-/* Liquid Glass preprocess (vips): per-variant background blur + a touch of
- * vibrancy. Blur scales with the output diagonal — the material's own scale
- * — using sigma/diameter ratios measured directly off the HIG "Materials"
- * variant photos: regular ~0.038 (structure obliterated into the platter),
- * clear ~0.013 (structure clearly survives). The saturation nudge only
- * compensates the hue mixing of the blur (measured chroma retention: clear
- * ~86% of background, regular ~45% after the shader's platter mapping).
- * Apple: the material "has no inherent color" — the legibility treatment
- * happens adaptively in the fragment shader, not as a baked-in tint here. */
-constexpr double GLASS_SIGMA_FRAC_CLEAR   = 0.013;
-constexpr double GLASS_SIGMA_FRAC_REGULAR = 0.038;
-constexpr double GLASS_SAT_CLEAR          = 1.10;
-constexpr double GLASS_SAT_REGULAR        = 1.15;
+/* Liquid Glass preprocess (vips): background mega-blur for the glass body.
+ * Structured-light measurement of real macOS 26.4 glassEffect (calibration
+ * captures, 3200x2000 @1x) bounds the interior fundamental transmission at
+ * p=256 px to 0.011-0.027 -> gaussian sigma >= ~110 px at a 3774 px window
+ * diagonal, identical across element sizes: sigma ~ 0.032 * diagonal, same
+ * for both variants. The measured clear veil is an exact affine map with no
+ * extra vibrancy (gray sweep fits to +-0.002), so saturation stays 1.0; the
+ * knobs remain for future divergence (e.g. dark-appearance captures). */
+constexpr double GLASS_SIGMA_FRAC_CLEAR   = 0.032;
+constexpr double GLASS_SIGMA_FRAC_REGULAR = 0.032;
+constexpr double GLASS_SAT_CLEAR          = 1.0;
+constexpr double GLASS_SAT_REGULAR        = 1.0;
 constexpr int    GLASS_DOWN_FACTOR        = 8;
 
 /* Bump whenever the cached pixel pipeline changes shape (layout, band count,
  * preprocess constants). Hashed into every cache key. */
-constexpr uint32_t CACHE_SCHEMA_VERSION = 3;
+constexpr uint32_t CACHE_SCHEMA_VERSION = 4;
 
 constexpr float DEFAULT_TRANSITION_DUR = 0.6f;
 constexpr int   INOTIFY_BUF_LEN        = 4096;
@@ -2084,6 +2083,19 @@ static void finalize_render(struct wallpaper_output* output)
                  + output->render.width / 4;
         int cy = (int)xoshiro256pp_bounded(&g_rng, output->render.height / 2)
                  + output->render.height / 4;
+
+        /* Debug/measurement override: WALLE_DEBUG_CENTER="x,y" pins the
+         * transition origin (buffer px, top-left origin) so external
+         * instrumentation can align with the circle deterministically. */
+        const char* dbg_center = getenv("WALLE_DEBUG_CENTER");
+        if (dbg_center) {
+            int dx_, dy_;
+            if (sscanf(dbg_center, "%d,%d", &dx_, &dy_) == 2) {
+                cx = dx_;
+                cy = dy_;
+            }
+        }
+
         output->t_center_x = (float)cx;
         output->t_center_y = (float)(output->render.height - cy); /* GL Y-axis is bottom-up */
 
