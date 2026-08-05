@@ -1,0 +1,237 @@
+{
+  "captures": [
+    {
+      "capture": "artifacts/gh-run-30589303022/download/liquid-glass-geometry-circle-512-offset-30589303022",
+      "comparison": {
+        "comparedPixels": 262144,
+        "comparedWords": 1048576,
+        "exact": true,
+        "examples": [],
+        "mismatchedChannels": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      },
+      "quad": {
+        "endpointBits": [
+          {
+            "high": "0x43800000",
+            "low": "0xc3800000",
+            "name": "sdf-x"
+          },
+          {
+            "high": "0xc3800000",
+            "low": "0x43800000",
+            "name": "sdf-y"
+          },
+          {
+            "high": "0x3f29cccd",
+            "low": "0x3e86cccd",
+            "name": "source-x"
+          },
+          {
+            "high": "0x3f3a2aab",
+            "low": "0x3ec9aaab",
+            "name": "source-y"
+          }
+        ],
+        "extent": [
+          512,
+          512
+        ],
+        "fixedBounds": [
+          20736,
+          89344,
+          151808,
+          220416
+        ],
+        "fixedUnitsPerPixel": 256,
+        "origin": [
+          81,
+          349
+        ],
+        "slopeBits": [
+          "0x3f800000",
+          "0xbf800000",
+          "0x3a4ccccd",
+          "0x3a2aaaab"
+        ],
+        "visibleBounds": [
+          81,
+          349,
+          593,
+          861
+        ]
+      },
+      "runtimeJsonSha256": "963f542b350f198b302216a33ccacb2b0b2dffdb0a9ed99235f2b4bb941e0eff",
+      "trace": {
+        "path": "artifacts/gh-run-30589303022/download/liquid-glass-geometry-circle-512-offset-30589303022/carenderer-live-tree-glass-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "d368dcaaea0b791703f040ee51c3f781f216934e9de61f475ba015876cdc9433"
+      }
+    },
+    {
+      "capture": "artifacts/gh-run-30589303022/download/liquid-glass-geometry-circle-896-center-30589303022",
+      "comparison": {
+        "comparedPixels": 802816,
+        "comparedWords": 3211264,
+        "exact": true,
+        "examples": [],
+        "mismatchedChannels": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      },
+      "quad": {
+        "endpointBits": [
+          {
+            "high": "0x43e00000",
+            "low": "0xc3e00000",
+            "name": "sdf-x"
+          },
+          {
+            "high": "0xc3e00000",
+            "low": "0x43e00000",
+            "name": "sdf-y"
+          },
+          {
+            "high": "0x3f4aaaab",
+            "low": "0x3e555556",
+            "name": "source-x"
+          },
+          {
+            "high": "0x3f4aaaab",
+            "low": "0x3e555556",
+            "name": "source-y"
+          }
+        ],
+        "extent": [
+          896,
+          896
+        ],
+        "fixedBounds": [
+          16384,
+          16384,
+          245760,
+          245760
+        ],
+        "fixedUnitsPerPixel": 256,
+        "origin": [
+          64,
+          64
+        ],
+        "slopeBits": [
+          "0x3f800000",
+          "0xbf800000",
+          "0x3a2aaaab",
+          "0x3a2aaaab"
+        ],
+        "visibleBounds": [
+          64,
+          64,
+          960,
+          960
+        ]
+      },
+      "runtimeJsonSha256": "0b144c7116ef44c5835d71aea729331e496779ce58a481b02669e74ca3be32f2",
+      "trace": {
+        "path": "artifacts/gh-run-30589303022/download/liquid-glass-geometry-circle-896-center-30589303022/carenderer-live-tree-glass-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "016e3e1efee440b600a8bd709a92754f54b3732c136508e7aa1cdeb2ff72d50a"
+      }
+    },
+    {
+      "capture": "artifacts/gh-run-30589303022/download/liquid-glass-geometry-circle-1536-center-30589303022",
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": true,
+        "examples": [],
+        "mismatchedChannels": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      },
+      "quad": {
+        "endpointBits": [
+          {
+            "high": "0x44400000",
+            "low": "0xc4400000",
+            "name": "sdf-x"
+          },
+          {
+            "high": "0xc4400000",
+            "low": "0x44400000",
+            "name": "sdf-y"
+          },
+          {
+            "high": "0x3f800000",
+            "low": "0x00000000",
+            "name": "source-x"
+          },
+          {
+            "high": "0x3f800000",
+            "low": "0x00000000",
+            "name": "source-y"
+          }
+        ],
+        "extent": [
+          1536,
+          1536
+        ],
+        "fixedBounds": [
+          -65536,
+          -65536,
+          327680,
+          327680
+        ],
+        "fixedUnitsPerPixel": 256,
+        "origin": [
+          -256,
+          -256
+        ],
+        "slopeBits": [
+          "0x3f800000",
+          "0xbf800000",
+          "0x3a2aaaab",
+          "0x3a2aaaab"
+        ],
+        "visibleBounds": [
+          0,
+          0,
+          1024,
+          1024
+        ]
+      },
+      "runtimeJsonSha256": "3eb0ea40323a3105bcac42389f528ee902f6f287a64323a69599bd51cd522161",
+      "trace": {
+        "path": "artifacts/gh-run-30589303022/download/liquid-glass-geometry-circle-1536-center-30589303022/carenderer-live-tree-glass-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "660d3bf733901e7aca5194b574f72b11dcf56e91b46439508b0ee597ad914dfd"
+      }
+    }
+  ],
+  "gate": {
+    "captureCount": 3,
+    "capturedCoordinateOrCoefficientTableReadByPredictor": false,
+    "comparedWords": 8454144,
+    "exact": true,
+    "mismatchedWords": 0,
+    "productionShaderAuthorized": false
+  },
+  "implementation": {
+    "coefficientModel": "lg-test/Analysis/raster_tile_coefficient_model_v3.py",
+    "file": "analysis/liquid_glass_runtime_raster_coefficients.py",
+    "model": "1/256-pixel setup with ties toward positive infinity; 27-bit first/tile/reciprocal stages; individually low-19-bit truncated tile partial products; carry propagated only through discarded column 18; 28-bit composite; 36-bit quad-center iterator"
+  },
+  "liquidGlassRuntimeRasterCoefficientGateSchemaVersion": 1
+}

@@ -1,0 +1,4117 @@
+{
+  "acceptance": {
+    "allocationPolicyExact": false,
+    "allowTolerance": false,
+    "effectiveOriginPolicyExact": true,
+    "maximumMismatchedComponents": 0,
+    "passed": false
+  },
+  "aggregate": {
+    "cropOrigin": {
+      "componentCount": 28,
+      "exactEveryState": false,
+      "mismatchedComponents": 6
+    },
+    "destinationExtent": {
+      "componentCount": 28,
+      "exactEveryState": false,
+      "mismatchedComponents": 6
+    },
+    "effectiveOrigin": {
+      "componentCount": 28,
+      "exactEveryState": true,
+      "mismatchedComponents": 0
+    },
+    "producerExtent": {
+      "componentCount": 28,
+      "exactEveryState": true,
+      "mismatchedComponents": 0
+    },
+    "runtimeScaleLawExactEveryState": true,
+    "stateCount": 14,
+    "textureCoordinateClamp": {
+      "componentCount": 56,
+      "exactEveryState": false,
+      "mismatchedComponents": 6
+    }
+  },
+  "classification": "prospective-unseen-geometry-holdout",
+  "dynamicAllocationHoldoutResultSchemaVersion": 1,
+  "geometry": {
+    "centerX": 512,
+    "centerY": 512,
+    "extendsBeyondWindow": true,
+    "height": 1536,
+    "name": "circle-1536-center",
+    "shape": "circle",
+    "width": 1536,
+    "windowHeight": 1024,
+    "windowWidth": 1024
+  },
+  "sampleIndices": [
+    1,
+    4,
+    8,
+    12,
+    15,
+    16,
+    17,
+    20,
+    24,
+    27,
+    28,
+    29,
+    31,
+    32
+  ],
+  "states": [
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": true,
+          "mismatchedComponents": 0
+        }
+      },
+      "expectedRuntimeScale": 0.9843993186950684,
+      "observed": {
+        "copyOffset": [
+          -1,
+          -4
+        ],
+        "cropOrigin": [
+          481,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          480,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 1.52587890625e-05,
+        "producerExtent": [
+          576,
+          576
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 32,
+          "allSourceScaleMismatchedComponents": 16,
+          "fragmentFunction": "TimgA2Xhfc_Isrc",
+          "indexCount": 24,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "27dde966de6f87a65c921747cac402dd75b42e7894eb8ec4810a960f71ba2a07",
+          "primaryVertices": [
+            [
+              478.0,
+              0.0,
+              0.0,
+              1.0,
+              485.5753173828125,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1009.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.9906005859375,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1009.0,
+              530.0,
+              0.0,
+              1.0,
+              1024.9906005859375,
+              538.3994140625,
+              0.0,
+              0.0
+            ],
+            [
+              478.0,
+              530.0,
+              0.0,
+              1.0,
+              485.5753173828125,
+              538.3994140625,
+              0.0,
+              3.9765989780426025
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                478.0,
+                0.0,
+                1009.0,
+                530.0
+              ],
+              "source": [
+                485.5753173828125,
+                0.0,
+                1024.9906005859375,
+                538.3994140625
+              ]
+            },
+            {
+              "position": [
+                478.0,
+                -1.0,
+                1009.0,
+                0.0
+              ],
+              "source": [
+                485.5753173828125,
+                0.5,
+                1024.9906005859375,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                1009.0,
+                -1.0,
+                1010.0,
+                0.0
+              ],
+              "source": [
+                1024.4906005859375,
+                0.5,
+                1024.4906005859375,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                1009.0,
+                0.0,
+                1010.0,
+                530.0
+              ],
+              "source": [
+                1024.4906005859375,
+                0.0,
+                1024.4906005859375,
+                538.3994140625
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            544,
+            544
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 16,
+          "vertexPayloadSHA256": "86607021e31b3525376493516d308251db19895c66796cf876c61bbb90f0c498",
+          "viewport": [
+            0,
+            0,
+            576,
+            576
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          526,
+          526
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 526,
+            "clippedBounds": [
+              488.037353515625,
+              1024.0
+            ],
+            "cropOrigin": 481,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              480.4236382985255,
+              1008.02490234375
+            ],
+            "unclippedBounds": [
+              488.037353515625,
+              2024.037353515625
+            ]
+          },
+          "y": {
+            "clampMaximum": 526,
+            "clippedBounds": [
+              0.0,
+              535.962646484375
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              0.0,
+              527.6012640452245
+            ],
+            "unclippedBounds": [
+              -1000.037353515625,
+              535.962646484375
+            ]
+          }
+        },
+        "cropOrigin": [
+          481,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          480,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          488.037353515625,
+          488.037353515625
+        ],
+        "producerExtent": [
+          576,
+          576
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          526,
+          526
+        ]
+      },
+      "remaining": 0.03120136260986328,
+      "runtimeScale": 0.9843993186950684,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 1
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": true,
+          "mismatchedComponents": 0
+        }
+      },
+      "expectedRuntimeScale": 0.9374933242797852,
+      "observed": {
+        "copyOffset": [
+          -2,
+          -4
+        ],
+        "cropOrigin": [
+          390,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          388,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 2.288818359375e-05,
+        "producerExtent": [
+          576,
+          576
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 32,
+          "allSourceScaleMismatchedComponents": 16,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 24,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "3967021f69be1c0dea52ac3aed3c884528b86496a07e3957b120255ab66a53f1",
+          "primaryVertices": [
+            [
+              387.0,
+              0.0,
+              0.0,
+              1.0,
+              412.8029479980469,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              960.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.00732421875,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              960.0,
+              573.0,
+              0.0,
+              1.0,
+              1024.00732421875,
+              611.204345703125,
+              0.0,
+              -1.5
+            ],
+            [
+              387.0,
+              573.0,
+              0.0,
+              1.0,
+              412.8029479980469,
+              611.204345703125,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                387.0,
+                0.0,
+                960.0,
+                573.0
+              ],
+              "source": [
+                412.8029479980469,
+                0.0,
+                1024.00732421875,
+                611.204345703125
+              ]
+            },
+            {
+              "position": [
+                387.0,
+                -1.0,
+                960.0,
+                0.0
+              ],
+              "source": [
+                412.8029479980469,
+                0.5,
+                1024.00732421875,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                960.0,
+                -1.0,
+                961.0,
+                0.0
+              ],
+              "source": [
+                1023.50732421875,
+                0.5,
+                1023.50732421875,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                960.0,
+                0.0,
+                961.0,
+                573.0
+              ],
+              "source": [
+                1023.50732421875,
+                0.0,
+                1023.50732421875,
+                611.204345703125
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            576,
+            576
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 16,
+          "vertexPayloadSHA256": "2fb1732e64970104592056ccd1d0edc7a90e63ae08521be8541d5fff31019647",
+          "viewport": [
+            0,
+            0,
+            576,
+            576
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          568,
+          569
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 568,
+            "clippedBounds": [
+              415.98974609375,
+              1024.0
+            ],
+            "cropOrigin": 390,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              389.98760993173346,
+              959.9931640625
+            ],
+            "unclippedBounds": [
+              415.98974609375,
+              1951.98974609375
+            ]
+          },
+          "y": {
+            "clampMaximum": 569,
+            "clippedBounds": [
+              0.0,
+              608.01025390625
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              0.0,
+              570.0055541307665
+            ],
+            "unclippedBounds": [
+              -927.98974609375,
+              608.01025390625
+            ]
+          }
+        },
+        "cropOrigin": [
+          390,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          388,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          415.98974609375,
+          415.98974609375
+        ],
+        "producerExtent": [
+          576,
+          576
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          568,
+          569
+        ]
+      },
+      "remaining": 0.1250133514404297,
+      "runtimeScale": 0.9374933242797852,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 4
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": true,
+          "mismatchedComponents": 0
+        }
+      },
+      "expectedRuntimeScale": 0.8736772537231445,
+      "observed": {
+        "copyOffset": [
+          -2,
+          -4
+        ],
+        "cropOrigin": [
+          278,
+          0
+        ],
+        "destinationExtent": [
+          640,
+          640
+        ],
+        "effectiveOrigin": [
+          276,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 7.62939453125e-06,
+        "producerExtent": [
+          640,
+          640
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 32,
+          "allSourceScaleMismatchedComponents": 16,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 24,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "eca7a4cd6d50ca8b4848c668ff026bcb7e20537817db2c6d227f7b31447d65f7",
+          "primaryVertices": [
+            [
+              275.0,
+              0.0,
+              0.0,
+              1.0,
+              314.76153564453125,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              895.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.40576171875,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              895.0,
+              620.0,
+              0.0,
+              1.0,
+              1024.40576171875,
+              709.6442260742188,
+              0.0,
+              -1.5
+            ],
+            [
+              275.0,
+              620.0,
+              0.0,
+              1.0,
+              314.76153564453125,
+              709.6442260742188,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                275.0,
+                0.0,
+                895.0,
+                620.0
+              ],
+              "source": [
+                314.76153564453125,
+                0.0,
+                1024.40576171875,
+                709.6442260742188
+              ]
+            },
+            {
+              "position": [
+                275.0,
+                -1.0,
+                895.0,
+                0.0
+              ],
+              "source": [
+                314.76153564453125,
+                0.5,
+                1024.40576171875,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                895.0,
+                -1.0,
+                896.0,
+                0.0
+              ],
+              "source": [
+                1023.90576171875,
+                0.5,
+                1023.90576171875,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                895.0,
+                0.0,
+                896.0,
+                620.0
+              ],
+              "source": [
+                1023.90576171875,
+                0.0,
+                1023.90576171875,
+                709.6442260742188
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            633,
+            633
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 16,
+          "vertexPayloadSHA256": "5f2c9a4ce174fa27067a13effbb839092648adccd365eccd52d838c5c74bf51f",
+          "viewport": [
+            0,
+            0,
+            640,
+            640
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          615,
+          615
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 615,
+            "clippedBounds": [
+              317.96826171875,
+              1024.0
+            ],
+            "cropOrigin": 278,
+            "destinationExtent": 640,
+            "producerExtent": 640,
+            "scaledBounds": [
+              277.80163766955957,
+              894.6455078125
+            ],
+            "unclippedBounds": [
+              317.96826171875,
+              1853.96826171875
+            ]
+          },
+          "y": {
+            "clampMaximum": 615,
+            "clippedBounds": [
+              0.0,
+              706.03173828125
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 640,
+            "producerExtent": 640,
+            "scaledBounds": [
+              0.0,
+              616.8438701429404
+            ],
+            "unclippedBounds": [
+              -829.96826171875,
+              706.03173828125
+            ]
+          }
+        },
+        "cropOrigin": [
+          278,
+          0
+        ],
+        "destinationExtent": [
+          640,
+          640
+        ],
+        "effectiveOrigin": [
+          276,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          317.96826171875,
+          317.96826171875
+        ],
+        "producerExtent": [
+          640,
+          640
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          615,
+          615
+        ]
+      },
+      "remaining": 0.25264549255371094,
+      "runtimeScale": 0.8736772537231445,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 8
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": true,
+          "mismatchedComponents": 0
+        }
+      },
+      "expectedRuntimeScale": 0.8116064071655273,
+      "observed": {
+        "copyOffset": [
+          -1,
+          -4
+        ],
+        "cropOrigin": [
+          181,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          180,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 2.6702880859375e-05,
+        "producerExtent": [
+          704,
+          704
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 32,
+          "allSourceScaleMismatchedComponents": 16,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 24,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "797b2f7e6fa62f5d6fc92af9c31ce037af9e41ec4c7b633491c661971b2c1bd1",
+          "primaryVertices": [
+            [
+              178.0,
+              0.0,
+              0.0,
+              1.0,
+              219.31813049316406,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              832.0,
+              0.0,
+              0.0,
+              1.0,
+              1025.12744140625,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              832.0,
+              653.0,
+              0.0,
+              1.0,
+              1025.12744140625,
+              804.5772094726562,
+              0.0,
+              -1.5
+            ],
+            [
+              178.0,
+              653.0,
+              0.0,
+              1.0,
+              219.31813049316406,
+              804.5772094726562,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                178.0,
+                0.0,
+                832.0,
+                653.0
+              ],
+              "source": [
+                219.31813049316406,
+                0.0,
+                1025.12744140625,
+                804.5772094726562
+              ]
+            },
+            {
+              "position": [
+                178.0,
+                -1.0,
+                832.0,
+                0.0
+              ],
+              "source": [
+                219.31813049316406,
+                0.5,
+                1025.12744140625,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                832.0,
+                -1.0,
+                833.0,
+                0.0
+              ],
+              "source": [
+                1024.62744140625,
+                0.5,
+                1024.62744140625,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                832.0,
+                0.0,
+                833.0,
+                653.0
+              ],
+              "source": [
+                1024.62744140625,
+                0.0,
+                1024.62744140625,
+                804.5772094726562
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            667,
+            667
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 16,
+          "vertexPayloadSHA256": "58dad4ad805cd170cd8c75a2a7df68d40d7f46e73897970e34b5d0149d2e1ab2",
+          "viewport": [
+            0,
+            0,
+            704,
+            704
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          649,
+          649
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 649,
+            "clippedBounds": [
+              222.62744140625,
+              1024.0
+            ],
+            "cropOrigin": 181,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              180.68585785618052,
+              831.0849609375
+            ],
+            "unclippedBounds": [
+              222.62744140625,
+              1758.62744140625
+            ]
+          },
+          "y": {
+            "clampMaximum": 649,
+            "clippedBounds": [
+              0.0,
+              801.37255859375
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              0.0,
+              650.3991030813195
+            ],
+            "unclippedBounds": [
+              -734.62744140625,
+              801.37255859375
+            ]
+          }
+        },
+        "cropOrigin": [
+          181,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          180,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          222.62744140625,
+          222.62744140625
+        ],
+        "producerExtent": [
+          704,
+          704
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          649,
+          649
+        ]
+      },
+      "remaining": 0.3767871856689453,
+      "runtimeScale": 0.8116064071655273,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 12
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": true,
+          "mismatchedComponents": 0
+        }
+      },
+      "expectedRuntimeScale": 0.7648177146911621,
+      "observed": {
+        "copyOffset": [
+          -4,
+          -4
+        ],
+        "cropOrigin": [
+          116,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          112,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 1.52587890625e-05,
+        "producerExtent": [
+          704,
+          704
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 32,
+          "allSourceScaleMismatchedComponents": 16,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 24,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "bd6740a588b3454bc5ab19cd9b27f7760b0e22a75dcc751cc5c6cbe1a22692d3",
+          "primaryVertices": [
+            [
+              113.0,
+              0.0,
+              0.0,
+              1.0,
+              147.74761962890625,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              784.0,
+              0.0,
+              0.0,
+              1.0,
+              1025.080810546875,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              784.0,
+              670.0,
+              0.0,
+              1.0,
+              1025.080810546875,
+              876.0257568359375,
+              0.0,
+              -1.5
+            ],
+            [
+              113.0,
+              670.0,
+              0.0,
+              1.0,
+              147.74761962890625,
+              876.0257568359375,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                113.0,
+                0.0,
+                784.0,
+                670.0
+              ],
+              "source": [
+                147.74761962890625,
+                0.0,
+                1025.080810546875,
+                876.0257568359375
+              ]
+            },
+            {
+              "position": [
+                113.0,
+                -1.0,
+                784.0,
+                0.0
+              ],
+              "source": [
+                147.74761962890625,
+                0.5,
+                1025.080810546875,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                784.0,
+                -1.0,
+                785.0,
+                0.0
+              ],
+              "source": [
+                1024.580810546875,
+                0.5,
+                1024.580810546875,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                784.0,
+                0.0,
+                785.0,
+                670.0
+              ],
+              "source": [
+                1024.580810546875,
+                0.0,
+                1024.580810546875,
+                876.0257568359375
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            684,
+            684
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 16,
+          "vertexPayloadSHA256": "4fcda378e4e1a4fd9cbb266cda300a9790e1d1fad32500f44f05a21baebeed36",
+          "viewport": [
+            0,
+            0,
+            704,
+            704
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          666,
+          666
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 666,
+            "clippedBounds": [
+              150.760009765625,
+              1024.0
+            ],
+            "cropOrigin": 116,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              115.3039261357626,
+              783.17333984375
+            ],
+            "unclippedBounds": [
+              150.760009765625,
+              1686.760009765625
+            ]
+          },
+          "y": {
+            "clampMaximum": 666,
+            "clippedBounds": [
+              0.0,
+              873.239990234375
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              0.0,
+              667.8694137079874
+            ],
+            "unclippedBounds": [
+              -662.760009765625,
+              873.239990234375
+            ]
+          }
+        },
+        "cropOrigin": [
+          116,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          112,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          150.760009765625,
+          150.760009765625
+        ],
+        "producerExtent": [
+          704,
+          704
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          666,
+          666
+        ]
+      },
+      "remaining": 0.4703645706176758,
+      "runtimeScale": 0.7648177146911621,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 15
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": true,
+          "mismatchedComponents": 0
+        }
+      },
+      "expectedRuntimeScale": 0.7487068176269531,
+      "observed": {
+        "copyOffset": [
+          -3,
+          -4
+        ],
+        "cropOrigin": [
+          95,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          92,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 3.814697265625e-06,
+        "producerExtent": [
+          704,
+          704
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 32,
+          "allSourceScaleMismatchedComponents": 16,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 24,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "3598a45b04ec360bfda85ccdc62584ff4739837ba00666406b0edd9d5a52552b",
+          "primaryVertices": [
+            [
+              92.0,
+              0.0,
+              0.0,
+              1.0,
+              122.8785400390625,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              767.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.4329833984375,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              767.0,
+              674.0,
+              0.0,
+              1.0,
+              1024.4329833984375,
+              900.2188720703125,
+              0.0,
+              -1.5
+            ],
+            [
+              92.0,
+              674.0,
+              0.0,
+              1.0,
+              122.8785400390625,
+              900.2188720703125,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                92.0,
+                0.0,
+                767.0,
+                674.0
+              ],
+              "source": [
+                122.8785400390625,
+                0.0,
+                1024.4329833984375,
+                900.2188720703125
+              ]
+            },
+            {
+              "position": [
+                92.0,
+                -1.0,
+                767.0,
+                0.0
+              ],
+              "source": [
+                122.8785400390625,
+                0.5,
+                1024.4329833984375,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                767.0,
+                -1.0,
+                768.0,
+                0.0
+              ],
+              "source": [
+                1023.9329833984375,
+                0.5,
+                1023.9329833984375,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                767.0,
+                0.0,
+                768.0,
+                674.0
+              ],
+              "source": [
+                1023.9329833984375,
+                0.0,
+                1023.9329833984375,
+                900.2188720703125
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            688,
+            689
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 16,
+          "vertexPayloadSHA256": "9baec29bf3a44f4fcd31f6abbf0fbaed47327324f63f26dde3b5bd714f467479",
+          "viewport": [
+            0,
+            0,
+            704,
+            704
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          670,
+          671
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 670,
+            "clippedBounds": [
+              126.013671875,
+              1024.0
+            ],
+            "cropOrigin": 95,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              94.34729524701834,
+              766.67578125
+            ],
+            "unclippedBounds": [
+              126.013671875,
+              1662.013671875
+            ]
+          },
+          "y": {
+            "clampMaximum": 671,
+            "clippedBounds": [
+              0.0,
+              897.986328125
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              0.0,
+              672.3284860029817
+            ],
+            "unclippedBounds": [
+              -638.013671875,
+              897.986328125
+            ]
+          }
+        },
+        "cropOrigin": [
+          95,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          92,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          126.013671875,
+          126.013671875
+        ],
+        "producerExtent": [
+          704,
+          704
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          670,
+          671
+        ]
+      },
+      "remaining": 0.5025863647460938,
+      "runtimeScale": 0.7487068176269531,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 16
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": true,
+          "mismatchedComponents": 0
+        }
+      },
+      "expectedRuntimeScale": 0.7330646514892578,
+      "observed": {
+        "copyOffset": [
+          -3,
+          -4
+        ],
+        "cropOrigin": [
+          75,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          72,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 2.288818359375e-05,
+        "producerExtent": [
+          704,
+          704
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 32,
+          "allSourceScaleMismatchedComponents": 16,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 24,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "e4d4bb3c550ffcedebcfebff4c8793721ef5e733c7627ff98c751f771e71de2d",
+          "primaryVertices": [
+            [
+              72.0,
+              0.0,
+              0.0,
+              1.0,
+              98.21780395507812,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              751.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.46630859375,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              751.0,
+              679.0,
+              0.0,
+              1.0,
+              1024.46630859375,
+              926.2484741210938,
+              0.0,
+              -1.5
+            ],
+            [
+              72.0,
+              679.0,
+              0.0,
+              1.0,
+              98.21780395507812,
+              926.2484741210938,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                72.0,
+                0.0,
+                751.0,
+                679.0
+              ],
+              "source": [
+                98.21780395507812,
+                0.0,
+                1024.46630859375,
+                926.2484741210938
+              ]
+            },
+            {
+              "position": [
+                72.0,
+                -1.0,
+                751.0,
+                0.0
+              ],
+              "source": [
+                98.21780395507812,
+                0.5,
+                1024.46630859375,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                751.0,
+                -1.0,
+                752.0,
+                0.0
+              ],
+              "source": [
+                1023.96630859375,
+                0.5,
+                1023.96630859375,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                751.0,
+                0.0,
+                752.0,
+                679.0
+              ],
+              "source": [
+                1023.96630859375,
+                0.0,
+                1023.96630859375,
+                926.2484741210938
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            692,
+            692
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 16,
+          "vertexPayloadSHA256": "41d99f1d0c78ab7f30a5701864d3715c023e1a874c4507fb7b3afdb70035267d",
+          "viewport": [
+            0,
+            0,
+            704,
+            704
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          674,
+          674
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 674,
+            "clippedBounds": [
+              101.9873046875,
+              1024.0
+            ],
+            "cropOrigin": 75,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              74.76328796707094,
+              750.658203125
+            ],
+            "unclippedBounds": [
+              101.9873046875,
+              1637.9873046875
+            ]
+          },
+          "y": {
+            "clampMaximum": 674,
+            "clippedBounds": [
+              0.0,
+              922.0126953125
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              0.0,
+              675.8949151579291
+            ],
+            "unclippedBounds": [
+              -613.9873046875,
+              922.0126953125
+            ]
+          }
+        },
+        "cropOrigin": [
+          75,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          72,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          101.9873046875,
+          101.9873046875
+        ],
+        "producerExtent": [
+          704,
+          704
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          674,
+          674
+        ]
+      },
+      "remaining": 0.5338706970214844,
+      "runtimeScale": 0.7330646514892578,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 17
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": true,
+          "mismatchedComponents": 0
+        }
+      },
+      "expectedRuntimeScale": 0.6863465309143066,
+      "observed": {
+        "copyOffset": [
+          -5,
+          -4
+        ],
+        "cropOrigin": [
+          21,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          16,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 1.1444091796875e-05,
+        "producerExtent": [
+          704,
+          704
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 32,
+          "allSourceScaleMismatchedComponents": 16,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 24,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "2f252e3714af7ef0f9191483bfa25a82cfd2924149ea34ec91214f20e84273e8",
+          "primaryVertices": [
+            [
+              19.0,
+              0.0,
+              0.0,
+              1.0,
+              27.682809829711914,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              703.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.263916015625,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              703.0,
+              684.0,
+              0.0,
+              1.0,
+              1024.263916015625,
+              996.5811157226562,
+              0.0,
+              -1.5
+            ],
+            [
+              19.0,
+              684.0,
+              0.0,
+              1.0,
+              27.682809829711914,
+              996.5811157226562,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                19.0,
+                0.0,
+                703.0,
+                684.0
+              ],
+              "source": [
+                27.682809829711914,
+                0.0,
+                1024.263916015625,
+                996.5811157226562
+              ]
+            },
+            {
+              "position": [
+                19.0,
+                -1.0,
+                703.0,
+                0.0
+              ],
+              "source": [
+                27.682809829711914,
+                0.5,
+                1024.263916015625,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                703.0,
+                -1.0,
+                704.0,
+                0.0
+              ],
+              "source": [
+                1023.763916015625,
+                0.5,
+                1023.763916015625,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                703.0,
+                0.0,
+                704.0,
+                684.0
+              ],
+              "source": [
+                1023.763916015625,
+                0.0,
+                1023.763916015625,
+                996.5811157226562
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            698,
+            699
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 16,
+          "vertexPayloadSHA256": "362cb0bb7fe144d39cd77f163b75795b803178319738ec5fa6d5df19f7b795ed",
+          "viewport": [
+            0,
+            0,
+            704,
+            704
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          680,
+          681
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 680,
+            "clippedBounds": [
+              30.228271484375,
+              1024.0
+            ],
+            "cropOrigin": 21,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              20.74706926883664,
+              702.81884765625
+            ],
+            "unclippedBounds": [
+              30.228271484375,
+              1566.228271484375
+            ]
+          },
+          "y": {
+            "clampMaximum": 681,
+            "clippedBounds": [
+              0.0,
+              993.771728515625
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 704,
+            "producerExtent": 704,
+            "scaledBounds": [
+              0.0,
+              682.0717783874134
+            ],
+            "unclippedBounds": [
+              -542.228271484375,
+              993.771728515625
+            ]
+          }
+        },
+        "cropOrigin": [
+          21,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          16,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          30.228271484375,
+          30.228271484375
+        ],
+        "producerExtent": [
+          704,
+          704
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          680,
+          681
+        ]
+      },
+      "remaining": 0.6273069381713867,
+      "runtimeScale": 0.6863465309143066,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 20
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": false,
+          "mismatchedComponents": 1
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": false,
+          "mismatchedComponents": 2
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": false,
+          "mismatchedComponents": 1
+        }
+      },
+      "expectedRuntimeScale": 0.6249556541442871,
+      "observed": {
+        "copyOffset": [
+          -4,
+          -4
+        ],
+        "cropOrigin": [
+          0,
+          0
+        ],
+        "destinationExtent": [
+          704,
+          704
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 0.0,
+        "producerExtent": [
+          640,
+          640
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 72,
+          "allSourceScaleMismatchedComponents": 48,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 54,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "0c602bf626accac579bf874ac6575fd7ef921d1aefd34803f8e0cfc906537f49",
+          "primaryVertices": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              640.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.0726318359375,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              640.0,
+              640.0,
+              0.0,
+              1.0,
+              1024.0726318359375,
+              1024.0726318359375,
+              0.0,
+              -1.5
+            ],
+            [
+              0.0,
+              640.0,
+              0.0,
+              1.0,
+              0.0,
+              1024.0726318359375,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                0.0,
+                0.0,
+                640.0,
+                640.0
+              ],
+              "source": [
+                0.0,
+                0.0,
+                1024.0726318359375,
+                1024.0726318359375
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                0.0,
+                0.0,
+                640.0
+              ],
+              "source": [
+                0.5,
+                0.0,
+                0.5,
+                1024.0726318359375
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                -1.0,
+                0.0,
+                0.0
+              ],
+              "source": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                -1.0,
+                640.0,
+                0.0
+              ],
+              "source": [
+                0.0,
+                0.5,
+                1024.0726318359375,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                640.0,
+                -1.0,
+                641.0,
+                0.0
+              ],
+              "source": [
+                1023.5726318359375,
+                0.5,
+                1023.5726318359375,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                640.0,
+                0.0,
+                641.0,
+                640.0
+              ],
+              "source": [
+                1023.5726318359375,
+                0.0,
+                1023.5726318359375,
+                1024.0726318359375
+              ]
+            },
+            {
+              "position": [
+                640.0,
+                640.0,
+                641.0,
+                641.0
+              ],
+              "source": [
+                1023.5726318359375,
+                1023.5726318359375,
+                1023.5726318359375,
+                1023.5726318359375
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                640.0,
+                640.0,
+                641.0
+              ],
+              "source": [
+                0.0,
+                1023.5726318359375,
+                1024.0726318359375,
+                1023.5726318359375
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                640.0,
+                0.0,
+                641.0
+              ],
+              "source": [
+                0.5,
+                1023.5726318359375,
+                0.5,
+                1023.5726318359375
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            640,
+            640
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 36,
+          "vertexPayloadSHA256": "8549f789d44f617387324d53a60253bddb1414ddf5c7124cbcdd77f935a419a0",
+          "viewport": [
+            0,
+            0,
+            640,
+            640
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          638,
+          638
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 637,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 1,
+            "destinationExtent": 640,
+            "producerExtent": 640,
+            "scaledBounds": [
+              0.0,
+              639.95458984375
+            ],
+            "unclippedBounds": [
+              -64.068115234375,
+              1471.931884765625
+            ]
+          },
+          "y": {
+            "clampMaximum": 638,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 640,
+            "producerExtent": 640,
+            "scaledBounds": [
+              0.0,
+              639.95458984375
+            ],
+            "unclippedBounds": [
+              -447.931884765625,
+              1088.068115234375
+            ]
+          }
+        },
+        "cropOrigin": [
+          1,
+          0
+        ],
+        "destinationExtent": [
+          640,
+          640
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          -64.068115234375,
+          -64.068115234375
+        ],
+        "producerExtent": [
+          640,
+          640
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          637,
+          638
+        ]
+      },
+      "remaining": 0.7500886917114258,
+      "runtimeScale": 0.6249556541442871,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 24
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": false,
+          "mismatchedComponents": 1
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": false,
+          "mismatchedComponents": 1
+        }
+      },
+      "expectedRuntimeScale": 0.5772128105163574,
+      "observed": {
+        "copyOffset": [
+          -4,
+          -4
+        ],
+        "cropOrigin": [
+          0,
+          0
+        ],
+        "destinationExtent": [
+          640,
+          640
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 0.0,
+        "producerExtent": [
+          640,
+          640
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 72,
+          "allSourceScaleMismatchedComponents": 48,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 54,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "8159e45afea904025b7dcf6c716ac790963c174845fe13712dde4f47f3e75aa6",
+          "primaryVertices": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              592.0,
+              0.0,
+              0.0,
+              1.0,
+              1025.6182861328125,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              592.0,
+              592.0,
+              0.0,
+              1.0,
+              1025.6182861328125,
+              1025.6182861328125,
+              0.0,
+              -1.5
+            ],
+            [
+              0.0,
+              592.0,
+              0.0,
+              1.0,
+              0.0,
+              1025.6182861328125,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                0.0,
+                0.0,
+                592.0,
+                592.0
+              ],
+              "source": [
+                0.0,
+                0.0,
+                1025.6182861328125,
+                1025.6182861328125
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                0.0,
+                0.0,
+                592.0
+              ],
+              "source": [
+                0.5,
+                0.0,
+                0.5,
+                1025.6182861328125
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                -1.0,
+                0.0,
+                0.0
+              ],
+              "source": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                -1.0,
+                592.0,
+                0.0
+              ],
+              "source": [
+                0.0,
+                0.5,
+                1025.6182861328125,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                592.0,
+                -1.0,
+                593.0,
+                0.0
+              ],
+              "source": [
+                1025.1182861328125,
+                0.5,
+                1025.1182861328125,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                592.0,
+                0.0,
+                593.0,
+                592.0
+              ],
+              "source": [
+                1025.1182861328125,
+                0.0,
+                1025.1182861328125,
+                1025.6182861328125
+              ]
+            },
+            {
+              "position": [
+                592.0,
+                592.0,
+                593.0,
+                593.0
+              ],
+              "source": [
+                1025.1182861328125,
+                1025.1182861328125,
+                1025.1182861328125,
+                1025.1182861328125
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                592.0,
+                592.0,
+                593.0
+              ],
+              "source": [
+                0.0,
+                1025.1182861328125,
+                1025.6182861328125,
+                1025.1182861328125
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                592.0,
+                0.0,
+                593.0
+              ],
+              "source": [
+                0.5,
+                1025.1182861328125,
+                0.5,
+                1025.1182861328125
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            608,
+            608
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 36,
+          "vertexPayloadSHA256": "21fa4d522f2979151875b69cf922c651dcd378c77371d17cc4a5ca151709c233",
+          "viewport": [
+            0,
+            0,
+            640,
+            640
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          590,
+          590
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 589,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 1,
+            "destinationExtent": 640,
+            "producerExtent": 640,
+            "scaledBounds": [
+              0.0,
+              591.06591796875
+            ],
+            "unclippedBounds": [
+              -137.401123046875,
+              1398.598876953125
+            ]
+          },
+          "y": {
+            "clampMaximum": 590,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 640,
+            "producerExtent": 640,
+            "scaledBounds": [
+              0.0,
+              591.06591796875
+            ],
+            "unclippedBounds": [
+              -374.598876953125,
+              1161.401123046875
+            ]
+          }
+        },
+        "cropOrigin": [
+          1,
+          0
+        ],
+        "destinationExtent": [
+          640,
+          640
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          -137.401123046875,
+          -137.401123046875
+        ],
+        "producerExtent": [
+          640,
+          640
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          589,
+          590
+        ]
+      },
+      "remaining": 0.8455743789672852,
+      "runtimeScale": 0.5772128105163574,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 27
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": false,
+          "mismatchedComponents": 1
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": false,
+          "mismatchedComponents": 2
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": false,
+          "mismatchedComponents": 1
+        }
+      },
+      "expectedRuntimeScale": 0.5613803863525391,
+      "observed": {
+        "copyOffset": [
+          -4,
+          -4
+        ],
+        "cropOrigin": [
+          0,
+          0
+        ],
+        "destinationExtent": [
+          640,
+          640
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 0.0,
+        "producerExtent": [
+          576,
+          576
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 72,
+          "allSourceScaleMismatchedComponents": 48,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 54,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "e440d5d16b3d0537fe1ec6e2d19d3369dc5a2a4fe41f0977ba67b1bb3addfe16",
+          "primaryVertices": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              575.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.260986328125,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              575.0,
+              575.0,
+              0.0,
+              1.0,
+              1024.260986328125,
+              1024.260986328125,
+              0.0,
+              -1.5
+            ],
+            [
+              0.0,
+              575.0,
+              0.0,
+              1.0,
+              0.0,
+              1024.260986328125,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                0.0,
+                0.0,
+                575.0,
+                575.0
+              ],
+              "source": [
+                0.0,
+                0.0,
+                1024.260986328125,
+                1024.260986328125
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                0.0,
+                0.0,
+                575.0
+              ],
+              "source": [
+                0.5,
+                0.0,
+                0.5,
+                1024.260986328125
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                -1.0,
+                0.0,
+                0.0
+              ],
+              "source": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                -1.0,
+                575.0,
+                0.0
+              ],
+              "source": [
+                0.0,
+                0.5,
+                1024.260986328125,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                575.0,
+                -1.0,
+                576.0,
+                0.0
+              ],
+              "source": [
+                1023.760986328125,
+                0.5,
+                1023.760986328125,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                575.0,
+                0.0,
+                576.0,
+                575.0
+              ],
+              "source": [
+                1023.760986328125,
+                0.0,
+                1023.760986328125,
+                1024.260986328125
+              ]
+            },
+            {
+              "position": [
+                575.0,
+                575.0,
+                576.0,
+                576.0
+              ],
+              "source": [
+                1023.760986328125,
+                1023.760986328125,
+                1023.760986328125,
+                1023.760986328125
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                575.0,
+                575.0,
+                576.0
+              ],
+              "source": [
+                0.0,
+                1023.760986328125,
+                1024.260986328125,
+                1023.760986328125
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                575.0,
+                0.0,
+                576.0
+              ],
+              "source": [
+                0.5,
+                1023.760986328125,
+                0.5,
+                1023.760986328125
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            576,
+            576
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 36,
+          "vertexPayloadSHA256": "2e486fa9abc5491b434b10df52e40d103aada243eb235e6f96c51a8df5c373bf",
+          "viewport": [
+            0,
+            0,
+            576,
+            576
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          573,
+          573
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 572,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 1,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              0.0,
+              574.853515625
+            ],
+            "unclippedBounds": [
+              -161.7197265625,
+              1374.2802734375
+            ]
+          },
+          "y": {
+            "clampMaximum": 573,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              0.0,
+              574.853515625
+            ],
+            "unclippedBounds": [
+              -350.2802734375,
+              1185.7197265625
+            ]
+          }
+        },
+        "cropOrigin": [
+          1,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          -161.7197265625,
+          -161.7197265625
+        ],
+        "producerExtent": [
+          576,
+          576
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          572,
+          573
+        ]
+      },
+      "remaining": 0.8772392272949219,
+      "runtimeScale": 0.5613803863525391,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 28
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": false,
+          "mismatchedComponents": 1
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": false,
+          "mismatchedComponents": 1
+        }
+      },
+      "expectedRuntimeScale": 0.546638011932373,
+      "observed": {
+        "copyOffset": [
+          -4,
+          -4
+        ],
+        "cropOrigin": [
+          0,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 0.0,
+        "producerExtent": [
+          576,
+          576
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 72,
+          "allSourceScaleMismatchedComponents": 48,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 54,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "1effcd6f14ad2600932bd89ae3e88050854453947cbbc8282fe5892e892374a0",
+          "primaryVertices": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              560.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.4439697265625,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              560.0,
+              560.0,
+              0.0,
+              1.0,
+              1024.4439697265625,
+              1024.4439697265625,
+              0.0,
+              -1.5
+            ],
+            [
+              0.0,
+              560.0,
+              0.0,
+              1.0,
+              0.0,
+              1024.4439697265625,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                0.0,
+                0.0,
+                560.0,
+                560.0
+              ],
+              "source": [
+                0.0,
+                0.0,
+                1024.4439697265625,
+                1024.4439697265625
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                0.0,
+                0.0,
+                560.0
+              ],
+              "source": [
+                0.5,
+                0.0,
+                0.5,
+                1024.4439697265625
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                -1.0,
+                0.0,
+                0.0
+              ],
+              "source": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                -1.0,
+                560.0,
+                0.0
+              ],
+              "source": [
+                0.0,
+                0.5,
+                1024.4439697265625,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                560.0,
+                -1.0,
+                561.0,
+                0.0
+              ],
+              "source": [
+                1023.9439697265625,
+                0.5,
+                1023.9439697265625,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                560.0,
+                0.0,
+                561.0,
+                560.0
+              ],
+              "source": [
+                1023.9439697265625,
+                0.0,
+                1023.9439697265625,
+                1024.4439697265625
+              ]
+            },
+            {
+              "position": [
+                560.0,
+                560.0,
+                561.0,
+                561.0
+              ],
+              "source": [
+                1023.9439697265625,
+                1023.9439697265625,
+                1023.9439697265625,
+                1023.9439697265625
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                560.0,
+                560.0,
+                561.0
+              ],
+              "source": [
+                0.0,
+                1023.9439697265625,
+                1024.4439697265625,
+                1023.9439697265625
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                560.0,
+                0.0,
+                561.0
+              ],
+              "source": [
+                0.5,
+                1023.9439697265625,
+                0.5,
+                1023.9439697265625
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            576,
+            576
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 36,
+          "vertexPayloadSHA256": "4dec5289efb477ad7c73a481fb104ec9bb86925150770d1850668164513dcfb8",
+          "viewport": [
+            0,
+            0,
+            576,
+            576
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          558,
+          558
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 557,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 1,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              0.0,
+              559.75732421875
+            ],
+            "unclippedBounds": [
+              -184.364013671875,
+              1351.635986328125
+            ]
+          },
+          "y": {
+            "clampMaximum": 558,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              0.0,
+              559.75732421875
+            ],
+            "unclippedBounds": [
+              -327.635986328125,
+              1208.364013671875
+            ]
+          }
+        },
+        "cropOrigin": [
+          1,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          -184.364013671875,
+          -184.364013671875
+        ],
+        "producerExtent": [
+          576,
+          576
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          557,
+          558
+        ]
+      },
+      "remaining": 0.9067239761352539,
+      "runtimeScale": 0.546638011932373,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 29
+    },
+    {
+      "capturedLayerStateCount": 16,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": false,
+          "mismatchedComponents": 1
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": false,
+          "mismatchedComponents": 1
+        }
+      },
+      "expectedRuntimeScale": 0.5145401954650879,
+      "observed": {
+        "copyOffset": [
+          -4,
+          -4
+        ],
+        "cropOrigin": [
+          0,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 0.0,
+        "producerExtent": [
+          576,
+          576
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 72,
+          "allSourceScaleMismatchedComponents": 48,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 54,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "60c1cd5cda65af5aa4fe608a6df75edd3ca9c7ede6a3ffd94e6cf0c417e51597",
+          "primaryVertices": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              -1.5,
+              -1.5
+            ],
+            [
+              527.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.2154541015625,
+              0.0,
+              0.0,
+              -1.5
+            ],
+            [
+              527.0,
+              527.0,
+              0.0,
+              1.0,
+              1024.2154541015625,
+              1024.2154541015625,
+              0.0,
+              -1.5
+            ],
+            [
+              0.0,
+              527.0,
+              0.0,
+              1.0,
+              0.0,
+              1024.2154541015625,
+              1.5,
+              -1.5
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                0.0,
+                0.0,
+                527.0,
+                527.0
+              ],
+              "source": [
+                0.0,
+                0.0,
+                1024.2154541015625,
+                1024.2154541015625
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                0.0,
+                0.0,
+                527.0
+              ],
+              "source": [
+                0.5,
+                0.0,
+                0.5,
+                1024.2154541015625
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                -1.0,
+                0.0,
+                0.0
+              ],
+              "source": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                -1.0,
+                527.0,
+                0.0
+              ],
+              "source": [
+                0.0,
+                0.5,
+                1024.2154541015625,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                527.0,
+                -1.0,
+                528.0,
+                0.0
+              ],
+              "source": [
+                1023.7154541015625,
+                0.5,
+                1023.7154541015625,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                527.0,
+                0.0,
+                528.0,
+                527.0
+              ],
+              "source": [
+                1023.7154541015625,
+                0.0,
+                1023.7154541015625,
+                1024.2154541015625
+              ]
+            },
+            {
+              "position": [
+                527.0,
+                527.0,
+                528.0,
+                528.0
+              ],
+              "source": [
+                1023.7154541015625,
+                1023.7154541015625,
+                1023.7154541015625,
+                1023.7154541015625
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                527.0,
+                527.0,
+                528.0
+              ],
+              "source": [
+                0.0,
+                1023.7154541015625,
+                1024.2154541015625,
+                1023.7154541015625
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                527.0,
+                0.0,
+                528.0
+              ],
+              "source": [
+                0.5,
+                1023.7154541015625,
+                0.5,
+                1023.7154541015625
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            543,
+            543
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 36,
+          "vertexPayloadSHA256": "cfc9629edce7bf57ffef9f8134688b50c06f77d044189932de3104c9d8ffaf17",
+          "viewport": [
+            0,
+            0,
+            576,
+            576
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          525,
+          525
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 524,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 1,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              0.0,
+              526.88916015625
+            ],
+            "unclippedBounds": [
+              -233.666259765625,
+              1302.333740234375
+            ]
+          },
+          "y": {
+            "clampMaximum": 525,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 576,
+            "producerExtent": 576,
+            "scaledBounds": [
+              0.0,
+              526.88916015625
+            ],
+            "unclippedBounds": [
+              -278.333740234375,
+              1257.666259765625
+            ]
+          }
+        },
+        "cropOrigin": [
+          1,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          -233.666259765625,
+          -233.666259765625
+        ],
+        "producerExtent": [
+          576,
+          576
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          524,
+          525
+        ]
+      },
+      "remaining": 0.9709196090698242,
+      "runtimeScale": 0.5145401954650879,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 31
+    },
+    {
+      "capturedLayerStateCount": 13,
+      "comparison": {
+        "cropOrigin": {
+          "componentCount": 2,
+          "exact": false,
+          "mismatchedComponents": 1
+        },
+        "destinationExtent": {
+          "componentCount": 2,
+          "exact": false,
+          "mismatchedComponents": 2
+        },
+        "effectiveOrigin": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "producerExtent": {
+          "componentCount": 2,
+          "exact": true,
+          "mismatchedComponents": 0
+        },
+        "textureCoordinateClamp": {
+          "componentCount": 4,
+          "exact": false,
+          "mismatchedComponents": 1
+        }
+      },
+      "expectedRuntimeScale": 0.5,
+      "observed": {
+        "copyOffset": [
+          -4,
+          -4
+        ],
+        "cropOrigin": [
+          0,
+          0
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "producerCropMaximumIntegralResidual": 0.0,
+        "producerExtent": [
+          512,
+          512
+        ],
+        "producerMesh": {
+          "allSourceScaleComponentCount": 72,
+          "allSourceScaleMismatchedComponents": 48,
+          "fragmentFunction": "A2Xghfc",
+          "indexCount": 54,
+          "inputTexture": {
+            "height": 1024,
+            "label": "",
+            "pixelFormat": 80,
+            "width": 1024
+          },
+          "mvpPayloadSHA256": "e73e1bfeb02c31ec219acae052b0b939bc7361cad820b7fadfeec69650d4f4f9",
+          "primaryVertices": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              512.0,
+              0.0,
+              0.0,
+              1.0,
+              1024.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              512.0,
+              512.0,
+              0.0,
+              1.0,
+              1024.0,
+              1024.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              512.0,
+              0.0,
+              1.0,
+              0.0,
+              1024.0,
+              0.0,
+              -3.75
+            ]
+          ],
+          "quadBounds": [
+            {
+              "position": [
+                0.0,
+                0.0,
+                512.0,
+                512.0
+              ],
+              "source": [
+                0.0,
+                0.0,
+                1024.0,
+                1024.0
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                0.0,
+                0.0,
+                512.0
+              ],
+              "source": [
+                0.5,
+                0.0,
+                0.5,
+                1024.0
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                -1.0,
+                0.0,
+                0.0
+              ],
+              "source": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                -1.0,
+                512.0,
+                0.0
+              ],
+              "source": [
+                0.0,
+                0.5,
+                1024.0,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                512.0,
+                -1.0,
+                513.0,
+                0.0
+              ],
+              "source": [
+                1023.5,
+                0.5,
+                1023.5,
+                0.5
+              ]
+            },
+            {
+              "position": [
+                512.0,
+                0.0,
+                513.0,
+                512.0
+              ],
+              "source": [
+                1023.5,
+                0.0,
+                1023.5,
+                1024.0
+              ]
+            },
+            {
+              "position": [
+                512.0,
+                512.0,
+                513.0,
+                513.0
+              ],
+              "source": [
+                1023.5,
+                1023.5,
+                1023.5,
+                1023.5
+              ]
+            },
+            {
+              "position": [
+                0.0,
+                512.0,
+                512.0,
+                513.0
+              ],
+              "source": [
+                0.0,
+                1023.5,
+                1024.0,
+                1023.5
+              ]
+            },
+            {
+              "position": [
+                -1.0,
+                512.0,
+                0.0,
+                513.0
+              ],
+              "source": [
+                0.5,
+                1023.5,
+                0.5,
+                1023.5
+              ]
+            }
+          ],
+          "scissor": [
+            0,
+            0,
+            512,
+            512
+          ],
+          "sourceScaleComponentCount": 8,
+          "sourceScaleMismatchedComponents": 0,
+          "vertexCount": 36,
+          "vertexPayloadSHA256": "2f63bae50e49f3e57415f51f1887114e0c46c9629b8898a35a984ce6bff40b40",
+          "viewport": [
+            0,
+            0,
+            512,
+            512
+          ]
+        },
+        "textureCoordinateClamp": [
+          0,
+          0,
+          511,
+          511
+        ]
+      },
+      "prediction": {
+        "axes": {
+          "x": {
+            "clampMaximum": 510,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 1,
+            "destinationExtent": 512,
+            "producerExtent": 512,
+            "scaledBounds": [
+              0.0,
+              512.0
+            ],
+            "unclippedBounds": [
+              -256.0,
+              1280.0
+            ]
+          },
+          "y": {
+            "clampMaximum": 511,
+            "clippedBounds": [
+              0.0,
+              1024.0
+            ],
+            "cropOrigin": 0,
+            "destinationExtent": 512,
+            "producerExtent": 512,
+            "scaledBounds": [
+              0.0,
+              512.0
+            ],
+            "unclippedBounds": [
+              -256.0,
+              1280.0
+            ]
+          }
+        },
+        "cropOrigin": [
+          1,
+          0
+        ],
+        "destinationExtent": [
+          512,
+          512
+        ],
+        "effectiveOrigin": [
+          -4,
+          -4
+        ],
+        "nominalFrameMinimum": [
+          -256.0,
+          -256.0
+        ],
+        "producerExtent": [
+          512,
+          512
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          510,
+          511
+        ]
+      },
+      "remaining": 1.0,
+      "runtimeScale": 0.5,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 32
+    }
+  ],
+  "timeline": "artifacts/gh-run-30748787009/liquid-glass-transition-introspection-geometry-clipped-materialize-30748787009/transition-timeline.json",
+  "timelineSHA256": "9fc6b7e8b2b70febc2fccaa03a77524780c2dd5756b439cae8a8772ecedd578b"
+}

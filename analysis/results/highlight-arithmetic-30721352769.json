@@ -1,0 +1,90 @@
+{
+  "coverage": {
+    "activePixels": 4020,
+    "boundingBox": [
+      111,
+      111,
+      912,
+      912
+    ]
+  },
+  "gate": {
+    "exact": true,
+    "exactStageCount": 12,
+    "productionShaderAuthorized": false,
+    "stageCount": 12
+  },
+  "liquidGlassHighlightArithmeticSchemaVersion": 1,
+  "source": {
+    "artifact": "artifacts/gh-run-30721352769/liquid-glass-highlight-arithmetic-30721352769",
+    "captureSchemaVersion": 1,
+    "metalDevice": {
+      "hasUnifiedMemory": true,
+      "name": "Apple Paravirtual device",
+      "registryID": 4294967699
+    },
+    "metalFastMathEnabled": true
+  },
+  "stages": {
+    "fadeFma": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "fadedCoverage": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "fillAlphaFloat": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "fillAlphaHalf": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "fillDirectionalNumerator": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "fillDirectionalReciprocalProduct": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "highlightAlphaHalfAdd": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "keyAlphaFloat": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "keyAlphaHalf": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "keyDirectionalNumerator": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "keyDirectionalReciprocalProduct": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    },
+    "normalizedDistance": {
+      "exact": true,
+      "mismatchedComponents": 0,
+      "observedComponents": 4020
+    }
+  }
+}

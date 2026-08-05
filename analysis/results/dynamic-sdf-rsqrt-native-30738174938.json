@@ -1,0 +1,435 @@
+{
+  "capturedAppleFunctionUnmodified": false,
+  "classification": "retrospective post-opening arithmetic isolation",
+  "comparisons": {
+    "float32": {
+      "comparedWords": 3145728,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    },
+    "geometry": {
+      "comparedWords": 4194304,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    },
+    "half-conversion": {
+      "comparedWords": 2097152,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    },
+    "normal": {
+      "comparedWords": 4194304,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x48405888",
+            "0x3b13ab32",
+            "0x3ed4909f",
+            "0x3f68e518"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48405888",
+            "0x3b13ab33",
+            "0x3ed490a1",
+            "0x3f68e519"
+          ],
+          "x": 327,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x48384580",
+            "0x3b16de8a",
+            "0x3ebce24e",
+            "0x3f6df151"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48384580",
+            "0x3b16de8b",
+            "0x3ebce24f",
+            "0x3f6df152"
+          ],
+          "x": 351,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x4837f59f",
+            "0x3b16ff4a",
+            "0x3ebbdd4f",
+            "0x3f6e24f8"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x4837f59f",
+            "0x3b16ff49",
+            "0x3ebbdd4d",
+            "0x3f6e24f6"
+          ],
+          "x": 352,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x483708ff",
+            "0x3b1760c5",
+            "0x3eb8ca52",
+            "0x3f6ebeb5"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x483708ff",
+            "0x3b1760c4",
+            "0x3eb8ca51",
+            "0x3f6ebeb4"
+          ],
+          "x": 355,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x48322119",
+            "0x3b1972c8",
+            "0x3ea6f010",
+            "0x3f72029d"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48322119",
+            "0x3b1972c9",
+            "0x3ea6f011",
+            "0x3f72029f"
+          ],
+          "x": 372,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x48280d8b",
+            "0x3b1dfb54",
+            "0x3e6b2069",
+            "0x3f7928f7"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48280d8b",
+            "0x3b1dfb55",
+            "0x3e6b206b",
+            "0x3f7928f8"
+          ],
+          "x": 416,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x4827530a",
+            "0x3b1e5347",
+            "0x3e61be19",
+            "0x3f79b3ac"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x4827530a",
+            "0x3b1e5348",
+            "0x3e61be1a",
+            "0x3f79b3ae"
+          ],
+          "x": 420,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482725aa",
+            "0x3b1e68c3",
+            "0x3e5f6318",
+            "0x3f79d58e"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482725aa",
+            "0x3b1e68c4",
+            "0x3e5f6319",
+            "0x3f79d590"
+          ],
+          "x": 421,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x48261fe8",
+            "0x3b1ee55f",
+            "0x3e512d4e",
+            "0x3f7a9a15"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48261fe8",
+            "0x3b1ee560",
+            "0x3e512d4f",
+            "0x3f7a9a17"
+          ],
+          "x": 427,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x48255386",
+            "0x3b1f4778",
+            "0x3e453cdb",
+            "0x3f7b34cc"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48255386",
+            "0x3b1f4779",
+            "0x3e453cdc",
+            "0x3f7b34ce"
+          ],
+          "x": 432,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482493a5",
+            "0x3b1fa437",
+            "0x3e3936dd",
+            "0x3f7bc712"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482493a5",
+            "0x3b1fa438",
+            "0x3e3936de",
+            "0x3f7bc714"
+          ],
+          "x": 437,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x48242684",
+            "0x3b1fd93f",
+            "0x3e31f635",
+            "0x3f7c1ab5"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48242684",
+            "0x3b1fd940",
+            "0x3e31f636",
+            "0x3f7c1ab7"
+          ],
+          "x": 440,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x48229f01",
+            "0x3b209937",
+            "0x3e14af2f",
+            "0x3f7d4979"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48229f01",
+            "0x3b209938",
+            "0x3e14af30",
+            "0x3f7d497a"
+          ],
+          "x": 452,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x4821775e",
+            "0x3b212bfa",
+            "0x3df306f8",
+            "0x3f7e30ef"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x4821775e",
+            "0x3b212bfb",
+            "0x3df306fa",
+            "0x3f7e30f1"
+          ],
+          "x": 463,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x481f4b93",
+            "0x3b224432",
+            "0x3ccff1ac",
+            "0x3f7feae1"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x481f4b93",
+            "0x3b224433",
+            "0x3ccff1ad",
+            "0x3f7feae3"
+          ],
+          "x": 501,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x481f3171",
+            "0x3b225183",
+            "0x3af2d7b9",
+            "0x3f7fffe2"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x481f3171",
+            "0x3b225184",
+            "0x3af2d7ba",
+            "0x3f7fffe4"
+          ],
+          "x": 512,
+          "y": 108
+        }
+      ],
+      "mismatchedPixels": 40790,
+      "mismatchedWords": 117814
+    },
+    "oval": {
+      "comparedWords": 4194304,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    },
+    "point": {
+      "comparedWords": 2097152,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    }
+  },
+  "coordinateMode": "axis-table",
+  "curvedDistanceMode": "contracted-half-fma",
+  "customMetalComparison": true,
+  "dynamicArtifact": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938",
+  "firstDivergentStage": "normal",
+  "implementation": {
+    "fragmentShaderBytes": 116490,
+    "fragmentShaderSha256": "0135934c143a59f829eec46df94e15d33428918930f29453aa46c7dcac14d3c6",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "liquidGlassDynamicSdfFloatIsolationSchemaVersion": 1,
+  "localSetup": {
+    "circleScaleBits": "0x441a64ad",
+    "inverseCircleScaleBits": "0x3ad43cbc"
+  },
+  "normalRsqrtMode": "native",
+  "numeratorMode": "uniform-offset",
+  "reciprocalOverride": {
+    "circleScaleBits": "0x441a64ad",
+    "correctedCode": 150,
+    "encodedDelta": 2,
+    "mantissa": 1729709,
+    "netReciprocalUlpAdjustment": 1,
+    "originalCode": 86
+  },
+  "referenceShader": {
+    "path": "analysis/apple_glass_reference.frag.glsl",
+    "runtimeInstrumentation": true,
+    "sha256BeforeInstrumentation": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6"
+  },
+  "runtimeRaster": {
+    "backgroundScissor": [
+      312,
+      16,
+      696,
+      696
+    ],
+    "selector": {
+      "base": 26946957,
+      "offset": -3,
+      "selected": 26946954
+    },
+    "tileStart": 3
+  },
+  "sampleIndex": 16
+}

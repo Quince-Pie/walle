@@ -1,0 +1,77 @@
+{
+  "candidateConfiguration": {
+    "HighlightCoordinateMode": 0,
+    "HighlightCoverageArithmeticMode": 1,
+    "HighlightDerivativeMode": 1,
+    "HighlightNormalizeMode": 1,
+    "HighlightSourceDivisionMode": 0,
+    "HighlightVibrantArithmeticMode": 9,
+    "UseAppleHalfIntrinsicTable": 1
+  },
+  "capture": {
+    "completeReference": {
+      "path": "artifacts/gh-run-30685461769/liquid-glass-introspection-regular-light-30685461769/carenderer-live-tree-bgra8.raw",
+      "sha256": "01aba762f10d1d4af3a5aa04c15e07155add6cefca12439b37137ba1cc6ba9cc"
+    },
+    "path": "artifacts/gh-run-30685461769/liquid-glass-introspection-regular-light-30685461769",
+    "prefixReference": {
+      "path": "artifacts/gh-run-30685461769/liquid-glass-introspection-regular-light-30685461769/carenderer-live-tree-glass-prefix-reference-bgra8.raw",
+      "sha256": "d82e7a70c3f0aac9fe678831111266d189c688dea1555222242df3deb8864018"
+    },
+    "runtimeSHA256": "9e9228974af9b9f602a8cdaf059d955a01b30a551db107858895d23ff5e092a6"
+  },
+  "comparisons": {
+    "completeBackgroundAndHighlight": {
+      "exact": true,
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "glassPrefix": {
+      "exact": true,
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    }
+  },
+  "gate": {
+    "exact": true,
+    "generatedRuntimeRasterCoefficients": true,
+    "oracleInjectionUsed": false,
+    "productionShaderAuthorized": false
+  },
+  "implementation": {
+    "fragmentShaderBytes": 105895,
+    "fragmentShaderSha256": "d74e41f6647619519660fd790e7227bbccb5a7cec93b8c81f46a22a9d299a188",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "intrinsicEvidence": {
+    "float": {
+      "path": "artifacts/apple-float-intrinsics-r8-30556057571.bin",
+      "sha256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449"
+    },
+    "half": {
+      "path": "artifacts/gh-run-30685461769/liquid-glass-introspection-regular-light-30685461769/half-intrinsics.bin",
+      "sha256": "ca1e5cbcaa645cad27917b87990edba4e8e06931c8089fbb2fbf1ae96837bfc2"
+    }
+  },
+  "liquidGlassCompleteStaticGateSchemaVersion": 1,
+  "runtimeRaster": {
+    "capturedCoordinateOrCoefficientTableLoaded": false,
+    "slopeBits": [
+      "0x3f800000",
+      "0xbf800000",
+      "0x3a2aaaac",
+      "0x3a2aaaac"
+    ],
+    "tileCount": 26,
+    "tileStart": 3
+  }
+}

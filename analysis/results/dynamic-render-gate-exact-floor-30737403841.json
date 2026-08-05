@@ -1,0 +1,1151 @@
+{
+  "dynamicArtifact": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841",
+  "floatIntrinsicTable": "artifacts/apple-float-intrinsics-r8-30556057571.bin",
+  "gate": {
+    "exact": true,
+    "exactStateCount": 9,
+    "executedStateCount": 9,
+    "fractionalRasterStateCount": 8,
+    "productionShaderAuthorized": false,
+    "profileCount": 1,
+    "stateCount": 9,
+    "unsupportedRasterStateCount": 0
+  },
+  "implementation": {
+    "axisExactCandidate": true,
+    "capturedCoordinateOrCoefficientTableLoaded": false,
+    "capturedStageInputUsedForDiagnosticIsolation": true,
+    "capturedStageInputUsedForGateCandidate": false,
+    "file": "analysis/liquid_glass_dynamic_render_gate.py",
+    "highlightConfiguration": {
+      "HighlightCoordinateMode": 1,
+      "HighlightCoverageArithmeticMode": 1,
+      "HighlightDerivativeMode": 1,
+      "HighlightFloatDivisionMode": 3,
+      "HighlightNormalizeMode": 1,
+      "HighlightNormalizedCoordinateMode": 1,
+      "HighlightSourceConstructionMode": 1,
+      "HighlightSourceDivisionMode": 0,
+      "HighlightVibrantArithmeticMode": 9,
+      "HoldingMixMode": 0,
+      "UseAppleHalfIntrinsicTable": 1
+    },
+    "oracleInjectionUsed": false,
+    "packedExactCandidate": false,
+    "python": "3.14.4",
+    "squareSelectorCalibration": {
+      "classification": "retrospective finite-domain calibration",
+      "path": "artifacts/gh-run-30736731165/liquid-glass-raster-square-selector-sweep-30736731165/raster-square-selectors-u32le.zlib",
+      "sha256": "93fcb5859794d67b193e00f2fe741416ae69d93125f38fa7b36506616b98e5ba"
+    }
+  },
+  "liquidGlassDynamicRenderGateSchemaVersion": 1,
+  "profiles": [
+    {
+      "appearance": "light",
+      "artifact": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841",
+      "implementation": {
+        "fragmentShaderBytes": 125643,
+        "fragmentShaderSha256": "2fe8036ecaa46d757fef4e7edd5de5ee41e4eac6fd5ec323b1a9659373c16ac2",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "material": "clear",
+      "states": [
+        {
+          "candidateInputComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "executed": true,
+          "finalHighlightInputReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-01-pre-final-highlight-reference-bgra8.raw",
+          "fractionalRaster": true,
+          "highlightRuntimeRaster": {
+            "axisBytes": 26816,
+            "axisStart": 93,
+            "coordinateMode": "axis-table",
+            "diagonal": "ascending",
+            "extent": [
+              833.5,
+              833.5
+            ],
+            "fixedBounds": [
+              24264,
+              24504,
+              237640,
+              237880
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              94.78125,
+              95.71875
+            ],
+            "selector": {
+              "base": 25322618,
+              "offset": 0,
+              "selected": 25322618
+            },
+            "slopeBits": [
+              "0x3f80000d",
+              "0xbf80000d",
+              "0x3f80000d",
+              "0xbf80000d"
+            ],
+            "tileCount": 28,
+            "tileStart": 2
+          },
+          "isolatedFinalHighlightComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "localRenderSeconds": 0.10392225394025445,
+          "prefixComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "prefixMismatchDetails": {
+            "firstMismatches": [],
+            "mismatchedPixels": 0
+          },
+          "prefixReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-01-glass-prefix-reference-bgra8.raw",
+          "reference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-01-bgra8.raw",
+          "remaining": 0.031169891357421875,
+          "requestedProgress": 0.03125,
+          "requiresFractionalRasterSetup": false,
+          "runtimeRaster": {
+            "axisBytes": 26240,
+            "axisStart": 102,
+            "circleScaleReciprocalBits": null,
+            "coordinateMode": "axis-table",
+            "diagonal": "descending",
+            "extent": [
+              815.5,
+              815.5
+            ],
+            "fixedBounds": [
+              26568,
+              26808,
+              235336,
+              235576
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              103.78125,
+              104.71875
+            ],
+            "selector": {
+              "base": 26452814,
+              "offset": 0,
+              "selected": 26452814
+            },
+            "slopeBits": [
+              "0x3f80000d",
+              "0xbf80000d",
+              "0x3ae0026e",
+              "0x3ae0026c"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "sampleIndex": 1,
+          "stageBoundaryComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          }
+        },
+        {
+          "candidateInputComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "executed": true,
+          "finalHighlightInputReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-04-pre-final-highlight-reference-bgra8.raw",
+          "fractionalRaster": true,
+          "highlightRuntimeRaster": {
+            "axisBytes": 26752,
+            "axisStart": 94,
+            "coordinateMode": "axis-table",
+            "diagonal": "ascending",
+            "extent": [
+              831.95703125,
+              831.95703125
+            ],
+            "fixedBounds": [
+              24583,
+              24580,
+              237564,
+              237561
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              96.02734375,
+              96.015625
+            ],
+            "selector": {
+              "base": 25416633,
+              "offset": 0,
+              "selected": 25416633
+            },
+            "slopeBits": [
+              "0x3f800020",
+              "0xbf800020",
+              "0x3f800020",
+              "0xbf800020"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "isolatedFinalHighlightComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "localRenderSeconds": 0.10384634998627007,
+          "prefixComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "prefixMismatchDetails": {
+            "firstMismatches": [],
+            "mismatchedPixels": 0
+          },
+          "prefixReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-04-glass-prefix-reference-bgra8.raw",
+          "reference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-04-bgra8.raw",
+          "remaining": 0.1274852752685547,
+          "requestedProgress": 0.125,
+          "requiresFractionalRasterSetup": false,
+          "runtimeRaster": {
+            "axisBytes": 26176,
+            "axisStart": 103,
+            "circleScaleReciprocalBits": null,
+            "coordinateMode": "axis-table",
+            "diagonal": "descending",
+            "extent": [
+              813.95703125,
+              813.95703125
+            ],
+            "fixedBounds": [
+              26887,
+              26884,
+              235260,
+              235257
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              105.02734375,
+              105.015625
+            ],
+            "selector": {
+              "base": 26553201,
+              "offset": -2,
+              "selected": 26553199
+            },
+            "slopeBits": [
+              "0x3f800021",
+              "0xbf800021",
+              "0x3ad50d29",
+              "0x3ad50d29"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "sampleIndex": 4,
+          "stageBoundaryComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          }
+        },
+        {
+          "candidateInputComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "executed": true,
+          "finalHighlightInputReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-08-pre-final-highlight-reference-bgra8.raw",
+          "fractionalRaster": true,
+          "highlightRuntimeRaster": {
+            "axisBytes": 26688,
+            "axisStart": 95,
+            "coordinateMode": "axis-table",
+            "diagonal": "ascending",
+            "extent": [
+              829.9921875,
+              829.9921875
+            ],
+            "fixedBounds": [
+              24767,
+              24899,
+              237245,
+              237377
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              96.74609375,
+              97.26171875
+            ],
+            "selector": {
+              "base": 25537114,
+              "offset": -1,
+              "selected": 25537113
+            },
+            "slopeBits": [
+              "0x3f7fffcd",
+              "0xbf7fffcd",
+              "0x3f7fffcd",
+              "0xbf7fffcd"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "isolatedFinalHighlightComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "localRenderSeconds": 0.08682621084153652,
+          "prefixComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "prefixMismatchDetails": {
+            "firstMismatches": [],
+            "mismatchedPixels": 0
+          },
+          "prefixReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-08-glass-prefix-reference-bgra8.raw",
+          "reference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-08-bgra8.raw",
+          "remaining": 0.2506437301635742,
+          "requestedProgress": 0.25,
+          "requiresFractionalRasterSetup": false,
+          "runtimeRaster": {
+            "axisBytes": 26112,
+            "axisStart": 104,
+            "circleScaleReciprocalBits": null,
+            "coordinateMode": "axis-table",
+            "diagonal": "descending",
+            "extent": [
+              811.9921875,
+              811.9921875
+            ],
+            "fixedBounds": [
+              27071,
+              27203,
+              234941,
+              235073
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              105.74609375,
+              106.26171875
+            ],
+            "selector": {
+              "base": 26681863,
+              "offset": -3,
+              "selected": 26681860
+            },
+            "slopeBits": [
+              "0x3f7fffcc",
+              "0xbf7fffcc",
+              "0x3ac70989",
+              "0x3ac70989"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "sampleIndex": 8,
+          "stageBoundaryComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          }
+        },
+        {
+          "candidateInputComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "executed": true,
+          "finalHighlightInputReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-12-pre-final-highlight-reference-bgra8.raw",
+          "fractionalRaster": true,
+          "highlightRuntimeRaster": {
+            "axisBytes": 26624,
+            "axisStart": 96,
+            "coordinateMode": "axis-table",
+            "diagonal": "ascending",
+            "extent": [
+              827.984375,
+              827.984375
+            ],
+            "fixedBounds": [
+              24968,
+              25212,
+              236932,
+              237176
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              97.53125,
+              98.484375
+            ],
+            "selector": {
+              "base": 25661110,
+              "offset": 5,
+              "selected": 25661115
+            },
+            "slopeBits": [
+              "0x3f7fffbb",
+              "0xbf7fffbb",
+              "0x3f7fffbb",
+              "0xbf7fffbb"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "isolatedFinalHighlightComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "localRenderSeconds": 0.08968290779739618,
+          "prefixComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "prefixMismatchDetails": {
+            "firstMismatches": [],
+            "mismatchedPixels": 0
+          },
+          "prefixReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-12-glass-prefix-reference-bgra8.raw",
+          "reference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-12-bgra8.raw",
+          "remaining": 0.3761911392211914,
+          "requestedProgress": 0.375,
+          "requiresFractionalRasterSetup": false,
+          "runtimeRaster": {
+            "axisBytes": 26048,
+            "axisStart": 105,
+            "circleScaleReciprocalBits": null,
+            "coordinateMode": "axis-table",
+            "diagonal": "descending",
+            "extent": [
+              809.984375,
+              809.984375
+            ],
+            "fixedBounds": [
+              27272,
+              27516,
+              234628,
+              234872
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              106.53125,
+              107.484375
+            ],
+            "selector": {
+              "base": 26814302,
+              "offset": 2,
+              "selected": 26814304
+            },
+            "slopeBits": [
+              "0x3f7fffb9",
+              "0xbf7fffb9",
+              "0x3ab8c0a9",
+              "0x3ab8c0a9"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "sampleIndex": 12,
+          "stageBoundaryComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          }
+        },
+        {
+          "candidateInputComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "executed": true,
+          "finalHighlightInputReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-16-pre-final-highlight-reference-bgra8.raw",
+          "fractionalRaster": true,
+          "highlightRuntimeRaster": {
+            "axisBytes": 26560,
+            "axisStart": 97,
+            "coordinateMode": "axis-table",
+            "diagonal": "ascending",
+            "extent": [
+              825.97265625,
+              825.97265625
+            ],
+            "fixedBounds": [
+              25428,
+              25267,
+              236877,
+              236716
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              99.328125,
+              98.69921875
+            ],
+            "selector": {
+              "base": 25786270,
+              "offset": -4,
+              "selected": 25786266
+            },
+            "slopeBits": [
+              "0x3f7ffffe",
+              "0xbf7ffffe",
+              "0x3f7ffffe",
+              "0xbf7ffffe"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "isolatedFinalHighlightComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "localRenderSeconds": 0.0924555838573724,
+          "prefixComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "prefixMismatchDetails": {
+            "firstMismatches": [],
+            "mismatchedPixels": 0
+          },
+          "prefixReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-16-glass-prefix-reference-bgra8.raw",
+          "reference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-16-bgra8.raw",
+          "remaining": 0.5017127990722656,
+          "requestedProgress": 0.5,
+          "requiresFractionalRasterSetup": false,
+          "runtimeRaster": {
+            "axisBytes": 25984,
+            "axisStart": 106,
+            "circleScaleReciprocalBits": null,
+            "coordinateMode": "axis-table",
+            "diagonal": "descending",
+            "extent": [
+              807.97265625,
+              807.97265625
+            ],
+            "fixedBounds": [
+              27732,
+              27571,
+              234573,
+              234412
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              108.328125,
+              107.69921875
+            ],
+            "selector": {
+              "base": 26947999,
+              "offset": -2,
+              "selected": 26947997
+            },
+            "slopeBits": [
+              "0x3f7fffff",
+              "0xbf7fffff",
+              "0x3aaa78c6",
+              "0x3aaa78c6"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "sampleIndex": 16,
+          "stageBoundaryComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          }
+        },
+        {
+          "candidateInputComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "executed": true,
+          "finalHighlightInputReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-20-pre-final-highlight-reference-bgra8.raw",
+          "fractionalRaster": true,
+          "highlightRuntimeRaster": {
+            "axisBytes": 26496,
+            "axisStart": 98,
+            "coordinateMode": "axis-table",
+            "diagonal": "ascending",
+            "extent": [
+              823.97265625,
+              823.97265625
+            ],
+            "fixedBounds": [
+              25682,
+              25525,
+              236619,
+              236462
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              100.3203125,
+              99.70703125
+            ],
+            "selector": {
+              "base": 25911596,
+              "offset": 3,
+              "selected": 25911599
+            },
+            "slopeBits": [
+              "0x3f7ffff9",
+              "0xbf7ffff9",
+              "0x3f7ffff9",
+              "0xbf7ffff9"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "isolatedFinalHighlightComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "localRenderSeconds": 0.09452666784636676,
+          "prefixComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "prefixMismatchDetails": {
+            "firstMismatches": [],
+            "mismatchedPixels": 0
+          },
+          "prefixReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-20-glass-prefix-reference-bgra8.raw",
+          "reference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-20-bgra8.raw",
+          "remaining": 0.6267309188842773,
+          "requestedProgress": 0.625,
+          "requiresFractionalRasterSetup": false,
+          "runtimeRaster": {
+            "axisBytes": 25920,
+            "axisStart": 107,
+            "circleScaleReciprocalBits": null,
+            "coordinateMode": "axis-table",
+            "diagonal": "descending",
+            "extent": [
+              805.97265625,
+              805.97265625
+            ],
+            "fixedBounds": [
+              27986,
+              27829,
+              234315,
+              234158
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              109.3203125,
+              108.70703125
+            ],
+            "selector": {
+              "base": 27081901,
+              "offset": 2,
+              "selected": 27081903
+            },
+            "slopeBits": [
+              "0x3f7ffff8",
+              "0xbf7ffff8",
+              "0x3a9c3f58",
+              "0x3a9c3f57"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "sampleIndex": 20,
+          "stageBoundaryComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          }
+        },
+        {
+          "candidateInputComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "executed": true,
+          "finalHighlightInputReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-24-pre-final-highlight-reference-bgra8.raw",
+          "fractionalRaster": true,
+          "highlightRuntimeRaster": {
+            "axisBytes": 26432,
+            "axisStart": 99,
+            "coordinateMode": "axis-table",
+            "diagonal": "ascending",
+            "extent": [
+              821.96484375,
+              821.96484375
+            ],
+            "fixedBounds": [
+              25877,
+              25844,
+              236300,
+              236267
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              101.08203125,
+              100.953125
+            ],
+            "selector": {
+              "base": 26038340,
+              "offset": 1,
+              "selected": 26038341
+            },
+            "slopeBits": [
+              "0x3f7fffd1",
+              "0xbf7fffd1",
+              "0x3f7fffd1",
+              "0xbf7fffd1"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "isolatedFinalHighlightComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "localRenderSeconds": 0.09721614699810743,
+          "prefixComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "prefixMismatchDetails": {
+            "firstMismatches": [],
+            "mismatchedPixels": 0
+          },
+          "prefixReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-24-glass-prefix-reference-bgra8.raw",
+          "reference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-24-bgra8.raw",
+          "remaining": 0.7523374557495117,
+          "requestedProgress": 0.75,
+          "requiresFractionalRasterSetup": false,
+          "runtimeRaster": {
+            "axisBytes": 25856,
+            "axisStart": 108,
+            "circleScaleReciprocalBits": null,
+            "coordinateMode": "axis-table",
+            "diagonal": "descending",
+            "extent": [
+              803.96484375,
+              803.96484375
+            ],
+            "fixedBounds": [
+              28181,
+              28148,
+              233996,
+              233963
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              110.08203125,
+              109.953125
+            ],
+            "selector": {
+              "base": 27217339,
+              "offset": 2,
+              "selected": 27217341
+            },
+            "slopeBits": [
+              "0x3f7fffd1",
+              "0xbf7fffd1",
+              "0x3a9fb34b",
+              "0x3a9fb34a"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "sampleIndex": 24,
+          "stageBoundaryComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          }
+        },
+        {
+          "candidateInputComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "executed": true,
+          "finalHighlightInputReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-28-pre-final-highlight-reference-bgra8.raw",
+          "fractionalRaster": true,
+          "highlightRuntimeRaster": {
+            "axisBytes": 26368,
+            "axisStart": 100,
+            "coordinateMode": "axis-table",
+            "diagonal": "ascending",
+            "extent": [
+              819.9765625,
+              819.9765625
+            ],
+            "fixedBounds": [
+              26216,
+              26014,
+              236130,
+              235928
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              102.40625,
+              101.6171875
+            ],
+            "selector": {
+              "base": 26164773,
+              "offset": -2,
+              "selected": 26164771
+            },
+            "slopeBits": [
+              "0x3f7ffff0",
+              "0xbf7ffff0",
+              "0x3f7ffff0",
+              "0xbf7ffff0"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "isolatedFinalHighlightComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "localRenderSeconds": 0.09924502996727824,
+          "prefixComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "prefixMismatchDetails": {
+            "firstMismatches": [],
+            "mismatchedPixels": 0
+          },
+          "prefixReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-28-glass-prefix-reference-bgra8.raw",
+          "reference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-28-bgra8.raw",
+          "remaining": 0.8765134811401367,
+          "requestedProgress": 0.875,
+          "requiresFractionalRasterSetup": false,
+          "runtimeRaster": {
+            "axisBytes": 25792,
+            "axisStart": 109,
+            "circleScaleReciprocalBits": null,
+            "coordinateMode": "axis-table",
+            "diagonal": "descending",
+            "extent": [
+              801.9765625,
+              801.9765625
+            ],
+            "fixedBounds": [
+              28520,
+              28318,
+              233826,
+              233624
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              111.40625,
+              110.6171875
+            ],
+            "selector": {
+              "base": 27352460,
+              "offset": 4,
+              "selected": 27352464
+            },
+            "slopeBits": [
+              "0x3f7fffef",
+              "0xbf7fffef",
+              "0x3a8fce5f",
+              "0x3a8fce5f"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "sampleIndex": 28,
+          "stageBoundaryComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          }
+        },
+        {
+          "candidateInputComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "executed": true,
+          "finalHighlightInputReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-32-pre-final-highlight-reference-bgra8.raw",
+          "fractionalRaster": false,
+          "highlightRuntimeRaster": {
+            "axisBytes": 26304,
+            "axisStart": 101,
+            "coordinateMode": "axis-table",
+            "diagonal": "ascending",
+            "extent": [
+              818,
+              818
+            ],
+            "fixedBounds": [
+              26368,
+              26368,
+              235776,
+              235776
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              103,
+              103
+            ],
+            "selector": {
+              "base": 26291369,
+              "offset": 0,
+              "selected": 26291369
+            },
+            "slopeBits": [
+              "0x3f800000",
+              "0xbf800000",
+              "0x3f800000",
+              "0xbf800000"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "isolatedFinalHighlightComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "localRenderSeconds": 0.09970036521553993,
+          "prefixComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "prefixMismatchDetails": {
+            "firstMismatches": [],
+            "mismatchedPixels": 0
+          },
+          "prefixReference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-32-glass-prefix-reference-bgra8.raw",
+          "reference": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-background-uniform-32-bgra8.raw",
+          "remaining": 1,
+          "requestedProgress": 1,
+          "requiresFractionalRasterSetup": false,
+          "runtimeRaster": {
+            "axisBytes": 25728,
+            "axisStart": 110,
+            "circleScaleReciprocalBits": null,
+            "coordinateMode": "axis-table",
+            "diagonal": "descending",
+            "extent": [
+              800,
+              800
+            ],
+            "fixedBounds": [
+              28672,
+              28672,
+              233472,
+              233472
+            ],
+            "fixedUnitsPerPixel": 256,
+            "origin": [
+              112,
+              112
+            ],
+            "selector": {
+              "base": 27487791,
+              "offset": 0,
+              "selected": 27487791
+            },
+            "slopeBits": [
+              "0x3f800000",
+              "0xbf800000",
+              "0x3a924924",
+              "0x3a924924"
+            ],
+            "tileCount": 26,
+            "tileStart": 3
+          },
+          "sampleIndex": 32,
+          "stageBoundaryComparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          }
+        }
+      ],
+      "staticCapture": "artifacts/gh-run-30685084902/liquid-glass-introspection-clear-light-30685084902",
+      "summary": {
+        "allStatesExact": true,
+        "exactStateCount": 9,
+        "executedStateCount": 9,
+        "fractionalRasterStateCount": 8,
+        "stateCount": 9,
+        "unsupportedRasterStateCount": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "artifact": "artifacts/gh-run-30674647960/liquid-glass-raster-clipped-setup-transfer-30674647960",
+  "captureIdentity": {
+    "ciCommit": "a9dd81713ffcdaf21f3447d0efd15a44d329447d",
+    "rawBytes": 73400320,
+    "rawFile": "artifacts/gh-run-30674647960/liquid-glass-raster-clipped-setup-transfer-30674647960/raster-clipped-setup-transfer.raw",
+    "rawSHA256": "c89b0d39d1c022fad863007e996e701ffa3b2e1c128b2b08fe7d28511fa4f590"
+  },
+  "controls": [
+    "unclipped-zero-origin-control",
+    "unclipped-centered-control"
+  ],
+  "elapsedSeconds": 108.52911041886546,
+  "gate": {
+    "comparedWords": 7340032,
+    "exact": true,
+    "firstMismatches": [],
+    "mismatchedWords": 0,
+    "variantMismatchedWords": {
+      "unclipped-centered-control": 0,
+      "unclipped-zero-origin-control": 0
+    }
+  },
+  "liquidGlassFractionalRasterGateSchemaVersion": 1,
+  "model": {
+    "constant": "measured 27-bit first/tile/reciprocal stages, top discarded column carry, 28-bit composite",
+    "coordinateQuantumPixels": "1/256",
+    "coordinateTieRule": "toward-positive-infinity",
+    "determinant": "fixedWidth*fixedHeight*2^-16",
+    "predictionReadsCapturedCoefficients": false,
+    "predictionReadsCapturedCoordinates": false,
+    "selector": "exhaustive-normalized-fractional-selector-table"
+  },
+  "platform": "Linux-6.18.38-x86_64-with-glibc2.42"
+}

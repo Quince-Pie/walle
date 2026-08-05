@@ -1,0 +1,10 @@
+build/
+protocols/
+result
+.direnv/
+artifacts/
+*.zip
+scratch/
+test
+test.c
+test.ini

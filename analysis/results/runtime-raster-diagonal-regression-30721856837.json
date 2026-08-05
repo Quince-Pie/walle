@@ -1,0 +1,92 @@
+{
+  "captures": [
+    {
+      "capture": "artifacts/gh-run-30721856837",
+      "comparison": {
+        "comparedPixels": 640000,
+        "comparedWords": 2560000,
+        "exact": true,
+        "examples": [],
+        "mismatchedChannels": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      },
+      "quad": {
+        "diagonal": "descending",
+        "endpointBits": [
+          {
+            "high": "0x43c80000",
+            "low": "0xc3c80000",
+            "name": "sdf-x"
+          },
+          {
+            "high": "0xc3c80000",
+            "low": "0x43c80000",
+            "name": "sdf-y"
+          },
+          {
+            "high": "0x3f66db6e",
+            "low": "0x3c124925",
+            "name": "source-x"
+          },
+          {
+            "high": "0x3f66db6e",
+            "low": "0x3c124925",
+            "name": "source-y"
+          }
+        ],
+        "extent": [
+          800,
+          800
+        ],
+        "fixedBounds": [
+          28672,
+          28672,
+          233472,
+          233472
+        ],
+        "fixedUnitsPerPixel": 256,
+        "origin": [
+          112,
+          112
+        ],
+        "slopeBits": [
+          "0x3f800000",
+          "0xbf800000",
+          "0x3a924924",
+          "0x3a924924"
+        ],
+        "visibleBounds": [
+          112,
+          112,
+          912,
+          912
+        ]
+      },
+      "runtimeJsonSha256": "bf4c3ff3883614d7e6b7fc6ac6457a62c772f366a82f9f951d6df206d2f7a21a",
+      "trace": {
+        "path": "artifacts/gh-run-30721856837/carenderer-live-tree-glass-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "8a01cd6628696cbd4389e2d6f7cdc2a5a0bae9826512a7069d30eac8cc36705c"
+      }
+    }
+  ],
+  "gate": {
+    "captureCount": 1,
+    "capturedCoordinateOrCoefficientTableReadByPredictor": false,
+    "comparedWords": 2560000,
+    "exact": true,
+    "mismatchedWords": 0,
+    "productionShaderAuthorized": false
+  },
+  "implementation": {
+    "coefficientModel": "lg-test/Analysis/raster_tile_coefficient_model_v3.py",
+    "file": "analysis/liquid_glass_runtime_raster_coefficients.py",
+    "model": "1/256-pixel setup with ties toward positive infinity; 27-bit first/tile/reciprocal stages; individually low-19-bit truncated tile partial products; carry propagated only through discarded column 18; 28-bit composite; 36-bit quad-center iterator"
+  },
+  "liquidGlassRuntimeRasterCoefficientGateSchemaVersion": 1
+}

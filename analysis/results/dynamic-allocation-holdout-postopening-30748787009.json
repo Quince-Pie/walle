@@ -1,0 +1,215 @@
+{
+  "aggregate": {
+    "allProducerQuadSourceQDiagnostic": {
+      "componentCount": 1200,
+      "exact": false,
+      "mismatchedComponents": 536
+    },
+    "destinationExtentGivenObservedEffectiveOrigin": {
+      "componentCount": 112,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "geometryCount": 4,
+    "narrowEffectiveOriginCandidate": {
+      "componentCount": 112,
+      "exact": false,
+      "mismatchedComponents": 2,
+      "residuals": [
+        {
+          "axis": "y",
+          "difference": -4.0,
+          "geometry": "circle-512-offset",
+          "observed": 56,
+          "predicted": 52,
+          "remaining": 0.25007057189941406,
+          "sampleIndex": 8,
+          "scaledLower": 56.0135491671972
+        },
+        {
+          "axis": "x",
+          "difference": 4.0,
+          "geometry": "circle-640-fractional",
+          "observed": 272,
+          "predicted": 276,
+          "remaining": 0.46978187561035156,
+          "sampleIndex": 15,
+          "scaledLower": 276.7168413527543
+        }
+      ]
+    },
+    "nonEndpointAuxiliaryBoundsGivenPrimary": {
+      "componentCount": 608,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "nonEndpointCropAndClamp": {
+      "componentCount": 208,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "nonEndpointProducerExtent": {
+      "componentCount": 104,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "nonEndpointTopology": {
+      "clippedSidePatternStates": {
+        "none": 35,
+        "xLower,xUpper,yLower,yUpper": 5,
+        "xUpper,yLower": 12
+      },
+      "exact": true,
+      "mismatchedStates": 0,
+      "stateCount": 52
+    },
+    "presentationCarrier": {
+      "componentCount": 224,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "primaryProducerSourceQ": {
+      "componentCount": 448,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "producerScissorFromClamp": {
+      "componentCount": 104,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "producerVertexCountStates": {
+      "16": 12,
+      "24": 2,
+      "36": 6,
+      "4": 36
+    },
+    "prospectiveFrozenGatePassed": false,
+    "quad4PrimaryPositionBoundsCandidate": {
+      "componentCount": 144,
+      "exact": false,
+      "mismatchedComponents": 4,
+      "residuals": [
+        {
+          "difference": -1.0,
+          "edge": "xUpper",
+          "geometry": "circle-256-center",
+          "observed": 358.0,
+          "predicted": 357,
+          "remaining": 0.9078845977783203,
+          "sampleIndex": 29
+        },
+        {
+          "difference": -1.0,
+          "edge": "xLower",
+          "geometry": "circle-640-fractional",
+          "observed": 129.0,
+          "predicted": 128,
+          "remaining": 0.875091552734375,
+          "sampleIndex": 28
+        },
+        {
+          "difference": -1.0,
+          "edge": "xLower",
+          "geometry": "circle-640-fractional",
+          "observed": 120.0,
+          "predicted": 119,
+          "remaining": 0.9081029891967773,
+          "sampleIndex": 29
+        },
+        {
+          "difference": -1.0,
+          "edge": "xUpper",
+          "geometry": "circle-640-fractional",
+          "observed": 435.0,
+          "predicted": 434,
+          "remaining": 0.9703912734985352,
+          "sampleIndex": 31
+        }
+      ],
+      "stateCount": 36
+    },
+    "runtimeScale": {
+      "componentCount": 56,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "stateCount": 56
+  },
+  "classification": "post-opening-retrospective-analysis-of-failed-prospective-holdout",
+  "conclusion": {
+    "independentEffectiveOriginPolicyRecovered": false,
+    "independentProducerMeshPolicyRecovered": false,
+    "productionShaderAuthorized": false,
+    "prospectiveFrozenGatePassed": false,
+    "requiresNewUnseenHoldout": true,
+    "retrospectiveCarrierLawExact": true,
+    "retrospectiveDestinationLawExactGivenObservedOrigin": true,
+    "retrospectiveNonEndpointAuxiliaryBoundsExactGivenPrimary": true,
+    "retrospectiveNonEndpointTopologyExact": true
+  },
+  "dynamicAllocationGeometryHoldoutAnalysisSchemaVersion": 1,
+  "inputs": [
+    {
+      "geometry": "circle-1536-center",
+      "prospectiveAcceptancePassed": false,
+      "prospectiveMismatchedComponents": {
+        "cropOrigin": 6,
+        "destinationExtent": 6,
+        "effectiveOrigin": 0,
+        "producerExtent": 0,
+        "textureCoordinateClamp": 6
+      },
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-clipped-materialize-30748787009/transition-timeline.json",
+      "timelineSHA256": "9fc6b7e8b2b70febc2fccaa03a77524780c2dd5756b439cae8a8772ecedd578b",
+      "validatorResult": "dynamic-allocation-holdout-circle-1536-center-30748787009.json",
+      "validatorResultSHA256": "89df5cdac95647ec0b539d8efa5a5b8c3c2d1ee6178d71ca58f52dc8d429d90c"
+    },
+    {
+      "geometry": "circle-256-center",
+      "prospectiveAcceptancePassed": false,
+      "prospectiveMismatchedComponents": {
+        "cropOrigin": 1,
+        "destinationExtent": 4,
+        "effectiveOrigin": 0,
+        "producerExtent": 0,
+        "textureCoordinateClamp": 1
+      },
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-256-materialize-30748787009/transition-timeline.json",
+      "timelineSHA256": "92dae58fda6d1d97e607f1123a5fcc15f3cf2f9e4a794dbd49550ce8297844f7",
+      "validatorResult": "dynamic-allocation-holdout-circle-256-center-30748787009.json",
+      "validatorResultSHA256": "3cf277884d9e0b9891baf5366d0425d486052bddda83561b18125aae7614bdbf"
+    },
+    {
+      "geometry": "circle-512-offset",
+      "prospectiveAcceptancePassed": false,
+      "prospectiveMismatchedComponents": {
+        "cropOrigin": 26,
+        "destinationExtent": 7,
+        "effectiveOrigin": 26,
+        "producerExtent": 0,
+        "textureCoordinateClamp": 8
+      },
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-offset-materialize-30748787009/transition-timeline.json",
+      "timelineSHA256": "c89c39e2ffcd1e38bcaf9c62c9bad40b789d2e8920cfa5f4ca22a3e06c8c81d8",
+      "validatorResult": "dynamic-allocation-holdout-circle-512-offset-30748787009.json",
+      "validatorResultSHA256": "f6bb0a41f5f637ed657cd0c65de8f64263b14bbaf53dcd5fd5d5b8a3ea8a4751"
+    },
+    {
+      "geometry": "circle-640-fractional",
+      "prospectiveAcceptancePassed": false,
+      "prospectiveMismatchedComponents": {
+        "cropOrigin": 27,
+        "destinationExtent": 11,
+        "effectiveOrigin": 26,
+        "producerExtent": 9,
+        "textureCoordinateClamp": 24
+      },
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-fractional-materialize-30748787009/transition-timeline.json",
+      "timelineSHA256": "9195f2c2c7eccf5dcb376237a021c4798101d84512a7588689bacdededdb9bad",
+      "validatorResult": "dynamic-allocation-holdout-circle-640-fractional-30748787009.json",
+      "validatorResultSHA256": "3ae4d23b4fe5dbb039882f0b5e4b9b07cdb15751f9766e173739c81ebf697420"
+    }
+  ],
+  "runID": 30748787009
+}

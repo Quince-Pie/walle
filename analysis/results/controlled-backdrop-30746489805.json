@@ -1,0 +1,1711 @@
+{
+  "aggregate": {
+    "copyBaseExactEveryState": true,
+    "copyBaseMismatchedBytes": 0,
+    "copyBaseObservedBytes": 10862592,
+    "mipExactEveryState": true,
+    "mipMismatchedBytes": 0,
+    "mipObservedBytes": 2715648,
+    "producerExactEveryState": true,
+    "producerMismatchedBytes": 0,
+    "producerObservedBytes": 10862592
+  },
+  "artifact": "/tmp/walle/artifacts/gh-run-30746489805",
+  "conclusion": {
+    "capturedMeshProducerReplayBitExact": true,
+    "controlledDynamicBackdropChainBitExact": true,
+    "copyBaseReplayBitExact": true,
+    "generatedMipReplayBitExact": true,
+    "independentCropAllocationPolicyRecovered": false,
+    "productionShaderAuthorized": false,
+    "prospectiveSeededInputHoldoutPassed": false
+  },
+  "implementation": {
+    "dependencies": {
+      "controlledBackdrop": {
+        "file": "/tmp/walle/analysis/liquid_glass_controlled_backdrop.py",
+        "sha256": "f4aadc1d7b45b4f4c1467d3cbebc5b1a79c9ab5d2c15ca21ab9ba043f47665f0"
+      },
+      "dynamicBackdropParser": {
+        "file": "/tmp/walle/analysis/liquid_glass_dynamic_backdrop.py",
+        "sha256": "7cb5a946dfb1580934548ec59b20e61c0c90a4f595ccb5b895357e99fc1365eb"
+      },
+      "rasterCoefficientBase": {
+        "file": "/tmp/walle/lg-test/Analysis/raster_tile_coefficient_model.py",
+        "sha256": "69b8546e26dbd17009260621b1a72610e9c25efee21e68022b07c9f00c599248"
+      },
+      "rasterCoefficientV3": {
+        "file": "/tmp/walle/lg-test/Analysis/raster_tile_coefficient_model_v3.py",
+        "sha256": "99c1725d9fdec0877b8510fb92aaa4a4ee398e61b0c579f0b1c1a0471520f1fe"
+      },
+      "rasterIterator": {
+        "file": "/tmp/walle/lg-test/Analysis/raster_tile_iterator_model.py",
+        "sha256": "bf0b926e759f9234d924ccd82654abc07ad8bb9ff10c9058ba5a284886dd2429"
+      },
+      "rasterSelector": {
+        "file": "/tmp/walle/lg-test/Analysis/raster_tile_selector_model.py",
+        "sha256": "1874d8c452dce244bd8ae2cb7fbf05d0d454a815c0c37c285e1c377524c9369d"
+      },
+      "rasterSelectorV4": {
+        "file": "/tmp/walle/lg-test/Analysis/raster_tile_selector_model_v4.py",
+        "sha256": "f1918f51974f486510ce5d68724cff015bb2e7f618a1153016d464cd9240a103"
+      },
+      "runtimeRaster": {
+        "file": "/tmp/walle/analysis/liquid_glass_runtime_raster_coefficients.py",
+        "sha256": "f9c1759a0e75ad527754f2d43ab1ace5c9e9077632fd4cd30d13a0341270d489"
+      }
+    },
+    "python": "3.14.4"
+  },
+  "liquidGlassControlledBackdropAnalysisSchemaVersion": 1,
+  "scope": {
+    "appearance": "light",
+    "controlledInput": "opaque-coordinate-hash-v1",
+    "direction": "materialize",
+    "material": "clear",
+    "openedDiscoveryCalibration": true,
+    "prospectiveHoldout": false,
+    "sampleIndices": [
+      1,
+      4,
+      8,
+      12,
+      16,
+      20,
+      24,
+      28,
+      32
+    ],
+    "stateCount": 9
+  },
+  "states": [
+    {
+      "copyBase": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          488,
+          -4
+        ],
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "sdf-generator-transition-background-uniform-01-texture-001-pf80-576x576.raw",
+          "sha256": "babc9557dc1909cadbca9e5e4001386351c11b1d765e0788006831e933eb29e2",
+          "uniqueBGRA8PixelCount": 255808
+        },
+        "textureCoordinateBase": [
+          -4,
+          -4
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          514,
+          515
+        ]
+      },
+      "dynamicResamplingScaleQ": 1.0158956527467886,
+      "mipMismatchedBytes": 0,
+      "mips": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumCodeDelta": 0,
+            "meanAbsoluteCodeDelta": 0.0,
+            "meanSignedCodeDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedBytesByChannel": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "mismatchedPixels": 0,
+            "observedBytes": 331776
+          },
+          "extent": [
+            288,
+            288
+          ],
+          "level": 1,
+          "raw": {
+            "rawBytes": 331776,
+            "rawFile": "sdf-generator-transition-background-uniform-01-texture-001-pf80-576x576-mip-01.raw",
+            "sha256": "aaa41284815ce179e92fc0f904e3d0157345a9beea85e290bcef7b4b94b8f303",
+            "uniqueBGRA8PixelCount": 24066
+          }
+        }
+      ],
+      "producer": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "cropOrigin": [
+          492,
+          0
+        ],
+        "extent": [
+          576,
+          576
+        ],
+        "fragmentFunction": "TimgA2Xhfc_Isrc",
+        "indexCount": 24,
+        "input": {
+          "rawBytes": 4194304,
+          "rawFile": "transition-background-uniform-01-dynamic-backdrop-producer-input-0-bgra8.raw",
+          "sha256": "3ac65697c38c44ed6332911c83e2f13a0b4b6958df49fa88365fbe6327cc1f88",
+          "uniqueBGRA8PixelCount": 863520
+        },
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "transition-background-uniform-01-dynamic-backdrop-producer-output-0-bgra8.raw",
+          "sha256": "7ef4b1ccfef35dc39cdb0109b9581a8b29c82486ffc32e2d677b0f615a8b6f8c",
+          "uniqueBGRA8PixelCount": 257741
+        },
+        "quadCount": 4,
+        "quads": [
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              0,
+              0,
+              516,
+              519
+            ],
+            "coveredPixelCount": 267804,
+            "rasterBounds": [
+              -3,
+              0,
+              516,
+              519
+            ]
+          },
+          {
+            "clippedBounds": [
+              0,
+              0,
+              516,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              -3,
+              -1,
+              516,
+              0
+            ]
+          },
+          {
+            "clippedBounds": [
+              516,
+              0,
+              517,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              516,
+              -1,
+              517,
+              0
+            ]
+          },
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              516,
+              0,
+              517,
+              519
+            ],
+            "coveredPixelCount": 519,
+            "rasterBounds": [
+              516,
+              0,
+              517,
+              519
+            ]
+          }
+        ],
+        "scissor": [
+          0,
+          0,
+          532,
+          533
+        ],
+        "vertexCount": 16,
+        "viewport": [
+          0.0,
+          0.0,
+          576.0,
+          576.0
+        ],
+        "whiteVertexColorVerified": false
+      },
+      "remaining": 0.03129386901855469,
+      "runtimeScale": 0.9843530654907227,
+      "sampleIndex": 1
+    },
+    {
+      "copyBase": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          432,
+          -4
+        ],
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "sdf-generator-transition-background-uniform-04-texture-000-pf80-576x576.raw",
+          "sha256": "8373c2c2f428326b55a90869fded67aaf8a062b84335d197fc6b49eb388062f1",
+          "uniqueBGRA8PixelCount": 268750
+        },
+        "textureCoordinateBase": [
+          -2,
+          -4
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          525,
+          525
+        ]
+      },
+      "dynamicResamplingScaleQ": 1.0666346580785997,
+      "mipMismatchedBytes": 0,
+      "mips": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumCodeDelta": 0,
+            "meanAbsoluteCodeDelta": 0.0,
+            "meanSignedCodeDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedBytesByChannel": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "mismatchedPixels": 0,
+            "observedBytes": 331776
+          },
+          "extent": [
+            288,
+            288
+          ],
+          "level": 1,
+          "raw": {
+            "rawBytes": 331776,
+            "rawFile": "sdf-generator-transition-background-uniform-04-texture-000-pf80-576x576-mip-01.raw",
+            "sha256": "431ae33a97b04822e336d3e760ef8d0804bc3aa0c3864a8fa4d245f9b2421d2a",
+            "uniqueBGRA8PixelCount": 22812
+          }
+        }
+      ],
+      "producer": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "cropOrigin": [
+          434,
+          0
+        ],
+        "extent": [
+          576,
+          576
+        ],
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "input": {
+          "rawBytes": 4194304,
+          "rawFile": "transition-background-uniform-04-dynamic-backdrop-producer-input-0-bgra8.raw",
+          "sha256": "3ac65697c38c44ed6332911c83e2f13a0b4b6958df49fa88365fbe6327cc1f88",
+          "uniqueBGRA8PixelCount": 863520
+        },
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "transition-background-uniform-04-dynamic-backdrop-producer-output-0-bgra8.raw",
+          "sha256": "a23d0c168078765f177b49ffe3687171355159c8320ea466765ce69d2e5de3ec",
+          "uniqueBGRA8PixelCount": 270764
+        },
+        "quadCount": 4,
+        "quads": [
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              0,
+              0,
+              527,
+              529
+            ],
+            "coveredPixelCount": 278783,
+            "rasterBounds": [
+              -3,
+              0,
+              527,
+              529
+            ]
+          },
+          {
+            "clippedBounds": [
+              0,
+              0,
+              527,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              -3,
+              -1,
+              527,
+              0
+            ]
+          },
+          {
+            "clippedBounds": [
+              527,
+              0,
+              528,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              527,
+              -1,
+              528,
+              0
+            ]
+          },
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              527,
+              0,
+              528,
+              529
+            ],
+            "coveredPixelCount": 529,
+            "rasterBounds": [
+              527,
+              0,
+              528,
+              529
+            ]
+          }
+        ],
+        "scissor": [
+          0,
+          0,
+          543,
+          543
+        ],
+        "vertexCount": 16,
+        "viewport": [
+          0.0,
+          0.0,
+          576.0,
+          576.0
+        ],
+        "whiteVertexColorVerified": true
+      },
+      "remaining": 0.12494373321533203,
+      "runtimeScale": 0.937528133392334,
+      "sampleIndex": 4
+    },
+    {
+      "copyBase": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          356,
+          -4
+        ],
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "sdf-generator-transition-background-uniform-08-texture-000-pf80-576x576.raw",
+          "sha256": "e82630816b7d1ff0770ac34f0682dc250f134cc3cd6fe356524244a2e152d0c6",
+          "uniqueBGRA8PixelCount": 281747
+        },
+        "textureCoordinateBase": [
+          -4,
+          -4
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          534,
+          534
+        ]
+      },
+      "dynamicResamplingScaleQ": 1.1441109832694762,
+      "mipMismatchedBytes": 0,
+      "mips": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumCodeDelta": 0,
+            "meanAbsoluteCodeDelta": 0.0,
+            "meanSignedCodeDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedBytesByChannel": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "mismatchedPixels": 0,
+            "observedBytes": 331776
+          },
+          "extent": [
+            288,
+            288
+          ],
+          "level": 1,
+          "raw": {
+            "rawBytes": 331776,
+            "rawFile": "sdf-generator-transition-background-uniform-08-texture-000-pf80-576x576-mip-01.raw",
+            "sha256": "a48d5aa074e8787abea117c6754854b4212b1e3d8afb5b051a4dd37c5183f6da",
+            "uniqueBGRA8PixelCount": 22434
+          }
+        }
+      ],
+      "producer": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "cropOrigin": [
+          360,
+          0
+        ],
+        "extent": [
+          576,
+          576
+        ],
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "input": {
+          "rawBytes": 4194304,
+          "rawFile": "transition-background-uniform-08-dynamic-backdrop-producer-input-0-bgra8.raw",
+          "sha256": "3ac65697c38c44ed6332911c83e2f13a0b4b6958df49fa88365fbe6327cc1f88",
+          "uniqueBGRA8PixelCount": 863520
+        },
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "transition-background-uniform-08-dynamic-backdrop-producer-output-0-bgra8.raw",
+          "sha256": "e7a6b87f9264b5850295bfe40a7a956ca33023d54434914f4c97f01a46fd71d5",
+          "uniqueBGRA8PixelCount": 283836
+        },
+        "quadCount": 4,
+        "quads": [
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              0,
+              0,
+              536,
+              538
+            ],
+            "coveredPixelCount": 288368,
+            "rasterBounds": [
+              -3,
+              0,
+              536,
+              538
+            ]
+          },
+          {
+            "clippedBounds": [
+              0,
+              0,
+              536,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              -3,
+              -1,
+              536,
+              0
+            ]
+          },
+          {
+            "clippedBounds": [
+              536,
+              0,
+              537,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              536,
+              -1,
+              537,
+              0
+            ]
+          },
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              536,
+              0,
+              537,
+              538
+            ],
+            "coveredPixelCount": 538,
+            "rasterBounds": [
+              536,
+              0,
+              537,
+              538
+            ]
+          }
+        ],
+        "scissor": [
+          0,
+          0,
+          552,
+          552
+        ],
+        "vertexCount": 16,
+        "viewport": [
+          0.0,
+          0.0,
+          576.0,
+          576.0
+        ],
+        "whiteVertexColorVerified": true
+      },
+      "remaining": 0.25191783905029297,
+      "runtimeScale": 0.8740410804748535,
+      "sampleIndex": 8
+    },
+    {
+      "copyBase": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          292,
+          -4
+        ],
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "sdf-generator-transition-background-uniform-12-texture-000-pf80-576x576.raw",
+          "sha256": "151a0e4821482e2aa06c86f311971b260ae0d2265507e57c59fb760241095206",
+          "uniqueBGRA8PixelCount": 283642
+        },
+        "textureCoordinateBase": [
+          -1,
+          -4
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          536,
+          536
+        ]
+      },
+      "dynamicResamplingScaleQ": 1.232817492159508,
+      "mipMismatchedBytes": 0,
+      "mips": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumCodeDelta": 0,
+            "meanAbsoluteCodeDelta": 0.0,
+            "meanSignedCodeDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedBytesByChannel": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "mismatchedPixels": 0,
+            "observedBytes": 331776
+          },
+          "extent": [
+            288,
+            288
+          ],
+          "level": 1,
+          "raw": {
+            "rawBytes": 331776,
+            "rawFile": "sdf-generator-transition-background-uniform-12-texture-000-pf80-576x576-mip-01.raw",
+            "sha256": "5720f496deb8b195d77e985f57e4d403d79eada5eab3ebd46f4cbfa000a053bb",
+            "uniqueBGRA8PixelCount": 20390
+          }
+        }
+      ],
+      "producer": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "cropOrigin": [
+          293,
+          0
+        ],
+        "extent": [
+          576,
+          576
+        ],
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "input": {
+          "rawBytes": 4194304,
+          "rawFile": "transition-background-uniform-12-dynamic-backdrop-producer-input-0-bgra8.raw",
+          "sha256": "3ac65697c38c44ed6332911c83e2f13a0b4b6958df49fa88365fbe6327cc1f88",
+          "uniqueBGRA8PixelCount": 863520
+        },
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "transition-background-uniform-12-dynamic-backdrop-producer-output-0-bgra8.raw",
+          "sha256": "34efc690971aa04537ade361dff5a699abbc25a9c69d020fc416afe7000293c8",
+          "uniqueBGRA8PixelCount": 286241
+        },
+        "quadCount": 4,
+        "quads": [
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              0,
+              0,
+              538,
+              541
+            ],
+            "coveredPixelCount": 291058,
+            "rasterBounds": [
+              -3,
+              0,
+              538,
+              541
+            ]
+          },
+          {
+            "clippedBounds": [
+              0,
+              0,
+              538,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              -3,
+              -1,
+              538,
+              0
+            ]
+          },
+          {
+            "clippedBounds": [
+              538,
+              0,
+              539,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              538,
+              -1,
+              539,
+              0
+            ]
+          },
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              538,
+              0,
+              539,
+              541
+            ],
+            "coveredPixelCount": 541,
+            "rasterBounds": [
+              538,
+              0,
+              539,
+              541
+            ]
+          }
+        ],
+        "scissor": [
+          0,
+          0,
+          554,
+          554
+        ],
+        "vertexCount": 16,
+        "viewport": [
+          0.0,
+          0.0,
+          576.0,
+          576.0
+        ],
+        "whiteVertexColorVerified": true
+      },
+      "remaining": 0.3776998519897461,
+      "runtimeScale": 0.811150074005127,
+      "sampleIndex": 12
+    },
+    {
+      "copyBase": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          232,
+          -4
+        ],
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "sdf-generator-transition-background-uniform-16-texture-000-pf80-576x576.raw",
+          "sha256": "cf7c34a63069c6ecb56a2a8063936dde3cb75305c9e0c3ed59273bff96aa9327",
+          "uniqueBGRA8PixelCount": 279529
+        },
+        "textureCoordinateBase": [
+          -2,
+          -4
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          532,
+          532
+        ]
+      },
+      "dynamicResamplingScaleQ": 1.3338438504524055,
+      "mipMismatchedBytes": 0,
+      "mips": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumCodeDelta": 0,
+            "meanAbsoluteCodeDelta": 0.0,
+            "meanSignedCodeDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedBytesByChannel": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "mismatchedPixels": 0,
+            "observedBytes": 331776
+          },
+          "extent": [
+            288,
+            288
+          ],
+          "level": 1,
+          "raw": {
+            "rawBytes": 331776,
+            "rawFile": "sdf-generator-transition-background-uniform-16-texture-000-pf80-576x576-mip-01.raw",
+            "sha256": "18cf87d193ac26217d5d2172cdc2574bbc013479d576d342e02f82a4307bd457",
+            "uniqueBGRA8PixelCount": 17712
+          }
+        }
+      ],
+      "producer": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "cropOrigin": [
+          234,
+          0
+        ],
+        "extent": [
+          576,
+          576
+        ],
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "input": {
+          "rawBytes": 4194304,
+          "rawFile": "transition-background-uniform-16-dynamic-backdrop-producer-input-0-bgra8.raw",
+          "sha256": "3ac65697c38c44ed6332911c83e2f13a0b4b6958df49fa88365fbe6327cc1f88",
+          "uniqueBGRA8PixelCount": 863520
+        },
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "transition-background-uniform-16-dynamic-backdrop-producer-output-0-bgra8.raw",
+          "sha256": "b728009f9579da222f9c66a4c0ad0d7ce890cff9334c6cf7634f2e89fb862e43",
+          "uniqueBGRA8PixelCount": 282127
+        },
+        "quadCount": 4,
+        "quads": [
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              0,
+              0,
+              534,
+              537
+            ],
+            "coveredPixelCount": 286758,
+            "rasterBounds": [
+              -3,
+              0,
+              534,
+              537
+            ]
+          },
+          {
+            "clippedBounds": [
+              0,
+              0,
+              534,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              -3,
+              -1,
+              534,
+              0
+            ]
+          },
+          {
+            "clippedBounds": [
+              534,
+              0,
+              535,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              534,
+              -1,
+              535,
+              0
+            ]
+          },
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              534,
+              0,
+              535,
+              537
+            ],
+            "coveredPixelCount": 537,
+            "rasterBounds": [
+              534,
+              0,
+              535,
+              537
+            ]
+          }
+        ],
+        "scissor": [
+          0,
+          0,
+          550,
+          550
+        ],
+        "vertexCount": 16,
+        "viewport": [
+          0.0,
+          0.0,
+          576.0,
+          576.0
+        ],
+        "whiteVertexColorVerified": true
+      },
+      "remaining": 0.5005741119384766,
+      "runtimeScale": 0.7497129440307617,
+      "sampleIndex": 16
+    },
+    {
+      "copyBase": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          176,
+          -4
+        ],
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "sdf-generator-transition-background-uniform-20-texture-000-pf80-576x576.raw",
+          "sha256": "d9913cef04fe27eed07335721d6659e2a2cb7ebfd2ef70033072fb9d0f182035",
+          "uniqueBGRA8PixelCount": 269443
+        },
+        "textureCoordinateBase": [
+          -4,
+          -4
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          522,
+          522
+        ]
+      },
+      "dynamicResamplingScaleQ": 1.4562524043435812,
+      "mipMismatchedBytes": 0,
+      "mips": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumCodeDelta": 0,
+            "meanAbsoluteCodeDelta": 0.0,
+            "meanSignedCodeDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedBytesByChannel": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "mismatchedPixels": 0,
+            "observedBytes": 331776
+          },
+          "extent": [
+            288,
+            288
+          ],
+          "level": 1,
+          "raw": {
+            "rawBytes": 331776,
+            "rawFile": "sdf-generator-transition-background-uniform-20-texture-000-pf80-576x576-mip-01.raw",
+            "sha256": "f767dd7942d693893b6303f7991cd23b87b3743f06920f831c48fc374e14cea8",
+            "uniqueBGRA8PixelCount": 16340
+          }
+        }
+      ],
+      "producer": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1327104
+        },
+        "cropOrigin": [
+          180,
+          0
+        ],
+        "extent": [
+          576,
+          576
+        ],
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "input": {
+          "rawBytes": 4194304,
+          "rawFile": "transition-background-uniform-20-dynamic-backdrop-producer-input-0-bgra8.raw",
+          "sha256": "3ac65697c38c44ed6332911c83e2f13a0b4b6958df49fa88365fbe6327cc1f88",
+          "uniqueBGRA8PixelCount": 863520
+        },
+        "output": {
+          "rawBytes": 1327104,
+          "rawFile": "transition-background-uniform-20-dynamic-backdrop-producer-output-0-bgra8.raw",
+          "sha256": "6ad0ef88817abde419619b1598b55ec8f6b01f2f866567ff75ec51bae944f65d",
+          "uniqueBGRA8PixelCount": 271489
+        },
+        "quadCount": 4,
+        "quads": [
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              0,
+              0,
+              524,
+              526
+            ],
+            "coveredPixelCount": 275624,
+            "rasterBounds": [
+              -3,
+              0,
+              524,
+              526
+            ]
+          },
+          {
+            "clippedBounds": [
+              0,
+              0,
+              524,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              -3,
+              -1,
+              524,
+              0
+            ]
+          },
+          {
+            "clippedBounds": [
+              524,
+              0,
+              525,
+              0
+            ],
+            "coveredPixelCount": 0,
+            "rasterBounds": [
+              524,
+              -1,
+              525,
+              0
+            ]
+          },
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              524,
+              0,
+              525,
+              526
+            ],
+            "coveredPixelCount": 526,
+            "rasterBounds": [
+              524,
+              0,
+              525,
+              526
+            ]
+          }
+        ],
+        "scissor": [
+          0,
+          0,
+          540,
+          540
+        ],
+        "vertexCount": 16,
+        "viewport": [
+          0.0,
+          0.0,
+          576.0,
+          576.0
+        ],
+        "whiteVertexColorVerified": true
+      },
+      "remaining": 0.6266117095947266,
+      "runtimeScale": 0.6866941452026367,
+      "sampleIndex": 20
+    },
+    {
+      "copyBase": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1048576
+        },
+        "destinationExtent": [
+          512,
+          512
+        ],
+        "effectiveOrigin": [
+          128,
+          4
+        ],
+        "output": {
+          "rawBytes": 1048576,
+          "rawFile": "sdf-generator-transition-background-uniform-24-texture-000-pf80-512x512.raw",
+          "sha256": "e02dab5db48cce5c96461178b841f5a92e9c89552724d1c6d18476eadd272baa",
+          "uniqueBGRA8PixelCount": 245049
+        },
+        "textureCoordinateBase": [
+          -5,
+          -4
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          497,
+          498
+        ]
+      },
+      "dynamicResamplingScaleQ": 1.6014515109214589,
+      "mipMismatchedBytes": 0,
+      "mips": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumCodeDelta": 0,
+            "meanAbsoluteCodeDelta": 0.0,
+            "meanSignedCodeDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedBytesByChannel": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "mismatchedPixels": 0,
+            "observedBytes": 262144
+          },
+          "extent": [
+            256,
+            256
+          ],
+          "level": 1,
+          "raw": {
+            "rawBytes": 262144,
+            "rawFile": "sdf-generator-transition-background-uniform-24-texture-000-pf80-512x512-mip-01.raw",
+            "sha256": "1545eb7f2f690839b93a36f60711fa73f53a287d17f7eeb302ea91cd39c69c8d",
+            "uniqueBGRA8PixelCount": 14548
+          }
+        }
+      ],
+      "producer": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1048576
+        },
+        "cropOrigin": [
+          133,
+          8
+        ],
+        "extent": [
+          512,
+          512
+        ],
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 6,
+        "input": {
+          "rawBytes": 4194304,
+          "rawFile": "transition-background-uniform-24-dynamic-backdrop-producer-input-0-bgra8.raw",
+          "sha256": "3ac65697c38c44ed6332911c83e2f13a0b4b6958df49fa88365fbe6327cc1f88",
+          "uniqueBGRA8PixelCount": 863520
+        },
+        "output": {
+          "rawBytes": 1048576,
+          "rawFile": "transition-background-uniform-24-dynamic-backdrop-producer-output-0-bgra8.raw",
+          "sha256": "9f25a3257994b4fdcbcca15558709c70defb46731dc9c436d9624205f1c5fca7",
+          "uniqueBGRA8PixelCount": 247003
+        },
+        "quadCount": 1,
+        "quads": [
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              0,
+              0,
+              500,
+              501
+            ],
+            "coveredPixelCount": 250500,
+            "rasterBounds": [
+              -3,
+              -7,
+              500,
+              501
+            ]
+          }
+        ],
+        "scissor": [
+          0,
+          0,
+          512,
+          512
+        ],
+        "vertexCount": 4,
+        "viewport": [
+          0.0,
+          0.0,
+          512.0,
+          512.0
+        ],
+        "whiteVertexColorVerified": true
+      },
+      "remaining": 0.7511329650878906,
+      "runtimeScale": 0.6244335174560547,
+      "sampleIndex": 24
+    },
+    {
+      "copyBase": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1048576
+        },
+        "destinationExtent": [
+          512,
+          512
+        ],
+        "effectiveOrigin": [
+          88,
+          32
+        ],
+        "output": {
+          "rawBytes": 1048576,
+          "rawFile": "sdf-generator-transition-background-uniform-28-texture-000-pf80-512x512.raw",
+          "sha256": "a200bc6867eadce2339b3ee4335c059994f76d6b187cc85ffe298cbe0fef2054",
+          "uniqueBGRA8PixelCount": 189932
+        },
+        "textureCoordinateBase": [
+          -4,
+          -3
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          448,
+          448
+        ]
+      },
+      "dynamicResamplingScaleQ": 1.7777566794556408,
+      "mipMismatchedBytes": 0,
+      "mips": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumCodeDelta": 0,
+            "meanAbsoluteCodeDelta": 0.0,
+            "meanSignedCodeDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedBytesByChannel": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "mismatchedPixels": 0,
+            "observedBytes": 262144
+          },
+          "extent": [
+            256,
+            256
+          ],
+          "level": 1,
+          "raw": {
+            "rawBytes": 262144,
+            "rawFile": "sdf-generator-transition-background-uniform-28-texture-000-pf80-512x512-mip-01.raw",
+            "sha256": "84a14c6236e9c062c61022a017db48cc325af4c6676facd56e030a17669dd076",
+            "uniqueBGRA8PixelCount": 12642
+          }
+        }
+      ],
+      "producer": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 1048576
+        },
+        "cropOrigin": [
+          92,
+          35
+        ],
+        "extent": [
+          512,
+          512
+        ],
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 6,
+        "input": {
+          "rawBytes": 4194304,
+          "rawFile": "transition-background-uniform-28-dynamic-backdrop-producer-input-0-bgra8.raw",
+          "sha256": "3ac65697c38c44ed6332911c83e2f13a0b4b6958df49fa88365fbe6327cc1f88",
+          "uniqueBGRA8PixelCount": 863520
+        },
+        "output": {
+          "rawBytes": 1048576,
+          "rawFile": "transition-background-uniform-28-dynamic-backdrop-producer-output-0-bgra8.raw",
+          "sha256": "1a90b77ea6f3e1a0fea265ea4cbed67d2d5b5b63c80da2bdc9e9f87815119d11",
+          "uniqueBGRA8PixelCount": 191925
+        },
+        "quadCount": 1,
+        "quads": [
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              0,
+              0,
+              451,
+              452
+            ],
+            "coveredPixelCount": 203852,
+            "rasterBounds": [
+              -2,
+              -6,
+              451,
+              452
+            ]
+          }
+        ],
+        "scissor": [
+          0,
+          0,
+          466,
+          466
+        ],
+        "vertexCount": 4,
+        "viewport": [
+          0.0,
+          0.0,
+          512.0,
+          512.0
+        ],
+        "whiteVertexColorVerified": true
+      },
+      "remaining": 0.8749866485595703,
+      "runtimeScale": 0.5625066757202148,
+      "sampleIndex": 28
+    },
+    {
+      "copyBase": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 802816
+        },
+        "destinationExtent": [
+          448,
+          448
+        ],
+        "effectiveOrigin": [
+          52,
+          52
+        ],
+        "output": {
+          "rawBytes": 802816,
+          "rawFile": "sdf-generator-transition-background-uniform-32-texture-001-pf80-448x448.raw",
+          "sha256": "26a2007a06f4f3735b11c861fb9234a6a1183e4925e2969b99103ca033812693",
+          "uniqueBGRA8PixelCount": 108566
+        },
+        "textureCoordinateBase": [
+          -5,
+          -4
+        ],
+        "textureCoordinateClamp": [
+          0,
+          0,
+          398,
+          399
+        ]
+      },
+      "dynamicResamplingScaleQ": 2.0,
+      "mipMismatchedBytes": 0,
+      "mips": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumCodeDelta": 0,
+            "meanAbsoluteCodeDelta": 0.0,
+            "meanSignedCodeDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedBytesByChannel": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "mismatchedPixels": 0,
+            "observedBytes": 200704
+          },
+          "extent": [
+            224,
+            224
+          ],
+          "level": 1,
+          "raw": {
+            "rawBytes": 200704,
+            "rawFile": "sdf-generator-transition-background-uniform-32-texture-001-pf80-448x448-mip-01.raw",
+            "sha256": "c8d5987e9ab16a0b45176c4a812ae79b6a20860cf747dd6e79ca8921abf5e2d1",
+            "uniqueBGRA8PixelCount": 6909
+          }
+        }
+      ],
+      "producer": {
+        "comparison": {
+          "exact": true,
+          "maximumCodeDelta": 0,
+          "meanAbsoluteCodeDelta": 0.0,
+          "meanSignedCodeDelta": 0.0,
+          "mismatchedBytes": 0,
+          "mismatchedBytesByChannel": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mismatchedPixels": 0,
+          "observedBytes": 802816
+        },
+        "cropOrigin": [
+          57,
+          56
+        ],
+        "extent": [
+          448,
+          448
+        ],
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 6,
+        "input": {
+          "rawBytes": 4194304,
+          "rawFile": "transition-background-uniform-32-dynamic-backdrop-producer-input-0-bgra8.raw",
+          "sha256": "3ac65697c38c44ed6332911c83e2f13a0b4b6958df49fa88365fbe6327cc1f88",
+          "uniqueBGRA8PixelCount": 863520
+        },
+        "output": {
+          "rawBytes": 802816,
+          "rawFile": "transition-background-uniform-32-dynamic-backdrop-producer-output-0-bgra8.raw",
+          "sha256": "d0d45fac2840ddbb147cf42adb96a7717fbdfb41b4f9ae77eb771b9e8e36eeef",
+          "uniqueBGRA8PixelCount": 108950
+        },
+        "quadCount": 1,
+        "quads": [
+          {
+            "ascendingDiagonal": true,
+            "clippedBounds": [
+              0,
+              0,
+              400,
+              401
+            ],
+            "coveredPixelCount": 160400,
+            "rasterBounds": [
+              -2,
+              -5,
+              400,
+              401
+            ]
+          }
+        ],
+        "scissor": [
+          0,
+          0,
+          416,
+          417
+        ],
+        "vertexCount": 4,
+        "viewport": [
+          0.0,
+          0.0,
+          448.0,
+          448.0
+        ],
+        "whiteVertexColorVerified": true
+      },
+      "remaining": 1.0,
+      "runtimeScale": 0.5,
+      "sampleIndex": 32
+    }
+  ],
+  "timeline": "/tmp/walle/artifacts/gh-run-30746489805/transition-timeline.json",
+  "timelineSHA256": "4ef0d2db8ee6516cc5e978a662f710fe1d1eb0ae7ed0b3232df104ee80064c2d"
+}

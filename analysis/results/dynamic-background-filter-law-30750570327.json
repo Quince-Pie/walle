@@ -1,0 +1,834 @@
+{
+  "aggregate": {
+    "constantAndStructuredNonnumeric": {
+      "componentCount": 2560,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "geometryCount": 4,
+    "inputClampDiagnostic": [
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.0106918811798096,
+        "remaining": 0.031235694885253906,
+        "sampleIndex": 1
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.0214414596557617,
+        "remaining": 0.06244659423828125,
+        "sampleIndex": 2
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.0332012176513672,
+        "remaining": 0.09637165069580078,
+        "sampleIndex": 3
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.0440510511398315,
+        "remaining": 0.1274728775024414,
+        "sampleIndex": 4
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.0543838739395142,
+        "remaining": 0.15691661834716797,
+        "sampleIndex": 5
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.0657644271850586,
+        "remaining": 0.18915271759033203,
+        "sampleIndex": 6
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.076335072517395,
+        "remaining": 0.21891403198242188,
+        "sampleIndex": 7
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.0877779722213745,
+        "remaining": 0.25094127655029297,
+        "sampleIndex": 8
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.0996063947677612,
+        "remaining": 0.2838401794433594,
+        "sampleIndex": 9
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.1105831861495972,
+        "remaining": 0.31418704986572266,
+        "sampleIndex": 10
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.1213793754577637,
+        "remaining": 0.34386444091796875,
+        "sampleIndex": 11
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.132861852645874,
+        "remaining": 0.3752450942993164,
+        "sampleIndex": 12
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.1448603868484497,
+        "remaining": 0.4078397750854492,
+        "sampleIndex": 13
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.1567939519882202,
+        "remaining": 0.4400606155395508,
+        "sampleIndex": 14
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.1684107780456543,
+        "remaining": 0.4712400436401367,
+        "sampleIndex": 15
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.179462194442749,
+        "remaining": 0.5007343292236328,
+        "sampleIndex": 16
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.1915568113327026,
+        "remaining": 0.5328292846679688,
+        "sampleIndex": 17
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.203775405883789,
+        "remaining": 0.5650596618652344,
+        "sampleIndex": 18
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.2156569957733154,
+        "remaining": 0.5962200164794922,
+        "sampleIndex": 19
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.2276573181152344,
+        "remaining": 0.6275110244750977,
+        "sampleIndex": 20
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.2389048337936401,
+        "remaining": 0.6566781997680664,
+        "sampleIndex": 21
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.2514034509658813,
+        "remaining": 0.6889095306396484,
+        "sampleIndex": 22
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.263007640838623,
+        "remaining": 0.7186651229858398,
+        "sampleIndex": 23
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.2754476070404053,
+        "remaining": 0.7503871917724609,
+        "sampleIndex": 24
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.28788161277771,
+        "remaining": 0.781916618347168,
+        "sampleIndex": 25
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.30048406124115,
+        "remaining": 0.813690185546875,
+        "sampleIndex": 26
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.3135372400283813,
+        "remaining": 0.8464117050170898,
+        "sampleIndex": 27
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.3259958028793335,
+        "remaining": 0.877467155456543,
+        "sampleIndex": 28
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.338570237159729,
+        "remaining": 0.9086380004882812,
+        "sampleIndex": 29
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.3512786626815796,
+        "remaining": 0.9399690628051758,
+        "sampleIndex": 30
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.3631861209869385,
+        "remaining": 0.9691696166992188,
+        "sampleIndex": 31
+      },
+      {
+        "geometry": "circle-256-center",
+        "observed": 1.3758244514465332,
+        "remaining": 1.0,
+        "sampleIndex": 32
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.0106725692749023,
+        "remaining": 0.031179428100585938,
+        "sampleIndex": 1
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.0214256048202515,
+        "remaining": 0.06240081787109375,
+        "sampleIndex": 2
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.0323052406311035,
+        "remaining": 0.0937948226928711,
+        "sampleIndex": 3
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.0432499647140503,
+        "remaining": 0.12518310546875,
+        "sampleIndex": 4
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.05414879322052,
+        "remaining": 0.1562480926513672,
+        "sampleIndex": 5
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.065213918685913,
+        "remaining": 0.18759822845458984,
+        "sampleIndex": 6
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.0768314599990845,
+        "remaining": 0.2203073501586914,
+        "sampleIndex": 7
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.0880028009414673,
+        "remaining": 0.2515678405761719,
+        "sampleIndex": 8
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.0989935398101807,
+        "remaining": 0.28214168548583984,
+        "sampleIndex": 9
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.110140323638916,
+        "remaining": 0.31296634674072266,
+        "sampleIndex": 10
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.1223324537277222,
+        "remaining": 0.34647655487060547,
+        "sampleIndex": 11
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.1336536407470703,
+        "remaining": 0.37740230560302734,
+        "sampleIndex": 12
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.1442970037460327,
+        "remaining": 0.4063138961791992,
+        "sampleIndex": 13
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.1558055877685547,
+        "remaining": 0.43739891052246094,
+        "sampleIndex": 14
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.1683462858200073,
+        "remaining": 0.4710674285888672,
+        "sampleIndex": 15
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.180155634880066,
+        "remaining": 0.5025806427001953,
+        "sampleIndex": 16
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.1919231414794922,
+        "remaining": 0.5337991714477539,
+        "sampleIndex": 17
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.2036023139953613,
+        "remaining": 0.5646047592163086,
+        "sampleIndex": 18
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.2148395776748657,
+        "remaining": 0.5940818786621094,
+        "sampleIndex": 19
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.2277350425720215,
+        "remaining": 0.6277132034301758,
+        "sampleIndex": 20
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.2395591735839844,
+        "remaining": 0.6583700180053711,
+        "sampleIndex": 21
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.2512439489364624,
+        "remaining": 0.6884994506835938,
+        "sampleIndex": 22
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.263478398323059,
+        "remaining": 0.7198686599731445,
+        "sampleIndex": 23
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.2754005193710327,
+        "remaining": 0.7502679824829102,
+        "sampleIndex": 24
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.288074016571045,
+        "remaining": 0.7824020385742188,
+        "sampleIndex": 25
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.3010838031768799,
+        "remaining": 0.8151979446411133,
+        "sampleIndex": 26
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.312562346458435,
+        "remaining": 0.8439750671386719,
+        "sampleIndex": 27
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.3250758647918701,
+        "remaining": 0.8751802444458008,
+        "sampleIndex": 28
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.338454246520996,
+        "remaining": 0.9083518981933594,
+        "sampleIndex": 29
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.3503077030181885,
+        "remaining": 0.9375810623168945,
+        "sampleIndex": 30
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.3639063835144043,
+        "remaining": 0.9709310531616211,
+        "sampleIndex": 31
+      },
+      {
+        "geometry": "circle-1536-center",
+        "observed": 1.3758244514465332,
+        "remaining": 1.0,
+        "sampleIndex": 32
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.0106735229492188,
+        "remaining": 0.031182289123535156,
+        "sampleIndex": 1
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.0214365720748901,
+        "remaining": 0.062432289123535156,
+        "sampleIndex": 2
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.0329784154891968,
+        "remaining": 0.09573173522949219,
+        "sampleIndex": 3
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.0441209077835083,
+        "remaining": 0.1276721954345703,
+        "sampleIndex": 4
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.0547226667404175,
+        "remaining": 0.15787887573242188,
+        "sampleIndex": 5
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.0651551485061646,
+        "remaining": 0.18743228912353516,
+        "sampleIndex": 6
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.0768177509307861,
+        "remaining": 0.22026920318603516,
+        "sampleIndex": 7
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.0875279903411865,
+        "remaining": 0.2502431869506836,
+        "sampleIndex": 8
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.0987701416015625,
+        "remaining": 0.2815217971801758,
+        "sampleIndex": 9
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.1108410358428955,
+        "remaining": 0.3148975372314453,
+        "sampleIndex": 10
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.1216682195663452,
+        "remaining": 0.34465599060058594,
+        "sampleIndex": 11
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.132866382598877,
+        "remaining": 0.3752584457397461,
+        "sampleIndex": 12
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.145097255706787,
+        "remaining": 0.4084806442260742,
+        "sampleIndex": 13
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.1563059091567993,
+        "remaining": 0.43874645233154297,
+        "sampleIndex": 14
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.1679471731185913,
+        "remaining": 0.4699993133544922,
+        "sampleIndex": 15
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.1793469190597534,
+        "remaining": 0.5004281997680664,
+        "sampleIndex": 16
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.1914268732070923,
+        "remaining": 0.5324850082397461,
+        "sampleIndex": 17
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.2034097909927368,
+        "remaining": 0.5640983581542969,
+        "sampleIndex": 18
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.2148399353027344,
+        "remaining": 0.5940828323364258,
+        "sampleIndex": 19
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.227066993713379,
+        "remaining": 0.6259756088256836,
+        "sampleIndex": 20
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.2398312091827393,
+        "remaining": 0.6590728759765625,
+        "sampleIndex": 21
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.250943660736084,
+        "remaining": 0.6877269744873047,
+        "sampleIndex": 22
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.2636387348175049,
+        "remaining": 0.7202787399291992,
+        "sampleIndex": 23
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.276041865348816,
+        "remaining": 0.7518987655639648,
+        "sampleIndex": 24
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.2886391878128052,
+        "remaining": 0.7838306427001953,
+        "sampleIndex": 25
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.3005021810531616,
+        "remaining": 0.8137350082397461,
+        "sampleIndex": 26
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.3133718967437744,
+        "remaining": 0.8459978103637695,
+        "sampleIndex": 27
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.3260669708251953,
+        "remaining": 0.8776435852050781,
+        "sampleIndex": 28
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.3385308980941772,
+        "remaining": 0.9085407257080078,
+        "sampleIndex": 29
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.350602149963379,
+        "remaining": 0.9383058547973633,
+        "sampleIndex": 30
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.3635156154632568,
+        "remaining": 0.969975471496582,
+        "sampleIndex": 31
+      },
+      {
+        "geometry": "circle-640-fractional",
+        "observed": 1.3758244514465332,
+        "remaining": 1.0,
+        "sampleIndex": 32
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.010758399963379,
+        "remaining": 0.031429290771484375,
+        "sampleIndex": 1
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.0215811729431152,
+        "remaining": 0.0628509521484375,
+        "sampleIndex": 2
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.0322901010513306,
+        "remaining": 0.09375190734863281,
+        "sampleIndex": 3
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.0432382822036743,
+        "remaining": 0.12514877319335938,
+        "sampleIndex": 4
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.0541318655014038,
+        "remaining": 0.15620040893554688,
+        "sampleIndex": 5
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.0661917924880981,
+        "remaining": 0.19035911560058594,
+        "sampleIndex": 6
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.076965570449829,
+        "remaining": 0.22068405151367188,
+        "sampleIndex": 7
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.0880670547485352,
+        "remaining": 0.25174808502197266,
+        "sampleIndex": 8
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.0986703634262085,
+        "remaining": 0.28124523162841797,
+        "sampleIndex": 9
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.111006259918213,
+        "remaining": 0.3153533935546875,
+        "sampleIndex": 10
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.1215403079986572,
+        "remaining": 0.34430599212646484,
+        "sampleIndex": 11
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.133091688156128,
+        "remaining": 0.3758716583251953,
+        "sampleIndex": 12
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.1452075242996216,
+        "remaining": 0.4087800979614258,
+        "sampleIndex": 13
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.1568104028701782,
+        "remaining": 0.44010448455810547,
+        "sampleIndex": 14
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.1674667596817017,
+        "remaining": 0.46871280670166016,
+        "sampleIndex": 15
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.1800721883773804,
+        "remaining": 0.5023574829101562,
+        "sampleIndex": 16
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.1909807920455933,
+        "remaining": 0.5313043594360352,
+        "sampleIndex": 17
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.2029633522033691,
+        "remaining": 0.5629243850708008,
+        "sampleIndex": 18
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.2147139310836792,
+        "remaining": 0.5937538146972656,
+        "sampleIndex": 19
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.2276915311813354,
+        "remaining": 0.6276006698608398,
+        "sampleIndex": 20
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.2391602993011475,
+        "remaining": 0.6573390960693359,
+        "sampleIndex": 21
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.2511236667633057,
+        "remaining": 0.6881895065307617,
+        "sampleIndex": 22
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.263042688369751,
+        "remaining": 0.7187538146972656,
+        "sampleIndex": 23
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.2759875059127808,
+        "remaining": 0.7517604827880859,
+        "sampleIndex": 24
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.2879446744918823,
+        "remaining": 0.7820749282836914,
+        "sampleIndex": 25
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.300817608833313,
+        "remaining": 0.8145284652709961,
+        "sampleIndex": 26
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.3135631084442139,
+        "remaining": 0.8464765548706055,
+        "sampleIndex": 27
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.3260592222213745,
+        "remaining": 0.87762451171875,
+        "sampleIndex": 28
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.3377116918563843,
+        "remaining": 0.9065151214599609,
+        "sampleIndex": 29
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.3513455390930176,
+        "remaining": 0.9401330947875977,
+        "sampleIndex": 30
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.3633363246917725,
+        "remaining": 0.9695367813110352,
+        "sampleIndex": 31
+      },
+      {
+        "geometry": "circle-512-offset",
+        "observed": 1.3758244514465332,
+        "remaining": 1.0,
+        "sampleIndex": 32
+      }
+    ],
+    "numericFieldCount": 47,
+    "predictedNumericBinary32": {
+      "componentCount": 5888,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "predictedNumericFieldCount": 46,
+    "stateCount": 128,
+    "unrecoveredNumericFields": [
+      "inputClamp"
+    ]
+  },
+  "classification": "post-opening-retrospective-clear-light-temporal-law-analysis",
+  "conclusion": {
+    "clearLightNumericBackgroundInputsRecoveredAtMetalPrecision": true,
+    "completeBackgroundInputLawRecovered": false,
+    "productionShaderAuthorized": false,
+    "remainingNumericField": "inputClamp",
+    "requiresUnseenTemporalHoldout": true
+  },
+  "dynamicBackgroundFilterLawAnalysisSchemaVersion": 1,
+  "inputs": [
+    {
+      "geometry": "circle-256-center",
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-256-materialize-30750570327/transition-timeline.json",
+      "timelineSHA256": "91287685a2abf1e1d98f8a8251b3c6da13085ed731dd66e07c1bb52b232a061c"
+    },
+    {
+      "geometry": "circle-1536-center",
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-clipped-materialize-30750570327/transition-timeline.json",
+      "timelineSHA256": "1368a0c87018b114729afa19825c176c0d8048af2e314906c5584af2b57dcf68"
+    },
+    {
+      "geometry": "circle-640-fractional",
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-fractional-materialize-30750570327/transition-timeline.json",
+      "timelineSHA256": "501f3735994e24e7ea7f9b0342b70eb94baff77084d4e9a94b4f910bc80163f4"
+    },
+    {
+      "geometry": "circle-512-offset",
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-offset-materialize-30750570327/transition-timeline.json",
+      "timelineSHA256": "3666198eed053d752b24909c5eddb68f7a9bd3d0ee361260f1976e9bde4a13fe"
+    }
+  ],
+  "recoveredStructure": {
+    "blurWeight": "w = float32(k * float32Mix(0.2, 0.5, k)); opacities 1/2 are w and 3/4 are float32(2*w)",
+    "effectiveDiameter": "G = k * (requestedDiameter + 16 * (1 - k))",
+    "geometryFields": {
+      "inputBlurDistance0": "-G/2",
+      "inputOuterRefractionAmount": "G/5",
+      "inputOuterRefractionHeight": "G/8",
+      "inputShadowHeight": "2*G/5"
+    },
+    "maxHeadroom": "float32Mix(1.2, 9999, k)"
+  },
+  "runID": 30750570327
+}

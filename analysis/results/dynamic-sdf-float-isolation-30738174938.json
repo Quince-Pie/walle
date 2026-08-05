@@ -1,0 +1,1625 @@
+{
+  "capturedAppleFunctionUnmodified": false,
+  "classification": "retrospective post-opening arithmetic isolation",
+  "comparisons": {
+    "float32": {
+      "comparedWords": 3145728,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x3f9efaf0",
+            "0x3f8ea6cd",
+            "0x3f8995a5"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3f9efaf2",
+            "0x3f8ea6ce",
+            "0x3f8995a6"
+          ],
+          "x": 312,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9eab20",
+            "0x3f8e82fa",
+            "0x3f897e36"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x3f9eab23",
+            "0x3f8e82fb",
+            "0x3f897e36"
+          ],
+          "x": 313,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9e5bb9",
+            "0x3f8e5f4d",
+            "0x3f8966df"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3f9e5bbc",
+            "0x3f8e5f4e",
+            "0x3f8966e0"
+          ],
+          "x": 314,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9e0cb8",
+            "0x3f8e3bc5",
+            "0x3f894fa1"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3f9e0cbb",
+            "0x3f8e3bc6",
+            "0x3f894fa2"
+          ],
+          "x": 315,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9dbe1e",
+            "0x3f8e1862",
+            "0x3f89387b"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x3f9dbe20",
+            "0x3f8e1863",
+            "0x3f89387b"
+          ],
+          "x": 316,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9d6fea",
+            "0x3f8df525",
+            "0x3f89216e"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x3f9d6fec",
+            "0x3f8df525",
+            "0x3f89216e"
+          ],
+          "x": 317,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9d221e",
+            "0x3f8dd20d",
+            "0x3f890a79"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x3f9d2220",
+            "0x3f8dd20e",
+            "0x3f890a79"
+          ],
+          "x": 318,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9cd4b7",
+            "0x3f8daf1b",
+            "0x3f88f39c"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3f9cd4ba",
+            "0x3f8daf1c",
+            "0x3f88f39d"
+          ],
+          "x": 319,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9c87b9",
+            "0x3f8d8c50",
+            "0x3f88dcda"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x3f9c87bb",
+            "0x3f8d8c51",
+            "0x3f88dcda"
+          ],
+          "x": 320,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9c3b21",
+            "0x3f8d69aa",
+            "0x3f88c62f"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3f9c3b23",
+            "0x3f8d69ab",
+            "0x3f88c630"
+          ],
+          "x": 321,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9beeef",
+            "0x3f8d472a",
+            "0x3f88af9e"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x3f9beef1",
+            "0x3f8d472a",
+            "0x3f88af9e"
+          ],
+          "x": 322,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9ba325",
+            "0x3f8d24d0",
+            "0x3f889925"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3f9ba327",
+            "0x3f8d24d1",
+            "0x3f889926"
+          ],
+          "x": 323,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9b57c1",
+            "0x3f8d029d",
+            "0x3f8882c6"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x3f9b57c3",
+            "0x3f8d029d",
+            "0x3f8882c6"
+          ],
+          "x": 324,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9b0cc3",
+            "0x3f8ce08f",
+            "0x3f886c7f"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x3f9b0cc6",
+            "0x3f8ce090",
+            "0x3f886c7f"
+          ],
+          "x": 325,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9ac22d",
+            "0x3f8cbea9",
+            "0x3f885652"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3f9ac230",
+            "0x3f8cbeaa",
+            "0x3f885653"
+          ],
+          "x": 326,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3f9a77fe",
+            "0x3f8c9ce9",
+            "0x3f88403e"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3f9a7800",
+            "0x3f8c9cea",
+            "0x3f88403f"
+          ],
+          "x": 327,
+          "y": 108
+        }
+      ],
+      "mismatchedPixels": 349189,
+      "mismatchedWords": 954188
+    },
+    "geometry": {
+      "comparedWords": 4194304,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x43ce6a4b",
+            "0x441a54ed",
+            "0x3f2b20fe",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43ce6a4b",
+            "0x441a54ed",
+            "0x3f2b20ff",
+            "0x3f7fe5e3"
+          ],
+          "x": 312,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43cdea4b",
+            "0x441a54ed",
+            "0x3f2ab6df",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43cdea4b",
+            "0x441a54ed",
+            "0x3f2ab6e0",
+            "0x3f7fe5e3"
+          ],
+          "x": 313,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43cd6a4b",
+            "0x441a54ed",
+            "0x3f2a4cc1",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43cd6a4b",
+            "0x441a54ed",
+            "0x3f2a4cc2",
+            "0x3f7fe5e3"
+          ],
+          "x": 314,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43ccea4b",
+            "0x441a54ed",
+            "0x3f29e2a3",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43ccea4b",
+            "0x441a54ed",
+            "0x3f29e2a4",
+            "0x3f7fe5e3"
+          ],
+          "x": 315,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43cc6a4a",
+            "0x441a54ed",
+            "0x3f297884",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            3
+          ],
+          "referenceHex": [
+            "0x43cc6a4a",
+            "0x441a54ed",
+            "0x3f297884",
+            "0x3f7fe5e3"
+          ],
+          "x": 316,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43cbea4a",
+            "0x441a54ed",
+            "0x3f290e65",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43cbea4a",
+            "0x441a54ed",
+            "0x3f290e66",
+            "0x3f7fe5e3"
+          ],
+          "x": 317,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43cb6a4a",
+            "0x441a54ed",
+            "0x3f28a447",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43cb6a4a",
+            "0x441a54ed",
+            "0x3f28a448",
+            "0x3f7fe5e3"
+          ],
+          "x": 318,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43caea4a",
+            "0x441a54ed",
+            "0x3f283a28",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43caea4a",
+            "0x441a54ed",
+            "0x3f283a29",
+            "0x3f7fe5e3"
+          ],
+          "x": 319,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43ca6a4a",
+            "0x441a54ed",
+            "0x3f27d00a",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43ca6a4a",
+            "0x441a54ed",
+            "0x3f27d00b",
+            "0x3f7fe5e3"
+          ],
+          "x": 320,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43c9ea4a",
+            "0x441a54ed",
+            "0x3f2765ec",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            3
+          ],
+          "referenceHex": [
+            "0x43c9ea4a",
+            "0x441a54ed",
+            "0x3f2765ec",
+            "0x3f7fe5e3"
+          ],
+          "x": 321,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43c96a4a",
+            "0x441a54ed",
+            "0x3f26fbcd",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43c96a4a",
+            "0x441a54ed",
+            "0x3f26fbce",
+            "0x3f7fe5e3"
+          ],
+          "x": 322,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43c8ea4a",
+            "0x441a54ed",
+            "0x3f2691af",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43c8ea4a",
+            "0x441a54ed",
+            "0x3f2691b0",
+            "0x3f7fe5e3"
+          ],
+          "x": 323,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43c86a4a",
+            "0x441a54ed",
+            "0x3f262791",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            3
+          ],
+          "referenceHex": [
+            "0x43c86a4a",
+            "0x441a54ed",
+            "0x3f262791",
+            "0x3f7fe5e3"
+          ],
+          "x": 324,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43c7ea4a",
+            "0x441a54ed",
+            "0x3f25bd72",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43c7ea4a",
+            "0x441a54ed",
+            "0x3f25bd73",
+            "0x3f7fe5e3"
+          ],
+          "x": 325,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43c76a4a",
+            "0x441a54ed",
+            "0x3f255354",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43c76a4a",
+            "0x441a54ed",
+            "0x3f255355",
+            "0x3f7fe5e3"
+          ],
+          "x": 326,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x43c6ea4a",
+            "0x441a54ed",
+            "0x3f24e935",
+            "0x3f7fe5e2"
+          ],
+          "channels": [
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x43c6ea4a",
+            "0x441a54ed",
+            "0x3f24e936",
+            "0x3f7fe5e3"
+          ],
+          "x": 327,
+          "y": 108
+        }
+      ],
+      "mismatchedPixels": 359024,
+      "mismatchedWords": 663986
+    },
+    "half-conversion": {
+      "comparedWords": 2097152,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x000023e0",
+            "0x000048c0"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x000023e1",
+            "0x000048c0"
+          ],
+          "x": 422,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00001f40",
+            "0x0000445f"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00001f41",
+            "0x00004460"
+          ],
+          "x": 450,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x000017fc",
+            "0x00003cd1"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x000017fd",
+            "0x00003cd1"
+          ],
+          "x": 477,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00000a7c",
+            "0x00002fd2"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00000a7e",
+            "0x00002fd5"
+          ],
+          "x": 494,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00000470",
+            "0x0000295a"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00000471",
+            "0x0000295b"
+          ],
+          "x": 496,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00000090",
+            "0x00001d6e"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00000091",
+            "0x00001d77"
+          ],
+          "x": 497,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x0000830c",
+            "0x0000a75a"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x0000830a",
+            "0x0000a755"
+          ],
+          "x": 498,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00008666",
+            "0x0000abb8"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00008665",
+            "0x0000abb7"
+          ],
+          "x": 499,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00008a28",
+            "0x0000af6d"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00008a27",
+            "0x0000af6c"
+          ],
+          "x": 501,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00008b70",
+            "0x0000b07c"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x00008b6f",
+            "0x0000b07c"
+          ],
+          "x": 502,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00008da0",
+            "0x0000b2c9"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00008d9f",
+            "0x0000b2c8"
+          ],
+          "x": 506,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00008df0",
+            "0x0000b329"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00008def",
+            "0x0000b328"
+          ],
+          "x": 507,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00008e2f",
+            "0x0000b375"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00008e2e",
+            "0x0000b374"
+          ],
+          "x": 508,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00008e83",
+            "0x0000b3db"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00008e82",
+            "0x0000b3da"
+          ],
+          "x": 512,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00008e12",
+            "0x0000b352"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00008e11",
+            "0x0000b351"
+          ],
+          "x": 515,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x00008d72",
+            "0x0000b291"
+          ],
+          "channels": [
+            0,
+            1
+          ],
+          "referenceHex": [
+            "0x00008d71",
+            "0x0000b290"
+          ],
+          "x": 517,
+          "y": 108
+        }
+      ],
+      "mismatchedPixels": 1163,
+      "mismatchedWords": 2155
+    },
+    "normal": {
+      "comparedWords": 4194304,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x4837f59f",
+            "0x3b16ff4a",
+            "0x3ebbdd4f",
+            "0x3f6e24f8"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x4837f59f",
+            "0x3b16ff49",
+            "0x3ebbdd4d",
+            "0x3f6e24f6"
+          ],
+          "x": 352,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x483708ff",
+            "0x3b1760c5",
+            "0x3eb8ca52",
+            "0x3f6ebeb5"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x483708ff",
+            "0x3b1760c4",
+            "0x3eb8ca51",
+            "0x3f6ebeb4"
+          ],
+          "x": 355,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x48333b9a",
+            "0x3b18f9ac",
+            "0x3eab341c",
+            "0x3f71439b"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48333b9a",
+            "0x3b18f9ab",
+            "0x3eab341b",
+            "0x3f71439a"
+          ],
+          "x": 368,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482f81d6",
+            "0x3b1a9726",
+            "0x3e9c1a50",
+            "0x3f73cfb8"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482f81d6",
+            "0x3b1a9725",
+            "0x3e9c1a4f",
+            "0x3f73cfb6"
+          ],
+          "x": 382,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482f0195",
+            "0x3b1acfc1",
+            "0x3e99e83a",
+            "0x3f7428fe"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482f0195",
+            "0x3b1acfc0",
+            "0x3e99e839",
+            "0x3f7428fd"
+          ],
+          "x": 384,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482e8354",
+            "0x3b1b07b7",
+            "0x3e97b3bd",
+            "0x3f748140"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482e8354",
+            "0x3b1b07b6",
+            "0x3e97b3bc",
+            "0x3f74813f"
+          ],
+          "x": 386,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482e44f4",
+            "0x3b1b2373",
+            "0x3e96989a",
+            "0x3f74acfe"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482e44f4",
+            "0x3b1b2372",
+            "0x3e969899",
+            "0x3f74acfd"
+          ],
+          "x": 387,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482d1493",
+            "0x3b1baba1",
+            "0x3e910816",
+            "0x3f7583c5"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482d1493",
+            "0x3b1baba0",
+            "0x3e910815",
+            "0x3f7583c3"
+          ],
+          "x": 392,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482bf0b1",
+            "0x3b1c2f8a",
+            "0x3e8b691f",
+            "0x3f7653cf"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482bf0b1",
+            "0x3b1c2f89",
+            "0x3e8b691e",
+            "0x3f7653ce"
+          ],
+          "x": 397,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x4829ce6e",
+            "0x3b1d29fb",
+            "0x3e800161",
+            "0x3f77decb"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x4829ce6e",
+            "0x3b1d29fa",
+            "0x3e800160",
+            "0x3f77dec9"
+          ],
+          "x": 407,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x4827530a",
+            "0x3b1e5347",
+            "0x3e61be19",
+            "0x3f79b3ac"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x4827530a",
+            "0x3b1e5348",
+            "0x3e61be1a",
+            "0x3f79b3ae"
+          ],
+          "x": 420,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482725aa",
+            "0x3b1e68c3",
+            "0x3e5f6318",
+            "0x3f79d58e"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482725aa",
+            "0x3b1e68c4",
+            "0x3e5f6319",
+            "0x3f79d590"
+          ],
+          "x": 421,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x48261fe8",
+            "0x3b1ee55f",
+            "0x3e512d4e",
+            "0x3f7a9a15"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x48261fe8",
+            "0x3b1ee560",
+            "0x3e512d4f",
+            "0x3f7a9a17"
+          ],
+          "x": 427,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x4823e043",
+            "0x3b1ffb81",
+            "0x3e2d1c7c",
+            "0x3f7c50bd"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x4823e043",
+            "0x3b1ffb80",
+            "0x3e2d1c7a",
+            "0x3f7c50bb"
+          ],
+          "x": 442,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x482359c2",
+            "0x3b203d51",
+            "0x3e235fdc",
+            "0x3f7cb889"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x482359c2",
+            "0x3b203d50",
+            "0x3e235fdb",
+            "0x3f7cb887"
+          ],
+          "x": 446,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x4822fa21",
+            "0x3b206c4d",
+            "0x3e1c0aaf",
+            "0x3f7d02a3"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x4822fa21",
+            "0x3b206c4c",
+            "0x3e1c0aae",
+            "0x3f7d02a1"
+          ],
+          "x": 449,
+          "y": 108
+        }
+      ],
+      "mismatchedPixels": 38769,
+      "mismatchedWords": 99409
+    },
+    "oval": {
+      "comparedWords": 4194304,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x3efc855d",
+            "0x3f7fd812",
+            "0x3f9efaf0",
+            "0x3f8ea6cd"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3efc8560",
+            "0x3f7fd814",
+            "0x3f9efaf2",
+            "0x3f8ea6ce"
+          ],
+          "x": 312,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3efb40ea",
+            "0x3f7fd812",
+            "0x3f9eab20",
+            "0x3f8e82fa"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3efb40ed",
+            "0x3f7fd814",
+            "0x3f9eab23",
+            "0x3f8e82fb"
+          ],
+          "x": 313,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3ef9fc7b",
+            "0x3f7fd812",
+            "0x3f9e5bb9",
+            "0x3f8e5f4d"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3ef9fc7e",
+            "0x3f7fd814",
+            "0x3f9e5bbc",
+            "0x3f8e5f4e"
+          ],
+          "x": 314,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3ef8b80b",
+            "0x3f7fd812",
+            "0x3f9e0cb8",
+            "0x3f8e3bc5"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3ef8b80e",
+            "0x3f7fd814",
+            "0x3f9e0cbb",
+            "0x3f8e3bc6"
+          ],
+          "x": 315,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3ef77399",
+            "0x3f7fd812",
+            "0x3f9dbe1e",
+            "0x3f8e1862"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3ef77399",
+            "0x3f7fd814",
+            "0x3f9dbe20",
+            "0x3f8e1863"
+          ],
+          "x": 316,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3ef62f26",
+            "0x3f7fd812",
+            "0x3f9d6fea",
+            "0x3f8df525"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3ef62f29",
+            "0x3f7fd814",
+            "0x3f9d6fec",
+            "0x3f8df525"
+          ],
+          "x": 317,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3ef4eab7",
+            "0x3f7fd812",
+            "0x3f9d221e",
+            "0x3f8dd20d"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3ef4eaba",
+            "0x3f7fd814",
+            "0x3f9d2220",
+            "0x3f8dd20e"
+          ],
+          "x": 318,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3ef3a644",
+            "0x3f7fd812",
+            "0x3f9cd4b7",
+            "0x3f8daf1b"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3ef3a647",
+            "0x3f7fd814",
+            "0x3f9cd4ba",
+            "0x3f8daf1c"
+          ],
+          "x": 319,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3ef261d5",
+            "0x3f7fd812",
+            "0x3f9c87b9",
+            "0x3f8d8c50"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3ef261d8",
+            "0x3f7fd814",
+            "0x3f9c87bb",
+            "0x3f8d8c51"
+          ],
+          "x": 320,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3ef11d66",
+            "0x3f7fd812",
+            "0x3f9c3b21",
+            "0x3f8d69aa"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3ef11d66",
+            "0x3f7fd814",
+            "0x3f9c3b23",
+            "0x3f8d69ab"
+          ],
+          "x": 321,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3eefd8f3",
+            "0x3f7fd812",
+            "0x3f9beeef",
+            "0x3f8d472a"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3eefd8f6",
+            "0x3f7fd814",
+            "0x3f9beef1",
+            "0x3f8d472a"
+          ],
+          "x": 322,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3eee9484",
+            "0x3f7fd812",
+            "0x3f9ba325",
+            "0x3f8d24d0"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3eee9487",
+            "0x3f7fd814",
+            "0x3f9ba327",
+            "0x3f8d24d1"
+          ],
+          "x": 323,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3eed5014",
+            "0x3f7fd812",
+            "0x3f9b57c1",
+            "0x3f8d029d"
+          ],
+          "channels": [
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3eed5014",
+            "0x3f7fd814",
+            "0x3f9b57c3",
+            "0x3f8d029d"
+          ],
+          "x": 324,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3eec0ba2",
+            "0x3f7fd812",
+            "0x3f9b0cc3",
+            "0x3f8ce08f"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3eec0ba5",
+            "0x3f7fd814",
+            "0x3f9b0cc6",
+            "0x3f8ce090"
+          ],
+          "x": 325,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3eeac732",
+            "0x3f7fd812",
+            "0x3f9ac22d",
+            "0x3f8cbea9"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3eeac735",
+            "0x3f7fd814",
+            "0x3f9ac230",
+            "0x3f8cbeaa"
+          ],
+          "x": 326,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3ee982c0",
+            "0x3f7fd812",
+            "0x3f9a77fe",
+            "0x3f8c9ce9"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3ee982c3",
+            "0x3f7fd814",
+            "0x3f9a7800",
+            "0x3f8c9cea"
+          ],
+          "x": 327,
+          "y": 108
+        }
+      ],
+      "mismatchedPixels": 356254,
+      "mismatchedWords": 1291955
+    }
+  },
+  "customMetalComparison": true,
+  "dynamicArtifact": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938",
+  "firstDivergentStage": "geometry",
+  "implementation": {
+    "fragmentShaderBytes": 115658,
+    "fragmentShaderSha256": "7db7c896ed5a979f60cd9d105ee16f0ad05c0b5bea1665e5e369bb7c85d5ba2f",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "liquidGlassDynamicSdfFloatIsolationSchemaVersion": 1,
+  "referenceShader": {
+    "path": "analysis/apple_glass_reference.frag.glsl",
+    "runtimeInstrumentation": true,
+    "sha256BeforeInstrumentation": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6"
+  },
+  "runtimeRaster": {
+    "backgroundScissor": [
+      312,
+      16,
+      696,
+      696
+    ],
+    "selector": {
+      "base": 26946957,
+      "offset": -3,
+      "selected": 26946954
+    },
+    "tileStart": 3
+  },
+  "sampleIndex": 16
+}

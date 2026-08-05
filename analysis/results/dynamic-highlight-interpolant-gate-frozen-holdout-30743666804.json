@@ -1,0 +1,698 @@
+{
+  "dynamicArtifact": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804",
+  "gate": {
+    "calibrationBacked": true,
+    "exact": true,
+    "mismatchedWords": 0,
+    "productionShaderAuthorized": false,
+    "sampleCount": 9
+  },
+  "liquidGlassDynamicInterpolantGateSchemaVersion": 4,
+  "predictor": {
+    "capturedInterpolantReadByPredictor": false,
+    "file": "analysis/liquid_glass_runtime_raster_coefficients.py",
+    "nearSquareSelectorCalibration": {
+      "classification": "preregistered finite-domain calibration; not a universal closed form",
+      "heightFixedDeltas": [
+        -256,
+        -128,
+        -64,
+        -32,
+        -16,
+        -8,
+        -4,
+        -2,
+        -1,
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256
+      ],
+      "path": "artifacts/gh-run-30743164322/liquid-glass-raster-near-square-selector-sweep-30743164322/raster-near-square-selectors-u32le.zlib",
+      "selectorCount": 589842,
+      "sha256": "0a4a226b18e3a2f4a3e58a36fd6125aa37cf50aa769581926e55349b5272436c"
+    },
+    "squareSelectorCalibration": {
+      "classification": "retrospective finite-domain calibration",
+      "path": "artifacts/gh-run-30736731165/liquid-glass-raster-square-selector-sweep-30736731165/raster-square-selectors-u32le.zlib",
+      "selectorCount": 32769,
+      "sha256": "93fcb5859794d67b193e00f2fe741416ae69d93125f38fa7b36506616b98e5ba",
+      "widthFixedLower": 196608
+    }
+  },
+  "samples": {
+    "1": {
+      "comparedChannels": [
+        "sdf-x",
+        "sdf-y"
+      ],
+      "comparison": {
+        "comparedPixels": 693889,
+        "comparedWords": 1387778,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          24503,
+          24265,
+          237879,
+          237641
+        ],
+        "primitivePixelCounts": [
+          347361,
+          346528
+        ],
+        "reciprocalSelector": {
+          "base": 25322618,
+          "fractionalTableIndex": 681737,
+          "offset": 0,
+          "selected": 25322618,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f7fffe4",
+          "0xbf7fffe4",
+          "0x3f7fffe4",
+          "0xbf7fffe4"
+        ],
+        "visibleBounds": [
+          96,
+          95,
+          929,
+          928
+        ]
+      },
+      "remaining": 0.03133869171142578,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 693889,
+          "bounds": {
+            "maximumX": 928,
+            "maximumY": 927,
+            "minimumX": 96,
+            "minimumY": 95
+          }
+        },
+        "path": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804/transition-background-uniform-01-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "record": "finalHighlightAlphaTrace",
+        "sha256": "77f4f8ddaec794d9fff965555d8a3bc4b17f37d481599e056e62acd48c75d728"
+      }
+    },
+    "12": {
+      "comparedChannels": [
+        "sdf-x",
+        "sdf-y"
+      ],
+      "comparison": {
+        "comparedPixels": 685584,
+        "comparedWords": 1371168,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          25056,
+          25121,
+          237023,
+          237088
+        ],
+        "primitivePixelCounts": [
+          343206,
+          342378
+        ],
+        "reciprocalSelector": {
+          "base": 25660390,
+          "fractionalTableIndex": 645158,
+          "offset": -1,
+          "selected": 25660389,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f7fffe7",
+          "0xbf7fffe7",
+          "0x3f7fffe7",
+          "0xbf7fffe7"
+        ],
+        "visibleBounds": [
+          98,
+          98,
+          926,
+          926
+        ]
+      },
+      "remaining": 0.3753204345703125,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 685584,
+          "bounds": {
+            "maximumX": 925,
+            "maximumY": 925,
+            "minimumX": 98,
+            "minimumY": 98
+          }
+        },
+        "path": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804/transition-background-uniform-12-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "record": "finalHighlightAlphaTrace",
+        "sha256": "aff98827ef4c7336b9e5690ef799eedb1887df0977af42062adb7b4d453b7467"
+      }
+    },
+    "16": {
+      "comparedChannels": [
+        "sdf-x",
+        "sdf-y"
+      ],
+      "comparison": {
+        "comparedPixels": 682276,
+        "comparedWords": 1364552,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          25372,
+          25326,
+          236818,
+          236772
+        ],
+        "primitivePixelCounts": [
+          340725,
+          341551
+        ],
+        "reciprocalSelector": {
+          "base": 25786997,
+          "fractionalTableIndex": 631694,
+          "offset": 2,
+          "selected": 25786999,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f80001c",
+          "0xbf80001c",
+          "0x3f80001c",
+          "0xbf80001c"
+        ],
+        "visibleBounds": [
+          99,
+          99,
+          925,
+          925
+        ]
+      },
+      "remaining": 0.5022745132446289,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 682276,
+          "bounds": {
+            "maximumX": 924,
+            "maximumY": 924,
+            "minimumX": 99,
+            "minimumY": 99
+          }
+        },
+        "path": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804/transition-background-uniform-16-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "record": "finalHighlightInterpolantTrace",
+        "sha256": "b7ec25ed90f0e67202be0fa5429635d8720dd9e36f52736cfa3eb0a07578cd7c"
+      }
+    },
+    "20": {
+      "comparedChannels": [
+        "sdf-x",
+        "sdf-y"
+      ],
+      "comparison": {
+        "comparedPixels": 678976,
+        "comparedWords": 1357952,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          25601,
+          25599,
+          236545,
+          236543
+        ],
+        "primitivePixelCounts": [
+          339076,
+          339900
+        ],
+        "reciprocalSelector": {
+          "base": 25909879,
+          "fractionalTableIndex": 618752,
+          "offset": 0,
+          "selected": 25909879,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f800002",
+          "0xbf800002",
+          "0x3f800002",
+          "0xbf800002"
+        ],
+        "visibleBounds": [
+          100,
+          100,
+          924,
+          924
+        ]
+      },
+      "remaining": 0.6249895095825195,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 678976,
+          "bounds": {
+            "maximumX": 923,
+            "maximumY": 923,
+            "minimumX": 100,
+            "minimumY": 100
+          }
+        },
+        "path": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804/transition-background-uniform-20-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "record": "finalHighlightInterpolantTrace",
+        "sha256": "1b4909f53744d73b0fdfff67edc5dea2363cd4755a71acfc50d383369c4b879b"
+      }
+    },
+    "24": {
+      "comparedChannels": [
+        "sdf-x",
+        "sdf-y"
+      ],
+      "comparison": {
+        "comparedPixels": 675684,
+        "comparedWords": 1351368,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          25745,
+          25971,
+          236173,
+          236399
+        ],
+        "primitivePixelCounts": [
+          338253,
+          337431
+        ],
+        "reciprocalSelector": {
+          "base": 26037107,
+          "fractionalTableIndex": 605481,
+          "offset": -3,
+          "selected": 26037104,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f7fffd7",
+          "0xbf7fffd7",
+          "0x3f7fffd7",
+          "0xbf7fffd7"
+        ],
+        "visibleBounds": [
+          101,
+          101,
+          923,
+          923
+        ]
+      },
+      "remaining": 0.7511024475097656,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 675684,
+          "bounds": {
+            "maximumX": 922,
+            "maximumY": 922,
+            "minimumX": 101,
+            "minimumY": 101
+          }
+        },
+        "path": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804/transition-background-uniform-24-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "record": "finalHighlightInterpolantTrace",
+        "sha256": "dc9c7edf5f5a1e5d8afbe1d8a5142a73c426546654c10e0c09770d67ad6096a1"
+      }
+    },
+    "28": {
+      "comparedChannels": [
+        "sdf-x",
+        "sdf-y"
+      ],
+      "comparison": {
+        "comparedPixels": 672400,
+        "comparedWords": 1344800,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          26083,
+          26142,
+          236002,
+          236061
+        ],
+        "primitivePixelCounts": [
+          336610,
+          335790
+        ],
+        "reciprocalSelector": {
+          "base": 26163518,
+          "fractionalTableIndex": 592423,
+          "offset": 6,
+          "selected": 26163524,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f7ffff1",
+          "0xbf7ffff1",
+          "0x3f7ffff1",
+          "0xbf7ffff1"
+        ],
+        "visibleBounds": [
+          102,
+          102,
+          922,
+          922
+        ]
+      },
+      "remaining": 0.8752908706665039,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 672400,
+          "bounds": {
+            "maximumX": 921,
+            "maximumY": 921,
+            "minimumX": 102,
+            "minimumY": 102
+          }
+        },
+        "path": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804/transition-background-uniform-28-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "record": "finalHighlightInterpolantTrace",
+        "sha256": "120c600f6b41b175ffd74c1816f96bf9b79fe4017051e319f3111409688b6429"
+      }
+    },
+    "32": {
+      "comparedChannels": [
+        "sdf-x",
+        "sdf-y"
+      ],
+      "comparison": {
+        "comparedPixels": 669124,
+        "comparedWords": 1338248,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          26368,
+          26368,
+          235776,
+          235776
+        ],
+        "primitivePixelCounts": [
+          334971,
+          334153
+        ],
+        "reciprocalSelector": {
+          "base": 26291369,
+          "fractionalTableIndex": 579344,
+          "offset": 0,
+          "selected": 26291369,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f800000",
+          "0xbf800000",
+          "0x3f800000",
+          "0xbf800000"
+        ],
+        "visibleBounds": [
+          103,
+          103,
+          921,
+          921
+        ]
+      },
+      "remaining": 1,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 669124,
+          "bounds": {
+            "maximumX": 920,
+            "maximumY": 920,
+            "minimumX": 103,
+            "minimumY": 103
+          }
+        },
+        "path": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804/transition-background-uniform-32-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "record": "finalHighlightAlphaTrace",
+        "sha256": "4df2425483a6879f0a4912f108bc9a4c765a07c4adcecef4c51ff3b2e56e32ed"
+      }
+    },
+    "4": {
+      "comparedChannels": [
+        "sdf-x",
+        "sdf-y"
+      ],
+      "comparison": {
+        "comparedPixels": 692224,
+        "comparedWords": 1384448,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          24485,
+          24671,
+          237473,
+          237659
+        ],
+        "primitivePixelCounts": [
+          346528,
+          345696
+        ],
+        "reciprocalSelector": {
+          "base": 25414962,
+          "fractionalTableIndex": 671640,
+          "offset": 0,
+          "selected": 25414962,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f80000b",
+          "0xbf80000b",
+          "0x3f80000b",
+          "0xbf80000b"
+        ],
+        "visibleBounds": [
+          96,
+          96,
+          928,
+          928
+        ]
+      },
+      "remaining": 0.12590694427490234,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 692224,
+          "bounds": {
+            "maximumX": 927,
+            "maximumY": 927,
+            "minimumX": 96,
+            "minimumY": 96
+          }
+        },
+        "path": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804/transition-background-uniform-04-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "record": "finalHighlightInterpolantTrace",
+        "sha256": "18ef57bf722bf273ab6e9b9daaf52cababaa7568110ab10a4f33b440e2b5e9f0"
+      }
+    },
+    "8": {
+      "comparedChannels": [
+        "sdf-x",
+        "sdf-y"
+      ],
+      "comparison": {
+        "comparedPixels": 688900,
+        "comparedWords": 1377800,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          24940,
+          24730,
+          237414,
+          237204
+        ],
+        "primitivePixelCounts": [
+          344035,
+          344865
+        ],
+        "reciprocalSelector": {
+          "base": 25538069,
+          "fractionalTableIndex": 658293,
+          "offset": 6,
+          "selected": 25538075,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f7ffffb",
+          "0xbf7ffffb",
+          "0x3f7ffffb",
+          "0xbf7ffffb"
+        ],
+        "visibleBounds": [
+          97,
+          97,
+          927,
+          927
+        ]
+      },
+      "remaining": 0.2514791488647461,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 688900,
+          "bounds": {
+            "maximumX": 926,
+            "maximumY": 926,
+            "minimumX": 97,
+            "minimumY": 97
+          }
+        },
+        "path": "artifacts/gh-run-30743666804/liquid-glass-transition-introspection-profile-clear-light-materialize-30743666804/transition-background-uniform-08-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "record": "finalHighlightInterpolantTrace",
+        "sha256": "2af95a578d00ed2ad09c5eb65a5bf63ab1d1f2d0bf681b18693ae3a9776a0959"
+      }
+    }
+  }
+}

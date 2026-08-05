@@ -15,17 +15,29 @@ MAKEFLAGS += --warn-undefined-variables
 # 2. Project Structure
 # =============================================================================
 
+MODE ?= DEBUG
+NATIVE ?= 0
+ANALYZE ?=
+SANITIZER ?=
+TRACY ?= 0
+PROFILE ::= $(if $(filter release,$(MODE)),release,debug)$(if $(filter 1,$(NATIVE)),-native)$(if $(strip $(SANITIZER)),-sanitized)$(if $(strip $(ANALYZE)),-analyzed)$(if $(filter 1,$(TRACY)),-tracy)
+
 # Directories (Use POSIX simple expansion ::=)
 BUILD_DIR    ::= build
-OBJ_DIR      ::= $(BUILD_DIR)/obj
+OBJ_DIR      ::= $(BUILD_DIR)/obj/$(PROFILE)
 BIN_DIR      ::= $(BUILD_DIR)/bin
+PROFILE_BIN_DIR ::= $(BIN_DIR)/$(PROFILE)
+TEST_DIR     ::= $(BUILD_DIR)/tests/$(PROFILE)
 PROTOCOL_DIR ::= protocols
 SHADER_DIR   ::= shaders
 
-TARGET ::= $(BIN_DIR)/walle
+TARGET     ::= $(PROFILE_BIN_DIR)/walle
+URING_TEST ::= $(TEST_DIR)/uring_smoke
+TILDE_TEST ::= $(TEST_DIR)/tilde_smoke
+TESTS      ::= $(URING_TEST) $(TILDE_TEST)
 
 # Core Application Sources (Located in root)
-APP_SOURCES ::= walle.c shiro.c
+APP_SOURCES ::= walle.c shiro.c tilde.c uring.c
 
 # 3. Toolchain and C23 Compliance Flags
 # =============================================================================
@@ -55,10 +67,8 @@ C23_STRICT ::=\
 # Usage:
 #   make              (Debug: Assertions ON, Symbols ON, -O0/O2)
 #   make MODE=release (Release: NDEBUG Defined, -O3, LTO, Strip Symbols)
-MODE ?= DEBUG
 # NATIVE=1 additionally enables -march=native (host-specific binary; never for
 # distributed/packaged builds).
-NATIVE ?= 0
 
 ifeq ($(MODE),release)
     # -flto=auto: Link Time Optimization.
@@ -81,8 +91,6 @@ C23_SECURITY ::=\
 # Static Analysis
 # Usage: make ANALYZE=1
 # Note: For Clang, use 'scan-build make' instead of setting ANALYZE=1.
-ANALYZE ?=
-SANITIZER ?=
 ifneq ($(strip $(ANALYZE)),)
     C23_SECURITY += -fanalyzer
 endif
@@ -97,11 +105,25 @@ CFLAGS  ::= $(C23_STRICT) $(C23_OPTIMIZE) $(C23_SECURITY) $(SANITIZER_FLAGS)
 LDFLAGS ::= $(SANITIZER_FLAGS)
 LDLIBS  ::= -lm
 
+# pthreads are part of the C library on current glibc, but -pthread also
+# supplies the compiler-side thread model and remains the portable contract.
+CFLAGS  += -pthread
+LDFLAGS += -pthread
+
 # Automatic Dependency Generation (Tracks headers and C23 #embed assets like shaders)
 DEPFLAGS ::= -MMD -MP
 
 # Base Include Paths
 CFLAGS += -I. -I$(PROTOCOL_DIR)
+
+# Opt-in profiling build. The flake dev shells provide Tracy's installed
+# headers and client library through the compiler wrapper; ordinary and
+# packaged builds do not acquire instrumentation overhead or a Tracy runtime
+# dependency.
+ifeq ($(TRACY),1)
+CPPFLAGS += -DWALLE_TRACY=1 -DTRACY_ENABLE=1 -DTRACY_ON_DEMAND=1
+LDLIBS += -lTracyClient
+endif
 
 # Macro for rigorous status checking using .SHELLSTATUS (Make 4.2+).
 CHECK_STATUS = $(if $(filter-out 0,$(strip $(.SHELLSTATUS))),$(error FATAL: Last shell command failed (Status $(.SHELLSTATUS))),)
@@ -178,7 +200,9 @@ LDLIBS += $(RENDER_LDLIBS)
 # 5.4 System Probing (Memory Allocator)
 # =============================================================================
 # jemalloc mitigates glibc memory fragmentation in long-running multi-threaded
-# processes with many small allocations (recommended by libvips documentation).
+# processes with many small allocations. Sanitizers must own the allocation
+# entry points so their interceptors remain compatible with Mesa's LLVM stack.
+ifeq ($(strip $(SANITIZER)),)
 JEMALLOC_DEPS ::= jemalloc
 
 JEMALLOC_CFLAGS != $(PKG_CONFIG) --cflags $(JEMALLOC_DEPS)
@@ -188,11 +212,12 @@ $(call CHECK_STATUS)
 
 CFLAGS += $(JEMALLOC_CFLAGS)
 LDLIBS += $(JEMALLOC_LDLIBS)
+endif
 
 # 5.5 System Probing (D-Bus / GameMode Integration)
 # =============================================================================
 # libsystemd provides sd-bus for monitoring org.freedesktop.portal.GameMode
-SYSTEMD_DEPS ::= libsystemd
+SYSTEMD_DEPS ::= libsystemd liburing
 
 SYSTEMD_CFLAGS != $(PKG_CONFIG) --cflags $(SYSTEMD_DEPS)
 $(call CHECK_STATUS)
@@ -201,21 +226,6 @@ $(call CHECK_STATUS)
 
 CFLAGS += $(SYSTEMD_CFLAGS)
 LDLIBS += $(SYSTEMD_LDLIBS)
-
-# 5.6 System Probing (io_uring Event Core)
-# =============================================================================
-# liburing >= 2.4 (sync-cancel API); runtime kernel floor is 5.15, probed at
-# startup — see the event-core section in walle.c.
-URING_DEPS ::= liburing >= 2.4
-
-URING_CFLAGS != $(PKG_CONFIG) --cflags '$(URING_DEPS)'
-$(call CHECK_STATUS)
-URING_LDLIBS != $(PKG_CONFIG) --libs '$(URING_DEPS)'
-$(call CHECK_STATUS)
-
-# -isystem: liburing's UAPI headers use zero-size arrays that trip -Wpedantic.
-CFLAGS += $(patsubst -I%,-isystem %,$(URING_CFLAGS))
-LDLIBS += $(URING_LDLIBS)
 
 # 6. Wayland Protocol Definitions
 # =============================================================================
@@ -260,19 +270,34 @@ ALL_SOURCES ::= $(APP_SOURCES) $(GENERATED_SOURCES)
 OBJECTS ::= $(ALL_SOURCES:%.c=$(OBJ_DIR)/%.c.o)
 DEPS    ::= $(OBJECTS:.o=.d)
 
-.PHONY: all clean fuzz
+.PHONY: all check clean fuzz
 
-all: $(TARGET)
+all: $(TARGET) | $(BIN_DIR)
+	@ln -sfn $(PROFILE)/walle $(BIN_DIR)/walle
+
+check: $(TESTS)
+	@echo "[TEST] raw io_uring reactor"
+	$(URING_TEST)
+	@echo "[TEST] tilde expansion"
+	$(TILDE_TEST)
+
+$(URING_TEST): tests/uring_smoke.c uring.c uring.h Makefile | $(TEST_DIR)
+	@echo "[CCLD] $@"
+	$(CC) $(CPPFLAGS) $(CFLAGS) tests/uring_smoke.c uring.c -o $@
+
+$(TILDE_TEST): tests/tilde_smoke.c tilde.c tilde.h Makefile | $(TEST_DIR)
+	@echo "[CCLD] $@"
+	$(CC) $(CPPFLAGS) $(CFLAGS) tests/tilde_smoke.c tilde.c -o $@
 
 # --- Linking Rule ---
-$(TARGET): $(OBJECTS) | $(BIN_DIR)
+$(TARGET): $(OBJECTS) Makefile | $(PROFILE_BIN_DIR)
 	@echo "MODE: $(MODE)"
 	@echo "[LD] $@"
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $(filter-out Makefile,$^) $(LDLIBS) -o $@
 
 # --- Unified Compilation Rule ---
 # This single pattern handles sources in the root, vendor/, and protocols/ directories.
-$(OBJ_DIR)/%.c.o: %.c
+$(OBJ_DIR)/%.c.o: %.c Makefile
 	@echo "[CC] $<"
 	@# Ensure the specific output subdirectory (e.g., build/obj/vendor/inih/src) exists.
 	@mkdir -p $(@D)
@@ -304,7 +329,7 @@ endif
 
 # --- Infrastructure (Directories) ---
 # Order-only prerequisites (|) ensure creation without triggering unnecessary rebuilds.
-$(BIN_DIR) $(PROTOCOL_DIR):
+$(BIN_DIR) $(PROFILE_BIN_DIR) $(TEST_DIR) $(PROTOCOL_DIR):
 	@mkdir -p $@
 
 # Include generated dependency files.

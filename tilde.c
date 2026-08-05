@@ -2,6 +2,8 @@
 #define _GNU_SOURCE 1 // Enables secure_getenv, strchrnul, and getcwd(NULL, 0)
 #endif
 
+#include "tilde.h"
+
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>

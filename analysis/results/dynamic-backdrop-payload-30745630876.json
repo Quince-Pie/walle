@@ -1,0 +1,256 @@
+{
+  "aggregate": {
+    "nonzeroProducerInputStateCount": 0,
+    "nonzeroProducerOutputStateCount": 0,
+    "producerAndCopyBaseSharedCommandBufferStateCount": 9
+  },
+  "artifact": "artifacts/gh-run-30745630876/liquid-glass-transition-introspection-profile-clear-light-materialize-30745630876",
+  "conclusion": {
+    "crossCommandBufferRaceObserved": false,
+    "payloadInformativeForProducerResampling": false,
+    "pointInTimeBoundaryJoinCapturedEveryState": true,
+    "productionShaderAuthorized": false,
+    "unmodifiedLocalBackdropWasTransparent": true
+  },
+  "dynamicUniformSchemaVersion": 6,
+  "liquidGlassDynamicBackdropPayloadAuditSchemaVersion": 1,
+  "stateCount": 9,
+  "states": [
+    {
+      "capturePoint": "blit-after-producer-render-before-copy-base-compute",
+      "copyBaseCommandBuffers": [
+        "0x0000000c84eaa800"
+      ],
+      "input": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 4194304,
+        "rawFile": "transition-background-uniform-01-dynamic-backdrop-producer-input-0-bgra8.raw",
+        "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "inputInterventionPresent": false,
+      "output": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 1327104,
+        "rawFile": "transition-background-uniform-01-dynamic-backdrop-producer-output-0-bgra8.raw",
+        "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "producerAndCopyBaseShareCommandBuffer": true,
+      "producerCommandBuffer": "0x0000000c84eaa800",
+      "sampleIndex": 1
+    },
+    {
+      "capturePoint": "blit-after-producer-render-before-copy-base-compute",
+      "copyBaseCommandBuffers": [
+        "0x0000000c84eaa800"
+      ],
+      "input": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 4194304,
+        "rawFile": "transition-background-uniform-04-dynamic-backdrop-producer-input-0-bgra8.raw",
+        "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "inputInterventionPresent": false,
+      "output": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 1327104,
+        "rawFile": "transition-background-uniform-04-dynamic-backdrop-producer-output-0-bgra8.raw",
+        "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "producerAndCopyBaseShareCommandBuffer": true,
+      "producerCommandBuffer": "0x0000000c84eaa800",
+      "sampleIndex": 4
+    },
+    {
+      "capturePoint": "blit-after-producer-render-before-copy-base-compute",
+      "copyBaseCommandBuffers": [
+        "0x0000000c84eaa800"
+      ],
+      "input": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 4194304,
+        "rawFile": "transition-background-uniform-08-dynamic-backdrop-producer-input-0-bgra8.raw",
+        "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "inputInterventionPresent": false,
+      "output": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 1327104,
+        "rawFile": "transition-background-uniform-08-dynamic-backdrop-producer-output-0-bgra8.raw",
+        "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "producerAndCopyBaseShareCommandBuffer": true,
+      "producerCommandBuffer": "0x0000000c84eaa800",
+      "sampleIndex": 8
+    },
+    {
+      "capturePoint": "blit-after-producer-render-before-copy-base-compute",
+      "copyBaseCommandBuffers": [
+        "0x0000000c84eaa800"
+      ],
+      "input": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 4194304,
+        "rawFile": "transition-background-uniform-12-dynamic-backdrop-producer-input-0-bgra8.raw",
+        "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "inputInterventionPresent": false,
+      "output": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 1327104,
+        "rawFile": "transition-background-uniform-12-dynamic-backdrop-producer-output-0-bgra8.raw",
+        "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "producerAndCopyBaseShareCommandBuffer": true,
+      "producerCommandBuffer": "0x0000000c84eaa800",
+      "sampleIndex": 12
+    },
+    {
+      "capturePoint": "blit-after-producer-render-before-copy-base-compute",
+      "copyBaseCommandBuffers": [
+        "0x0000000c84eaa800"
+      ],
+      "input": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 4194304,
+        "rawFile": "transition-background-uniform-16-dynamic-backdrop-producer-input-0-bgra8.raw",
+        "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "inputInterventionPresent": false,
+      "output": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 1327104,
+        "rawFile": "transition-background-uniform-16-dynamic-backdrop-producer-output-0-bgra8.raw",
+        "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "producerAndCopyBaseShareCommandBuffer": true,
+      "producerCommandBuffer": "0x0000000c84eaa800",
+      "sampleIndex": 16
+    },
+    {
+      "capturePoint": "blit-after-producer-render-before-copy-base-compute",
+      "copyBaseCommandBuffers": [
+        "0x0000000c84eaa800"
+      ],
+      "input": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 4194304,
+        "rawFile": "transition-background-uniform-20-dynamic-backdrop-producer-input-0-bgra8.raw",
+        "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "inputInterventionPresent": false,
+      "output": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 1327104,
+        "rawFile": "transition-background-uniform-20-dynamic-backdrop-producer-output-0-bgra8.raw",
+        "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "producerAndCopyBaseShareCommandBuffer": true,
+      "producerCommandBuffer": "0x0000000c84eaa800",
+      "sampleIndex": 20
+    },
+    {
+      "capturePoint": "blit-after-producer-render-before-copy-base-compute",
+      "copyBaseCommandBuffers": [
+        "0x0000000c84eaa800"
+      ],
+      "input": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 4194304,
+        "rawFile": "transition-background-uniform-24-dynamic-backdrop-producer-input-0-bgra8.raw",
+        "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "inputInterventionPresent": false,
+      "output": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 1048576,
+        "rawFile": "transition-background-uniform-24-dynamic-backdrop-producer-output-0-bgra8.raw",
+        "sha256": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "producerAndCopyBaseShareCommandBuffer": true,
+      "producerCommandBuffer": "0x0000000c84eaa800",
+      "sampleIndex": 24
+    },
+    {
+      "capturePoint": "blit-after-producer-render-before-copy-base-compute",
+      "copyBaseCommandBuffers": [
+        "0x0000000c84eaa800"
+      ],
+      "input": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 4194304,
+        "rawFile": "transition-background-uniform-28-dynamic-backdrop-producer-input-0-bgra8.raw",
+        "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "inputInterventionPresent": false,
+      "output": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 917504,
+        "rawFile": "transition-background-uniform-28-dynamic-backdrop-producer-output-0-bgra8.raw",
+        "sha256": "b527dab94f6bf43c3ccbea0f804d18604204064047f4efa0f7b6d859c2d706eb",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "producerAndCopyBaseShareCommandBuffer": true,
+      "producerCommandBuffer": "0x0000000c84eaa800",
+      "sampleIndex": 28
+    },
+    {
+      "capturePoint": "blit-after-producer-render-before-copy-base-compute",
+      "copyBaseCommandBuffers": [
+        "0x0000000c84eaa800"
+      ],
+      "input": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 4194304,
+        "rawFile": "transition-background-uniform-32-dynamic-backdrop-producer-input-0-bgra8.raw",
+        "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "inputInterventionPresent": false,
+      "output": {
+        "allZero": true,
+        "nonzeroByteCount": 0,
+        "rawBytes": 802816,
+        "rawFile": "transition-background-uniform-32-dynamic-backdrop-producer-output-0-bgra8.raw",
+        "sha256": "125c62526cce3e4b947fa527adf081ae0394d1ef0fbeb74db5ce742574533cf3",
+        "uniqueBGRA8PixelCount": 1
+      },
+      "producerAndCopyBaseShareCommandBuffer": true,
+      "producerCommandBuffer": "0x0000000c84eaa800",
+      "sampleIndex": 32
+    }
+  ],
+  "timeline": "artifacts/gh-run-30745630876/liquid-glass-transition-introspection-profile-clear-light-materialize-30745630876/transition-timeline.json",
+  "timelineSHA256": "a81c4c80896f4299037928656404f9e8aa383ac14238188806f6cdc289e2476b"
+}

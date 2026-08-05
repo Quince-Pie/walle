@@ -22,7 +22,7 @@ void xoshiro256pp_long_jump(XoshiroState* state);
 [[nodiscard("Internal function: result must be returned by the fast path")]]
 uint64_t xoshiro256pp_bounded_slow(XoshiroState* rng, uint64_t limit, uint128_t m);
 
-static inline uint64_t rotl(const uint64_t x, int k) [[unsequenced]]
+static inline uint64_t rotl(const uint64_t x, int k)
 {
     return (x << k) | (x >> (64 - k));
 }

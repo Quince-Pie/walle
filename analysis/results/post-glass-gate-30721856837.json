@@ -1,0 +1,917 @@
+{
+  "captures": [
+    {
+      "capture": "artifacts/gh-run-30721856837",
+      "cases": [
+        {
+          "appleOutput": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-black-output-bgra8.raw",
+            "sha256": "344e69484d49fc1e88585eb86d7c7095030bef1ef9cc290df6023f70c49988e6"
+          },
+          "input": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-black-input-bgra8.raw",
+            "sha256": "4571a45562870efcbcbaacbe46976b780a3be00a4b3651d8a0a3329e6f38ac3b"
+          },
+          "name": "black"
+        },
+        {
+          "appleOutput": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-white-output-bgra8.raw",
+            "sha256": "cd3517473707d59c3d915b52a3e16213cadce80d9ffb2b4371958fb7acb51a08"
+          },
+          "input": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-white-input-bgra8.raw",
+            "sha256": "cd3517473707d59c3d915b52a3e16213cadce80d9ffb2b4371958fb7acb51a08"
+          },
+          "name": "white"
+        },
+        {
+          "appleOutput": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-red-output-bgra8.raw",
+            "sha256": "f3dc4cfbc14f9faf05a2a49602d573f57b641efa931cc075aecb8d81f5805290"
+          },
+          "input": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-red-input-bgra8.raw",
+            "sha256": "b73edb1dd5a5db45c625fff9e303a943e3f851282dbd0bf607dd38c928e2dc60"
+          },
+          "name": "red"
+        },
+        {
+          "appleOutput": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-green-output-bgra8.raw",
+            "sha256": "508e5c1af3d87986fc1485478cffce84bcbbe898e2604c78de087e1effb2fd50"
+          },
+          "input": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-green-input-bgra8.raw",
+            "sha256": "508e5c1af3d87986fc1485478cffce84bcbbe898e2604c78de087e1effb2fd50"
+          },
+          "name": "green"
+        },
+        {
+          "appleOutput": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-blue-output-bgra8.raw",
+            "sha256": "67a90287b45178958f71f8be4d8fee5375d5c0d52814225463b29a1cd8e2c931"
+          },
+          "input": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-blue-input-bgra8.raw",
+            "sha256": "69c37d64b9957a165f4972d3fd7f303a7db0b211620360821cd69c1bb5fe640b"
+          },
+          "name": "blue"
+        },
+        {
+          "appleOutput": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-ramp-output-bgra8.raw",
+            "sha256": "a8ba244bdd71a0feed1ede68f5b8ac511c4fd6935acd6214cb1f17296d67988e"
+          },
+          "input": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-ramp-input-bgra8.raw",
+            "sha256": "b39aac3d8b41ad5eeb110521ab23ec9c2d61bed36cc8c7c71522eb403879cbb3"
+          },
+          "name": "ramp"
+        },
+        {
+          "appleOutput": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-hash-a-output-bgra8.raw",
+            "sha256": "32dc40a3dc3410cb67b2465a748a3dcffc29bed95cde79861535eae390a9a903"
+          },
+          "input": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-hash-a-input-bgra8.raw",
+            "sha256": "5e00d0707cbf7012714d963b2722beb615f01664dc55046e3218f1071bf350c8"
+          },
+          "name": "hash-a"
+        },
+        {
+          "appleOutput": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-hash-b-output-bgra8.raw",
+            "sha256": "98506d309e12a170b758fd40c0b62d21fa6c9cdc40ead411832641f0eebda354"
+          },
+          "input": {
+            "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-hash-b-input-bgra8.raw",
+            "sha256": "97cd3b6538c079f0b698248405a6e7bbe275cb763170463f3aeb4a73fda2b341"
+          },
+          "name": "hash-b"
+        }
+      ],
+      "configurations": {
+        "coarse-final-fma": {
+          "cases": [
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.0001494884490966797,
+                "mismatchedBytes": 627,
+                "mismatchedPixels": 209
+              },
+              "name": "black"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "white"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.580352783203125e-05,
+                "mismatchedBytes": 276,
+                "mismatchedPixels": 138
+              },
+              "name": "red"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "green"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.106231689453125e-05,
+                "mismatchedBytes": 340,
+                "mismatchedPixels": 170
+              },
+              "name": "blue"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.036064147949219e-05,
+                "mismatchedBytes": 379,
+                "mismatchedPixels": 365
+              },
+              "name": "ramp"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.369850158691406e-05,
+                "mismatchedBytes": 393,
+                "mismatchedPixels": 370
+              },
+              "name": "hash-a"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.226799011230469e-05,
+                "mismatchedBytes": 387,
+                "mismatchedPixels": 371
+              },
+              "name": "hash-b"
+            }
+          ],
+          "configuration": {
+            "derivativeMode": 0,
+            "sourceDivisionMode": 0,
+            "vibrantMode": 2
+          },
+          "gate": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "mismatchedBytes": 2402,
+            "mismatchedPixels": 1623
+          }
+        },
+        "coarse-separate": {
+          "cases": [
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.0001494884490966797,
+                "mismatchedBytes": 627,
+                "mismatchedPixels": 209
+              },
+              "name": "black"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "white"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.580352783203125e-05,
+                "mismatchedBytes": 276,
+                "mismatchedPixels": 138
+              },
+              "name": "red"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "green"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.106231689453125e-05,
+                "mismatchedBytes": 340,
+                "mismatchedPixels": 170
+              },
+              "name": "blue"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.00011897087097167969,
+                "mismatchedBytes": 499,
+                "mismatchedPixels": 476
+              },
+              "name": "ramp"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.00012183189392089844,
+                "mismatchedBytes": 511,
+                "mismatchedPixels": 478
+              },
+              "name": "hash-a"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.00011992454528808594,
+                "mismatchedBytes": 503,
+                "mismatchedPixels": 475
+              },
+              "name": "hash-b"
+            }
+          ],
+          "configuration": {
+            "derivativeMode": 0,
+            "sourceDivisionMode": 0,
+            "vibrantMode": 0
+          },
+          "gate": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "mismatchedBytes": 2756,
+            "mismatchedPixels": 1946
+          }
+        },
+        "fine-final-fma": {
+          "cases": [
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.1552734375e-05,
+                "mismatchedBytes": 384,
+                "mismatchedPixels": 128
+              },
+              "name": "black"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "white"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.1961669921875e-05,
+                "mismatchedBytes": 176,
+                "mismatchedPixels": 88
+              },
+              "name": "red"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "green"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.245208740234375e-05,
+                "mismatchedBytes": 220,
+                "mismatchedPixels": 110
+              },
+              "name": "blue"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.176399230957031e-05,
+                "mismatchedBytes": 301,
+                "mismatchedPixels": 293
+              },
+              "name": "ramp"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.914138793945312e-05,
+                "mismatchedBytes": 290,
+                "mismatchedPixels": 277
+              },
+              "name": "hash-a"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.699562072753906e-05,
+                "mismatchedBytes": 281,
+                "mismatchedPixels": 273
+              },
+              "name": "hash-b"
+            }
+          ],
+          "configuration": {
+            "derivativeMode": 1,
+            "sourceDivisionMode": 0,
+            "vibrantMode": 2
+          },
+          "gate": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "mismatchedBytes": 1652,
+            "mismatchedPixels": 1169
+          }
+        },
+        "fine-final-fma-reciprocal-source": {
+          "cases": [
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.00010156631469726562,
+                "mismatchedBytes": 426,
+                "mismatchedPixels": 142
+              },
+              "name": "black"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "white"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.9591064453125e-05,
+                "mismatchedBytes": 208,
+                "mismatchedPixels": 104
+              },
+              "name": "red"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "green"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.05718994140625e-05,
+                "mismatchedBytes": 296,
+                "mismatchedPixels": 148
+              },
+              "name": "blue"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.700920104980469e-05,
+                "mismatchedBytes": 323,
+                "mismatchedPixels": 313
+              },
+              "name": "ramp"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.581710815429688e-05,
+                "mismatchedBytes": 318,
+                "mismatchedPixels": 303
+              },
+              "name": "hash-a"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.081031799316406e-05,
+                "mismatchedBytes": 297,
+                "mismatchedPixels": 288
+              },
+              "name": "hash-b"
+            }
+          ],
+          "configuration": {
+            "derivativeMode": 1,
+            "sourceDivisionMode": 1,
+            "vibrantMode": 2
+          },
+          "gate": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "mismatchedBytes": 1868,
+            "mismatchedPixels": 1298
+          }
+        },
+        "fine-final-fma-rtz-source": {
+          "cases": [
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.00011014938354492188,
+                "mismatchedBytes": 462,
+                "mismatchedPixels": 154
+              },
+              "name": "black"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "white"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.343292236328125e-05,
+                "mismatchedBytes": 308,
+                "mismatchedPixels": 154
+              },
+              "name": "red"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "green"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.00011539459228515625,
+                "mismatchedBytes": 484,
+                "mismatchedPixels": 242
+              },
+              "name": "blue"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.511543273925781e-05,
+                "mismatchedBytes": 357,
+                "mismatchedPixels": 345
+              },
+              "name": "ramp"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.511543273925781e-05,
+                "mismatchedBytes": 357,
+                "mismatchedPixels": 340
+              },
+              "name": "hash-a"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.843971252441406e-05,
+                "mismatchedBytes": 329,
+                "mismatchedPixels": 317
+              },
+              "name": "hash-b"
+            }
+          ],
+          "configuration": {
+            "derivativeMode": 1,
+            "sourceDivisionMode": 2,
+            "vibrantMode": 2
+          },
+          "gate": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "mismatchedBytes": 2297,
+            "mismatchedPixels": 1552
+          }
+        },
+        "fine-matrix-and-final-fma": {
+          "cases": [
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.1552734375e-05,
+                "mismatchedBytes": 384,
+                "mismatchedPixels": 128
+              },
+              "name": "black"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "white"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.1961669921875e-05,
+                "mismatchedBytes": 176,
+                "mismatchedPixels": 88
+              },
+              "name": "red"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "green"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.245208740234375e-05,
+                "mismatchedBytes": 220,
+                "mismatchedPixels": 110
+              },
+              "name": "blue"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.271766662597656e-05,
+                "mismatchedBytes": 305,
+                "mismatchedPixels": 294
+              },
+              "name": "ramp"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.842613220214844e-05,
+                "mismatchedBytes": 287,
+                "mismatchedPixels": 275
+              },
+              "name": "hash-a"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.628036499023438e-05,
+                "mismatchedBytes": 278,
+                "mismatchedPixels": 270
+              },
+              "name": "hash-b"
+            }
+          ],
+          "configuration": {
+            "derivativeMode": 1,
+            "sourceDivisionMode": 0,
+            "vibrantMode": 3
+          },
+          "gate": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "mismatchedBytes": 1650,
+            "mismatchedPixels": 1165
+          }
+        },
+        "fine-native-final-fma": {
+          "cases": [
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.1552734375e-05,
+                "mismatchedBytes": 384,
+                "mismatchedPixels": 128
+              },
+              "name": "black"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "white"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.1961669921875e-05,
+                "mismatchedBytes": 176,
+                "mismatchedPixels": 88
+              },
+              "name": "red"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "green"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.245208740234375e-05,
+                "mismatchedBytes": 220,
+                "mismatchedPixels": 110
+              },
+              "name": "blue"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.176399230957031e-05,
+                "mismatchedBytes": 301,
+                "mismatchedPixels": 293
+              },
+              "name": "ramp"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.914138793945312e-05,
+                "mismatchedBytes": 290,
+                "mismatchedPixels": 277
+              },
+              "name": "hash-a"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.699562072753906e-05,
+                "mismatchedBytes": 281,
+                "mismatchedPixels": 273
+              },
+              "name": "hash-b"
+            }
+          ],
+          "configuration": {
+            "derivativeMode": 1,
+            "sourceDivisionMode": 0,
+            "vibrantMode": 6
+          },
+          "gate": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "mismatchedBytes": 1652,
+            "mismatchedPixels": 1169
+          }
+        },
+        "fine-separate": {
+          "cases": [
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.1552734375e-05,
+                "mismatchedBytes": 384,
+                "mismatchedPixels": 128
+              },
+              "name": "black"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "white"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.1961669921875e-05,
+                "mismatchedBytes": 176,
+                "mismatchedPixels": 88
+              },
+              "name": "red"
+            },
+            {
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "name": "green"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.245208740234375e-05,
+                "mismatchedBytes": 220,
+                "mismatchedPixels": 110
+              },
+              "name": "blue"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.0001087188720703125,
+                "mismatchedBytes": 456,
+                "mismatchedPixels": 435
+              },
+              "name": "ramp"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.00010371208190917969,
+                "mismatchedBytes": 435,
+                "mismatchedPixels": 415
+              },
+              "name": "hash-a"
+            },
+            {
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 0.0001068115234375,
+                "mismatchedBytes": 448,
+                "mismatchedPixels": 424
+              },
+              "name": "hash-b"
+            }
+          ],
+          "configuration": {
+            "derivativeMode": 1,
+            "sourceDivisionMode": 0,
+            "vibrantMode": 0
+          },
+          "gate": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "mismatchedBytes": 2119,
+            "mismatchedPixels": 1600
+          }
+        }
+      },
+      "runtimeJsonSha256": "bf4c3ff3883614d7e6b7fc6ac6457a62c772f366a82f9f951d6df206d2f7a21a"
+    }
+  ],
+  "configurationTotals": {
+    "coarse-final-fma": {
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 2402,
+      "mismatchedPixels": 1623
+    },
+    "coarse-separate": {
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 2756,
+      "mismatchedPixels": 1946
+    },
+    "fine-final-fma": {
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 1652,
+      "mismatchedPixels": 1169
+    },
+    "fine-final-fma-reciprocal-source": {
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 1868,
+      "mismatchedPixels": 1298
+    },
+    "fine-final-fma-rtz-source": {
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 2297,
+      "mismatchedPixels": 1552
+    },
+    "fine-matrix-and-final-fma": {
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 1650,
+      "mismatchedPixels": 1165
+    },
+    "fine-native-final-fma": {
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 1652,
+      "mismatchedPixels": 1169
+    },
+    "fine-separate": {
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 2119,
+      "mismatchedPixels": 1600
+    }
+  },
+  "gate": {
+    "capturedApplePipelinesUnmodified": true,
+    "exact": false,
+    "exactConfigurations": [],
+    "productionShaderAuthorized": false
+  },
+  "liquidGlassPostGlassGateSchemaVersion": 1
+}

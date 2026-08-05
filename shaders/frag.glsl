@@ -1,5 +1,4 @@
-#version 300 es
-precision highp float;
+#version 450 core
 
 in vec2 v_UV;
 out vec4 FragColor;
@@ -112,8 +111,8 @@ const float WASH_CK_LIGHT   = 0.18;
 const float WASH_CK_DARK    = 0.28;
 
 // --- Dynamic layer (HIG-photo fitted; motion only) ---
-const float RING_RADIUS_FRAC = 0.973;
-const float RING_OFFSET_FRAC = 0.021;
+const float RING_RADIUS_FRAC = 1.0;
+const float RING_OFFSET_FRAC = 0.0;
 const float RING_W_EDGE_FRAC = 0.007;
 const float RING_W_TOP_FRAC  = 0.020;
 const float RING_UP_GAIN     = 0.20;
