@@ -1,0 +1,22 @@
+{
+  "classification": "Walle fixture derived from the prospective circle-500 selected-region transfer",
+  "exactOutputComparisonCount": 448,
+  "fixtureByteCount": 2584,
+  "fixtureSHA256": "5cf88e149c4f6d8733a1d7adda18d29b010e3fb81ec400cdcd58b256e9547c9d",
+  "sampleCount": 32,
+  "scope": {
+    "independentOpticalTransferEstablished": false,
+    "independentWalleZeroByteFrameEstablished": false,
+    "liquidGlassParityEstablished": false,
+    "otherProfilesEstablished": false,
+    "physicalPixelParityEstablished": false,
+    "regularDarkMaterializeSelectedRegionTransferEstablished": true
+  },
+  "selectedRegionV1FixtureSchemaVersion": 1,
+  "source": {
+    "generatorSHA256": "02277058a279d66de619f1d2616c8db51eec29ccd062cbd9ccfa3799f05bf14f",
+    "materializeModelSHA256": "0fe38fbe4a55689af2157524545698bad021b39f3da830cbd86f6540c0370c5b",
+    "prospectiveHoldoutSHA256": "eb780c4bc6e7376a3a5857b51dda939d2766ce236e0bf023e4bd53668902a3a1",
+    "selectedRegionValidatorSHA256": "781eca4d9a716c77f28315c181fd53f6466df7a34d805be2fedf3549b1b28600"
+  }
+}

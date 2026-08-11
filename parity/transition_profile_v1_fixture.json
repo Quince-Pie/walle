@@ -1,0 +1,85 @@
+{
+  "classification": "retained macOS 26.6.1 transition-profile payload fixture",
+  "comparedByteCount": 65016,
+  "fixtureByteCount": 72096,
+  "fixtureSHA256": "f4db5fa0cf679c4cb98eb0561dfd655b243f5bb68332399fae01de290f317129",
+  "generatorSHA256": "9866508734a3e7f6e1c71cd27221250bf04b57416c21d193c8f5c2adcc305aae",
+  "modeledByteOffset": 64,
+  "modeledComparedByteCount": 48888,
+  "profileCount": 252,
+  "profileSizeBytes": 258,
+  "schemaVersion": 1,
+  "scope": {
+    "capturedGeometryFieldsUsed": true,
+    "dynamicGeometryEstablished": false,
+    "liquidGlassParityEstablished": false,
+    "physicalPixelParityEstablished": false,
+    "transitionProfilePackingEstablished": true
+  },
+  "timelines": [
+    {
+      "appearance": "light",
+      "diameter": 455,
+      "direction": "materialize",
+      "material": "clear",
+      "profileCount": 32,
+      "timelineSHA256": "a037ea8c762f0ba7db875a04944f50d81127e7036a6c4b2509292ee75c4ca4cd"
+    },
+    {
+      "appearance": "dark",
+      "diameter": 463,
+      "direction": "materialize",
+      "material": "clear",
+      "profileCount": 32,
+      "timelineSHA256": "51be1573be9aade902a0c3630f7d1fae6a2b0d4be9f7886d28b07976fc7d2aa2"
+    },
+    {
+      "appearance": "light",
+      "diameter": 471,
+      "direction": "materialize",
+      "material": "regular",
+      "profileCount": 32,
+      "timelineSHA256": "d50f0ee922edbd2e0c1c1fc03f7e0a9d4e83e05d3e3e340e92ae0ea197318c29"
+    },
+    {
+      "appearance": "dark",
+      "diameter": 479,
+      "direction": "materialize",
+      "material": "regular",
+      "profileCount": 32,
+      "timelineSHA256": "2c0416417b4bc5b21752d13344a9ee44e6ceda801b2d9693e9fa0c4786282b90"
+    },
+    {
+      "appearance": "light",
+      "diameter": 456,
+      "direction": "dematerialize",
+      "material": "clear",
+      "profileCount": 31,
+      "timelineSHA256": "8a49dee85c59135f6c63279576ad66af2b69935a0fb2a6c82a08e09b8c2c2c49"
+    },
+    {
+      "appearance": "dark",
+      "diameter": 464,
+      "direction": "dematerialize",
+      "material": "clear",
+      "profileCount": 31,
+      "timelineSHA256": "45f912caa7f52c4e0ef7fef96ccf71726c9c5014b5c5d0386b92fab3ef11e86a"
+    },
+    {
+      "appearance": "light",
+      "diameter": 472,
+      "direction": "dematerialize",
+      "material": "regular",
+      "profileCount": 31,
+      "timelineSHA256": "dd28332a6fda069c3657da4d0a38e1df53d24233b8bcef68f0d39cd7f4b4d8ec"
+    },
+    {
+      "appearance": "dark",
+      "diameter": 480,
+      "direction": "dematerialize",
+      "material": "regular",
+      "profileCount": 31,
+      "timelineSHA256": "d4c4e2721003efa0e4e58712a681e6898ba60819ad3f16923d833cc7c945ae69"
+    }
+  ]
+}

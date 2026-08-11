@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "classification": "same-host cross-GPU production reveal-mask reproducibility check",
+  "command": "nix develop ./lg-test --command env DRI_PRIME=1 python analysis/score_reveal_best_known_gles.py --output build/analysis-gles-axis/production-integrated-91-rx9070-result.json --expect-mismatches 91",
+  "common": {
+    "glVersion": "OpenGL ES 3.2 Mesa 26.1.5",
+    "rendererBinarySha256": "cd5a0f187b5ee86250012343879e5cb77d6e1e4a7c61c5c21d3fb78c5ae0f947",
+    "candidateInventorySha256": "9062b7bfde617f88638c9b48fdb8ace7b6f91b4518d54c5a6e54abcb51e93644",
+    "perStateMismatchCountSha256": "d6c006d789b551e875555f3e8ef32f0c46c3ec3911802fea405ef9d3458edb5d",
+    "mismatchedPixels": 91,
+    "absoluteError": 91,
+    "maximumError": 1,
+    "exactFrames": 52,
+    "exactPixels": 272629669,
+    "totalPixels": 272629760,
+    "exactPixelPercentage": 99.99996662139893
+  },
+  "integrated": {
+    "renderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "reportPath": "analysis/reveal_best_known_gles_corpus_gate_result.json",
+    "reportSha256": "107755cee108db83c489658df14b89da271503a9812612097b0804bc0360f76f"
+  },
+  "discrete": {
+    "renderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+    "reportPath": "build/analysis-gles-axis/production-integrated-91-rx9070-result.json",
+    "reportSha256": "a1cb24c50eacdb99972ffe10a9b997350de443040a3b8c5cd53a4fef7e0cbb30"
+  },
+  "all65CandidateHashesEqual": true,
+  "environment": {
+    "sameDriverVersion": true,
+    "sameHost": true,
+    "crossVendorPortabilityEstablished": false
+  }
+}

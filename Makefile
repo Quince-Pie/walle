@@ -11,21 +11,41 @@ MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 # Synchronized output when the user runs with -j (Make 4.0+).
 MAKEFLAGS += -Otarget
 MAKEFLAGS += --warn-undefined-variables
+# GCC's LTO wrapper invokes a recursive makefile that references this optional
+# GNU variable. Export an explicit empty value so our warning policy remains
+# useful without producing a false warning at link time.
+export GNUMAKEFLAGS :=
 
 # 2. Project Structure
 # =============================================================================
 
-# Directories (Use POSIX simple expansion ::=)
-BUILD_DIR    ::= build
-OBJ_DIR      ::= $(BUILD_DIR)/obj
-BIN_DIR      ::= $(BUILD_DIR)/bin
-PROTOCOL_DIR ::= protocols
-SHADER_DIR   ::= shaders
+# Build variants must never share objects: optimization, instrumentation,
+# analyzer, and sanitizer flags all get their own output directory.
+MODE ?= DEBUG
+NATIVE ?= 0
+ANALYZE ?=
+SANITIZER ?=
+TRACY ?= 0
+PROFILE ::= $(if $(filter release,$(MODE)),release,debug)$(if $(filter 1,$(NATIVE)),-native)$(if $(strip $(SANITIZER)),-sanitized)$(if $(strip $(ANALYZE)),-analyzed)$(if $(filter 1,$(TRACY)),-tracy)
 
-TARGET ::= $(BIN_DIR)/walle
+# Directories (Use POSIX simple expansion ::=)
+BUILD_DIR       ::= build
+OBJ_DIR         ::= $(BUILD_DIR)/obj/$(PROFILE)
+BIN_DIR         ::= $(BUILD_DIR)/bin
+PROFILE_BIN_DIR ::= $(BIN_DIR)/$(PROFILE)
+PROTOCOL_DIR    ::= protocols
+SHADER_DIR      ::= shaders
+
+TARGET        ::= $(PROFILE_BIN_DIR)/walle
+ACTIVE_TARGET ::= $(BIN_DIR)/walle
+QUALITY_BIN_DIR ::= $(BIN_DIR)/quality
+REVEAL_GATE_SOURCE ::= analysis/verify_reveal_best_known_gles.c
+REVEAL_GATE_TARGET ::= $(QUALITY_BIN_DIR)/verify_reveal_best_known_gles
 
 # Core Application Sources (Located in root)
-APP_SOURCES ::= walle.c shiro.c
+APP_SOURCES ::= walle.c shiro.c parity/render_walle_exact_static_gl.c \
+	parity/liquid_glass_reveal_mask_model.c parity/liquid_glass_postguard.c \
+	parity/liquid_glass_raster.c
 
 # 3. Toolchain and C23 Compliance Flags
 # =============================================================================
@@ -53,12 +73,11 @@ C23_STRICT ::=\
     -Wimplicit-fallthrough
 
 # Usage:
-#   make              (Debug: Assertions ON, Symbols ON, -O0/O2)
-#   make MODE=release (Release: NDEBUG Defined, -O3, LTO, Strip Symbols)
-MODE ?= DEBUG
+#   make                       (Debug: assertions and symbols)
+#   make MODE=release          (Release: NDEBUG, -O3, LTO)
+#   make MODE=release TRACY=1  (separate opt-in Tracy profile)
 # NATIVE=1 additionally enables -march=native (host-specific binary; never for
 # distributed/packaged builds).
-NATIVE ?= 0
 
 ifeq ($(MODE),release)
     # -flto=auto: Link Time Optimization.
@@ -81,8 +100,6 @@ C23_SECURITY ::=\
 # Static Analysis
 # Usage: make ANALYZE=1
 # Note: For Clang, use 'scan-build make' instead of setting ANALYZE=1.
-ANALYZE ?=
-SANITIZER ?=
 ifneq ($(strip $(ANALYZE)),)
     C23_SECURITY += -fanalyzer
 endif
@@ -97,11 +114,23 @@ CFLAGS  ::= $(C23_STRICT) $(C23_OPTIMIZE) $(C23_SECURITY) $(SANITIZER_FLAGS)
 LDFLAGS ::= $(SANITIZER_FLAGS)
 LDLIBS  ::= -lm
 
+# Supply the compiler-side thread model as well as the linker contract.
+CFLAGS  += -pthread
+LDFLAGS += -pthread
+
 # Automatic Dependency Generation (Tracks headers and C23 #embed assets like shaders)
 DEPFLAGS ::= -MMD -MP
 
 # Base Include Paths
 CFLAGS += -I. -I$(PROTOCOL_DIR)
+
+# The development shell exposes Tracy's installed headers and client library
+# through its compiler wrapper. Normal builds retain no profiling overhead or
+# Tracy runtime dependency.
+ifeq ($(TRACY),1)
+CPPFLAGS += -DWALLE_TRACY=1 -DTRACY_ENABLE=1 -DTRACY_ON_DEMAND=1
+LDLIBS += -lTracyClient
+endif
 
 # Macro for rigorous status checking using .SHELLSTATUS (Make 4.2+).
 CHECK_STATUS = $(if $(filter-out 0,$(strip $(.SHELLSTATUS))),$(error FATAL: Last shell command failed (Status $(.SHELLSTATUS))),)
@@ -166,14 +195,21 @@ LDLIBS += $(HASH_LDLIBS)
 # 5.3 System Probing (Rendering)
 # =============================================================================
 RENDER_DEPS ::= glesv2 egl
+CORE_RENDER_DEPS ::= opengl egl
 
 RENDER_CFLAGS != $(PKG_CONFIG) --cflags $(RENDER_DEPS)
 $(call CHECK_STATUS)
 RENDER_LDLIBS != $(PKG_CONFIG) --libs $(RENDER_DEPS)
 $(call CHECK_STATUS)
+CORE_RENDER_CFLAGS != $(PKG_CONFIG) --cflags $(CORE_RENDER_DEPS)
+$(call CHECK_STATUS)
+CORE_RENDER_LDLIBS != $(PKG_CONFIG) --libs $(CORE_RENDER_DEPS)
+$(call CHECK_STATUS)
 
 CFLAGS += $(RENDER_CFLAGS)
 LDLIBS += $(RENDER_LDLIBS)
+CFLAGS += $(CORE_RENDER_CFLAGS)
+LDLIBS += $(CORE_RENDER_LDLIBS)
 
 # 5.4 System Probing (Memory Allocator)
 # =============================================================================
@@ -260,12 +296,56 @@ ALL_SOURCES ::= $(APP_SOURCES) $(GENERATED_SOURCES)
 OBJECTS ::= $(ALL_SOURCES:%.c=$(OBJ_DIR)/%.c.o)
 DEPS    ::= $(OBJECTS:.o=.d)
 
-.PHONY: all clean fuzz
+.PHONY: all activate clean fuzz reveal-best-known-corpus-gate reveal-best-known-gate \
+	reveal-best-known-process-gate reveal-mask-model-gate reveal-raster-gate
 
-all: $(TARGET)
+all: $(TARGET) activate
+
+activate: $(TARGET) | $(BIN_DIR)
+	ln -sfn $(PROFILE)/walle $(ACTIVE_TARGET)
+
+reveal-mask-model-gate:
+	./parity/run_liquid_glass_reveal_mask_model_gate.sh
+
+reveal-raster-gate: parity/raster_p25_selector_ceil_bits.bin \
+		artifacts/apple-float-intrinsics-r8-30556057571.bin \
+		parity/apple_fast_sqrt_correction_nibbles.bin
+	bash parity/run_liquid_glass_reveal_raster_gate.sh
+
+reveal-best-known-gate: $(REVEAL_GATE_TARGET)
+	$(REVEAL_GATE_TARGET)
+
+reveal-best-known-corpus-gate: $(REVEAL_GATE_TARGET) \
+		analysis/score_reveal_best_known_gles.py \
+		analysis/reveal_best_known_gles_corpus_gate_result.json
+	nix develop ./lg-test --command python analysis/score_reveal_best_known_gles.py \
+		--baseline analysis/reveal_best_known_gles_corpus_gate_result.json \
+		--expect-mismatches 91 >/dev/null
+	@echo "best-known reveal GLES corpus: frozen 65-state score reproduced"
+
+reveal-best-known-process-gate: $(TARGET) $(REVEAL_GATE_TARGET) \
+		analysis/run_walle_reveal_process_capture_gate.sh
+	bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
+
+$(REVEAL_GATE_TARGET): $(REVEAL_GATE_SOURCE) parity/liquid_glass_reveal_mask_model.c \
+		parity/liquid_glass_reveal_mask_model.h parity/liquid_glass_postguard.c \
+		parity/liquid_glass_postguard.h parity/liquid_glass_raster.c parity/liquid_glass_raster.h \
+		parity/liquid_glass_transition_frame.h \
+		parity/liquid_glass_selected_region.h parity/liquid_glass_transition_profile.h \
+		parity/liquid_glass_static_profile.h parity/liquid_glass_materialize.h \
+		parity/raster_p25_selector_ceil_bits.bin \
+		parity/apple_fast_sqrt_correction_nibbles.bin shaders/vert.glsl \
+		shaders/reveal_mask.vert.glsl shaders/reveal_mask.frag.glsl \
+		shaders/frag_reveal_best_known.glsl | $(QUALITY_BIN_DIR)
+	@echo "[CC] $<"
+	$(CC) $(C23_STRICT) -Werror -O2 -fstack-protector-strong -D_FORTIFY_SOURCE=3 \
+		-I. -Iparity $(RENDER_CFLAGS) $(REVEAL_GATE_SOURCE) \
+		parity/liquid_glass_reveal_mask_model.c parity/liquid_glass_postguard.c \
+		parity/liquid_glass_raster.c \
+		$(RENDER_LDLIBS) -lm -o $@
 
 # --- Linking Rule ---
-$(TARGET): $(OBJECTS) | $(BIN_DIR)
+$(TARGET): $(OBJECTS) | $(PROFILE_BIN_DIR)
 	@echo "MODE: $(MODE)"
 	@echo "[LD] $@"
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
@@ -277,6 +357,8 @@ $(OBJ_DIR)/%.c.o: %.c
 	@# Ensure the specific output subdirectory (e.g., build/obj/vendor/inih/src) exists.
 	@mkdir -p $(@D)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/parity/render_walle_exact_static_gl.c.o: private CPPFLAGS += -DWALLE_EXACT_STATIC_GL_NO_MAIN=1
 
 # Cold-start correctness: on the first build no .d files exist yet, so objects
 # must explicitly depend on the generated protocol headers or a parallel build
@@ -304,7 +386,7 @@ endif
 
 # --- Infrastructure (Directories) ---
 # Order-only prerequisites (|) ensure creation without triggering unnecessary rebuilds.
-$(BIN_DIR) $(PROTOCOL_DIR):
+$(BIN_DIR) $(PROFILE_BIN_DIR) $(QUALITY_BIN_DIR) $(PROTOCOL_DIR):
 	@mkdir -p $@
 
 # Include generated dependency files.

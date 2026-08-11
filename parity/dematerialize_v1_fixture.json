@@ -1,0 +1,65 @@
+{
+  "cases": [
+    {
+      "appearance": "light",
+      "caseId": "clear-light-circle456",
+      "diameter": 456,
+      "direction": "dematerialize",
+      "material": "clear",
+      "nativeClampResultSHA256": "79b60f07703aa03d2d084c7545ec6cd04b6351601908ae554112c20c43d5f695",
+      "timelineSHA256": "8a49dee85c59135f6c63279576ad66af2b69935a0fb2a6c82a08e09b8c2c2c49",
+      "validationSHA256": "1dae521f781f5d0461cbcc07484c627f9cbad1828bf18336de158fcab65a0338"
+    },
+    {
+      "appearance": "dark",
+      "caseId": "clear-dark-circle464",
+      "diameter": 464,
+      "direction": "dematerialize",
+      "material": "clear",
+      "nativeClampResultSHA256": "9b45334d75896fad385ff4760ee40e1d01ef07b6c0004be8a7d900e4be0b16ba",
+      "timelineSHA256": "45f912caa7f52c4e0ef7fef96ccf71726c9c5014b5c5d0386b92fab3ef11e86a",
+      "validationSHA256": "7ad6b307bcdae30d93552aba09a11f0d7d1736bf97569fafc119dc55315744ce"
+    },
+    {
+      "appearance": "light",
+      "caseId": "regular-light-circle472",
+      "diameter": 472,
+      "direction": "dematerialize",
+      "material": "regular",
+      "nativeClampResultSHA256": "bf4382c62cc80a590d4f87518dbce97982b00ea422c38edcdc7938d31738e5f5",
+      "timelineSHA256": "dd28332a6fda069c3657da4d0a38e1df53d24233b8bcef68f0d39cd7f4b4d8ec",
+      "validationSHA256": "de917c1b15e618b1b2fdca889daac153c425f0df88dde8f494e6e289cde3ed3b"
+    },
+    {
+      "appearance": "dark",
+      "caseId": "regular-dark-circle480",
+      "diameter": 480,
+      "direction": "dematerialize",
+      "material": "regular",
+      "nativeClampResultSHA256": "fe9797bb3ef1d3c4c8d187789ca58573429dbb175e1647f1dd2b3eaa7a3acb07",
+      "timelineSHA256": "d4c4e2721003efa0e4e58712a681e6898ba60819ad3f16923d833cc7c945ae69",
+      "validationSHA256": "a8461a8c84cc4459e2fe948466ded3bee7b892982634595c9f3e1567e2577740"
+    }
+  ],
+  "classification": "Walle fixture derived from the prospective four-profile dematerialize transfer",
+  "comparisonPrecision": "IEEE-754 binary32 words",
+  "dematerializeV1FixtureSchemaVersion": 1,
+  "dynamicStateCount": 124,
+  "fixtureByteCount": 23864,
+  "fixtureSHA256": "4f00b39ea6a965f53fb15405b7eb4777f50edefa1cdd1336de6e5a5c6a6fd09d",
+  "numericComparisonCount": 5828,
+  "numericFieldCount": 47,
+  "scope": {
+    "dematerializeNumericTransferEstablished": true,
+    "directionCompleteNumericTransferEstablished": true,
+    "independentWalleZeroByteFrameEstablished": false,
+    "liquidGlassParityEstablished": false,
+    "materializeNumericTransferEstablished": true,
+    "physicalPixelParityEstablished": false
+  },
+  "source": {
+    "generatorSHA256": "c8d35de6d2800af4febdcae82e6137e72bd13ca6c7269ea529ec152ead81070b",
+    "modelSHA256": "0fe38fbe4a55689af2157524545698bad021b39f3da830cbd86f6540c0370c5b",
+    "prospectiveAggregateSHA256": "81812b504be06916ea37195a3c5f2c49bf49d93d391735bca22dea7359bb1790"
+  }
+}

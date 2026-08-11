@@ -1,0 +1,34 @@
+{
+  "classification": "retained macOS 26.6.1 small-clear Tghn profile fixture",
+  "comparedByteCount": 12600,
+  "fixtureByteCount": 14304,
+  "fixtureSHA256": "0910b3b604fd3b4fbb66117e5b0c2ff2ba2eb98542fe2785880c05aac84ce693",
+  "generatorSHA256": "5013c181a5608d6613fc154740609879da68ca417e8e74e48f6ebad5e1dd22e7",
+  "profileCount": 60,
+  "profileSizeBytes": 210,
+  "profileStreamSHA256": "91d7807370e65dfe65e0955d91674aa68eaba9cfae87781b1ec3a3aded70add0",
+  "schemaVersion": 1,
+  "scope": {
+    "capturedBytesUsedOnlyAsTestOracle": true,
+    "productionWalleParityEstablished": false,
+    "smallClearTghnPixelSemanticsEstablishedElsewhere": true,
+    "smallClearTghnProfilePackingEstablished": true,
+    "smallClearTmuaCompositionEstablished": false
+  },
+  "timelines": [
+    {
+      "appearance": "dark",
+      "diameter": 51,
+      "direction": "dematerialize",
+      "profileCount": 30,
+      "timelineSHA256": "0fb1572ce1822fa3a00da0cf37357ba7d923d60d21da85b6a14207bf20c3fe31"
+    },
+    {
+      "appearance": "light",
+      "diameter": 53,
+      "direction": "materialize",
+      "profileCount": 30,
+      "timelineSHA256": "85dc1f54a54f86852ee46b1c611f8968b470c0551a4647c0f7b8a59030ccb016"
+    }
+  ]
+}

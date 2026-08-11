@@ -14,6 +14,22 @@ a wayland wallpaper engine
   (the measured ~50% sRGB veil over a mega-blur, with the real outward
   edge-lensing profile) and `regular` (the opaque platter: white over light
   content, dark over dark, hue-washed by the wallpaper)
+- recovered reveal topology: a table-free public-input constructor selects the
+  observed border-grid or compact-visible-arc mesh, renders an R8 mask, then
+  uses that mask as the sole transition coverage input. This is Walle's only
+  reveal implementation. The current recorded offline CPU reference agrees
+  at 272,629,669 of 272,629,760 channel-0 mask samples (91 one-code residuals);
+  this is intentionally named `best-known`, not `exact`. The production model
+  now reproduces that same score through Mesa/GLES on both the integrated
+  Radeon and RX 9070 XT. Its one-draw OpenGL ES 3.2 path combines recovered
+  canonical post-guard children with P25/AGX axes and exact current/XOR-helper
+  ownership, then applies the admitted Apple fast-square-root correction and
+  binary16 round-to-nearest-even transfer. The remaining mask boundary is
+  Apple's hardware-specific setup law for arbitrary non-axis-separable clipped
+  children. A deterministic 65-state diagnostic
+  run of the Walle executable produces the same R8 inventory byte for byte (65
+  normal composition swaps and 64 frame callbacks). Composed-RGBA and
+  physical-presentation scoring remain separate.
 - fill with cropping area (high, low, center, attention, entropy)
 - hot config reload (including adding/removing output sections at runtime)
 - per monitor config
@@ -33,6 +49,7 @@ a wayland wallpaper engine
 - inih
 - jemalloc
 - libglvnd
+- OpenGL ES 3.2
 - liburing (>= 2.4)
 - libvips
 - systemd-dev (for dbus)

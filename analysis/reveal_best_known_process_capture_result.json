@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "classification": "sole reveal-path capture from the actual Walle executable",
+  "date": "2026-08-11",
+  "command": "nix develop --command make MODE=release reveal-best-known-process-gate",
+  "inputs": {
+    "walleSourceSha256": "3484d72434866a9acbce82e2a5415c27d7c961140d69b615524001863a867743",
+    "releaseBinarySha256": "d4f556e657ac4a5520f448b8d499496fefda3d51dfccc7b185cee7261955798c",
+    "processGateSha256": "1d8cc386098e3d9915a736132ab81a185c67d65a4c22dc70e2cc0eff0157f47f",
+    "fragmentShaderSha256": "ceb6a3c256061a339c4859a7a90bae3fd9edf715c6489881d56e37f5c711a7ff",
+    "standaloneCorpusReportSha256": "107755cee108db83c489658df14b89da271503a9812612097b0804bc0360f76f",
+    "crossGpuReportSha256": "d9bf40975cebec88d7ccaa038d4e53335f3764e2761b3b4012fad92574f33ad3",
+    "standaloneCandidateInventorySha256": "9062b7bfde617f88638c9b48fdb8ace7b6f91b4518d54c5a6e54abcb51e93644"
+  },
+  "capture": {
+    "backend": "private headless Labwc Wayland compositor using GLES",
+    "dimensions": [
+      2048,
+      2048
+    ],
+    "centerTopLeft": [
+      512.0,
+      614.4
+    ],
+    "progress": "state / 64",
+    "format": "R8 top-left row-major",
+    "states": 65,
+    "files": 65,
+    "ordinaryCompositionSwaps": 65,
+    "frameCallbacks": 64,
+    "actualProcessMasksEqualStandaloneGles": true,
+    "candidateInventorySha256": "9062b7bfde617f88638c9b48fdb8ace7b6f91b4518d54c5a6e54abcb51e93644"
+  },
+  "retrospectiveScoreInheritedByByteEquality": {
+    "exactPixels": 272629669,
+    "totalPixels": 272629760,
+    "mismatchedPixels": 91,
+    "absoluteError": 91,
+    "maximumError": 1,
+    "exactPercentage": 99.99996662139893
+  },
+  "failClosedChecks": {
+    "emptyRealDestinationRequired": true,
+    "symlinkDestinationRejected": true,
+    "existingEntriesRejected": true,
+    "stateFilesCreatedExclusive": true,
+    "stateFileModeOctal": "0600",
+    "exactStaticAuthorityConflictRejected": true
+  },
+  "validation": {
+    "gccReleaseProcessGatePassed": true,
+    "gccAddressUndefinedLeakSanitizerProcessGatePassed": true,
+    "gccAnalyzerBuildAndProcessGatePassed": true,
+    "standaloneGlesGatePassed": true,
+    "raphaelIntegratedProcessGatePassed": true,
+    "rx9070xtDiscreteProcessGatePassed": true,
+    "firstBootCompletedEndpointRenderedThroughSoleRevealPath": true,
+    "emptyEndpointStateByteEqual": true,
+    "fullEndpointStateByteEqual": true,
+    "capturedTransitionUsesSameRevealCompositionPath": true,
+    "alternativeRevealCompositionPathAbsent": true
+  },
+  "coverage": {
+    "ordinaryWalleExecutableProcessRendered": true,
+    "layerShellSurfaceRendered": true,
+    "ordinaryWalleMaskBytesScored": true,
+    "soleRevealProductionPathExercised": true,
+    "composedRgbaFramesScored": false,
+    "physicalPresentationScored": false,
+    "provenanceCompleteClosure": false,
+    "exactParityClaimed": false
+  }
+}

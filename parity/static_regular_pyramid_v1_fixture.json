@@ -1,0 +1,77 @@
+{
+  "classification": "physical-Retina prospective static regular producer-geometry holdout, composed independently from the diagnostic wallpaper through the transferred crop, copy-base, and mip kernels",
+  "evidenceSHA256": {
+    "canonicalResult": "dc030ff6806c6c5aef92c7276a2bd2c093e963775d9a2007c5439daa41435533",
+    "generator": "1b9380c4cba3e44a3a428a4cb08a23179d8fdd791aed2e4d15553a83bfcacaaa",
+    "runtime": "7b847a04ac51c4474485d97ae0144fe1d984d08a2781faa88343c1fcb815622c",
+    "validation": "3280f6ae19b7dd8fef9a2c85a1fa15daada3172ad6403ac9a87f55825723e507"
+  },
+  "fixture": {
+    "byteCount": 546120,
+    "headerSize": 120,
+    "levelCount": 6,
+    "magic": "WLGSPV1",
+    "path": "static_regular_pyramid_v1_fixture.bin",
+    "payloadByteCount": 546000,
+    "sha256": "6b4e9920fe4cdb7fd18cf91d21a15c28ad67026a2dcbe8ffe8eb5afe10b66e79",
+    "version": 1
+  },
+  "geometry": {
+    "center": [
+      301.25,
+      699.75
+    ],
+    "diameter": 377,
+    "name": "circle-377-fractional-holdout",
+    "window": [
+      1024,
+      1024
+    ]
+  },
+  "levels": [
+    {
+      "byteCount": 409600,
+      "height": 320,
+      "sha256": "cea1d0a3fa59bc04ef6755860338ecbce514c424722f85115f8176d85e9816ad",
+      "source": "sdf-generator-carenderer-live-tree-texture-003-pf80-320x320.raw",
+      "width": 320
+    },
+    {
+      "byteCount": 102400,
+      "height": 160,
+      "sha256": "af814768131772676fb07c567d6aa4fdd563aceaca1c4d35e9726d85ba716dc1",
+      "source": "sdf-generator-carenderer-live-tree-texture-003-pf80-320x320-mip-01.raw",
+      "width": 160
+    },
+    {
+      "byteCount": 25600,
+      "height": 80,
+      "sha256": "25530014edd8dbe501df1a3de0a5e7b59fc0e9b5363bf649ddb1103e894176ff",
+      "source": "sdf-generator-carenderer-live-tree-texture-003-pf80-320x320-mip-02.raw",
+      "width": 80
+    },
+    {
+      "byteCount": 6400,
+      "height": 40,
+      "sha256": "8a5842e476f69bff33deba92ce8f21d1fe3bc549d70fa4c699825aad58663ede",
+      "source": "sdf-generator-carenderer-live-tree-texture-003-pf80-320x320-mip-03.raw",
+      "width": 40
+    },
+    {
+      "byteCount": 1600,
+      "height": 20,
+      "sha256": "ac774d9a3cf4bf63833c387e088829f0a5cd9a5034485e32f9df50f0ee761225",
+      "source": "sdf-generator-carenderer-live-tree-texture-003-pf80-320x320-mip-04.raw",
+      "width": 20
+    },
+    {
+      "byteCount": 400,
+      "height": 10,
+      "sha256": "6b2a1ad3d2d825a0ff80a3303d581a6cfb0d27d970daffcd639ffd2764242db1",
+      "source": "sdf-generator-carenderer-live-tree-texture-003-pf80-320x320-mip-05.raw",
+      "width": 10
+    }
+  ],
+  "streamSHA256": "59fdd7866c923fac6c88bc921fb87065fca789bb1b9a1503f7c89d48fbe00956",
+  "walleStaticRegularPyramidFixtureManifestSchemaVersion": 1
+}
