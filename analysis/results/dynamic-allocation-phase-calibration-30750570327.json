@@ -1,0 +1,321 @@
+{
+  "aggregate": {
+    "allProducerQuadSourceQDiagnostic": {
+      "componentCount": 2600,
+      "exact": false,
+      "mismatchedComponents": 1112
+    },
+    "geometryCount": 4,
+    "nonEndpointAuxiliaryBoundsGivenPrimary": {
+      "componentCount": 1432,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "nonEndpointCropAndClamp": {
+      "componentCount": 496,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "nonEndpointDestinationExtentWithSelectedOrigin": {
+      "componentCount": 248,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "nonEndpointPrimaryPositionCandidates": {
+      "byVertexCount": {
+        "16": {
+          "componentCount": 132,
+          "exact": true,
+          "mismatchedComponents": 0,
+          "stateCount": 33
+        },
+        "36": {
+          "componentCount": 40,
+          "exact": true,
+          "mismatchedComponents": 0,
+          "stateCount": 10
+        },
+        "4": {
+          "componentCount": 324,
+          "exact": false,
+          "mismatchedComponents": 15,
+          "stateCount": 81
+        }
+      },
+      "overall": {
+        "componentCount": 496,
+        "exact": false,
+        "mismatchedComponents": 15,
+        "residuals": [
+          {
+            "difference": 1.0,
+            "edge": "yUpper",
+            "geometry": "circle-256-center",
+            "observed": 329.0,
+            "predicted": 330,
+            "remaining": 0.9691696166992188,
+            "sampleIndex": 31,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xUpper",
+            "geometry": "circle-640-fractional",
+            "observed": 592.0,
+            "predicted": 591,
+            "remaining": 0.7202787399291992,
+            "sampleIndex": 23,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xUpper",
+            "geometry": "circle-640-fractional",
+            "observed": 571.0,
+            "predicted": 570,
+            "remaining": 0.7518987655639648,
+            "sampleIndex": 24,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xLower",
+            "geometry": "circle-640-fractional",
+            "observed": 158.0,
+            "predicted": 157,
+            "remaining": 0.7838306427001953,
+            "sampleIndex": 25,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xLower",
+            "geometry": "circle-640-fractional",
+            "observed": 148.0,
+            "predicted": 147,
+            "remaining": 0.8137350082397461,
+            "sampleIndex": 26,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xUpper",
+            "geometry": "circle-640-fractional",
+            "observed": 531.0,
+            "predicted": 530,
+            "remaining": 0.8137350082397461,
+            "sampleIndex": 26,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xLower",
+            "geometry": "circle-640-fractional",
+            "observed": 138.0,
+            "predicted": 137,
+            "remaining": 0.8459978103637695,
+            "sampleIndex": 27,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xUpper",
+            "geometry": "circle-640-fractional",
+            "observed": 511.0,
+            "predicted": 510,
+            "remaining": 0.8459978103637695,
+            "sampleIndex": 27,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xLower",
+            "geometry": "circle-640-fractional",
+            "observed": 129.0,
+            "predicted": 128,
+            "remaining": 0.8776435852050781,
+            "sampleIndex": 28,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xUpper",
+            "geometry": "circle-640-fractional",
+            "observed": 491.0,
+            "predicted": 490,
+            "remaining": 0.8776435852050781,
+            "sampleIndex": 28,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xLower",
+            "geometry": "circle-640-fractional",
+            "observed": 120.0,
+            "predicted": 119,
+            "remaining": 0.9085407257080078,
+            "sampleIndex": 29,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xUpper",
+            "geometry": "circle-640-fractional",
+            "observed": 472.0,
+            "predicted": 471,
+            "remaining": 0.9085407257080078,
+            "sampleIndex": 29,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xLower",
+            "geometry": "circle-640-fractional",
+            "observed": 111.0,
+            "predicted": 110,
+            "remaining": 0.9383058547973633,
+            "sampleIndex": 30,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xUpper",
+            "geometry": "circle-640-fractional",
+            "observed": 454.0,
+            "predicted": 453,
+            "remaining": 0.9383058547973633,
+            "sampleIndex": 30,
+            "vertexCount": 4
+          },
+          {
+            "difference": -1.0,
+            "edge": "xLower",
+            "geometry": "circle-640-fractional",
+            "observed": 103.0,
+            "predicted": 102,
+            "remaining": 0.969975471496582,
+            "sampleIndex": 31,
+            "vertexCount": 4
+          }
+        ]
+      }
+    },
+    "nonEndpointProducerExtent": {
+      "componentCount": 248,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "nonEndpointStateCount": 124,
+    "nonEndpointTopology": {
+      "clippedSidePatternStates": {
+        "none": 81,
+        "xLower,xUpper,yLower,yUpper": 10,
+        "xUpper,yLower": 33
+      },
+      "exact": true,
+      "mismatchedStates": 0,
+      "stateCount": 124
+    },
+    "phaseCandidatesAllStatesGivenObservedCrop": {
+      "resampling-ratio-five-fourths": {
+        "componentCount": 256,
+        "exact": false,
+        "mismatchedComponents": 1
+      },
+      "rounded-eight-pixel-transition-padding": {
+        "componentCount": 256,
+        "exact": true,
+        "mismatchedComponents": 0
+      }
+    },
+    "phaseCandidatesFromPredictedNonEndpointCrop": {
+      "resampling-ratio-five-fourths": {
+        "componentCount": 248,
+        "exact": false,
+        "mismatchedComponents": 1
+      },
+      "rounded-eight-pixel-transition-padding": {
+        "componentCount": 248,
+        "exact": true,
+        "mismatchedComponents": 0
+      }
+    },
+    "phaseDiscriminatingComponents": [
+      {
+        "axis": "x",
+        "candidateOrigins": {
+          "resampling-ratio-five-fourths": 320,
+          "rounded-eight-pixel-transition-padding": 324
+        },
+        "cropOrigin": 325,
+        "geometry": "circle-512-offset",
+        "observedEffectiveOrigin": 324,
+        "remaining": 0.4087800979614258,
+        "sampleIndex": 13
+      }
+    ],
+    "primaryProducerSourceQ": {
+      "componentCount": 1024,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "producerScissorFromClamp": {
+      "componentCount": 248,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "producerVertexCountStatesIncludingEndpoints": {
+      "16": 33,
+      "24": 2,
+      "36": 11,
+      "4": 82
+    },
+    "runtimeScale": {
+      "componentCount": 128,
+      "exact": true,
+      "mismatchedComponents": 0
+    },
+    "stateCount": 128
+  },
+  "classification": "post-opening-analysis-of-preregistered-dense-temporal-calibration",
+  "conclusion": {
+    "independentProducerMeshPolicyRecovered": false,
+    "nonEndpointAllocationMetadataRecoveredOnCalibration": true,
+    "phaseCandidateSelectedByDiscriminator": true,
+    "productionShaderAuthorized": false,
+    "requiresNewUnseenGeometryHoldout": true,
+    "selectedFinitePhaseCandidate": "rounded-eight-pixel-transition-padding"
+  },
+  "dynamicAllocationPhaseCalibrationAnalysisSchemaVersion": 1,
+  "inputs": [
+    {
+      "geometry": "circle-256-center",
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-256-materialize-30750570327/transition-timeline.json",
+      "timelineSHA256": "91287685a2abf1e1d98f8a8251b3c6da13085ed731dd66e07c1bb52b232a061c",
+      "validatorResult": "liquid-glass-transition-introspection-geometry-256-materialize-30750570327/dynamic-allocation-calibration.json",
+      "validatorResultSHA256": "73287af2e74023884a566d7728629325d5367e5e6fd1e361c1454812ae2f51d3"
+    },
+    {
+      "geometry": "circle-1536-center",
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-clipped-materialize-30750570327/transition-timeline.json",
+      "timelineSHA256": "1368a0c87018b114729afa19825c176c0d8048af2e314906c5584af2b57dcf68",
+      "validatorResult": "liquid-glass-transition-introspection-geometry-clipped-materialize-30750570327/dynamic-allocation-calibration.json",
+      "validatorResultSHA256": "5a45f28823113dc894fb1008dcad3292acca537429206df2cf1a704dabe653f8"
+    },
+    {
+      "geometry": "circle-640-fractional",
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-fractional-materialize-30750570327/transition-timeline.json",
+      "timelineSHA256": "501f3735994e24e7ea7f9b0342b70eb94baff77084d4e9a94b4f910bc80163f4",
+      "validatorResult": "liquid-glass-transition-introspection-geometry-fractional-materialize-30750570327/dynamic-allocation-calibration.json",
+      "validatorResultSHA256": "213ac2c98fbc08edf6c2d26588f5c682bfc1b39c9b877239787701b9c53cc4e7"
+    },
+    {
+      "geometry": "circle-512-offset",
+      "timelineArtifact": "liquid-glass-transition-introspection-geometry-offset-materialize-30750570327/transition-timeline.json",
+      "timelineSHA256": "3666198eed053d752b24909c5eddb68f7a9bd3d0ee361260f1976e9bde4a13fe",
+      "validatorResult": "liquid-glass-transition-introspection-geometry-offset-materialize-30750570327/dynamic-allocation-calibration.json",
+      "validatorResultSHA256": "ca98abb92789aa5702074b4859218670eec276d736489580e7496d3b49742f8a"
+    }
+  ],
+  "runID": 30750570327
+}

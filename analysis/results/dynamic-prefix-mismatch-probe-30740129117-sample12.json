@@ -1,0 +1,4233 @@
+{
+  "baseline": {
+    "exact": false,
+    "firstMismatches": [
+      {
+        "appleRGBA": [
+          2,
+          2,
+          2,
+          235
+        ],
+        "candidateMinusAppleRGBA": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "candidateRGBA": [
+          3,
+          3,
+          3,
+          235
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "appleRGBA": [
+          2,
+          2,
+          2,
+          235
+        ],
+        "candidateMinusAppleRGBA": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "candidateRGBA": [
+          3,
+          3,
+          3,
+          235
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "maximumChannelDelta": 1,
+    "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+    "mismatchedBytes": 6,
+    "mismatchedPixels": 2
+  },
+  "classification": "retrospective opened diagnostic",
+  "combinedCoordinateQuantizationSweep": {
+    "coordinate-0-quantization-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-0-quantization-1": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-1-quantization-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-1-quantization-1": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-2-quantization-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-2-quantization-1": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-3-quantization-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-3-quantization-1": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-4-quantization-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-4-quantization-1": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-5-quantization-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "coordinate-5-quantization-1": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    }
+  },
+  "combinedMixSweep": {
+    "composite-0-holding-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-0-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-5": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-0-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-1-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-5": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-1-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-2-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-5": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-2-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-3-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-5": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-3-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-4-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-5": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-4-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-5-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-5": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-5-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-6-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-5": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-6-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-0": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-7-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-5": {
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 596,
+          "y": 116
+        },
+        {
+          "appleRGBA": [
+            2,
+            2,
+            2,
+            235
+          ],
+          "candidateMinusAppleRGBA": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "candidateRGBA": [
+            3,
+            3,
+            3,
+            235
+          ],
+          "x": 907,
+          "y": 427
+        }
+      ],
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+      "mismatchedBytes": 6,
+      "mismatchedPixels": 2
+    },
+    "composite-7-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    }
+  },
+  "customMetalHoldingStageSweep": null,
+  "dynamicArtifact": "artifacts/gh-run-30740129117/liquid-glass-transition-introspection-profile-clear-light-materialize-30740129117",
+  "holdingModeTraces": {
+    "0": [
+      {
+        "halfCodes": [
+          8454,
+          8454,
+          8454,
+          15196
+        ],
+        "values": [
+          0.0098114013671875,
+          0.0098114013671875,
+          0.0098114013671875,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8454,
+          8454,
+          8454,
+          15196
+        ],
+        "values": [
+          0.0098114013671875,
+          0.0098114013671875,
+          0.0098114013671875,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "1": [
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "2": [
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "3": [
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "4": [
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "5": [
+      {
+        "halfCodes": [
+          8454,
+          8454,
+          8454,
+          15196
+        ],
+        "values": [
+          0.0098114013671875,
+          0.0098114013671875,
+          0.0098114013671875,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8454,
+          8454,
+          8454,
+          15196
+        ],
+        "values": [
+          0.0098114013671875,
+          0.0098114013671875,
+          0.0098114013671875,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "6": [
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "7": [
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8453,
+          8453,
+          8453,
+          15196
+        ],
+        "values": [
+          0.00980377197265625,
+          0.00980377197265625,
+          0.00980377197265625,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ]
+  },
+  "implementation": {
+    "fragmentShaderBytes": 124579,
+    "fragmentShaderSha256": "588ad72af31aabb2f4c932b8912a2abf3af07324c3d3ef6ddbb8b2e9ac3afe72",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "liquidGlassDynamicPrefixMismatchProbeSchemaVersion": 2,
+  "mixSweeps": {
+    "ProbeCompositeMixMode": {
+      "0": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "1": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "2": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "3": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "4": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "5": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "6": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "7": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      }
+    },
+    "ProbeHoldingMixMode": {
+      "0": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "1": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "2": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "3": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "4": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "5": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "6": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "7": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      }
+    }
+  },
+  "numericTracesAtProbeCoordinates": {
+    "1": [
+      {
+        "halfCodes": [
+          47101,
+          12976,
+          15315,
+          15196
+        ],
+        "values": [
+          -0.499267578125,
+          0.208984375,
+          0.97802734375,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          47101,
+          15315,
+          12976,
+          15196
+        ],
+        "values": [
+          -0.499267578125,
+          0.97802734375,
+          0.208984375,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "10": [
+      {
+        "halfCodes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "11": [
+      {
+        "halfCodes": [
+          8570,
+          8570,
+          8570,
+          15360
+        ],
+        "values": [
+          0.0106964111328125,
+          0.0106964111328125,
+          0.0106964111328125,
+          1.0
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8570,
+          8570,
+          8570,
+          15360
+        ],
+        "values": [
+          0.0106964111328125,
+          0.0106964111328125,
+          0.0106964111328125,
+          1.0
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "12": [
+      {
+        "halfCodes": [
+          8458,
+          8458,
+          8458,
+          15196
+        ],
+        "values": [
+          0.0098419189453125,
+          0.0098419189453125,
+          0.0098419189453125,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8458,
+          8458,
+          8458,
+          15196
+        ],
+        "values": [
+          0.0098419189453125,
+          0.0098419189453125,
+          0.0098419189453125,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "13": [
+      {
+        "halfCodes": [
+          8454,
+          8454,
+          8454,
+          15196
+        ],
+        "values": [
+          0.0098114013671875,
+          0.0098114013671875,
+          0.0098114013671875,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8454,
+          8454,
+          8454,
+          15196
+        ],
+        "values": [
+          0.0098114013671875,
+          0.0098114013671875,
+          0.0098114013671875,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "14": [
+      {
+        "halfCodes": [
+          8570,
+          8570,
+          8570,
+          15360
+        ],
+        "values": [
+          0.0106964111328125,
+          0.0106964111328125,
+          0.0106964111328125,
+          1.0
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8570,
+          8570,
+          8570,
+          15360
+        ],
+        "values": [
+          0.0106964111328125,
+          0.0106964111328125,
+          0.0106964111328125,
+          1.0
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "2": [
+      {
+        "halfCodes": [
+          13634,
+          12828,
+          52039,
+          11391
+        ],
+        "values": [
+          0.32861328125,
+          0.19091796875,
+          -14.5546875,
+          0.07025146484375
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          14850,
+          14568,
+          52039,
+          11391
+        ],
+        "values": [
+          0.7509765625,
+          0.61328125,
+          -14.5546875,
+          0.07025146484375
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "21": [
+      {
+        "halfCodes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "26": [
+      {
+        "halfCodes": [
+          8444,
+          8444,
+          8444,
+          15196
+        ],
+        "values": [
+          0.009735107421875,
+          0.009735107421875,
+          0.009735107421875,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8444,
+          8444,
+          8444,
+          15196
+        ],
+        "values": [
+          0.009735107421875,
+          0.009735107421875,
+          0.009735107421875,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "27": [
+      {
+        "halfCodes": [
+          13606,
+          13606,
+          13606,
+          13606
+        ],
+        "values": [
+          0.32177734375,
+          0.32177734375,
+          0.32177734375,
+          0.32177734375
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          13606,
+          13606,
+          13606,
+          13606
+        ],
+        "values": [
+          0.32177734375,
+          0.32177734375,
+          0.32177734375,
+          0.32177734375
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "4": [
+      {
+        "halfCodes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "5": [
+      {
+        "halfCodes": [
+          23240,
+          22464,
+          20864,
+          22496
+        ],
+        "values": [
+          217.0,
+          124.0,
+          44.0,
+          126.0
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          18944,
+          22904,
+          23088,
+          19968
+        ],
+        "values": [
+          12.0,
+          175.0,
+          198.0,
+          24.0
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "6": [
+      {
+        "halfCodes": [
+          27904,
+          25088,
+          62144,
+          29720
+        ],
+        "values": [
+          5120.0,
+          768.0,
+          -13824.0,
+          16768.0
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          58368,
+          60672,
+          62496,
+          29376
+        ],
+        "values": [
+          -1024.0,
+          -5120.0,
+          -16896.0,
+          13824.0
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "7": [
+      {
+        "halfCodes": [
+          3282,
+          38308,
+          0,
+          0
+        ],
+        "values": [
+          0.0002942085266113281,
+          -0.001377105712890625,
+          0.0,
+          0.0
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          5540,
+          36050,
+          0,
+          0
+        ],
+        "values": [
+          0.001377105712890625,
+          -0.0002942085266113281,
+          0.0,
+          0.0
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "8": [
+      {
+        "halfCodes": [
+          47101,
+          15554,
+          14007,
+          15196
+        ],
+        "values": [
+          -0.499267578125,
+          1.189453125,
+          0.419677734375,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          47101,
+          15553,
+          14009,
+          15196
+        ],
+        "values": [
+          -0.499267578125,
+          1.1884765625,
+          0.420166015625,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ],
+    "9": [
+      {
+        "halfCodes": [
+          8454,
+          8454,
+          8454,
+          15196
+        ],
+        "values": [
+          0.0098114013671875,
+          0.0098114013671875,
+          0.0098114013671875,
+          0.919921875
+        ],
+        "x": 596,
+        "y": 116
+      },
+      {
+        "halfCodes": [
+          8454,
+          8454,
+          8454,
+          15196
+        ],
+        "values": [
+          0.0098114013671875,
+          0.0098114013671875,
+          0.0098114013671875,
+          0.919921875
+        ],
+        "x": 907,
+        "y": 427
+      }
+    ]
+  },
+  "prefixReference": {
+    "path": "artifacts/gh-run-30740129117/liquid-glass-transition-introspection-profile-clear-light-materialize-30740129117/transition-background-uniform-12-glass-prefix-reference-bgra8.raw",
+    "sha256": "3f89c2ac9a2eeef3538b451766768988324702c47132512e157effb50debc805"
+  },
+  "probeCoordinates": [
+    {
+      "x": 596,
+      "y": 116
+    },
+    {
+      "x": 907,
+      "y": 427
+    }
+  ],
+  "productionShaderAuthorized": false,
+  "profile": {
+    "appearance": "light",
+    "material": "clear"
+  },
+  "runtimeRaster": {
+    "axisStart": 105,
+    "selector": {
+      "base": 26816110,
+      "offset": 4,
+      "selected": 26816114
+    }
+  },
+  "sampleIndex": 12,
+  "singleUniformSweeps": {
+    "AppleFastReciprocalBias": {
+      "0": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "1": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "2": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      }
+    },
+    "AppleFastSqrtBias": {
+      "0": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "1": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "2": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      }
+    },
+    "InnerSamplerCoordinateModel": {
+      "0": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "1": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "2": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "3": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "4": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "5": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      }
+    },
+    "SamplerModel": {
+      "0": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "1": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      }
+    },
+    "SamplerSpatialQuantization": {
+      "0": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      },
+      "1": {
+        "exact": false,
+        "firstMismatches": [
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 596,
+            "y": 116
+          },
+          {
+            "appleRGBA": [
+              2,
+              2,
+              2,
+              235
+            ],
+            "candidateMinusAppleRGBA": [
+              1,
+              1,
+              1,
+              0
+            ],
+            "candidateRGBA": [
+              3,
+              3,
+              3,
+              235
+            ],
+            "x": 907,
+            "y": 427
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+        "mismatchedBytes": 6,
+        "mismatchedPixels": 2
+      }
+    }
+  }
+}

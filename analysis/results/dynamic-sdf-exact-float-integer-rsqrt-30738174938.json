@@ -1,0 +1,129 @@
+{
+  "capturedAppleFunctionUnmodified": false,
+  "classification": "retrospective post-opening arithmetic isolation",
+  "comparisons": {
+    "float32": {
+      "comparedWords": 3145728,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0,
+      "referenceMinusCandidateBitDeltaByChannel": [
+        {},
+        {},
+        {}
+      ]
+    },
+    "geometry": {
+      "comparedWords": 4194304,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0,
+      "referenceMinusCandidateBitDeltaByChannel": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "half-conversion": {
+      "comparedWords": 2097152,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0,
+      "referenceMinusCandidateBitDeltaByChannel": [
+        {},
+        {}
+      ]
+    },
+    "normal": {
+      "comparedWords": 4194304,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0,
+      "referenceMinusCandidateBitDeltaByChannel": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "oval": {
+      "comparedWords": 4194304,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0,
+      "referenceMinusCandidateBitDeltaByChannel": [
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "point": {
+      "comparedWords": 2097152,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0,
+      "referenceMinusCandidateBitDeltaByChannel": [
+        {},
+        {}
+      ]
+    }
+  },
+  "coordinateMode": "axis-table",
+  "curvedDistanceMode": "contracted-half-fma",
+  "customMetalComparison": true,
+  "dynamicArtifact": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938",
+  "firstDivergentStage": null,
+  "implementation": {
+    "fragmentShaderBytes": 120895,
+    "fragmentShaderSha256": "c3c890cc90ca2043b08e7e97267e47f9b6b860138fe16192b05166e77ed026e1",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "liquidGlassDynamicSdfFloatIsolationSchemaVersion": 1,
+  "localSetup": {
+    "circleScaleBits": "0x441a64ad",
+    "inverseCircleScaleBits": "0x3ad43cbc"
+  },
+  "normalRsqrtMode": "integer-corrected",
+  "numeratorMode": "uniform-offset",
+  "reciprocalOverride": {
+    "circleScaleBits": "0x441a64ad",
+    "correctedCode": 150,
+    "encodedDelta": 2,
+    "mantissa": 1729709,
+    "netReciprocalUlpAdjustment": 1,
+    "originalCode": 86
+  },
+  "referenceShader": {
+    "path": "analysis/apple_glass_reference.frag.glsl",
+    "runtimeInstrumentation": true,
+    "sha256BeforeInstrumentation": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6"
+  },
+  "runtimeRaster": {
+    "backgroundScissor": [
+      312,
+      16,
+      696,
+      696
+    ],
+    "selector": {
+      "base": 26946957,
+      "offset": -3,
+      "selected": 26946954
+    },
+    "tileStart": 3
+  },
+  "sampleIndex": 16
+}

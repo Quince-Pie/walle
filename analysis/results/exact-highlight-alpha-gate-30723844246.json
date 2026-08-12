@@ -1,0 +1,347 @@
+{
+  "alphaCapture": "artifacts/gh-run-30723844246/liquid-glass-highlight-pipeline-30723844246",
+  "alphaOracle": {
+    "activePixels": 4028,
+    "maximumHalfWord": "0x3908",
+    "minimumHalfWord": "0x0bbd",
+    "path": "artifacts/gh-run-30723844246/liquid-glass-highlight-pipeline-30723844246/carenderer-local-backdrop-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+    "sha256": "52a2df22a7a94c8dd2150ee8f152fc67a0fc5551bd38153474ac6e11d18a614d",
+    "uniqueHalfWords": 727
+  },
+  "alphaRuntimeSHA256": "d29ad40b04b06fc623e709befcb718419d88ff0e0a3b913ed094fa31822b1777",
+  "cases": [
+    {
+      "appleOutputSHA256": "344e69484d49fc1e88585eb86d7c7095030bef1ef9cc290df6023f70c49988e6",
+      "inputSHA256": "4571a45562870efcbcbaacbe46976b780a3be00a4b3651d8a0a3329e6f38ac3b",
+      "name": "black"
+    },
+    {
+      "appleOutputSHA256": "cd3517473707d59c3d915b52a3e16213cadce80d9ffb2b4371958fb7acb51a08",
+      "inputSHA256": "cd3517473707d59c3d915b52a3e16213cadce80d9ffb2b4371958fb7acb51a08",
+      "name": "white"
+    },
+    {
+      "appleOutputSHA256": "f3dc4cfbc14f9faf05a2a49602d573f57b641efa931cc075aecb8d81f5805290",
+      "inputSHA256": "b73edb1dd5a5db45c625fff9e303a943e3f851282dbd0bf607dd38c928e2dc60",
+      "name": "red"
+    },
+    {
+      "appleOutputSHA256": "508e5c1af3d87986fc1485478cffce84bcbbe898e2604c78de087e1effb2fd50",
+      "inputSHA256": "508e5c1af3d87986fc1485478cffce84bcbbe898e2604c78de087e1effb2fd50",
+      "name": "green"
+    },
+    {
+      "appleOutputSHA256": "67a90287b45178958f71f8be4d8fee5375d5c0d52814225463b29a1cd8e2c931",
+      "inputSHA256": "69c37d64b9957a165f4972d3fd7f303a7db0b211620360821cd69c1bb5fe640b",
+      "name": "blue"
+    },
+    {
+      "appleOutputSHA256": "a8ba244bdd71a0feed1ede68f5b8ac511c4fd6935acd6214cb1f17296d67988e",
+      "inputSHA256": "b39aac3d8b41ad5eeb110521ab23ec9c2d61bed36cc8c7c71522eb403879cbb3",
+      "name": "ramp"
+    },
+    {
+      "appleOutputSHA256": "32dc40a3dc3410cb67b2465a748a3dcffc29bed95cde79861535eae390a9a903",
+      "inputSHA256": "5e00d0707cbf7012714d963b2722beb615f01664dc55046e3218f1071bf350c8",
+      "name": "hash-a"
+    },
+    {
+      "appleOutputSHA256": "98506d309e12a170b758fd40c0b62d21fa6c9cdc40ead411832641f0eebda354",
+      "inputSHA256": "97cd3b6538c079f0b698248405a6e7bbe275cb763170463f3aeb4a73fda2b341",
+      "name": "hash-b"
+    }
+  ],
+  "gate": {
+    "exact": true,
+    "exactModes": [
+      "half-division"
+    ],
+    "productionShaderAuthorized": false
+  },
+  "highlightFixtureFingerprint": {
+    "indices": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de",
+    "uniform": "ffd866689cc7391ffc0a19cf61446ea5b173869316ea7de6df0f37ab9506024a",
+    "vertices": "a4ef6b66e7735bfafd3e07c9adcacf89d745258719d741a7b8fbc8df622b24c1"
+  },
+  "liquidGlassExactHighlightAlphaGateSchemaVersion": 1,
+  "modes": {
+    "half-division": {
+      "cases": [
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "black"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "white"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "red"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "green"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "blue"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "ramp"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "hash-a"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "hash-b"
+        }
+      ],
+      "gate": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "sourceDivisionMode": 0,
+      "vibrantArithmeticMode": 9
+    },
+    "reciprocal-multiply": {
+      "cases": [
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 1.2874603271484375e-05,
+            "mismatchedBytes": 54,
+            "mismatchedPixels": 18
+          },
+          "name": "black"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "white"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 1.52587890625e-05,
+            "mismatchedBytes": 64,
+            "mismatchedPixels": 32
+          },
+          "name": "red"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "green"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 2.002716064453125e-05,
+            "mismatchedBytes": 84,
+            "mismatchedPixels": 42
+          },
+          "name": "blue"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 1.0967254638671875e-05,
+            "mismatchedBytes": 46,
+            "mismatchedPixels": 46
+          },
+          "name": "ramp"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 1.0251998901367188e-05,
+            "mismatchedBytes": 43,
+            "mismatchedPixels": 43
+          },
+          "name": "hash-a"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 1.049041748046875e-05,
+            "mismatchedBytes": 44,
+            "mismatchedPixels": 44
+          },
+          "name": "hash-b"
+        }
+      ],
+      "gate": {
+        "exact": false,
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 335,
+        "mismatchedPixels": 225
+      },
+      "sourceDivisionMode": 1,
+      "vibrantArithmeticMode": 9
+    },
+    "round-toward-zero-division": {
+      "cases": [
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 3.4332275390625e-05,
+            "mismatchedBytes": 144,
+            "mismatchedPixels": 48
+          },
+          "name": "black"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "white"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 4.00543212890625e-05,
+            "mismatchedBytes": 168,
+            "mismatchedPixels": 84
+          },
+          "name": "red"
+        },
+        {
+          "comparison": {
+            "exact": true,
+            "maximumChannelDelta": 0,
+            "meanAbsoluteChannelDelta": 0.0,
+            "mismatchedBytes": 0,
+            "mismatchedPixels": 0
+          },
+          "name": "green"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 7.2479248046875e-05,
+            "mismatchedBytes": 304,
+            "mismatchedPixels": 152
+          },
+          "name": "blue"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 2.3365020751953125e-05,
+            "mismatchedBytes": 98,
+            "mismatchedPixels": 98
+          },
+          "name": "ramp"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 2.7418136596679688e-05,
+            "mismatchedBytes": 115,
+            "mismatchedPixels": 113
+          },
+          "name": "hash-a"
+        },
+        {
+          "comparison": {
+            "exact": false,
+            "maximumChannelDelta": 1,
+            "meanAbsoluteChannelDelta": 2.3365020751953125e-05,
+            "mismatchedBytes": 98,
+            "mismatchedPixels": 97
+          },
+          "name": "hash-b"
+        }
+      ],
+      "gate": {
+        "exact": false,
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 927,
+        "mismatchedPixels": 592
+      },
+      "sourceDivisionMode": 2,
+      "vibrantArithmeticMode": 9
+    }
+  },
+  "referenceCapture": "artifacts/gh-run-30721856837",
+  "referenceRuntimeSHA256": "bf4c3ff3883614d7e6b7fc6ac6457a62c772f366a82f9f951d6df206d2f7a21a"
+}

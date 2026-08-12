@@ -1,0 +1,4357 @@
+{
+  "aggregate": {
+    "activeBlendMaximumPreferredQuantizedResidualCodes": 0.786794009691272,
+    "activeBlendMeanPreferredQuantizedResidualCodes": 0.4569115912758464,
+    "activeBlendSamples": 52,
+    "maximumPreferredQuantizedResidualCodes": 0.786794009691272,
+    "meanPreferredQuantizedResidualCodes": 0.30722163853972007,
+    "productionShaderAuthorized": false,
+    "samples": 79,
+    "scalarBlendIsBitExact": false,
+    "temporalAlgorithmFullyDetermined": false
+  },
+  "artifact": "artifacts/gh-run-30595670287/download/liquid-glass-captures-30595670287-dynamic",
+  "backingScaleFactor": 1,
+  "ciCommit": "e8634c270009199454fffd153129126c8921f845",
+  "holdout": {
+    "aggregateMaximumAbsoluteAlphaError": 0.17283888189192131,
+    "aggregateMeanAbsoluteAlphaError": 0.031103245171633712,
+    "coordinateComparisons": {
+      "hybridTail": {
+        "aggregateMaximumAbsoluteAlphaError": 0.16958654468805473,
+        "aggregateMeanAbsoluteAlphaError": 0.03822815233565472
+      },
+      "presentationProgress": {
+        "aggregateMaximumAbsoluteAlphaError": 0.16958654468805473,
+        "aggregateMeanAbsoluteAlphaError": 0.03757525772155542
+      }
+    },
+    "interpolator": "piecewise-linear monotone-envelope",
+    "pairs": [
+      {
+        "appearance": "light",
+        "blendSpace": "codeValue",
+        "holdoutSamples": 15,
+        "holdoutSequence": "wallpaper-transition-reverse__regular__light",
+        "maximumAbsoluteAlphaError": 0.027087145253246903,
+        "meanAbsoluteAlphaError": 0.010792041586686596,
+        "overlay": "regular",
+        "trainingSequence": "wallpaper-transition__regular__light"
+      },
+      {
+        "appearance": "dark",
+        "blendSpace": "codeValue",
+        "holdoutSamples": 8,
+        "holdoutSequence": "wallpaper-transition-reverse__regular__dark",
+        "maximumAbsoluteAlphaError": 0.17283888189192131,
+        "meanAbsoluteAlphaError": 0.08467870603354877,
+        "overlay": "regular",
+        "trainingSequence": "wallpaper-transition__regular__dark"
+      },
+      {
+        "appearance": "light",
+        "blendSpace": "codeValue",
+        "holdoutSamples": 8,
+        "holdoutSequence": "wallpaper-transition-reverse__clear__light",
+        "maximumAbsoluteAlphaError": 0.05964597238260039,
+        "meanAbsoluteAlphaError": 0.028543364873296027,
+        "overlay": "clear",
+        "trainingSequence": "wallpaper-transition__clear__light"
+      },
+      {
+        "appearance": "dark",
+        "blendSpace": "codeValue",
+        "holdoutSamples": 7,
+        "holdoutSequence": "wallpaper-transition-reverse__clear__dark",
+        "maximumAbsoluteAlphaError": 0.041597940421724156,
+        "meanAbsoluteAlphaError": 0.016323732209574834,
+        "overlay": "clear",
+        "trainingSequence": "wallpaper-transition__clear__dark"
+      }
+    ],
+    "partitionRule": "wallpaper-transition fits; wallpaper-transition-reverse holds out",
+    "timelineCoordinate": "actualSecondsNormalized"
+  },
+  "implementation": {
+    "file": "analysis/liquid_glass_transition_decomposition.py",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "osBuild": "25E246",
+  "schemaVersion": 2,
+  "sequences": [
+    {
+      "appearance": "light",
+      "durationSeconds": 1.0,
+      "endpointConvergence": {
+        "bitExactSamples": 1,
+        "captureBackendSampleCounts": {
+          "ScreenCaptureKit-SCStream-BGRA": 14
+        },
+        "comparisonRegion": "analysis pixels after declared exclusions",
+        "firstBitExactObservedSample": {
+          "actualSeconds": 1.0734931663333214,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.0734931663333214
+        },
+        "lastNonExactObservedSample": {
+          "actualSeconds": 1.0093622919999916,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 5,
+            "meanAbsoluteCode": 2.7162900055129993,
+            "mismatchedChannels": 5508917,
+            "mismatchedPixels": 1838003
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0058.png",
+          "index": 58,
+          "phase": "live",
+          "presentationProgress": 0.9640625,
+          "timelineCoordinate": 0.9640625
+        },
+        "nonExactSamples": 13,
+        "observedSamples": 14,
+        "stableBitExactEndpointObserved": true,
+        "stableBitExactSuffixSamples": 1,
+        "stableBitExactSuffixStart": {
+          "actualSeconds": 1.0734931663333214,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.0734931663333214
+        }
+      },
+      "excludedPixels": 5120,
+      "glassAnchor": {
+        "actualSeconds": 0.6400213330001066,
+        "endpointRMSECodes": 84.01210717474687,
+        "file": "dynamic/wallpaper-transition__regular__light/frame-0037.png",
+        "index": 37,
+        "presentationProgress": 0.621875
+      },
+      "id": "wallpaper-transition__regular__light",
+      "includedPixels": 1838080,
+      "incomingEndpointFile": "dynamic/wallpaper-transition__regular__light/post-settle.png",
+      "meanQuantizedResidualCodes": {
+        "codeValue": 0.28074924455332273,
+        "linearLightSRGB": 1.2415735570864836
+      },
+      "mode": "wallpaper-transition",
+      "overlay": "regular",
+      "partition": "training",
+      "preferredBlendSpace": "codeValue",
+      "samples": [
+        {
+          "actualSeconds": 0.6400213330001066,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 147,
+            "meanAbsoluteCode": 81.07103172876045,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0037.png",
+          "index": 37,
+          "phase": "live",
+          "presentationProgress": 0.621875,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.8256309619078286e-07,
+              "continuousRMSECodes": 2.2060464920214962e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.621875
+        },
+        {
+          "actualSeconds": 0.6576673753334035,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 147,
+            "meanAbsoluteCode": 81.07103172876045,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0038.png",
+          "index": 38,
+          "phase": "live",
+          "presentationProgress": 0.63671875,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.8256309619078286e-07,
+              "continuousRMSECodes": 2.2060464920214962e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.63671875
+        },
+        {
+          "actualSeconds": 0.6751804166666489,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 147,
+            "meanAbsoluteCode": 81.07103172876045,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0039.png",
+          "index": 39,
+          "phase": "live",
+          "presentationProgress": 0.65078125,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.8256309619078286e-07,
+              "continuousRMSECodes": 2.2060464920214962e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.65078125
+        },
+        {
+          "actualSeconds": 0.7043170419999569,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 147,
+            "meanAbsoluteCode": 81.07103172876045,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0041.png",
+          "index": 41,
+          "phase": "live",
+          "presentationProgress": 0.68671875,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.8256309619078286e-07,
+              "continuousRMSECodes": 2.2060464920214962e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.68671875
+        },
+        {
+          "actualSeconds": 0.7413859579999666,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 123,
+            "meanAbsoluteCode": 67.5480593880571,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0042.png",
+          "index": 42,
+          "phase": "live",
+          "presentationProgress": 0.7015625,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.8325953797455837,
+              "channelAlpha": [
+                0.8309417916074204,
+                0.8330485496960908,
+                0.8340062326025739
+              ],
+              "channelAlphaSpread": 0.0030644409951534612,
+              "continuousMeanAbsoluteCodes": 0.519994142446788,
+              "continuousRMSECodes": 0.9694626144275893,
+              "quantizedMaximumAbsoluteCodes": 13.0,
+              "quantizedMeanAbsoluteCodes": 0.45142195479340763,
+              "quantizedMismatchFraction": 0.36999205692896936
+            },
+            "linearLightSRGB": {
+              "alpha": 0.7864132855313553,
+              "channelAlpha": [
+                0.7806092551235518,
+                0.7857581349237379,
+                0.7925452482339813
+              ],
+              "channelAlphaSpread": 0.011935993110429477,
+              "continuousMeanAbsoluteCodes": 1.389219745476155,
+              "continuousRMSECodes": 1.970908901395813,
+              "quantizedMaximumAbsoluteCodes": 14.0,
+              "quantizedMeanAbsoluteCodes": 1.367188044045961,
+              "quantizedMismatchFraction": 0.750014689240947
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.7015625
+        },
+        {
+          "actualSeconds": 0.7638022506666289,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 111,
+            "meanAbsoluteCode": 61.04640349350046,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0044.png",
+          "index": 44,
+          "phase": "live",
+          "presentationProgress": 0.72734375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.7523162106551885,
+              "channelAlpha": [
+                0.7504044318007015,
+                0.7529535100738776,
+                0.7538382399529108
+              ],
+              "channelAlphaSpread": 0.0034338081522092834,
+              "continuousMeanAbsoluteCodes": 0.5802646042050978,
+              "continuousRMSECodes": 1.1180159127112952,
+              "quantizedMaximumAbsoluteCodes": 16.0,
+              "quantizedMeanAbsoluteCodes": 0.5163128554433611,
+              "quantizedMismatchFraction": 0.41385957085654596
+            },
+            "linearLightSRGB": {
+              "alpha": 0.6905484197210826,
+              "channelAlpha": [
+                0.6834465256741332,
+                0.6899516249941142,
+                0.697849541748997
+              ],
+              "channelAlphaSpread": 0.014403016074863828,
+              "continuousMeanAbsoluteCodes": 1.8598131611874067,
+              "continuousRMSECodes": 2.6166038844094937,
+              "quantizedMaximumAbsoluteCodes": 18.0,
+              "quantizedMeanAbsoluteCodes": 1.845652347376973,
+              "quantizedMismatchFraction": 0.8190782410631383
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.72734375
+        },
+        {
+          "actualSeconds": 0.7951145006666707,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 89,
+            "meanAbsoluteCode": 49.02511189211931,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0046.png",
+          "index": 46,
+          "phase": "live",
+          "presentationProgress": 0.76796875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.60396409835187,
+              "channelAlpha": [
+                0.6017314944874356,
+                0.6052963350415336,
+                0.6051756415256409
+              ],
+              "channelAlphaSpread": 0.0035648405540980033,
+              "continuousMeanAbsoluteCodes": 0.6388590334600724,
+              "continuousRMSECodes": 1.1217568037424412,
+              "quantizedMaximumAbsoluteCodes": 15.0,
+              "quantizedMeanAbsoluteCodes": 0.5836782584726091,
+              "quantizedMismatchFraction": 0.46442719214252554
+            },
+            "linearLightSRGB": {
+              "alpha": 0.5249905697115312,
+              "channelAlpha": [
+                0.5167586214651633,
+                0.5253492120545563,
+                0.5324175189219787
+              ],
+              "channelAlphaSpread": 0.01565889745681548,
+              "continuousMeanAbsoluteCodes": 2.518103946694203,
+              "continuousRMSECodes": 3.493977971353025,
+              "quantizedMaximumAbsoluteCodes": 18.0,
+              "quantizedMeanAbsoluteCodes": 2.50638546744429,
+              "quantizedMismatchFraction": 0.8736565691736304
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.76796875
+        },
+        {
+          "actualSeconds": 0.8333651663334081,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 68,
+            "meanAbsoluteCode": 37.44104192055478,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0048.png",
+          "index": 48,
+          "phase": "live",
+          "presentationProgress": 0.80078125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.4611750982522017,
+              "channelAlpha": [
+                0.45913356516094556,
+                0.46252043328225845,
+                0.462160615356967
+              ],
+              "channelAlphaSpread": 0.0033868681213128915,
+              "continuousMeanAbsoluteCodes": 0.6333478313039715,
+              "continuousRMSECodes": 1.0113214682475344,
+              "quantizedMaximumAbsoluteCodes": 13.0,
+              "quantizedMeanAbsoluteCodes": 0.5773129207288765,
+              "quantizedMismatchFraction": 0.4702854790506035
+            },
+            "linearLightSRGB": {
+              "alpha": 0.3796103367059411,
+              "channelAlpha": [
+                0.3718586018107383,
+                0.38012384970763013,
+                0.38643066208492544
+              ],
+              "channelAlphaSpread": 0.014572060274187115,
+              "continuousMeanAbsoluteCodes": 2.8081780898883704,
+              "continuousRMSECodes": 3.947055604807133,
+              "quantizedMaximumAbsoluteCodes": 22.0,
+              "quantizedMeanAbsoluteCodes": 2.8015227846448467,
+              "quantizedMismatchFraction": 0.8823638434308264
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.80078125
+        },
+        {
+          "actualSeconds": 0.8647722083333633,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 51,
+            "meanAbsoluteCode": 28.087069115598887,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0050.png",
+          "index": 50,
+          "phase": "live",
+          "presentationProgress": 0.834375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.34589078350139213,
+              "channelAlpha": [
+                0.3441249287511352,
+                0.3471946442912756,
+                0.3466082936628484
+              ],
+              "channelAlphaSpread": 0.0030697155401404053,
+              "continuousMeanAbsoluteCodes": 0.5817402560364182,
+              "continuousRMSECodes": 0.8748604731607158,
+              "quantizedMaximumAbsoluteCodes": 10.0,
+              "quantizedMeanAbsoluteCodes": 0.5243048906104921,
+              "quantizedMismatchFraction": 0.44662310672005573
+            },
+            "linearLightSRGB": {
+              "alpha": 0.2721334151242836,
+              "channelAlpha": [
+                0.26547861631436237,
+                0.27273937972666024,
+                0.27782576347421234
+              ],
+              "channelAlphaSpread": 0.01234714715984997,
+              "continuousMeanAbsoluteCodes": 2.766301408731063,
+              "continuousRMSECodes": 3.972261890007924,
+              "quantizedMaximumAbsoluteCodes": 24.0,
+              "quantizedMeanAbsoluteCodes": 2.753066605733519,
+              "quantizedMismatchFraction": 0.8804828951949861
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.834375
+        },
+        {
+          "actualSeconds": 0.8955961253333271,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 36,
+            "meanAbsoluteCode": 19.42743913939183,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0052.png",
+          "index": 52,
+          "phase": "live",
+          "presentationProgress": 0.86171875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.23923833430202002,
+              "channelAlpha": [
+                0.2377626362770865,
+                0.24054427504240566,
+                0.23962974725776312
+              ],
+              "channelAlphaSpread": 0.002781638765319172,
+              "continuousMeanAbsoluteCodes": 0.5042465528198271,
+              "continuousRMSECodes": 0.7141858382194548,
+              "quantizedMaximumAbsoluteCodes": 7.0,
+              "quantizedMeanAbsoluteCodes": 0.4372921744428969,
+              "quantizedMismatchFraction": 0.3944612494196843
+            },
+            "linearLightSRGB": {
+              "alpha": 0.18027347251183604,
+              "channelAlpha": [
+                0.17504750723892343,
+                0.18103085225977414,
+                0.1844659906644992
+              ],
+              "channelAlphaSpread": 0.009418483425575774,
+              "continuousMeanAbsoluteCodes": 2.4276628014803654,
+              "continuousRMSECodes": 3.5967987841160434,
+              "quantizedMaximumAbsoluteCodes": 23.0,
+              "quantizedMeanAbsoluteCodes": 2.4158973856778085,
+              "quantizedMismatchFraction": 0.8617499419684308
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.86171875
+        },
+        {
+          "actualSeconds": 0.9293348756666546,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 23,
+            "meanAbsoluteCode": 12.325274561861653,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0053.png",
+          "index": 53,
+          "phase": "live",
+          "presentationProgress": 0.88359375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.1517540545739008,
+              "channelAlpha": [
+                0.1507134660369656,
+                0.15271578194905266,
+                0.15199075022452707
+              ],
+              "channelAlphaSpread": 0.002002315912087077,
+              "continuousMeanAbsoluteCodes": 0.42521556810291694,
+              "continuousRMSECodes": 0.5691027753986933,
+              "quantizedMaximumAbsoluteCodes": 5.0,
+              "quantizedMeanAbsoluteCodes": 0.34931685962163417,
+              "quantizedMismatchFraction": 0.3307536487349118
+            },
+            "linearLightSRGB": {
+              "alpha": 0.1103337162914157,
+              "channelAlpha": [
+                0.10675779996505963,
+                0.11087419698907655,
+                0.11318055654310022
+              ],
+              "channelAlphaSpread": 0.006422756578040589,
+              "continuousMeanAbsoluteCodes": 1.8902753791776152,
+              "continuousRMSECodes": 2.9034977955501198,
+              "quantizedMaximumAbsoluteCodes": 21.0,
+              "quantizedMeanAbsoluteCodes": 1.8723762476787373,
+              "quantizedMismatchFraction": 0.801818926996286
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.88359375
+        },
+        {
+          "actualSeconds": 0.9623176663333197,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 13,
+            "meanAbsoluteCode": 6.694694282439647,
+            "mismatchedChannels": 5514176,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0056.png",
+          "index": 56,
+          "phase": "live",
+          "presentationProgress": 0.934375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.08243063835629812,
+              "channelAlpha": [
+                0.08176759222326975,
+                0.08293657242580799,
+                0.08268430645448041
+              ],
+              "channelAlphaSpread": 0.0011689802025382362,
+              "continuousMeanAbsoluteCodes": 0.3596449969618295,
+              "continuousRMSECodes": 0.4568404892313207,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.2670890276810585,
+              "quantizedMismatchFraction": 0.261976265088208
+            },
+            "linearLightSRGB": {
+              "alpha": 0.058216132840659365,
+              "channelAlpha": [
+                0.05611724345294561,
+                0.058456487478569595,
+                0.05996291209201843
+              ],
+              "channelAlphaSpread": 0.003845668639072819,
+              "continuousMeanAbsoluteCodes": 1.2391423273769344,
+              "continuousRMSECodes": 1.9679112467521889,
+              "quantizedMaximumAbsoluteCodes": 17.0,
+              "quantizedMeanAbsoluteCodes": 1.2115283339136491,
+              "quantizedMismatchFraction": 0.6581088237000928
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.934375
+        },
+        {
+          "actualSeconds": 1.0093622919999916,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 5,
+            "meanAbsoluteCode": 2.7162900055129993,
+            "mismatchedChannels": 5508917,
+            "mismatchedPixels": 1838003
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0058.png",
+          "index": 58,
+          "phase": "live",
+          "presentationProgress": 0.9640625,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.03343102669074663,
+              "channelAlpha": [
+                0.03314052399866445,
+                0.03369606155965298,
+                0.03350042775860083
+              ],
+              "channelAlphaSpread": 0.0005555375609885352,
+              "continuousMeanAbsoluteCodes": 0.3258690866355472,
+              "continuousRMSECodes": 0.40109580220596536,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.22376048195218198,
+              "quantizedMismatchFraction": 0.2236261025998143
+            },
+            "linearLightSRGB": {
+              "alpha": 0.02315788905867878,
+              "channelAlpha": [
+                0.02227375215032317,
+                0.02329748633613709,
+                0.023855881098973523
+              ],
+              "channelAlphaSpread": 0.0015821289486503513,
+              "continuousMeanAbsoluteCodes": 0.6660597311974458,
+              "continuousRMSECodes": 1.0178249679304863,
+              "quantizedMaximumAbsoluteCodes": 10.0,
+              "quantizedMeanAbsoluteCodes": 0.6084125826949861,
+              "quantizedMismatchFraction": 0.45151172237697307
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.9640625
+        },
+        {
+          "actualSeconds": 1.0734931663333214,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition__regular__light/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 1.0734931663333214
+        }
+      ]
+    },
+    {
+      "appearance": "light",
+      "durationSeconds": 1.0,
+      "endpointConvergence": {
+        "bitExactSamples": 0,
+        "captureBackendSampleCounts": {
+          "ScreenCaptureKit-SCStream-BGRA": 15
+        },
+        "comparisonRegion": "analysis pixels after declared exclusions",
+        "firstBitExactObservedSample": null,
+        "lastNonExactObservedSample": {
+          "actualSeconds": 1.056093125000018,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 1,
+            "meanAbsoluteCode": 0.03961144237465181,
+            "mismatchedChannels": 218427,
+            "mismatchedPixels": 199937
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.056093125000018
+        },
+        "nonExactSamples": 15,
+        "observedSamples": 15,
+        "stableBitExactEndpointObserved": false,
+        "stableBitExactSuffixSamples": 0,
+        "stableBitExactSuffixStart": null
+      },
+      "excludedPixels": 5120,
+      "glassAnchor": {
+        "actualSeconds": 0.6396145829999682,
+        "endpointRMSECodes": 82.20699614811436,
+        "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0037.png",
+        "index": 37,
+        "presentationProgress": 0.6203125
+      },
+      "id": "wallpaper-transition-reverse__regular__light",
+      "includedPixels": 1838080,
+      "incomingEndpointFile": "dynamic/wallpaper-transition-reverse__regular__light/post-settle.png",
+      "meanQuantizedResidualCodes": {
+        "codeValue": 0.3141583004487775,
+        "linearLightSRGB": 1.276893400843392
+      },
+      "mode": "wallpaper-transition-reverse",
+      "overlay": "regular",
+      "partition": "holdout",
+      "preferredBlendSpace": "codeValue",
+      "samples": [
+        {
+          "actualSeconds": 0.6396145829999682,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 138,
+            "meanAbsoluteCode": 79.52805953313603,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0037.png",
+          "index": 37,
+          "phase": "live",
+          "presentationProgress": 0.6203125,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.3251899216279125e-07,
+              "continuousRMSECodes": 1.988546566489092e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.6203125
+        },
+        {
+          "actualSeconds": 0.6747756673333924,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 138,
+            "meanAbsoluteCode": 79.52805953313603,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0039.png",
+          "index": 39,
+          "phase": "live",
+          "presentationProgress": 0.646875,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.3251899216279125e-07,
+              "continuousRMSECodes": 1.988546566489092e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.646875
+        },
+        {
+          "actualSeconds": 0.7009024583333598,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 138,
+            "meanAbsoluteCode": 79.52805953313603,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0040.png",
+          "index": 40,
+          "phase": "live",
+          "presentationProgress": 0.6703125,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.3251899216279125e-07,
+              "continuousRMSECodes": 1.988546566489092e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.6703125
+        },
+        {
+          "actualSeconds": 0.738743708666675,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 114,
+            "meanAbsoluteCode": 65.49651520427112,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0043.png",
+          "index": 43,
+          "phase": "live",
+          "presentationProgress": 0.721875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.8227975879400642,
+              "channelAlpha": [
+                0.8226598085708742,
+                0.8222512973133914,
+                0.8234986234840264
+              ],
+              "channelAlphaSpread": 0.0012473261706349437,
+              "continuousMeanAbsoluteCodes": 0.5384084127144672,
+              "continuousRMSECodes": 1.0633954050607473,
+              "quantizedMaximumAbsoluteCodes": 13.0,
+              "quantizedMeanAbsoluteCodes": 0.46917943361188486,
+              "quantizedMismatchFraction": 0.36124107764623953
+            },
+            "linearLightSRGB": {
+              "alpha": 0.7765376981511136,
+              "channelAlpha": [
+                0.7783746054342372,
+                0.7710902359974736,
+                0.779897460491194
+              ],
+              "channelAlphaSpread": 0.0088072244937204,
+              "continuousMeanAbsoluteCodes": 1.3391703012220375,
+              "continuousRMSECodes": 1.9532093277918392,
+              "quantizedMaximumAbsoluteCodes": 14.0,
+              "quantizedMeanAbsoluteCodes": 1.315805079213092,
+              "quantizedMismatchFraction": 0.7268929172469824
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.721875
+        },
+        {
+          "actualSeconds": 0.7748425420000444,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 94,
+            "meanAbsoluteCode": 54.0128362204039,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0045.png",
+          "index": 45,
+          "phase": "live",
+          "presentationProgress": 0.746875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.6782536474634597,
+              "channelAlpha": [
+                0.6785872334575122,
+                0.6776092259743874,
+                0.6785853275343052
+              ],
+              "channelAlphaSpread": 0.0009780074831247099,
+              "continuousMeanAbsoluteCodes": 0.6111075078904241,
+              "continuousRMSECodes": 1.2088542016127082,
+              "quantizedMaximumAbsoluteCodes": 17.0,
+              "quantizedMeanAbsoluteCodes": 0.5485274489322192,
+              "quantizedMismatchFraction": 0.4170716182103064
+            },
+            "linearLightSRGB": {
+              "alpha": 0.6089804955446658,
+              "channelAlpha": [
+                0.61217812212209,
+                0.6018543664908971,
+                0.612595104733623
+              ],
+              "channelAlphaSpread": 0.010740738242725922,
+              "continuousMeanAbsoluteCodes": 2.0160321772153886,
+              "continuousRMSECodes": 2.8599430030074333,
+              "quantizedMaximumAbsoluteCodes": 19.0,
+              "quantizedMeanAbsoluteCodes": 1.9991808481313835,
+              "quantizedMismatchFraction": 0.8286193564298978
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.746875
+        },
+        {
+          "actualSeconds": 0.7931023753333761,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 84,
+            "meanAbsoluteCode": 48.179291253191735,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0046.png",
+          "index": 46,
+          "phase": "live",
+          "presentationProgress": 0.7703125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.604925627756596,
+              "channelAlpha": [
+                0.6050395505529016,
+                0.6045918259991329,
+                0.6051562052644366
+              ],
+              "channelAlphaSpread": 0.0005643792653037272,
+              "continuousMeanAbsoluteCodes": 0.6225794296549113,
+              "continuousRMSECodes": 1.1687420685979946,
+              "quantizedMaximumAbsoluteCodes": 18.0,
+              "quantizedMeanAbsoluteCodes": 0.5595148198119777,
+              "quantizedMismatchFraction": 0.43040146964948933
+            },
+            "linearLightSRGB": {
+              "alpha": 0.5291527944267299,
+              "channelAlpha": [
+                0.5321624231573988,
+                0.5221925539950153,
+                0.532794793222304
+              ],
+              "channelAlphaSpread": 0.010602239227288757,
+              "continuousMeanAbsoluteCodes": 2.253835287922604,
+              "continuousRMSECodes": 3.169634755721164,
+              "quantizedMaximumAbsoluteCodes": 20.0,
+              "quantizedMeanAbsoluteCodes": 2.242328951949861,
+              "quantizedMismatchFraction": 0.851766517235376
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.7703125
+        },
+        {
+          "actualSeconds": 0.8112650833332964,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 74,
+            "meanAbsoluteCode": 42.55537825702182,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0047.png",
+          "index": 47,
+          "phase": "live",
+          "presentationProgress": 0.7875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.5342875925362897,
+              "channelAlpha": [
+                0.5345456429744219,
+                0.5338666132356474,
+                0.5344642057297067
+              ],
+              "channelAlphaSpread": 0.0006790297387744282,
+              "continuousMeanAbsoluteCodes": 0.6190026518555848,
+              "continuousRMSECodes": 1.103262771209678,
+              "quantizedMaximumAbsoluteCodes": 16.0,
+              "quantizedMeanAbsoluteCodes": 0.5560835219359331,
+              "quantizedMismatchFraction": 0.43493591138579385
+            },
+            "linearLightSRGB": {
+              "alpha": 0.45553384091793314,
+              "channelAlpha": [
+                0.4587170816647718,
+                0.4484458667448882,
+                0.45912641052236197
+              ],
+              "channelAlphaSpread": 0.010680543777473794,
+              "continuousMeanAbsoluteCodes": 2.4029659484657517,
+              "continuousRMSECodes": 3.3798092359881338,
+              "quantizedMaximumAbsoluteCodes": 18.0,
+              "quantizedMeanAbsoluteCodes": 2.3912673369312905,
+              "quantizedMismatchFraction": 0.8591428737233054
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.7875
+        },
+        {
+          "actualSeconds": 0.8269734590000439,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 65,
+            "meanAbsoluteCode": 37.300593010097494,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0049.png",
+          "index": 49,
+          "phase": "live",
+          "presentationProgress": 0.8109375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.4682954033350637,
+              "channelAlpha": [
+                0.4684996305499122,
+                0.4678795439625962,
+                0.4685204684480293
+              ],
+              "channelAlphaSpread": 0.0006409244854331253,
+              "continuousMeanAbsoluteCodes": 0.612764601515971,
+              "continuousRMSECodes": 1.0404356142696762,
+              "quantizedMaximumAbsoluteCodes": 14.0,
+              "quantizedMeanAbsoluteCodes": 0.552473051590065,
+              "quantizedMismatchFraction": 0.44026611101439184
+            },
+            "linearLightSRGB": {
+              "alpha": 0.3896798499517091,
+              "channelAlpha": [
+                0.3927174739650412,
+                0.3827933709454959,
+                0.3932244314332223
+              ],
+              "channelAlphaSpread": 0.010431060487726351,
+              "continuousMeanAbsoluteCodes": 2.4753510245166117,
+              "continuousRMSECodes": 3.5024870679812423,
+              "quantizedMaximumAbsoluteCodes": 17.0,
+              "quantizedMeanAbsoluteCodes": 2.4681511867455894,
+              "quantizedMismatchFraction": 0.8620613176067781
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.8109375
+        },
+        {
+          "actualSeconds": 0.8639628746666972,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 48,
+            "meanAbsoluteCode": 27.540996946088672,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0050.png",
+          "index": 50,
+          "phase": "live",
+          "presentationProgress": 0.83671875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.34572305217387544,
+              "channelAlpha": [
+                0.3459070773612647,
+                0.3454359621681893,
+                0.34583546260935105
+              ],
+              "channelAlphaSpread": 0.00047111519307541094,
+              "continuousMeanAbsoluteCodes": 0.5565131491619122,
+              "continuousRMSECodes": 0.8765449011938298,
+              "quantizedMaximumAbsoluteCodes": 11.0,
+              "quantizedMeanAbsoluteCodes": 0.49145702762302695,
+              "quantizedMismatchFraction": 0.41239572452414114
+            },
+            "linearLightSRGB": {
+              "alpha": 0.274740756937526,
+              "channelAlpha": [
+                0.27737646713704905,
+                0.26888932000397997,
+                0.27769891787157414
+              ],
+              "channelAlphaSpread": 0.008809597867594166,
+              "continuousMeanAbsoluteCodes": 2.412777432027301,
+              "continuousRMSECodes": 3.4798993925142034,
+              "quantizedMaximumAbsoluteCodes": 18.0,
+              "quantizedMeanAbsoluteCodes": 2.4015064632660166,
+              "quantizedMismatchFraction": 0.8535714803853296
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.83671875
+        },
+        {
+          "actualSeconds": 0.9020140826667102,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 34,
+            "meanAbsoluteCode": 19.065061005687095,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0052.png",
+          "index": 52,
+          "phase": "live",
+          "presentationProgress": 0.86640625,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.23928318314566963,
+              "channelAlpha": [
+                0.23929924725350826,
+                0.23929171063520727,
+                0.2392583500381823
+              ],
+              "channelAlphaSpread": 4.0897215325963465e-05,
+              "continuousMeanAbsoluteCodes": 0.4852794393537326,
+              "continuousRMSECodes": 0.7100889584180357,
+              "quantizedMaximumAbsoluteCodes": 8.0,
+              "quantizedMeanAbsoluteCodes": 0.4129279828226555,
+              "quantizedMismatchFraction": 0.36704151433379756
+            },
+            "linearLightSRGB": {
+              "alpha": 0.18254001215601331,
+              "channelAlpha": [
+                0.18446443641229612,
+                0.17826054081266532,
+                0.18470663014774782
+              ],
+              "channelAlphaSpread": 0.0064460893350825055,
+              "continuousMeanAbsoluteCodes": 2.1094375008833053,
+              "continuousRMSECodes": 3.118613383354304,
+              "quantizedMaximumAbsoluteCodes": 17.0,
+              "quantizedMeanAbsoluteCodes": 2.0969522545264625,
+              "quantizedMismatchFraction": 0.8336274808495822
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.86640625
+        },
+        {
+          "actualSeconds": 0.9235042086667136,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 27,
+            "meanAbsoluteCode": 15.454169024199164,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0053.png",
+          "index": 53,
+          "phase": "live",
+          "presentationProgress": 0.88984375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.19396006753222933,
+              "channelAlpha": [
+                0.19395114115566753,
+                0.19395175071854526,
+                0.19397755756359666
+              ],
+              "channelAlphaSpread": 2.6416407929136243e-05,
+              "continuousMeanAbsoluteCodes": 0.44784971084878084,
+              "continuousRMSECodes": 0.6332617562645644,
+              "quantizedMaximumAbsoluteCodes": 7.0,
+              "quantizedMeanAbsoluteCodes": 0.3705194188138347,
+              "quantizedMismatchFraction": 0.33834871169916436
+            },
+            "linearLightSRGB": {
+              "alpha": 0.14536234421820085,
+              "channelAlpha": [
+                0.14697443141354546,
+                0.14171861504049882,
+                0.14723307733668842
+              ],
+              "channelAlphaSpread": 0.005514462296189598,
+              "continuousMeanAbsoluteCodes": 1.8865467780362208,
+              "continuousRMSECodes": 2.83128338041209,
+              "quantizedMaximumAbsoluteCodes": 16.0,
+              "quantizedMeanAbsoluteCodes": 1.8705687456476323,
+              "quantizedMismatchFraction": 0.809626530582637
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.88984375
+        },
+        {
+          "actualSeconds": 0.9538792086667058,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 16,
+            "meanAbsoluteCode": 8.640372744022748,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0055.png",
+          "index": 55,
+          "phase": "live",
+          "presentationProgress": 0.91640625,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.10842637981563676,
+              "channelAlpha": [
+                0.10846003761667743,
+                0.10838188529130005,
+                0.10843867357463247
+              ],
+              "channelAlphaSpread": 7.815232537737582e-05,
+              "continuousMeanAbsoluteCodes": 0.3747237882290655,
+              "continuousRMSECodes": 0.4892099564243432,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.2828761533774373,
+              "quantizedMismatchFraction": 0.27255342531337046
+            },
+            "linearLightSRGB": {
+              "alpha": 0.07857446806657221,
+              "channelAlpha": [
+                0.0796039274661858,
+                0.07633939032110916,
+                0.07968210885255138
+              ],
+              "channelAlphaSpread": 0.003342718531442218,
+              "continuousMeanAbsoluteCodes": 1.2949681064759069,
+              "continuousRMSECodes": 2.0051003956704005,
+              "quantizedMaximumAbsoluteCodes": 12.0,
+              "quantizedMeanAbsoluteCodes": 1.269155858286908,
+              "quantizedMismatchFraction": 0.6901438820218199
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.91640625
+        },
+        {
+          "actualSeconds": 0.9818520833334219,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 8,
+            "meanAbsoluteCode": 4.39875939386026,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0056.png",
+          "index": 56,
+          "phase": "live",
+          "presentationProgress": 0.9375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.05520294429871792,
+              "channelAlpha": [
+                0.05528331519569874,
+                0.05515286080562175,
+                0.055174368154307485
+              ],
+              "channelAlphaSpread": 0.0001304543900769936,
+              "continuousMeanAbsoluteCodes": 0.3304481638396572,
+              "continuousRMSECodes": 0.41252442308359616,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.22545627321262768,
+              "quantizedMismatchFraction": 0.22371967850510677
+            },
+            "linearLightSRGB": {
+              "alpha": 0.03915239358051431,
+              "channelAlpha": [
+                0.039750025877183626,
+                0.03795371138741906,
+                0.03970171022305098
+              ],
+              "channelAlphaSpread": 0.0017963144897645625,
+              "continuousMeanAbsoluteCodes": 0.7968650555737946,
+              "continuousRMSECodes": 1.230010745577192,
+              "quantizedMaximumAbsoluteCodes": 8.0,
+              "quantizedMeanAbsoluteCodes": 0.7524590877437326,
+              "quantizedMismatchFraction": 0.5157566591225626
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.9375
+        },
+        {
+          "actualSeconds": 1.0189857910000342,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 3,
+            "meanAbsoluteCode": 1.2559135982474465,
+            "mismatchedChannels": 5345234,
+            "mismatchedPixels": 1836601
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0059.png",
+          "index": 59,
+          "phase": "live",
+          "presentationProgress": 0.98671875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.015765071697500115,
+              "channelAlpha": [
+                0.015785505829655228,
+                0.015787982044871487,
+                0.015721040279731997
+              ],
+              "channelAlphaSpread": 6.694176513949088e-05,
+              "continuousMeanAbsoluteCodes": 0.3161563058728793,
+              "continuousRMSECodes": 0.38796004947617807,
+              "quantizedMaximumAbsoluteCodes": 1.0,
+              "quantizedMeanAbsoluteCodes": 0.20374793262534818,
+              "quantizedMismatchFraction": 0.20374793262534818
+            },
+            "linearLightSRGB": {
+              "alpha": 0.010980036092911252,
+              "channelAlpha": [
+                0.011152792415375219,
+                0.010673585700730747,
+                0.011100860610652444
+              ],
+              "channelAlphaSpread": 0.00047920671464447145,
+              "continuousMeanAbsoluteCodes": 0.39721912303342793,
+              "continuousRMSECodes": 0.5301069624413591,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.30641375783426184,
+              "quantizedMismatchFraction": 0.2893051444986072
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.98671875
+        },
+        {
+          "actualSeconds": 1.056093125000018,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 1,
+            "meanAbsoluteCode": 0.03961144237465181,
+            "mismatchedChannels": 218427,
+            "mismatchedPixels": 199937
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__light/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "projection": {
+            "codeValue": {
+              "alpha": 7.657201716258654e-05,
+              "channelAlpha": [
+                7.964938907204914e-05,
+                4.632003624749805e-05,
+                0.00010470407390317567
+              ],
+              "channelAlphaSpread": 5.838403765567762e-05,
+              "continuousMeanAbsoluteCodes": 0.045421097463579675,
+              "continuousRMSECodes": 0.1989266553959101,
+              "quantizedMaximumAbsoluteCodes": 1.0,
+              "quantizedMeanAbsoluteCodes": 0.03961144237465181,
+              "quantizedMismatchFraction": 0.03961144237465181
+            },
+            "linearLightSRGB": {
+              "alpha": 5.704923543310853e-05,
+              "channelAlpha": [
+                7.570947929576663e-05,
+                2.2995924177635477e-05,
+                7.100263608069774e-05
+              ],
+              "channelAlphaSpread": 5.2713555118131145e-05,
+              "continuousMeanAbsoluteCodes": 0.046413370560138674,
+              "continuousRMSECodes": 0.19894260917171522,
+              "quantizedMaximumAbsoluteCodes": 1.0,
+              "quantizedMeanAbsoluteCodes": 0.03961144237465181,
+              "quantizedMismatchFraction": 0.03961144237465181
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 1.056093125000018
+        }
+      ]
+    },
+    {
+      "appearance": "light",
+      "durationSeconds": 1.0,
+      "endpointConvergence": {
+        "bitExactSamples": 1,
+        "captureBackendSampleCounts": {
+          "ScreenCaptureKit-SCStream-BGRA": 12
+        },
+        "comparisonRegion": "analysis pixels after declared exclusions",
+        "firstBitExactObservedSample": {
+          "actualSeconds": 1.0510050420000425,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.0510050420000425
+        },
+        "lastNonExactObservedSample": {
+          "actualSeconds": 0.9687034586667096,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 4,
+            "meanAbsoluteCode": 1.453125544045961,
+            "mismatchedChannels": 5246088,
+            "mismatchedPixels": 1829469
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0057.png",
+          "index": 57,
+          "phase": "live",
+          "presentationProgress": 0.94375,
+          "timelineCoordinate": 0.94375
+        },
+        "nonExactSamples": 11,
+        "observedSamples": 12,
+        "stableBitExactEndpointObserved": true,
+        "stableBitExactSuffixSamples": 1,
+        "stableBitExactSuffixStart": {
+          "actualSeconds": 1.0510050420000425,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.0510050420000425
+        }
+      },
+      "excludedPixels": 5120,
+      "glassAnchor": {
+        "actualSeconds": 0.6445500423333783,
+        "endpointRMSECodes": 31.75588412432451,
+        "file": "dynamic/wallpaper-transition__clear__light/frame-0037.png",
+        "index": 37,
+        "presentationProgress": 0.62421875
+      },
+      "id": "wallpaper-transition__clear__light",
+      "includedPixels": 1838080,
+      "incomingEndpointFile": "dynamic/wallpaper-transition__clear__light/post-settle.png",
+      "meanQuantizedResidualCodes": {
+        "codeValue": 0.3454298174665351,
+        "linearLightSRGB": 0.5962700208913649
+      },
+      "mode": "wallpaper-transition",
+      "overlay": "clear",
+      "partition": "training",
+      "preferredBlendSpace": "codeValue",
+      "samples": [
+        {
+          "actualSeconds": 0.6445500423333783,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 64,
+            "meanAbsoluteCode": 29.3352948003714,
+            "mismatchedChannels": 5505065,
+            "mismatchedPixels": 1838078
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0037.png",
+          "index": 37,
+          "phase": "live",
+          "presentationProgress": 0.62421875,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 6.444717626828448e-08,
+              "continuousRMSECodes": 1.0548537915872058e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.62421875
+        },
+        {
+          "actualSeconds": 0.6629361246666576,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 64,
+            "meanAbsoluteCode": 29.3352948003714,
+            "mismatchedChannels": 5505065,
+            "mismatchedPixels": 1838078
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0039.png",
+          "index": 39,
+          "phase": "live",
+          "presentationProgress": 0.6484375,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 6.444717626828448e-08,
+              "continuousRMSECodes": 1.0548537915872058e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.6484375
+        },
+        {
+          "actualSeconds": 0.6918339583334046,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 64,
+            "meanAbsoluteCode": 29.3352948003714,
+            "mismatchedChannels": 5505065,
+            "mismatchedPixels": 1838078
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0040.png",
+          "index": 40,
+          "phase": "live",
+          "presentationProgress": 0.66953125,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 6.444717626828448e-08,
+              "continuousRMSECodes": 1.0548537915872058e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.66953125
+        },
+        {
+          "actualSeconds": 0.72586504100002,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 53,
+            "meanAbsoluteCode": 24.148539236594708,
+            "mismatchedChannels": 5503826,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0043.png",
+          "index": 43,
+          "phase": "live",
+          "presentationProgress": 0.7125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.821703389804567,
+              "channelAlpha": [
+                0.8213482282111283,
+                0.8207902257696824,
+                0.8231004256485587
+              ],
+              "channelAlphaSpread": 0.0023101998788762623,
+              "continuousMeanAbsoluteCodes": 0.4498244167404974,
+              "continuousRMSECodes": 0.5640270662561113,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.3828465935468895,
+              "quantizedMismatchFraction": 0.3747615265204271
+            },
+            "linearLightSRGB": {
+              "alpha": 0.8011430718894306,
+              "channelAlpha": [
+                0.8010713810954889,
+                0.7958768822862174,
+                0.8063285896857787
+              ],
+              "channelAlphaSpread": 0.01045170739956125,
+              "continuousMeanAbsoluteCodes": 0.6308802042028476,
+              "continuousRMSECodes": 0.8244485540256015,
+              "quantizedMaximumAbsoluteCodes": 5.0,
+              "quantizedMeanAbsoluteCodes": 0.5795273691388115,
+              "quantizedMismatchFraction": 0.4982869806174559
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.7125
+        },
+        {
+          "actualSeconds": 0.7613211249999949,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 42,
+            "meanAbsoluteCode": 19.27199269527623,
+            "mismatchedChannels": 5502866,
+            "mismatchedPixels": 1838077
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0044.png",
+          "index": 44,
+          "phase": "live",
+          "presentationProgress": 0.7375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.6540541298924263,
+              "channelAlpha": [
+                0.6523990523541486,
+                0.6530585985175432,
+                0.65703690791329
+              ],
+              "channelAlphaSpread": 0.004637855559141313,
+              "continuousMeanAbsoluteCodes": 0.5282905279607715,
+              "continuousRMSECodes": 0.6629302154612433,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.47157377988625815,
+              "quantizedMismatchFraction": 0.44645554056406683
+            },
+            "linearLightSRGB": {
+              "alpha": 0.6234829512826162,
+              "channelAlpha": [
+                0.6217677920842319,
+                0.6162601513633561,
+                0.6318953826818312
+              ],
+              "channelAlphaSpread": 0.015635231318475107,
+              "continuousMeanAbsoluteCodes": 0.9150027818472826,
+              "continuousRMSECodes": 1.2326895819675716,
+              "quantizedMaximumAbsoluteCodes": 7.0,
+              "quantizedMeanAbsoluteCodes": 0.8726868979224698,
+              "quantizedMismatchFraction": 0.6175614409238626
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.7375
+        },
+        {
+          "actualSeconds": 0.7797806253333874,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 37,
+            "meanAbsoluteCode": 17.047081556116527,
+            "mismatchedChannels": 5503130,
+            "mismatchedPixels": 1838074
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0046.png",
+          "index": 46,
+          "phase": "live",
+          "presentationProgress": 0.7609375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.5773187734108752,
+              "channelAlpha": [
+                0.5760192861640894,
+                0.5757286662424286,
+                0.5805355443095555
+              ],
+              "channelAlphaSpread": 0.004806878067126874,
+              "continuousMeanAbsoluteCodes": 0.583820793788081,
+              "continuousRMSECodes": 0.7293528186226166,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.5335085161327763,
+              "quantizedMismatchFraction": 0.4944382181406685
+            },
+            "linearLightSRGB": {
+              "alpha": 0.5451887206510445,
+              "channelAlpha": [
+                0.544621032446523,
+                0.53690706051078,
+                0.5537093891264427
+              ],
+              "channelAlphaSpread": 0.016802328615662776,
+              "continuousMeanAbsoluteCodes": 1.0403556261014473,
+              "continuousRMSECodes": 1.4005523342304018,
+              "quantizedMaximumAbsoluteCodes": 8.0,
+              "quantizedMeanAbsoluteCodes": 1.0084441373607242,
+              "quantizedMismatchFraction": 0.6709060541434541
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.7609375
+        },
+        {
+          "actualSeconds": 0.8165375833333428,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 28,
+            "meanAbsoluteCode": 12.992708514681986,
+            "mismatchedChannels": 5503893,
+            "mismatchedPixels": 1838066
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0047.png",
+          "index": 47,
+          "phase": "live",
+          "presentationProgress": 0.78828125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.4370871162402676,
+              "channelAlpha": [
+                0.43543596288791003,
+                0.43464908559431004,
+                0.4416263018973698
+              ],
+              "channelAlphaSpread": 0.006977216303059752,
+              "continuousMeanAbsoluteCodes": 0.7129362429908115,
+              "continuousRMSECodes": 0.8766272931655219,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.6831773734911792,
+              "quantizedMismatchFraction": 0.5950932494777159
+            },
+            "linearLightSRGB": {
+              "alpha": 0.40731865254249144,
+              "channelAlpha": [
+                0.407639229886895,
+                0.39807591316875046,
+                0.4160608016919154
+              ],
+              "channelAlphaSpread": 0.017984888523164932,
+              "continuousMeanAbsoluteCodes": 1.2459073436549393,
+              "continuousRMSECodes": 1.6577536234209176,
+              "quantizedMaximumAbsoluteCodes": 10.0,
+              "quantizedMeanAbsoluteCodes": 1.2289983751160631,
+              "quantizedMismatchFraction": 0.7404064748723306
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.78828125
+        },
+        {
+          "actualSeconds": 0.8389511249999941,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 24,
+            "meanAbsoluteCode": 11.162089245299443,
+            "mismatchedChannels": 5504701,
+            "mismatchedPixels": 1838067
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0049.png",
+          "index": 49,
+          "phase": "live",
+          "presentationProgress": 0.809375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.37328124954260966,
+              "channelAlpha": [
+                0.3716650595093898,
+                0.36928860843676503,
+                0.3794624223141428
+              ],
+              "channelAlphaSpread": 0.010173813877377758,
+              "continuousMeanAbsoluteCodes": 0.8058861853871339,
+              "continuousRMSECodes": 0.9834966846612908,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.786794009691272,
+              "quantizedMismatchFraction": 0.6490243442432684
+            },
+            "linearLightSRGB": {
+              "alpha": 0.34716424799546497,
+              "channelAlpha": [
+                0.34862475964918005,
+                0.33626938746733825,
+                0.3565983731290039
+              ],
+              "channelAlphaSpread": 0.020328985661665633,
+              "continuousMeanAbsoluteCodes": 1.3503312182300546,
+              "continuousRMSECodes": 1.777129984061188,
+              "quantizedMaximumAbsoluteCodes": 11.0,
+              "quantizedMeanAbsoluteCodes": 1.328714201775766,
+              "quantizedMismatchFraction": 0.7624659064531105
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.809375
+        },
+        {
+          "actualSeconds": 0.8709251669999958,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 17,
+            "meanAbsoluteCode": 7.902200121866295,
+            "mismatchedChannels": 5503458,
+            "mismatchedPixels": 1837979
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0050.png",
+          "index": 50,
+          "phase": "live",
+          "presentationProgress": 0.825,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.26324230400009874,
+              "channelAlpha": [
+                0.2616709737619065,
+                0.26010643185907323,
+                0.26844472101624584
+              ],
+              "channelAlphaSpread": 0.008338289157172607,
+              "continuousMeanAbsoluteCodes": 0.690574124666448,
+              "continuousRMSECodes": 0.8447388061836558,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.6538772342154132,
+              "quantizedMismatchFraction": 0.5838447365366759
+            },
+            "linearLightSRGB": {
+              "alpha": 0.2417103449983778,
+              "channelAlpha": [
+                0.24258018985078086,
+                0.23330555778195403,
+                0.2491948247519157
+              ],
+              "channelAlphaSpread": 0.01588926696996168,
+              "continuousMeanAbsoluteCodes": 1.1709303866255554,
+              "continuousRMSECodes": 1.5609015037727636,
+              "quantizedMaximumAbsoluteCodes": 10.0,
+              "quantizedMeanAbsoluteCodes": 1.1488879700557104,
+              "quantizedMismatchFraction": 0.7217919423166202
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.825
+        },
+        {
+          "actualSeconds": 0.9407514576667495,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 7,
+            "meanAbsoluteCode": 3.0486001697423397,
+            "mismatchedChannels": 5474531,
+            "mismatchedPixels": 1837329
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0054.png",
+          "index": 54,
+          "phase": "live",
+          "presentationProgress": 0.89375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.10073195884326945,
+              "channelAlpha": [
+                0.10002780053782366,
+                0.09896242777493346,
+                0.10345747288820016
+              ],
+              "channelAlphaSpread": 0.004495045113266705,
+              "continuousMeanAbsoluteCodes": 0.4451094494625829,
+              "continuousRMSECodes": 0.549174597817711,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.3746382094359331,
+              "quantizedMismatchFraction": 0.37243826891829157
+            },
+            "linearLightSRGB": {
+              "alpha": 0.09105391701507812,
+              "channelAlpha": [
+                0.0916231777121694,
+                0.08708919993074915,
+                0.09445668691351529
+              ],
+              "channelAlphaSpread": 0.007367486982766139,
+              "continuousMeanAbsoluteCodes": 0.6722559125718688,
+              "continuousRMSECodes": 0.8963988859019216,
+              "quantizedMaximumAbsoluteCodes": 7.0,
+              "quantizedMeanAbsoluteCodes": 0.6265245981313835,
+              "quantizedMismatchFraction": 0.5236021645775302
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.89375
+        },
+        {
+          "actualSeconds": 0.9687034586667096,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 4,
+            "meanAbsoluteCode": 1.453125544045961,
+            "mismatchedChannels": 5246088,
+            "mismatchedPixels": 1829469
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0057.png",
+          "index": 57,
+          "phase": "live",
+          "presentationProgress": 0.94375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.048139539240914235,
+              "channelAlpha": [
+                0.04789079645835068,
+                0.047305441732304984,
+                0.04932849578681384
+              ],
+              "channelAlphaSpread": 0.002023054054508859,
+              "continuousMeanAbsoluteCodes": 0.3453037451793584,
+              "continuousRMSECodes": 0.4257486253758049,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.2587420931987001,
+              "quantizedMismatchFraction": 0.25873121227948004
+            },
+            "linearLightSRGB": {
+              "alpha": 0.043001907000931476,
+              "channelAlpha": [
+                0.043336435205121135,
+                0.04121728063925798,
+                0.04447062511429995
+              ],
+              "channelAlphaSpread": 0.0032533444750419693,
+              "continuousMeanAbsoluteCodes": 0.4335795864158465,
+              "continuousRMSECodes": 0.5599978035884051,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.3614567011954503,
+              "quantizedMismatchFraction": 0.34676619080779947
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.94375
+        },
+        {
+          "actualSeconds": 1.0510050420000425,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition__clear__light/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 1.0510050420000425
+        }
+      ]
+    },
+    {
+      "appearance": "light",
+      "durationSeconds": 1.0,
+      "endpointConvergence": {
+        "bitExactSamples": 2,
+        "captureBackendSampleCounts": {
+          "ScreenCaptureKit-SCStream-BGRA": 8
+        },
+        "comparisonRegion": "analysis pixels after declared exclusions",
+        "firstBitExactObservedSample": {
+          "actualSeconds": 1.0426443743332356,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0058.png",
+          "index": 58,
+          "phase": "live",
+          "presentationProgress": 0.97265625,
+          "timelineCoordinate": 0.97265625
+        },
+        "lastNonExactObservedSample": {
+          "actualSeconds": 0.9302522913332609,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 7,
+            "meanAbsoluteCode": 2.9727766655060353,
+            "mismatchedChannels": 5498341,
+            "mismatchedPixels": 1838059
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0054.png",
+          "index": 54,
+          "phase": "live",
+          "presentationProgress": 0.8984375,
+          "timelineCoordinate": 0.8984375
+        },
+        "nonExactSamples": 6,
+        "observedSamples": 8,
+        "stableBitExactEndpointObserved": true,
+        "stableBitExactSuffixSamples": 2,
+        "stableBitExactSuffixStart": {
+          "actualSeconds": 1.0426443743332356,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0058.png",
+          "index": 58,
+          "phase": "live",
+          "presentationProgress": 0.97265625,
+          "timelineCoordinate": 0.97265625
+        }
+      },
+      "excludedPixels": 5120,
+      "glassAnchor": {
+        "actualSeconds": 0.6819385413332952,
+        "endpointRMSECodes": 31.05963301476433,
+        "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0040.png",
+        "index": 40,
+        "presentationProgress": 0.6625
+      },
+      "id": "wallpaper-transition-reverse__clear__light",
+      "includedPixels": 1838080,
+      "incomingEndpointFile": "dynamic/wallpaper-transition-reverse__clear__light/post-settle.png",
+      "meanQuantizedResidualCodes": {
+        "codeValue": 0.29403854837656684,
+        "linearLightSRGB": 0.4752586258487117
+      },
+      "mode": "wallpaper-transition-reverse",
+      "overlay": "clear",
+      "partition": "holdout",
+      "preferredBlendSpace": "codeValue",
+      "samples": [
+        {
+          "actualSeconds": 0.6819385413332952,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 63,
+            "meanAbsoluteCode": 28.92244552286444,
+            "mismatchedChannels": 5511860,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0040.png",
+          "index": 40,
+          "phase": "live",
+          "presentationProgress": 0.6625,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.7581675803096846e-08,
+              "continuousRMSECodes": 6.987274499735652e-07,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.6625
+        },
+        {
+          "actualSeconds": 0.7160425416666953,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 52,
+            "meanAbsoluteCode": 23.57654164490483,
+            "mismatchedChannels": 5511619,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0042.png",
+          "index": 42,
+          "phase": "live",
+          "presentationProgress": 0.696875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.8135197335620504,
+              "channelAlpha": [
+                0.8141104608954866,
+                0.8150202059533519,
+                0.8114759421694705
+              ],
+              "channelAlphaSpread": 0.003544263783881396,
+              "continuousMeanAbsoluteCodes": 0.4269002382815604,
+              "continuousRMSECodes": 0.5374916084855834,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.3513604775998143,
+              "quantizedMismatchFraction": 0.34459998113974
+            },
+            "linearLightSRGB": {
+              "alpha": 0.7929316209669699,
+              "channelAlpha": [
+                0.7953630351562646,
+                0.7914411506242759,
+                0.7918388221924251
+              ],
+              "channelAlphaSpread": 0.0039218845319887174,
+              "continuousMeanAbsoluteCodes": 0.5849069652520293,
+              "continuousRMSECodes": 0.760018085715441,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.5326890015668524,
+              "quantizedMismatchFraction": 0.47185831592386257
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.696875
+        },
+        {
+          "actualSeconds": 0.7367486666665855,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 45,
+            "meanAbsoluteCode": 20.786469758298516,
+            "mismatchedChannels": 5511825,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0043.png",
+          "index": 43,
+          "phase": "live",
+          "presentationProgress": 0.7125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.7163385984839848,
+              "channelAlpha": [
+                0.717613885051112,
+                0.7168564508121141,
+                0.7146173629536403
+              ],
+              "channelAlphaSpread": 0.002996522097471699,
+              "continuousMeanAbsoluteCodes": 0.4547474917027833,
+              "continuousRMSECodes": 0.5756423743218815,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.3977092038068709,
+              "quantizedMismatchFraction": 0.3828228368732591
+            },
+            "linearLightSRGB": {
+              "alpha": 0.6891341598504659,
+              "channelAlpha": [
+                0.6928129813337764,
+                0.6850449045406384,
+                0.6891135762462098
+              ],
+              "channelAlphaSpread": 0.007768076793138068,
+              "continuousMeanAbsoluteCodes": 0.7178371087560635,
+              "continuousRMSECodes": 0.9533562025624815,
+              "quantizedMaximumAbsoluteCodes": 6.0,
+              "quantizedMeanAbsoluteCodes": 0.6717553098885793,
+              "quantizedMismatchFraction": 0.5393426836699164
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.7125
+        },
+        {
+          "actualSeconds": 0.8231001670000637,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 23,
+            "meanAbsoluteCode": 11.045913126740947,
+            "mismatchedChannels": 5514130,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0047.png",
+          "index": 47,
+          "phase": "live",
+          "presentationProgress": 0.78671875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.3750337028682319,
+              "channelAlpha": [
+                0.37837390429179407,
+                0.37785891734746696,
+                0.3690730463335939
+              ],
+              "channelAlphaSpread": 0.009300857958200182,
+              "continuousMeanAbsoluteCodes": 0.7555475927135296,
+              "continuousRMSECodes": 0.973436009729312,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.7046387172121634,
+              "quantizedMismatchFraction": 0.5653616817548747
+            },
+            "linearLightSRGB": {
+              "alpha": 0.34994586302101555,
+              "channelAlpha": [
+                0.3552061191717919,
+                0.3448864429539633,
+                0.3492151595614263
+              ],
+              "channelAlphaSpread": 0.010319676217828588,
+              "continuousMeanAbsoluteCodes": 1.2201525459015878,
+              "continuousRMSECodes": 1.6047933475531344,
+              "quantizedMaximumAbsoluteCodes": 8.0,
+              "quantizedMeanAbsoluteCodes": 1.200231763579387,
+              "quantizedMismatchFraction": 0.723964499187558
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.78671875
+        },
+        {
+          "actualSeconds": 0.8926781246666451,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 11,
+            "meanAbsoluteCode": 5.086134625986537,
+            "mismatchedChannels": 5513269,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0052.png",
+          "index": 52,
+          "phase": "live",
+          "presentationProgress": 0.859375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.17125402038088278,
+              "channelAlpha": [
+                0.1734541666671689,
+                0.17332468482334573,
+                0.1671204281404144
+              ],
+              "channelAlphaSpread": 0.0063337385267545065,
+              "continuousMeanAbsoluteCodes": 0.5705335552569828,
+              "continuousRMSECodes": 0.7222156261761609,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.524984222667131,
+              "quantizedMismatchFraction": 0.4805917043871866
+            },
+            "linearLightSRGB": {
+              "alpha": 0.15675277710747168,
+              "channelAlpha": [
+                0.15970794998602864,
+                0.15378349442677341,
+                0.1564552826135156
+              ],
+              "channelAlphaSpread": 0.005924455559255221,
+              "continuousMeanAbsoluteCodes": 0.8685722428658491,
+              "continuousRMSECodes": 1.1464679586930704,
+              "quantizedMaximumAbsoluteCodes": 6.0,
+              "quantizedMeanAbsoluteCodes": 0.838737885909935,
+              "quantizedMismatchFraction": 0.6209858475510678
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.859375
+        },
+        {
+          "actualSeconds": 0.9302522913332609,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 7,
+            "meanAbsoluteCode": 2.9727766655060353,
+            "mismatchedChannels": 5498341,
+            "mismatchedPixels": 1838059
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0054.png",
+          "index": 54,
+          "phase": "live",
+          "presentationProgress": 0.8984375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.09999245005973349,
+              "channelAlpha": [
+                0.10149867932046105,
+                0.1012295224799854,
+                0.09734106938660775
+              ],
+              "channelAlphaSpread": 0.004157609933853307,
+              "continuousMeanAbsoluteCodes": 0.431690773363731,
+              "continuousRMSECodes": 0.5393605160223405,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.37361576572655525,
+              "quantizedMismatchFraction": 0.36807483896239557
+            },
+            "linearLightSRGB": {
+              "alpha": 0.09066469977854885,
+              "channelAlpha": [
+                0.0926991761447102,
+                0.08883965593259209,
+                0.09026479121776329
+              ],
+              "channelAlphaSpread": 0.003859520212118106,
+              "continuousMeanAbsoluteCodes": 0.6074102449715968,
+              "continuousRMSECodes": 0.7944847764269779,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.5586550458449396,
+              "quantizedMismatchFraction": 0.4884419249071495
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.8984375
+        },
+        {
+          "actualSeconds": 1.0426443743332356,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0058.png",
+          "index": 58,
+          "phase": "live",
+          "presentationProgress": 0.97265625,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.97265625
+        },
+        {
+          "actualSeconds": 1.0676976673332774,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__light/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 1.0676976673332774
+        }
+      ]
+    },
+    {
+      "appearance": "dark",
+      "durationSeconds": 1.0,
+      "endpointConvergence": {
+        "bitExactSamples": 1,
+        "captureBackendSampleCounts": {
+          "ScreenCaptureKit-SCStream-BGRA": 8
+        },
+        "comparisonRegion": "analysis pixels after declared exclusions",
+        "firstBitExactObservedSample": {
+          "actualSeconds": 1.0726976246666595,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.0726976246666595
+        },
+        "lastNonExactObservedSample": {
+          "actualSeconds": 1.0115526670001032,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 5,
+            "meanAbsoluteCode": 1.953147305884401,
+            "mismatchedChannels": 5333688,
+            "mismatchedPixels": 1832030
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0059.png",
+          "index": 59,
+          "phase": "live",
+          "presentationProgress": 0.98203125,
+          "timelineCoordinate": 0.98203125
+        },
+        "nonExactSamples": 7,
+        "observedSamples": 8,
+        "stableBitExactEndpointObserved": true,
+        "stableBitExactSuffixSamples": 1,
+        "stableBitExactSuffixStart": {
+          "actualSeconds": 1.0726976246666595,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.0726976246666595
+        }
+      },
+      "excludedPixels": 5120,
+      "glassAnchor": {
+        "actualSeconds": 0.7162962090000065,
+        "endpointRMSECodes": 65.98574786828725,
+        "file": "dynamic/wallpaper-transition__regular__dark/frame-0041.png",
+        "index": 41,
+        "presentationProgress": 0.690625
+      },
+      "id": "wallpaper-transition__regular__dark",
+      "includedPixels": 1838080,
+      "incomingEndpointFile": "dynamic/wallpaper-transition__regular__dark/post-settle.png",
+      "meanQuantizedResidualCodes": {
+        "codeValue": 0.34006769291869776,
+        "linearLightSRGB": 0.8248325698555014
+      },
+      "mode": "wallpaper-transition",
+      "overlay": "regular",
+      "partition": "training",
+      "preferredBlendSpace": "codeValue",
+      "samples": [
+        {
+          "actualSeconds": 0.7162962090000065,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 137,
+            "meanAbsoluteCode": 61.954881724408075,
+            "mismatchedChannels": 5513502,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0041.png",
+          "index": 41,
+          "phase": "live",
+          "presentationProgress": 0.690625,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.0691612929956663e-06,
+              "continuousRMSECodes": 4.273451084435656e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.690625
+        },
+        {
+          "actualSeconds": 0.7677479996665966,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 105,
+            "meanAbsoluteCode": 46.83845262447772,
+            "mismatchedChannels": 5513277,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0045.png",
+          "index": 45,
+          "phase": "live",
+          "presentationProgress": 0.74375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.7565689730415394,
+              "channelAlpha": [
+                0.7568569303487319,
+                0.7558121877415207,
+                0.7572031842674354
+              ],
+              "channelAlphaSpread": 0.0013909965259146784,
+              "continuousMeanAbsoluteCodes": 0.544118390260515,
+              "continuousRMSECodes": 0.8120243210107407,
+              "quantizedMaximumAbsoluteCodes": 11.0,
+              "quantizedMeanAbsoluteCodes": 0.48704300139275764,
+              "quantizedMismatchFraction": 0.435485760503714
+            },
+            "linearLightSRGB": {
+              "alpha": 0.8308984069015928,
+              "channelAlpha": [
+                0.8296199707253238,
+                0.8348313013143854,
+                0.8261425702605958
+              ],
+              "channelAlphaSpread": 0.008688731053789644,
+              "continuousMeanAbsoluteCodes": 1.3816840583048657,
+              "continuousRMSECodes": 1.855992826639949,
+              "quantizedMaximumAbsoluteCodes": 14.0,
+              "quantizedMeanAbsoluteCodes": 1.3636769527623027,
+              "quantizedMismatchFraction": 0.7681831041086351
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.74375
+        },
+        {
+          "actualSeconds": 0.8032631243333412,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 85,
+            "meanAbsoluteCode": 37.62810323816156,
+            "mismatchedChannels": 5513050,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0047.png",
+          "index": 47,
+          "phase": "live",
+          "presentationProgress": 0.78828125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.6081725754542767,
+              "channelAlpha": [
+                0.6092395493384113,
+                0.6072214673434216,
+                0.6083292046451859
+              ],
+              "channelAlphaSpread": 0.002018081994989651,
+              "continuousMeanAbsoluteCodes": 0.6299467725814177,
+              "continuousRMSECodes": 0.9091525038072498,
+              "quantizedMaximumAbsoluteCodes": 13.0,
+              "quantizedMeanAbsoluteCodes": 0.5821551111304549,
+              "quantizedMismatchFraction": 0.5017530974350046
+            },
+            "linearLightSRGB": {
+              "alpha": 0.7056111027711778,
+              "channelAlpha": [
+                0.7045642053475242,
+                0.7108908284734142,
+                0.6987112902608028
+              ],
+              "channelAlphaSpread": 0.012179538212611418,
+              "continuousMeanAbsoluteCodes": 1.6279790813524446,
+              "continuousRMSECodes": 2.142889686718269,
+              "quantizedMaximumAbsoluteCodes": 15.0,
+              "quantizedMeanAbsoluteCodes": 1.6113529697655524,
+              "quantizedMismatchFraction": 0.8064940952878366
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.78828125
+        },
+        {
+          "actualSeconds": 0.8608051669999668,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 57,
+            "meanAbsoluteCode": 25.114486130454967,
+            "mismatchedChannels": 5512186,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0050.png",
+          "index": 50,
+          "phase": "live",
+          "presentationProgress": 0.83203125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.406340573401625,
+              "channelAlpha": [
+                0.40750352916349925,
+                0.40554032800859713,
+                0.40623145265080324
+              ],
+              "channelAlphaSpread": 0.0019632011549021167,
+              "continuousMeanAbsoluteCodes": 0.6305896060688277,
+              "continuousRMSECodes": 0.8549181675227929,
+              "quantizedMaximumAbsoluteCodes": 10.0,
+              "quantizedMeanAbsoluteCodes": 0.5842232111768803,
+              "quantizedMismatchFraction": 0.5090567331128134
+            },
+            "linearLightSRGB": {
+              "alpha": 0.5066944877642704,
+              "channelAlpha": [
+                0.5056661415575278,
+                0.5124780493338772,
+                0.49904503885658436
+              ],
+              "channelAlphaSpread": 0.01343301047729284,
+              "continuousMeanAbsoluteCodes": 1.5116182902146447,
+              "continuousRMSECodes": 1.9484153135719968,
+              "quantizedMaximumAbsoluteCodes": 12.0,
+              "quantizedMeanAbsoluteCodes": 1.4916673920612813,
+              "quantizedMismatchFraction": 0.7916488944986072
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.83203125
+        },
+        {
+          "actualSeconds": 0.8976137506667214,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 34,
+            "meanAbsoluteCode": 14.825490729456824,
+            "mismatchedChannels": 5508447,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0052.png",
+          "index": 52,
+          "phase": "live",
+          "presentationProgress": 0.85859375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.24011390877060645,
+              "channelAlpha": [
+                0.24072921859333374,
+                0.23958681806474572,
+                0.2401789037115496
+              ],
+              "channelAlphaSpread": 0.0011424005285880223,
+              "continuousMeanAbsoluteCodes": 0.527096294817673,
+              "continuousRMSECodes": 0.6887450525426395,
+              "quantizedMaximumAbsoluteCodes": 7.0,
+              "quantizedMeanAbsoluteCodes": 0.469989518047818,
+              "quantizedMismatchFraction": 0.4377422818012999
+            },
+            "linearLightSRGB": {
+              "alpha": 0.31701229968809497,
+              "channelAlpha": [
+                0.315826632067283,
+                0.3217249107647905,
+                0.3110470359109212
+              ],
+              "channelAlphaSpread": 0.010677874853869285,
+              "continuousMeanAbsoluteCodes": 1.1069204976967257,
+              "continuousRMSECodes": 1.4125961474055582,
+              "quantizedMaximumAbsoluteCodes": 8.0,
+              "quantizedMeanAbsoluteCodes": 1.0834967284702879,
+              "quantizedMismatchFraction": 0.7182989858983287
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.85859375
+        },
+        {
+          "actualSeconds": 0.9342968333333488,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 22,
+            "meanAbsoluteCode": 9.438022102773909,
+            "mismatchedChannels": 5503379,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0055.png",
+          "index": 55,
+          "phase": "live",
+          "presentationProgress": 0.9125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.1529459713383675,
+              "channelAlpha": [
+                0.15352893437011217,
+                0.1524083064471516,
+                0.1530528634306068
+              ],
+              "channelAlphaSpread": 0.001120627922960582,
+              "continuousMeanAbsoluteCodes": 0.4421946443639827,
+              "continuousRMSECodes": 0.5648982837069497,
+              "quantizedMaximumAbsoluteCodes": 5.0,
+              "quantizedMeanAbsoluteCodes": 0.37261852948003715,
+              "quantizedMismatchFraction": 0.3615374013463324
+            },
+            "linearLightSRGB": {
+              "alpha": 0.20783658595703922,
+              "channelAlpha": [
+                0.20710956472467248,
+                0.21114639373910424,
+                0.20356561788288347
+              ],
+              "channelAlphaSpread": 0.007580775856220773,
+              "continuousMeanAbsoluteCodes": 0.8057328392688389,
+              "continuousRMSECodes": 1.0237234774727701,
+              "quantizedMaximumAbsoluteCodes": 6.0,
+              "quantizedMeanAbsoluteCodes": 0.7712248650766017,
+              "quantizedMismatchFraction": 0.6176183844011142
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.9125
+        },
+        {
+          "actualSeconds": 1.0115526670001032,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 5,
+            "meanAbsoluteCode": 1.953147305884401,
+            "mismatchedChannels": 5333688,
+            "mismatchedPixels": 1832030
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0059.png",
+          "index": 59,
+          "phase": "live",
+          "presentationProgress": 0.98203125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.03173234289810383,
+              "channelAlpha": [
+                0.03196805338969974,
+                0.0316540024337892,
+                0.03161097122542402
+              ],
+              "channelAlphaSpread": 0.00035708216427571965,
+              "continuousMeanAbsoluteCodes": 0.3273294358961319,
+              "continuousRMSECodes": 0.4019535138787945,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.22451217212163416,
+              "quantizedMismatchFraction": 0.2245031046889508
+            },
+            "linearLightSRGB": {
+              "alpha": 0.044941396639047816,
+              "channelAlpha": [
+                0.04487654910176785,
+                0.04584770031794383,
+                0.04366856265236834
+              ],
+              "channelAlphaSpread": 0.002179137665575488,
+              "continuousMeanAbsoluteCodes": 0.362671675388818,
+              "continuousRMSECodes": 0.44891669779102583,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.2772416507079851,
+              "quantizedMismatchFraction": 0.27698685584958216
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.98203125
+        },
+        {
+          "actualSeconds": 1.0726976246666595,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": true,
+            "maximumAbsoluteCode": 0,
+            "meanAbsoluteCode": 0.0,
+            "mismatchedChannels": 0,
+            "mismatchedPixels": 0
+          },
+          "file": "dynamic/wallpaper-transition__regular__dark/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 0.0,
+              "channelAlpha": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 1.0726976246666595
+        }
+      ]
+    },
+    {
+      "appearance": "dark",
+      "durationSeconds": 1.0,
+      "endpointConvergence": {
+        "bitExactSamples": 0,
+        "captureBackendSampleCounts": {
+          "ScreenCaptureKit-SCStream-BGRA": 8
+        },
+        "comparisonRegion": "analysis pixels after declared exclusions",
+        "firstBitExactObservedSample": null,
+        "lastNonExactObservedSample": {
+          "actualSeconds": 1.0551752913332848,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 3,
+            "meanAbsoluteCode": 1.066182465761374,
+            "mismatchedChannels": 4871817,
+            "mismatchedPixels": 1800551
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.0551752913332848
+        },
+        "nonExactSamples": 8,
+        "observedSamples": 8,
+        "stableBitExactEndpointObserved": false,
+        "stableBitExactSuffixSamples": 0,
+        "stableBitExactSuffixStart": null
+      },
+      "excludedPixels": 5120,
+      "glassAnchor": {
+        "actualSeconds": 0.6687859583333307,
+        "endpointRMSECodes": 66.99875680555154,
+        "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0039.png",
+        "index": 39,
+        "presentationProgress": 0.64765625
+      },
+      "id": "wallpaper-transition-reverse__regular__dark",
+      "includedPixels": 1838080,
+      "incomingEndpointFile": "dynamic/wallpaper-transition-reverse__regular__dark/post-settle.png",
+      "meanQuantizedResidualCodes": {
+        "codeValue": 0.2822506592023561,
+        "linearLightSRGB": 0.6737127192505223
+      },
+      "mode": "wallpaper-transition-reverse",
+      "overlay": "regular",
+      "partition": "holdout",
+      "preferredBlendSpace": "codeValue",
+      "samples": [
+        {
+          "actualSeconds": 0.6687859583333307,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 121,
+            "meanAbsoluteCode": 63.488823482474466,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0039.png",
+          "index": 39,
+          "phase": "live",
+          "presentationProgress": 0.64765625,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.102921055344486e-06,
+              "continuousRMSECodes": 4.365577476716741e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.64765625
+        },
+        {
+          "actualSeconds": 0.7528275833332714,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 121,
+            "meanAbsoluteCode": 63.488823482474466,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0043.png",
+          "index": 43,
+          "phase": "live",
+          "presentationProgress": 0.71953125,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.102921055344486e-06,
+              "continuousRMSECodes": 4.365577476716741e-06,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.71953125
+        },
+        {
+          "actualSeconds": 0.7866377500000681,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 100,
+            "meanAbsoluteCode": 52.073979369777156,
+            "mismatchedChannels": 5514240,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0045.png",
+          "index": 45,
+          "phase": "live",
+          "presentationProgress": 0.74296875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.8207795710513154,
+              "channelAlpha": [
+                0.8199890014914135,
+                0.8210573664596292,
+                0.8213011801869914
+              ],
+              "channelAlphaSpread": 0.0013121786955778703,
+              "continuousMeanAbsoluteCodes": 0.4376193779390115,
+              "continuousRMSECodes": 0.5473429932773558,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.3691272051996286,
+              "quantizedMismatchFraction": 0.36340384168987927
+            },
+            "linearLightSRGB": {
+              "alpha": 0.879010002417425,
+              "channelAlpha": [
+                0.8761352773205675,
+                0.8835850573558783,
+                0.8767211212971335
+              ],
+              "channelAlphaSpread": 0.007449780035310827,
+              "continuousMeanAbsoluteCodes": 1.0555817101676512,
+              "continuousRMSECodes": 1.364471923849814,
+              "quantizedMaximumAbsoluteCodes": 7.0,
+              "quantizedMeanAbsoluteCodes": 1.0304935947655525,
+              "quantizedMismatchFraction": 0.6999111391597029
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.74296875
+        },
+        {
+          "actualSeconds": 0.8432450006666841,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 73,
+            "meanAbsoluteCode": 37.9745451775766,
+            "mismatchedChannels": 5514183,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0049.png",
+          "index": 49,
+          "phase": "live",
+          "presentationProgress": 0.81953125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.5991622011428986,
+              "channelAlpha": [
+                0.5984410805784752,
+                0.5997683685047309,
+                0.5992582077660669
+              ],
+              "channelAlphaSpread": 0.0013272879262556936,
+              "continuousMeanAbsoluteCodes": 0.562223302165847,
+              "continuousRMSECodes": 0.7088429647485107,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.508000195856546,
+              "quantizedMismatchFraction": 0.4696124941968431
+            },
+            "linearLightSRGB": {
+              "alpha": 0.6961064243018252,
+              "channelAlpha": [
+                0.6913878638795242,
+                0.7042647213432259,
+                0.6915569172128011
+              ],
+              "channelAlphaSpread": 0.012876857463701707,
+              "continuousMeanAbsoluteCodes": 1.4853219261401598,
+              "continuousRMSECodes": 1.8819639602515401,
+              "quantizedMaximumAbsoluteCodes": 8.0,
+              "quantizedMeanAbsoluteCodes": 1.4678414432451254,
+              "quantizedMismatchFraction": 0.7927364423746518
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.81953125
+        },
+        {
+          "actualSeconds": 0.8979014166666843,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 42,
+            "meanAbsoluteCode": 21.48908081621402,
+            "mismatchedChannels": 5512446,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0053.png",
+          "index": 53,
+          "phase": "live",
+          "presentationProgress": 0.8765625,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.3395517449572605,
+              "channelAlpha": [
+                0.3391204978545729,
+                0.3399800485826235,
+                0.3395383207576959
+              ],
+              "channelAlphaSpread": 0.0008595507280506065,
+              "continuousMeanAbsoluteCodes": 0.5486297997287167,
+              "continuousRMSECodes": 0.6910820847370124,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.4927130483983287,
+              "quantizedMismatchFraction": 0.46057244516016715
+            },
+            "linearLightSRGB": {
+              "alpha": 0.43199205365292753,
+              "channelAlpha": [
+                0.4273172818350809,
+                0.44025464476965426,
+                0.42726488881955693
+              ],
+              "channelAlphaSpread": 0.012989755950097326,
+              "continuousMeanAbsoluteCodes": 1.271515658130124,
+              "continuousRMSECodes": 1.5949382196061395,
+              "quantizedMaximumAbsoluteCodes": 7.0,
+              "quantizedMeanAbsoluteCodes": 1.2502868935701021,
+              "quantizedMismatchFraction": 0.7590222768686166
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.8765625
+        },
+        {
+          "actualSeconds": 0.9326523333332375,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 29,
+            "meanAbsoluteCode": 14.781376218662952,
+            "mismatchedChannels": 5510251,
+            "mismatchedPixels": 1838080
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0055.png",
+          "index": 55,
+          "phase": "live",
+          "presentationProgress": 0.9125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.2337198886587573,
+              "channelAlpha": [
+                0.23333973069999875,
+                0.23417583386085367,
+                0.2336236725404012
+              ],
+              "channelAlphaSpread": 0.0008361031608549174,
+              "continuousMeanAbsoluteCodes": 0.4840095451968128,
+              "continuousRMSECodes": 0.6072420244786861,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.42240399402274836,
+              "quantizedMismatchFraction": 0.4086911342270195
+            },
+            "linearLightSRGB": {
+              "alpha": 0.30809617035274794,
+              "channelAlpha": [
+                0.3041468965984265,
+                0.3150814751051386,
+                0.30409650157025137
+              ],
+              "channelAlphaSpread": 0.010984973534887255,
+              "continuousMeanAbsoluteCodes": 1.007077219749532,
+              "continuousRMSECodes": 1.2614138702313318,
+              "quantizedMaximumAbsoluteCodes": 5.0,
+              "quantizedMeanAbsoluteCodes": 0.9807482082753017,
+              "quantizedMismatchFraction": 0.6957325034818942
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.9125
+        },
+        {
+          "actualSeconds": 1.0093151253333303,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 10,
+            "meanAbsoluteCode": 5.093604921077066,
+            "mismatchedChannels": 5483419,
+            "mismatchedPixels": 1837869
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0059.png",
+          "index": 59,
+          "phase": "live",
+          "presentationProgress": 0.97890625,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.08066807045181895,
+              "channelAlpha": [
+                0.08045316999318546,
+                0.08096643978882168,
+                0.08056994323684928
+              ],
+              "channelAlphaSpread": 0.0005132697956362203,
+              "continuousMeanAbsoluteCodes": 0.35342511265307747,
+              "continuousRMSECodes": 0.4365689741647538,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.2632107053737233,
+              "quantizedMismatchFraction": 0.26306145543175485
+            },
+            "linearLightSRGB": {
+              "alpha": 0.1117949483091698,
+              "channelAlpha": [
+                0.10994337001865294,
+                0.115048131341647,
+                0.10994638241300864
+              ],
+              "channelAlphaSpread": 0.005104761322994061,
+              "continuousMeanAbsoluteCodes": 0.4995433880585205,
+              "continuousRMSECodes": 0.6231282820026898,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.44107075499071496,
+              "quantizedMismatchFraction": 0.42614576079387184
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.97890625
+        },
+        {
+          "actualSeconds": 1.0551752913332848,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 3,
+            "meanAbsoluteCode": 1.066182465761374,
+            "mismatchedChannels": 4871817,
+            "mismatchedPixels": 1800551
+          },
+          "file": "dynamic/wallpaper-transition-reverse__regular__dark/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.016903810827352907,
+              "channelAlpha": [
+                0.01683422149476076,
+                0.016975518414259497,
+                0.016898852843652886
+              ],
+              "channelAlphaSpread": 0.00014129691949873666,
+              "continuousMeanAbsoluteCodes": 0.31216028501783794,
+              "continuousRMSECodes": 0.386130798065099,
+              "quantizedMaximumAbsoluteCodes": 1.0,
+              "quantizedMeanAbsoluteCodes": 0.20255012476787373,
+              "quantizedMismatchFraction": 0.20255012476787373
+            },
+            "linearLightSRGB": {
+              "alpha": 0.023916187553866698,
+              "channelAlpha": [
+                0.023384587726252074,
+                0.02475043141514976,
+                0.023507317879479895
+              ],
+              "channelAlphaSpread": 0.0013658436888976874,
+              "continuousMeanAbsoluteCodes": 0.31948439300392334,
+              "continuousRMSECodes": 0.39919399561743923,
+              "quantizedMaximumAbsoluteCodes": 1.0,
+              "quantizedMeanAbsoluteCodes": 0.2192608591573816,
+              "quantizedMismatchFraction": 0.2192608591573816
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 1.0551752913332848
+        }
+      ]
+    },
+    {
+      "appearance": "dark",
+      "durationSeconds": 1.0,
+      "endpointConvergence": {
+        "bitExactSamples": 0,
+        "captureBackendSampleCounts": {
+          "ScreenCaptureKit-SCStream-BGRA": 7
+        },
+        "comparisonRegion": "analysis pixels after declared exclusions",
+        "firstBitExactObservedSample": null,
+        "lastNonExactObservedSample": {
+          "actualSeconds": 1.0452805836666244,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 2,
+            "meanAbsoluteCode": 0.3789477788416899,
+            "mismatchedChannels": 2087521,
+            "mismatchedPixels": 1197437
+          },
+          "file": "dynamic/wallpaper-transition__clear__dark/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.0452805836666244
+        },
+        "nonExactSamples": 7,
+        "observedSamples": 7,
+        "stableBitExactEndpointObserved": false,
+        "stableBitExactSuffixSamples": 0,
+        "stableBitExactSuffixStart": null
+      },
+      "excludedPixels": 5120,
+      "glassAnchor": {
+        "actualSeconds": 0.6762447916666474,
+        "endpointRMSECodes": 16.69975699863757,
+        "file": "dynamic/wallpaper-transition__clear__dark/frame-0039.png",
+        "index": 39,
+        "presentationProgress": 0.65546875
+      },
+      "id": "wallpaper-transition__clear__dark",
+      "includedPixels": 1838080,
+      "incomingEndpointFile": "dynamic/wallpaper-transition__clear__dark/post-settle.png",
+      "meanQuantizedResidualCodes": {
+        "codeValue": 0.3217946884533758,
+        "linearLightSRGB": 0.3334177640850909
+      },
+      "mode": "wallpaper-transition",
+      "overlay": "clear",
+      "partition": "training",
+      "preferredBlendSpace": "codeValue",
+      "samples": [
+        {
+          "actualSeconds": 0.6762447916666474,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 47,
+            "meanAbsoluteCode": 13.913379359621635,
+            "mismatchedChannels": 5403054,
+            "mismatchedPixels": 1838021
+          },
+          "file": "dynamic/wallpaper-transition__clear__dark/frame-0039.png",
+          "index": 39,
+          "phase": "live",
+          "presentationProgress": 0.65546875,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 1.080922208235235e-10,
+              "continuousRMSECodes": 2.7149537265840787e-08,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.65546875
+        },
+        {
+          "actualSeconds": 0.7378745000000322,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 47,
+            "meanAbsoluteCode": 13.913379359621635,
+            "mismatchedChannels": 5403054,
+            "mismatchedPixels": 1838021
+          },
+          "file": "dynamic/wallpaper-transition__clear__dark/frame-0042.png",
+          "index": 42,
+          "phase": "live",
+          "presentationProgress": 0.70625,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 1.080922208235235e-10,
+              "continuousRMSECodes": 2.7149537265840787e-08,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.70625
+        },
+        {
+          "actualSeconds": 0.782895000666656,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 38,
+            "meanAbsoluteCode": 11.179757863277622,
+            "mismatchedChannels": 5376756,
+            "mismatchedPixels": 1837930
+          },
+          "file": "dynamic/wallpaper-transition__clear__dark/frame-0044.png",
+          "index": 44,
+          "phase": "live",
+          "presentationProgress": 0.73046875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.8017351380240267,
+              "channelAlpha": [
+                0.7983653181376471,
+                0.8010085898140997,
+                0.8068833045624179
+              ],
+              "channelAlphaSpread": 0.008517986424770752,
+              "continuousMeanAbsoluteCodes": 0.4665834159132858,
+              "continuousRMSECodes": 0.5879974922374762,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.40374104137650885,
+              "quantizedMismatchFraction": 0.39266517235376047
+            },
+            "linearLightSRGB": {
+              "alpha": 0.8159705916547733,
+              "channelAlpha": [
+                0.8114997633292563,
+                0.818682163624045,
+                0.8150176077672671
+              ],
+              "channelAlphaSpread": 0.007182400294788671,
+              "continuousMeanAbsoluteCodes": 0.4857313253452436,
+              "continuousRMSECodes": 0.6099610574192608,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.4233223436049211,
+              "quantizedMismatchFraction": 0.408916731952182
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.73046875
+        },
+        {
+          "actualSeconds": 0.827542666999932,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 27,
+            "meanAbsoluteCode": 7.911839346854689,
+            "mismatchedChannels": 5322340,
+            "mismatchedPixels": 1837501
+          },
+          "file": "dynamic/wallpaper-transition__clear__dark/frame-0049.png",
+          "index": 49,
+          "phase": "live",
+          "presentationProgress": 0.8109375,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.5638411906883045,
+              "channelAlpha": [
+                0.5570265047956973,
+                0.5604863988305177,
+                0.5771725411057296
+              ],
+              "channelAlphaSpread": 0.02014603631003231,
+              "continuousMeanAbsoluteCodes": 0.6081498506504043,
+              "continuousRMSECodes": 0.7604713440761952,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.5603325208913649,
+              "quantizedMismatchFraction": 0.511909710132312
+            },
+            "linearLightSRGB": {
+              "alpha": 0.5845281239602712,
+              "channelAlpha": [
+                0.5752741943680804,
+                0.587598412151283,
+                0.5879827783202498
+              ],
+              "channelAlphaSpread": 0.01270858395216945,
+              "continuousMeanAbsoluteCodes": 0.6411482439209519,
+              "continuousRMSECodes": 0.8038926754483021,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.5982291303969359,
+              "quantizedMismatchFraction": 0.5331508965877437
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.8109375
+        },
+        {
+          "actualSeconds": 0.8969799170000101,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 14,
+            "meanAbsoluteCode": 4.26546577588208,
+            "mismatchedChannels": 5191211,
+            "mismatchedPixels": 1833405
+          },
+          "file": "dynamic/wallpaper-transition__clear__dark/frame-0053.png",
+          "index": 53,
+          "phase": "live",
+          "presentationProgress": 0.8765625,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.29630409108842043,
+              "channelAlpha": [
+                0.28839351087706105,
+                0.2894524691549386,
+                0.31635975064474336
+              ],
+              "channelAlphaSpread": 0.02796623976768231,
+              "continuousMeanAbsoluteCodes": 0.7590140937458284,
+              "continuousRMSECodes": 0.9365051137987458,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.72824070044104,
+              "quantizedMismatchFraction": 0.6117365221680594
+            },
+            "linearLightSRGB": {
+              "alpha": 0.3117431850913573,
+              "channelAlpha": [
+                0.300259348417078,
+                0.31256494266411405,
+                0.3224098705613615
+              ],
+              "channelAlphaSpread": 0.02215052214428348,
+              "continuousMeanAbsoluteCodes": 0.7809058218066794,
+              "continuousRMSECodes": 0.9701558669608735,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.7437470984215413,
+              "quantizedMismatchFraction": 0.6117040607590529
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.8765625
+        },
+        {
+          "actualSeconds": 1.0103938746666472,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 4,
+            "meanAbsoluteCode": 0.9610562833681523,
+            "mismatchedChannels": 4085732,
+            "mismatchedPixels": 1637151
+          },
+          "file": "dynamic/wallpaper-transition__clear__dark/frame-0057.png",
+          "index": 57,
+          "phase": "live",
+          "presentationProgress": 0.94921875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.06555337461992886,
+              "channelAlpha": [
+                0.06288094605578803,
+                0.0633189203064514,
+                0.07220451247349426
+              ],
+              "channelAlphaSpread": 0.009323566417706222,
+              "continuousMeanAbsoluteCodes": 0.3800675757647861,
+              "continuousRMSECodes": 0.4705647718994667,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.3009518990831012,
+              "quantizedMismatchFraction": 0.3007096172818013
+            },
+            "linearLightSRGB": {
+              "alpha": 0.06989681994492468,
+              "channelAlpha": [
+                0.06604779257400178,
+                0.06989559139447946,
+                0.07406256816439123
+              ],
+              "channelAlphaSpread": 0.008014775590389447,
+              "continuousMeanAbsoluteCodes": 0.38433878002178096,
+              "continuousRMSECodes": 0.47671835214842684,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.3065902100742804,
+              "quantizedMismatchFraction": 0.30626614003017644
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.94921875
+        },
+        {
+          "actualSeconds": 1.0452805836666244,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 2,
+            "meanAbsoluteCode": 0.3789477788416899,
+            "mismatchedChannels": 2087521,
+            "mismatchedPixels": 1197437
+          },
+          "file": "dynamic/wallpaper-transition__clear__dark/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.02716415021131069,
+              "channelAlpha": [
+                0.026202353335667863,
+                0.02664568572795918,
+                0.029115353891118727
+              ],
+              "channelAlphaSpread": 0.0029130005554508648,
+              "continuousMeanAbsoluteCodes": 0.346569497335422,
+              "continuousRMSECodes": 0.41703793706806686,
+              "quantizedMaximumAbsoluteCodes": 1.0,
+              "quantizedMeanAbsoluteCodes": 0.2592966573816156,
+              "quantizedMismatchFraction": 0.2592966573816156
+            },
+            "linearLightSRGB": {
+              "alpha": 0.029416949400338305,
+              "channelAlpha": [
+                0.028047005637366854,
+                0.02979395045244923,
+                0.030093866586909088
+              ],
+              "channelAlphaSpread": 0.002046860949542234,
+              "continuousMeanAbsoluteCodes": 0.35316847025026793,
+              "continuousRMSECodes": 0.4194171057181645,
+              "quantizedMaximumAbsoluteCodes": 1.0,
+              "quantizedMeanAbsoluteCodes": 0.2620355660979573,
+              "quantizedMismatchFraction": 0.2620355660979573
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 1.0452805836666244
+        }
+      ]
+    },
+    {
+      "appearance": "dark",
+      "durationSeconds": 1.0,
+      "endpointConvergence": {
+        "bitExactSamples": 0,
+        "captureBackendSampleCounts": {
+          "ScreenCaptureKit-SCStream-BGRA": 7
+        },
+        "comparisonRegion": "analysis pixels after declared exclusions",
+        "firstBitExactObservedSample": null,
+        "lastNonExactObservedSample": {
+          "actualSeconds": 1.056984625000041,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 1,
+            "meanAbsoluteCode": 0.06519719852599815,
+            "mismatchedChannels": 359513,
+            "mismatchedPixels": 323837
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__dark/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "timelineCoordinate": 1.056984625000041
+        },
+        "nonExactSamples": 7,
+        "observedSamples": 7,
+        "stableBitExactEndpointObserved": false,
+        "stableBitExactSuffixSamples": 0,
+        "stableBitExactSuffixStart": null
+      },
+      "excludedPixels": 5120,
+      "glassAnchor": {
+        "actualSeconds": 0.6747247909999032,
+        "endpointRMSECodes": 16.304272745227074,
+        "file": "dynamic/wallpaper-transition-reverse__clear__dark/frame-0039.png",
+        "index": 39,
+        "presentationProgress": 0.64375
+      },
+      "id": "wallpaper-transition-reverse__clear__dark",
+      "includedPixels": 1838080,
+      "incomingEndpointFile": "dynamic/wallpaper-transition-reverse__clear__dark/post-settle.png",
+      "meanQuantizedResidualCodes": {
+        "codeValue": 0.2712956687723836,
+        "linearLightSRGB": 0.2757546435618119
+      },
+      "mode": "wallpaper-transition-reverse",
+      "overlay": "clear",
+      "partition": "holdout",
+      "preferredBlendSpace": "codeValue",
+      "samples": [
+        {
+          "actualSeconds": 0.6747247909999032,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 43,
+            "meanAbsoluteCode": 13.773782969185238,
+            "mismatchedChannels": 5408175,
+            "mismatchedPixels": 1838037
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__dark/frame-0039.png",
+          "index": 39,
+          "phase": "live",
+          "presentationProgress": 0.64375,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.2137286824657613e-11,
+              "continuousRMSECodes": 1.8379014937518032e-08,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.64375
+        },
+        {
+          "actualSeconds": 0.7347845416666132,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 43,
+            "meanAbsoluteCode": 13.773782969185238,
+            "mismatchedChannels": 5408175,
+            "mismatchedPixels": 1838037
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__dark/frame-0042.png",
+          "index": 42,
+          "phase": "live",
+          "presentationProgress": 0.69921875,
+          "projection": {
+            "codeValue": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 0.0,
+              "continuousRMSECodes": 0.0,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "linearLightSRGB": {
+              "alpha": 1.0,
+              "channelAlpha": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "channelAlphaSpread": 0.0,
+              "continuousMeanAbsoluteCodes": 2.2137286824657613e-11,
+              "continuousRMSECodes": 1.8379014937518032e-08,
+              "quantizedMaximumAbsoluteCodes": 0.0,
+              "quantizedMeanAbsoluteCodes": 0.0,
+              "quantizedMismatchFraction": 0.0
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.69921875
+        },
+        {
+          "actualSeconds": 0.8132095836666053,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 28,
+            "meanAbsoluteCode": 9.06952290796193,
+            "mismatchedChannels": 5364091,
+            "mismatchedPixels": 1837819
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__dark/frame-0046.png",
+          "index": 46,
+          "phase": "live",
+          "presentationProgress": 0.76796875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.6535714538639794,
+              "channelAlpha": [
+                0.6599665518467489,
+                0.6580739999325247,
+                0.6437227707623281
+              ],
+              "channelAlphaSpread": 0.016243781084420816,
+              "continuousMeanAbsoluteCodes": 0.50696525061529,
+              "continuousRMSECodes": 0.6469723983860233,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.44449643105849584,
+              "quantizedMismatchFraction": 0.4186192476207057
+            },
+            "linearLightSRGB": {
+              "alpha": 0.6714563774234056,
+              "channelAlpha": [
+                0.6735476463089374,
+                0.6787912798495789,
+                0.6612421607007664
+              ],
+              "channelAlphaSpread": 0.01754911914881252,
+              "continuousMeanAbsoluteCodes": 0.5194593882432057,
+              "continuousRMSECodes": 0.6648280898272757,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.45741879207288766,
+              "quantizedMismatchFraction": 0.4286213512650882
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.76796875
+        },
+        {
+          "actualSeconds": 0.9178352089999748,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 11,
+            "meanAbsoluteCode": 3.6866988016480966,
+            "mismatchedChannels": 5188713,
+            "mismatchedPixels": 1827947
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__dark/frame-0051.png",
+          "index": 51,
+          "phase": "live",
+          "presentationProgress": 0.84453125,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.2573011307288807,
+              "channelAlpha": [
+                0.2659568301250296,
+                0.2656262707113336,
+                0.24184214678674693
+              ],
+              "channelAlphaSpread": 0.02411468333828265,
+              "continuousMeanAbsoluteCodes": 0.6627520021241411,
+              "continuousRMSECodes": 0.8462680333161207,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.6041824439995358,
+              "quantizedMismatchFraction": 0.5211452530176416
+            },
+            "linearLightSRGB": {
+              "alpha": 0.26958917226002016,
+              "channelAlpha": [
+                0.2738585919297613,
+                0.28256251212230793,
+                0.25100886527977967
+              ],
+              "channelAlphaSpread": 0.03155364684252826,
+              "continuousMeanAbsoluteCodes": 0.6748216654008865,
+              "continuousRMSECodes": 0.8604521349813565,
+              "quantizedMaximumAbsoluteCodes": 4.0,
+              "quantizedMeanAbsoluteCodes": 0.6199713831824513,
+              "quantizedMismatchFraction": 0.5306127408310121
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.84453125
+        },
+        {
+          "actualSeconds": 0.941101291666655,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 7,
+            "meanAbsoluteCode": 2.395234520078923,
+            "mismatchedChannels": 5028079,
+            "mismatchedPixels": 1806299
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__dark/frame-0054.png",
+          "index": 54,
+          "phase": "live",
+          "presentationProgress": 0.89296875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.1649373159891457,
+              "channelAlpha": [
+                0.17158300447105557,
+                0.1718897385363375,
+                0.15253330966915568
+              ],
+              "channelAlphaSpread": 0.019356428867181807,
+              "continuousMeanAbsoluteCodes": 0.5751051999165044,
+              "continuousRMSECodes": 0.7287361430257701,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.5342919423166202,
+              "quantizedMismatchFraction": 0.4874160355733519
+            },
+            "linearLightSRGB": {
+              "alpha": 0.1732057456606026,
+              "channelAlpha": [
+                0.17654627834486342,
+                0.1840870045072499,
+                0.15783838714789816
+              ],
+              "channelAlphaSpread": 0.026248617359351745,
+              "continuousMeanAbsoluteCodes": 0.582857477386156,
+              "continuousRMSECodes": 0.7383960915145191,
+              "quantizedMaximumAbsoluteCodes": 3.0,
+              "quantizedMeanAbsoluteCodes": 0.5334548369312906,
+              "quantizedMismatchFraction": 0.4861875797934076
+            },
+            "lowerQuantizedResidualModel": "linearLightSRGB"
+          },
+          "timelineCoordinate": 0.89296875
+        },
+        {
+          "actualSeconds": 1.0031004170000415,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 3,
+            "meanAbsoluteCode": 0.6921844170728877,
+            "mismatchedChannels": 3535399,
+            "mismatchedPixels": 1533766
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__dark/frame-0058.png",
+          "index": 58,
+          "phase": "live",
+          "presentationProgress": 0.96796875,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.04804262968270064,
+              "channelAlpha": [
+                0.05027648312352663,
+                0.04982419085702866,
+                0.04440317953832784
+              ],
+              "channelAlphaSpread": 0.005873303585198789,
+              "continuousMeanAbsoluteCodes": 0.34317684925006514,
+              "continuousRMSECodes": 0.42511086370827456,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.25090166550603527,
+              "quantizedMismatchFraction": 0.25087682074048284
+            },
+            "linearLightSRGB": {
+              "alpha": 0.0509087215703503,
+              "channelAlpha": [
+                0.052154501631699365,
+                0.05393324009873868,
+                0.046351298366191306
+              ],
+              "channelAlphaSpread": 0.007581941732547372,
+              "continuousMeanAbsoluteCodes": 0.34421943314892334,
+              "continuousRMSECodes": 0.42699873419124085,
+              "quantizedMaximumAbsoluteCodes": 2.0,
+              "quantizedMeanAbsoluteCodes": 0.25424029422005573,
+              "quantizedMismatchFraction": 0.25421037169220057
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 0.96796875
+        },
+        {
+          "actualSeconds": 1.056984625000041,
+          "captureBackend": "ScreenCaptureKit-SCStream-BGRA",
+          "endpointComparison": {
+            "analysisRegionBitExact": false,
+            "maximumAbsoluteCode": 1,
+            "meanAbsoluteCode": 0.06519719852599815,
+            "mismatchedChannels": 359513,
+            "mismatchedPixels": 323837
+          },
+          "file": "dynamic/wallpaper-transition-reverse__clear__dark/frame-0060.png",
+          "index": 60,
+          "phase": "live",
+          "presentationProgress": 1.0,
+          "projection": {
+            "codeValue": {
+              "alpha": 0.003634873494093205,
+              "channelAlpha": [
+                0.003575501803469394,
+                0.0034333157327118284,
+                0.0038787534706755085
+              ],
+              "channelAlphaSpread": 0.0004454377379636801,
+              "continuousMeanAbsoluteCodes": 0.1078265661793997,
+              "continuousRMSECodes": 0.2483646050888246,
+              "quantizedMaximumAbsoluteCodes": 1.0,
+              "quantizedMeanAbsoluteCodes": 0.06519719852599815,
+              "quantizedMismatchFraction": 0.06519719852599815
+            },
+            "linearLightSRGB": {
+              "alpha": 0.0036716970027336478,
+              "channelAlpha": [
+                0.0034944913831321416,
+                0.0035251822710135063,
+                0.003997799857383633
+              ],
+              "channelAlphaSpread": 0.000503308474251491,
+              "continuousMeanAbsoluteCodes": 0.10511418251232517,
+              "continuousRMSECodes": 0.2484292420057681,
+              "quantizedMaximumAbsoluteCodes": 1.0,
+              "quantizedMeanAbsoluteCodes": 0.06519719852599815,
+              "quantizedMismatchFraction": 0.06519719852599815
+            },
+            "lowerQuantizedResidualModel": "codeValue"
+          },
+          "timelineCoordinate": 1.056984625000041
+        }
+      ]
+    }
+  ],
+  "transitionOriginNormalized": [
+    0.25,
+    0.3
+  ],
+  "windowPoints": [
+    1280,
+    1440
+  ]
+}

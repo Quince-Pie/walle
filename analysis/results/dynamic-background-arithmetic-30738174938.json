@@ -1,0 +1,1832 @@
+{
+  "capturedAppleFunctionUnmodified": false,
+  "classification": "prospective diagnostic stage isolation",
+  "customStageInVertex": true,
+  "dynamicArtifact": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938",
+  "firstDivergentStage": "sdf",
+  "implementation": {
+    "fragmentShaderBytes": 113087,
+    "fragmentShaderSha256": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "liquidGlassDynamicBackgroundArithmeticSchemaVersion": 1,
+  "prefix": {
+    "comparison": {
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "meanAbsoluteChannelDelta": 5.7220458984375e-06,
+      "mismatchedBytes": 24,
+      "mismatchedPixels": 22
+    },
+    "reference": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938/transition-background-uniform-16-glass-prefix-reference-bgra8.raw"
+  },
+  "preregistration": {
+    "contents": {
+      "acceptance": {
+        "maximumAllowedMismatchedWords": null,
+        "requireAllNineRawTraceSurfaces": true,
+        "requireFrozenWrapperAndInputHashes": true,
+        "requireMainGlassDrawCount": 1,
+        "requireOpenedRunDifferentFromPriorRuns": true,
+        "verdict": "diagnostic first-divergent-stage result; this is not a parity gate"
+      },
+      "backgroundArithmeticTomographyPreregistrationSchemaVersion": 1,
+      "capture": {
+        "appearance": "light",
+        "capturedAppleFunctionUnmodified": false,
+        "customStageInVertex": true,
+        "direction": "materialize",
+        "forbiddenOpenedRunIds": [
+          30737403841,
+          30737749781
+        ],
+        "material": "clear",
+        "replay": "main-only",
+        "sampleIndex": 16,
+        "traceNames": [
+          "sdf-float",
+          "sdf-geometry",
+          "sdf-oval",
+          "sdf-normal",
+          "sdf-coverage",
+          "sdf",
+          "color-stages-a",
+          "color-stages-b",
+          "final-color"
+        ]
+      },
+      "classification": "prospective diagnostic stage isolation",
+      "frozenAnalysis": {
+        "analysisWrapperSha256": "eb79d2494cb0982daa2a9c03fb7fc2e4a6cb8d39299ac432d84433153e998949",
+        "dynamicRenderGateSha256": "fec16ab265aae2ab5738c35fff2488e39807101e5ff51c862fc2374dd9aa200a",
+        "floatIntrinsicTableSha256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449",
+        "halfIntrinsicTableSha256": "ca1e5cbcaa645cad27917b87990edba4e8e06931c8089fbb2fbf1ae96837bfc2",
+        "referenceRendererSha256": "7ac69e72c3b7450f84d009233a781381e14393c136b058ee7f07c2c62866730a",
+        "referenceShaderSha256": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6",
+        "runtimeRasterCoefficientsSha256": "43a5e76869d8e3fba09214e586947b88745dd04283515b8f75e6ca8006d2aaf0",
+        "squareSelectorArchiveSha256": "93fcb5859794d67b193e00f2fe741416ae69d93125f38fa7b36506616b98e5ba",
+        "squareSelectorCalibrationSha256": "aa12e1a33851f60df923667d0e6063d877a194cc4d31548eb644751fa33584b6",
+        "staticRuntimeSha256": "bf4c3ff3883614d7e6b7fc6ac6457a62c772f366a82f9f951d6df206d2f7a21a"
+      },
+      "frozenComparisons": [
+        {
+          "components": [
+            "distance",
+            "normal-x",
+            "normal-y",
+            "coverage"
+          ],
+          "localNumericTrace": 1,
+          "metalTrace": "sdf",
+          "name": "sdf"
+        },
+        {
+          "components": [
+            "distance",
+            "feather",
+            "quotient",
+            "coverage"
+          ],
+          "localNumericTrace": 8,
+          "metalTrace": "sdf-coverage",
+          "name": "sdf-coverage"
+        },
+        {
+          "components": [
+            "source-rgba",
+            "face-rgba"
+          ],
+          "localNumericTraces": [
+            10,
+            11
+          ],
+          "metalTrace": "color-stages-a",
+          "name": "color-stages-a"
+        },
+        {
+          "components": [
+            "pre-holding-composite-rgba",
+            "post-holding-rgba"
+          ],
+          "localNumericTraces": [
+            12,
+            13
+          ],
+          "metalTrace": "color-stages-b",
+          "name": "color-stages-b"
+        },
+        {
+          "components": [
+            "pre-blend-r",
+            "pre-blend-g",
+            "pre-blend-b",
+            "pre-blend-a"
+          ],
+          "localNumericTrace": 9,
+          "metalTrace": "final-color",
+          "name": "final-color"
+        }
+      ],
+      "frozenInterpretation": [
+        "A first divergence in sdf or sdf-coverage localizes the retained error to SDF construction, half conversion, fine derivatives, or coverage arithmetic.",
+        "Exact sdf and sdf-coverage followed by a color-stages-a divergence localizes it to source sampling or face construction.",
+        "Exact color-stages-a followed by color-stages-b localizes it to edge, bleed, shadow, or holding composition.",
+        "Exact color stages followed by final-color localizes it to clamp or EDR arithmetic.",
+        "All custom-Metal stages exact while the Apple BGRA8 prefix remains inexact localizes it after the compared shader stages, but does not prove the private Apple shader uses the same intermediates."
+      ],
+      "limitations": [
+        "These are custom-Metal reimplementation stages executed on the captured buffers and raster state, not private Apple fragment-shader intermediates.",
+        "The unmodified Apple private shader remains the endpoint BGRA8 oracle.",
+        "This probe covers only clear/light materialize sample 16.",
+        "No result from this probe authorizes a production shader change or a Liquid Glass parity claim."
+      ],
+      "objective": "Locate the first arithmetic stage responsible for the retained sample-16 one-LSB main-edge error by comparing a frozen local renderer with custom-Metal replays captured only after this registration.",
+      "preOpeningHarnessCorrection": {
+        "correctedAnalysisWrapperSha256": "eb79d2494cb0982daa2a9c03fb7fc2e4a6cb8d39299ac432d84433153e998949",
+        "correction": "Select the full executable-spec shader and explicitly apply the same recovered exact configuration used by the production specialization.",
+        "dryRunInputRunId": 30737403841,
+        "dryRunRetainedPrefixMaximumChannelDelta": 1,
+        "dryRunRetainedPrefixMismatchedBytes": 29,
+        "dryRunRetainedPrefixMismatchedPixels": 29,
+        "fault": "The first wrapper selected the final production specialization, which intentionally specializes NumericTrace to zero and therefore cannot emit diagnostic stages.",
+        "newArtifactOpened": false,
+        "originalAnalysisWrapperSha256": "60b05bf08800f4ea78b5b7a4d12f93ab25ed482208df307cc69abcff275fa424"
+      },
+      "priorEvidence": {
+        "prospectiveFullRenderExactStates": 9,
+        "prospectiveFullRenderStateCount": 9,
+        "prospectiveInterpolantComparedWords": 37748736,
+        "prospectiveInterpolantMismatchedWords": 0,
+        "prospectiveInterpolantRunId": 30737749781,
+        "retainedFailingRunId": 30737403841,
+        "retainedFailingSampleIndex": 16,
+        "retainedFinalMaximumChannelDelta": 1,
+        "retainedFinalMismatchedBytes": 56,
+        "retainedFinalMismatchedPixels": 36,
+        "retainedPrefixMaximumChannelDelta": 1,
+        "retainedPrefixMismatchedBytes": 29,
+        "retainedPrefixMismatchedPixels": 29,
+        "shadowOwnedPrefixMismatchPixels": 0
+      }
+    },
+    "path": "lg-test/Analysis/background_arithmetic_tomography_preregistration.json",
+    "verifiedFiles": {
+      "analysisWrapperSha256": {
+        "path": "/tmp/walle/analysis/liquid_glass_dynamic_background_arithmetic.py",
+        "sha256": "eb79d2494cb0982daa2a9c03fb7fc2e4a6cb8d39299ac432d84433153e998949"
+      },
+      "dynamicRenderGateSha256": {
+        "path": "/tmp/walle/analysis/liquid_glass_dynamic_render_gate.py",
+        "sha256": "fec16ab265aae2ab5738c35fff2488e39807101e5ff51c862fc2374dd9aa200a"
+      },
+      "floatIntrinsicTableSha256": {
+        "path": "artifacts/apple-float-intrinsics-r8-30556057571.bin",
+        "sha256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449"
+      },
+      "halfIntrinsicTableSha256": {
+        "path": "artifacts/gh-run-30721856837/half-intrinsics.bin",
+        "sha256": "ca1e5cbcaa645cad27917b87990edba4e8e06931c8089fbb2fbf1ae96837bfc2"
+      },
+      "referenceRendererSha256": {
+        "path": "/tmp/walle/analysis/apple_glass_reference_renderer.py",
+        "sha256": "7ac69e72c3b7450f84d009233a781381e14393c136b058ee7f07c2c62866730a"
+      },
+      "referenceShaderSha256": {
+        "path": "/tmp/walle/analysis/apple_glass_reference.frag.glsl",
+        "sha256": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6"
+      },
+      "runtimeRasterCoefficientsSha256": {
+        "path": "/tmp/walle/analysis/liquid_glass_runtime_raster_coefficients.py",
+        "sha256": "43a5e76869d8e3fba09214e586947b88745dd04283515b8f75e6ca8006d2aaf0"
+      },
+      "squareSelectorArchiveSha256": {
+        "path": "artifacts/gh-run-30736731165/liquid-glass-raster-square-selector-sweep-30736731165/raster-square-selectors-u32le.zlib",
+        "sha256": "93fcb5859794d67b193e00f2fe741416ae69d93125f38fa7b36506616b98e5ba"
+      },
+      "squareSelectorCalibrationSha256": {
+        "path": "/tmp/walle/analysis/liquid_glass_square_selector_calibration.py",
+        "sha256": "aa12e1a33851f60df923667d0e6063d877a194cc4d31548eb644751fa33584b6"
+      },
+      "staticRuntimeSha256": {
+        "path": "artifacts/gh-run-30721856837/runtime.json",
+        "sha256": "bf4c3ff3883614d7e6b7fc6ac6457a62c772f366a82f9f951d6df206d2f7a21a"
+      }
+    }
+  },
+  "profile": {
+    "appearance": "light",
+    "material": "clear"
+  },
+  "rawFloatDiagnostics": {
+    "sdf-float": {
+      "classification": "custom-Metal diagnostic with no local gate oracle",
+      "path": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938/transition-background-uniform-16-glass-dynamic-main-sdf-float-numeric-trace-rgba32ui.raw",
+      "sha256": "6b37a0d0fa274e216e7ca91b5ccbbce56c111d6211c4a6570df56eba01059939"
+    },
+    "sdf-geometry": {
+      "classification": "custom-Metal diagnostic with no local gate oracle",
+      "path": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938/transition-background-uniform-16-glass-dynamic-main-sdf-geometry-numeric-trace-rgba32ui.raw",
+      "sha256": "3b5571d2f375b06bf35f47ba75ce96164dcd18f15860bd36392bcf0c6f03ba31"
+    },
+    "sdf-normal": {
+      "classification": "custom-Metal diagnostic with no local gate oracle",
+      "path": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938/transition-background-uniform-16-glass-dynamic-main-sdf-normal-numeric-trace-rgba32ui.raw",
+      "sha256": "2331fdb6f6c60f048a0fe1ad4ebeaf345ba361fd7c251535218e6836736cb1a5"
+    },
+    "sdf-oval": {
+      "classification": "custom-Metal diagnostic with no local gate oracle",
+      "path": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938/transition-background-uniform-16-glass-dynamic-main-sdf-oval-numeric-trace-rgba32ui.raw",
+      "sha256": "30191b0c276e528d0ceca392af809077a923b611e4e08a089f5a383958b002d5"
+    }
+  },
+  "report": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938/transition-timeline.json",
+  "runId": 30738174938,
+  "runtimeRaster": {
+    "backgroundScissor": [
+      312,
+      16,
+      696,
+      696
+    ],
+    "selector": {
+      "base": 26946957,
+      "offset": -3,
+      "selected": 26946954
+    },
+    "slopeBits": [
+      "0x3f800012",
+      "0xbf800012",
+      "0x3aaa98a7",
+      "0x3aaa98a7"
+    ],
+    "tileCount": 26,
+    "tileStart": 3
+  },
+  "sampleIndex": 16,
+  "stageComparisons": {
+    "color-stages-a": {
+      "comparedWords": 8388608,
+      "exact": true,
+      "examples": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    },
+    "color-stages-b": {
+      "comparedWords": 8388608,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x1bc9",
+            "0x1bc9",
+            "0x1bc9",
+            "0x327a",
+            "0x1bc9",
+            "0x1bc9",
+            "0x1bc9",
+            "0x327a"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x1bc4",
+            "0x1bc4",
+            "0x1bc4",
+            "0x3276",
+            "0x1bc4",
+            "0x1bc4",
+            "0x1bc4",
+            "0x3276"
+          ],
+          "x": 490,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1f5c",
+            "0x1f5c",
+            "0x1f5c",
+            "0x361f",
+            "0x1f5c",
+            "0x1f5c",
+            "0x1f5c",
+            "0x361f"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x1f5b",
+            "0x1f5b",
+            "0x1f5b",
+            "0x361e",
+            "0x1f5b",
+            "0x1f5b",
+            "0x1f5b",
+            "0x361e"
+          ],
+          "x": 494,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x2256",
+            "0x2256",
+            "0x2256",
+            "0x3945",
+            "0x2256",
+            "0x2256",
+            "0x2256",
+            "0x3945"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x2254",
+            "0x2254",
+            "0x2254",
+            "0x3944",
+            "0x2254",
+            "0x2254",
+            "0x2254",
+            "0x3944"
+          ],
+          "x": 503,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x22fe",
+            "0x22fe",
+            "0x22fe",
+            "0x39d1",
+            "0x22fe",
+            "0x22fe",
+            "0x22fe",
+            "0x39d1"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x22fd",
+            "0x22fd",
+            "0x22fd",
+            "0x39d0",
+            "0x22fd",
+            "0x22fd",
+            "0x22fd",
+            "0x39d0"
+          ],
+          "x": 515,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x22c2",
+            "0x22c2",
+            "0x22c2",
+            "0x399f",
+            "0x22c2",
+            "0x22c2",
+            "0x22c2",
+            "0x399f"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x22c1",
+            "0x22c1",
+            "0x22c1",
+            "0x399e",
+            "0x22c1",
+            "0x22c1",
+            "0x22c1",
+            "0x399e"
+          ],
+          "x": 517,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x223b",
+            "0x223b",
+            "0x223b",
+            "0x392f",
+            "0x223b",
+            "0x223b",
+            "0x223b",
+            "0x392f"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x223c",
+            "0x223c",
+            "0x223c",
+            "0x3930",
+            "0x223c",
+            "0x223c",
+            "0x223c",
+            "0x3930"
+          ],
+          "x": 520,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x2098",
+            "0x2098",
+            "0x2098",
+            "0x37a5",
+            "0x2098",
+            "0x2098",
+            "0x2098",
+            "0x37a5"
+          ],
+          "channels": [
+            3,
+            7
+          ],
+          "referenceHex": [
+            "0x2098",
+            "0x2098",
+            "0x2098",
+            "0x37a4",
+            "0x2098",
+            "0x2098",
+            "0x2098",
+            "0x37a4"
+          ],
+          "x": 526,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x203f",
+            "0x203f",
+            "0x203f",
+            "0x3710",
+            "0x203f",
+            "0x203f",
+            "0x203f",
+            "0x3710"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x203e",
+            "0x203e",
+            "0x203e",
+            "0x370f",
+            "0x203e",
+            "0x203e",
+            "0x203e",
+            "0x370f"
+          ],
+          "x": 527,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1fc1",
+            "0x1fc1",
+            "0x1fc1",
+            "0x3673",
+            "0x1fc1",
+            "0x1fc1",
+            "0x1fc1",
+            "0x3673"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x1fc0",
+            "0x1fc0",
+            "0x1fc0",
+            "0x3672",
+            "0x1fc0",
+            "0x1fc0",
+            "0x1fc0",
+            "0x3672"
+          ],
+          "x": 528,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1ad2",
+            "0x1ad2",
+            "0x1ad2",
+            "0x31ac",
+            "0x1ad2",
+            "0x1ad2",
+            "0x1ad2",
+            "0x31ac"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x1acf",
+            "0x1acf",
+            "0x1acf",
+            "0x31aa",
+            "0x1acf",
+            "0x1acf",
+            "0x1acf",
+            "0x31aa"
+          ],
+          "x": 533,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x18e5",
+            "0x18e5",
+            "0x18e5",
+            "0x3012",
+            "0x18e5",
+            "0x18e5",
+            "0x18e5",
+            "0x3012"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x18e2",
+            "0x18e2",
+            "0x18e2",
+            "0x3010",
+            "0x18e2",
+            "0x18e2",
+            "0x18e2",
+            "0x3010"
+          ],
+          "x": 534,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1ded",
+            "0x1ded",
+            "0x1ded",
+            "0x34ee",
+            "0x1ded",
+            "0x1ded",
+            "0x1ded",
+            "0x34ee"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x1dec",
+            "0x1dec",
+            "0x1dec",
+            "0x34ed",
+            "0x1dec",
+            "0x1dec",
+            "0x1dec",
+            "0x34ed"
+          ],
+          "x": 477,
+          "y": 109
+        },
+        {
+          "candidateHex": [
+            "0x2454",
+            "0x2454",
+            "0x2454",
+            "0x3b33",
+            "0x2454",
+            "0x2454",
+            "0x2454",
+            "0x3b33"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x2453",
+            "0x2453",
+            "0x2453",
+            "0x3b32",
+            "0x2453",
+            "0x2453",
+            "0x2453",
+            "0x3b32"
+          ],
+          "x": 537,
+          "y": 109
+        },
+        {
+          "candidateHex": [
+            "0x2371",
+            "0x2371",
+            "0x2371",
+            "0x3a31",
+            "0x2371",
+            "0x2371",
+            "0x2371",
+            "0x3a31"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x2370",
+            "0x2370",
+            "0x2370",
+            "0x3a30",
+            "0x2370",
+            "0x2370",
+            "0x2370",
+            "0x3a30"
+          ],
+          "x": 539,
+          "y": 109
+        },
+        {
+          "candidateHex": [
+            "0x1b43",
+            "0x1b43",
+            "0x1b43",
+            "0x320a",
+            "0x1b43",
+            "0x1b43",
+            "0x1b43",
+            "0x320a"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x1b40",
+            "0x1b40",
+            "0x1b40",
+            "0x3208",
+            "0x1b40",
+            "0x1b40",
+            "0x1b40",
+            "0x3208"
+          ],
+          "x": 547,
+          "y": 109
+        },
+        {
+          "candidateHex": [
+            "0x2027",
+            "0x2027",
+            "0x2027",
+            "0x36e8",
+            "0x2027",
+            "0x2027",
+            "0x2027",
+            "0x36e8"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "referenceHex": [
+            "0x2026",
+            "0x2026",
+            "0x2026",
+            "0x36e7",
+            "0x2026",
+            "0x2026",
+            "0x2026",
+            "0x36e7"
+          ],
+          "x": 468,
+          "y": 110
+        }
+      ],
+      "mismatchedPixels": 183,
+      "mismatchedWords": 1346
+    },
+    "final-color": {
+      "comparedWords": 4194304,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x1bc9",
+            "0x1bc9",
+            "0x1bc9",
+            "0x327a"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x1bc4",
+            "0x1bc4",
+            "0x1bc4",
+            "0x3276"
+          ],
+          "x": 490,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1f5c",
+            "0x1f5c",
+            "0x1f5c",
+            "0x361f"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x1f5b",
+            "0x1f5b",
+            "0x1f5b",
+            "0x361e"
+          ],
+          "x": 494,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x2256",
+            "0x2256",
+            "0x2256",
+            "0x3945"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x2254",
+            "0x2254",
+            "0x2254",
+            "0x3944"
+          ],
+          "x": 503,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x22fe",
+            "0x22fe",
+            "0x22fe",
+            "0x39d1"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x22fd",
+            "0x22fd",
+            "0x22fd",
+            "0x39d0"
+          ],
+          "x": 515,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x22c2",
+            "0x22c2",
+            "0x22c2",
+            "0x399f"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x22c1",
+            "0x22c1",
+            "0x22c1",
+            "0x399e"
+          ],
+          "x": 517,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x223b",
+            "0x223b",
+            "0x223b",
+            "0x392f"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x223c",
+            "0x223c",
+            "0x223c",
+            "0x3930"
+          ],
+          "x": 520,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x2098",
+            "0x2098",
+            "0x2098",
+            "0x37a5"
+          ],
+          "channels": [
+            3
+          ],
+          "referenceHex": [
+            "0x2098",
+            "0x2098",
+            "0x2098",
+            "0x37a4"
+          ],
+          "x": 526,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x203f",
+            "0x203f",
+            "0x203f",
+            "0x3710"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x203e",
+            "0x203e",
+            "0x203e",
+            "0x370f"
+          ],
+          "x": 527,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1fc1",
+            "0x1fc1",
+            "0x1fc1",
+            "0x3673"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x1fc0",
+            "0x1fc0",
+            "0x1fc0",
+            "0x3672"
+          ],
+          "x": 528,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1ad2",
+            "0x1ad2",
+            "0x1ad2",
+            "0x31ac"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x1acf",
+            "0x1acf",
+            "0x1acf",
+            "0x31aa"
+          ],
+          "x": 533,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x18e5",
+            "0x18e5",
+            "0x18e5",
+            "0x3012"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x18e2",
+            "0x18e2",
+            "0x18e2",
+            "0x3010"
+          ],
+          "x": 534,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1ded",
+            "0x1ded",
+            "0x1ded",
+            "0x34ee"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x1dec",
+            "0x1dec",
+            "0x1dec",
+            "0x34ed"
+          ],
+          "x": 477,
+          "y": 109
+        },
+        {
+          "candidateHex": [
+            "0x2454",
+            "0x2454",
+            "0x2454",
+            "0x3b33"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x2453",
+            "0x2453",
+            "0x2453",
+            "0x3b32"
+          ],
+          "x": 537,
+          "y": 109
+        },
+        {
+          "candidateHex": [
+            "0x2371",
+            "0x2371",
+            "0x2371",
+            "0x3a31"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x2370",
+            "0x2370",
+            "0x2370",
+            "0x3a30"
+          ],
+          "x": 539,
+          "y": 109
+        },
+        {
+          "candidateHex": [
+            "0x1b43",
+            "0x1b43",
+            "0x1b43",
+            "0x320a"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x1b40",
+            "0x1b40",
+            "0x1b40",
+            "0x3208"
+          ],
+          "x": 547,
+          "y": 109
+        },
+        {
+          "candidateHex": [
+            "0x2027",
+            "0x2027",
+            "0x2027",
+            "0x36e8"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x2026",
+            "0x2026",
+            "0x2026",
+            "0x36e7"
+          ],
+          "x": 468,
+          "y": 110
+        }
+      ],
+      "mismatchedPixels": 183,
+      "mismatchedWords": 679
+    },
+    "sdf": {
+      "comparedWords": 4194304,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x4ee0",
+            "0xb5a5",
+            "0x3b7c",
+            "0x0000"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x4ee1",
+            "0xb5a5",
+            "0x3b7c",
+            "0x0000"
+          ],
+          "x": 359,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x445f",
+            "0xb0cd",
+            "0x3be9",
+            "0x0000"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x4460",
+            "0xb0cd",
+            "0x3be9",
+            "0x0000"
+          ],
+          "x": 450,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3501",
+            "0xaaba",
+            "0x3bfd",
+            "0x327a"
+          ],
+          "channels": [
+            3
+          ],
+          "referenceHex": [
+            "0x3501",
+            "0xaaba",
+            "0x3bfd",
+            "0x3276"
+          ],
+          "x": 490,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x2fd2",
+            "0xa977",
+            "0x3bfe",
+            "0x361f"
+          ],
+          "channels": [
+            0,
+            3
+          ],
+          "referenceHex": [
+            "0x2fd5",
+            "0xa977",
+            "0x3bfe",
+            "0x361e"
+          ],
+          "x": 494,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1d6e",
+            "0xa884",
+            "0x3bff",
+            "0x37eb"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x1d81",
+            "0xa884",
+            "0x3bff",
+            "0x37eb"
+          ],
+          "x": 497,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xa75a",
+            "0xa833",
+            "0x3bff",
+            "0x3839"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0xa755",
+            "0xa833",
+            "0x3bff",
+            "0x3839"
+          ],
+          "x": 498,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xabb8",
+            "0xa7c4",
+            "0x3bff",
+            "0x3878"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0xabb7",
+            "0xa7c4",
+            "0x3bff",
+            "0x3878"
+          ],
+          "x": 499,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xaf6d",
+            "0xa680",
+            "0x3bff",
+            "0x38e8"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0xaf6c",
+            "0xa680",
+            "0x3bff",
+            "0x38e8"
+          ],
+          "x": 501,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb12e",
+            "0xa53b",
+            "0x3c00",
+            "0x3945"
+          ],
+          "channels": [
+            0,
+            3
+          ],
+          "referenceHex": [
+            "0xb12c",
+            "0xa53b",
+            "0x3c00",
+            "0x3944"
+          ],
+          "x": 503,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb2c9",
+            "0xa2a9",
+            "0x3c00",
+            "0x39ad"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0xb2c8",
+            "0xa2a9",
+            "0x3c00",
+            "0x39ad"
+          ],
+          "x": 506,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb329",
+            "0xa164",
+            "0x3c00",
+            "0x39c5"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0xb328",
+            "0xa164",
+            "0x3c00",
+            "0x39c5"
+          ],
+          "x": 507,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb375",
+            "0xa020",
+            "0x3c00",
+            "0x39da"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0xb374",
+            "0xa020",
+            "0x3c00",
+            "0x39da"
+          ],
+          "x": 508,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb3ad",
+            "0x9db6",
+            "0x3c00",
+            "0x39e8"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0xb3ac",
+            "0x9db6",
+            "0x3c00",
+            "0x39e8"
+          ],
+          "x": 509,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb3db",
+            "0x1797",
+            "0x3c00",
+            "0x39f5"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0xb3da",
+            "0x1797",
+            "0x3c00",
+            "0x39f5"
+          ],
+          "x": 512,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb352",
+            "0x20c1",
+            "0x3c00",
+            "0x39d1"
+          ],
+          "channels": [
+            0,
+            3
+          ],
+          "referenceHex": [
+            "0xb351",
+            "0x20c1",
+            "0x3c00",
+            "0x39d0"
+          ],
+          "x": 515,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb291",
+            "0x234a",
+            "0x3c00",
+            "0x399f"
+          ],
+          "channels": [
+            0,
+            3
+          ],
+          "referenceHex": [
+            "0xb290",
+            "0x234a",
+            "0x3c00",
+            "0x399e"
+          ],
+          "x": 517,
+          "y": 108
+        }
+      ],
+      "mismatchedPixels": 1023,
+      "mismatchedWords": 1150
+    },
+    "sdf-coverage": {
+      "comparedWords": 4194304,
+      "exact": false,
+      "examples": [
+        {
+          "candidateHex": [
+            "0x4ef7",
+            "0x3d20",
+            "0xcd70",
+            "0x0000"
+          ],
+          "channels": [
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x4ef7",
+            "0x3d10",
+            "0xcd81",
+            "0x0000"
+          ],
+          "x": 358,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x4ee0",
+            "0x3d20",
+            "0xcd5e",
+            "0x0000"
+          ],
+          "channels": [
+            0
+          ],
+          "referenceHex": [
+            "0x4ee1",
+            "0x3d20",
+            "0xcd5e",
+            "0x0000"
+          ],
+          "x": 359,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x445f",
+            "0x3c8a",
+            "0xc3b4",
+            "0x0000"
+          ],
+          "channels": [
+            0,
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x4460",
+            "0x3c92",
+            "0xc3a8",
+            "0x0000"
+          ],
+          "x": 450,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x4439",
+            "0x3c8a",
+            "0xc371",
+            "0x0000"
+          ],
+          "channels": [
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x4439",
+            "0x3c8e",
+            "0xc36b",
+            "0x0000"
+          ],
+          "x": 451,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3bb2",
+            "0x3c4c",
+            "0xbb2a",
+            "0x0000"
+          ],
+          "channels": [
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3bb2",
+            "0x3c4b",
+            "0xbb2c",
+            "0x0000"
+          ],
+          "x": 480,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3b16",
+            "0x3c4c",
+            "0xba99",
+            "0x0000"
+          ],
+          "channels": [
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x3b16",
+            "0x3c4b",
+            "0xba9a",
+            "0x0000"
+          ],
+          "x": 481,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x3501",
+            "0x3c34",
+            "0xb4c3",
+            "0x327a"
+          ],
+          "channels": [
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x3501",
+            "0x3c32",
+            "0xb4c5",
+            "0x3276"
+          ],
+          "x": 490,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x2fd2",
+            "0x3c29",
+            "0xaf85",
+            "0x361f"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0x2fd5",
+            "0x3c2a",
+            "0xaf86",
+            "0x361e"
+          ],
+          "x": 494,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x2d2c",
+            "0x3c29",
+            "0xacf9",
+            "0x36c2"
+          ],
+          "channels": [
+            1,
+            2
+          ],
+          "referenceHex": [
+            "0x2d2c",
+            "0x3c2a",
+            "0xacf8",
+            "0x36c2"
+          ],
+          "x": 495,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0x1d6e",
+            "0x3c25",
+            "0x9d3e",
+            "0x37eb"
+          ],
+          "channels": [
+            0,
+            2
+          ],
+          "referenceHex": [
+            "0x1d81",
+            "0x3c25",
+            "0x9d50",
+            "0x37eb"
+          ],
+          "x": 497,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xa75a",
+            "0x3c20",
+            "0x2721",
+            "0x3839"
+          ],
+          "channels": [
+            0,
+            2
+          ],
+          "referenceHex": [
+            "0xa755",
+            "0x3c20",
+            "0x271c",
+            "0x3839"
+          ],
+          "x": 498,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xabb8",
+            "0x3c20",
+            "0x2b7c",
+            "0x3878"
+          ],
+          "channels": [
+            0,
+            2
+          ],
+          "referenceHex": [
+            "0xabb7",
+            "0x3c20",
+            "0x2b7b",
+            "0x3878"
+          ],
+          "x": 499,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xaf6d",
+            "0x3c1a",
+            "0x2f3e",
+            "0x38e8"
+          ],
+          "channels": [
+            0,
+            2
+          ],
+          "referenceHex": [
+            "0xaf6c",
+            "0x3c1a",
+            "0x2f3d",
+            "0x38e8"
+          ],
+          "x": 501,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb12e",
+            "0x3c15",
+            "0x3113",
+            "0x3945"
+          ],
+          "channels": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "referenceHex": [
+            "0xb12c",
+            "0x3c16",
+            "0x3110",
+            "0x3944"
+          ],
+          "x": 503,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb2c9",
+            "0x3c0c",
+            "0x32b5",
+            "0x39ad"
+          ],
+          "channels": [
+            0,
+            2
+          ],
+          "referenceHex": [
+            "0xb2c8",
+            "0x3c0c",
+            "0x32b4",
+            "0x39ad"
+          ],
+          "x": 506,
+          "y": 108
+        },
+        {
+          "candidateHex": [
+            "0xb329",
+            "0x3c0c",
+            "0x3314",
+            "0x39c5"
+          ],
+          "channels": [
+            0,
+            2
+          ],
+          "referenceHex": [
+            "0xb328",
+            "0x3c0c",
+            "0x3313",
+            "0x39c5"
+          ],
+          "x": 507,
+          "y": 108
+        }
+      ],
+      "mismatchedPixels": 2153,
+      "mismatchedWords": 4785
+    }
+  }
+}

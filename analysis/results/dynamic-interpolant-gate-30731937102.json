@@ -1,0 +1,1099 @@
+{
+  "dynamicArtifact": "artifacts/gh-run-30731937102",
+  "gate": {
+    "exact": false,
+    "mismatchedWords": 1952424,
+    "productionShaderAuthorized": false,
+    "sampleCount": 3
+  },
+  "liquidGlassDynamicInterpolantGateSchemaVersion": 1,
+  "predictor": {
+    "capturedInterpolantReadByPredictor": false,
+    "file": "analysis/liquid_glass_runtime_raster_coefficients.py"
+  },
+  "samples": {
+    "1": {
+      "comparison": {
+        "comparedPixels": 693889,
+        "comparedWords": 2775556,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          1,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          24256,
+          24512,
+          237632,
+          237888
+        ],
+        "primitivePixelCounts": [
+          347361,
+          346528
+        ],
+        "slopeBits": [
+          "0x3f800001",
+          "0xbf800001",
+          "0x3adb29bc",
+          "0x00000000"
+        ],
+        "visibleBounds": [
+          95,
+          96,
+          928,
+          929
+        ]
+      },
+      "remaining": 0.031246185302734375,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 693889,
+          "bounds": {
+            "maximumX": 927,
+            "maximumY": 928,
+            "minimumX": 95,
+            "minimumY": 96
+          }
+        },
+        "path": "artifacts/gh-run-30731937102/liquid-glass-transition-introspection-profile-clear-light-materialize-30731937102/transition-background-uniform-01-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "sha256": "813c5795d0c059c3e95046cbe33bdf50bbade31d25b557379e56944b842e1fba"
+      }
+    },
+    "12": {
+      "comparison": {
+        "comparedPixels": 685584,
+        "comparedWords": 2742336,
+        "exact": false,
+        "examples": [
+          {
+            "appleBits": [
+              "0xc3cee8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -413.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3cee8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -413.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 98,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3ce68c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -412.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3ce68c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -412.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 99,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3cde8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -411.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3cde8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -411.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 100,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3cd68c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -410.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3cd68c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -410.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 101,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3cce8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -409.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3cce8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -409.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 102,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3cc68c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -408.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3cc68c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -408.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 103,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3cbe8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -407.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3cbe8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -407.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 104,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3cb68c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -406.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3cb68c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -406.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 105,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3cae8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -405.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3cae8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -405.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 106,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3ca68c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -404.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3ca68c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -404.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 107,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c9e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -403.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c9e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -403.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 108,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c968c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -402.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c968c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -402.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 109,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c8e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -401.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c8e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -401.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 110,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c868c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -400.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c868c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -400.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 111,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c7e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -399.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c7e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -399.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 112,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c768c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -398.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c768c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -398.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 113,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c6e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -397.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c6e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -397.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 114,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c668c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -396.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c668c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -396.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 115,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c5e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -395.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c5e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -395.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 116,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c568c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -394.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c568c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -394.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 117,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c4e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -393.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c4e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -393.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 118,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c468c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -392.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c468c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -392.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 119,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c3e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -391.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c3e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -391.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 120,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c368c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -390.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c368c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -390.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 121,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c2e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -389.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c2e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -389.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 122,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c268c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -388.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c268c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -388.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 123,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c1e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -387.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c1e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -387.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 124,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c168c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -386.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c168c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -386.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 125,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c0e8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -385.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c0e8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -385.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 126,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3c068c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -384.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3c068c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -384.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 127,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3bfe8c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -383.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3bfe8c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -383.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 128,
+            "y": 98
+          },
+          {
+            "appleBits": [
+              "0xc3bf68c0",
+              "0x43ce9740",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "appleValues": [
+              -382.818359375,
+              413.181640625,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "predictedBits": [
+              "0xc3bf68c1",
+              "0x43ce9741",
+              "0xbeb58d3e",
+              "0x3fa6398d"
+            ],
+            "predictedValues": [
+              -382.8183898925781,
+              413.1816711425781,
+              -0.3545932173728943,
+              1.2986313104629517
+            ],
+            "x": 129,
+            "y": 98
+          }
+        ],
+        "mismatchedPixels": 685584,
+        "mismatchedWords": 1952424,
+        "mismatchedWordsByChannel": [
+          685584,
+          685584,
+          581256,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          1,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          25173,
+          25010,
+          237134,
+          236971
+        ],
+        "primitivePixelCounts": [
+          342378,
+          343206
+        ],
+        "slopeBits": [
+          "0x3f800000",
+          "0xbf800000",
+          "0x3ab4adfd",
+          "0x00000000"
+        ],
+        "visibleBounds": [
+          98,
+          98,
+          926,
+          926
+        ]
+      },
+      "remaining": 0.3767051696777344,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 685584,
+          "bounds": {
+            "maximumX": 925,
+            "maximumY": 925,
+            "minimumX": 98,
+            "minimumY": 98
+          }
+        },
+        "path": "artifacts/gh-run-30731937102/liquid-glass-transition-introspection-profile-clear-light-materialize-30731937102/transition-background-uniform-12-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "sha256": "8688febd5d18cfbf0cde5b8607550b11d8a876e5d6a3c497964ab7a491856d57"
+      }
+    },
+    "32": {
+      "comparison": {
+        "comparedPixels": 669124,
+        "comparedWords": 2676496,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "quad": {
+        "channelAxes": [
+          0,
+          1,
+          1,
+          1
+        ],
+        "diagonal": "ascending",
+        "fixedBounds": [
+          26368,
+          26368,
+          235776,
+          235776
+        ],
+        "primitivePixelCounts": [
+          334971,
+          334153
+        ],
+        "slopeBits": [
+          "0x3f800000",
+          "0xbf800000",
+          "0x3a8f1114",
+          "0x00000000"
+        ],
+        "visibleBounds": [
+          103,
+          103,
+          921,
+          921
+        ]
+      },
+      "remaining": 1,
+      "trace": {
+        "activePixelsOutsidePredictedBounds": 0,
+        "coverage": {
+          "activePixels": 669124,
+          "bounds": {
+            "maximumX": 920,
+            "maximumY": 920,
+            "minimumX": 103,
+            "minimumY": 103
+          }
+        },
+        "path": "artifacts/gh-run-30731937102/liquid-glass-transition-introspection-profile-clear-light-materialize-30731937102/transition-background-uniform-32-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw",
+        "sha256": "4df2425483a6879f0a4912f108bc9a4c765a07c4adcecef4c51ff3b2e56e32ed"
+      }
+    }
+  }
+}

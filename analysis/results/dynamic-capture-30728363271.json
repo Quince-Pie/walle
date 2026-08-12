@@ -1,0 +1,1146 @@
+{
+  "artifact": "artifacts/gh-run-30728363271",
+  "conclusion": {
+    "allGeneratedPositionClipAndSdfBitsExact": false,
+    "dynamicRenderParityProven": false,
+    "movingBackdropBytesCapturedForEveryState": true,
+    "productionShaderAuthorized": false,
+    "profileCount": 1,
+    "stateCount": 9
+  },
+  "implementation": {
+    "file": "analysis/liquid_glass_dynamic_capture.py",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "liquidGlassDynamicCaptureAnalysisSchemaVersion": 1,
+  "profiles": [
+    {
+      "appearance": "light",
+      "artifact": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271",
+      "geometry": {
+        "centerX": 512,
+        "centerY": 512,
+        "extendsBeyondWindow": false,
+        "height": 800,
+        "name": "circle-800-center",
+        "shape": "circle",
+        "width": 800,
+        "windowHeight": 1024,
+        "windowWidth": 1024
+      },
+      "material": "clear",
+      "states": [
+        {
+          "backdropPyramid": {
+            "height": 576,
+            "levels": [
+              {
+                "bytes": 1327104,
+                "height": 576,
+                "level": 0,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-01-texture-000-pf80-576x576.raw",
+                "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+                "width": 576
+              },
+              {
+                "bytes": 331776,
+                "height": 288,
+                "level": 1,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-01-texture-000-pf80-576x576-mip-01.raw",
+                "sha256": "a251c7b271e711604c800658cf80ad17ef32328ab9b24fca54438b214224c3d9",
+                "width": 288
+              }
+            ],
+            "pixelFormat": 80,
+            "width": 576
+          },
+          "backgroundProfileSHA256": "d74b910eb2cfb35ed01aec016a5d427725e5831422808d1fdb80178809845c72",
+          "finalHighlightGeometrySHA256": "68bbff372d11be5ab960dc5b7b06f65b4b6c2f53c63f19c3b7cf5787ad49fa6d",
+          "finalHighlightUniformSHA256": "f8864ced1067e280314429a855bbf92391520c03f98deaa0cd898006078979f9",
+          "generatedEffectExtent": 815.4988098144531,
+          "generatedEffectOrigin": [
+            104.72084045410156,
+            104.72084045410156
+          ],
+          "geometryComparison": {
+            "main": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 6
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 12
+                }
+              },
+              "mismatchedComponents": 18
+            },
+            "shadow": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 20
+                },
+                "sdf": {
+                  "exact": false,
+                  "mismatchedComponents": 8
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 32
+                }
+              },
+              "mismatchedComponents": 60
+            }
+          },
+          "mvpBits": [
+            "0x3b000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbb000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbf800000",
+            "0x3f800000",
+            "0x00000000",
+            "0x3f800000"
+          ],
+          "output": {
+            "bytes": 4194304,
+            "height": 1024,
+            "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/transition-background-uniform-01-bgra8.raw",
+            "pixelFormat": 80,
+            "sha256": "f006bc52a653bc44921a2bbe8b1366c592d57a0a7467bf3aa234a2c821e8a5ce",
+            "width": 1024
+          },
+          "remaining": 0.03132438659667969,
+          "renderDurationSeconds": 0.7994895000000213,
+          "requestedProgress": 0.03125,
+          "sampleIndex": 1,
+          "snapshotLayerSource": "presentation",
+          "sourceMapping": {
+            "maximumOriginResidual": 0.11496997624635696,
+            "originNearestInteger": [
+              496,
+              -4
+            ],
+            "originX": 495.7694799005985,
+            "originY": -3.918274410068989,
+            "textureScaleX": 1.015625,
+            "textureScaleY": 1.015625,
+            "virtualHeight": 585,
+            "virtualWidth": 585
+          }
+        },
+        {
+          "backdropPyramid": {
+            "height": 576,
+            "levels": [
+              {
+                "bytes": 1327104,
+                "height": 576,
+                "level": 0,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-04-texture-000-pf80-576x576.raw",
+                "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+                "width": 576
+              },
+              {
+                "bytes": 331776,
+                "height": 288,
+                "level": 1,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-04-texture-000-pf80-576x576-mip-01.raw",
+                "sha256": "a251c7b271e711604c800658cf80ad17ef32328ab9b24fca54438b214224c3d9",
+                "width": 288
+              }
+            ],
+            "pixelFormat": 80,
+            "width": 576
+          },
+          "backgroundProfileSHA256": "a7bcb07b693e9830bfb67babbd9f4a693293c87a674212a39ef9669441f79027",
+          "finalHighlightGeometrySHA256": "93b0c459a85ff1910c7df5d2d735647368c2c555e3bc8c88077acfd6fb637a35",
+          "finalHighlightUniformSHA256": "867927edbe933b168b979a8806b0a954069181dda1bf4e50264ec044cdb42adb",
+          "generatedEffectExtent": 813.9700927734375,
+          "generatedEffectOrigin": [
+            105.26727294921875,
+            105.26727294921875
+          ],
+          "geometryComparison": {
+            "main": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 6
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 12
+                }
+              },
+              "mismatchedComponents": 18
+            },
+            "shadow": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 16
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 32
+                }
+              },
+              "mismatchedComponents": 48
+            }
+          },
+          "mvpBits": [
+            "0x3b000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbb000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbf800000",
+            "0x3f800000",
+            "0x00000000",
+            "0x3f800000"
+          ],
+          "output": {
+            "bytes": 4194304,
+            "height": 1024,
+            "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/transition-background-uniform-04-bgra8.raw",
+            "pixelFormat": 80,
+            "sha256": "2d8214ffdd5658da5f86ddc90e22619af19f63df534f66bb930e45a092903441",
+            "width": 1024
+          },
+          "remaining": 0.12686920166015625,
+          "renderDurationSeconds": 0.6838975416666528,
+          "requestedProgress": 0.125,
+          "sampleIndex": 4,
+          "snapshotLayerSource": "presentation",
+          "sourceMapping": {
+            "maximumOriginResidual": 0.008674979209899902,
+            "originNearestInteger": [
+              457,
+              -4
+            ],
+            "originX": 456.99009197950363,
+            "originY": -4.25994673371315,
+            "textureScaleX": 1.0677083333333333,
+            "textureScaleY": 1.0677083333333333,
+            "virtualHeight": 615,
+            "virtualWidth": 615
+          }
+        },
+        {
+          "backdropPyramid": {
+            "height": 576,
+            "levels": [
+              {
+                "bytes": 1327104,
+                "height": 576,
+                "level": 0,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-08-texture-000-pf80-576x576.raw",
+                "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+                "width": 576
+              },
+              {
+                "bytes": 331776,
+                "height": 288,
+                "level": 1,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-08-texture-000-pf80-576x576-mip-01.raw",
+                "sha256": "a251c7b271e711604c800658cf80ad17ef32328ab9b24fca54438b214224c3d9",
+                "width": 288
+              }
+            ],
+            "pixelFormat": 80,
+            "width": 576
+          },
+          "backgroundProfileSHA256": "8ad2ab91491ff546d19ca0c5daf138a17e1049ac578f9faccd567d59f0cfddcd",
+          "finalHighlightGeometrySHA256": "371de340c9eb6cfb574342976d94ed18135e7668998cf17de53a1ecfb657a3a4",
+          "finalHighlightUniformSHA256": "f4d483298670eaca5177a02bc950c15184dce66ea654e39366c6754b70223d2b",
+          "generatedEffectExtent": 811.9709777832031,
+          "generatedEffectOrigin": [
+            106.28895568847656,
+            106.28895568847656
+          ],
+          "geometryComparison": {
+            "main": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 6
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 12
+                }
+              },
+              "mismatchedComponents": 18
+            },
+            "shadow": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 20
+                },
+                "sdf": {
+                  "exact": false,
+                  "mismatchedComponents": 8
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 32
+                }
+              },
+              "mismatchedComponents": 60
+            }
+          },
+          "mvpBits": [
+            "0x3b000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbb000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbf800000",
+            "0x3f800000",
+            "0x00000000",
+            "0x3f800000"
+          ],
+          "output": {
+            "bytes": 4194304,
+            "height": 1024,
+            "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/transition-background-uniform-08-bgra8.raw",
+            "pixelFormat": 80,
+            "sha256": "7a96e3db595055c64c99e221fd00168ad098f213732eb68682f9b8c457bb0808",
+            "width": 1024
+          },
+          "remaining": 0.2518138885498047,
+          "renderDurationSeconds": 0.7548969999999997,
+          "requestedProgress": 0.25,
+          "sampleIndex": 8,
+          "snapshotLayerSource": "presentation",
+          "sourceMapping": {
+            "maximumOriginResidual": 0.01927642524242401,
+            "originNearestInteger": [
+              407,
+              -5
+            ],
+            "originX": 407.2742961496115,
+            "originY": -4.600672364234924,
+            "textureScaleX": 1.1440972222222223,
+            "textureScaleY": 1.1440972222222223,
+            "virtualHeight": 659,
+            "virtualWidth": 659
+          }
+        },
+        {
+          "backdropPyramid": {
+            "height": 576,
+            "levels": [
+              {
+                "bytes": 1327104,
+                "height": 576,
+                "level": 0,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-12-texture-000-pf80-576x576.raw",
+                "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+                "width": 576
+              },
+              {
+                "bytes": 331776,
+                "height": 288,
+                "level": 1,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-12-texture-000-pf80-576x576-mip-01.raw",
+                "sha256": "a251c7b271e711604c800658cf80ad17ef32328ab9b24fca54438b214224c3d9",
+                "width": 288
+              }
+            ],
+            "pixelFormat": 80,
+            "width": 576
+          },
+          "backgroundProfileSHA256": "062d4cc1ccf8816a70cc0583c3e51ee111572dd858d2742c62ef45efdbd16a9e",
+          "finalHighlightGeometrySHA256": "24ae1f45c3dd7f88c36dfa6eeaf70e7324255028f0ebbe09eb25201ac2a4135d",
+          "finalHighlightUniformSHA256": "a59987fbbc0f1f016ccdaa426a2e6fbdc1b2882f9da1f1a33b3cf539d69fb330",
+          "generatedEffectExtent": 809.9843444824219,
+          "generatedEffectOrigin": [
+            106.61643981933594,
+            106.61643981933594
+          ],
+          "geometryComparison": {
+            "main": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 6
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 12
+                }
+              },
+              "mismatchedComponents": 18
+            },
+            "shadow": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 20
+                },
+                "sdf": {
+                  "exact": false,
+                  "mismatchedComponents": 8
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 32
+                }
+              },
+              "mismatchedComponents": 60
+            }
+          },
+          "mvpBits": [
+            "0x3b000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbb000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbf800000",
+            "0x3f800000",
+            "0x00000000",
+            "0x3f800000"
+          ],
+          "output": {
+            "bytes": 4194304,
+            "height": 1024,
+            "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/transition-background-uniform-12-bgra8.raw",
+            "pixelFormat": 80,
+            "sha256": "00b758eb6d70b8f8d88894fad49ec82055a86ef87d76c6a4c7c0c71c6c795742",
+            "width": 1024
+          },
+          "remaining": 0.3759784698486328,
+          "renderDurationSeconds": 0.6767042500000002,
+          "requestedProgress": 0.375,
+          "sampleIndex": 12,
+          "snapshotLayerSource": "presentation",
+          "sourceMapping": {
+            "maximumOriginResidual": 0.19996029138565063,
+            "originNearestInteger": [
+              360,
+              -5
+            ],
+            "originX": 359.6761647313833,
+            "originY": -4.670629441738129,
+            "textureScaleX": 1.2309027777777777,
+            "textureScaleY": 1.2309027777777777,
+            "virtualHeight": 709,
+            "virtualWidth": 709
+          }
+        },
+        {
+          "backdropPyramid": {
+            "height": 576,
+            "levels": [
+              {
+                "bytes": 1327104,
+                "height": 576,
+                "level": 0,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-16-texture-000-pf80-576x576.raw",
+                "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+                "width": 576
+              },
+              {
+                "bytes": 331776,
+                "height": 288,
+                "level": 1,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-16-texture-000-pf80-576x576-mip-01.raw",
+                "sha256": "a251c7b271e711604c800658cf80ad17ef32328ab9b24fca54438b214224c3d9",
+                "width": 288
+              }
+            ],
+            "pixelFormat": 80,
+            "width": 576
+          },
+          "backgroundProfileSHA256": "9d236a03b1aa2fbb6b31c12c0b261c4e9d24c025b2c05f056a426200111e5654",
+          "finalHighlightGeometrySHA256": "3b505a5eecd9036274dbc16295a5ce705efa05da940c2ee1d84667982dcbe14b",
+          "finalHighlightUniformSHA256": "6a8b9b441f79e35721482a526d1305e6630b52805e74525c707d8740d67e3ffa",
+          "generatedEffectExtent": 807.98828125,
+          "generatedEffectOrigin": [
+            107.712890625,
+            107.712890625
+          ],
+          "geometryComparison": {
+            "main": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 6
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 12
+                }
+              },
+              "mismatchedComponents": 18
+            },
+            "shadow": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 16
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 32
+                }
+              },
+              "mismatchedComponents": 48
+            }
+          },
+          "mvpBits": [
+            "0x3b000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbb000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbf800000",
+            "0x3f800000",
+            "0x00000000",
+            "0x3f800000"
+          ],
+          "output": {
+            "bytes": 4194304,
+            "height": 1024,
+            "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/transition-background-uniform-16-bgra8.raw",
+            "pixelFormat": 80,
+            "sha256": "82ae6c316c22fdfc46a53e0fcec274c4e52ec58e0af82ec6f9073a6f0b463ef8",
+            "width": 1024
+          },
+          "remaining": 0.500732421875,
+          "renderDurationSeconds": 0.6735120833333212,
+          "requestedProgress": 0.5,
+          "sampleIndex": 16,
+          "snapshotLayerSource": "presentation",
+          "sourceMapping": {
+            "maximumOriginResidual": 0.1972637176513672,
+            "originNearestInteger": [
+              310,
+              -5
+            ],
+            "originX": 309.5831642150879,
+            "originY": -5.083189010620117,
+            "textureScaleX": 1.3333333333333333,
+            "textureScaleY": 1.3333333333333333,
+            "virtualHeight": 768,
+            "virtualWidth": 768
+          }
+        },
+        {
+          "backdropPyramid": {
+            "height": 576,
+            "levels": [
+              {
+                "bytes": 1327104,
+                "height": 576,
+                "level": 0,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-20-texture-000-pf80-576x576.raw",
+                "sha256": "0f7cfb43327ad082e6362afa8bcb4f762da9c55356e9c002f0b2697f0b6cd138",
+                "width": 576
+              },
+              {
+                "bytes": 331776,
+                "height": 288,
+                "level": 1,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-20-texture-000-pf80-576x576-mip-01.raw",
+                "sha256": "a251c7b271e711604c800658cf80ad17ef32328ab9b24fca54438b214224c3d9",
+                "width": 288
+              }
+            ],
+            "pixelFormat": 80,
+            "width": 576
+          },
+          "backgroundProfileSHA256": "5ccc716953eda0b0d7a40e2e9e2056ea30a0860f86c445f486271209c8dc7ffd",
+          "finalHighlightGeometrySHA256": "c12ba7146f0511a0c8e87f2a18dfb3058d07693fa7f28174b90cdd1ee3ba4101",
+          "finalHighlightUniformSHA256": "aa9d6d5888b4ac6da4e097f53ca0dcc71bb4161e181bf8e94f6b1242b2234322",
+          "generatedEffectExtent": 805.9639587402344,
+          "generatedEffectOrigin": [
+            109.11698913574219,
+            109.11698913574219
+          ],
+          "geometryComparison": {
+            "main": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 6
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 12
+                }
+              },
+              "mismatchedComponents": 18
+            },
+            "shadow": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 20
+                },
+                "sdf": {
+                  "exact": false,
+                  "mismatchedComponents": 8
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 32
+                }
+              },
+              "mismatchedComponents": 60
+            }
+          },
+          "mvpBits": [
+            "0x3b000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbb000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbf800000",
+            "0x3f800000",
+            "0x00000000",
+            "0x3f800000"
+          ],
+          "output": {
+            "bytes": 4194304,
+            "height": 1024,
+            "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/transition-background-uniform-20-bgra8.raw",
+            "pixelFormat": 80,
+            "sha256": "ca3e5ae7f5ea8ccaccc1bcf35dadf8fd94b3b6c36ff4c4b3c4b07fc02f5e4a46",
+            "width": 1024
+          },
+          "remaining": 0.6272525787353516,
+          "renderDurationSeconds": 0.7282546250000053,
+          "requestedProgress": 0.625,
+          "sampleIndex": 20,
+          "snapshotLayerSource": "presentation",
+          "sourceMapping": {
+            "maximumOriginResidual": 0.09266515076160431,
+            "originNearestInteger": [
+              256,
+              -6
+            ],
+            "originX": 256.4788629859686,
+            "originY": -5.70868494361639,
+            "textureScaleX": 1.4565972222222223,
+            "textureScaleY": 1.4565972222222223,
+            "virtualHeight": 839,
+            "virtualWidth": 839
+          }
+        },
+        {
+          "backdropPyramid": {
+            "height": 512,
+            "levels": [
+              {
+                "bytes": 1048576,
+                "height": 512,
+                "level": 0,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-24-texture-000-pf80-512x512.raw",
+                "sha256": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+                "width": 512
+              },
+              {
+                "bytes": 262144,
+                "height": 256,
+                "level": 1,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-24-texture-000-pf80-512x512-mip-01.raw",
+                "sha256": "8a39d2abd3999ab73c34db2476849cddf303ce389b35826850f9a700589b4a90",
+                "width": 256
+              }
+            ],
+            "pixelFormat": 80,
+            "width": 512
+          },
+          "backgroundProfileSHA256": "576e247e83ae79370b4876b53fc48b180d8e5a5e59b960cc7e746062c0f8eb2e",
+          "finalHighlightGeometrySHA256": "8a6e8241ed5468ac63d2d49ac4b50d820cfc65be0f1de3e81607f167a7136c6d",
+          "finalHighlightUniformSHA256": "928d1fb3c230ba86f498c88745955b2c625debd304132573d2baff30ae5167b8",
+          "generatedEffectExtent": 803.9655303955078,
+          "generatedEffectOrigin": [
+            110.1554946899414,
+            110.1554946899414
+          ],
+          "geometryComparison": {
+            "main": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 6
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 12
+                }
+              },
+              "mismatchedComponents": 18
+            },
+            "shadow": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 16
+                },
+                "sdf": {
+                  "exact": false,
+                  "mismatchedComponents": 8
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 32
+                }
+              },
+              "mismatchedComponents": 56
+            }
+          },
+          "mvpBits": [
+            "0x3b000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbb000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbf800000",
+            "0x3f800000",
+            "0x00000000",
+            "0x3f800000"
+          ],
+          "output": {
+            "bytes": 4194304,
+            "height": 1024,
+            "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/transition-background-uniform-24-bgra8.raw",
+            "pixelFormat": 80,
+            "sha256": "fad7ddf8b981d3a3b3901dba3704237b3beb10494349af844e1fa163348a03e9",
+            "width": 1024
+          },
+          "remaining": 0.7521543502807617,
+          "renderDurationSeconds": 0.6735350416666677,
+          "requestedProgress": 0.75,
+          "sampleIndex": 24,
+          "snapshotLayerSource": "presentation",
+          "sourceMapping": {
+            "maximumOriginResidual": 0.1889527142047882,
+            "originNearestInteger": [
+              205,
+              6
+            ],
+            "originX": 205.00929937139153,
+            "originY": 6.1734679043293,
+            "textureScaleX": 1.603515625,
+            "textureScaleY": 1.603515625,
+            "virtualHeight": 821,
+            "virtualWidth": 821
+          }
+        },
+        {
+          "backdropPyramid": {
+            "height": 512,
+            "levels": [
+              {
+                "bytes": 1048576,
+                "height": 512,
+                "level": 0,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-28-texture-000-pf80-512x512.raw",
+                "sha256": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+                "width": 512
+              },
+              {
+                "bytes": 262144,
+                "height": 256,
+                "level": 1,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-28-texture-000-pf80-512x512-mip-01.raw",
+                "sha256": "8a39d2abd3999ab73c34db2476849cddf303ce389b35826850f9a700589b4a90",
+                "width": 256
+              }
+            ],
+            "pixelFormat": 80,
+            "width": 512
+          },
+          "backgroundProfileSHA256": "03ecc6aece8de3135fa6911add709d2340da108848d7577597e34febdc42772c",
+          "finalHighlightGeometrySHA256": "e547382897491be32cab3333ea44eb4c51ec8d0fe2a60d69bbce56a7c439be02",
+          "finalHighlightUniformSHA256": "099b181f312c419786ec5c246bd2833ff38557364c71b423eea51111b9a826a1",
+          "generatedEffectExtent": 801.9609527587891,
+          "generatedEffectOrigin": [
+            111.04334259033203,
+            111.04334259033203
+          ],
+          "geometryComparison": {
+            "main": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 6
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 12
+                }
+              },
+              "mismatchedComponents": 18
+            },
+            "shadow": {
+              "exact": false,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": false,
+                  "mismatchedComponents": 16
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": false,
+                  "mismatchedComponents": 32
+                }
+              },
+              "mismatchedComponents": 48
+            }
+          },
+          "mvpBits": [
+            "0x3b000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbb000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbf800000",
+            "0x3f800000",
+            "0x00000000",
+            "0x3f800000"
+          ],
+          "output": {
+            "bytes": 4194304,
+            "height": 1024,
+            "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/transition-background-uniform-28-bgra8.raw",
+            "pixelFormat": 80,
+            "sha256": "040d1d398b5c2e1d5f9ce2d70954a78bea55d2a50557302055518dec304dcd79",
+            "width": 1024
+          },
+          "remaining": 0.8774404525756836,
+          "renderDurationSeconds": 0.6982258333333391,
+          "requestedProgress": 0.875,
+          "sampleIndex": 28,
+          "snapshotLayerSource": "presentation",
+          "sourceMapping": {
+            "maximumOriginResidual": 0.08838450908660889,
+            "originNearestInteger": [
+              157,
+              57
+            ],
+            "originX": 156.86284786462784,
+            "originY": 57.112847447395325,
+            "textureScaleX": 1.78125,
+            "textureScaleY": 1.78125,
+            "virtualHeight": 912,
+            "virtualWidth": 912
+          }
+        },
+        {
+          "backdropPyramid": {
+            "height": 448,
+            "levels": [
+              {
+                "bytes": 802816,
+                "height": 448,
+                "level": 0,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-32-texture-000-pf80-448x448.raw",
+                "sha256": "125c62526cce3e4b947fa527adf081ae0394d1ef0fbeb74db5ce742574533cf3",
+                "width": 448
+              },
+              {
+                "bytes": 200704,
+                "height": 224,
+                "level": 1,
+                "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/sdf-generator-transition-background-uniform-32-texture-000-pf80-448x448-mip-01.raw",
+                "sha256": "ba0ee4b797b99449ebc7396d09562a0f64ec8795eabf62376fe36e289fb0f3c8",
+                "width": 224
+              }
+            ],
+            "pixelFormat": 80,
+            "width": 448
+          },
+          "backgroundProfileSHA256": "677bb330d187f4780f914cba32be2ff347c591df18d49e88764628bb7e9e0c87",
+          "finalHighlightGeometrySHA256": "8b812ac6e19c5ba753bc82025a80468276bfd6e235c467caf44f8e0e7cd9fe26",
+          "finalHighlightUniformSHA256": "8ca2a986d0af33555f97b32fcebef3625a23c79620a374c8a52cac23411aaaa5",
+          "generatedEffectExtent": 800.0,
+          "generatedEffectOrigin": [
+            112.0,
+            112.0
+          ],
+          "geometryComparison": {
+            "main": {
+              "exact": true,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                }
+              },
+              "mismatchedComponents": 0
+            },
+            "shadow": {
+              "exact": true,
+              "groups": {
+                "clip": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "position": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "sdf": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                },
+                "source": {
+                  "exact": true,
+                  "mismatchedComponents": 0
+                }
+              },
+              "mismatchedComponents": 0
+            }
+          },
+          "mvpBits": [
+            "0x3b000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbb000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0x00000000",
+            "0xbf800000",
+            "0x3f800000",
+            "0x00000000",
+            "0x3f800000"
+          ],
+          "output": {
+            "bytes": 4194304,
+            "height": 1024,
+            "path": "artifacts/gh-run-30728363271/liquid-glass-transition-introspection-profile-clear-light-materialize-30728363271/transition-background-uniform-32-bgra8.raw",
+            "pixelFormat": 80,
+            "sha256": "d082143ad056fdc215addfb3d9dd34bc4e5c1b6033431cf61240b845b6f59d0d",
+            "width": 1024
+          },
+          "remaining": 1.0,
+          "renderDurationSeconds": 0.7552124166666658,
+          "requestedProgress": 1,
+          "sampleIndex": 32,
+          "snapshotLayerSource": "static-carrier-endpoint",
+          "sourceMapping": {
+            "maximumOriginResidual": 7.450580596923828e-06,
+            "originNearestInteger": [
+              104,
+              104
+            ],
+            "originX": 103.99999219179153,
+            "originY": 103.99999219179153,
+            "textureScaleX": 2.0,
+            "textureScaleY": 2.0,
+            "virtualHeight": 896,
+            "virtualWidth": 896
+          }
+        }
+      ],
+      "timelineSHA256": "a96f809f4ee84e3673d0c47bf7b299d7e4cb9475d3f563e1fee3c50eb7a39265"
+    }
+  ],
+  "staticTemplateCapture": "artifacts/gh-run-30721856837"
+}

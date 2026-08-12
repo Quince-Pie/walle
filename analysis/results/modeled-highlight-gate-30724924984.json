@@ -1,0 +1,261 @@
+{
+  "alphaCapture": "artifacts/gh-run-30724924984/liquid-glass-highlight-pipeline-30724924984",
+  "alphaRuntimeSHA256": "59cd847840ec2f606df8dc12e71c3d9a6f054e0474ae12c19c263e14aea9def5",
+  "candidateConfiguration": {
+    "highlightCoordinateMode": 0,
+    "highlightCoverageArithmeticMode": 1,
+    "highlightDerivativeMode": 1,
+    "highlightNormalizeMode": 1,
+    "highlightSourceDivisionMode": 0,
+    "highlightVibrantArithmeticMode": 9,
+    "useAppleFloatIntrinsicTable": true,
+    "useAppleHalfIntrinsicTable": true
+  },
+  "gate": {
+    "capturedAppleFunctionUnmodified": true,
+    "exact": true,
+    "modeledAlphaExact": true,
+    "modeledPostGlass": {
+      "exact": true,
+      "maximumChannelDelta": 0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "oracleInjectionUsed": false,
+    "productionShaderAuthorized": false
+  },
+  "highlightFixtureFingerprint": {
+    "indices": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de",
+    "uniform": "ffd866689cc7391ffc0a19cf61446ea5b173869316ea7de6df0f37ab9506024a",
+    "vertices": "a4ef6b66e7735bfafd3e07c9adcacf89d745258719d741a7b8fbc8df622b24c1"
+  },
+  "implementation": {
+    "fragmentShaderBytes": 105851,
+    "fragmentShaderSha256": "2f89d8f683097163bddefa1a6f4253d81ed912fdb45f354bfe00dc53271a5f17",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "intrinsicEvidence": {
+    "float": {
+      "path": "artifacts/apple-float-intrinsics-r8-30556057571.bin",
+      "sha256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449"
+    },
+    "half": {
+      "path": "artifacts/gh-run-30721856837/half-intrinsics.bin",
+      "sha256": "ca1e5cbcaa645cad27917b87990edba4e8e06931c8089fbb2fbf1ae96837bfc2"
+    }
+  },
+  "liquidGlassModeledHighlightGateSchemaVersion": 1,
+  "modeledAlpha": {
+    "combined": {
+      "applePath": "artifacts/gh-run-30724924984/liquid-glass-highlight-pipeline-30724924984/carenderer-local-backdrop-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+      "appleSHA256": "52a2df22a7a94c8dd2150ee8f152fc67a0fc5551bd38153474ac6e11d18a614d",
+      "comparison": {
+        "activeApplePixels": 4028,
+        "activeCandidatePixels": 4028,
+        "activeMaskMismatchedPixels": 0,
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumAbsoluteValueDelta": 0.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedWords": 0,
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 1048576
+      },
+      "uniformEdits": {}
+    },
+    "fill": {
+      "applePath": "artifacts/gh-run-30724924984/liquid-glass-highlight-pipeline-30724924984/carenderer-local-backdrop-final-highlight-alpha-fill-rgba16float-rgba16f.raw",
+      "appleSHA256": "c0efeee82b5cfe4d8b037e31f797dd9fb8d28d406a9020052b6cf0948bcd1beb",
+      "comparison": {
+        "activeApplePixels": 3554,
+        "activeCandidatePixels": 3554,
+        "activeMaskMismatchedPixels": 0,
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumAbsoluteValueDelta": 0.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedWords": 0,
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 1048576
+      },
+      "uniformEdits": {
+        "0xe8": "0000000000000000"
+      }
+    },
+    "key": {
+      "applePath": "artifacts/gh-run-30724924984/liquid-glass-highlight-pipeline-30724924984/carenderer-local-backdrop-final-highlight-alpha-key-rgba16float-rgba16f.raw",
+      "appleSHA256": "07c060e9b798ca5aee6c7bc5ddb56eb7717d8fed2f44996f1c6d255015302cb5",
+      "comparison": {
+        "activeApplePixels": 3554,
+        "activeCandidatePixels": 3554,
+        "activeMaskMismatchedPixels": 0,
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumAbsoluteValueDelta": 0.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedWords": 0,
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 1048576
+      },
+      "uniformEdits": {
+        "0xf0": "0000000000000000"
+      }
+    }
+  },
+  "postGlassCases": [
+    {
+      "appleOutput": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-black-output-bgra8.raw",
+        "sha256": "344e69484d49fc1e88585eb86d7c7095030bef1ef9cc290df6023f70c49988e6"
+      },
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "input": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-black-input-bgra8.raw",
+        "sha256": "4571a45562870efcbcbaacbe46976b780a3be00a4b3651d8a0a3329e6f38ac3b"
+      },
+      "name": "black"
+    },
+    {
+      "appleOutput": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-white-output-bgra8.raw",
+        "sha256": "cd3517473707d59c3d915b52a3e16213cadce80d9ffb2b4371958fb7acb51a08"
+      },
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "input": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-white-input-bgra8.raw",
+        "sha256": "cd3517473707d59c3d915b52a3e16213cadce80d9ffb2b4371958fb7acb51a08"
+      },
+      "name": "white"
+    },
+    {
+      "appleOutput": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-red-output-bgra8.raw",
+        "sha256": "f3dc4cfbc14f9faf05a2a49602d573f57b641efa931cc075aecb8d81f5805290"
+      },
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "input": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-red-input-bgra8.raw",
+        "sha256": "b73edb1dd5a5db45c625fff9e303a943e3f851282dbd0bf607dd38c928e2dc60"
+      },
+      "name": "red"
+    },
+    {
+      "appleOutput": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-green-output-bgra8.raw",
+        "sha256": "508e5c1af3d87986fc1485478cffce84bcbbe898e2604c78de087e1effb2fd50"
+      },
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "input": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-green-input-bgra8.raw",
+        "sha256": "508e5c1af3d87986fc1485478cffce84bcbbe898e2604c78de087e1effb2fd50"
+      },
+      "name": "green"
+    },
+    {
+      "appleOutput": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-blue-output-bgra8.raw",
+        "sha256": "67a90287b45178958f71f8be4d8fee5375d5c0d52814225463b29a1cd8e2c931"
+      },
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "input": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-blue-input-bgra8.raw",
+        "sha256": "69c37d64b9957a165f4972d3fd7f303a7db0b211620360821cd69c1bb5fe640b"
+      },
+      "name": "blue"
+    },
+    {
+      "appleOutput": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-ramp-output-bgra8.raw",
+        "sha256": "a8ba244bdd71a0feed1ede68f5b8ac511c4fd6935acd6214cb1f17296d67988e"
+      },
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "input": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-ramp-input-bgra8.raw",
+        "sha256": "b39aac3d8b41ad5eeb110521ab23ec9c2d61bed36cc8c7c71522eb403879cbb3"
+      },
+      "name": "ramp"
+    },
+    {
+      "appleOutput": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-hash-a-output-bgra8.raw",
+        "sha256": "32dc40a3dc3410cb67b2465a748a3dcffc29bed95cde79861535eae390a9a903"
+      },
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "input": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-hash-a-input-bgra8.raw",
+        "sha256": "5e00d0707cbf7012714d963b2722beb615f01664dc55046e3218f1071bf350c8"
+      },
+      "name": "hash-a"
+    },
+    {
+      "appleOutput": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-hash-b-output-bgra8.raw",
+        "sha256": "98506d309e12a170b758fd40c0b62d21fa6c9cdc40ead411832641f0eebda354"
+      },
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "input": {
+        "path": "artifacts/gh-run-30721856837/carenderer-local-backdrop-post-glass-hash-b-input-bgra8.raw",
+        "sha256": "97cd3b6538c079f0b698248405a6e7bbe275cb763170463f3aeb4a73fda2b341"
+      },
+      "name": "hash-b"
+    }
+  ],
+  "referenceCapture": "artifacts/gh-run-30721856837",
+  "referenceRuntimeSHA256": "bf4c3ff3883614d7e6b7fc6ac6457a62c772f366a82f9f951d6df206d2f7a21a"
+}

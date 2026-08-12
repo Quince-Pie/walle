@@ -1,0 +1,1214 @@
+{
+  "aggregate": {
+    "displacementMatrixScaleBitsExactEveryState": true,
+    "fmaThenDivideMismatchedSourceComponents": 22,
+    "mainSourceComponentCount": 108,
+    "producerInputRawStateCount": 9,
+    "producerOrthographicScaleBitsExactEveryState": true,
+    "producerOutputRawStateCount": 9,
+    "runtimeScaleLawExactEveryState": true,
+    "shadowSourceComponentCount": 288,
+    "twoCandidateUnionMismatchedSourceComponents": 4
+  },
+  "appearance": "light",
+  "artifact": "artifacts/gh-run-30745630876/liquid-glass-transition-introspection-profile-clear-light-materialize-30745630876",
+  "conclusion": {
+    "dynamicResamplingAndCropAlgebraRecovered": true,
+    "exactSourceCoordinateStagingRecovered": false,
+    "independentCropAllocationPolicyRecovered": false,
+    "independentDynamicBackdropReplayProven": false,
+    "producerInputBytesCapturedEveryState": true,
+    "producerOutputBytesCapturedEveryState": true,
+    "productionShaderAuthorized": false
+  },
+  "implementation": {
+    "file": "analysis/liquid_glass_dynamic_backdrop.py",
+    "python": "3.14.4"
+  },
+  "liquidGlassDynamicBackdropAnalysisSchemaVersion": 1,
+  "material": "clear",
+  "stateCount": 9,
+  "states": [
+    {
+      "copyBase": {
+        "copyOffset": [
+          -4,
+          -4
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          488,
+          -4
+        ],
+        "producerCropOrigin": [
+          492,
+          0
+        ],
+        "uniform": {
+          "destinationLevel0Size": [
+            576,
+            576
+          ],
+          "destinationLevel1": 1,
+          "destinationLevel1Size": [
+            288,
+            288
+          ],
+          "noBaseMip": false,
+          "textureCoordinateBase": [
+            -4,
+            -4
+          ],
+          "textureCoordinateClamp": [
+            0,
+            0,
+            515,
+            515
+          ]
+        }
+      },
+      "expectedRuntimeScale": 0.9845290184020996,
+      "glass": {
+        "displacementMatrixScaleBitsExact": true,
+        "fragmentFunction": "glass_background_sdf_no_bleed_lph",
+        "mainSourceCoordinates": {
+          "affineFmaMismatchedComponents": 3,
+          "componentCount": 12,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 4.303216701373458e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "shadowSourceCoordinates": {
+          "affineFmaMismatchedComponents": 8,
+          "componentCount": 32,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 4.303216701373458e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "sourceTextureAddressMatchesCopyDestination": true,
+        "virtualExtent": [
+          585.0513181773491,
+          585.0513181773491
+        ]
+      },
+      "inputFaceOpacity": 0.03094196319580078,
+      "inverseRuntimeScaleQ": 1.0157140940578977,
+      "producer": {
+        "crop": {
+          "maximumIntegralResidual": 2.288818359375e-05,
+          "origin": [
+            492,
+            0
+          ],
+          "orthographicScaleBitsExact": true,
+          "raw": [
+            491.9999771118164,
+            0.0
+          ]
+        },
+        "fragmentFunction": "TimgA2Xhfc_Isrc",
+        "indexCount": 24,
+        "inputTexture": {
+          "height": 1024,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 1024,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 4194304,
+            "rawFile": "transition-background-uniform-01-dynamic-backdrop-producer-input-0-bgra8.raw",
+            "width": 1024
+          },
+          "width": 1024
+        },
+        "outputExtent": [
+          576,
+          576
+        ],
+        "outputTexture": {
+          "height": 576,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 576,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 1327104,
+            "rawFile": "transition-background-uniform-01-dynamic-backdrop-producer-output-0-bgra8.raw",
+            "width": 576
+          },
+          "width": 576
+        },
+        "pipelineLabel": "com.apple.coreanimation.PBGRAXm_TimgA2Xhfc_Isrc",
+        "sourceScaleComparison": {
+          "componentCount": 8,
+          "maximumUlpDistance": 0,
+          "roundedProductMismatchedComponents": 0
+        },
+        "vertexCount": 16
+      },
+      "remaining": 0.03094196319580078,
+      "runtimeScale": 0.9845290184020996,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 1
+    },
+    {
+      "copyBase": {
+        "copyOffset": [
+          -2,
+          -4
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          432,
+          -4
+        ],
+        "producerCropOrigin": [
+          434,
+          0
+        ],
+        "uniform": {
+          "destinationLevel0Size": [
+            576,
+            576
+          ],
+          "destinationLevel1": 1,
+          "destinationLevel1Size": [
+            288,
+            288
+          ],
+          "noBaseMip": false,
+          "textureCoordinateBase": [
+            -2,
+            -4
+          ],
+          "textureCoordinateClamp": [
+            0,
+            0,
+            525,
+            525
+          ]
+        }
+      },
+      "expectedRuntimeScale": 0.9375820159912109,
+      "glass": {
+        "displacementMatrixScaleBitsExact": true,
+        "fragmentFunction": "glass_background_sdf_no_bleed_lph",
+        "mainSourceCoordinates": {
+          "affineFmaMismatchedComponents": 6,
+          "componentCount": 12,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 1.099822111427784e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "shadowSourceCoordinates": {
+          "affineFmaMismatchedComponents": 20,
+          "componentCount": 32,
+          "fmaThenDivideMismatchedComponents": 4,
+          "maximumRecoveredOriginResidual": 1.099822111427784e-05,
+          "twoCandidateUnionExact": false,
+          "twoCandidateUnionMismatchedComponents": 4
+        },
+        "sourceTextureAddressMatchesCopyDestination": true,
+        "virtualExtent": [
+          614.3462547018389,
+          614.3462547018389
+        ]
+      },
+      "inputFaceOpacity": 0.12483596801757812,
+      "inverseRuntimeScaleQ": 1.0665733588573592,
+      "producer": {
+        "crop": {
+          "maximumIntegralResidual": 7.62939453125e-06,
+          "origin": [
+            434,
+            0
+          ],
+          "orthographicScaleBitsExact": true,
+          "raw": [
+            433.99999237060547,
+            0.0
+          ]
+        },
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "inputTexture": {
+          "height": 1024,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 1024,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 4194304,
+            "rawFile": "transition-background-uniform-04-dynamic-backdrop-producer-input-0-bgra8.raw",
+            "width": 1024
+          },
+          "width": 1024
+        },
+        "outputExtent": [
+          576,
+          576
+        ],
+        "outputTexture": {
+          "height": 576,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 576,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 1327104,
+            "rawFile": "transition-background-uniform-04-dynamic-backdrop-producer-output-0-bgra8.raw",
+            "width": 576
+          },
+          "width": 576
+        },
+        "pipelineLabel": "com.apple.coreanimation.PBGRAXm_A2Xghfc",
+        "sourceScaleComparison": {
+          "componentCount": 8,
+          "maximumUlpDistance": 0,
+          "roundedProductMismatchedComponents": 0
+        },
+        "vertexCount": 16
+      },
+      "remaining": 0.12483596801757812,
+      "runtimeScale": 0.9375820159912109,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 4
+    },
+    {
+      "copyBase": {
+        "copyOffset": [
+          -1,
+          -4
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          360,
+          -4
+        ],
+        "producerCropOrigin": [
+          361,
+          0
+        ],
+        "uniform": {
+          "destinationLevel0Size": [
+            576,
+            576
+          ],
+          "destinationLevel1": 1,
+          "destinationLevel1Size": [
+            288,
+            288
+          ],
+          "noBaseMip": false,
+          "textureCoordinateBase": [
+            -1,
+            -4
+          ],
+          "textureCoordinateClamp": [
+            0,
+            0,
+            534,
+            534
+          ]
+        }
+      },
+      "expectedRuntimeScale": 0.875037670135498,
+      "glass": {
+        "displacementMatrixScaleBitsExact": true,
+        "fragmentFunction": "glass_background_sdf_no_bleed_lph",
+        "mainSourceCoordinates": {
+          "affineFmaMismatchedComponents": 9,
+          "componentCount": 12,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 2.654374111443758e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "shadowSourceCoordinates": {
+          "affineFmaMismatchedComponents": 24,
+          "componentCount": 32,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 2.654374111443758e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "sourceTextureAddressMatchesCopyDestination": true,
+        "virtualExtent": [
+          658.2573752634071,
+          658.2573752634071
+        ]
+      },
+      "inputFaceOpacity": 0.2499246597290039,
+      "inverseRuntimeScaleQ": 1.1428079431656373,
+      "producer": {
+        "crop": {
+          "maximumIntegralResidual": 3.0517578125e-05,
+          "origin": [
+            361,
+            0
+          ],
+          "orthographicScaleBitsExact": true,
+          "raw": [
+            361.0000305175781,
+            0.0
+          ]
+        },
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "inputTexture": {
+          "height": 1024,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 1024,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 4194304,
+            "rawFile": "transition-background-uniform-08-dynamic-backdrop-producer-input-0-bgra8.raw",
+            "width": 1024
+          },
+          "width": 1024
+        },
+        "outputExtent": [
+          576,
+          576
+        ],
+        "outputTexture": {
+          "height": 576,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 576,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 1327104,
+            "rawFile": "transition-background-uniform-08-dynamic-backdrop-producer-output-0-bgra8.raw",
+            "width": 576
+          },
+          "width": 576
+        },
+        "pipelineLabel": "com.apple.coreanimation.PBGRAXm_A2Xghfc",
+        "sourceScaleComparison": {
+          "componentCount": 8,
+          "maximumUlpDistance": 0,
+          "roundedProductMismatchedComponents": 0
+        },
+        "vertexCount": 16
+      },
+      "remaining": 0.2499246597290039,
+      "runtimeScale": 0.875037670135498,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 8
+    },
+    {
+      "copyBase": {
+        "copyOffset": [
+          -3,
+          -4
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          292,
+          -4
+        ],
+        "producerCropOrigin": [
+          295,
+          0
+        ],
+        "uniform": {
+          "destinationLevel0Size": [
+            576,
+            576
+          ],
+          "destinationLevel1": 1,
+          "destinationLevel1Size": [
+            288,
+            288
+          ],
+          "noBaseMip": false,
+          "textureCoordinateBase": [
+            -3,
+            -4
+          ],
+          "textureCoordinateClamp": [
+            0,
+            0,
+            536,
+            536
+          ]
+        }
+      },
+      "expectedRuntimeScale": 0.8127121925354004,
+      "glass": {
+        "displacementMatrixScaleBitsExact": true,
+        "fragmentFunction": "glass_background_sdf_no_bleed_lph",
+        "mainSourceCoordinates": {
+          "affineFmaMismatchedComponents": 3,
+          "componentCount": 12,
+          "fmaThenDivideMismatchedComponents": 3,
+          "maximumRecoveredOriginResidual": 1.2383588909870014e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "shadowSourceCoordinates": {
+          "affineFmaMismatchedComponents": 8,
+          "componentCount": 32,
+          "fmaThenDivideMismatchedComponents": 4,
+          "maximumRecoveredOriginResidual": 1.2383588909870014e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "sourceTextureAddressMatchesCopyDestination": true,
+        "virtualExtent": [
+          708.7379828805883,
+          708.7379828805883
+        ]
+      },
+      "inputFaceOpacity": 0.3745756149291992,
+      "inverseRuntimeScaleQ": 1.2304478869454658,
+      "producer": {
+        "crop": {
+          "maximumIntegralResidual": 7.62939453125e-06,
+          "origin": [
+            295,
+            0
+          ],
+          "orthographicScaleBitsExact": true,
+          "raw": [
+            295.00000762939453,
+            0.0
+          ]
+        },
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "inputTexture": {
+          "height": 1024,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 1024,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 4194304,
+            "rawFile": "transition-background-uniform-12-dynamic-backdrop-producer-input-0-bgra8.raw",
+            "width": 1024
+          },
+          "width": 1024
+        },
+        "outputExtent": [
+          576,
+          576
+        ],
+        "outputTexture": {
+          "height": 576,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 576,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 1327104,
+            "rawFile": "transition-background-uniform-12-dynamic-backdrop-producer-output-0-bgra8.raw",
+            "width": 576
+          },
+          "width": 576
+        },
+        "pipelineLabel": "com.apple.coreanimation.PBGRAXm_A2Xghfc",
+        "sourceScaleComparison": {
+          "componentCount": 8,
+          "maximumUlpDistance": 0,
+          "roundedProductMismatchedComponents": 0
+        },
+        "vertexCount": 16
+      },
+      "remaining": 0.3745756149291992,
+      "runtimeScale": 0.8127121925354004,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 12
+    },
+    {
+      "copyBase": {
+        "copyOffset": [
+          -5,
+          -4
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          228,
+          -4
+        ],
+        "producerCropOrigin": [
+          233,
+          0
+        ],
+        "uniform": {
+          "destinationLevel0Size": [
+            576,
+            576
+          ],
+          "destinationLevel1": 1,
+          "destinationLevel1Size": [
+            288,
+            288
+          ],
+          "noBaseMip": false,
+          "textureCoordinateBase": [
+            -5,
+            -4
+          ],
+          "textureCoordinateClamp": [
+            0,
+            0,
+            532,
+            532
+          ]
+        }
+      },
+      "expectedRuntimeScale": 0.748873233795166,
+      "glass": {
+        "displacementMatrixScaleBitsExact": true,
+        "fragmentFunction": "glass_background_sdf_no_bleed_lph",
+        "mainSourceCoordinates": {
+          "affineFmaMismatchedComponents": 6,
+          "componentCount": 12,
+          "fmaThenDivideMismatchedComponents": 3,
+          "maximumRecoveredOriginResidual": 3.451536758802831e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "shadowSourceCoordinates": {
+          "affineFmaMismatchedComponents": 16,
+          "componentCount": 32,
+          "fmaThenDivideMismatchedComponents": 8,
+          "maximumRecoveredOriginResidual": 3.451536758802831e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "sourceTextureAddressMatchesCopyDestination": true,
+        "virtualExtent": [
+          769.1555446319359,
+          769.1555446319359
+        ]
+      },
+      "inputFaceOpacity": 0.502253532409668,
+      "inverseRuntimeScaleQ": 1.335339487208222,
+      "producer": {
+        "crop": {
+          "maximumIntegralResidual": 3.814697265625e-06,
+          "origin": [
+            233,
+            0
+          ],
+          "orthographicScaleBitsExact": true,
+          "raw": [
+            233.00000381469727,
+            0.0
+          ]
+        },
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "inputTexture": {
+          "height": 1024,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 1024,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 4194304,
+            "rawFile": "transition-background-uniform-16-dynamic-backdrop-producer-input-0-bgra8.raw",
+            "width": 1024
+          },
+          "width": 1024
+        },
+        "outputExtent": [
+          576,
+          576
+        ],
+        "outputTexture": {
+          "height": 576,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 576,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 1327104,
+            "rawFile": "transition-background-uniform-16-dynamic-backdrop-producer-output-0-bgra8.raw",
+            "width": 576
+          },
+          "width": 576
+        },
+        "pipelineLabel": "com.apple.coreanimation.PBGRAXm_A2Xghfc",
+        "sourceScaleComparison": {
+          "componentCount": 8,
+          "maximumUlpDistance": 0,
+          "roundedProductMismatchedComponents": 0
+        },
+        "vertexCount": 16
+      },
+      "remaining": 0.502253532409668,
+      "runtimeScale": 0.748873233795166,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 16
+    },
+    {
+      "copyBase": {
+        "copyOffset": [
+          -4,
+          -4
+        ],
+        "destinationExtent": [
+          576,
+          576
+        ],
+        "effectiveOrigin": [
+          176,
+          -4
+        ],
+        "producerCropOrigin": [
+          180,
+          0
+        ],
+        "uniform": {
+          "destinationLevel0Size": [
+            576,
+            576
+          ],
+          "destinationLevel1": 1,
+          "destinationLevel1Size": [
+            288,
+            288
+          ],
+          "noBaseMip": false,
+          "textureCoordinateBase": [
+            -4,
+            -4
+          ],
+          "textureCoordinateClamp": [
+            0,
+            0,
+            522,
+            522
+          ]
+        }
+      },
+      "expectedRuntimeScale": 0.6866025924682617,
+      "glass": {
+        "displacementMatrixScaleBitsExact": true,
+        "fragmentFunction": "glass_background_sdf_no_bleed_lph",
+        "mainSourceCoordinates": {
+          "affineFmaMismatchedComponents": 0,
+          "componentCount": 12,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 1.2487522326409817e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "shadowSourceCoordinates": {
+          "affineFmaMismatchedComponents": 0,
+          "componentCount": 32,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 1.4270131941884756e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "sourceTextureAddressMatchesCopyDestination": true,
+        "virtualExtent": [
+          838.9132320770047,
+          838.9132320770047
+        ]
+      },
+      "inputFaceOpacity": 0.6267948150634766,
+      "inverseRuntimeScaleQ": 1.4564465834670222,
+      "producer": {
+        "crop": {
+          "maximumIntegralResidual": 0.0,
+          "origin": [
+            180,
+            0
+          ],
+          "orthographicScaleBitsExact": true,
+          "raw": [
+            180.0,
+            0.0
+          ]
+        },
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 24,
+        "inputTexture": {
+          "height": 1024,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 1024,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 4194304,
+            "rawFile": "transition-background-uniform-20-dynamic-backdrop-producer-input-0-bgra8.raw",
+            "width": 1024
+          },
+          "width": 1024
+        },
+        "outputExtent": [
+          576,
+          576
+        ],
+        "outputTexture": {
+          "height": 576,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 576,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 1327104,
+            "rawFile": "transition-background-uniform-20-dynamic-backdrop-producer-output-0-bgra8.raw",
+            "width": 576
+          },
+          "width": 576
+        },
+        "pipelineLabel": "com.apple.coreanimation.PBGRAXm_A2Xghfc",
+        "sourceScaleComparison": {
+          "componentCount": 8,
+          "maximumUlpDistance": 0,
+          "roundedProductMismatchedComponents": 0
+        },
+        "vertexCount": 16
+      },
+      "remaining": 0.6267948150634766,
+      "runtimeScale": 0.6866025924682617,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 20
+    },
+    {
+      "copyBase": {
+        "copyOffset": [
+          -5,
+          -4
+        ],
+        "destinationExtent": [
+          512,
+          512
+        ],
+        "effectiveOrigin": [
+          128,
+          4
+        ],
+        "producerCropOrigin": [
+          133,
+          8
+        ],
+        "uniform": {
+          "destinationLevel0Size": [
+            512,
+            512
+          ],
+          "destinationLevel1": 1,
+          "destinationLevel1Size": [
+            256,
+            256
+          ],
+          "noBaseMip": false,
+          "textureCoordinateBase": [
+            -5,
+            -4
+          ],
+          "textureCoordinateClamp": [
+            0,
+            0,
+            497,
+            498
+          ]
+        }
+      },
+      "expectedRuntimeScale": 0.6243886947631836,
+      "glass": {
+        "displacementMatrixScaleBitsExact": true,
+        "fragmentFunction": "glass_background_sdf_no_bleed_lph",
+        "mainSourceCoordinates": {
+          "affineFmaMismatchedComponents": 0,
+          "componentCount": 12,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 2.5560380890965462e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "shadowSourceCoordinates": {
+          "affineFmaMismatchedComponents": 0,
+          "componentCount": 32,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 2.5560380890965462e-05,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "sourceTextureAddressMatchesCopyDestination": true,
+        "virtualExtent": [
+          820.0020344605854,
+          820.0020344605854
+        ]
+      },
+      "inputFaceOpacity": 0.7512226104736328,
+      "inverseRuntimeScaleQ": 1.6015664735558308,
+      "producer": {
+        "crop": {
+          "maximumIntegralResidual": 0.0,
+          "origin": [
+            133,
+            8
+          ],
+          "orthographicScaleBitsExact": true,
+          "raw": [
+            133.0,
+            8.0
+          ]
+        },
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 6,
+        "inputTexture": {
+          "height": 1024,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 1024,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 4194304,
+            "rawFile": "transition-background-uniform-24-dynamic-backdrop-producer-input-0-bgra8.raw",
+            "width": 1024
+          },
+          "width": 1024
+        },
+        "outputExtent": [
+          512,
+          512
+        ],
+        "outputTexture": {
+          "height": 512,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 512,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 1048576,
+            "rawFile": "transition-background-uniform-24-dynamic-backdrop-producer-output-0-bgra8.raw",
+            "width": 512
+          },
+          "width": 512
+        },
+        "pipelineLabel": "com.apple.coreanimation.PBGRAXm_A2Xghfc",
+        "sourceScaleComparison": {
+          "componentCount": 8,
+          "maximumUlpDistance": 1,
+          "roundedProductMismatchedComponents": 2
+        },
+        "vertexCount": 4
+      },
+      "remaining": 0.7512226104736328,
+      "runtimeScale": 0.6243886947631836,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 24
+    },
+    {
+      "copyBase": {
+        "copyOffset": [
+          -3,
+          -4
+        ],
+        "destinationExtent": [
+          512,
+          512
+        ],
+        "effectiveOrigin": [
+          88,
+          32
+        ],
+        "producerCropOrigin": [
+          91,
+          36
+        ],
+        "uniform": {
+          "destinationLevel0Size": [
+            512,
+            512
+          ],
+          "destinationLevel1": 1,
+          "destinationLevel1Size": [
+            256,
+            256
+          ],
+          "noBaseMip": false,
+          "textureCoordinateBase": [
+            -3,
+            -4
+          ],
+          "textureCoordinateClamp": [
+            0,
+            0,
+            448,
+            447
+          ]
+        }
+      },
+      "expectedRuntimeScale": 0.5619997978210449,
+      "glass": {
+        "displacementMatrixScaleBitsExact": true,
+        "fragmentFunction": "glass_background_sdf_no_bleed_lph",
+        "mainSourceCoordinates": {
+          "affineFmaMismatchedComponents": 0,
+          "componentCount": 12,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 5.312467692419887e-06,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "shadowSourceCoordinates": {
+          "affineFmaMismatchedComponents": 0,
+          "componentCount": 32,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 5.312467692419887e-06,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "sourceTextureAddressMatchesCopyDestination": true,
+        "virtualExtent": [
+          911.0323562127577,
+          911.0323562127577
+        ]
+      },
+      "inputFaceOpacity": 0.8760004043579102,
+      "inverseRuntimeScaleQ": 1.7793600707280424,
+      "producer": {
+        "crop": {
+          "maximumIntegralResidual": 2.288818359375e-05,
+          "origin": [
+            91,
+            36
+          ],
+          "orthographicScaleBitsExact": true,
+          "raw": [
+            91.0,
+            36.000022888183594
+          ]
+        },
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 6,
+        "inputTexture": {
+          "height": 1024,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 1024,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 4194304,
+            "rawFile": "transition-background-uniform-28-dynamic-backdrop-producer-input-0-bgra8.raw",
+            "width": 1024
+          },
+          "width": 1024
+        },
+        "outputExtent": [
+          512,
+          448
+        ],
+        "outputTexture": {
+          "height": 448,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 448,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 917504,
+            "rawFile": "transition-background-uniform-28-dynamic-backdrop-producer-output-0-bgra8.raw",
+            "width": 512
+          },
+          "width": 512
+        },
+        "pipelineLabel": "com.apple.coreanimation.PBGRAXm_A2Xghfc",
+        "sourceScaleComparison": {
+          "componentCount": 8,
+          "maximumUlpDistance": 0,
+          "roundedProductMismatchedComponents": 0
+        },
+        "vertexCount": 4
+      },
+      "remaining": 0.8760004043579102,
+      "runtimeScale": 0.5619997978210449,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 28
+    },
+    {
+      "copyBase": {
+        "copyOffset": [
+          -5,
+          -4
+        ],
+        "destinationExtent": [
+          448,
+          448
+        ],
+        "effectiveOrigin": [
+          52,
+          52
+        ],
+        "producerCropOrigin": [
+          57,
+          56
+        ],
+        "uniform": {
+          "destinationLevel0Size": [
+            448,
+            448
+          ],
+          "destinationLevel1": 1,
+          "destinationLevel1Size": [
+            224,
+            224
+          ],
+          "noBaseMip": false,
+          "textureCoordinateBase": [
+            -5,
+            -4
+          ],
+          "textureCoordinateClamp": [
+            0,
+            0,
+            398,
+            399
+          ]
+        }
+      },
+      "expectedRuntimeScale": 0.5,
+      "glass": {
+        "displacementMatrixScaleBitsExact": true,
+        "fragmentFunction": "glass_background_sdf_no_bleed_lph",
+        "mainSourceCoordinates": {
+          "affineFmaMismatchedComponents": 12,
+          "componentCount": 12,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 7.62939453125e-06,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "shadowSourceCoordinates": {
+          "affineFmaMismatchedComponents": 32,
+          "componentCount": 32,
+          "fmaThenDivideMismatchedComponents": 0,
+          "maximumRecoveredOriginResidual": 7.62939453125e-06,
+          "twoCandidateUnionExact": true,
+          "twoCandidateUnionMismatchedComponents": 0
+        },
+        "sourceTextureAddressMatchesCopyDestination": true,
+        "virtualExtent": [
+          896.0,
+          896.0
+        ]
+      },
+      "inputFaceOpacity": 1.0,
+      "inverseRuntimeScaleQ": 2.0,
+      "producer": {
+        "crop": {
+          "maximumIntegralResidual": 2.288818359375e-05,
+          "origin": [
+            57,
+            56
+          ],
+          "orthographicScaleBitsExact": true,
+          "raw": [
+            57.000022888183594,
+            56.0
+          ]
+        },
+        "fragmentFunction": "A2Xghfc",
+        "indexCount": 6,
+        "inputTexture": {
+          "height": 1024,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 1024,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 4194304,
+            "rawFile": "transition-background-uniform-32-dynamic-backdrop-producer-input-0-bgra8.raw",
+            "width": 1024
+          },
+          "width": 1024
+        },
+        "outputExtent": [
+          448,
+          448
+        ],
+        "outputTexture": {
+          "height": 448,
+          "mipmapLevelCount": 1,
+          "pixelFormat": 80,
+          "raw": {
+            "captured": true,
+            "height": 448,
+            "mipmapLevelCount": 1,
+            "pixelFormat": 80,
+            "rawBytes": 802816,
+            "rawFile": "transition-background-uniform-32-dynamic-backdrop-producer-output-0-bgra8.raw",
+            "width": 448
+          },
+          "width": 448
+        },
+        "pipelineLabel": "com.apple.coreanimation.PBGRAXm_A2Xghfc",
+        "sourceScaleComparison": {
+          "componentCount": 8,
+          "maximumUlpDistance": 0,
+          "roundedProductMismatchedComponents": 0
+        },
+        "vertexCount": 4
+      },
+      "remaining": 1.0,
+      "runtimeScale": 0.5,
+      "runtimeScaleLawExact": true,
+      "sampleIndex": 32
+    }
+  ],
+  "timeline": "artifacts/gh-run-30745630876/liquid-glass-transition-introspection-profile-clear-light-materialize-30745630876/transition-timeline.json",
+  "timelineSHA256": "a81c4c80896f4299037928656404f9e8aa383ac14238188806f6cdc289e2476b"
+}

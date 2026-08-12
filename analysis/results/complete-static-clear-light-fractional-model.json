@@ -1,0 +1,77 @@
+{
+  "candidateConfiguration": {
+    "HighlightCoordinateMode": 0,
+    "HighlightCoverageArithmeticMode": 1,
+    "HighlightDerivativeMode": 1,
+    "HighlightNormalizeMode": 1,
+    "HighlightSourceDivisionMode": 0,
+    "HighlightVibrantArithmeticMode": 9,
+    "UseAppleHalfIntrinsicTable": 1
+  },
+  "capture": {
+    "completeReference": {
+      "path": "artifacts/gh-run-30721856837/carenderer-live-tree-bgra8.raw",
+      "sha256": "1f44660d36a84e8509563bef565907c6bc0fcd400266974102b67ef2fe313bd9"
+    },
+    "path": "artifacts/gh-run-30721856837",
+    "prefixReference": {
+      "path": "artifacts/gh-run-30721856837/carenderer-live-tree-glass-prefix-reference-bgra8.raw",
+      "sha256": "ff6037ef15f075c6a4ddb7b96a2830a901dc47adcf0313dbaf653f4cfbac0e70"
+    },
+    "runtimeSHA256": "bf4c3ff3883614d7e6b7fc6ac6457a62c772f366a82f9f951d6df206d2f7a21a"
+  },
+  "comparisons": {
+    "completeBackgroundAndHighlight": {
+      "exact": true,
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "glassPrefix": {
+      "exact": true,
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    }
+  },
+  "gate": {
+    "exact": true,
+    "generatedRuntimeRasterCoefficients": true,
+    "oracleInjectionUsed": false,
+    "productionShaderAuthorized": false
+  },
+  "implementation": {
+    "fragmentShaderBytes": 105895,
+    "fragmentShaderSha256": "d74e41f6647619519660fd790e7227bbccb5a7cec93b8c81f46a22a9d299a188",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "intrinsicEvidence": {
+    "float": {
+      "path": "artifacts/apple-float-intrinsics-r8-30556057571.bin",
+      "sha256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449"
+    },
+    "half": {
+      "path": "artifacts/gh-run-30721856837/half-intrinsics.bin",
+      "sha256": "ca1e5cbcaa645cad27917b87990edba4e8e06931c8089fbb2fbf1ae96837bfc2"
+    }
+  },
+  "liquidGlassCompleteStaticGateSchemaVersion": 1,
+  "runtimeRaster": {
+    "capturedCoordinateOrCoefficientTableLoaded": false,
+    "slopeBits": [
+      "0x3f800000",
+      "0xbf800000",
+      "0x3a924924",
+      "0x3a924924"
+    ],
+    "tileCount": 26,
+    "tileStart": 3
+  }
+}

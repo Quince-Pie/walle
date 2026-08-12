@@ -1,4 +1,5 @@
 {
+  lib,
   gcc15Stdenv,
   pkg-config,
   vips,
@@ -10,8 +11,7 @@
   wayland-scanner,
   libglvnd,
   inih,
-  xxHash,
-  liburing,
+  xxhash,
 }:
 
 # gcc15Stdenv.mkDerivation (not `gcc15` in nativeBuildInputs): the stdenv's cc
@@ -21,7 +21,20 @@ gcc15Stdenv.mkDerivation {
   pname = "walle";
   version = "0.0.1";
 
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./Makefile
+      ./walle.c
+      ./shiro.c
+      ./shiro.h
+      ./tilde.c
+      ./tilde.h
+      ./uring.c
+      ./uring.h
+      ./shaders
+    ];
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -34,11 +47,10 @@ gcc15Stdenv.mkDerivation {
     wayland
     libglvnd.dev
     inih
-    xxHash
+    xxhash
     wayland-protocols
     wlr-protocols
     jemalloc
-    liburing
   ];
 
   makeFlags = [ "MODE=release" ];

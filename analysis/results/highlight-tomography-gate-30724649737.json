@@ -1,0 +1,453 @@
+{
+  "candidateConfiguration": {
+    "highlightCoordinateMode": 0,
+    "highlightCoverageArithmeticMode": 1,
+    "highlightDerivativeMode": 1,
+    "useAppleFloatIntrinsicTable": true
+  },
+  "cases": {
+    "leading-coverage": {
+      "applePath": "artifacts/gh-run-30724649737/liquid-glass-highlight-pipeline-30724649737/carenderer-local-backdrop-final-highlight-alpha-tomography-leading-coverage-rgba16float-rgba16f.raw",
+      "appleSHA256": "6e281cfcf10cfb294b61a1288d2f16b989614afd5208c7c9bf639abdbd88ba6f",
+      "comparison": {
+        "activeApplePixels": 504228,
+        "activeCandidatePixels": 504228,
+        "activeMaskMismatchedPixels": 0,
+        "exact": false,
+        "matchingWordFraction": 0.9991912841796875,
+        "maximumAbsoluteValueDelta": 0.0009765625,
+        "maximumHalfCodeDelta": 570,
+        "mismatchBounds": {
+          "maximumX": 911,
+          "maximumY": 911,
+          "minimumX": 112,
+          "minimumY": 112
+        },
+        "mismatchedWords": 848,
+        "mostCommonNonzeroDeltas": [
+          {
+            "candidateMinusAppleHalfCode": -1,
+            "count": 268
+          },
+          {
+            "candidateMinusAppleHalfCode": 1,
+            "count": 260
+          },
+          {
+            "candidateMinusAppleHalfCode": 2,
+            "count": 52
+          },
+          {
+            "candidateMinusAppleHalfCode": 3,
+            "count": 44
+          },
+          {
+            "candidateMinusAppleHalfCode": -3,
+            "count": 28
+          },
+          {
+            "candidateMinusAppleHalfCode": -2,
+            "count": 24
+          },
+          {
+            "candidateMinusAppleHalfCode": -6,
+            "count": 20
+          },
+          {
+            "candidateMinusAppleHalfCode": -8,
+            "count": 20
+          },
+          {
+            "candidateMinusAppleHalfCode": 16,
+            "count": 16
+          },
+          {
+            "candidateMinusAppleHalfCode": -7,
+            "count": 16
+          },
+          {
+            "candidateMinusAppleHalfCode": -5,
+            "count": 12
+          },
+          {
+            "candidateMinusAppleHalfCode": 62,
+            "count": 8
+          }
+        ],
+        "wordCount": 1048576
+      },
+      "uniformEdits": {
+        "0xd0": "ff7b",
+        "0xd2": "00e8",
+        "0xd4": "0000",
+        "0xd6": "00000000",
+        "0xe4": "0000",
+        "0xe6": "0000",
+        "0xe8": "003c003c003c003c",
+        "0xf0": "0000000000000000"
+      }
+    },
+    "normalized-normal-x": {
+      "applePath": "artifacts/gh-run-30724649737/liquid-glass-highlight-pipeline-30724649737/carenderer-local-backdrop-final-highlight-alpha-tomography-normalized-normal-x-rgba16float-rgba16f.raw",
+      "appleSHA256": "c88e2abdb30b6ee53e566e1228354185b65ebc25c6216a071301e4eb9e84b54a",
+      "comparison": {
+        "activeApplePixels": 669124,
+        "activeCandidatePixels": 669124,
+        "activeMaskMismatchedPixels": 0,
+        "exact": false,
+        "matchingWordFraction": 0.906829833984375,
+        "maximumAbsoluteValueDelta": 0.00048828125,
+        "maximumHalfCodeDelta": 2,
+        "mismatchBounds": {
+          "maximumX": 920,
+          "maximumY": 920,
+          "minimumX": 103,
+          "minimumY": 103
+        },
+        "mismatchedWords": 97696,
+        "mostCommonNonzeroDeltas": [
+          {
+            "candidateMinusAppleHalfCode": -1,
+            "count": 53032
+          },
+          {
+            "candidateMinusAppleHalfCode": 1,
+            "count": 33130
+          },
+          {
+            "candidateMinusAppleHalfCode": -2,
+            "count": 11534
+          }
+        ],
+        "wordCount": 1048576
+      },
+      "uniformEdits": {
+        "0xd0": "ff7b",
+        "0xd2": "00c0",
+        "0xd4": "0000",
+        "0xd6": "003c0000",
+        "0xe4": "0000",
+        "0xe6": "00f4",
+        "0xe8": "003c003c003c003c",
+        "0xf0": "0000000000000000"
+      }
+    },
+    "normalized-normal-y": {
+      "applePath": "artifacts/gh-run-30724649737/liquid-glass-highlight-pipeline-30724649737/carenderer-local-backdrop-final-highlight-alpha-tomography-normalized-normal-y-rgba16float-rgba16f.raw",
+      "appleSHA256": "c253c9e964aa04576f8e813e6d6084b5877f41a0ac58a0e804e9204cfba618bd",
+      "comparison": {
+        "activeApplePixels": 669124,
+        "activeCandidatePixels": 669124,
+        "activeMaskMismatchedPixels": 0,
+        "exact": false,
+        "matchingWordFraction": 0.9134426116943359,
+        "maximumAbsoluteValueDelta": 0.00048828125,
+        "maximumHalfCodeDelta": 2,
+        "mismatchBounds": {
+          "maximumX": 920,
+          "maximumY": 920,
+          "minimumX": 103,
+          "minimumY": 103
+        },
+        "mismatchedWords": 90762,
+        "mostCommonNonzeroDeltas": [
+          {
+            "candidateMinusAppleHalfCode": -1,
+            "count": 49092
+          },
+          {
+            "candidateMinusAppleHalfCode": 1,
+            "count": 30946
+          },
+          {
+            "candidateMinusAppleHalfCode": -2,
+            "count": 10724
+          }
+        ],
+        "wordCount": 1048576
+      },
+      "uniformEdits": {
+        "0xd0": "ff7b",
+        "0xd2": "00c0",
+        "0xd4": "0000",
+        "0xd6": "0000003c",
+        "0xe4": "0000",
+        "0xe6": "00f4",
+        "0xe8": "003c003c003c003c",
+        "0xf0": "0000000000000000"
+      }
+    },
+    "original-coverage": {
+      "applePath": "artifacts/gh-run-30724649737/liquid-glass-highlight-pipeline-30724649737/carenderer-local-backdrop-final-highlight-alpha-tomography-original-coverage-rgba16float-rgba16f.raw",
+      "appleSHA256": "4ac5fb43bf36f53a162bf7e071678355a998f2dfc654c49456f912bf9a083239",
+      "comparison": {
+        "activeApplePixels": 4028,
+        "activeCandidatePixels": 4028,
+        "activeMaskMismatchedPixels": 0,
+        "exact": false,
+        "matchingWordFraction": 0.9988250732421875,
+        "maximumAbsoluteValueDelta": 0.0009765625,
+        "maximumHalfCodeDelta": 570,
+        "mismatchBounds": {
+          "maximumX": 911,
+          "maximumY": 911,
+          "minimumX": 112,
+          "minimumY": 112
+        },
+        "mismatchedWords": 1232,
+        "mostCommonNonzeroDeltas": [
+          {
+            "candidateMinusAppleHalfCode": -1,
+            "count": 428
+          },
+          {
+            "candidateMinusAppleHalfCode": 1,
+            "count": 164
+          },
+          {
+            "candidateMinusAppleHalfCode": -2,
+            "count": 124
+          },
+          {
+            "candidateMinusAppleHalfCode": -5,
+            "count": 112
+          },
+          {
+            "candidateMinusAppleHalfCode": -3,
+            "count": 96
+          },
+          {
+            "candidateMinusAppleHalfCode": 2,
+            "count": 52
+          },
+          {
+            "candidateMinusAppleHalfCode": 3,
+            "count": 44
+          },
+          {
+            "candidateMinusAppleHalfCode": -6,
+            "count": 44
+          },
+          {
+            "candidateMinusAppleHalfCode": -4,
+            "count": 28
+          },
+          {
+            "candidateMinusAppleHalfCode": -8,
+            "count": 20
+          },
+          {
+            "candidateMinusAppleHalfCode": 16,
+            "count": 16
+          },
+          {
+            "candidateMinusAppleHalfCode": -7,
+            "count": 16
+          }
+        ],
+        "wordCount": 1048576
+      },
+      "uniformEdits": {
+        "0xd2": "00e8",
+        "0xd4": "0000",
+        "0xd6": "00000000",
+        "0xe8": "003c003c003c003c",
+        "0xf0": "0000000000000000"
+      }
+    },
+    "original-directional": {
+      "applePath": "artifacts/gh-run-30724649737/liquid-glass-highlight-pipeline-30724649737/carenderer-local-backdrop-final-highlight-alpha-tomography-original-directional-rgba16float-rgba16f.raw",
+      "appleSHA256": "43006af0fd197904dd162947a3d64c4fca98e3d4ec9b5a8a0dc08fd6516788f0",
+      "comparison": {
+        "activeApplePixels": 579618,
+        "activeCandidatePixels": 579500,
+        "activeMaskMismatchedPixels": 118,
+        "exact": false,
+        "matchingWordFraction": 0.9024658203125,
+        "maximumAbsoluteValueDelta": 0.0009765625,
+        "maximumHalfCodeDelta": 4656,
+        "mismatchBounds": {
+          "maximumX": 920,
+          "maximumY": 920,
+          "minimumX": 103,
+          "minimumY": 103
+        },
+        "mismatchedWords": 102272,
+        "mostCommonNonzeroDeltas": [
+          {
+            "candidateMinusAppleHalfCode": 1,
+            "count": 48706
+          },
+          {
+            "candidateMinusAppleHalfCode": -1,
+            "count": 15475
+          },
+          {
+            "candidateMinusAppleHalfCode": -2,
+            "count": 10381
+          },
+          {
+            "candidateMinusAppleHalfCode": -4,
+            "count": 5985
+          },
+          {
+            "candidateMinusAppleHalfCode": 2,
+            "count": 3579
+          },
+          {
+            "candidateMinusAppleHalfCode": -8,
+            "count": 3395
+          },
+          {
+            "candidateMinusAppleHalfCode": -33,
+            "count": 2293
+          },
+          {
+            "candidateMinusAppleHalfCode": -16,
+            "count": 2283
+          },
+          {
+            "candidateMinusAppleHalfCode": -17,
+            "count": 1843
+          },
+          {
+            "candidateMinusAppleHalfCode": -9,
+            "count": 1574
+          },
+          {
+            "candidateMinusAppleHalfCode": -66,
+            "count": 1363
+          },
+          {
+            "candidateMinusAppleHalfCode": -5,
+            "count": 1123
+          }
+        ],
+        "wordCount": 1048576
+      },
+      "uniformEdits": {
+        "0xd0": "ff7b",
+        "0xd4": "0000",
+        "0xe4": "0000",
+        "0xe6": "00f4",
+        "0xe8": "003c003c003c003c",
+        "0xf0": "0000000000000000"
+      }
+    },
+    "shifted-scaled-distance": {
+      "applePath": "artifacts/gh-run-30724649737/liquid-glass-highlight-pipeline-30724649737/carenderer-local-backdrop-final-highlight-alpha-tomography-shifted-scaled-distance-rgba16float-rgba16f.raw",
+      "appleSHA256": "d45a5f44e05dd9d743b41eb301f029b55f4576751589202cb21cb0bb42e35d6f",
+      "comparison": {
+        "activeApplePixels": 41400,
+        "activeCandidatePixels": 41400,
+        "activeMaskMismatchedPixels": 0,
+        "exact": false,
+        "matchingWordFraction": 0.9916305541992188,
+        "maximumAbsoluteValueDelta": 0.0016021728515625,
+        "maximumHalfCodeDelta": 1575,
+        "mismatchBounds": {
+          "maximumX": 915,
+          "maximumY": 915,
+          "minimumX": 108,
+          "minimumY": 108
+        },
+        "mismatchedWords": 8776,
+        "mostCommonNonzeroDeltas": [
+          {
+            "candidateMinusAppleHalfCode": -1,
+            "count": 3168
+          },
+          {
+            "candidateMinusAppleHalfCode": -2,
+            "count": 1236
+          },
+          {
+            "candidateMinusAppleHalfCode": -3,
+            "count": 1160
+          },
+          {
+            "candidateMinusAppleHalfCode": -6,
+            "count": 688
+          },
+          {
+            "candidateMinusAppleHalfCode": -7,
+            "count": 540
+          },
+          {
+            "candidateMinusAppleHalfCode": -14,
+            "count": 348
+          },
+          {
+            "candidateMinusAppleHalfCode": -15,
+            "count": 300
+          },
+          {
+            "candidateMinusAppleHalfCode": 1,
+            "count": 244
+          },
+          {
+            "candidateMinusAppleHalfCode": -30,
+            "count": 160
+          },
+          {
+            "candidateMinusAppleHalfCode": -31,
+            "count": 76
+          },
+          {
+            "candidateMinusAppleHalfCode": 2,
+            "count": 60
+          },
+          {
+            "candidateMinusAppleHalfCode": 7,
+            "count": 56
+          }
+        ],
+        "wordCount": 1048576
+      },
+      "uniformEdits": {
+        "0xd0": "004c",
+        "0xd2": "00e8",
+        "0xd4": "0000",
+        "0xd6": "00000000",
+        "0xe4": "003c",
+        "0xe6": "00c4",
+        "0xe8": "003c003c003c003c",
+        "0xf0": "0000000000000000"
+      }
+    }
+  },
+  "gate": {
+    "allTomographyStagesExact": false,
+    "productionShaderAuthorized": false
+  },
+  "highlightFixtureFingerprint": {
+    "indices": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de",
+    "uniform": "ffd866689cc7391ffc0a19cf61446ea5b173869316ea7de6df0f37ab9506024a",
+    "vertices": "a4ef6b66e7735bfafd3e07c9adcacf89d745258719d741a7b8fbc8df622b24c1"
+  },
+  "implementation": {
+    "fragmentShaderBytes": 105367,
+    "fragmentShaderSha256": "aeaa50fa58ce7a320867db1ec4791e91ac0c743000a2e83d8a5fd3a0e280a6b5",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "intrinsicTable": {
+    "path": "artifacts/apple-float-intrinsics-r8-30556057571.bin",
+    "sha256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449"
+  },
+  "liquidGlassHighlightTomographyGateSchemaVersion": 1,
+  "referenceCapture": "artifacts/gh-run-30721856837",
+  "stageExact": {
+    "leading-coverage": false,
+    "normalized-normal-x": false,
+    "normalized-normal-y": false,
+    "original-coverage": false,
+    "original-directional": false,
+    "shifted-scaled-distance": false
+  },
+  "tomographyCapture": "artifacts/gh-run-30724649737/liquid-glass-highlight-pipeline-30724649737"
+}

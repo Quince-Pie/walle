@@ -1,0 +1,3214 @@
+{
+  "classification": "retrospective opened-frame calibration",
+  "dynamicRoots": [
+    "artifacts/gh-run-30732437898/liquid-glass-transition-introspection-profile-clear-light-materialize-30732437898",
+    "artifacts/gh-run-30734657824/liquid-glass-transition-introspection-profile-clear-light-materialize-30734657824",
+    "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841",
+    "artifacts/gh-run-30737749781/liquid-glass-transition-introspection-profile-clear-light-materialize-30737749781",
+    "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938"
+  ],
+  "floatIntrinsicTable": {
+    "path": "artifacts/apple-float-intrinsics-r8-30556057571.bin",
+    "sha256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449"
+  },
+  "limitations": [
+    "Every Apple output used here was opened before this search.",
+    "An exact code may be non-unique when BGRA8 is insensitive to the reciprocal ULP.",
+    "This calibration is not prospective parity evidence."
+  ],
+  "liquidGlassDynamicReciprocalCalibrationSchemaVersion": 1,
+  "profiles": [
+    {
+      "appearance": "light",
+      "artifact": "artifacts/gh-run-30732437898/liquid-glass-transition-introspection-profile-clear-light-materialize-30732437898",
+      "implementation": {
+        "fragmentShaderBytes": 113087,
+        "fragmentShaderSha256": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "material": "clear",
+      "report": "artifacts/gh-run-30732437898/liquid-glass-transition-introspection-profile-clear-light-materialize-30732437898/transition-timeline.json",
+      "states": [
+        {
+          "candidates": [
+            {
+              "code": 22,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.0994415283203125e-06,
+                "mismatchedBytes": 13,
+                "mismatchedPixels": 13
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 86,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 150,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.6226043701171875e-06,
+                "mismatchedBytes": 11,
+                "mismatchedPixels": 11
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 214,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.0531158447265625e-06,
+                "mismatchedBytes": 17,
+                "mismatchedPixels": 17
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 86,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441bd3d6",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1823702,
+          "radius": 407.7478942871094,
+          "remaining": 0.031513214111328125,
+          "sampleIndex": 1,
+          "selector": {
+            "base": 26453063,
+            "offset": 4,
+            "selected": 26453067
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 58,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.5762786865234375e-06,
+                "mismatchedBytes": 15,
+                "mismatchedPixels": 15
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 122,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 186,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.0994415283203125e-06,
+                "mismatchedBytes": 13,
+                "mismatchedPixels": 13
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 250,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.245208740234375e-06,
+                "mismatchedBytes": 22,
+                "mismatchedPixels": 22
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 122,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441b8a85",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1804933,
+          "radius": 406.9985046386719,
+          "remaining": 0.12518692016601562,
+          "sampleIndex": 4,
+          "selector": {
+            "base": 26550646,
+            "offset": 4,
+            "selected": 26550650
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.0994415283203125e-06,
+                "mismatchedBytes": 13,
+                "mismatchedPixels": 13
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.3909759521484375e-06,
+                "mismatchedBytes": 31,
+                "mismatchedPixels": 31
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 69,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441b26c6",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1779398,
+          "radius": 405.9789733886719,
+          "remaining": 0.2526273727416992,
+          "sampleIndex": 8,
+          "selector": {
+            "base": 26683917,
+            "offset": -3,
+            "selected": 26683914
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 6,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.5762786865234375e-06,
+                "mismatchedBytes": 15,
+                "mismatchedPixels": 15
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 70,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 134,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.5299530029296875e-06,
+                "mismatchedBytes": 19,
+                "mismatchedPixels": 19
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 198,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.821487426757812e-06,
+                "mismatchedBytes": 37,
+                "mismatchedPixels": 35
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 70,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441ac5ce",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1754574,
+          "radius": 404.9878234863281,
+          "remaining": 0.3765220642089844,
+          "sampleIndex": 12,
+          "selector": {
+            "base": 26814823,
+            "offset": -2,
+            "selected": 26814821
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 22,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.298324584960938e-06,
+                "mismatchedBytes": 39,
+                "mismatchedPixels": 35
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 86,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.0531158447265625e-06,
+                "mismatchedBytes": 17,
+                "mismatchedPixels": 15
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 150,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 214,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.0531158447265625e-06,
+                "mismatchedBytes": 17,
+                "mismatchedPixels": 17
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 86,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a6525",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1729829,
+          "radius": 403.99981689453125,
+          "remaining": 0.5000228881835938,
+          "sampleIndex": 16,
+          "selector": {
+            "base": 26946173,
+            "offset": 0,
+            "selected": 26946173
+          },
+          "uniqueExactEncodedDelta": 2
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.291534423828125e-06,
+                "mismatchedBytes": 18,
+                "mismatchedPixels": 18
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.337860107421875e-06,
+                "mismatchedBytes": 14,
+                "mismatchedPixels": 14
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.67572021484375e-06,
+                "mismatchedBytes": 28,
+                "mismatchedPixels": 28
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 69,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a01ad",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1704365,
+          "radius": 402.9831237792969,
+          "remaining": 0.6271085739135742,
+          "sampleIndex": 20,
+          "selector": {
+            "base": 27082161,
+            "offset": 6,
+            "selected": 27082167
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 37,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.58306884765625e-06,
+                "mismatchedBytes": 36,
+                "mismatchedPixels": 36
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 101,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 165,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.0531158447265625e-06,
+                "mismatchedBytes": 17,
+                "mismatchedPixels": 17
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 229,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.049041748046875e-05,
+                "mismatchedBytes": 44,
+                "mismatchedPixels": 42
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 101,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x44199f8f",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1679247,
+          "radius": 401.980224609375,
+          "remaining": 0.7524738311767578,
+          "sampleIndex": 24,
+          "selector": {
+            "base": 27217603,
+            "offset": 2,
+            "selected": 27217605
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.58306884765625e-06,
+                "mismatchedBytes": 36,
+                "mismatchedPixels": 30
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.059906005859375e-06,
+                "mismatchedBytes": 38,
+                "mismatchedPixels": 36
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.8596649169921875e-05,
+                "mismatchedBytes": 78,
+                "mismatchedPixels": 70
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 69,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x44193e78",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1654392,
+          "radius": 400.98785400390625,
+          "remaining": 0.8765201568603516,
+          "sampleIndex": 28,
+          "selector": {
+            "base": 27352460,
+            "offset": 4,
+            "selected": 27352464
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.337860107421875e-05,
+                "mismatchedBytes": 140,
+                "mismatchedPixels": 92
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.71661376953125e-05,
+                "mismatchedBytes": 72,
+                "mismatchedPixels": 56
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.5367431640625e-06,
+                "mismatchedBytes": 40,
+                "mismatchedPixels": 40
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 133,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x4418ddd3",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1629651,
+          "radius": 400.0,
+          "remaining": 1,
+          "sampleIndex": 32,
+          "selector": {
+            "base": 27487791,
+            "offset": 0,
+            "selected": 27487791
+          },
+          "uniqueExactEncodedDelta": 2
+        }
+      ],
+      "summary": {
+        "capturedCodeExactStateCount": 8,
+        "stateCount": 9,
+        "statesWithAtLeastOneExactCode": 9,
+        "statesWithUniqueExactCode": 9
+      }
+    },
+    {
+      "appearance": "light",
+      "artifact": "artifacts/gh-run-30734657824/liquid-glass-transition-introspection-profile-clear-light-materialize-30734657824",
+      "implementation": {
+        "fragmentShaderBytes": 113087,
+        "fragmentShaderSha256": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "material": "clear",
+      "report": "artifacts/gh-run-30734657824/liquid-glass-transition-introspection-profile-clear-light-materialize-30734657824/transition-timeline.json",
+      "states": [
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.9073486328125e-06,
+                "mismatchedBytes": 8,
+                "mismatchedPixels": 8
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.337860107421875e-06,
+                "mismatchedBytes": 14,
+                "mismatchedPixels": 14
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.152557373046875e-06,
+                "mismatchedBytes": 30,
+                "mismatchedPixels": 30
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 69,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441bd3ed",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1823725,
+          "radius": 407.7488098144531,
+          "remaining": 0.03139781951904297,
+          "sampleIndex": 1,
+          "selector": {
+            "base": 26452814,
+            "offset": 0,
+            "selected": 26452814
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 22,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.9073486328125e-06,
+                "mismatchedBytes": 8,
+                "mismatchedPixels": 8
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 86,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 150,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.76837158203125e-06,
+                "mismatchedBytes": 20,
+                "mismatchedPixels": 20
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 214,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.58306884765625e-06,
+                "mismatchedBytes": 36,
+                "mismatchedPixels": 36
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 86,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441b8a96",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1804950,
+          "radius": 406.99920654296875,
+          "remaining": 0.12509918212890625,
+          "sampleIndex": 4,
+          "selector": {
+            "base": 26550396,
+            "offset": 0,
+            "selected": 26550396
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 58,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 122,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 186,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.1457672119140625e-06,
+                "mismatchedBytes": 9,
+                "mismatchedPixels": 9
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 250,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 122,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441b27b7",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1779639,
+          "radius": 405.9886169433594,
+          "remaining": 0.25142383575439453,
+          "sampleIndex": 8,
+          "selector": {
+            "base": 26682885,
+            "offset": 2,
+            "selected": 26682887
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 18,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.1457672119140625e-06,
+                "mismatchedBytes": 9,
+                "mismatchedPixels": 9
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 82,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 146,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.5299530029296875e-06,
+                "mismatchedBytes": 19,
+                "mismatchedPixels": 15
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 210,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.58306884765625e-06,
+                "mismatchedBytes": 36,
+                "mismatchedPixels": 32
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 82,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441ac681",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1754753,
+          "radius": 404.9949951171875,
+          "remaining": 0.3756256103515625,
+          "sampleIndex": 12,
+          "selector": {
+            "base": 26813780,
+            "offset": 7,
+            "selected": 26813787
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.0067901611328125e-06,
+                "mismatchedBytes": 21,
+                "mismatchedPixels": 21
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.198883056640625e-06,
+                "mismatchedBytes": 26,
+                "mismatchedPixels": 26
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 69,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a6354",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1729364,
+          "radius": 403.98126220703125,
+          "remaining": 0.5023422241210938,
+          "sampleIndex": 16,
+          "selector": {
+            "base": 26948773,
+            "offset": 5,
+            "selected": 26948778
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 41,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.5299530029296875e-06,
+                "mismatchedBytes": 19,
+                "mismatchedPixels": 19
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 105,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 169,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.5762786865234375e-06,
+                "mismatchedBytes": 15,
+                "mismatchedPixels": 15
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 233,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.152557373046875e-06,
+                "mismatchedBytes": 30,
+                "mismatchedPixels": 30
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 105,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a02a4",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1704612,
+          "radius": 402.99298095703125,
+          "remaining": 0.6258764266967773,
+          "sampleIndex": 20,
+          "selector": {
+            "base": 27081119,
+            "offset": -2,
+            "selected": 27081117
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 6,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.152557373046875e-06,
+                "mismatchedBytes": 30,
+                "mismatchedPixels": 27
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 70,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 134,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.86102294921875e-06,
+                "mismatchedBytes": 12,
+                "mismatchedPixels": 12
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 198,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.775161743164062e-06,
+                "mismatchedBytes": 41,
+                "mismatchedPixels": 37
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 70,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x4419a19c",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1679772,
+          "radius": 402.001220703125,
+          "remaining": 0.7498483657836914,
+          "sampleIndex": 24,
+          "selector": {
+            "base": 27214697,
+            "offset": -1,
+            "selected": 27214696
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 6,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.3113021850585938e-05,
+                "mismatchedBytes": 55,
+                "mismatchedPixels": 45
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 70,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 134,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.0251998901367188e-05,
+                "mismatchedBytes": 43,
+                "mismatchedPixels": 39
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 198,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.9311904907226562e-05,
+                "mismatchedBytes": 81,
+                "mismatchedPixels": 65
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 70,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x44193dde",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1654238,
+          "radius": 400.9817199707031,
+          "remaining": 0.8772859573364258,
+          "sampleIndex": 28,
+          "selector": {
+            "base": 27353523,
+            "offset": 7,
+            "selected": 27353530
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.337860107421875e-05,
+                "mismatchedBytes": 140,
+                "mismatchedPixels": 92
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.71661376953125e-05,
+                "mismatchedBytes": 72,
+                "mismatchedPixels": 56
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.5367431640625e-06,
+                "mismatchedBytes": 40,
+                "mismatchedPixels": 40
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 133,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x4418ddd3",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1629651,
+          "radius": 400.0,
+          "remaining": 1,
+          "sampleIndex": 32,
+          "selector": {
+            "base": 27487791,
+            "offset": 0,
+            "selected": 27487791
+          },
+          "uniqueExactEncodedDelta": 2
+        }
+      ],
+      "summary": {
+        "capturedCodeExactStateCount": 9,
+        "stateCount": 9,
+        "statesWithAtLeastOneExactCode": 9,
+        "statesWithUniqueExactCode": 9
+      }
+    },
+    {
+      "appearance": "light",
+      "artifact": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841",
+      "implementation": {
+        "fragmentShaderBytes": 113087,
+        "fragmentShaderSha256": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "material": "clear",
+      "report": "artifacts/gh-run-30737403841/liquid-glass-transition-introspection-profile-clear-light-materialize-30737403841/transition-timeline.json",
+      "states": [
+        {
+          "candidates": [
+            {
+              "code": 26,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.0531158447265625e-06,
+                "mismatchedBytes": 17,
+                "mismatchedPixels": 17
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 90,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 154,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.430511474609375e-06,
+                "mismatchedBytes": 6,
+                "mismatchedPixels": 6
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 218,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 90,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441bd41a",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1823770,
+          "radius": 407.7506408691406,
+          "remaining": 0.031169891357421875,
+          "sampleIndex": 1,
+          "selector": {
+            "base": 26452814,
+            "offset": 0,
+            "selected": 26452814
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.9073486328125e-06,
+                "mismatchedBytes": 8,
+                "mismatchedPixels": 8
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.5762786865234375e-06,
+                "mismatchedBytes": 15,
+                "mismatchedPixels": 15
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.67572021484375e-06,
+                "mismatchedBytes": 28,
+                "mismatchedPixels": 28
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 69,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441b88b8",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1804472,
+          "radius": 406.9801025390625,
+          "remaining": 0.1274852752685547,
+          "sampleIndex": 4,
+          "selector": {
+            "base": 26553201,
+            "offset": -2,
+            "selected": 26553199
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 37,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 101,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 165,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.86102294921875e-06,
+                "mismatchedBytes": 12,
+                "mismatchedPixels": 12
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 229,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.245208740234375e-06,
+                "mismatchedBytes": 22,
+                "mismatchedPixels": 22
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 101,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441b2853",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1779795,
+          "radius": 405.9948425292969,
+          "remaining": 0.2506437301635742,
+          "sampleIndex": 8,
+          "selector": {
+            "base": 26681863,
+            "offset": -3,
+            "selected": 26681860
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 21,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.291534423828125e-06,
+                "mismatchedBytes": 18,
+                "mismatchedPixels": 18
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 85,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 149,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.384185791015625e-06,
+                "mismatchedBytes": 10,
+                "mismatchedPixels": 10
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 213,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.152557373046875e-06,
+                "mismatchedBytes": 30,
+                "mismatchedPixels": 30
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 85,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441ac610",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1754640,
+          "radius": 404.990478515625,
+          "remaining": 0.3761911392211914,
+          "sampleIndex": 12,
+          "selector": {
+            "base": 26814302,
+            "offset": 2,
+            "selected": 26814304
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 58,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.1682510375976562e-05,
+                "mismatchedBytes": 49,
+                "mismatchedPixels": 49
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 122,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.9141387939453125e-06,
+                "mismatchedBytes": 29,
+                "mismatchedPixels": 29
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 186,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 250,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.6689300537109375e-06,
+                "mismatchedBytes": 7,
+                "mismatchedPixels": 7
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 122,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a63d2",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1729490,
+          "radius": 403.9862976074219,
+          "remaining": 0.5017127990722656,
+          "sampleIndex": 16,
+          "selector": {
+            "base": 26947999,
+            "offset": -2,
+            "selected": 26947997
+          },
+          "uniqueExactEncodedDelta": 2
+        },
+        {
+          "candidates": [
+            {
+              "code": 4,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.291534423828125e-06,
+                "mismatchedBytes": 18,
+                "mismatchedPixels": 18
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 68,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 132,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.9604644775390625e-06,
+                "mismatchedBytes": 25,
+                "mismatchedPixels": 25
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 196,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.775161743164062e-06,
+                "mismatchedBytes": 41,
+                "mismatchedPixels": 41
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 68,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a01f9",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1704441,
+          "radius": 402.98614501953125,
+          "remaining": 0.6267309188842773,
+          "sampleIndex": 20,
+          "selector": {
+            "base": 27081901,
+            "offset": 2,
+            "selected": 27081903
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.5299530029296875e-06,
+                "mismatchedBytes": 19,
+                "mismatchedPixels": 15
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.344650268554688e-06,
+                "mismatchedBytes": 35,
+                "mismatchedPixels": 29
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.3589859008789062e-05,
+                "mismatchedBytes": 57,
+                "mismatchedPixels": 51
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 69,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x44199fa9",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1679273,
+          "radius": 401.9812927246094,
+          "remaining": 0.7523374557495117,
+          "sampleIndex": 24,
+          "selector": {
+            "base": 27217339,
+            "offset": 2,
+            "selected": 27217341
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.621246337890625e-05,
+                "mismatchedBytes": 68,
+                "mismatchedPixels": 64
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.049041748046875e-05,
+                "mismatchedBytes": 44,
+                "mismatchedPixels": 42
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.059906005859375e-06,
+                "mismatchedBytes": 38,
+                "mismatchedPixels": 34
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 133,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x44193e79",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1654393,
+          "radius": 400.9878845214844,
+          "remaining": 0.8765134811401367,
+          "sampleIndex": 28,
+          "selector": {
+            "base": 27352460,
+            "offset": 4,
+            "selected": 27352464
+          },
+          "uniqueExactEncodedDelta": 2
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.337860107421875e-05,
+                "mismatchedBytes": 140,
+                "mismatchedPixels": 92
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.71661376953125e-05,
+                "mismatchedBytes": 72,
+                "mismatchedPixels": 56
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.5367431640625e-06,
+                "mismatchedBytes": 40,
+                "mismatchedPixels": 40
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 133,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x4418ddd3",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1629651,
+          "radius": 400.0,
+          "remaining": 1,
+          "sampleIndex": 32,
+          "selector": {
+            "base": 27487791,
+            "offset": 0,
+            "selected": 27487791
+          },
+          "uniqueExactEncodedDelta": 2
+        }
+      ],
+      "summary": {
+        "capturedCodeExactStateCount": 8,
+        "stateCount": 9,
+        "statesWithAtLeastOneExactCode": 9,
+        "statesWithUniqueExactCode": 9
+      }
+    },
+    {
+      "appearance": "light",
+      "artifact": "artifacts/gh-run-30737749781/liquid-glass-transition-introspection-profile-clear-light-materialize-30737749781",
+      "implementation": {
+        "fragmentShaderBytes": 113087,
+        "fragmentShaderSha256": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "material": "clear",
+      "report": "artifacts/gh-run-30737749781/liquid-glass-transition-introspection-profile-clear-light-materialize-30737749781/transition-timeline.json",
+      "states": [
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.67572021484375e-06,
+                "mismatchedBytes": 28,
+                "mismatchedPixels": 28
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.337860107421875e-06,
+                "mismatchedBytes": 14,
+                "mismatchedPixels": 14
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.86102294921875e-06,
+                "mismatchedBytes": 12,
+                "mismatchedPixels": 12
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 133,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x441bd3ef",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1823727,
+          "radius": 407.7489013671875,
+          "remaining": 0.0313873291015625,
+          "sampleIndex": 1,
+          "selector": {
+            "base": 26452814,
+            "offset": 0,
+            "selected": 26452814
+          },
+          "uniqueExactEncodedDelta": 2
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.0067901611328125e-06,
+                "mismatchedBytes": 21,
+                "mismatchedPixels": 21
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.6226043701171875e-06,
+                "mismatchedBytes": 11,
+                "mismatchedPixels": 11
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.0994415283203125e-06,
+                "mismatchedBytes": 13,
+                "mismatchedPixels": 13
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 133,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x441b8a9d",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1804957,
+          "radius": 406.9994812011719,
+          "remaining": 0.12506389617919922,
+          "sampleIndex": 4,
+          "selector": {
+            "base": 26550646,
+            "offset": 4,
+            "selected": 26550650
+          },
+          "uniqueExactEncodedDelta": 2
+        },
+        {
+          "candidates": [
+            {
+              "code": 6,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.5299530029296875e-06,
+                "mismatchedBytes": 19,
+                "mismatchedPixels": 19
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 70,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.384185791015625e-06,
+                "mismatchedBytes": 10,
+                "mismatchedPixels": 10
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 134,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 198,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.7220458984375e-06,
+                "mismatchedBytes": 24,
+                "mismatchedPixels": 24
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 134,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x441b278d",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1779597,
+          "radius": 405.9869079589844,
+          "remaining": 0.2516355514526367,
+          "sampleIndex": 8,
+          "selector": {
+            "base": 26683138,
+            "offset": 6,
+            "selected": 26683144
+          },
+          "uniqueExactEncodedDelta": 2
+        },
+        {
+          "candidates": [
+            {
+              "code": 37,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.76837158203125e-06,
+                "mismatchedBytes": 20,
+                "mismatchedPixels": 20
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 101,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 165,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 229,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.58306884765625e-06,
+                "mismatchedBytes": 36,
+                "mismatchedPixels": 36
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 101,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441ac503",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1754371,
+          "radius": 404.9797058105469,
+          "remaining": 0.3775367736816406,
+          "sampleIndex": 12,
+          "selector": {
+            "base": 26815855,
+            "offset": 1,
+            "selected": 26815856
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 42,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.245208740234375e-06,
+                "mismatchedBytes": 22,
+                "mismatchedPixels": 22
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 106,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 170,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 234,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.67572021484375e-06,
+                "mismatchedBytes": 28,
+                "mismatchedPixels": 28
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 106,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a6399",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1729433,
+          "radius": 403.9840087890625,
+          "remaining": 0.5019969940185547,
+          "sampleIndex": 16,
+          "selector": {
+            "base": 26948515,
+            "offset": 3,
+            "selected": 26948518
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 38,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.152557373046875e-06,
+                "mismatchedBytes": 30,
+                "mismatchedPixels": 28
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 102,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 166,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.0067901611328125e-06,
+                "mismatchedBytes": 21,
+                "mismatchedPixels": 19
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 230,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.0967254638671875e-05,
+                "mismatchedBytes": 46,
+                "mismatchedPixels": 44
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 102,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a02ee",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1704686,
+          "radius": 402.9959411621094,
+          "remaining": 0.6255064010620117,
+          "sampleIndex": 20,
+          "selector": {
+            "base": 27080588,
+            "offset": 4,
+            "selected": 27080592
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 58,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 122,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 186,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.6226043701171875e-06,
+                "mismatchedBytes": 11,
+                "mismatchedPixels": 11
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 250,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.7220458984375e-06,
+                "mismatchedBytes": 24,
+                "mismatchedPixels": 20
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 122,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x44199f76",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1679222,
+          "radius": 401.979248046875,
+          "remaining": 0.7525949478149414,
+          "sampleIndex": 24,
+          "selector": {
+            "base": 27217866,
+            "offset": 4,
+            "selected": 27217870
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 54,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.059906005859375e-06,
+                "mismatchedBytes": 38,
+                "mismatchedPixels": 32
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 118,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 182,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.58306884765625e-06,
+                "mismatchedBytes": 36,
+                "mismatchedPixels": 34
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 246,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.621246337890625e-05,
+                "mismatchedBytes": 68,
+                "mismatchedPixels": 58
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 118,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x44193e60",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1654368,
+          "radius": 400.9869079589844,
+          "remaining": 0.8766345977783203,
+          "sampleIndex": 28,
+          "selector": {
+            "base": 27352726,
+            "offset": 4,
+            "selected": 27352730
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.337860107421875e-05,
+                "mismatchedBytes": 140,
+                "mismatchedPixels": 92
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.71661376953125e-05,
+                "mismatchedBytes": 72,
+                "mismatchedPixels": 56
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.5367431640625e-06,
+                "mismatchedBytes": 40,
+                "mismatchedPixels": 40
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 133,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x4418ddd3",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1629651,
+          "radius": 400.0,
+          "remaining": 1,
+          "sampleIndex": 32,
+          "selector": {
+            "base": 27487791,
+            "offset": 0,
+            "selected": 27487791
+          },
+          "uniqueExactEncodedDelta": 2
+        }
+      ],
+      "summary": {
+        "capturedCodeExactStateCount": 9,
+        "stateCount": 9,
+        "statesWithAtLeastOneExactCode": 9,
+        "statesWithUniqueExactCode": 9
+      }
+    },
+    {
+      "appearance": "light",
+      "artifact": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938",
+      "implementation": {
+        "fragmentShaderBytes": 113087,
+        "fragmentShaderSha256": "0a79c0f7d35b36f09801414c7412bdff7aa11cd88af2613e6568add5c66227c6",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "material": "clear",
+      "report": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938/transition-timeline.json",
+      "states": [
+        {
+          "candidates": [
+            {
+              "code": 42,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.1920928955078125e-06,
+                "mismatchedBytes": 5,
+                "mismatchedPixels": 5
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 106,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 170,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.6689300537109375e-06,
+                "mismatchedBytes": 7,
+                "mismatchedPixels": 7
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 234,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.76837158203125e-06,
+                "mismatchedBytes": 20,
+                "mismatchedPixels": 20
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 106,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441bd416",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1823766,
+          "radius": 407.7504577636719,
+          "remaining": 0.031192779541015625,
+          "sampleIndex": 1,
+          "selector": {
+            "base": 26452814,
+            "offset": 0,
+            "selected": 26452814
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 58,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.5762786865234375e-06,
+                "mismatchedBytes": 15,
+                "mismatchedPixels": 15
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 122,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 186,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.0994415283203125e-06,
+                "mismatchedBytes": 13,
+                "mismatchedPixels": 13
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 250,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.245208740234375e-06,
+                "mismatchedBytes": 22,
+                "mismatchedPixels": 22
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 122,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441b8a85",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1804933,
+          "radius": 406.9985046386719,
+          "remaining": 0.12518692016601562,
+          "sampleIndex": 4,
+          "selector": {
+            "base": 26550646,
+            "offset": 4,
+            "selected": 26550650
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 25,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.6226043701171875e-06,
+                "mismatchedBytes": 11,
+                "mismatchedPixels": 11
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 89,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 153,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.5762786865234375e-06,
+                "mismatchedBytes": 15,
+                "mismatchedPixels": 15
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 217,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.152557373046875e-06,
+                "mismatchedBytes": 30,
+                "mismatchedPixels": 30
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 89,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441b26ed",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1779437,
+          "radius": 405.98052978515625,
+          "remaining": 0.25243473052978516,
+          "sampleIndex": 8,
+          "selector": {
+            "base": 26683917,
+            "offset": -3,
+            "selected": 26683914
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.814697265625e-06,
+                "mismatchedBytes": 16,
+                "mismatchedPixels": 16
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.0067901611328125e-06,
+                "mismatchedBytes": 21,
+                "mismatchedPixels": 21
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.67572021484375e-06,
+                "mismatchedBytes": 28,
+                "mismatchedPixels": 28
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 69,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441ac6dc",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1754844,
+          "radius": 404.99859619140625,
+          "remaining": 0.37517356872558594,
+          "sampleIndex": 12,
+          "selector": {
+            "base": 26813525,
+            "offset": 3,
+            "selected": 26813528
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 22,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.0251998901367188e-05,
+                "mismatchedBytes": 43,
+                "mismatchedPixels": 41
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 86,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.7220458984375e-06,
+                "mismatchedBytes": 24,
+                "mismatchedPixels": 22
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 150,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 214,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 5.245208740234375e-06,
+                "mismatchedBytes": 22,
+                "mismatchedPixels": 20
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 86,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a64ad",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1729709,
+          "radius": 403.9950256347656,
+          "remaining": 0.5006217956542969,
+          "sampleIndex": 16,
+          "selector": {
+            "base": 26946957,
+            "offset": -3,
+            "selected": 26946954
+          },
+          "uniqueExactEncodedDelta": 2
+        },
+        {
+          "candidates": [
+            {
+              "code": 21,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 2.86102294921875e-06,
+                "mismatchedBytes": 12,
+                "mismatchedPixels": 12
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 85,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 149,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 4.0531158447265625e-06,
+                "mismatchedBytes": 17,
+                "mismatchedPixels": 17
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 213,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.198883056640625e-06,
+                "mismatchedBytes": 26,
+                "mismatchedPixels": 26
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 85,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x441a014d",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1704269,
+          "radius": 402.9792785644531,
+          "remaining": 0.627589225769043,
+          "sampleIndex": 20,
+          "selector": {
+            "base": 27082693,
+            "offset": -1,
+            "selected": 27082692
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.152557373046875e-06,
+                "mismatchedBytes": 30,
+                "mismatchedPixels": 26
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 6.4373016357421875e-06,
+                "mismatchedBytes": 27,
+                "mismatchedPixels": 27
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.3589859008789062e-05,
+                "mismatchedBytes": 57,
+                "mismatchedPixels": 52
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 69,
+          "capturedEncodedDelta": 1,
+          "circleScaleBits": "0x4419a16d",
+          "exactEncodedDeltas": [
+            1
+          ],
+          "mantissa": 1679725,
+          "radius": 401.99932861328125,
+          "remaining": 0.7500829696655273,
+          "sampleIndex": 24,
+          "selector": {
+            "base": 27215224,
+            "offset": 1,
+            "selected": 27215225
+          },
+          "uniqueExactEncodedDelta": 1
+        },
+        {
+          "candidates": [
+            {
+              "code": 21,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.7881393432617188e-05,
+                "mismatchedBytes": 75,
+                "mismatchedPixels": 63
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 85,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 8.58306884765625e-06,
+                "mismatchedBytes": 36,
+                "mismatchedPixels": 28
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 149,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 213,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 7.152557373046875e-06,
+                "mismatchedBytes": 30,
+                "mismatchedPixels": 28
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 149,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x44193da7",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1654183,
+          "radius": 400.9794921875,
+          "remaining": 0.8775615692138672,
+          "sampleIndex": 28,
+          "selector": {
+            "base": 27353800,
+            "offset": -4,
+            "selected": 27353796
+          },
+          "uniqueExactEncodedDelta": 2
+        },
+        {
+          "candidates": [
+            {
+              "code": 5,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 3.337860107421875e-05,
+                "mismatchedBytes": 140,
+                "mismatchedPixels": 92
+              },
+              "encodedDelta": 0,
+              "netReciprocalUlpAdjustment": -1
+            },
+            {
+              "code": 69,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 1.71661376953125e-05,
+                "mismatchedBytes": 72,
+                "mismatchedPixels": 56
+              },
+              "encodedDelta": 1,
+              "netReciprocalUlpAdjustment": 0
+            },
+            {
+              "code": 133,
+              "comparison": {
+                "exact": true,
+                "maximumChannelDelta": 0,
+                "meanAbsoluteChannelDelta": 0.0,
+                "mismatchedBytes": 0,
+                "mismatchedPixels": 0
+              },
+              "encodedDelta": 2,
+              "netReciprocalUlpAdjustment": 1
+            },
+            {
+              "code": 197,
+              "comparison": {
+                "exact": false,
+                "maximumChannelDelta": 1,
+                "meanAbsoluteChannelDelta": 9.5367431640625e-06,
+                "mismatchedBytes": 40,
+                "mismatchedPixels": 40
+              },
+              "encodedDelta": 3,
+              "netReciprocalUlpAdjustment": 2
+            }
+          ],
+          "capturedCode": 133,
+          "capturedEncodedDelta": 2,
+          "circleScaleBits": "0x4418ddd3",
+          "exactEncodedDeltas": [
+            2
+          ],
+          "mantissa": 1629651,
+          "radius": 400.0,
+          "remaining": 1,
+          "sampleIndex": 32,
+          "selector": {
+            "base": 27487791,
+            "offset": 0,
+            "selected": 27487791
+          },
+          "uniqueExactEncodedDelta": 2
+        }
+      ],
+      "summary": {
+        "capturedCodeExactStateCount": 8,
+        "stateCount": 9,
+        "statesWithAtLeastOneExactCode": 9,
+        "statesWithUniqueExactCode": 9
+      }
+    }
+  ],
+  "squareSelectorArchive": {
+    "path": "artifacts/gh-run-30736731165/liquid-glass-raster-square-selector-sweep-30736731165/raster-square-selectors-u32le.zlib",
+    "sha256": "93fcb5859794d67b193e00f2fe741416ae69d93125f38fa7b36506616b98e5ba"
+  },
+  "staticCapture": "artifacts/gh-run-30721856837",
+  "summary": {
+    "capturedCodeExactStateCount": 42,
+    "profileCount": 5,
+    "stateCount": 45,
+    "statesWithAtLeastOneExactCode": 45,
+    "statesWithUniqueExactCode": 45
+  }
+}

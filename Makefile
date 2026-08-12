@@ -19,8 +19,6 @@ export GNUMAKEFLAGS :=
 # 2. Project Structure
 # =============================================================================
 
-# Build variants must never share objects: optimization, instrumentation,
-# analyzer, and sanitizer flags all get their own output directory.
 MODE ?= DEBUG
 NATIVE ?= 0
 ANALYZE ?=
@@ -29,23 +27,21 @@ TRACY ?= 0
 PROFILE ::= $(if $(filter release,$(MODE)),release,debug)$(if $(filter 1,$(NATIVE)),-native)$(if $(strip $(SANITIZER)),-sanitized)$(if $(strip $(ANALYZE)),-analyzed)$(if $(filter 1,$(TRACY)),-tracy)
 
 # Directories (Use POSIX simple expansion ::=)
-BUILD_DIR       ::= build
-OBJ_DIR         ::= $(BUILD_DIR)/obj/$(PROFILE)
-BIN_DIR         ::= $(BUILD_DIR)/bin
+BUILD_DIR    ::= build
+OBJ_DIR      ::= $(BUILD_DIR)/obj/$(PROFILE)
+BIN_DIR      ::= $(BUILD_DIR)/bin
 PROFILE_BIN_DIR ::= $(BIN_DIR)/$(PROFILE)
-PROTOCOL_DIR    ::= protocols
-SHADER_DIR      ::= shaders
+TEST_DIR     ::= $(BUILD_DIR)/tests/$(PROFILE)
+PROTOCOL_DIR ::= protocols
+SHADER_DIR   ::= shaders
 
-TARGET        ::= $(PROFILE_BIN_DIR)/walle
-ACTIVE_TARGET ::= $(BIN_DIR)/walle
-QUALITY_BIN_DIR ::= $(BIN_DIR)/quality
-REVEAL_GATE_SOURCE ::= analysis/verify_reveal_best_known_gles.c
-REVEAL_GATE_TARGET ::= $(QUALITY_BIN_DIR)/verify_reveal_best_known_gles
+TARGET     ::= $(PROFILE_BIN_DIR)/walle
+URING_TEST ::= $(TEST_DIR)/uring_smoke
+TILDE_TEST ::= $(TEST_DIR)/tilde_smoke
+TESTS      ::= $(URING_TEST) $(TILDE_TEST)
 
 # Core Application Sources (Located in root)
-APP_SOURCES ::= walle.c shiro.c parity/render_walle_exact_static_gl.c \
-	parity/liquid_glass_reveal_mask_model.c parity/liquid_glass_postguard.c \
-	parity/liquid_glass_raster.c
+APP_SOURCES ::= walle.c shiro.c tilde.c uring.c
 
 # 3. Toolchain and C23 Compliance Flags
 # =============================================================================
@@ -73,9 +69,8 @@ C23_STRICT ::=\
     -Wimplicit-fallthrough
 
 # Usage:
-#   make                       (Debug: assertions and symbols)
-#   make MODE=release          (Release: NDEBUG, -O3, LTO)
-#   make MODE=release TRACY=1  (separate opt-in Tracy profile)
+#   make              (Debug: Assertions ON, Symbols ON, -O0/O2)
+#   make MODE=release (Release: NDEBUG Defined, -O3, LTO, Strip Symbols)
 # NATIVE=1 additionally enables -march=native (host-specific binary; never for
 # distributed/packaged builds).
 
@@ -114,7 +109,8 @@ CFLAGS  ::= $(C23_STRICT) $(C23_OPTIMIZE) $(C23_SECURITY) $(SANITIZER_FLAGS)
 LDFLAGS ::= $(SANITIZER_FLAGS)
 LDLIBS  ::= -lm
 
-# Supply the compiler-side thread model as well as the linker contract.
+# pthreads are part of the C library on current glibc, but -pthread also
+# supplies the compiler-side thread model and remains the portable contract.
 CFLAGS  += -pthread
 LDFLAGS += -pthread
 
@@ -124,9 +120,10 @@ DEPFLAGS ::= -MMD -MP
 # Base Include Paths
 CFLAGS += -I. -I$(PROTOCOL_DIR)
 
-# The development shell exposes Tracy's installed headers and client library
-# through its compiler wrapper. Normal builds retain no profiling overhead or
-# Tracy runtime dependency.
+# Opt-in profiling build. The flake dev shells provide Tracy's installed
+# headers and client library through the compiler wrapper; ordinary and
+# packaged builds do not acquire instrumentation overhead or a Tracy runtime
+# dependency.
 ifeq ($(TRACY),1)
 CPPFLAGS += -DWALLE_TRACY=1 -DTRACY_ENABLE=1 -DTRACY_ON_DEMAND=1
 LDLIBS += -lTracyClient
@@ -214,7 +211,9 @@ LDLIBS += $(CORE_RENDER_LDLIBS)
 # 5.4 System Probing (Memory Allocator)
 # =============================================================================
 # jemalloc mitigates glibc memory fragmentation in long-running multi-threaded
-# processes with many small allocations (recommended by libvips documentation).
+# processes with many small allocations. Sanitizers must own the allocation
+# entry points so their interceptors remain compatible with Mesa's LLVM stack.
+ifeq ($(strip $(SANITIZER)),)
 JEMALLOC_DEPS ::= jemalloc
 
 JEMALLOC_CFLAGS != $(PKG_CONFIG) --cflags $(JEMALLOC_DEPS)
@@ -224,11 +223,12 @@ $(call CHECK_STATUS)
 
 CFLAGS += $(JEMALLOC_CFLAGS)
 LDLIBS += $(JEMALLOC_LDLIBS)
+endif
 
 # 5.5 System Probing (D-Bus / GameMode Integration)
 # =============================================================================
 # libsystemd provides sd-bus for monitoring org.freedesktop.portal.GameMode
-SYSTEMD_DEPS ::= libsystemd
+SYSTEMD_DEPS ::= libsystemd liburing
 
 SYSTEMD_CFLAGS != $(PKG_CONFIG) --cflags $(SYSTEMD_DEPS)
 $(call CHECK_STATUS)
@@ -237,21 +237,6 @@ $(call CHECK_STATUS)
 
 CFLAGS += $(SYSTEMD_CFLAGS)
 LDLIBS += $(SYSTEMD_LDLIBS)
-
-# 5.6 System Probing (io_uring Event Core)
-# =============================================================================
-# liburing >= 2.4 (sync-cancel API); runtime kernel floor is 5.15, probed at
-# startup — see the event-core section in walle.c.
-URING_DEPS ::= liburing >= 2.4
-
-URING_CFLAGS != $(PKG_CONFIG) --cflags '$(URING_DEPS)'
-$(call CHECK_STATUS)
-URING_LDLIBS != $(PKG_CONFIG) --libs '$(URING_DEPS)'
-$(call CHECK_STATUS)
-
-# -isystem: liburing's UAPI headers use zero-size arrays that trip -Wpedantic.
-CFLAGS += $(patsubst -I%,-isystem %,$(URING_CFLAGS))
-LDLIBS += $(URING_LDLIBS)
 
 # 6. Wayland Protocol Definitions
 # =============================================================================
@@ -296,63 +281,34 @@ ALL_SOURCES ::= $(APP_SOURCES) $(GENERATED_SOURCES)
 OBJECTS ::= $(ALL_SOURCES:%.c=$(OBJ_DIR)/%.c.o)
 DEPS    ::= $(OBJECTS:.o=.d)
 
-.PHONY: all activate clean fuzz reveal-best-known-corpus-gate reveal-best-known-gate \
-	reveal-best-known-process-gate reveal-mask-model-gate reveal-raster-gate
+.PHONY: all check clean fuzz
 
-all: $(TARGET) activate
+all: $(TARGET) | $(BIN_DIR)
+	@ln -sfn $(PROFILE)/walle $(BIN_DIR)/walle
 
-activate: $(TARGET) | $(BIN_DIR)
-	ln -sfn $(PROFILE)/walle $(ACTIVE_TARGET)
+check: $(TESTS)
+	@echo "[TEST] raw io_uring reactor"
+	$(URING_TEST)
+	@echo "[TEST] tilde expansion"
+	$(TILDE_TEST)
 
-reveal-mask-model-gate:
-	./parity/run_liquid_glass_reveal_mask_model_gate.sh
+$(URING_TEST): tests/uring_smoke.c uring.c uring.h Makefile | $(TEST_DIR)
+	@echo "[CCLD] $@"
+	$(CC) $(CPPFLAGS) $(CFLAGS) tests/uring_smoke.c uring.c -o $@
 
-reveal-raster-gate: parity/raster_p25_selector_ceil_bits.bin \
-		artifacts/apple-float-intrinsics-r8-30556057571.bin \
-		parity/apple_fast_sqrt_correction_nibbles.bin
-	bash parity/run_liquid_glass_reveal_raster_gate.sh
-
-reveal-best-known-gate: $(REVEAL_GATE_TARGET)
-	$(REVEAL_GATE_TARGET)
-
-reveal-best-known-corpus-gate: $(REVEAL_GATE_TARGET) \
-		analysis/score_reveal_best_known_gles.py \
-		analysis/reveal_best_known_gles_corpus_gate_result.json
-	nix develop ./lg-test --command python analysis/score_reveal_best_known_gles.py \
-		--baseline analysis/reveal_best_known_gles_corpus_gate_result.json \
-		--expect-mismatches 91 >/dev/null
-	@echo "best-known reveal GLES corpus: frozen 65-state score reproduced"
-
-reveal-best-known-process-gate: $(TARGET) $(REVEAL_GATE_TARGET) \
-		analysis/run_walle_reveal_process_capture_gate.sh
-	bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
-
-$(REVEAL_GATE_TARGET): $(REVEAL_GATE_SOURCE) parity/liquid_glass_reveal_mask_model.c \
-		parity/liquid_glass_reveal_mask_model.h parity/liquid_glass_postguard.c \
-		parity/liquid_glass_postguard.h parity/liquid_glass_raster.c parity/liquid_glass_raster.h \
-		parity/liquid_glass_transition_frame.h \
-		parity/liquid_glass_selected_region.h parity/liquid_glass_transition_profile.h \
-		parity/liquid_glass_static_profile.h parity/liquid_glass_materialize.h \
-		parity/raster_p25_selector_ceil_bits.bin \
-		parity/apple_fast_sqrt_correction_nibbles.bin shaders/vert.glsl \
-		shaders/reveal_mask.vert.glsl shaders/reveal_mask.frag.glsl \
-		shaders/frag_reveal_best_known.glsl | $(QUALITY_BIN_DIR)
-	@echo "[CC] $<"
-	$(CC) $(C23_STRICT) -Werror -O2 -fstack-protector-strong -D_FORTIFY_SOURCE=3 \
-		-I. -Iparity $(RENDER_CFLAGS) $(REVEAL_GATE_SOURCE) \
-		parity/liquid_glass_reveal_mask_model.c parity/liquid_glass_postguard.c \
-		parity/liquid_glass_raster.c \
-		$(RENDER_LDLIBS) -lm -o $@
+$(TILDE_TEST): tests/tilde_smoke.c tilde.c tilde.h Makefile | $(TEST_DIR)
+	@echo "[CCLD] $@"
+	$(CC) $(CPPFLAGS) $(CFLAGS) tests/tilde_smoke.c tilde.c -o $@
 
 # --- Linking Rule ---
-$(TARGET): $(OBJECTS) | $(PROFILE_BIN_DIR)
+$(TARGET): $(OBJECTS) Makefile | $(PROFILE_BIN_DIR)
 	@echo "MODE: $(MODE)"
 	@echo "[LD] $@"
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $(filter-out Makefile,$^) $(LDLIBS) -o $@
 
 # --- Unified Compilation Rule ---
 # This single pattern handles sources in the root, vendor/, and protocols/ directories.
-$(OBJ_DIR)/%.c.o: %.c
+$(OBJ_DIR)/%.c.o: %.c Makefile
 	@echo "[CC] $<"
 	@# Ensure the specific output subdirectory (e.g., build/obj/vendor/inih/src) exists.
 	@mkdir -p $(@D)
@@ -386,7 +342,7 @@ endif
 
 # --- Infrastructure (Directories) ---
 # Order-only prerequisites (|) ensure creation without triggering unnecessary rebuilds.
-$(BIN_DIR) $(PROFILE_BIN_DIR) $(QUALITY_BIN_DIR) $(PROTOCOL_DIR):
+$(BIN_DIR) $(PROFILE_BIN_DIR) $(TEST_DIR) $(PROTOCOL_DIR):
 	@mkdir -p $@
 
 # Include generated dependency files.

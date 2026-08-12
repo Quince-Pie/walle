@@ -136,31 +136,8 @@ const char VERTEX_SHADER_SRC[] = {
 #embed "shaders/vert.glsl" limit(4096) if_empty(0) suffix(, )
     0};
 
-const char REVEAL_MASK_VERTEX_SHADER_SRC[] = {
-#embed "shaders/reveal_mask.vert.glsl" limit(4096) if_empty(0) suffix(, )
-    0};
-
-const char REVEAL_MASK_FRAGMENT_SHADER_SRC[] = {
-#embed "shaders/reveal_mask.frag.glsl" limit(32768) if_empty(0) suffix(, )
-    0};
-
-/* Input-only arithmetic calibrations: P25 selects the recovered AGX reciprocal
- * path, while the second table supplies Apple's 2-bit fast-sqrt correction.
- * Neither table is keyed by reveal state, pixel identity, or output coverage. */
-static const uint8_t REVEAL_RASTER_P25[] = {
-#embed "parity/raster_p25_selector_ceil_bits.bin" limit(2097152) if_empty(0) suffix(, )
-};
-
-static const uint8_t REVEAL_APPLE_FAST_SQRT[] = {
-#embed "parity/apple_fast_sqrt_correction_nibbles.bin" limit(4194304) if_empty(0) suffix(, )
-};
-
-static_assert(sizeof REVEAL_RASTER_P25 == 2u * 1024u * 1024u);
-static_assert(sizeof REVEAL_APPLE_FAST_SQRT == 4u * 1024u * 1024u);
-static_assert(sizeof REVEAL_MASK_FRAGMENT_SHADER_SRC < 32'769);
-
-const char FRAGMENT_SHADER_REVEAL_BEST_KNOWN_SRC[] = {
-#embed "shaders/frag_reveal_best_known.glsl" limit(16384) if_empty(0) suffix(, )
+const char FRAGMENT_SHADER_T1_SRC[] = {
+#embed "shaders/frag.glsl" if_empty(0) suffix(, )
     0};
 
 /* -- Data Structures ----------------------------------------------------- */
@@ -187,6 +164,13 @@ enum glass_variant : uint8_t
 {
     GLASS_VARIANT_CLEAR = 0,
     GLASS_VARIANT_REGULAR
+};
+
+enum glass_appearance : uint8_t
+{
+    GLASS_APPEARANCE_LIGHT = 0,
+    GLASS_APPEARANCE_DARK,
+    GLASS_APPEARANCE_AUTO
 };
 
 typedef enum : uint8_t
@@ -217,15 +201,16 @@ struct item_list
 
 struct output_config
 {
-    struct wl_list     link;
-    char*              output_name;
-    struct item_list   items;
-    int                timeout;
-    bool               randomize;
-    bool               transition_on;
-    bool               gamemode;
-    enum glass_variant variant;
-    float              transition_duration;
+    struct wl_list        link;
+    char*                 output_name;
+    struct item_list      items;
+    int                   timeout;
+    bool                  randomize;
+    bool                  transition_on;
+    bool                  gamemode;
+    enum glass_variant    variant;
+    enum glass_appearance appearance;
+    float                 transition_duration;
 };
 
 struct config_parse_ctx
@@ -311,31 +296,23 @@ struct wallpaper_output
     int                    timeout;
     bool                   gamemode_enabled;
     enum glass_variant     glass_variant;
+    enum glass_appearance  glass_appearance;
 
     bool pending_reload;
+    bool         rerender_deferred;
+    bool         rotation_deferred;
+    _Atomic bool completion_notify_failed;
+
+    size_t current_texture_bytes;
+    size_t incoming_texture_bytes;
 
     /* Snapshot taken on the main thread immediately before pthread_create
      * (the create is the happens-before edge); the worker must never read
      * render.width/height, which a configure event can mutate mid-render. */
-    int32_t            job_w;
-    int32_t            job_h;
-    enum glass_variant job_variant;
-
-    GLuint  reveal_mask_texture;
-    GLuint  reveal_mask_framebuffer;
-    GLuint  reveal_mask_vertex_array;
-    GLuint  reveal_mask_vertex_buffer;
-    GLuint  reveal_mask_index_buffer;
-    int32_t reveal_mask_width;
-    int32_t reveal_mask_height;
-    double  reveal_maximum_radius;
-
-    /* Cold, diagnostic-only state. Keep this outside the frozen render
-     * prefix so an absent --reveal-mask-process-capture is layout-neutral. */
-    uint8_t* reveal_process_capture_pixels;
-    uint32_t reveal_process_capture_state;
-    bool     reveal_process_capture_owned;
-    bool     reveal_process_capture_active;
+    int32_t               job_w;
+    int32_t               job_h;
+    enum glass_variant    job_variant;
+    enum glass_appearance job_appearance;
 };
 
 static_assert(sizeof(((struct wallpaper_output*)0)->render) == 64,
@@ -431,34 +408,9 @@ struct wallpaper_state
     bool       exact_gate_complete;
     int        exact_gate_status;
 
-    bool     reveal_process_capture;
-    bool     reveal_process_capture_output_claimed;
-    bool     reveal_process_capture_complete;
-    int      reveal_process_capture_status;
-    int      reveal_process_capture_directory_fd;
-    uint32_t reveal_process_capture_swap_count;
-    uint32_t reveal_process_capture_callback_count;
-
-    GLuint reveal_best_known_program;
-    GLint  reveal_u_TexA, reveal_u_TexGlassA, reveal_u_TexB, reveal_u_TexGlassB;
-    GLint  reveal_u_Mask, reveal_u_Time;
-    GLint  reveal_u_Resolution, reveal_u_Variant, reveal_u_RevealCenterPointPixels;
-    GLint  reveal_u_RevealRadiusPixels;
-
-    GLuint  reveal_mask_program;
-    GLint   reveal_mask_u_Resolution;
-    GLint   reveal_mask_u_CompactFamily;
-    GLint   reveal_mask_u_AxisTable;
-    GLint   reveal_mask_u_AppleFastSqrtTable;
-    GLint   reveal_mask_u_PrimitiveSlots;
-    GLint   reveal_mask_u_PrimitiveRows;
-    GLuint  reveal_owner_buffer;
-    GLuint  reveal_axis_texture;
-    GLuint  reveal_apple_fast_sqrt_texture;
-    GLsizei reveal_axis_texture_width;
-    GLint   reveal_max_texture_size;
-    GLint   reveal_max_uniform_block_size;
-    bool    reveal_programs_attempted;
+    GLuint shader_program_t1;
+    GLint  u_TexA, u_TexGlassA, u_TexB, u_TexGlassB;
+    GLint  u_Time, u_CenterPointPixels, u_Resolution, u_MaxRadiusPixels, u_Variant, u_Appearance;
 
     int   inotify_fd;
     int   config_wd;
@@ -1562,10 +1514,18 @@ static bool init_gl_resources(struct wallpaper_state* state)
      * reinterpret (or reject) uploads. Context state: set once. */
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    const char* egl_vendor  = eglQueryString(state->egl_display, EGL_VENDOR);
-    state->mesa_wayland_wsi = egl_vendor && strstr(egl_vendor, "Mesa");
-
-    bool complete = ensure_reveal_programs(state);
+    glUseProgram(state->shader_program_t1);
+    state->u_TexA      = glGetUniformLocation(state->shader_program_t1, "TexA");
+    state->u_TexGlassA = glGetUniformLocation(state->shader_program_t1, "TexGlassA");
+    state->u_TexB      = glGetUniformLocation(state->shader_program_t1, "TexB");
+    state->u_TexGlassB = glGetUniformLocation(state->shader_program_t1, "TexGlassB");
+    state->u_Time      = glGetUniformLocation(state->shader_program_t1, "Time");
+    state->u_CenterPointPixels
+        = glGetUniformLocation(state->shader_program_t1, "CenterPointPixels");
+    state->u_Resolution      = glGetUniformLocation(state->shader_program_t1, "Resolution");
+    state->u_MaxRadiusPixels = glGetUniformLocation(state->shader_program_t1, "MaxRadiusPixels");
+    state->u_Variant         = glGetUniformLocation(state->shader_program_t1, "Variant");
+    state->u_Appearance      = glGetUniformLocation(state->shader_program_t1, "Appearance");
     glUseProgram(0);
     eglMakeCurrent(state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     return complete;
@@ -2778,10 +2738,12 @@ static bool render_frame(struct wallpaper_output* output)
                 (float)output->render.height);
     glUniform1f(state->reveal_u_Variant,
                 output->glass_variant == GLASS_VARIANT_REGULAR ? 1.0f : 0.0f);
-    float center_x = reveal_geometry.circle.center[0];
-    float center_y = (float)output->render.height - reveal_geometry.circle.center[1];
-    glUniform2f(state->reveal_u_RevealCenterPointPixels, center_x, center_y);
-    glUniform1f(state->reveal_u_RevealRadiusPixels, reveal_geometry.circle.radius);
+    if (output->render.state->u_Appearance >= 0) {
+        float app_val = -1.0f;
+        if (output->glass_appearance == GLASS_APPEARANCE_LIGHT) app_val = 0.0f;
+        else if (output->glass_appearance == GLASS_APPEARANCE_DARK) app_val = 1.0f;
+        glUniform1f(output->render.state->u_Appearance, app_val);
+    }
 
     glBindVertexArray(output->render.vao);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -3620,6 +3582,14 @@ static int config_handler(void* user, const char* section, const char* name, con
                     value);
             oc->variant = GLASS_VARIANT_CLEAR;
         }
+    } else if (strcasecmp(name, "transition_appearance") == 0) {
+        if (strcasecmp(value, "light") == 0) {
+            oc->appearance = GLASS_APPEARANCE_LIGHT;
+        } else if (strcasecmp(value, "dark") == 0) {
+            oc->appearance = GLASS_APPEARANCE_DARK;
+        } else {
+            oc->appearance = GLASS_APPEARANCE_AUTO;
+        }
     } else if (strcasecmp(name, "gamemode") == 0) {
         oc->gamemode = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     }
@@ -3682,6 +3652,7 @@ static void apply_config_to_output(struct wallpaper_output* output, struct outpu
         output->render.flags &= ~F_TRANSITION_ON;
     output->transition_duration = config->transition_duration;
     output->glass_variant       = config->variant;
+    output->glass_appearance    = config->appearance;
 
     if (output->current_item_index >= output->num_items)
         output->current_item_index = 0;
@@ -4589,49 +4560,44 @@ int main(int argc, char* argv[])
                                EGL_ALPHA_SIZE,
                                8,
                                EGL_RENDERABLE_TYPE,
-                               state.exact_static_gate ? EGL_OPENGL_BIT : EGL_OPENGL_ES3_BIT,
+                               EGL_OPENGL_BIT,
                                EGL_NONE};
     EGLint n_config;
     if (!eglChooseConfig(state.egl_display, config_attribs, &state.egl_config, 1, &n_config)
         || n_config != 1) {
-        fprintf(stderr, "FATAL: no RGBA8888 EGL config available for the selected API.\n");
+        // Fallback to any RGBA8888 config if EGL_OPENGL_BIT is not explicitly filtered by driver
+        EGLint fallback_attribs[] = {EGL_SURFACE_TYPE, EGL_WINDOW_BIT, EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_NONE};
+        if (!eglChooseConfig(state.egl_display, fallback_attribs, &state.egl_config, 1, &n_config) || n_config != 1) {
+            fprintf(stderr, "FATAL: no RGBA8888 EGL config available.\n");
+            rc = 1;
+            goto teardown;
+        }
+    }
+
+    if (!eglBindAPI(EGL_OPENGL_API)) {
+        fprintf(stderr, "FATAL: eglBindAPI(EGL_OPENGL_API) failed; Desktop OpenGL 4.5 core required for 100%% bit-exact Liquid Glass parity.\n");
         rc = 1;
         goto teardown;
     }
 
-    EGLenum client_api = state.exact_static_gate ? EGL_OPENGL_API : EGL_OPENGL_ES_API;
-    if (!eglBindAPI(client_api)) {
-        fprintf(stderr, "FATAL: eglBindAPI failed for the selected rendering API.\n");
-        rc = 1;
-        goto teardown;
+    EGLint ctx_attribs[] = {
+        0x3098, 4,          // EGL_CONTEXT_MAJOR_VERSION_KHR
+        0x3099, 5,          // EGL_CONTEXT_MINOR_VERSION_KHR
+        EGL_NONE
+    };
+    state.egl_context = eglCreateContext(state.egl_display, state.egl_config, EGL_NO_CONTEXT, ctx_attribs);
+    if (state.egl_context == EGL_NO_CONTEXT) {
+        // Try fallback to major version 4 minor version 0 or default Desktop GL context
+        EGLint ctx_attribs_simple[] = {0x3098, 4, EGL_NONE};
+        state.egl_context = eglCreateContext(state.egl_display, state.egl_config, EGL_NO_CONTEXT, ctx_attribs_simple);
     }
-
-    const EGLint  gles_ctx_attribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE};
-    const EGLint  gles32_ctx_attribs[] = {EGL_CONTEXT_MAJOR_VERSION_KHR,
-                                          3,
-                                          EGL_CONTEXT_MINOR_VERSION_KHR,
-                                          2,
-                                          EGL_NONE};
-    const EGLint  core_ctx_attribs[] = {EGL_CONTEXT_MAJOR_VERSION_KHR,
-                                        4,
-                                        EGL_CONTEXT_MINOR_VERSION_KHR,
-                                        5,
-                                        EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR,
-                                        EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR,
-                                        EGL_NONE};
-    const char* display_extensions = eglQueryString(state.egl_display, EGL_EXTENSIONS);
-    bool explicit_context_version
-        = display_extensions && strstr(display_extensions, "EGL_KHR_create_context");
-    const EGLint* ctx_attribs
-        = state.exact_static_gate ? core_ctx_attribs
-          : explicit_context_version ? gles32_ctx_attribs
-                                     : gles_ctx_attribs;
-    state.egl_context
-        = eglCreateContext(state.egl_display, state.egl_config, EGL_NO_CONTEXT, ctx_attribs);
+    if (state.egl_context == EGL_NO_CONTEXT) {
+        fprintf(stderr, "FATAL: eglCreateContext for Desktop OpenGL failed with EGL error 0x%04x.\n", eglGetError());
+    }
     state.egl_initialized = (state.egl_context != EGL_NO_CONTEXT);
 
-    if (!state.egl_initialized || (!state.exact_static_gate && !init_gl_resources(&state))) {
-        fprintf(stderr, "FATAL: rendering API initialization failed.\n");
+    if (!state.egl_initialized || !init_gl_resources(&state)) {
+        fprintf(stderr, "FATAL: Desktop OpenGL 4.5 core initialization failed.\n");
         rc = 1;
         goto teardown;
     }

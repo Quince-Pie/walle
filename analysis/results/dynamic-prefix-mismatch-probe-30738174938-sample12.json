@@ -1,0 +1,943 @@
+{
+  "baseline": {
+    "exact": true,
+    "firstMismatches": [],
+    "maximumChannelDelta": 0,
+    "meanAbsoluteChannelDelta": 0.0,
+    "mismatchedBytes": 0,
+    "mismatchedPixels": 0
+  },
+  "classification": "retrospective opened diagnostic",
+  "combinedCoordinateQuantizationSweep": {
+    "coordinate-0-quantization-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-0-quantization-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-1-quantization-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-1-quantization-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-2-quantization-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-2-quantization-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-3-quantization-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-3-quantization-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-4-quantization-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-4-quantization-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-5-quantization-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "coordinate-5-quantization-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    }
+  },
+  "combinedMixSweep": {
+    "composite-0-holding-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-5": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-0-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-5": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-1-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-5": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-2-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-5": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-3-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-5": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-4-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-5": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-5-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-5": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-6-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-0": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-1": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-2": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-3": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-4": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-5": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-6": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    },
+    "composite-7-holding-7": {
+      "exact": true,
+      "firstMismatches": [],
+      "maximumChannelDelta": 0,
+      "meanAbsoluteChannelDelta": 0.0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0
+    }
+  },
+  "dynamicArtifact": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938",
+  "implementation": {
+    "fragmentShaderBytes": 123414,
+    "fragmentShaderSha256": "f01701e3bcfa75f95d294a23cf123f24741e8d497d8dccd10f5cf37a5f3330bc",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "liquidGlassDynamicPrefixMismatchProbeSchemaVersion": 1,
+  "mixSweeps": {
+    "ProbeCompositeMixMode": {
+      "0": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "1": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "2": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "3": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "4": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "5": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "6": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "7": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      }
+    },
+    "ProbeHoldingMixMode": {
+      "0": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "1": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "2": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "3": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "4": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "5": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "6": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "7": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      }
+    }
+  },
+  "numericTracesAtBaselineMismatches": {
+    "1": [],
+    "10": [],
+    "11": [],
+    "12": [],
+    "13": [],
+    "14": [],
+    "2": [],
+    "21": [],
+    "4": [],
+    "5": [],
+    "6": [],
+    "7": [],
+    "8": [],
+    "9": []
+  },
+  "prefixReference": {
+    "path": "artifacts/gh-run-30738174938/liquid-glass-transition-introspection-profile-clear-light-materialize-30738174938/transition-background-uniform-12-glass-prefix-reference-bgra8.raw",
+    "sha256": "a5c7517adb03cdb1b748a303e8ecda18363c472fa8fbc1d62319ed5262e377dd"
+  },
+  "productionShaderAuthorized": false,
+  "profile": {
+    "appearance": "light",
+    "material": "clear"
+  },
+  "runtimeRaster": {
+    "axisStart": 105,
+    "selector": {
+      "base": 26813525,
+      "offset": 3,
+      "selected": 26813528
+    }
+  },
+  "sampleIndex": 12,
+  "singleUniformSweeps": {
+    "AppleFastReciprocalBias": {
+      "0": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "1": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "2": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      }
+    },
+    "AppleFastSqrtBias": {
+      "0": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "1": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "2": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      }
+    },
+    "InnerSamplerCoordinateModel": {
+      "0": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "1": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "2": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "3": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "4": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "5": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      }
+    },
+    "SamplerModel": {
+      "0": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "1": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      }
+    },
+    "SamplerSpatialQuantization": {
+      "0": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "1": {
+        "exact": true,
+        "firstMismatches": [],
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      }
+    }
+  }
+}

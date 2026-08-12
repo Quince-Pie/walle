@@ -1,0 +1,4174 @@
+{
+  "alphaRaster": {
+    "1": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-01-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+      "appleSHA256": "0cf610f4e8852440265fdff58aed57def3fcef8fcc7a5d7b536d88662663f30e",
+      "comparison": {
+        "activeApplePixels": 4157,
+        "activeCandidatePixels": 4157,
+        "activeMaskMismatchedPixels": 0,
+        "exact": false,
+        "matchingWordFraction": 0.9995107650756836,
+        "maximumHalfCodeDelta": 236,
+        "mismatchBounds": {
+          "maximumX": 919,
+          "maximumY": 919,
+          "minimumX": 111,
+          "minimumY": 105
+        },
+        "mismatchedWords": 513,
+        "mostCommonNonzeroDeltas": [
+          {
+            "candidateMinusAppleHalfCode": -1,
+            "count": 207
+          },
+          {
+            "candidateMinusAppleHalfCode": 1,
+            "count": 78
+          },
+          {
+            "candidateMinusAppleHalfCode": 2,
+            "count": 55
+          },
+          {
+            "candidateMinusAppleHalfCode": -2,
+            "count": 46
+          },
+          {
+            "candidateMinusAppleHalfCode": 3,
+            "count": 26
+          },
+          {
+            "candidateMinusAppleHalfCode": -3,
+            "count": 18
+          },
+          {
+            "candidateMinusAppleHalfCode": 5,
+            "count": 10
+          },
+          {
+            "candidateMinusAppleHalfCode": -6,
+            "count": 10
+          },
+          {
+            "candidateMinusAppleHalfCode": 4,
+            "count": 8
+          },
+          {
+            "candidateMinusAppleHalfCode": 6,
+            "count": 7
+          },
+          {
+            "candidateMinusAppleHalfCode": -5,
+            "count": 6
+          },
+          {
+            "candidateMinusAppleHalfCode": -4,
+            "count": 4
+          }
+        ],
+        "wordCount": 1048576
+      },
+      "diagonal": "ascending",
+      "orientationDiagnostics": {
+        "capturedRows": {
+          "activeApplePixels": 4157,
+          "activeCandidatePixels": 4157,
+          "activeMaskMismatchedPixels": 0,
+          "exact": false,
+          "matchingWordFraction": 0.9995107650756836,
+          "maximumHalfCodeDelta": 236,
+          "mismatchBounds": {
+            "maximumX": 919,
+            "maximumY": 919,
+            "minimumX": 111,
+            "minimumY": 105
+          },
+          "mismatchedWords": 513,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 207
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 78
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 55
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 46
+            },
+            {
+              "candidateMinusAppleHalfCode": 3,
+              "count": 26
+            },
+            {
+              "candidateMinusAppleHalfCode": -3,
+              "count": 18
+            },
+            {
+              "candidateMinusAppleHalfCode": 5,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": -6,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": 4,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 6,
+              "count": 7
+            },
+            {
+              "candidateMinusAppleHalfCode": -5,
+              "count": 6
+            },
+            {
+              "candidateMinusAppleHalfCode": -4,
+              "count": 4
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "flippedColumns": {
+          "activeApplePixels": 4157,
+          "activeCandidatePixels": 4157,
+          "activeMaskMismatchedPixels": 838,
+          "exact": false,
+          "matchingWordFraction": 0.9956426620483398,
+          "maximumHalfCodeDelta": 13709,
+          "mismatchBounds": {
+            "maximumX": 919,
+            "maximumY": 919,
+            "minimumX": 104,
+            "minimumY": 104
+          },
+          "mismatchedWords": 4569,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 10,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": 122,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -10,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -122,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 41,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 19,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -19,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -246,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 246,
+              "count": 7
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "flippedRows": {
+          "activeApplePixels": 4157,
+          "activeCandidatePixels": 4157,
+          "activeMaskMismatchedPixels": 838,
+          "exact": false,
+          "matchingWordFraction": 0.9956398010253906,
+          "maximumHalfCodeDelta": 13709,
+          "mismatchBounds": {
+            "maximumX": 919,
+            "maximumY": 919,
+            "minimumX": 104,
+            "minimumY": 104
+          },
+          "mismatchedWords": 4572,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 19,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 10,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 43,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -19,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -43,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -166,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -324,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 159,
+              "count": 7
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "rotated180": {
+          "activeApplePixels": 4157,
+          "activeCandidatePixels": 4157,
+          "activeMaskMismatchedPixels": 1194,
+          "exact": false,
+          "matchingWordFraction": 0.9954671859741211,
+          "maximumHalfCodeDelta": 13938,
+          "mismatchBounds": {
+            "maximumX": 919,
+            "maximumY": 919,
+            "minimumX": 104,
+            "minimumY": 104
+          },
+          "mismatchedWords": 4753,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -44,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": 190,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 7,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -8,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 63,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 46,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 31,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 4,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -4,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -27,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -31,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -63,
+              "count": 8
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "rotated90Clockwise": {
+          "activeApplePixels": 4157,
+          "activeCandidatePixels": 4157,
+          "activeMaskMismatchedPixels": 838,
+          "exact": false,
+          "matchingWordFraction": 0.995640754699707,
+          "maximumHalfCodeDelta": 13709,
+          "mismatchBounds": {
+            "maximumX": 919,
+            "maximumY": 919,
+            "minimumX": 104,
+            "minimumY": 104
+          },
+          "mismatchedWords": 4571,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": 10,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -19,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -27,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -10,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -159,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -166,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 246,
+              "count": 7
+            },
+            {
+              "candidateMinusAppleHalfCode": 166,
+              "count": 7
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "rotated90Counterclockwise": {
+          "activeApplePixels": 4157,
+          "activeCandidatePixels": 4157,
+          "activeMaskMismatchedPixels": 838,
+          "exact": false,
+          "matchingWordFraction": 0.9956417083740234,
+          "maximumHalfCodeDelta": 13709,
+          "mismatchBounds": {
+            "maximumX": 919,
+            "maximumY": 919,
+            "minimumX": 104,
+            "minimumY": 104
+          },
+          "mismatchedWords": 4570,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 10,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": 122,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 19,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 43,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 27,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -10,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 159,
+              "count": 7
+            },
+            {
+              "candidateMinusAppleHalfCode": 101,
+              "count": 7
+            },
+            {
+              "candidateMinusAppleHalfCode": 18,
+              "count": 7
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "transposed": {
+          "activeApplePixels": 4157,
+          "activeCandidatePixels": 4157,
+          "activeMaskMismatchedPixels": 1194,
+          "exact": false,
+          "matchingWordFraction": 0.9954671859741211,
+          "maximumHalfCodeDelta": 13938,
+          "mismatchBounds": {
+            "maximumX": 919,
+            "maximumY": 919,
+            "minimumX": 104,
+            "minimumY": 104
+          },
+          "mismatchedWords": 4753,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 190,
+              "count": 12
+            },
+            {
+              "candidateMinusAppleHalfCode": -44,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": 7,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -8,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": -190,
+              "count": 9
+            },
+            {
+              "candidateMinusAppleHalfCode": 63,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 46,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 31,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 4,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -4,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -27,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -31,
+              "count": 8
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "transverse": {
+          "activeApplePixels": 4157,
+          "activeCandidatePixels": 4157,
+          "activeMaskMismatchedPixels": 0,
+          "exact": false,
+          "matchingWordFraction": 0.9991302490234375,
+          "maximumHalfCodeDelta": 242,
+          "mismatchBounds": {
+            "maximumX": 919,
+            "maximumY": 919,
+            "minimumX": 104,
+            "minimumY": 104
+          },
+          "mismatchedWords": 912,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 377
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 256
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 65
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 65
+            },
+            {
+              "candidateMinusAppleHalfCode": 3,
+              "count": 29
+            },
+            {
+              "candidateMinusAppleHalfCode": -3,
+              "count": 18
+            },
+            {
+              "candidateMinusAppleHalfCode": 5,
+              "count": 11
+            },
+            {
+              "candidateMinusAppleHalfCode": 4,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": -4,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": -6,
+              "count": 10
+            },
+            {
+              "candidateMinusAppleHalfCode": 12,
+              "count": 6
+            },
+            {
+              "candidateMinusAppleHalfCode": 6,
+              "count": 5
+            }
+          ],
+          "wordCount": 1048576
+        }
+      },
+      "remaining": 0.030328750610351562
+    },
+    "12": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-12-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+      "appleSHA256": "dde96469eb9e75db88a4133f20368da93a84f08c9018798b294b795638648d4e",
+      "comparison": {
+        "activeApplePixels": 4124,
+        "activeCandidatePixels": 4124,
+        "activeMaskMismatchedPixels": 0,
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedWords": 0,
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 1048576
+      },
+      "diagonal": "ascending",
+      "orientationDiagnostics": {
+        "capturedRows": {
+          "activeApplePixels": 4124,
+          "activeCandidatePixels": 4124,
+          "activeMaskMismatchedPixels": 0,
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedWords": 0,
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 1048576
+        },
+        "flippedColumns": {
+          "activeApplePixels": 4124,
+          "activeCandidatePixels": 4124,
+          "activeMaskMismatchedPixels": 232,
+          "exact": false,
+          "matchingWordFraction": 0.9959907531738281,
+          "maximumHalfCodeDelta": 12759,
+          "mismatchBounds": {
+            "maximumX": 917,
+            "maximumY": 916,
+            "minimumX": 106,
+            "minimumY": 106
+          },
+          "mismatchedWords": 4204,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 34
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 34
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 24
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 24
+            },
+            {
+              "candidateMinusAppleHalfCode": 8,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": -8,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": 15,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": 5,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": -5,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": -15,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": 14,
+              "count": 18
+            },
+            {
+              "candidateMinusAppleHalfCode": 6,
+              "count": 18
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "flippedRows": {
+          "activeApplePixels": 4124,
+          "activeCandidatePixels": 4124,
+          "activeMaskMismatchedPixels": 232,
+          "exact": false,
+          "matchingWordFraction": 0.9960002899169922,
+          "maximumHalfCodeDelta": 12759,
+          "mismatchBounds": {
+            "maximumX": 917,
+            "maximumY": 917,
+            "minimumX": 107,
+            "minimumY": 106
+          },
+          "mismatchedWords": 4194,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 32
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 32
+            },
+            {
+              "candidateMinusAppleHalfCode": 5,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": -5,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": 8,
+              "count": 21
+            },
+            {
+              "candidateMinusAppleHalfCode": -8,
+              "count": 21
+            },
+            {
+              "candidateMinusAppleHalfCode": 15,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": -15,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": 47,
+              "count": 18
+            },
+            {
+              "candidateMinusAppleHalfCode": -47,
+              "count": 18
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "rotated180": {
+          "activeApplePixels": 4124,
+          "activeCandidatePixels": 4124,
+          "activeMaskMismatchedPixels": 336,
+          "exact": false,
+          "matchingWordFraction": 0.9959201812744141,
+          "maximumHalfCodeDelta": 12902,
+          "mismatchBounds": {
+            "maximumX": 917,
+            "maximumY": 917,
+            "minimumX": 106,
+            "minimumY": 106
+          },
+          "mismatchedWords": 4278,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 279,
+              "count": 48
+            },
+            {
+              "candidateMinusAppleHalfCode": -279,
+              "count": 48
+            },
+            {
+              "candidateMinusAppleHalfCode": 6,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -6,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 25
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 25
+            },
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": 287,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": -287,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": 40,
+              "count": 17
+            },
+            {
+              "candidateMinusAppleHalfCode": 16,
+              "count": 17
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "rotated90Clockwise": {
+          "activeApplePixels": 4124,
+          "activeCandidatePixels": 4124,
+          "activeMaskMismatchedPixels": 232,
+          "exact": false,
+          "matchingWordFraction": 0.9959936141967773,
+          "maximumHalfCodeDelta": 12759,
+          "mismatchBounds": {
+            "maximumX": 917,
+            "maximumY": 917,
+            "minimumX": 107,
+            "minimumY": 106
+          },
+          "mismatchedWords": 4201,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 37
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 31
+            },
+            {
+              "candidateMinusAppleHalfCode": -8,
+              "count": 24
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 23
+            },
+            {
+              "candidateMinusAppleHalfCode": 5,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": 15,
+              "count": 20
+            },
+            {
+              "candidateMinusAppleHalfCode": 8,
+              "count": 20
+            },
+            {
+              "candidateMinusAppleHalfCode": -5,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": -6,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": -15,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": 47,
+              "count": 18
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "rotated90Counterclockwise": {
+          "activeApplePixels": 4124,
+          "activeCandidatePixels": 4124,
+          "activeMaskMismatchedPixels": 232,
+          "exact": false,
+          "matchingWordFraction": 0.9959936141967773,
+          "maximumHalfCodeDelta": 12759,
+          "mismatchBounds": {
+            "maximumX": 917,
+            "maximumY": 916,
+            "minimumX": 106,
+            "minimumY": 106
+          },
+          "mismatchedWords": 4201,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 37
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 31
+            },
+            {
+              "candidateMinusAppleHalfCode": 8,
+              "count": 24
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 23
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": -5,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": -8,
+              "count": 20
+            },
+            {
+              "candidateMinusAppleHalfCode": -15,
+              "count": 20
+            },
+            {
+              "candidateMinusAppleHalfCode": 15,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": 6,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": 5,
+              "count": 19
+            },
+            {
+              "candidateMinusAppleHalfCode": -7,
+              "count": 18
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "transposed": {
+          "activeApplePixels": 4124,
+          "activeCandidatePixels": 4124,
+          "activeMaskMismatchedPixels": 336,
+          "exact": false,
+          "matchingWordFraction": 0.9959201812744141,
+          "maximumHalfCodeDelta": 12902,
+          "mismatchBounds": {
+            "maximumX": 917,
+            "maximumY": 917,
+            "minimumX": 106,
+            "minimumY": 106
+          },
+          "mismatchedWords": 4278,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 279,
+              "count": 51
+            },
+            {
+              "candidateMinusAppleHalfCode": -279,
+              "count": 51
+            },
+            {
+              "candidateMinusAppleHalfCode": 6,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -6,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 25
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 25
+            },
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 22
+            },
+            {
+              "candidateMinusAppleHalfCode": 287,
+              "count": 17
+            },
+            {
+              "candidateMinusAppleHalfCode": 40,
+              "count": 17
+            },
+            {
+              "candidateMinusAppleHalfCode": 20,
+              "count": 17
+            },
+            {
+              "candidateMinusAppleHalfCode": 16,
+              "count": 17
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "transverse": {
+          "activeApplePixels": 4124,
+          "activeCandidatePixels": 4124,
+          "activeMaskMismatchedPixels": 0,
+          "exact": false,
+          "matchingWordFraction": 0.9992485046386719,
+          "maximumHalfCodeDelta": 104,
+          "mismatchBounds": {
+            "maximumX": 916,
+            "maximumY": 916,
+            "minimumX": 107,
+            "minimumY": 107
+          },
+          "mismatchedWords": 788,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 320
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 320
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 34
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 34
+            },
+            {
+              "candidateMinusAppleHalfCode": 3,
+              "count": 12
+            },
+            {
+              "candidateMinusAppleHalfCode": -3,
+              "count": 12
+            },
+            {
+              "candidateMinusAppleHalfCode": 4,
+              "count": 7
+            },
+            {
+              "candidateMinusAppleHalfCode": -4,
+              "count": 7
+            },
+            {
+              "candidateMinusAppleHalfCode": 5,
+              "count": 5
+            },
+            {
+              "candidateMinusAppleHalfCode": -5,
+              "count": 5
+            },
+            {
+              "candidateMinusAppleHalfCode": 11,
+              "count": 3
+            },
+            {
+              "candidateMinusAppleHalfCode": -11,
+              "count": 3
+            }
+          ],
+          "wordCount": 1048576
+        }
+      },
+      "remaining": 0.3749113082885742
+    },
+    "32": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-32-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+      "appleSHA256": "52a2df22a7a94c8dd2150ee8f152fc67a0fc5551bd38153474ac6e11d18a614d",
+      "comparison": {
+        "activeApplePixels": 4028,
+        "activeCandidatePixels": 4028,
+        "activeMaskMismatchedPixels": 0,
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedWords": 0,
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 1048576
+      },
+      "diagonal": "ascending",
+      "orientationDiagnostics": {
+        "capturedRows": {
+          "activeApplePixels": 4028,
+          "activeCandidatePixels": 4028,
+          "activeMaskMismatchedPixels": 0,
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedWords": 0,
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 1048576
+        },
+        "flippedColumns": {
+          "activeApplePixels": 4028,
+          "activeCandidatePixels": 4028,
+          "activeMaskMismatchedPixels": 0,
+          "exact": false,
+          "matchingWordFraction": 0.9975814819335938,
+          "maximumHalfCodeDelta": 64,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedWords": 2536,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 338
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 338
+            },
+            {
+              "candidateMinusAppleHalfCode": 33,
+              "count": 44
+            },
+            {
+              "candidateMinusAppleHalfCode": -33,
+              "count": 44
+            },
+            {
+              "candidateMinusAppleHalfCode": 34,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 30,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -30,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -34,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 43,
+              "count": 28
+            },
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 28
+            },
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 28
+            },
+            {
+              "candidateMinusAppleHalfCode": -43,
+              "count": 28
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "flippedRows": {
+          "activeApplePixels": 4028,
+          "activeCandidatePixels": 4028,
+          "activeMaskMismatchedPixels": 0,
+          "exact": false,
+          "matchingWordFraction": 0.9975814819335938,
+          "maximumHalfCodeDelta": 64,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedWords": 2536,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 338
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 338
+            },
+            {
+              "candidateMinusAppleHalfCode": 33,
+              "count": 44
+            },
+            {
+              "candidateMinusAppleHalfCode": -33,
+              "count": 44
+            },
+            {
+              "candidateMinusAppleHalfCode": 34,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 30,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -30,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -34,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 43,
+              "count": 28
+            },
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 28
+            },
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 28
+            },
+            {
+              "candidateMinusAppleHalfCode": -43,
+              "count": 28
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "rotated180": {
+          "activeApplePixels": 4028,
+          "activeCandidatePixels": 4028,
+          "activeMaskMismatchedPixels": 0,
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedWords": 0,
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 1048576
+        },
+        "rotated90Clockwise": {
+          "activeApplePixels": 4028,
+          "activeCandidatePixels": 4028,
+          "activeMaskMismatchedPixels": 0,
+          "exact": false,
+          "matchingWordFraction": 0.9975433349609375,
+          "maximumHalfCodeDelta": 65,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedWords": 2576,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 348
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 348
+            },
+            {
+              "candidateMinusAppleHalfCode": 33,
+              "count": 44
+            },
+            {
+              "candidateMinusAppleHalfCode": -33,
+              "count": 44
+            },
+            {
+              "candidateMinusAppleHalfCode": 34,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 13,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -13,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -34,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 43,
+              "count": 28
+            },
+            {
+              "candidateMinusAppleHalfCode": 39,
+              "count": 28
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "rotated90Counterclockwise": {
+          "activeApplePixels": 4028,
+          "activeCandidatePixels": 4028,
+          "activeMaskMismatchedPixels": 0,
+          "exact": false,
+          "matchingWordFraction": 0.9975433349609375,
+          "maximumHalfCodeDelta": 65,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedWords": 2576,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 348
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 348
+            },
+            {
+              "candidateMinusAppleHalfCode": 33,
+              "count": 44
+            },
+            {
+              "candidateMinusAppleHalfCode": -33,
+              "count": 44
+            },
+            {
+              "candidateMinusAppleHalfCode": 34,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 28,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 13,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -13,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -28,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": -34,
+              "count": 30
+            },
+            {
+              "candidateMinusAppleHalfCode": 43,
+              "count": 28
+            },
+            {
+              "candidateMinusAppleHalfCode": 39,
+              "count": 28
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "transposed": {
+          "activeApplePixels": 4028,
+          "activeCandidatePixels": 4028,
+          "activeMaskMismatchedPixels": 0,
+          "exact": false,
+          "matchingWordFraction": 0.9994659423828125,
+          "maximumHalfCodeDelta": 14,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedWords": 560,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 236
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 236
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 26
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 26
+            },
+            {
+              "candidateMinusAppleHalfCode": 5,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -5,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 14,
+              "count": 4
+            },
+            {
+              "candidateMinusAppleHalfCode": 3,
+              "count": 4
+            },
+            {
+              "candidateMinusAppleHalfCode": -3,
+              "count": 4
+            },
+            {
+              "candidateMinusAppleHalfCode": -14,
+              "count": 4
+            },
+            {
+              "candidateMinusAppleHalfCode": 4,
+              "count": 2
+            },
+            {
+              "candidateMinusAppleHalfCode": -4,
+              "count": 2
+            }
+          ],
+          "wordCount": 1048576
+        },
+        "transverse": {
+          "activeApplePixels": 4028,
+          "activeCandidatePixels": 4028,
+          "activeMaskMismatchedPixels": 0,
+          "exact": false,
+          "matchingWordFraction": 0.9994659423828125,
+          "maximumHalfCodeDelta": 14,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedWords": 560,
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 236
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 236
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 26
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 26
+            },
+            {
+              "candidateMinusAppleHalfCode": 5,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": -5,
+              "count": 8
+            },
+            {
+              "candidateMinusAppleHalfCode": 14,
+              "count": 4
+            },
+            {
+              "candidateMinusAppleHalfCode": 3,
+              "count": 4
+            },
+            {
+              "candidateMinusAppleHalfCode": -3,
+              "count": 4
+            },
+            {
+              "candidateMinusAppleHalfCode": -14,
+              "count": 4
+            },
+            {
+              "candidateMinusAppleHalfCode": 4,
+              "count": 2
+            },
+            {
+              "candidateMinusAppleHalfCode": -4,
+              "count": 2
+            }
+          ],
+          "wordCount": 1048576
+        }
+      },
+      "remaining": 1
+    }
+  },
+  "arithmeticSweep": {
+    "destination-0-source-0": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 0,
+      "sourceDivisionMode": 0
+    },
+    "destination-0-source-1": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.999849796295166,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 910,
+            "maximumY": 910,
+            "minimumX": 113,
+            "minimumY": 113
+          },
+          "mismatchedPixels": 210,
+          "mismatchedWords": 630,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 210,
+            "green": 210,
+            "red": 210
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 366
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 264
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9995541572570801,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 914,
+          "mismatchedWords": 1870,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 560,
+            "green": 688,
+            "red": 622
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 976
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 894
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 0,
+      "sourceDivisionMode": 1
+    },
+    "destination-0-source-2": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9996094703674316,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 546,
+          "mismatchedWords": 1638,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 546,
+            "green": 546,
+            "red": 546
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1638
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9993343353271484,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1374,
+          "mismatchedWords": 2792,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 920,
+            "green": 914,
+            "red": 958
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 2792
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 0,
+      "sourceDivisionMode": 2
+    },
+    "destination-0-source-3": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999971389770508,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 884,
+            "maximumY": 884,
+            "minimumX": 139,
+            "minimumY": 139
+          },
+          "mismatchedPixels": 4,
+          "mismatchedWords": 12,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 4,
+            "green": 4,
+            "red": 4
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 0,
+      "sourceDivisionMode": 3
+    },
+    "destination-0-source-4": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999971389770508,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 884,
+            "maximumY": 884,
+            "minimumX": 139,
+            "minimumY": 139
+          },
+          "mismatchedPixels": 4,
+          "mismatchedWords": 12,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 4,
+            "green": 4,
+            "red": 4
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 0,
+      "sourceDivisionMode": 4
+    },
+    "destination-1-source-0": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 1,
+      "sourceDivisionMode": 0
+    },
+    "destination-1-source-1": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.999849796295166,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 910,
+            "maximumY": 910,
+            "minimumX": 113,
+            "minimumY": 113
+          },
+          "mismatchedPixels": 210,
+          "mismatchedWords": 630,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 210,
+            "green": 210,
+            "red": 210
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 366
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 264
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9995541572570801,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 914,
+          "mismatchedWords": 1870,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 560,
+            "green": 688,
+            "red": 622
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 976
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 894
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 1,
+      "sourceDivisionMode": 1
+    },
+    "destination-1-source-2": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9996094703674316,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 546,
+          "mismatchedWords": 1638,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 546,
+            "green": 546,
+            "red": 546
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1638
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9993343353271484,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1374,
+          "mismatchedWords": 2792,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 920,
+            "green": 914,
+            "red": 958
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 2792
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 1,
+      "sourceDivisionMode": 2
+    },
+    "destination-1-source-3": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999971389770508,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 884,
+            "maximumY": 884,
+            "minimumX": 139,
+            "minimumY": 139
+          },
+          "mismatchedPixels": 4,
+          "mismatchedWords": 12,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 4,
+            "green": 4,
+            "red": 4
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 1,
+      "sourceDivisionMode": 3
+    },
+    "destination-1-source-4": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999971389770508,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 884,
+            "maximumY": 884,
+            "minimumX": 139,
+            "minimumY": 139
+          },
+          "mismatchedPixels": 4,
+          "mismatchedWords": 12,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 4,
+            "green": 4,
+            "red": 4
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 1,
+      "sourceDivisionMode": 4
+    },
+    "destination-2-source-0": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9998025894165039,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 276,
+          "mismatchedWords": 828,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 276,
+            "green": 276,
+            "red": 276
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 468
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 360
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9998993873596191,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 256,
+          "mismatchedWords": 422,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 192,
+            "green": 36,
+            "red": 194
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 312
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 110
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 2,
+      "sourceDivisionMode": 0
+    },
+    "destination-2-source-1": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9996623992919922,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 472,
+          "mismatchedWords": 1416,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 472,
+            "green": 472,
+            "red": 472
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 726
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 678
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.999476432800293,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1100,
+          "mismatchedWords": 2196,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 700,
+            "green": 724,
+            "red": 772
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1118
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 1028
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 32
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 18
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 2,
+      "sourceDivisionMode": 1
+    },
+    "destination-2-source-2": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9994850158691406,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 720,
+          "mismatchedWords": 2160,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 720,
+            "green": 720,
+            "red": 720
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1848
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 300
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9992752075195312,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1492,
+          "mismatchedWords": 3040,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 1022,
+            "green": 938,
+            "red": 1080
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 2906
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 70
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 64
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 2,
+      "sourceDivisionMode": 2
+    },
+    "destination-2-source-3": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9998025894165039,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 276,
+          "mismatchedWords": 828,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 276,
+            "green": 276,
+            "red": 276
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 468
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 360
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9998965263366699,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 260,
+          "mismatchedWords": 434,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 196,
+            "green": 40,
+            "red": 198
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 312
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 122
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 2,
+      "sourceDivisionMode": 3
+    },
+    "destination-2-source-4": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9998025894165039,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 276,
+          "mismatchedWords": 828,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 276,
+            "green": 276,
+            "red": 276
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 468
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 360
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9998965263366699,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 260,
+          "mismatchedWords": 434,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 196,
+            "green": 40,
+            "red": 198
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 312
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 122
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 2,
+      "sourceDivisionMode": 4
+    },
+    "destination-3-source-0": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9996223449707031,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 528,
+          "mismatchedWords": 1584,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 528,
+            "green": 528,
+            "red": 528
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1584
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9998626708984375,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 424,
+          "mismatchedWords": 576,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 258,
+            "green": 110,
+            "red": 208
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 304
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 272
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 3,
+      "sourceDivisionMode": 0
+    },
+    "destination-3-source-1": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.999542236328125,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 640,
+          "mismatchedWords": 1920,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 640,
+            "green": 640,
+            "red": 640
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1722
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 150
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 48
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9994711875915527,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1194,
+          "mismatchedWords": 2218,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 718,
+            "green": 764,
+            "red": 736
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1096
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 1046
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 64
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 3,
+      "sourceDivisionMode": 1
+    },
+    "destination-3-source-2": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9992547035217285,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1042,
+          "mismatchedWords": 3126,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 1042,
+            "green": 1042,
+            "red": 1042
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 3018
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 108
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9992580413818359,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1650,
+          "mismatchedWords": 3112,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 1044,
+            "green": 988,
+            "red": 1080
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 2866
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 180
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 66
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 3,
+      "sourceDivisionMode": 2
+    },
+    "destination-3-source-3": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9996223449707031,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 528,
+          "mismatchedWords": 1584,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 528,
+            "green": 528,
+            "red": 528
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1584
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9998598098754883,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 428,
+          "mismatchedWords": 588,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 262,
+            "green": 114,
+            "red": 212
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 304
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 284
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 3,
+      "sourceDivisionMode": 3
+    },
+    "destination-3-source-4": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9996223449707031,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 528,
+          "mismatchedWords": 1584,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 528,
+            "green": 528,
+            "red": 528
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1584
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9998598098754883,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 428,
+          "mismatchedWords": 588,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 262,
+            "green": 114,
+            "red": 212
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 304
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 284
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 3,
+      "sourceDivisionMode": 4
+    },
+    "destination-4-source-0": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 4,
+      "sourceDivisionMode": 0
+    },
+    "destination-4-source-1": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.999849796295166,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 910,
+            "maximumY": 910,
+            "minimumX": 113,
+            "minimumY": 113
+          },
+          "mismatchedPixels": 210,
+          "mismatchedWords": 630,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 210,
+            "green": 210,
+            "red": 210
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 366
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 264
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9995541572570801,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 914,
+          "mismatchedWords": 1870,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 560,
+            "green": 688,
+            "red": 622
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 976
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 894
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 4,
+      "sourceDivisionMode": 1
+    },
+    "destination-4-source-2": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9996094703674316,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 546,
+          "mismatchedWords": 1638,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 546,
+            "green": 546,
+            "red": 546
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1638
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9993343353271484,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1374,
+          "mismatchedWords": 2792,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 920,
+            "green": 914,
+            "red": 958
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 2792
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 4,
+      "sourceDivisionMode": 2
+    },
+    "destination-4-source-3": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999971389770508,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 884,
+            "maximumY": 884,
+            "minimumX": 139,
+            "minimumY": 139
+          },
+          "mismatchedPixels": 4,
+          "mismatchedWords": 12,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 4,
+            "green": 4,
+            "red": 4
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 4,
+      "sourceDivisionMode": 3
+    },
+    "destination-4-source-4": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999971389770508,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 884,
+            "maximumY": 884,
+            "minimumX": 139,
+            "minimumY": 139
+          },
+          "mismatchedPixels": 4,
+          "mismatchedWords": 12,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 4,
+            "green": 4,
+            "red": 4
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 4,
+      "sourceDivisionMode": 4
+    },
+    "destination-5-source-0": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 5,
+      "sourceDivisionMode": 0
+    },
+    "destination-5-source-1": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.999849796295166,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 910,
+            "maximumY": 910,
+            "minimumX": 113,
+            "minimumY": 113
+          },
+          "mismatchedPixels": 210,
+          "mismatchedWords": 630,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 210,
+            "green": 210,
+            "red": 210
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 366
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 264
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9995541572570801,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 914,
+          "mismatchedWords": 1870,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 560,
+            "green": 688,
+            "red": 622
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 976
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 894
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 5,
+      "sourceDivisionMode": 1
+    },
+    "destination-5-source-2": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9996094703674316,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 546,
+          "mismatchedWords": 1638,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 546,
+            "green": 546,
+            "red": 546
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1638
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9993343353271484,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1374,
+          "mismatchedWords": 2792,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 920,
+            "green": 914,
+            "red": 958
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 2792
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 5,
+      "sourceDivisionMode": 2
+    },
+    "destination-5-source-3": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999971389770508,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 884,
+            "maximumY": 884,
+            "minimumX": 139,
+            "minimumY": 139
+          },
+          "mismatchedPixels": 4,
+          "mismatchedWords": 12,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 4,
+            "green": 4,
+            "red": 4
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 5,
+      "sourceDivisionMode": 3
+    },
+    "destination-5-source-4": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999971389770508,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 884,
+            "maximumY": 884,
+            "minimumX": 139,
+            "minimumY": 139
+          },
+          "mismatchedPixels": 4,
+          "mismatchedWords": 12,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 4,
+            "green": 4,
+            "red": 4
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 5,
+      "sourceDivisionMode": 4
+    },
+    "destination-6-source-0": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999380111694336,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 184,
+          "mismatchedWords": 260,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 120,
+            "green": 28,
+            "red": 112
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 208
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 52
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 6,
+      "sourceDivisionMode": 0
+    },
+    "destination-6-source-1": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.999849796295166,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 910,
+            "maximumY": 910,
+            "minimumX": 113,
+            "minimumY": 113
+          },
+          "mismatchedPixels": 210,
+          "mismatchedWords": 630,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 210,
+            "green": 210,
+            "red": 210
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 366
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 264
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9995121955871582,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1046,
+          "mismatchedWords": 2046,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 628,
+            "green": 724,
+            "red": 694
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 1080
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 922
+            },
+            {
+              "candidateMinusAppleHalfCode": 2,
+              "count": 44
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 6,
+      "sourceDivisionMode": 1
+    },
+    "destination-6-source-2": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9996094703674316,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 546,
+          "mismatchedWords": 1638,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 546,
+            "green": 546,
+            "red": 546
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1638
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9993176460266113,
+          "maximumHalfCodeDelta": 2,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1468,
+          "mismatchedWords": 2862,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 940,
+            "green": 934,
+            "red": 988
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 2730
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 120
+            },
+            {
+              "candidateMinusAppleHalfCode": -2,
+              "count": 12
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 6,
+      "sourceDivisionMode": 2
+    },
+    "destination-6-source-3": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999351501464844,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 188,
+          "mismatchedWords": 272,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 124,
+            "green": 32,
+            "red": 116
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 220
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 52
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 6,
+      "sourceDivisionMode": 3
+    },
+    "destination-6-source-4": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9999351501464844,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 188,
+          "mismatchedWords": 272,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 124,
+            "green": 32,
+            "red": 116
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 220
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 52
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "destinationDivisionMode": 6,
+      "sourceDivisionMode": 4
+    }
+  },
+  "candidateConfiguration": {
+    "HighlightCoordinateMode": 1,
+    "HighlightCoverageArithmeticMode": 1,
+    "HighlightDerivativeMode": 1,
+    "HighlightNormalizeMode": 1,
+    "HighlightSourceConstructionMode": 1,
+    "HighlightSourceDivisionMode": 0,
+    "HighlightVibrantArithmeticMode": 9,
+    "UseAppleHalfIntrinsicTable": 1
+  },
+  "dynamicArtifact": "artifacts/gh-run-30730626908",
+  "floatIntrinsicTable": {
+    "path": "artifacts/apple-float-intrinsics-r8-30556057571.bin",
+    "sha256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449"
+  },
+  "gate": {
+    "allDynamicAlphaTracesExact": false,
+    "allTranslucentCompositorStagesExact": true,
+    "exact": false,
+    "productionShaderAuthorized": false
+  },
+  "implementation": {
+    "fragmentShaderBytes": 110075,
+    "fragmentShaderSha256": "8913418866f84b208d647a06c425a93e096545b81925e30c0af5f4d912b20d74",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "liquidGlassDynamicHighlightStageGateSchemaVersion": 1,
+  "sourceConstructionSweep": {
+    "0": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9997496604919434,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 350,
+          "mismatchedWords": 1050,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 350,
+            "green": 350,
+            "red": 350
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 624
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 426
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9993515014648438,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1276,
+          "mismatchedWords": 2720,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 918,
+            "green": 896,
+            "red": 906
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1444
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 1276
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "sourceConstructionMode": 0
+    },
+    "1": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": true,
+          "matchingWordFraction": 1.0,
+          "maximumHalfCodeDelta": 0,
+          "mismatchBounds": null,
+          "mismatchedPixels": 0,
+          "mismatchedWords": 0,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 0
+          },
+          "mostCommonNonzeroDeltas": [],
+          "wordCount": 4194304
+        }
+      },
+      "sourceConstructionMode": 1
+    },
+    "2": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9998340606689453,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 232,
+          "mismatchedWords": 696,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 232,
+            "green": 232,
+            "red": 232
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 360
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 336
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9995508193969727,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 896,
+          "mismatchedWords": 1884,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 620,
+            "green": 614,
+            "red": 650
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 948
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 936
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "sourceConstructionMode": 2
+    },
+    "3": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9998340606689453,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 232,
+          "mismatchedWords": 696,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 232,
+            "green": 232,
+            "red": 232
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 360
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 336
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9995508193969727,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 896,
+          "mismatchedWords": 1884,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 620,
+            "green": 614,
+            "red": 650
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 948
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 936
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "sourceConstructionMode": 3
+    },
+    "4": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9998340606689453,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 232,
+          "mismatchedWords": 696,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 232,
+            "green": 232,
+            "red": 232
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 360
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 336
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9995508193969727,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 896,
+          "mismatchedWords": 1884,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 620,
+            "green": 614,
+            "red": 650
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 948
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 936
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "sourceConstructionMode": 4
+    },
+    "5": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9999814033508301,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 26,
+          "mismatchedWords": 78,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 26,
+            "green": 26,
+            "red": 26
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 42
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 36
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9997334480285645,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 480,
+          "mismatchedWords": 1118,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 378,
+            "green": 328,
+            "red": 412
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 576
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 542
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "sourceConstructionMode": 5
+    },
+    "6": {
+      "comparisons": {
+        "identity-rgb-destination-alpha": {
+          "exact": false,
+          "matchingWordFraction": 0.9998326301574707,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 234,
+          "mismatchedWords": 702,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 234,
+            "green": 234,
+            "red": 234
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 492
+            },
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 210
+            }
+          ],
+          "wordCount": 4194304
+        },
+        "natural": {
+          "exact": false,
+          "matchingWordFraction": 0.9994544982910156,
+          "maximumHalfCodeDelta": 1,
+          "mismatchBounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          },
+          "mismatchedPixels": 1054,
+          "mismatchedWords": 2288,
+          "mismatchedWordsByChannel": {
+            "alpha": 0,
+            "blue": 762,
+            "green": 748,
+            "red": 778
+          },
+          "mostCommonNonzeroDeltas": [
+            {
+              "candidateMinusAppleHalfCode": -1,
+              "count": 1176
+            },
+            {
+              "candidateMinusAppleHalfCode": 1,
+              "count": 1112
+            }
+          ],
+          "wordCount": 4194304
+        }
+      },
+      "sourceConstructionMode": 6
+    }
+  },
+  "staticCapture": "artifacts/gh-run-30721856837",
+  "translucentCompositor": {
+    "asymmetric-constant-unit-alpha": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-32-final-highlight-alpha-compositor-tomography-asymmetric-constant-unit-alpha-rgba16float-rgba16f.raw",
+      "appleSHA256": "69acf8cdd586851d1b83977241e4f37fe65bc00341ccf098e0f2d45ce09658d0",
+      "comparison": {
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": {
+          "alpha": 0,
+          "blue": 0,
+          "green": 0,
+          "red": 0
+        },
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 4194304
+      }
+    },
+    "identity-rgb-destination-alpha": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-32-final-highlight-alpha-compositor-tomography-identity-rgb-destination-alpha-rgba16float-rgba16f.raw",
+      "appleSHA256": "5be47290556652fb09a19dcee28bbfbfc6887c37dfe8309a9b55efe77c4faa72",
+      "comparison": {
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": {
+          "alpha": 0,
+          "blue": 0,
+          "green": 0,
+          "red": 0
+        },
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 4194304
+      }
+    },
+    "identity-rgb-unit-alpha": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-32-final-highlight-alpha-compositor-tomography-identity-rgb-unit-alpha-rgba16float-rgba16f.raw",
+      "appleSHA256": "7f8c219dee08ee17423c521739f8b6edbb74f0f69a094df2cfe37b9f8a70afb2",
+      "comparison": {
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": {
+          "alpha": 0,
+          "blue": 0,
+          "green": 0,
+          "red": 0
+        },
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 4194304
+      }
+    },
+    "natural": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-32-final-highlight-alpha-compositor-rebuilt-rgba16float-rgba16f.raw",
+      "appleSHA256": "5d0d6d102f04290de73a8373d45e4abeaed003081f51b1fccd92d3764a066c14",
+      "comparison": {
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": {
+          "alpha": 0,
+          "blue": 0,
+          "green": 0,
+          "red": 0
+        },
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 4194304
+      }
+    },
+    "natural-rgb-unit-alpha": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-32-final-highlight-alpha-compositor-tomography-natural-rgb-unit-alpha-rgba16float-rgba16f.raw",
+      "appleSHA256": "34b38af3cacdece1d668de778db09d840761103b3a5b387055cd8c4b6559b37b",
+      "comparison": {
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": {
+          "alpha": 0,
+          "blue": 0,
+          "green": 0,
+          "red": 0
+        },
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 4194304
+      }
+    },
+    "permuted-rgb-unit-alpha": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-32-final-highlight-alpha-compositor-tomography-permuted-rgb-unit-alpha-rgba16float-rgba16f.raw",
+      "appleSHA256": "7f8c219dee08ee17423c521739f8b6edbb74f0f69a094df2cfe37b9f8a70afb2",
+      "comparison": {
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": {
+          "alpha": 0,
+          "blue": 0,
+          "green": 0,
+          "red": 0
+        },
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 4194304
+      }
+    },
+    "unit-rgb-unit-alpha": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-32-final-highlight-alpha-compositor-tomography-unit-rgb-unit-alpha-rgba16float-rgba16f.raw",
+      "appleSHA256": "66cd5d177ce575ecb6c225c73b82a4bee10bdb50510caaba9b8324ec51d0186f",
+      "comparison": {
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": {
+          "alpha": 0,
+          "blue": 0,
+          "green": 0,
+          "red": 0
+        },
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 4194304
+      }
+    },
+    "zero-rgb-unit-alpha": {
+      "applePath": "artifacts/gh-run-30730626908/liquid-glass-transition-introspection-profile-clear-light-materialize-30730626908/transition-background-uniform-32-final-highlight-alpha-compositor-tomography-zero-rgb-unit-alpha-rgba16float-rgba16f.raw",
+      "appleSHA256": "b7ada9978fe8cb6d382c29ca3fde055d229d438f5db620c2d3da107d95087f13",
+      "comparison": {
+        "exact": true,
+        "matchingWordFraction": 1.0,
+        "maximumHalfCodeDelta": 0,
+        "mismatchBounds": null,
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": {
+          "alpha": 0,
+          "blue": 0,
+          "green": 0,
+          "red": 0
+        },
+        "mostCommonNonzeroDeltas": [],
+        "wordCount": 4194304
+      }
+    }
+  }
+}

@@ -1,0 +1,1937 @@
+{
+  "classification": "retrospective-opened-diagnostic",
+  "dynamicArtifact": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987",
+  "followupPreregistration": null,
+  "gate": {
+    "calibrationBacked": true,
+    "combinedReplayUsedForAcceptance": false,
+    "comparedWords": 37748736,
+    "everyStateExact": false,
+    "exact": false,
+    "expectedComparedWords": 37748736,
+    "mismatchedWords": 637475,
+    "productionShaderAuthorized": false,
+    "prospectiveEvidence": false,
+    "sampleCount": 9
+  },
+  "liquidGlassDynamicBackgroundInterpolantGateSchemaVersion": 1,
+  "predictor": {
+    "capturedInterpolantReadByPredictor": false,
+    "gateFile": "/tmp/walle/analysis/liquid_glass_dynamic_background_interpolant_gate.py",
+    "gateFileSha256": "9bc3afd8f92aceb3c1ee35acb534638af912955ada7825df3475e646f9b3e046",
+    "predictionCompletedBeforeRawTraceOpen": false,
+    "squareSelectorCalibration": {
+      "classification": "retrospective finite-domain calibration",
+      "selectorCount": 32769,
+      "widthFixedLower": 196608
+    },
+    "verifiedFrozenFiles": {
+      "dynamicRenderGateSha256": {
+        "exact": false,
+        "expectedSha256": "fec16ab265aae2ab5738c35fff2488e39807101e5ff51c862fc2374dd9aa200a",
+        "observedSha256": "989d676969204ef48134c4d51d705dd3e5f1a0061619ba673546b2461a17b773",
+        "path": "/tmp/walle/analysis/liquid_glass_dynamic_render_gate.py",
+        "sha256": "989d676969204ef48134c4d51d705dd3e5f1a0061619ba673546b2461a17b773"
+      },
+      "runtimeRasterCoefficientsSha256": {
+        "exact": false,
+        "expectedSha256": "43a5e76869d8e3fba09214e586947b88745dd04283515b8f75e6ca8006d2aaf0",
+        "observedSha256": "b223e31429784f201d528cf14fa393e7ba0224f78e7da627f40b01b99e905c62",
+        "path": "/tmp/walle/analysis/liquid_glass_runtime_raster_coefficients.py",
+        "sha256": "b223e31429784f201d528cf14fa393e7ba0224f78e7da627f40b01b99e905c62"
+      },
+      "squareSelectorArchiveSha256": {
+        "exact": true,
+        "expectedSha256": "93fcb5859794d67b193e00f2fe741416ae69d93125f38fa7b36506616b98e5ba",
+        "observedSha256": "93fcb5859794d67b193e00f2fe741416ae69d93125f38fa7b36506616b98e5ba",
+        "path": "artifacts/gh-run-30736731165/liquid-glass-raster-square-selector-sweep-30736731165/raster-square-selectors-u32le.zlib",
+        "sha256": "93fcb5859794d67b193e00f2fe741416ae69d93125f38fa7b36506616b98e5ba"
+      },
+      "squareSelectorCalibrationSha256": {
+        "exact": true,
+        "expectedSha256": "aa12e1a33851f60df923667d0e6063d877a194cc4d31548eb644751fa33584b6",
+        "observedSha256": "aa12e1a33851f60df923667d0e6063d877a194cc4d31548eb644751fa33584b6",
+        "path": "/tmp/walle/analysis/liquid_glass_square_selector_calibration.py",
+        "sha256": "aa12e1a33851f60df923667d0e6063d877a194cc4d31548eb644751fa33584b6"
+      }
+    }
+  },
+  "preregistration": {
+    "path": "lg-test/Analysis/background_interpolant_transfer_preregistration.json",
+    "record": {
+      "acceptance": {
+        "comparedWords": 37748736,
+        "maximumAllowedMismatchedWords": 0,
+        "requireEveryStateExact": true
+      },
+      "backgroundInterpolantTransferPreregistrationSchemaVersion": 1,
+      "capture": {
+        "appearance": "light",
+        "diagnosticReplay": "main-plus-shadow",
+        "direction": "materialize",
+        "material": "clear",
+        "pixelFormat": "rgba32Uint",
+        "prospectiveReplay": "main-only",
+        "sampleIndices": [
+          1,
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          28,
+          32
+        ],
+        "traceComponents": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ]
+      },
+      "classification": "prospective dynamic transfer gate",
+      "frozenPredictor": {
+        "dynamicRenderGateSha256": "fec16ab265aae2ab5738c35fff2488e39807101e5ff51c862fc2374dd9aa200a",
+        "runtimeRasterCoefficientsSha256": "43a5e76869d8e3fba09214e586947b88745dd04283515b8f75e6ca8006d2aaf0",
+        "squareSelectorArchiveSha256": "93fcb5859794d67b193e00f2fe741416ae69d93125f38fa7b36506616b98e5ba",
+        "squareSelectorCalibrationSha256": "aa12e1a33851f60df923667d0e6063d877a194cc4d31548eb644751fa33584b6"
+      },
+      "limitations": [
+        "This gate covers the clear/light materialize transition only.",
+        "Only the main-draw replay is part of the prospective zero-mismatch acceptance; the combined replay is diagnostic evidence.",
+        "Passing does not by itself authorize production parity.",
+        "The finite square selector table remains calibration-backed rather than a portable closed form."
+      ],
+      "objective": "Test the frozen local AGX raster model against all four background interpolants at every dynamic state before any trace is opened."
+    },
+    "sha256": "51847750dd97d20a5e7521986c237181b2cd53e76bfa200de3601ee3f785d26d"
+  },
+  "samples": {
+    "1": {
+      "combinedTrace": {
+        "classification": "diagnostic-only; not prospective acceptance",
+        "coverage": {
+          "activePixels": 180609,
+          "bounds": {
+            "maximumX": 919,
+            "maximumY": 524,
+            "minimumX": 499,
+            "minimumY": 96
+          }
+        },
+        "differingPixelBounds": {
+          "maximumX": 919,
+          "maximumY": 103,
+          "minimumX": 499,
+          "minimumY": 96
+        },
+        "differingPixelsFromMainReplay": 3368,
+        "differingWordsFromMainReplay": 13472,
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-01-glass-dynamic-combined-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "75403d3e77fd01e27b6a2b57b4363ae0a56cedb91dad452655a59e274408c371"
+      },
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainTrace": {
+        "coverage": {
+          "activePixels": 177241,
+          "bounds": {
+            "maximumX": 919,
+            "maximumY": 524,
+            "minimumX": 499,
+            "minimumY": 104
+          }
+        },
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-01-glass-dynamic-main-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "63d9779db7976526b5db62a01394a76dd76bed2f8ff61cb287d18194d3f43bff"
+      },
+      "quad": {
+        "capturedScissor": [
+          499,
+          87,
+          438,
+          438
+        ],
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "clippedBounds": [
+          499,
+          104,
+          920,
+          525
+        ],
+        "diagonal": "descending",
+        "fixedBounds": [
+          26778,
+          26599,
+          235545,
+          235366
+        ],
+        "primitivePixelCounts": [
+          332520,
+          331705
+        ],
+        "reciprocalSelector": {
+          "base": 26453063,
+          "fractionalTableIndex": 562984,
+          "offset": 4,
+          "selected": 26453067,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f7fffd5",
+          "0xbf7fffd5",
+          "0x3adff4ef",
+          "0x3adff4f0"
+        ],
+        "visibleBounds": [
+          105,
+          104,
+          920,
+          919
+        ]
+      },
+      "remaining": 0.031624794006347656,
+      "requestedProgress": 0.03125
+    },
+    "12": {
+      "combinedTrace": {
+        "classification": "diagnostic-only; not prospective acceptance",
+        "coverage": {
+          "activePixels": 313584,
+          "bounds": {
+            "maximumX": 916,
+            "maximumY": 662,
+            "minimumX": 361,
+            "minimumY": 99
+          }
+        },
+        "differingPixelBounds": {
+          "maximumX": 916,
+          "maximumY": 106,
+          "minimumX": 361,
+          "minimumY": 99
+        },
+        "differingPixelsFromMainReplay": 4448,
+        "differingWordsFromMainReplay": 17792,
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-12-glass-dynamic-combined-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "e7d4b3420015c5cb44216338f071ff138805e6e9587c1cf66900367d2541882d"
+      },
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainTrace": {
+        "coverage": {
+          "activePixels": 309136,
+          "bounds": {
+            "maximumX": 916,
+            "maximumY": 662,
+            "minimumX": 361,
+            "minimumY": 107
+          }
+        },
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-12-glass-dynamic-main-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "d5def238dcc18b344746dcbf90155000f56f877d2abe13389e26343323ec6325"
+      },
+      "quad": {
+        "capturedScissor": [
+          361,
+          34,
+          629,
+          629
+        ],
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "clippedBounds": [
+          361,
+          107,
+          917,
+          663
+        ],
+        "diagonal": "descending",
+        "fixedBounds": [
+          27505,
+          27285,
+          234859,
+          234639
+        ],
+        "primitivePixelCounts": [
+          328455,
+          327645
+        ],
+        "reciprocalSelector": {
+          "base": 26814823,
+          "fractionalTableIndex": 527096,
+          "offset": -2,
+          "selected": 26814821,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f800006",
+          "0xbf800006",
+          "0x3ab8ba10",
+          "0x3ab8ba10"
+        ],
+        "visibleBounds": [
+          107,
+          107,
+          917,
+          917
+        ]
+      },
+      "remaining": 0.37642574310302734,
+      "requestedProgress": 0.375
+    },
+    "16": {
+      "combinedTrace": {
+        "classification": "diagnostic-only; not prospective acceptance",
+        "coverage": {
+          "activePixels": 369648,
+          "bounds": {
+            "maximumX": 915,
+            "maximumY": 711,
+            "minimumX": 312,
+            "minimumY": 100
+          }
+        },
+        "differingPixelBounds": {
+          "maximumX": 915,
+          "maximumY": 107,
+          "minimumX": 312,
+          "minimumY": 100
+        },
+        "differingPixelsFromMainReplay": 4832,
+        "differingWordsFromMainReplay": 19328,
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-16-glass-dynamic-combined-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "4b7dcf2a1bdfab8a182b9204e0bba12d20d839f62751c7664c939a231f3f9dbf"
+      },
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainTrace": {
+        "coverage": {
+          "activePixels": 364816,
+          "bounds": {
+            "maximumX": 915,
+            "maximumY": 711,
+            "minimumX": 312,
+            "minimumY": 108
+          }
+        },
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-16-glass-dynamic-main-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "8d5e298ad5d1ed9c6873cf58b4d36f7b5284811415a2944d74fabcd097f805e0"
+      },
+      "quad": {
+        "capturedScissor": [
+          312,
+          16,
+          696,
+          696
+        ],
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "clippedBounds": [
+          312,
+          108,
+          916,
+          712
+        ],
+        "diagonal": "descending",
+        "fixedBounds": [
+          27587,
+          27712,
+          234432,
+          234557
+        ],
+        "primitivePixelCounts": [
+          326836,
+          326028
+        ],
+        "reciprocalSelector": {
+          "base": 26946957,
+          "fractionalTableIndex": 514228,
+          "offset": -3,
+          "selected": 26946954,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f800014",
+          "0xbf800014",
+          "0x3aaa98ff",
+          "0x3aaa98ff"
+        ],
+        "visibleBounds": [
+          108,
+          108,
+          916,
+          916
+        ]
+      },
+      "remaining": 0.5006103515625,
+      "requestedProgress": 0.5
+    },
+    "20": {
+      "combinedTrace": {
+        "classification": "diagnostic-only; not prospective acceptance",
+        "coverage": {
+          "activePixels": 431633,
+          "bounds": {
+            "maximumX": 914,
+            "maximumY": 761,
+            "minimumX": 262,
+            "minimumY": 101
+          }
+        },
+        "differingPixelBounds": {
+          "maximumX": 914,
+          "maximumY": 108,
+          "minimumX": 262,
+          "minimumY": 101
+        },
+        "differingPixelsFromMainReplay": 5224,
+        "differingWordsFromMainReplay": 20896,
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-20-glass-dynamic-combined-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "fede548a51c025a5bcb28bbfb237005e685d7efdd0216960b3fc25294393a861"
+      },
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainTrace": {
+        "coverage": {
+          "activePixels": 426409,
+          "bounds": {
+            "maximumX": 914,
+            "maximumY": 761,
+            "minimumX": 262,
+            "minimumY": 109
+          }
+        },
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-20-glass-dynamic-main-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "a2e1e01b0037e54b2a043a0ac48590cced4a236ec8462514a35af0f67af95143"
+      },
+      "quad": {
+        "capturedScissor": [
+          262,
+          0,
+          762,
+          762
+        ],
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "clippedBounds": [
+          262,
+          109,
+          915,
+          762
+        ],
+        "diagonal": "descending",
+        "fixedBounds": [
+          27904,
+          27904,
+          234240,
+          234240
+        ],
+        "primitivePixelCounts": [
+          325221,
+          324415
+        ],
+        "reciprocalSelector": {
+          "base": 27080067,
+          "fractionalTableIndex": 501392,
+          "offset": 0,
+          "selected": 27080067,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f800000",
+          "0xbf800000",
+          "0x3a9c71b9",
+          "0x3a9c71b9"
+        ],
+        "visibleBounds": [
+          109,
+          109,
+          915,
+          915
+        ]
+      },
+      "remaining": 0.6250019073486328,
+      "requestedProgress": 0.625
+    },
+    "24": {
+      "combinedTrace": {
+        "classification": "diagnostic-only; not prospective acceptance",
+        "coverage": {
+          "activePixels": 498420,
+          "bounds": {
+            "maximumX": 913,
+            "maximumY": 811,
+            "minimumX": 212,
+            "minimumY": 102
+          }
+        },
+        "differingPixelBounds": {
+          "maximumX": 913,
+          "maximumY": 109,
+          "minimumX": 212,
+          "minimumY": 102
+        },
+        "differingPixelsFromMainReplay": 5616,
+        "differingWordsFromMainReplay": 22464,
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-24-glass-dynamic-combined-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "b1246f88e2960dae971916c37d68026993bb9829e680eb088f2e0a55c2b5b459"
+      },
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainTrace": {
+        "coverage": {
+          "activePixels": 492804,
+          "bounds": {
+            "maximumX": 913,
+            "maximumY": 811,
+            "minimumX": 212,
+            "minimumY": 110
+          }
+        },
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-24-glass-dynamic-main-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "1cb09836acd3452a4b0a2ba3b77147aee7b997381af99c893467f136b89240e2"
+      },
+      "quad": {
+        "capturedScissor": [
+          212,
+          4,
+          800,
+          808
+        ],
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "clippedBounds": [
+          212,
+          110,
+          914,
+          812
+        ],
+        "diagonal": "descending",
+        "fixedBounds": [
+          28044,
+          28281,
+          233863,
+          234100
+        ],
+        "primitivePixelCounts": [
+          323610,
+          322806
+        ],
+        "reciprocalSelector": {
+          "base": 27216276,
+          "fractionalTableIndex": 488387,
+          "offset": 7,
+          "selected": 27216283,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f80000a",
+          "0xbf80000a",
+          "0x3a9fda1e",
+          "0x3a9fda1d"
+        ],
+        "visibleBounds": [
+          110,
+          110,
+          914,
+          914
+        ]
+      },
+      "remaining": 0.7511577606201172,
+      "requestedProgress": 0.75
+    },
+    "28": {
+      "combinedTrace": {
+        "classification": "diagnostic-only; not prospective acceptance",
+        "coverage": {
+          "activePixels": 570009,
+          "bounds": {
+            "maximumX": 912,
+            "maximumY": 861,
+            "minimumX": 162,
+            "minimumY": 103
+          }
+        },
+        "differingPixelBounds": {
+          "maximumX": 912,
+          "maximumY": 110,
+          "minimumX": 162,
+          "minimumY": 103
+        },
+        "differingPixelsFromMainReplay": 6008,
+        "differingWordsFromMainReplay": 24032,
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-28-glass-dynamic-combined-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "52d9b34a3b0a2215d133486ac928f49bed9ad800f34a7ffb3270d3fdff514c3d"
+      },
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainTrace": {
+        "coverage": {
+          "activePixels": 564001,
+          "bounds": {
+            "maximumX": 912,
+            "maximumY": 861,
+            "minimumX": 162,
+            "minimumY": 111
+          }
+        },
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-28-glass-dynamic-main-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "f71b166972db2c6271d4bf616a5214215f94e1b7b0fbe51e7ba6fb2ca77f16c4"
+      },
+      "quad": {
+        "capturedScissor": [
+          162,
+          54,
+          800,
+          808
+        ],
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "clippedBounds": [
+          162,
+          111,
+          913,
+          862
+        ],
+        "diagonal": "descending",
+        "fixedBounds": [
+          28407,
+          28425,
+          233719,
+          233737
+        ],
+        "primitivePixelCounts": [
+          322003,
+          321201
+        ],
+        "reciprocalSelector": {
+          "base": 27350865,
+          "fractionalTableIndex": 475664,
+          "offset": 0,
+          "selected": 27350865,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f7fffe4",
+          "0xbf7fffe4",
+          "0x3a8ffd29",
+          "0x3a8ffd27"
+        ],
+        "visibleBounds": [
+          111,
+          111,
+          913,
+          913
+        ]
+      },
+      "remaining": 0.8750848770141602,
+      "requestedProgress": 0.875
+    },
+    "32": {
+      "combinedTrace": {
+        "classification": "diagnostic-only; not prospective acceptance",
+        "coverage": {
+          "activePixels": 646400,
+          "bounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 104
+          }
+        },
+        "differingPixelBounds": {
+          "maximumX": 911,
+          "maximumY": 111,
+          "minimumX": 112,
+          "minimumY": 104
+        },
+        "differingPixelsFromMainReplay": 6400,
+        "differingWordsFromMainReplay": 25600,
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-32-glass-dynamic-combined-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "8a01cd6628696cbd4389e2d6f7cdc2a5a0bae9826512a7069d30eac8cc36705c"
+      },
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainTrace": {
+        "coverage": {
+          "activePixels": 640000,
+          "bounds": {
+            "maximumX": 911,
+            "maximumY": 911,
+            "minimumX": 112,
+            "minimumY": 112
+          }
+        },
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-32-glass-dynamic-main-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "3b45b9d6347d1b58b8d05788351679c52be97abd7b16311512466bd37255a4f5"
+      },
+      "quad": {
+        "capturedScissor": [
+          112,
+          104,
+          800,
+          808
+        ],
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "clippedBounds": [
+          112,
+          112,
+          912,
+          912
+        ],
+        "diagonal": "descending",
+        "fixedBounds": [
+          28672,
+          28672,
+          233472,
+          233472
+        ],
+        "primitivePixelCounts": [
+          320400,
+          319600
+        ],
+        "reciprocalSelector": {
+          "base": 27487791,
+          "fractionalTableIndex": 462848,
+          "offset": 0,
+          "selected": 27487791,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f800000",
+          "0xbf800000",
+          "0x3a924924",
+          "0x3a924924"
+        ],
+        "visibleBounds": [
+          112,
+          112,
+          912,
+          912
+        ]
+      },
+      "remaining": 1,
+      "requestedProgress": 1
+    },
+    "4": {
+      "combinedTrace": {
+        "classification": "diagnostic-only; not prospective acceptance",
+        "coverage": {
+          "activePixels": 212505,
+          "bounds": {
+            "maximumX": 918,
+            "maximumY": 561,
+            "minimumX": 462,
+            "minimumY": 97
+          }
+        },
+        "differingPixelBounds": {
+          "maximumX": 918,
+          "maximumY": 104,
+          "minimumX": 462,
+          "minimumY": 97
+        },
+        "differingPixelsFromMainReplay": 3656,
+        "differingWordsFromMainReplay": 14624,
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-04-glass-dynamic-combined-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "808772dad0f71a4c9b7afca348dd4b79aa4de1973b4519aa1d710c23ad8509a1"
+      },
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": false,
+        "examples": [
+          {
+            "appleBits": [
+              "0xc24599fe",
+              "0x43cb4d3d",
+              "0x3b2e75c4",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -49.40038299560547,
+              406.6034240722656,
+              0.002662048675119877,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2459a00",
+              "0x43cb4cbe",
+              "0x3b2e757d",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -49.400390625,
+              406.59954833984375,
+              0.0026620321441441774,
+              0.1786365956068039
+            ],
+            "x": 462,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc24199fe",
+              "0x43cb4d3d",
+              "0x3b8c8e5e",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -48.40038299560547,
+              406.6034240722656,
+              0.004289432428777218,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2419a00",
+              "0x43cb4cbe",
+              "0x3b8c8e3a",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -48.400390625,
+              406.59954833984375,
+              0.004289415664970875,
+              0.1786365956068039
+            ],
+            "x": 463,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc23d99fe",
+              "0x43cb4d3d",
+              "0x3bc1e1d9",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -47.40038299560547,
+              406.6034240722656,
+              0.0059168157167732716,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc23d9a00",
+              "0x43cb4cbe",
+              "0x3bc1e1b5",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -47.400390625,
+              406.59954833984375,
+              0.0059167989529669285,
+              0.1786365956068039
+            ],
+            "x": 464,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc23999fe",
+              "0x43cb4d3d",
+              "0x3bf73555",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -46.40038299560547,
+              406.6034240722656,
+              0.0075441994704306126,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2399a00",
+              "0x43cb4cbe",
+              "0x3bf73531",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -46.400390625,
+              406.59954833984375,
+              0.0075441827066242695,
+              0.1786365956068039
+            ],
+            "x": 465,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc23599fe",
+              "0x43cb4d3d",
+              "0x3c164468",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -45.40038299560547,
+              406.6034240722656,
+              0.009171582758426666,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2359a00",
+              "0x43cb4cbe",
+              "0x3c164456",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -45.400390625,
+              406.59954833984375,
+              0.009171565994620323,
+              0.1786365956068039
+            ],
+            "x": 466,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc23199fe",
+              "0x43cb4d3d",
+              "0x3c30ee26",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -44.40038299560547,
+              406.6034240722656,
+              0.010798966512084007,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2319a00",
+              "0x43cb4cbe",
+              "0x3c30ee14",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -44.400390625,
+              406.59954833984375,
+              0.010798949748277664,
+              0.1786365956068039
+            ],
+            "x": 467,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc22d99fe",
+              "0x43cb4d3d",
+              "0x3c4b97e4",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -43.40038299560547,
+              406.6034240722656,
+              0.012426350265741348,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc22d9a00",
+              "0x43cb4cbe",
+              "0x3c4b97d1",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -43.400390625,
+              406.59954833984375,
+              0.01242633257061243,
+              0.1786365956068039
+            ],
+            "x": 468,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc22999ff",
+              "0x43cb4d3d",
+              "0x3c6641a2",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -42.400386810302734,
+              406.6034240722656,
+              0.01405373401939869,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2299a01",
+              "0x43cb4cbe",
+              "0x3c66418f",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -42.400394439697266,
+              406.59954833984375,
+              0.014053716324269772,
+              0.1786365956068039
+            ],
+            "x": 469,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc22599ff",
+              "0x43cb4d3d",
+              "0x3c8075b0",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -41.400386810302734,
+              406.6034240722656,
+              0.01568111777305603,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2259a01",
+              "0x43cb4cbe",
+              "0x3c8075a6",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -41.400394439697266,
+              406.59954833984375,
+              0.015681099146604538,
+              0.1786365956068039
+            ],
+            "x": 470,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc22199ff",
+              "0x43cb4d3d",
+              "0x3c8dca8f",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -40.400386810302734,
+              406.6034240722656,
+              0.01730850152671337,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2219a01",
+              "0x43cb4cbe",
+              "0x3c8dca85",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -40.400394439697266,
+              406.59954833984375,
+              0.01730848290026188,
+              0.1786365956068039
+            ],
+            "x": 471,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc21d99ff",
+              "0x43cb4d3d",
+              "0x3c9b1f6d",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -39.400386810302734,
+              406.6034240722656,
+              0.018935883417725563,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc21d9a01",
+              "0x43cb4cbe",
+              "0x3c9b1f64",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -39.400394439697266,
+              406.59954833984375,
+              0.01893586665391922,
+              0.1786365956068039
+            ],
+            "x": 472,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc21999ff",
+              "0x43cb4d3d",
+              "0x3ca8744c",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -38.400386810302734,
+              406.6034240722656,
+              0.020563267171382904,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2199a01",
+              "0x43cb4cbe",
+              "0x3ca87443",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -38.400394439697266,
+              406.59954833984375,
+              0.02056325040757656,
+              0.1786365956068039
+            ],
+            "x": 473,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc21599ff",
+              "0x43cb4d3d",
+              "0x3cb5c92b",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -37.400386810302734,
+              406.6034240722656,
+              0.022190650925040245,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2159a01",
+              "0x43cb4cbe",
+              "0x3cb5c922",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -37.400394439697266,
+              406.59954833984375,
+              0.022190634161233902,
+              0.1786365956068039
+            ],
+            "x": 474,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc21199ff",
+              "0x43cb4d3d",
+              "0x3cc31e0a",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -36.400386810302734,
+              406.6034240722656,
+              0.023818034678697586,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2119a01",
+              "0x43cb4cbe",
+              "0x3cc31e01",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -36.400394439697266,
+              406.59954833984375,
+              0.023818017914891243,
+              0.1786365956068039
+            ],
+            "x": 475,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc20d99ff",
+              "0x43cb4d3d",
+              "0x3cd072e9",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -35.400386810302734,
+              406.6034240722656,
+              0.025445418432354927,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc20d9a01",
+              "0x43cb4cbe",
+              "0x3cd072df",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -35.400394439697266,
+              406.59954833984375,
+              0.025445399805903435,
+              0.1786365956068039
+            ],
+            "x": 476,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc20999ff",
+              "0x43cb4d3d",
+              "0x3cddc7c8",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -34.400386810302734,
+              406.6034240722656,
+              0.027072802186012268,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2099a01",
+              "0x43cb4cbe",
+              "0x3cddc7be",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -34.400394439697266,
+              406.59954833984375,
+              0.027072783559560776,
+              0.1786365956068039
+            ],
+            "x": 477,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc20599ff",
+              "0x43cb4d3d",
+              "0x3ceb1ca7",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -33.400386810302734,
+              406.6034240722656,
+              0.02870018593966961,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2059a01",
+              "0x43cb4cbe",
+              "0x3ceb1c9d",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -33.400394439697266,
+              406.59954833984375,
+              0.028700167313218117,
+              0.1786365956068039
+            ],
+            "x": 478,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc20199ff",
+              "0x43cb4d3d",
+              "0x3cf87186",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -32.400386810302734,
+              406.6034240722656,
+              0.03032756969332695,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc2019a01",
+              "0x43cb4cbe",
+              "0x3cf8717c",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -32.400394439697266,
+              406.59954833984375,
+              0.030327551066875458,
+              0.1786365956068039
+            ],
+            "x": 479,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1fb3400",
+              "0x43cb4d3d",
+              "0x3d02e333",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -31.400390625,
+              406.6034240722656,
+              0.03195495530962944,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1fb3402",
+              "0x43cb4cbe",
+              "0x3d02e32d",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -31.400394439697266,
+              406.59954833984375,
+              0.03195493295788765,
+              0.1786365956068039
+            ],
+            "x": 480,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1f33400",
+              "0x43cb4d3d",
+              "0x3d098da3",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -30.400390625,
+              406.6034240722656,
+              0.03358234092593193,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1f33402",
+              "0x43cb4cbe",
+              "0x3d098d9d",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -30.400394439697266,
+              406.59954833984375,
+              0.03358231857419014,
+              0.1786365956068039
+            ],
+            "x": 481,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1eb3400",
+              "0x43cb4d3d",
+              "0x3d103812",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -29.400390625,
+              406.6034240722656,
+              0.03520972281694412,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1eb3402",
+              "0x43cb4cbe",
+              "0x3d10380c",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -29.400394439697266,
+              406.59954833984375,
+              0.03520970046520233,
+              0.1786365956068039
+            ],
+            "x": 482,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1e33400",
+              "0x43cb4d3d",
+              "0x3d16e282",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -28.400390625,
+              406.6034240722656,
+              0.03683710843324661,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1e33402",
+              "0x43cb4cbe",
+              "0x3d16e27c",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -28.400394439697266,
+              406.59954833984375,
+              0.03683708608150482,
+              0.1786365956068039
+            ],
+            "x": 483,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1db3400",
+              "0x43cb4d3d",
+              "0x3d1d8cf1",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -27.400390625,
+              406.6034240722656,
+              0.038464490324258804,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1db3402",
+              "0x43cb4cbe",
+              "0x3d1d8ceb",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -27.400394439697266,
+              406.59954833984375,
+              0.038464467972517014,
+              0.1786365956068039
+            ],
+            "x": 484,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1d33400",
+              "0x43cb4d3d",
+              "0x3d243761",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -26.400390625,
+              406.6034240722656,
+              0.040091875940561295,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1d33402",
+              "0x43cb4cbe",
+              "0x3d24375a",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -26.400394439697266,
+              406.59954833984375,
+              0.040091849863529205,
+              0.1786365956068039
+            ],
+            "x": 485,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1cb3400",
+              "0x43cb4d3d",
+              "0x3d2ae1d0",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -25.400390625,
+              406.6034240722656,
+              0.041719257831573486,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1cb3402",
+              "0x43cb4cbe",
+              "0x3d2ae1ca",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -25.400394439697266,
+              406.59954833984375,
+              0.041719235479831696,
+              0.1786365956068039
+            ],
+            "x": 486,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1c33400",
+              "0x43cb4d3d",
+              "0x3d318c40",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -24.400390625,
+              406.6034240722656,
+              0.04334664344787598,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1c33402",
+              "0x43cb4cbe",
+              "0x3d318c39",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -24.400394439697266,
+              406.59954833984375,
+              0.04334661737084389,
+              0.1786365956068039
+            ],
+            "x": 487,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1bb3400",
+              "0x43cb4d3d",
+              "0x3d3836af",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -23.400390625,
+              406.6034240722656,
+              0.04497402533888817,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1bb3402",
+              "0x43cb4cbe",
+              "0x3d3836a9",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -23.400394439697266,
+              406.59954833984375,
+              0.04497400298714638,
+              0.1786365956068039
+            ],
+            "x": 488,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1b33400",
+              "0x43cb4d3d",
+              "0x3d3ee11e",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -22.400390625,
+              406.6034240722656,
+              0.04660140722990036,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1b33402",
+              "0x43cb4cbe",
+              "0x3d3ee118",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -22.400394439697266,
+              406.59954833984375,
+              0.04660138487815857,
+              0.1786365956068039
+            ],
+            "x": 489,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1ab3400",
+              "0x43cb4d3d",
+              "0x3d458b8e",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -21.400390625,
+              406.6034240722656,
+              0.04822879284620285,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1ab3402",
+              "0x43cb4cbe",
+              "0x3d458b88",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -21.400394439697266,
+              406.59954833984375,
+              0.04822877049446106,
+              0.1786365956068039
+            ],
+            "x": 490,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1a33401",
+              "0x43cb4d3d",
+              "0x3d4c35fd",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -20.400392532348633,
+              406.6034240722656,
+              0.04985617473721504,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1a33403",
+              "0x43cb4cbe",
+              "0x3d4c35f7",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -20.4003963470459,
+              406.59954833984375,
+              0.04985615238547325,
+              0.1786365956068039
+            ],
+            "x": 491,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc19b3401",
+              "0x43cb4d3d",
+              "0x3d52e06d",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -19.400392532348633,
+              406.6034240722656,
+              0.05148356035351753,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc19b3403",
+              "0x43cb4cbe",
+              "0x3d52e066",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -19.4003963470459,
+              406.59954833984375,
+              0.05148353427648544,
+              0.1786365956068039
+            ],
+            "x": 492,
+            "y": 105
+          },
+          {
+            "appleBits": [
+              "0xc1933401",
+              "0x43cb4d3d",
+              "0x3d598adc",
+              "0x3e36ead9"
+            ],
+            "appleValues": [
+              -18.400392532348633,
+              406.6034240722656,
+              0.053110942244529724,
+              0.17863024771213531
+            ],
+            "predictedBits": [
+              "0xc1933403",
+              "0x43cb4cbe",
+              "0x3d598ad6",
+              "0x3e36ec83"
+            ],
+            "predictedValues": [
+              -18.4003963470459,
+              406.59954833984375,
+              0.05311091989278793,
+              0.1786365956068039
+            ],
+            "x": 493,
+            "y": 105
+          }
+        ],
+        "mismatchedPixels": 208849,
+        "mismatchedWords": 637475,
+        "mismatchedWordsByChannel": [
+          97426,
+          208849,
+          122351,
+          208849
+        ]
+      },
+      "mainTrace": {
+        "coverage": {
+          "activePixels": 208849,
+          "bounds": {
+            "maximumX": 918,
+            "maximumY": 561,
+            "minimumX": 462,
+            "minimumY": 105
+          }
+        },
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-04-glass-dynamic-main-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "70d8913d9eccbf7cb980ddbb9051418996ca1ff2fce1f47fa8078a5dd4339561"
+      },
+      "quad": {
+        "capturedScissor": [
+          462,
+          74,
+          488,
+          488
+        ],
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "clippedBounds": [
+          462,
+          105,
+          919,
+          562
+        ],
+        "diagonal": "descending",
+        "fixedBounds": [
+          26855,
+          26906,
+          235238,
+          235289
+        ],
+        "primitivePixelCounts": [
+          331705,
+          330891
+        ],
+        "reciprocalSelector": {
+          "base": 26550646,
+          "fractionalTableIndex": 553207,
+          "offset": 4,
+          "selected": 26550650,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f7ffffd",
+          "0xbf7ffffd",
+          "0x3ad54dee",
+          "0x3ad54dee"
+        ],
+        "visibleBounds": [
+          105,
+          105,
+          919,
+          919
+        ]
+      },
+      "remaining": 0.12525367736816406,
+      "requestedProgress": 0.125
+    },
+    "8": {
+      "combinedTrace": {
+        "classification": "diagnostic-only; not prospective acceptance",
+        "coverage": {
+          "activePixels": 261105,
+          "bounds": {
+            "maximumX": 917,
+            "maximumY": 612,
+            "minimumX": 411,
+            "minimumY": 98
+          }
+        },
+        "differingPixelBounds": {
+          "maximumX": 917,
+          "maximumY": 105,
+          "minimumX": 411,
+          "minimumY": 98
+        },
+        "differingPixelsFromMainReplay": 4056,
+        "differingWordsFromMainReplay": 16224,
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-08-glass-dynamic-combined-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "9a136be654194ec25e729ca007c5bdae412298fdb742321fbd9f008545a9f61c"
+      },
+      "comparison": {
+        "comparedPixels": 1048576,
+        "comparedWords": 4194304,
+        "exact": true,
+        "examples": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0,
+        "mismatchedWordsByChannel": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainTrace": {
+        "coverage": {
+          "activePixels": 257049,
+          "bounds": {
+            "maximumX": 917,
+            "maximumY": 612,
+            "minimumX": 411,
+            "minimumY": 106
+          }
+        },
+        "path": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-background-uniform-08-glass-dynamic-main-interpolant-numeric-trace-rgba32ui.raw",
+        "sha256": "d1e526bbb52a2691cab145bd97e25186bd1ec3670c54f3bd66a4ba61ff2ba826"
+      },
+      "quad": {
+        "capturedScissor": [
+          411,
+          54,
+          559,
+          559
+        ],
+        "channelAxes": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "clippedBounds": [
+          411,
+          106,
+          918,
+          613
+        ],
+        "diagonal": "descending",
+        "fixedBounds": [
+          27113,
+          27170,
+          234974,
+          235031
+        ],
+        "primitivePixelCounts": [
+          330078,
+          329266
+        ],
+        "reciprocalSelector": {
+          "base": 26684170,
+          "fractionalTableIndex": 539945,
+          "offset": 1,
+          "selected": 26684171,
+          "squareCalibrationUsed": true
+        },
+        "slopeBits": [
+          "0x3f7fffe2",
+          "0xbf7fffe2",
+          "0x3ac6cb77",
+          "0x3ac6cb77"
+        ],
+        "visibleBounds": [
+          106,
+          106,
+          918,
+          918
+        ]
+      },
+      "remaining": 0.252777099609375,
+      "requestedProgress": 0.25
+    }
+  },
+  "transitionReport": "artifacts/gh-run-30741372987/liquid-glass-transition-introspection-profile-clear-light-materialize-30741372987/transition-timeline.json"
+}
