@@ -54,6 +54,8 @@ timers, and layer-shell surfaces.
 Per-output resource policy:
 
 - compositor-minimum FIFO swapchain;
+- qualifying integrated GPUs are preferred by default for wallpaper power
+  efficiency, with `WALLE_VK_DEVICE` as the explicit override;
 - one frame fence/acquire semaphore and one present semaphore per swapchain
   image;
 - current standard+glass wallpaper pair retained while idle;
@@ -65,6 +67,7 @@ Per-output resource policy:
 - host-visible device-local coherent memory is written directly when exposed;
   otherwise a single transition-lived staging allocation is used;
 - the previous frame fence is waited before any mapped/staging overwrite;
+- descriptor sets are updated only when their transition resources change;
 - exactly one reveal draw and one composition draw per transition frame.
 
 The wallpaper textures are `VK_FORMAT_R8G8B8A8_SRGB`; the compact glass image

@@ -1,3 +1,5 @@
+#language slang 2026
+
 // Liquid Glass composition. The mask itself is produced by reveal_mask.slang.
 
 [[vk::binding(0, 0)]] Texture2D<float4> texA;

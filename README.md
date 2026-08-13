@@ -42,6 +42,8 @@ Walle is a long-running wallpaper process, so the renderer deliberately keeps
 its persistent GPU footprint small:
 
 - one FIFO swapchain at the compositor's minimum image count;
+- the default device policy prefers a qualifying integrated GPU for lower
+  background power; `WALLE_VK_DEVICE` remains an explicit override;
 - only the current wallpaper pair is retained while idle;
 - the incoming wallpaper pair, R8_UINT reveal mask, owner/axis data,
   descriptors, and optional readback are transition-lived and destroyed on
@@ -51,7 +53,9 @@ its persistent GPU footprint small:
 - host-visible device-local memory is used directly when available; otherwise
   one transition-lived staging allocation is used;
 - one frame is in flight per output, one reveal draw and one composition draw
-  are submitted per transition frame.
+  are submitted per transition frame;
+- image and storage descriptors are written only when their transition-owned
+  resources are created or replaced, never redundantly per frame.
 
 At 2048×2048 the reveal mask is exactly 4 MiB. No RGBA intermediate is used.
 Wallpaper images use sRGB textures; the swapchain uses BGRA8 UNORM with the

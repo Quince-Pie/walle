@@ -200,6 +200,9 @@ struct walle_vk_output
 
     uint32_t axis_packed_width;
     bool     transition_resources_ready;
+    bool     mask_descriptors_ready;
+    bool     compose_descriptors_ready;
+    bool     compose_descriptors_first_boot;
 };
 
 static const char* vk_result_name(VkResult result)
@@ -857,6 +860,24 @@ static bool device_candidate(struct walle_vk_renderer*           renderer,
     return true;
 }
 
+static uint32_t wallpaper_device_preference(VkPhysicalDeviceType type)
+{
+    switch (type) {
+        case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
+            return 5;
+        case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
+            return 4;
+        case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
+            return 3;
+        case VK_PHYSICAL_DEVICE_TYPE_OTHER:
+            return 2;
+        case VK_PHYSICAL_DEVICE_TYPE_CPU:
+            return 1;
+        default:
+            return 0;
+    }
+}
+
 static bool create_descriptor_layouts(struct walle_vk_renderer* renderer)
 {
     VkDescriptorSetLayoutBinding mask_bindings[4] = {};
@@ -1212,6 +1233,7 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
     VkPhysicalDeviceProperties2        selected_properties   = {};
     VkPhysicalDeviceVulkan14Properties selected_properties14 = {};
     uint32_t                           selected_queue        = UINT32_MAX;
+    uint32_t                           selected_preference   = 0;
     for (uint32_t index = 0; index < count; ++index) {
         VkPhysicalDeviceProperties2        properties2;
         VkPhysicalDeviceVulkan14Properties properties14;
@@ -1220,11 +1242,16 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
                 renderer, devices[index], surface, &queue_family, &properties2, &properties14)
             || (requested && !strstr(properties2.properties.deviceName, requested)))
             continue;
+        uint32_t preference = wallpaper_device_preference(properties2.properties.deviceType);
+        if (selected && preference <= selected_preference)
+            continue;
         selected              = devices[index];
         selected_properties   = properties2;
         selected_properties14 = properties14;
         selected_queue        = queue_family;
-        break;
+        selected_preference   = preference;
+        if (requested)
+            break;
     }
     free(devices);
     if (!selected) {
@@ -1757,7 +1784,8 @@ bool walle_vk_output_upload(struct walle_vk_output*            output,
         return false;
     }
     destroy_texture_pair(output->renderer->device, &output->incoming);
-    output->incoming = pair;
+    output->incoming                  = pair;
+    output->compose_descriptors_ready = false;
     return true;
 }
 
@@ -1883,6 +1911,8 @@ static void destroy_transition_resources(struct walle_vk_output* output)
     output->mapping_offset             = 0;
     output->axis_offset                = 0;
     output->transition_resources_ready = false;
+    output->mask_descriptors_ready     = false;
+    output->compose_descriptors_ready  = false;
 }
 
 static bool create_transition_descriptor_sets(struct walle_vk_output* output)
@@ -1994,6 +2024,7 @@ static bool ensure_transition_buffers(struct walle_vk_output*              outpu
     if (output->transition_buffer.capacity < total_size) {
         destroy_buffer(renderer->device, &output->transition_buffer);
         destroy_buffer(renderer->device, &output->staging_buffer);
+        output->mask_descriptors_ready = false;
         VkBufferUsageFlags usage
             = VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
               | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
@@ -2031,11 +2062,14 @@ static bool ensure_transition_buffers(struct walle_vk_output*              outpu
     }
     output->axis_packed_width = raster->packed_width;
 
+    if (output->mask_descriptors_ready)
+        return true;
+
     VkDescriptorBufferInfo buffer_infos[4] = {
         {
             .buffer = output->transition_buffer.handle,
             .offset = output->axis_offset,
-            .range  = axis_size,
+            .range  = output->transition_buffer.capacity - output->axis_offset,
         },
         {
             .buffer = renderer->sqrt_buffer.handle,
@@ -2065,11 +2099,14 @@ static bool ensure_transition_buffers(struct walle_vk_output*              outpu
         };
     }
     vkUpdateDescriptorSets(renderer->device, 4, writes, 0, nullptr);
+    output->mask_descriptors_ready = true;
     return true;
 }
 
 static bool update_compose_descriptors(struct walle_vk_output* output, bool first_boot)
 {
+    if (output->compose_descriptors_ready && output->compose_descriptors_first_boot == first_boot)
+        return true;
     const struct walle_vk_texture_pair* a = first_boot ? &output->incoming : &output->current;
     const struct walle_vk_texture_pair* b = &output->incoming;
     if (!a->standard.view || !a->glass.view || !b->standard.view || !b->glass.view
@@ -2094,6 +2131,8 @@ static bool update_compose_descriptors(struct walle_vk_output* output, bool firs
         };
     }
     vkUpdateDescriptorSets(output->renderer->device, 5, writes, 0, nullptr);
+    output->compose_descriptors_first_boot = first_boot;
+    output->compose_descriptors_ready      = true;
     return true;
 }
 

@@ -1,3 +1,5 @@
+#language slang 2026
+
 // Recovered reveal coverage raster, compiled offline to Vulkan SPIR-V.
 
 static const uint kMaxOwners = 94;
