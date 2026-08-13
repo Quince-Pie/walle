@@ -205,6 +205,11 @@ struct walle_vk_output
     bool     compose_descriptors_first_boot;
 };
 
+static bool swapchain_result_has_image(VkResult result)
+{
+    return result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR;
+}
+
 static const char* vk_result_name(VkResult result)
 {
     switch (result) {
@@ -1428,7 +1433,28 @@ static void destroy_swapchain(struct walle_vk_output* output)
     output->extent    = (VkExtent2D){};
 }
 
-static bool create_swapchain(struct walle_vk_output* output, uint32_t width, uint32_t height)
+static void move_swapchain(struct walle_vk_output* destination, struct walle_vk_output* source)
+{
+    destination->swapchain                  = source->swapchain;
+    destination->extent                     = source->extent;
+    destination->swapchain_image_count      = source->swapchain_image_count;
+    destination->swapchain_images           = source->swapchain_images;
+    destination->swapchain_views            = source->swapchain_views;
+    destination->swapchain_layouts          = source->swapchain_layouts;
+    destination->render_complete_semaphores = source->render_complete_semaphores;
+    source->swapchain                       = VK_NULL_HANDLE;
+    source->extent                          = (VkExtent2D){};
+    source->swapchain_image_count           = 0;
+    source->swapchain_images                = nullptr;
+    source->swapchain_views                 = nullptr;
+    source->swapchain_layouts               = nullptr;
+    source->render_complete_semaphores      = nullptr;
+}
+
+static bool create_swapchain(struct walle_vk_output* output,
+                             uint32_t                width,
+                             uint32_t                height,
+                             VkSwapchainKHR          old_swapchain)
 {
     struct walle_vk_renderer* renderer = output->renderer;
     VkSurfaceCapabilitiesKHR  capabilities;
@@ -1475,6 +1501,7 @@ static bool create_swapchain(struct walle_vk_output* output, uint32_t width, uin
         .compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
         .presentMode      = VK_PRESENT_MODE_FIFO_KHR,
         .clipped          = VK_TRUE,
+        .oldSwapchain     = old_swapchain,
     };
     if (!vk_check(vkCreateSwapchainKHR(renderer->device, &create_info, nullptr, &output->swapchain),
                   "vkCreateSwapchainKHR"))
@@ -1526,6 +1553,31 @@ static bool create_swapchain(struct walle_vk_output* output, uint32_t width, uin
             return false;
         output->swapchain_layouts[index] = VK_IMAGE_LAYOUT_UNDEFINED;
     }
+    return true;
+}
+
+static bool recreate_swapchain(struct walle_vk_output* output)
+{
+    uint32_t width  = output->extent.width;
+    uint32_t height = output->extent.height;
+    if (width == 0 || height == 0
+        || !vk_check(vkDeviceWaitIdle(output->renderer->device),
+                     "vkDeviceWaitIdle(swapchain recreation)"))
+        return false;
+
+    struct walle_vk_output replacement = {
+        .renderer = output->renderer,
+        .surface  = output->surface,
+    };
+    if (!create_swapchain(&replacement, width, height, output->swapchain)) {
+        destroy_swapchain(&replacement);
+        return false;
+    }
+
+    struct walle_vk_output retired = {.renderer = output->renderer};
+    move_swapchain(&retired, output);
+    move_swapchain(output, &replacement);
+    destroy_swapchain(&retired);
     return true;
 }
 
@@ -1589,7 +1641,7 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
                    && initialize_device(renderer, output->surface)
                    && width <= renderer->properties.limits.maxImageDimension2D
                    && height <= renderer->properties.limits.maxImageDimension2D
-                   && create_swapchain(output, width, height)
+                   && create_swapchain(output, width, height, VK_NULL_HANDLE)
                    && create_output_command_resources(output);
     if (!success) {
         walle_vk_output_destroy(output);
@@ -1611,7 +1663,7 @@ bool walle_vk_output_resize(struct walle_vk_output* output, uint32_t width, uint
     destroy_texture_pair(output->renderer->device, &output->current);
     destroy_texture_pair(output->renderer->device, &output->incoming);
     destroy_swapchain(output);
-    return create_swapchain(output, width, height);
+    return create_swapchain(output, width, height, VK_NULL_HANDLE);
 }
 
 static bool read_layer_exact(int fd, const struct walle_vk_image_layer* layer, void* destination)
@@ -2531,20 +2583,39 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
         return WALLE_VK_FRAME_FATAL;
     }
 
-    uint32_t image_index = 0;
-    VkResult acquire     = vkAcquireNextImageKHR(device,
-                                             output->swapchain,
-                                             UINT64_MAX,
-                                             output->image_acquired_semaphore,
-                                             VK_NULL_HANDLE,
-                                             &image_index);
+    uint32_t image_index       = 0;
+    bool     acquire_recreated = false;
+    VkResult acquire;
+    do {
+        acquire = vkAcquireNextImageKHR(device,
+                                        output->swapchain,
+                                        UINT64_MAX,
+                                        output->image_acquired_semaphore,
+                                        VK_NULL_HANDLE,
+                                        &image_index);
+        if (acquire != VK_ERROR_OUT_OF_DATE_KHR || acquire_recreated)
+            break;
+        if (!recreate_swapchain(output)) {
+            walle_lg_reveal_raster_destroy(&raster);
+            fprintf(stderr, "[Vulkan] Could not recreate an out-of-date swapchain.\n");
+            return WALLE_VK_FRAME_FATAL;
+        }
+        acquire_recreated = true;
+        fprintf(stderr, "[Vulkan] Recreated an out-of-date swapchain.\n");
+    } while (true);
     if (acquire == VK_ERROR_OUT_OF_DATE_KHR) {
         walle_lg_reveal_raster_destroy(&raster);
         return WALLE_VK_FRAME_SURFACE_CHANGED;
     }
-    bool surface_changed = acquire == VK_SUBOPTIMAL_KHR;
-    if (!vk_check(acquire, "vkAcquireNextImageKHR")
-        || !record_frame(output, image_index, frame, &raster, copies, copy_count, host_written)
+    bool acquire_suboptimal = acquire == VK_SUBOPTIMAL_KHR;
+    if (!swapchain_result_has_image(acquire)) {
+        vk_check(acquire, "vkAcquireNextImageKHR");
+        if (acquire == VK_ERROR_DEVICE_LOST)
+            output->renderer->fatal = true;
+        walle_lg_reveal_raster_destroy(&raster);
+        return WALLE_VK_FRAME_FATAL;
+    }
+    if (!record_frame(output, image_index, frame, &raster, copies, copy_count, host_written)
         || !vk_check(vkResetFences(device, 1, &output->frame_fence), "vkResetFences(frame)")) {
         output->renderer->fatal = true;
         walle_lg_reveal_raster_destroy(&raster);
@@ -2592,7 +2663,8 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
     if (present != VK_SUCCESS && present != VK_SUBOPTIMAL_KHR
         && present != VK_ERROR_OUT_OF_DATE_KHR) {
         vk_check(present, "vkQueuePresentKHR");
-        output->renderer->fatal = true;
+        if (present == VK_ERROR_DEVICE_LOST)
+            output->renderer->fatal = true;
         return WALLE_VK_FRAME_FATAL;
     }
     if (readback) {
@@ -2603,8 +2675,16 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
         }
         memcpy(frame->mask_readback, output->readback_buffer.memory.mapped, (size_t)mask_size);
     }
-    return !surface_changed && present == VK_SUCCESS ? WALLE_VK_FRAME_OK
-                                                     : WALLE_VK_FRAME_SURFACE_CHANGED;
+    if (acquire_suboptimal || present == VK_SUBOPTIMAL_KHR || present == VK_ERROR_OUT_OF_DATE_KHR) {
+        if (!recreate_swapchain(output)) {
+            fprintf(stderr, "[Vulkan] Could not recreate a changed swapchain.\n");
+            return WALLE_VK_FRAME_FATAL;
+        }
+        fprintf(stderr, "[Vulkan] Recreated a changed swapchain.\n");
+        if (present == VK_ERROR_OUT_OF_DATE_KHR)
+            return WALLE_VK_FRAME_SURFACE_CHANGED;
+    }
+    return WALLE_VK_FRAME_OK;
 }
 
 void walle_vk_output_promote(struct walle_vk_output* output)

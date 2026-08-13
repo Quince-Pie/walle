@@ -1753,12 +1753,19 @@ static void stop_failed_transition(struct wallpaper_output* output, const char* 
     walle_vk_output_abort_transition(output->render.vk_output);
 }
 
+enum render_frame_result : uint8_t
+{
+    RENDER_FRAME_FAILED,
+    RENDER_FRAME_PRESENTED,
+    RENDER_FRAME_RETRY,
+};
+
 [[nodiscard]]
-static bool render_frame(struct wallpaper_output* output)
+static enum render_frame_result render_frame(struct wallpaper_output* output)
 {
     if ((output->render.flags & F_DEAD) || !output->render.vk_output
         || output->render.t_state == T_STATE_IDLE)
-        return false;
+        return RENDER_FRAME_FAILED;
 
     struct wallpaper_state* state           = output->render.state;
     bool                    process_capture = output->reveal_process_capture_active;
@@ -1801,7 +1808,7 @@ static bool render_frame(struct wallpaper_output* output)
 #if defined(WALLE_TRACY)
         TracyCZoneEnd(tracy_transition_frame);
 #endif
-        return false;
+        return RENDER_FRAME_FAILED;
     }
 
     bool                  first_boot = !(output->render.flags & F_BOOT_COMPLETE);
@@ -1830,7 +1837,7 @@ static bool render_frame(struct wallpaper_output* output)
 #if defined(WALLE_TRACY)
         TracyCZoneEnd(tracy_transition_frame);
 #endif
-        return false;
+        return RENDER_FRAME_FAILED;
     }
     if (status == WALLE_VK_FRAME_SURFACE_CHANGED) {
         if (output->frame_callback)
@@ -1841,7 +1848,7 @@ static bool render_frame(struct wallpaper_output* output)
 #if defined(WALLE_TRACY)
         TracyCZoneEnd(tracy_transition_frame);
 #endif
-        return true;
+        return RENDER_FRAME_RETRY;
     }
 
     if (process_capture) {
@@ -1856,7 +1863,7 @@ static bool render_frame(struct wallpaper_output* output)
 #if defined(WALLE_TRACY)
             TracyCZoneEnd(tracy_transition_frame);
 #endif
-            return false;
+            return RENDER_FRAME_FAILED;
         }
         ++state->reveal_process_capture_swap_count;
         if (!finished)
@@ -1904,7 +1911,7 @@ static bool render_frame(struct wallpaper_output* output)
 #if defined(WALLE_TRACY)
     TracyCZoneEnd(tracy_transition_frame);
 #endif
-    return true;
+    return RENDER_FRAME_PRESENTED;
 }
 
 static void frame_callback_handler(void* data, struct wl_callback* callback, uint32_t time)
@@ -1914,7 +1921,7 @@ static void frame_callback_handler(void* data, struct wl_callback* callback, uin
     auto output = (struct wallpaper_output*)data;
     if (output->reveal_process_capture_active)
         ++output->render.state->reveal_process_capture_callback_count;
-    if (!render_frame(output) && output->reveal_process_capture_owned)
+    if (render_frame(output) == RENDER_FRAME_FAILED && output->reveal_process_capture_owned)
         reveal_process_capture_fail(output->render.state, "capture frame callback did not render");
 }
 
@@ -2083,11 +2090,12 @@ static void finalize_render(struct wallpaper_output* output)
     }
 
     if (first_boot) {
-        if (render_frame(output)) {
+        enum render_frame_result result = render_frame(output);
+        if (result == RENDER_FRAME_PRESENTED) {
             output->render.flags |= F_BOOT_COMPLETE;
             if (output->reveal_process_capture_owned)
                 update_wallpaper(output);
-        } else if (output->reveal_process_capture_owned)
+        } else if (result == RENDER_FRAME_FAILED && output->reveal_process_capture_owned)
             reveal_process_capture_fail(state, "capture first-boot frame did not render");
     } else {
         if (output->frame_callback)
@@ -2096,7 +2104,7 @@ static void finalize_render(struct wallpaper_output* output)
         /* Submit the first frame immediately. Waiting for a callback on a
          * newly recreated surface can defer visible work until the compositor
          * next happens to repaint an otherwise static background. */
-        if (!render_frame(output) && output->reveal_process_capture_owned)
+        if (render_frame(output) == RENDER_FRAME_FAILED && output->reveal_process_capture_owned)
             reveal_process_capture_fail(state, "initial capture state did not render");
     }
 }

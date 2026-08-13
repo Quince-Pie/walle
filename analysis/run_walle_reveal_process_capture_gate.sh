@@ -8,6 +8,9 @@ labwc_binary=${LABWC:-/run/current-system/sw/bin/labwc}
 scorer="$task_root/analysis/score_reveal_vulkan_capture.py"
 expected_candidate_inventory=9062b7bfde617f88638c9b48fdb8ace7b6f91b4518d54c5a6e54abcb51e93644
 expected_count_hash=d6c006d789b551e875555f3e8ef32f0c46c3ec3911802fea405ef9d3458edb5d
+acquire_interposer=${WALLE_VK_ACQUIRE_INTERPOSER:-}
+forced_acquire_result=${WALLE_VK_FORCED_ACQUIRE_RESULT:-SUBOPTIMAL}
+forced_acquire_name=
 capture_width=2048
 capture_height=2048
 capture_bytes=$((capture_width * capture_height))
@@ -21,6 +24,9 @@ fail()
 [[ -x "$walle_binary" ]] || fail "missing Walle binary: $walle_binary"
 [[ -x "$labwc_binary" ]] || fail "missing Labwc binary: $labwc_binary"
 [[ -f "$scorer" ]] || fail "missing Vulkan capture scorer: $scorer"
+if [[ -n "$acquire_interposer" && ! -f "$acquire_interposer" ]]; then
+    fail "missing Vulkan acquire interposer: $acquire_interposer"
+fi
 if ldd "$walle_binary" | grep -Eiq 'lib(EGL|GLES|GLX|OpenGL)'; then
     fail 'Walle still links an OpenGL/EGL runtime'
 fi
@@ -76,10 +82,29 @@ for _ in $(seq 1 200); do
 done
 [[ -S "$runtime_directory/$wayland_display" ]] || fail "Labwc did not create $wayland_display"
 
-if ! timeout 90s env \
-    XDG_RUNTIME_DIR="$runtime_directory" \
-    WAYLAND_DISPLAY="$wayland_display" \
-    WALLE_VULKAN_VALIDATION=1 \
+declare -a walle_environment=(
+    "XDG_RUNTIME_DIR=$runtime_directory"
+    "WAYLAND_DISPLAY=$wayland_display"
+    WALLE_VULKAN_VALIDATION=1
+)
+if [[ -n "$acquire_interposer" ]]; then
+    case "$forced_acquire_result" in
+        SUBOPTIMAL) forced_acquire_name=VK_SUBOPTIMAL_KHR ;;
+        OUT_OF_DATE) forced_acquire_name=VK_ERROR_OUT_OF_DATE_KHR ;;
+        *) fail "unsupported forced Vulkan acquire result: $forced_acquire_result" ;;
+    esac
+    preload=$acquire_interposer
+    asan_runtime=$(ldd "$walle_binary" | awk '$1 ~ /^libasan[.]so/ { print $3; exit }')
+    if [[ -n "$asan_runtime" ]]; then
+        preload="$asan_runtime:$preload"
+    fi
+    walle_environment+=(
+        "LD_PRELOAD=$preload"
+        "WALLE_TEST_VK_ACQUIRE_RESULT=$forced_acquire_result"
+    )
+fi
+
+if ! timeout 90s env "${walle_environment[@]}" \
     "$walle_binary" \
     --config "$walle_config" \
     --reveal-mask-process-capture "$capture_directory" \
@@ -163,3 +188,6 @@ printf '%s\n' \
     'mismatchedPixels=91' \
     'exactPixelPercentage=99.99996662139893' \
     "actualProcessCandidateInventorySha256=$expected_candidate_inventory"
+if [[ -n "$acquire_interposer" ]]; then
+    printf 'forcedAcquireResult=%s\n' "$forced_acquire_name"
+fi

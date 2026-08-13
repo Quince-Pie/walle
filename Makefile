@@ -36,9 +36,11 @@ PROFILE_BIN_DIR ::= $(BIN_DIR)/$(PROFILE)
 PROTOCOL_DIR    ::= protocols
 SHADER_DIR      ::= shaders
 SPIRV_DIR       ::= $(BUILD_DIR)/shaders
+VULKAN_TEST_DIR ::= $(BUILD_DIR)/tests/$(PROFILE)
 
 TARGET        ::= $(PROFILE_BIN_DIR)/walle
 ACTIVE_TARGET ::= $(BIN_DIR)/walle
+VULKAN_SUBOPTIMAL_INTERPOSER ::= $(VULKAN_TEST_DIR)/libwalle-vulkan-suboptimal.so
 
 # Core Application Sources (Located in root)
 APP_SOURCES ::= walle.c shiro.c vulkan_renderer.c \
@@ -319,8 +321,17 @@ reveal-raster-gate: parity/raster_p25_selector_ceil_bits.bin \
 reveal-best-known-corpus-gate: reveal-best-known-process-gate
 
 reveal-best-known-process-gate: $(TARGET) \
-		analysis/run_walle_reveal_process_capture_gate.sh
+		analysis/run_walle_reveal_process_capture_gate.sh \
+		$(VULKAN_SUBOPTIMAL_INTERPOSER)
 	bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
+	WALLE_VK_ACQUIRE_INTERPOSER=$(abspath $(VULKAN_SUBOPTIMAL_INTERPOSER)) \
+		bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
+	WALLE_VK_ACQUIRE_INTERPOSER=$(abspath $(VULKAN_SUBOPTIMAL_INTERPOSER)) \
+		WALLE_VK_FORCED_ACQUIRE_RESULT=OUT_OF_DATE \
+		bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
+
+$(VULKAN_SUBOPTIMAL_INTERPOSER): analysis/inject_vulkan_suboptimal.c Makefile | $(VULKAN_TEST_DIR)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -fPIC -shared $< -ldl -o $@
 
 # --- Linking Rule ---
 $(TARGET): $(OBJECTS) | $(PROFILE_BIN_DIR)
@@ -389,7 +400,7 @@ endif
 
 # --- Infrastructure (Directories) ---
 # Order-only prerequisites (|) ensure creation without triggering unnecessary rebuilds.
-$(BIN_DIR) $(PROFILE_BIN_DIR) $(PROTOCOL_DIR) $(SPIRV_DIR):
+$(BIN_DIR) $(PROFILE_BIN_DIR) $(PROTOCOL_DIR) $(SPIRV_DIR) $(VULKAN_TEST_DIR):
 	@mkdir -p $@
 
 # Include generated dependency files.

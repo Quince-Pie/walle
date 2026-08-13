@@ -70,6 +70,14 @@ Per-output resource policy:
 - descriptor sets are updated only when their transition resources change;
 - exactly one reveal draw and one composition draw per transition frame.
 
+WSI result handling is deliberately per-output. A suboptimal acquisition is a
+successful acquisition: Walle renders/presents it, recreates that output with
+the previous handle in `VkSwapchainCreateInfoKHR.oldSwapchain`, and continues.
+An out-of-date acquire recreates and retries once immediately; a repeated
+out-of-date result schedules the next frame callback. Only actual device loss
+may poison the shared renderer; ordinary WSI changes must not stop sibling
+outputs.
+
 The wallpaper textures are `VK_FORMAT_R8G8B8A8_SRGB`; the compact glass image
 keeps its native downsampled size. The mask is `VK_FORMAT_R8_UINT`. The
 swapchain is `VK_FORMAT_B8G8R8A8_UNORM`, and the composition shader performs
@@ -114,6 +122,9 @@ Green on the current implementation:
 - SPIR-V validation for all four modules against Vulkan 1.4;
 - actual Wayland/Vulkan process capture: 65 states, 65 presents, 64 frame
   callbacks, no validation warning/error, canonical 91-residual inventory;
+- the same process/corpus gate with `vkAcquireNextImageKHR` forced once to
+  return `VK_SUBOPTIMAL_KHR` and then `VK_ERROR_OUT_OF_DATE_KHR` in separate
+  runs, each still producing exactly 65 canonical presents;
 - same process inventory on integrated Radeon and RX 9070 XT;
 - production binary has no EGL/OpenGL/OpenGL ES runtime dependency.
 

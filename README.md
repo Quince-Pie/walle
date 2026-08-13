@@ -57,6 +57,12 @@ its persistent GPU footprint small:
 - image and storage descriptors are written only when their transition-owned
   resources are created or replaced, never redundantly per frame.
 
+Wayland swapchain changes are output-local. `VK_SUBOPTIMAL_KHR` completes the
+acquired frame and triggers an `oldSwapchain` recreation; an out-of-date
+acquire recreates and retries once immediately, with a repeated change deferred
+to the next frame callback. Neither condition marks the shared device fatal or
+stops transitions on other outputs.
+
 At 2048×2048 the reveal mask is exactly 4 MiB. No RGBA intermediate is used.
 Wallpaper images use sRGB textures; the swapchain uses BGRA8 UNORM with the
 composition shader performing the final sRGB transfer exactly once.
@@ -110,7 +116,10 @@ make MODE=release SANITIZER=1
 
 The process gate launches an isolated headless Wayland compositor, enables
 Vulkan validation, renders/presents 65 normal Walle frames, reads back only the
-R8 mask for scoring, and requires the 91-residual canonical inventory.
+R8 mask for scoring, and requires the 91-residual canonical inventory. It then
+runs the same process with an acquire interposer forcing, in turn,
+`VK_SUBOPTIMAL_KHR` and `VK_ERROR_OUT_OF_DATE_KHR`, pinning both
+swapchain-recreation paths.
 
 ## Usage
 
