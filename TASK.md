@@ -54,8 +54,9 @@ timers, and layer-shell surfaces.
 Per-output resource policy:
 
 - compositor-minimum FIFO swapchain;
-- qualifying integrated GPUs are preferred by default for wallpaper power
-  efficiency, with `WALLE_VK_DEVICE` as the explicit override;
+- `auto` prefers a qualifying discrete GPU and never selects a CPU Vulkan
+  device; `[walle] vulkan_device`, `--vulkan-device`, or `WALLE_VK_DEVICE`
+  can explicitly select a type, enumerated index, or device-name substring;
 - one frame fence/acquire semaphore and one present semaphore per swapchain
   image;
 - current standard+glass wallpaper pair retained while idle;
@@ -124,6 +125,9 @@ Green on the current implementation:
 - SPIR-V validation for all four modules against Vulkan 1.4;
 - actual Wayland/Vulkan process capture: 65 states, 65 presents, 64 frame
   callbacks, no validation warning/error, canonical 91-residual inventory;
+- actual swapchain BGRA readback at fixed state 32 for both clear and regular,
+  requiring at least 1% distinct bytes; this catches material/push-ABI
+  regressions but is not an Apple composed-frame parity claim;
 - the same process/corpus gate with `vkAcquireNextImageKHR` forced once to
   return `VK_SUBOPTIMAL_KHR` and then `VK_ERROR_OUT_OF_DATE_KHR` in separate
   runs, each still producing exactly 65 canonical presents;

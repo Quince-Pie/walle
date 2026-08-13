@@ -96,6 +96,7 @@ constexpr int   INOTIFY_BUF_LEN        = 4096;
 constexpr uint32_t  REVEAL_PROCESS_CAPTURE_WIDTH       = 2048;
 constexpr uint32_t  REVEAL_PROCESS_CAPTURE_HEIGHT      = 2048;
 constexpr uint32_t  REVEAL_PROCESS_CAPTURE_STATE_COUNT = 65;
+constexpr uint32_t  REVEAL_PROCESS_COMPOSITION_STATE   = 32;
 static const double REVEAL_PROCESS_CAPTURE_CENTER_X    = 512.0;
 static const double REVEAL_PROCESS_CAPTURE_CENTER_Y    = 614.4;
 constexpr double    REVEAL_RADIUS_MARGIN               = 1.03;
@@ -185,6 +186,7 @@ struct output_config
 struct config_parse_ctx
 {
     struct wl_list* config_list;
+    char**          renderer_device_selector;
 };
 
 struct image_layer
@@ -271,6 +273,7 @@ struct wallpaper_output
     /* Cold, diagnostic-only state. Keep this outside the frozen render
      * prefix so an absent --reveal-mask-process-capture is layout-neutral. */
     uint8_t* reveal_process_capture_pixels;
+    uint8_t* reveal_process_composition_pixels;
     uint32_t reveal_process_capture_state;
     bool     reveal_process_capture_owned;
     bool     reveal_process_capture_active;
@@ -1741,6 +1744,33 @@ static bool write_reveal_process_capture(struct wallpaper_output* output)
     return success;
 }
 
+[[nodiscard]]
+static bool write_reveal_process_composition(struct wallpaper_output* output)
+{
+    static const char       name[] = "composition-state-0032.bgra";
+    struct wallpaper_state* state  = output->render.state;
+    int                     fd     = openat(state->reveal_process_capture_directory_fd,
+                    name,
+                    O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC | O_NOFOLLOW,
+                    S_IRUSR | S_IWUSR);
+    if (fd < 0)
+        return false;
+
+    bool success
+        = write_all_bytes(fd,
+                          output->reveal_process_composition_pixels,
+                          (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT * 4);
+    int saved_errno = errno;
+    if (close(fd) < 0 && success) {
+        success     = false;
+        saved_errno = errno;
+    }
+    if (!success)
+        (void)unlinkat(state->reveal_process_capture_directory_fd, name, 0);
+    errno = saved_errno;
+    return success;
+}
+
 static void stop_failed_transition(struct wallpaper_output* output, const char* reason)
 {
     fprintf(stderr, "[Vulkan] Transition stopped for %s: %s\n", output->name, reason);
@@ -1824,6 +1854,16 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
              .mask_readback_size
         = process_capture ? (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT
                                : 0,
+             .composition_readback
+        = process_capture
+                  && output->reveal_process_capture_state == REVEAL_PROCESS_COMPOSITION_STATE
+                   ? output->reveal_process_composition_pixels
+                   : nullptr,
+             .composition_readback_size
+        = process_capture
+                  && output->reveal_process_capture_state == REVEAL_PROCESS_COMPOSITION_STATE
+                   ? (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT * 4
+                   : 0,
     };
 #if defined(WALLE_TRACY)
     TracyCZoneN(tracy_present, "Vulkan render and present", true);
@@ -1860,6 +1900,14 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
                      output->reveal_process_capture_state,
                      strerror(errno));
             stop_failed_transition(output, reason);
+#if defined(WALLE_TRACY)
+            TracyCZoneEnd(tracy_transition_frame);
+#endif
+            return RENDER_FRAME_FAILED;
+        }
+        if (output->reveal_process_capture_state == REVEAL_PROCESS_COMPOSITION_STATE
+            && !write_reveal_process_composition(output)) {
+            stop_failed_transition(output, "could not create composition-state-0032.bgra");
 #if defined(WALLE_TRACY)
             TracyCZoneEnd(tracy_transition_frame);
 #endif
@@ -1902,6 +1950,8 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
             "revealMaskProcessCaptureCenterTopLeft=512.0,614.4\n"
             "revealMaskProcessCaptureProgress=state/64\n"
             "revealMaskProcessCaptureFormat=R8-top-left-row-major\n"
+            "compositionProcessCaptureState=32\n"
+            "compositionProcessCaptureFormat=BGRA8-top-left-row-major\n"
             "revealMaskProcessCaptureComplete=true\n",
             REVEAL_PROCESS_CAPTURE_STATE_COUNT,
             state->reveal_process_capture_swap_count,
@@ -2127,6 +2177,8 @@ static void destroy_output(struct wallpaper_output* o)
     o->reveal_process_capture_active = false;
     free(o->reveal_process_capture_pixels);
     o->reveal_process_capture_pixels = nullptr;
+    free(o->reveal_process_composition_pixels);
+    o->reveal_process_composition_pixels = nullptr;
 
     /* Slots own their fds: cancel-then-close makes a CQE-after-free
      * impossible (generation bump) before the fd is released. */
@@ -2526,7 +2578,17 @@ static float parse_duration_setting(const char* value)
 static int config_handler(void* user, const char* section, const char* name, const char* value)
 {
     auto ctx = (struct config_parse_ctx*)user;
-    auto oc  = get_or_create_config_in_list(ctx->config_list, section);
+    if (strcasecmp(section, "walle") == 0) {
+        if (ctx->renderer_device_selector && strcasecmp(name, "vulkan_device") == 0) {
+            char* selector = strdup(value);
+            if (!selector)
+                return 0;
+            free(*ctx->renderer_device_selector);
+            *ctx->renderer_device_selector = selector;
+        }
+        return 1;
+    }
+    auto oc = get_or_create_config_in_list(ctx->config_list, section);
     if (!oc)
         return 0;
 
@@ -2789,6 +2851,7 @@ static void layer_surface_configure(
                                                 output->surface,
                                                 (uint32_t)buffer_width,
                                                 (uint32_t)buffer_height,
+                                                process_capture,
                                                 &output->render.vk_output);
         if (renderer_ready) {
             output->render.flags |= F_RENDERER_INIT;
@@ -2821,6 +2884,17 @@ static void layer_surface_configure(
         output->reveal_process_capture_pixels = malloc(byte_count);
         if (!output->reveal_process_capture_pixels) {
             reveal_process_capture_fail(state, "could not allocate the R8 readback buffer");
+            destroy_output(output);
+            return;
+        }
+        if (ckd_mul(&byte_count, byte_count, (size_t)4)) {
+            reveal_process_capture_fail(state, "composition capture buffer size overflow");
+            destroy_output(output);
+            return;
+        }
+        output->reveal_process_composition_pixels = malloc(byte_count);
+        if (!output->reveal_process_composition_pixels) {
+            reveal_process_capture_fail(state, "could not allocate the BGRA8 readback buffer");
             destroy_output(output);
             return;
         }
@@ -3197,6 +3271,8 @@ static void print_usage(const char* argv0)
         "Usage: %s [OPTIONS]\n"
         "\n"
         "  -c, --config <path>  use this config file instead of the XDG lookup\n"
+        "      --vulkan-device <selector>\n"
+        "                         auto, discrete, integrated, device index, or name substring\n"
         "  -h, --help           show this help and exit\n"
         "  -V, --version        print version and exit\n"
         "\n"
@@ -3271,11 +3347,13 @@ int main(int argc, char* argv[])
     enum
     {
         OPT_REVEAL_MASK_PROCESS_CAPTURE = 256,
+        OPT_VULKAN_DEVICE,
     };
     static const struct option LONG_OPTS[] = {
         {"config", required_argument, nullptr, 'c'},
         {"help", no_argument, nullptr, 'h'},
         {"version", no_argument, nullptr, 'V'},
+        {"vulkan-device", required_argument, nullptr, OPT_VULKAN_DEVICE},
         {"reveal-mask-process-capture",
          required_argument,
          nullptr,
@@ -3283,6 +3361,8 @@ int main(int argc, char* argv[])
         {},
     };
     const char* reveal_process_capture_directory = nullptr;
+    const char* vulkan_device_selector           = getenv("WALLE_VK_DEVICE");
+    bool        vulkan_device_selector_locked = vulkan_device_selector && *vulkan_device_selector;
     for (int opt; (opt = getopt_long(argc, argv, "c:hV", LONG_OPTS, nullptr)) != -1;) {
         switch (opt) {
             case 'c':
@@ -3294,6 +3374,10 @@ int main(int argc, char* argv[])
             case 'V':
                 printf("walle %s\n", WALLE_VERSION);
                 return 0;
+            case OPT_VULKAN_DEVICE:
+                vulkan_device_selector        = optarg;
+                vulkan_device_selector_locked = true;
+                break;
             case OPT_REVEAL_MASK_PROCESS_CAPTURE:
                 reveal_process_capture_directory = optarg;
                 break;
@@ -3326,7 +3410,8 @@ int main(int argc, char* argv[])
         .inotify_fd                          = -1,
         .vk_max_image_dimension              = UINT32_MAX,
     };
-    int rc = 0;
+    char* config_device_selector = nullptr;
+    int   rc                     = 0;
 
     if (state.reveal_process_capture) {
         state.reveal_process_capture_directory_fd
@@ -3381,17 +3466,15 @@ int main(int argc, char* argv[])
     /* Armed only while a flush is blocked on EAGAIN. */
     ev_slot_at(&state.ev, EV_WL_OUT)->fd = wl_display_get_fd(state.display);
 
-    if (!walle_vk_renderer_create(state.display, &state.vk_renderer)) {
-        fprintf(stderr, "FATAL: Vulkan 1.4 renderer initialization failed.\n");
-        rc = 1;
-        goto teardown;
-    }
-
     {
         state.config_path = get_config_path();
         if (state.config_path) {
-            struct config_parse_ctx ctx  = {.config_list = &state.output_configs};
-            int                     perr = ini_parse(state.config_path, config_handler, &ctx);
+            struct config_parse_ctx ctx = {
+                .config_list = &state.output_configs,
+                .renderer_device_selector
+                = vulkan_device_selector_locked ? nullptr : &config_device_selector,
+            };
+            int perr = ini_parse(state.config_path, config_handler, &ctx);
             if (perr != 0) {
                 if (perr > 0)
                     fprintf(
@@ -3426,6 +3509,14 @@ int main(int argc, char* argv[])
             }
         } else {
             fprintf(stderr, "FATAL: Configuration file 'config.ini' not found.\n");
+            rc = 1;
+            goto teardown;
+        }
+
+        const char* selected_device
+            = vulkan_device_selector_locked ? vulkan_device_selector : config_device_selector;
+        if (!walle_vk_renderer_create(state.display, selected_device, &state.vk_renderer)) {
+            fprintf(stderr, "FATAL: Vulkan 1.4 renderer initialization failed.\n");
             rc = 1;
             goto teardown;
         }
@@ -3754,6 +3845,7 @@ teardown:
     free(state.config_path);
     free(state.config_dir);
     free(state.config_filename);
+    free(config_device_selector);
 
     gamemode_cleanup(&state);
 

@@ -42,8 +42,9 @@ Walle is a long-running wallpaper process, so the renderer deliberately keeps
 its persistent GPU footprint small:
 
 - one FIFO swapchain at the compositor's minimum image count;
-- the default device policy prefers a qualifying integrated GPU for lower
-  background power; `WALLE_VK_DEVICE` remains an explicit override;
+- `auto` prefers a qualifying discrete GPU, avoiding cross-GPU presentation
+  when displays are attached to it; CPU Vulkan devices are never selected
+  automatically;
 - only the current wallpaper pair is retained while idle;
 - the incoming wallpaper pair, R8_UINT reveal mask, owner/axis data,
   descriptors, and optional readback are transition-lived and destroyed on
@@ -115,16 +116,31 @@ make MODE=release SANITIZER=1
 ```
 
 The process gate launches an isolated headless Wayland compositor, enables
-Vulkan validation, renders/presents 65 normal Walle frames, reads back only the
-R8 mask for scoring, and requires the 91-residual canonical inventory. It then
-runs the same process with an acquire interposer forcing, in turn,
+Vulkan validation, renders/presents 65 normal Walle frames, scores every R8
+mask, and requires the 91-residual canonical inventory. At fixed state 32 it
+also reads back actual swapchain BGRA bytes for clear and regular and requires
+at least 1% of their bytes to differ, which guards the material push-constant
+ABI. This is a Vulkan composition regression test, not an Apple
+composed-output oracle. The gate then runs the same process with an acquire
+interposer forcing, in turn,
 `VK_SUBOPTIMAL_KHR` and `VK_ERROR_OUT_OF_DATE_KHR`, pinning both
 swapchain-recreation paths.
 
 ## Usage
 
 ```text
-walle [-c /path/to/config.ini] [--help] [--version]
+walle [-c /path/to/config.ini] [--vulkan-device SELECTOR] [--help] [--version]
+```
+
+`SELECTOR` is `auto` (the default), `discrete`, `integrated`, a Vulkan device
+index printed at startup, or a case-insensitive device-name substring. It can
+also be set globally as `vulkan_device` in the config's `[walle]` section or
+through `WALLE_VK_DEVICE`. Precedence is command line, environment, config,
+then `auto`; changing it requires restarting Walle. For example:
+
+```sh
+walle --vulkan-device discrete
+walle --vulkan-device 'RX 9070 XT'
 ```
 
 For the deterministic parity diagnostic only:

@@ -34,6 +34,8 @@ struct walle_vk_frame
     /* Optional diagnostic destination, tightly packed in top-left row order. */
     uint8_t* mask_readback;
     size_t   mask_readback_size;
+    uint8_t* composition_readback;
+    size_t   composition_readback_size;
 };
 
 enum walle_vk_frame_status : uint8_t
@@ -44,7 +46,9 @@ enum walle_vk_frame_status : uint8_t
 };
 
 [[nodiscard]]
-bool walle_vk_renderer_create(struct wl_display* display, struct walle_vk_renderer** result);
+bool walle_vk_renderer_create(struct wl_display*         display,
+                              const char*                device_selector,
+                              struct walle_vk_renderer** result);
 
 void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer);
 
@@ -56,6 +60,7 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
                             struct wl_surface*        surface,
                             uint32_t                  width,
                             uint32_t                  height,
+                            bool                      enable_composition_readback,
                             struct walle_vk_output**  result);
 
 [[nodiscard]]

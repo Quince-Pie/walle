@@ -20,6 +20,7 @@ WIDTH = 2_048
 HEIGHT = 2_048
 STATE_COUNT = 65
 EXPECTED_NAMES = tuple(f"state-{state:04}.r8" for state in range(STATE_COUNT))
+COMPOSITION_NAME = "composition-state-0032.bgra"
 
 type JsonObject = dict[str, object]
 
@@ -35,7 +36,8 @@ def score_capture(capture: Path, corpus: Path) -> JsonObject:
         raise NotADirectoryError(corpus)
 
     actual_names = tuple(sorted(path.name for path in capture.iterdir()))
-    if actual_names != EXPECTED_NAMES:
+    expected_with_composition = tuple(sorted((*EXPECTED_NAMES, COMPOSITION_NAME)))
+    if actual_names not in (EXPECTED_NAMES, expected_with_composition):
         raise ValueError("capture file inventory differs")
 
     candidate_hashes: list[str] = []

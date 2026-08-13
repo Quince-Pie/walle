@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -130,6 +131,7 @@ static_assert(offsetof(struct walle_vk_compose_push, geometry) == 16);
 struct walle_vk_renderer
 {
     struct wl_display*       display;
+    char*                    device_selector;
     VkInstance               instance;
     VkDebugUtilsMessengerEXT debug_messenger;
 
@@ -201,6 +203,7 @@ struct walle_vk_output
     bool     mask_descriptors_ready;
     bool     compose_descriptors_ready;
     bool     compose_descriptors_first_boot;
+    bool     composition_readback_enabled;
 };
 
 static bool swapchain_result_has_image(VkResult result)
@@ -866,19 +869,69 @@ static bool device_candidate(struct walle_vk_renderer*           renderer,
 static uint32_t wallpaper_device_preference(VkPhysicalDeviceType type)
 {
     switch (type) {
-        case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
-            return 5;
         case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
+            return 5;
+        case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
             return 4;
         case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
             return 3;
         case VK_PHYSICAL_DEVICE_TYPE_OTHER:
             return 2;
         case VK_PHYSICAL_DEVICE_TYPE_CPU:
-            return 1;
+            return 0;
         default:
             return 0;
     }
+}
+
+static const char* physical_device_type_name(VkPhysicalDeviceType type)
+{
+    switch (type) {
+        case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
+            return "discrete";
+        case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
+            return "integrated";
+        case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
+            return "virtual";
+        case VK_PHYSICAL_DEVICE_TYPE_CPU:
+            return "cpu";
+        case VK_PHYSICAL_DEVICE_TYPE_OTHER:
+        default:
+            return "other";
+    }
+}
+
+static bool parse_device_index(const char* selector, uint32_t* result)
+{
+    if (!selector || !*selector)
+        return false;
+    errno               = 0;
+    char*         end   = nullptr;
+    unsigned long index = strtoul(selector, &end, 10);
+    if (errno || end == selector || *end || index > UINT32_MAX)
+        return false;
+    *result = (uint32_t)index;
+    return true;
+}
+
+static bool device_selector_matches(const char*                       selector,
+                                    uint32_t                          index,
+                                    const VkPhysicalDeviceProperties* properties)
+{
+    if (!selector || !*selector || strcasecmp(selector, "auto") == 0)
+        return properties->deviceType != VK_PHYSICAL_DEVICE_TYPE_CPU;
+
+    uint32_t requested_index;
+    if (parse_device_index(selector, &requested_index))
+        return requested_index == index;
+
+    const char* type = physical_device_type_name(properties->deviceType);
+    if (strcasecmp(selector, "discrete") == 0 || strcasecmp(selector, "integrated") == 0
+        || strcasecmp(selector, "virtual") == 0 || strcasecmp(selector, "cpu") == 0
+        || strcasecmp(selector, "other") == 0)
+        return strcasecmp(selector, type) == 0;
+
+    return strcasestr(properties->deviceName, selector) != nullptr;
 }
 
 static bool create_descriptor_layouts(struct walle_vk_renderer* renderer)
@@ -1231,37 +1284,53 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
         return false;
     }
 
-    const char*                        requested             = getenv("WALLE_VK_DEVICE");
-    VkPhysicalDevice                   selected              = VK_NULL_HANDLE;
+    const char*      requested = renderer->device_selector;
+    bool             automatic = !requested || !*requested || strcasecmp(requested, "auto") == 0;
+    VkPhysicalDevice selected  = VK_NULL_HANDLE;
     VkPhysicalDeviceProperties2        selected_properties   = {};
     VkPhysicalDeviceVulkan14Properties selected_properties14 = {};
     uint32_t                           selected_queue        = UINT32_MAX;
     uint32_t                           selected_preference   = 0;
+    uint32_t                           selected_index        = UINT32_MAX;
     for (uint32_t index = 0; index < count; ++index) {
         VkPhysicalDeviceProperties2        properties2;
         VkPhysicalDeviceVulkan14Properties properties14;
         uint32_t                           queue_family;
         if (!device_candidate(
-                renderer, devices[index], surface, &queue_family, &properties2, &properties14)
-            || (requested && !strstr(properties2.properties.deviceName, requested)))
+                renderer, devices[index], surface, &queue_family, &properties2, &properties14))
+            continue;
+        fprintf(stderr,
+                "[Vulkan] Device %u: %s [%s], API %u.%u.%u.\n",
+                index,
+                properties2.properties.deviceName,
+                physical_device_type_name(properties2.properties.deviceType),
+                VK_API_VERSION_MAJOR(properties2.properties.apiVersion),
+                VK_API_VERSION_MINOR(properties2.properties.apiVersion),
+                VK_API_VERSION_PATCH(properties2.properties.apiVersion));
+        if (!device_selector_matches(requested, index, &properties2.properties))
             continue;
         uint32_t preference = wallpaper_device_preference(properties2.properties.deviceType);
-        if (selected && preference <= selected_preference)
+        if (!automatic)
+            preference = 1;
+        if (selected
+            && (preference < selected_preference
+                || (preference == selected_preference
+                    && properties2.properties.driverVersion
+                           <= selected_properties.properties.driverVersion)))
             continue;
         selected              = devices[index];
         selected_properties   = properties2;
         selected_properties14 = properties14;
         selected_queue        = queue_family;
         selected_preference   = preference;
-        if (requested)
-            break;
+        selected_index        = index;
     }
     free(devices);
     if (!selected) {
         fprintf(stderr,
                 "FATAL: no Vulkan 1.4 Wayland device satisfies Walle's exact renderer%s%s.\n",
-                requested ? " matching WALLE_VK_DEVICE=" : "",
-                requested ? requested : "");
+                automatic ? "" : " matching selector ",
+                automatic ? "" : requested);
         return false;
     }
 
@@ -1331,15 +1400,20 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
         return false;
     renderer->device_ready = true;
     fprintf(stderr,
-            "[Vulkan] %s, API %u.%u.%u, SPIR-V 1.6, dynamic rendering, synchronization2.\n",
+            "[Vulkan] Selected device %u: %s [%s], API %u.%u.%u, SPIR-V 1.6, dynamic "
+            "rendering, synchronization2.\n",
+            selected_index,
             renderer->properties.deviceName,
+            physical_device_type_name(renderer->properties.deviceType),
             VK_API_VERSION_MAJOR(renderer->properties.apiVersion),
             VK_API_VERSION_MINOR(renderer->properties.apiVersion),
             VK_API_VERSION_PATCH(renderer->properties.apiVersion));
     return true;
 }
 
-bool walle_vk_renderer_create(struct wl_display* display, struct walle_vk_renderer** result)
+bool walle_vk_renderer_create(struct wl_display*         display,
+                              const char*                device_selector,
+                              struct walle_vk_renderer** result)
 {
     if (!display || !result)
         return false;
@@ -1348,6 +1422,12 @@ bool walle_vk_renderer_create(struct wl_display* display, struct walle_vk_render
     if (!renderer)
         return false;
     renderer->display = display;
+    renderer->device_selector
+        = strdup(device_selector && *device_selector ? device_selector : "auto");
+    if (!renderer->device_selector) {
+        free(renderer);
+        return false;
+    }
     if (!create_instance(renderer)) {
         walle_vk_renderer_destroy(renderer);
         return false;
@@ -1386,6 +1466,7 @@ void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
     destroy_debug_messenger(renderer);
     if (renderer->instance)
         vkDestroyInstance(renderer->instance, nullptr);
+    free(renderer->device_selector);
     free(renderer);
 }
 
@@ -1465,6 +1546,11 @@ static bool create_swapchain(struct walle_vk_output* output,
         fprintf(stderr, "FATAL: Wayland swapchain lacks opaque color-attachment support.\n");
         return false;
     }
+    if (output->composition_readback_enabled
+        && (capabilities.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) == 0) {
+        fprintf(stderr, "FATAL: Wayland swapchain does not support diagnostic readback.\n");
+        return false;
+    }
 
     VkExtent2D extent = {.width = width, .height = height};
     if (capabilities.currentExtent.width != UINT32_MAX)
@@ -1493,7 +1579,9 @@ static bool create_swapchain(struct walle_vk_output* output,
         .imageColorSpace  = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR,
         .imageExtent      = extent,
         .imageArrayLayers = 1,
-        .imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+        .imageUsage
+        = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+          | (output->composition_readback_enabled ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
         .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
         .preTransform     = capabilities.currentTransform,
         .compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
@@ -1564,8 +1652,9 @@ static bool recreate_swapchain(struct walle_vk_output* output)
         return false;
 
     struct walle_vk_output replacement = {
-        .renderer = output->renderer,
-        .surface  = output->surface,
+        .renderer                     = output->renderer,
+        .surface                      = output->surface,
+        .composition_readback_enabled = output->composition_readback_enabled,
     };
     if (!create_swapchain(&replacement, width, height, output->swapchain)) {
         destroy_swapchain(&replacement);
@@ -1619,6 +1708,7 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
                             struct wl_surface*        surface,
                             uint32_t                  width,
                             uint32_t                  height,
+                            bool                      enable_composition_readback,
                             struct walle_vk_output**  result)
 {
     if (!renderer || !renderer->instance || !surface || !result || width == 0 || height == 0)
@@ -1628,6 +1718,7 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
     if (!output)
         return false;
     output->renderer                           = renderer;
+    output->composition_readback_enabled       = enable_composition_readback;
     VkWaylandSurfaceCreateInfoKHR surface_info = {
         .sType   = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
         .display = renderer->display,
@@ -2030,6 +2121,7 @@ static bool ensure_transition_base(struct walle_vk_output* output, bool readback
     if (readback && !output->readback_buffer.handle) {
         VkDeviceSize size;
         if (ckd_mul(&size, (VkDeviceSize)output->extent.width, (VkDeviceSize)output->extent.height)
+            || (output->composition_readback_enabled && ckd_mul(&size, size, (VkDeviceSize)5))
             || !create_buffer(renderer,
                               size,
                               VK_BUFFER_USAGE_TRANSFER_DST_BIT,
@@ -2306,7 +2398,8 @@ static bool record_frame(struct walle_vk_output*              output,
                          const struct walle_lg_reveal_raster* raster,
                          const VkBufferCopy                   copies[static 5],
                          uint32_t                             copy_count,
-                         bool                                 host_written)
+                         bool                                 host_written,
+                         VkDeviceSize                         mask_size)
 {
     struct walle_vk_renderer* renderer       = output->renderer;
     VkCommandBuffer           command_buffer = output->command_buffer;
@@ -2524,14 +2617,51 @@ static bool record_frame(struct walle_vk_output*              output,
                       sizeof compose_push);
     vkCmdDraw(command_buffer, 3, 1, 0, 0);
     vkCmdEndRendering(command_buffer);
-    image_barrier(command_buffer,
-                  output->swapchain_images[image_index],
-                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-                  VK_PIPELINE_STAGE_2_NONE,
-                  VK_ACCESS_2_NONE,
-                  VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                  VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+    if (frame->composition_readback) {
+        image_barrier(command_buffer,
+                      output->swapchain_images[image_index],
+                      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                      VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                      VK_PIPELINE_STAGE_2_COPY_BIT,
+                      VK_ACCESS_2_TRANSFER_READ_BIT,
+                      VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        VkBufferImageCopy copy = {
+            .bufferOffset = mask_size,
+            .imageSubresource = {
+                .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                .layerCount = 1,
+            },
+            .imageExtent = {
+                .width = output->extent.width,
+                .height = output->extent.height,
+                .depth = 1,
+            },
+        };
+        vkCmdCopyImageToBuffer(command_buffer,
+                               output->swapchain_images[image_index],
+                               VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                               output->readback_buffer.handle,
+                               1,
+                               &copy);
+        image_barrier(command_buffer,
+                      output->swapchain_images[image_index],
+                      VK_PIPELINE_STAGE_2_COPY_BIT,
+                      VK_ACCESS_2_TRANSFER_READ_BIT,
+                      VK_PIPELINE_STAGE_2_NONE,
+                      VK_ACCESS_2_NONE,
+                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+    } else {
+        image_barrier(command_buffer,
+                      output->swapchain_images[image_index],
+                      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                      VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                      VK_PIPELINE_STAGE_2_NONE,
+                      VK_ACCESS_2_NONE,
+                      VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+    }
     output->swapchain_layouts[image_index] = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     return vk_check(vkEndCommandBuffer(command_buffer), "vkEndCommandBuffer(frame)");
 }
@@ -2545,9 +2675,14 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
         || !isfinite(frame->center_top_left_y) || !isfinite(frame->radius) || frame->radius < 0.0f)
         return WALLE_VK_FRAME_FATAL;
     VkDeviceSize mask_size;
-    bool         readback = frame->mask_readback != nullptr;
+    bool readback = frame->mask_readback != nullptr || frame->composition_readback != nullptr;
+    VkDeviceSize composition_size;
     if (ckd_mul(&mask_size, (VkDeviceSize)output->extent.width, (VkDeviceSize)output->extent.height)
-        || (readback && frame->mask_readback_size != mask_size))
+        || ckd_mul(&composition_size, mask_size, (VkDeviceSize)4)
+        || (frame->mask_readback && frame->mask_readback_size != mask_size)
+        || (frame->composition_readback
+            && (!output->composition_readback_enabled
+                || frame->composition_readback_size != composition_size)))
         return WALLE_VK_FRAME_FATAL;
     if (!ensure_transition_base(output, readback))
         return WALLE_VK_FRAME_FATAL;
@@ -2613,7 +2748,8 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
         walle_lg_reveal_raster_destroy(&raster);
         return WALLE_VK_FRAME_FATAL;
     }
-    if (!record_frame(output, image_index, frame, &raster, copies, copy_count, host_written)
+    if (!record_frame(
+            output, image_index, frame, &raster, copies, copy_count, host_written, mask_size)
         || !vk_check(vkResetFences(device, 1, &output->frame_fence), "vkResetFences(frame)")) {
         output->renderer->fatal = true;
         walle_lg_reveal_raster_destroy(&raster);
@@ -2633,7 +2769,7 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
     VkSemaphoreSubmitInfo signal_info = {
         .sType     = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO,
         .semaphore = output->render_complete_semaphores[image_index],
-        .stageMask = VK_PIPELINE_STAGE_2_ALL_GRAPHICS_BIT,
+        .stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
     };
     VkSubmitInfo2 submit_info = {
         .sType                    = VK_STRUCTURE_TYPE_SUBMIT_INFO_2,
@@ -2671,7 +2807,12 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
             output->renderer->fatal = true;
             return WALLE_VK_FRAME_FATAL;
         }
-        memcpy(frame->mask_readback, output->readback_buffer.memory.mapped, (size_t)mask_size);
+        if (frame->mask_readback)
+            memcpy(frame->mask_readback, output->readback_buffer.memory.mapped, (size_t)mask_size);
+        if (frame->composition_readback)
+            memcpy(frame->composition_readback,
+                   (uint8_t*)output->readback_buffer.memory.mapped + (size_t)mask_size,
+                   (size_t)composition_size);
     }
     if (acquire_suboptimal || present == VK_SUBOPTIMAL_KHR || present == VK_ERROR_OUT_OF_DATE_KHR) {
         if (!recreate_swapchain(output)) {
