@@ -17,9 +17,6 @@
 #    include <endian.h>
 #endif
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-#include <GLES3/gl3.h>
 #include <assert.h>
 #include <dirent.h>
 #include <fcntl.h>
@@ -45,14 +42,12 @@
 #include <unistd.h>
 #include <vips/vips.h>
 #include <wayland-client.h>
-#include <wayland-egl.h>
 #include <xxhash.h>
 
-#include "parity/render_walle_exact_static_gl.h"
-#include "parity/liquid_glass_raster.h"
 #include "parity/liquid_glass_reveal_mask_model.h"
 #include "protocols/wlr-layer-shell-unstable-v1.h"
 #include "shiro.h"
+#include "vulkan_renderer.h"
 
 #if defined(WALLE_TRACY)
 #    include <tracy/tracy/TracyC.h>
@@ -101,9 +96,9 @@ constexpr int   INOTIFY_BUF_LEN        = 4096;
 constexpr uint32_t  REVEAL_PROCESS_CAPTURE_WIDTH       = 2048;
 constexpr uint32_t  REVEAL_PROCESS_CAPTURE_HEIGHT      = 2048;
 constexpr uint32_t  REVEAL_PROCESS_CAPTURE_STATE_COUNT = 65;
-static const double REVEAL_PROCESS_CAPTURE_CENTER_X     = 512.0;
-static const double REVEAL_PROCESS_CAPTURE_CENTER_Y     = 614.4;
-constexpr double    REVEAL_RADIUS_MARGIN                = 1.03;
+static const double REVEAL_PROCESS_CAPTURE_CENTER_X    = 512.0;
+static const double REVEAL_PROCESS_CAPTURE_CENTER_Y    = 614.4;
+constexpr double    REVEAL_RADIUS_MARGIN               = 1.03;
 
 constexpr size_t   CACHE_HIGH_WATERMARK    = 512UL * 1024UL * 1024UL;
 constexpr size_t   CACHE_LOW_WATERMARK     = 384UL * 1024UL * 1024UL;
@@ -121,24 +116,6 @@ static XoshiroState g_rng = {};
 
 /* -c/--config override; consulted by get_config_path(). */
 static const char* g_config_override = nullptr;
-
-struct exact_static_gate_options
-{
-    const char* fixture_directory;
-    const char* vertex_shader;
-    const char* fragment_shader;
-    const char* intrinsic_table;
-};
-
-static struct exact_static_gate_options g_exact_static_gate;
-
-const char VERTEX_SHADER_SRC[] = {
-#embed "shaders/vert.glsl" limit(4096) if_empty(0) suffix(, )
-    0};
-
-const char FRAGMENT_SHADER_T1_SRC[] = {
-#embed "shaders/frag.glsl" if_empty(0) suffix(, )
-    0};
 
 /* -- Data Structures ----------------------------------------------------- */
 
@@ -166,17 +143,10 @@ enum glass_variant : uint8_t
     GLASS_VARIANT_REGULAR
 };
 
-enum glass_appearance : uint8_t
-{
-    GLASS_APPEARANCE_LIGHT = 0,
-    GLASS_APPEARANCE_DARK,
-    GLASS_APPEARANCE_AUTO
-};
-
 typedef enum : uint8_t
 {
     F_CONFIGURED    = 1 << 0,
-    F_TEX_INIT      = 1 << 1,
+    F_RENDERER_INIT = 1 << 1,
     F_BOOT_COMPLETE = 1 << 2,
     F_THREAD_ACTIVE = 1 << 3,
     F_RANDOMIZE     = 1 << 4,
@@ -201,16 +171,15 @@ struct item_list
 
 struct output_config
 {
-    struct wl_list        link;
-    char*                 output_name;
-    struct item_list      items;
-    int                   timeout;
-    bool                  randomize;
-    bool                  transition_on;
-    bool                  gamemode;
-    enum glass_variant    variant;
-    enum glass_appearance appearance;
-    float                 transition_duration;
+    struct wl_list     link;
+    char*              output_name;
+    struct item_list   items;
+    int                timeout;
+    bool               randomize;
+    bool               transition_on;
+    bool               gamemode;
+    enum glass_variant variant;
+    float              transition_duration;
 };
 
 struct config_parse_ctx
@@ -247,15 +216,8 @@ struct wallpaper_output
     struct
     {
         struct wallpaper_state* state;
-        EGLSurface              egl_surface;
+        struct walle_vk_output* vk_output;
         uint64_t                anim_start_ns;
-
-        GLuint vao;
-        GLuint tex_A;
-        GLuint tex_B;
-        GLuint tex_GlassA;
-        GLuint tex_GlassB;
-        GLuint pbo;
 
         int32_t width;
         int32_t height;
@@ -263,7 +225,7 @@ struct wallpaper_output
 
         enum transition_state t_state;
         output_flags_t        flags;
-        uint8_t               _pad[2];
+        uint8_t               _pad[26];
     } render;
 
     float     t_center_x;
@@ -287,8 +249,6 @@ struct wallpaper_output
     char*                         name;
     struct wl_surface*            surface;
     struct zwlr_layer_surface_v1* layer_surface;
-    struct wl_egl_window*         egl_window;
-    GLuint                        vbo;
 
     struct wallpaper_item* items;
     size_t                 num_items;
@@ -296,23 +256,24 @@ struct wallpaper_output
     int                    timeout;
     bool                   gamemode_enabled;
     enum glass_variant     glass_variant;
-    enum glass_appearance  glass_appearance;
 
     bool pending_reload;
-    bool         rerender_deferred;
-    bool         rotation_deferred;
-    _Atomic bool completion_notify_failed;
-
-    size_t current_texture_bytes;
-    size_t incoming_texture_bytes;
 
     /* Snapshot taken on the main thread immediately before pthread_create
      * (the create is the happens-before edge); the worker must never read
      * render.width/height, which a configure event can mutate mid-render. */
-    int32_t               job_w;
-    int32_t               job_h;
-    enum glass_variant    job_variant;
-    enum glass_appearance job_appearance;
+    int32_t            job_w;
+    int32_t            job_h;
+    enum glass_variant job_variant;
+
+    double reveal_maximum_radius;
+
+    /* Cold, diagnostic-only state. Keep this outside the frozen render
+     * prefix so an absent --reveal-mask-process-capture is layout-neutral. */
+    uint8_t* reveal_process_capture_pixels;
+    uint32_t reveal_process_capture_state;
+    bool     reveal_process_capture_owned;
+    bool     reveal_process_capture_active;
 };
 
 static_assert(sizeof(((struct wallpaper_output*)0)->render) == 64,
@@ -397,20 +358,16 @@ struct wallpaper_state
     struct wl_list outputs;
     struct wl_list output_configs;
 
-    EGLDisplay egl_display;
-    EGLConfig  egl_config;
-    EGLContext egl_context;
-    EGLSurface util_surface; /* 1x1 pbuffer fallback when surfaceless is unsupported */
-    bool       egl_initialized;
-    bool       mesa_wayland_wsi;
-    bool       exact_static_gate;
-    bool       exact_output_claimed;
-    bool       exact_gate_complete;
-    int        exact_gate_status;
+    struct walle_vk_renderer* vk_renderer;
+    uint32_t                  vk_max_image_dimension;
 
-    GLuint shader_program_t1;
-    GLint  u_TexA, u_TexGlassA, u_TexB, u_TexGlassB;
-    GLint  u_Time, u_CenterPointPixels, u_Resolution, u_MaxRadiusPixels, u_Variant, u_Appearance;
+    bool     reveal_process_capture;
+    bool     reveal_process_capture_output_claimed;
+    bool     reveal_process_capture_complete;
+    int      reveal_process_capture_status;
+    int      reveal_process_capture_directory_fd;
+    uint32_t reveal_process_capture_swap_count;
+    uint32_t reveal_process_capture_callback_count;
 
     int   inotify_fd;
     int   config_wd;
@@ -1279,802 +1236,9 @@ static void gamemode_handle_disconnect(struct wallpaper_state* state, int err)
     }
 }
 
-/* -- OpenGL -------------------------------------------------------------- */
+/* Rendering is Vulkan-only. Shader modules are generated offline from Slang and embedded by
+ * vulkan_renderer.c. */
 
-/* Make the shared context current without a window surface: surfaceless if
- * the driver supports it (EGL_KHR_surfaceless_context), else a 1x1 pbuffer
- * created from the same config. Needed for resource init and for texture
- * cleanup of outputs whose window surface is already gone. */
-[[nodiscard]]
-static bool egl_make_current_utility(struct wallpaper_state* state)
-{
-    if (eglMakeCurrent(state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, state->egl_context))
-        return true;
-
-    if (state->util_surface == EGL_NO_SURFACE) {
-        EGLint pba[]        = {EGL_WIDTH, 1, EGL_HEIGHT, 1, EGL_NONE};
-        state->util_surface = eglCreatePbufferSurface(state->egl_display, state->egl_config, pba);
-    }
-    return state->util_surface != EGL_NO_SURFACE
-           && eglMakeCurrent(
-               state->egl_display, state->util_surface, state->util_surface, state->egl_context);
-}
-
-[[nodiscard]]
-static GLuint compile_shader(GLenum type, const char* src)
-{
-    GLuint sh = glCreateShader(type);
-    glShaderSource(sh, 1, &src, nullptr);
-    glCompileShader(sh);
-    GLint ok = GL_FALSE;
-    glGetShaderiv(sh, GL_COMPILE_STATUS, &ok);
-    if (!ok) {
-        char    log[2048];
-        GLsizei len = 0;
-        glGetShaderInfoLog(sh, sizeof(log), &len, log);
-        fprintf(stderr,
-                "[GLES] %s shader compile failed:\n%.*s\n",
-                type == GL_VERTEX_SHADER ? "vertex" : "fragment",
-                (int)len,
-                log);
-        glDeleteShader(sh);
-        return 0;
-    }
-    return sh;
-}
-
-[[nodiscard]]
-static GLuint link_shader_program(const char* vertex_source, const char* fragment_source)
-{
-    GLuint vertex   = compile_shader(GL_VERTEX_SHADER, vertex_source);
-    GLuint fragment = compile_shader(GL_FRAGMENT_SHADER, fragment_source);
-    if (!vertex || !fragment) {
-        if (vertex)
-            glDeleteShader(vertex);
-        if (fragment)
-            glDeleteShader(fragment);
-        return 0;
-    }
-
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vertex);
-    glAttachShader(program, fragment);
-    glLinkProgram(program);
-    glDeleteShader(vertex);
-    glDeleteShader(fragment);
-
-    GLint linked = GL_FALSE;
-    glGetProgramiv(program, GL_LINK_STATUS, &linked);
-    if (linked == GL_TRUE)
-        return program;
-
-    char    log[2048];
-    GLsizei length = 0;
-    glGetProgramInfoLog(program, sizeof(log), &length, log);
-    fprintf(stderr, "[GLES] Program link failed:\n%.*s\n", (int)length, log);
-    glDeleteProgram(program);
-    return 0;
-}
-
-static bool uniform_location(GLuint program, const char* name, GLint* result)
-{
-    *result = glGetUniformLocation(program, name);
-    if (*result >= 0)
-        return true;
-    fprintf(stderr, "[GLES] Required uniform '%s' is absent.\n", name);
-    return false;
-}
-
-static bool uniform_block_binding(GLuint       program,
-                                  const char*  name,
-                                  GLuint       binding,
-                                  size_t       expected_size)
-{
-    GLuint index = glGetUniformBlockIndex(program, name);
-    if (index == GL_INVALID_INDEX) {
-        fprintf(stderr, "[GLES] Required uniform block '%s' is absent.\n", name);
-        return false;
-    }
-    GLint size = 0;
-    glGetActiveUniformBlockiv(program, index, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
-    if (expected_size > INT_MAX || size != (GLint)expected_size) {
-        fprintf(stderr,
-                "[GLES] Uniform block '%s' has size %d; expected %zu.\n",
-                name,
-                size,
-                expected_size);
-        return false;
-    }
-    glUniformBlockBinding(program, index, binding);
-    return true;
-}
-
-[[nodiscard]]
-static bool ensure_reveal_programs(struct wallpaper_state* state)
-{
-    if (state->reveal_best_known_program && state->reveal_mask_program)
-        return true;
-    if (state->reveal_programs_attempted)
-        return false;
-    state->reveal_programs_attempted = true;
-
-    state->reveal_best_known_program
-        = link_shader_program(VERTEX_SHADER_SRC, FRAGMENT_SHADER_REVEAL_BEST_KNOWN_SRC);
-    state->reveal_mask_program
-        = link_shader_program(REVEAL_MASK_VERTEX_SHADER_SRC, REVEAL_MASK_FRAGMENT_SHADER_SRC);
-    bool complete
-        = state->reveal_best_known_program != 0 && state->reveal_mask_program != 0
-          && uniform_location(state->reveal_best_known_program, "TexA", &state->reveal_u_TexA)
-          && uniform_location(
-              state->reveal_best_known_program, "TexGlassA", &state->reveal_u_TexGlassA)
-          && uniform_location(state->reveal_best_known_program, "TexB", &state->reveal_u_TexB)
-          && uniform_location(
-              state->reveal_best_known_program, "TexGlassB", &state->reveal_u_TexGlassB)
-          && uniform_location(state->reveal_best_known_program, "RevealMask", &state->reveal_u_Mask)
-          && uniform_location(state->reveal_best_known_program, "Time", &state->reveal_u_Time)
-          && uniform_location(
-              state->reveal_best_known_program, "Resolution", &state->reveal_u_Resolution)
-          && uniform_location(state->reveal_best_known_program, "Variant", &state->reveal_u_Variant)
-          && uniform_location(state->reveal_best_known_program,
-                              "RevealCenterPointPixels",
-                              &state->reveal_u_RevealCenterPointPixels)
-          && uniform_location(state->reveal_best_known_program,
-                              "RevealRadiusPixels",
-                              &state->reveal_u_RevealRadiusPixels)
-          && uniform_location(
-              state->reveal_mask_program, "RevealResolution", &state->reveal_mask_u_Resolution)
-          && uniform_location(state->reveal_mask_program,
-                              "RevealCompactFamily",
-                              &state->reveal_mask_u_CompactFamily)
-          && uniform_location(
-              state->reveal_mask_program, "AxisTable", &state->reveal_mask_u_AxisTable)
-          && uniform_location(state->reveal_mask_program,
-                              "AppleFastSqrtTable",
-                              &state->reveal_mask_u_AppleFastSqrtTable)
-          && uniform_location(
-              state->reveal_mask_program, "PrimitiveSlots[0]", &state->reveal_mask_u_PrimitiveSlots)
-          && uniform_location(
-              state->reveal_mask_program, "PrimitiveRows[0]", &state->reveal_mask_u_PrimitiveRows)
-          && uniform_block_binding(state->reveal_mask_program,
-                                   "RevealOwnerBlock",
-                                   WALLE_LG_REVEAL_OWNER_BLOCK_BINDING,
-                                   sizeof(struct walle_lg_reveal_owner_block))
-          && glGetError() == GL_NO_ERROR;
-    if (complete) {
-        glUseProgram(state->reveal_best_known_program);
-        glUniform1i(state->reveal_u_TexA, 0);
-        glUniform1i(state->reveal_u_TexGlassA, 1);
-        glUniform1i(state->reveal_u_TexB, 2);
-        glUniform1i(state->reveal_u_TexGlassB, 3);
-        glUniform1i(state->reveal_u_Mask, 4);
-        glUseProgram(state->reveal_mask_program);
-        glUniform1i(state->reveal_mask_u_AxisTable, 14);
-        glUniform1i(state->reveal_mask_u_AppleFastSqrtTable, 15);
-        glUseProgram(0);
-        complete = glGetError() == GL_NO_ERROR;
-    }
-    if (complete)
-        return true;
-
-    if (state->reveal_best_known_program)
-        glDeleteProgram(state->reveal_best_known_program);
-    if (state->reveal_mask_program)
-        glDeleteProgram(state->reveal_mask_program);
-    state->reveal_best_known_program = 0;
-    state->reveal_mask_program       = 0;
-    return false;
-}
-
-[[nodiscard]]
-static bool init_gl_resources(struct wallpaper_state* state)
-{
-    if (!egl_make_current_utility(state)) {
-        fprintf(stderr, "[EGL] No surfaceless/pbuffer context available.\n");
-        return false;
-    }
-
-    GLint gles_major = 0;
-    GLint gles_minor = 0;
-    GLint maximum_texture_size = 0;
-    GLint maximum_uniform_block_size = 0;
-    glGetIntegerv(GL_MAJOR_VERSION, &gles_major);
-    glGetIntegerv(GL_MINOR_VERSION, &gles_minor);
-    if (gles_major < 3 || (gles_major == 3 && gles_minor < 2)) {
-        const GLubyte* version = glGetString(GL_VERSION);
-        fprintf(stderr,
-                "FATAL: Walle requires OpenGL ES 3.2; the created context reports %s.\n",
-                version ? (const char*)version : "an unknown version");
-        eglMakeCurrent(state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        return false;
-    }
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maximum_texture_size);
-    if (maximum_texture_size < 4'096 || glGetError() != GL_NO_ERROR) {
-        fprintf(stderr,
-                "FATAL: Walle requires a GLES maximum 2D texture size of at least 4096; "
-                "the created context reports %d.\n",
-                maximum_texture_size);
-        eglMakeCurrent(state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        return false;
-    }
-    state->reveal_max_texture_size = maximum_texture_size;
-    glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &maximum_uniform_block_size);
-    if (maximum_uniform_block_size < (GLint)sizeof(struct walle_lg_reveal_owner_block)
-        || glGetError() != GL_NO_ERROR) {
-        fprintf(stderr,
-                "FATAL: Walle requires a GLES uniform block size of at least %zu bytes; "
-                "the created context reports %d.\n",
-                sizeof(struct walle_lg_reveal_owner_block),
-                maximum_uniform_block_size);
-        eglMakeCurrent(state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        return false;
-    }
-    state->reveal_max_uniform_block_size = maximum_uniform_block_size;
-
-    /* Cache rows are tightly packed; never let the default alignment of 4
-     * reinterpret (or reject) uploads. Context state: set once. */
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    glUseProgram(state->shader_program_t1);
-    state->u_TexA      = glGetUniformLocation(state->shader_program_t1, "TexA");
-    state->u_TexGlassA = glGetUniformLocation(state->shader_program_t1, "TexGlassA");
-    state->u_TexB      = glGetUniformLocation(state->shader_program_t1, "TexB");
-    state->u_TexGlassB = glGetUniformLocation(state->shader_program_t1, "TexGlassB");
-    state->u_Time      = glGetUniformLocation(state->shader_program_t1, "Time");
-    state->u_CenterPointPixels
-        = glGetUniformLocation(state->shader_program_t1, "CenterPointPixels");
-    state->u_Resolution      = glGetUniformLocation(state->shader_program_t1, "Resolution");
-    state->u_MaxRadiusPixels = glGetUniformLocation(state->shader_program_t1, "MaxRadiusPixels");
-    state->u_Variant         = glGetUniformLocation(state->shader_program_t1, "Variant");
-    state->u_Appearance      = glGetUniformLocation(state->shader_program_t1, "Appearance");
-    glUseProgram(0);
-    eglMakeCurrent(state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-    return complete;
-}
-
-static void configure_wallpaper_texture(GLuint texture)
-{
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-}
-
-static void init_output_gl(struct wallpaper_output* output)
-{
-    if (!output->render.state->egl_initialized)
-        return;
-
-    if (!eglMakeCurrent(output->render.state->egl_display,
-                        output->render.egl_surface,
-                        output->render.egl_surface,
-                        output->render.state->egl_context)) {
-        fprintf(stderr, "[EGL] eglMakeCurrent failed for %s\n", output->name);
-        return;
-    }
-
-    /* Redraws are paced by frame callbacks; a nonzero swap interval would
-     * add a second throttle (and can block in eglSwapBuffers). */
-    eglSwapInterval(output->render.state->egl_display, 0);
-
-    float vertices[] = {-1.0f,
-                        -1.0f,
-                        0.0f,
-                        0.0f,
-                        1.0f,
-                        -1.0f,
-                        1.0f,
-                        0.0f,
-                        -1.0f,
-                        1.0f,
-                        0.0f,
-                        1.0f,
-                        1.0f,
-                        1.0f,
-                        1.0f,
-                        1.0f};
-
-    glGenVertexArrays(1, &output->render.vao);
-    glGenBuffers(1, &output->vbo);
-    glGenBuffers(1, &output->render.pbo);
-
-    glBindVertexArray(output->render.vao);
-    glBindBuffer(GL_ARRAY_BUFFER, output->vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-
-    glGenTextures(1, &output->render.tex_A);
-    glGenTextures(1, &output->render.tex_GlassA);
-    glGenTextures(1, &output->render.tex_B);
-    glGenTextures(1, &output->render.tex_GlassB);
-
-    GLuint texs[] = {output->render.tex_A,
-                     output->render.tex_GlassA,
-                     output->render.tex_B,
-                     output->render.tex_GlassB};
-    for (int i = 0; i < 4; i++)
-        configure_wallpaper_texture(texs[i]);
-
-    output->render.flags |= F_TEX_INIT;
-    eglMakeCurrent(
-        output->render.state->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-}
-
-static void destroy_reveal_mask_resources(struct wallpaper_output* output)
-{
-    if (output->reveal_mask_index_buffer)
-        glDeleteBuffers(1, &output->reveal_mask_index_buffer);
-    if (output->reveal_mask_vertex_buffer)
-        glDeleteBuffers(1, &output->reveal_mask_vertex_buffer);
-    if (output->reveal_mask_vertex_array)
-        glDeleteVertexArrays(1, &output->reveal_mask_vertex_array);
-    if (output->reveal_mask_framebuffer)
-        glDeleteFramebuffers(1, &output->reveal_mask_framebuffer);
-    if (output->reveal_mask_texture)
-        glDeleteTextures(1, &output->reveal_mask_texture);
-    output->reveal_mask_index_buffer  = 0;
-    output->reveal_mask_vertex_buffer = 0;
-    output->reveal_mask_vertex_array  = 0;
-    output->reveal_mask_framebuffer   = 0;
-    output->reveal_mask_texture       = 0;
-    output->reveal_mask_width         = 0;
-    output->reveal_mask_height        = 0;
-}
-
-static void destroy_reveal_arithmetic_resources(struct wallpaper_state* state)
-{
-    if (state->reveal_owner_buffer)
-        glDeleteBuffers(1, &state->reveal_owner_buffer);
-    if (state->reveal_axis_texture)
-        glDeleteTextures(1, &state->reveal_axis_texture);
-    if (state->reveal_apple_fast_sqrt_texture)
-        glDeleteTextures(1, &state->reveal_apple_fast_sqrt_texture);
-    state->reveal_owner_buffer            = 0;
-    state->reveal_axis_texture            = 0;
-    state->reveal_apple_fast_sqrt_texture = 0;
-    state->reveal_axis_texture_width      = 0;
-}
-
-[[nodiscard]]
-static bool ensure_reveal_arithmetic_resources(struct wallpaper_state* state, uint32_t packed_width)
-{
-    if (packed_width == 0 || packed_width > (uint32_t)INT_MAX
-        || packed_width > (uint32_t)state->reveal_max_texture_size
-        || state->reveal_max_uniform_block_size
-               < (GLint)sizeof(struct walle_lg_reveal_owner_block))
-        return false;
-
-    if (!state->reveal_owner_buffer) {
-        glGenBuffers(1, &state->reveal_owner_buffer);
-        glBindBuffer(GL_UNIFORM_BUFFER, state->reveal_owner_buffer);
-        glBufferData(GL_UNIFORM_BUFFER,
-                     sizeof(struct walle_lg_reveal_owner_block),
-                     nullptr,
-                     GL_DYNAMIC_DRAW);
-    }
-
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-    if (!state->reveal_apple_fast_sqrt_texture) {
-        glGenTextures(1, &state->reveal_apple_fast_sqrt_texture);
-        glActiveTexture(GL_TEXTURE15);
-        glBindTexture(GL_TEXTURE_2D, state->reveal_apple_fast_sqrt_texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexImage2D(GL_TEXTURE_2D,
-                     0,
-                     GL_R8UI,
-                     4096,
-                     1024,
-                     0,
-                     GL_RED_INTEGER,
-                     GL_UNSIGNED_BYTE,
-                     REVEAL_APPLE_FAST_SQRT);
-    }
-
-    if (!state->reveal_axis_texture) {
-        glGenTextures(1, &state->reveal_axis_texture);
-        glActiveTexture(GL_TEXTURE14);
-        glBindTexture(GL_TEXTURE_2D, state->reveal_axis_texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    }
-
-    glActiveTexture(GL_TEXTURE14);
-    glBindTexture(GL_TEXTURE_2D, state->reveal_axis_texture);
-    if (state->reveal_axis_texture_width < (GLsizei)packed_width) {
-        glTexImage2D(GL_TEXTURE_2D,
-                     0,
-                     GL_RG32UI,
-                     (GLsizei)packed_width,
-                     WALLE_LG_REVEAL_RASTER_MAX_OWNER_COUNT * WALLE_LG_RASTER_PRIMITIVE_COUNT,
-                     0,
-                     GL_RG_INTEGER,
-                     GL_UNSIGNED_INT,
-                     nullptr);
-        state->reveal_axis_texture_width = (GLsizei)packed_width;
-    }
-    glActiveTexture(GL_TEXTURE0);
-
-    if (state->reveal_owner_buffer && state->reveal_axis_texture
-        && state->reveal_apple_fast_sqrt_texture && glGetError() == GL_NO_ERROR)
-        return true;
-
-    destroy_reveal_arithmetic_resources(state);
-    return false;
-}
-
-[[nodiscard]]
-static bool ensure_reveal_mask_resources(struct wallpaper_output* output)
-{
-    if (!output->reveal_mask_texture) {
-        glGenTextures(1, &output->reveal_mask_texture);
-        glGenFramebuffers(1, &output->reveal_mask_framebuffer);
-        glGenVertexArrays(1, &output->reveal_mask_vertex_array);
-        glGenBuffers(1, &output->reveal_mask_vertex_buffer);
-        glGenBuffers(1, &output->reveal_mask_index_buffer);
-        if (!output->reveal_mask_texture || !output->reveal_mask_framebuffer
-            || !output->reveal_mask_vertex_array || !output->reveal_mask_vertex_buffer
-            || !output->reveal_mask_index_buffer) {
-            destroy_reveal_mask_resources(output);
-            return false;
-        }
-
-        glBindTexture(GL_TEXTURE_2D, output->reveal_mask_texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-        glBindVertexArray(output->reveal_mask_vertex_array);
-        glBindBuffer(GL_ARRAY_BUFFER, output->reveal_mask_vertex_buffer);
-        glBufferData(GL_ARRAY_BUFFER,
-                     WALLE_LG_REVEAL_MAX_VERTEX_COUNT * WALLE_LG_REVEAL_VERTEX_STRIDE,
-                     nullptr,
-                     GL_STREAM_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, output->reveal_mask_index_buffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                     WALLE_LG_REVEAL_MAX_INDEX_COUNT * sizeof(uint16_t),
-                     nullptr,
-                     GL_STREAM_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(
-            0, 4, GL_FLOAT, GL_FALSE, WALLE_LG_REVEAL_VERTEX_STRIDE, (const void*)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(
-            1, 2, GL_FLOAT, GL_FALSE, WALLE_LG_REVEAL_VERTEX_STRIDE, (const void*)(uintptr_t)16);
-        glEnableVertexAttribArray(2);
-        glVertexAttribPointer(
-            2, 2, GL_FLOAT, GL_FALSE, WALLE_LG_REVEAL_VERTEX_STRIDE, (const void*)(uintptr_t)24);
-    }
-
-    if (output->reveal_mask_width != output->render.width
-        || output->reveal_mask_height != output->render.height) {
-        glBindTexture(GL_TEXTURE_2D, output->reveal_mask_texture);
-        glTexImage2D(GL_TEXTURE_2D,
-                     0,
-                     GL_R8,
-                     output->render.width,
-                     output->render.height,
-                     0,
-                     GL_RED,
-                     GL_UNSIGNED_BYTE,
-                     nullptr);
-        glBindFramebuffer(GL_FRAMEBUFFER, output->reveal_mask_framebuffer);
-        glFramebufferTexture2D(
-            GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, output->reveal_mask_texture, 0);
-        bool complete = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE
-                        && glGetError() == GL_NO_ERROR;
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        if (!complete) {
-            destroy_reveal_mask_resources(output);
-            return false;
-        }
-        output->reveal_mask_width  = output->render.width;
-        output->reveal_mask_height = output->render.height;
-    }
-    return true;
-}
-
-[[nodiscard]]
-static bool reveal_geometry_fits_output(const struct wallpaper_output*              output,
-                                        const struct walle_lg_reveal_mask_geometry* geometry)
-{
-    if (output->render.width <= 0 || output->render.height <= 0
-        || geometry->vertex_count > WALLE_LG_REVEAL_MAX_VERTEX_COUNT
-        || geometry->index_count > WALLE_LG_REVEAL_MAX_INDEX_COUNT)
-        return false;
-    for (uint32_t index = 0; index < geometry->index_count; ++index) {
-        if (geometry->indices[index] >= geometry->vertex_count)
-            return false;
-    }
-    if (geometry->circle.empty) {
-        return geometry->family == WALLE_LG_REVEAL_MASK_EMPTY && geometry->vertex_count == 0
-               && geometry->index_count == 0 && !geometry->clear_to_inside;
-    }
-
-    int64_t right  = (int64_t)geometry->circle.scissor[0] + geometry->circle.scissor[2];
-    int64_t bottom = (int64_t)geometry->circle.scissor[1] + geometry->circle.scissor[3];
-    if (geometry->circle.scissor[0] < 0 || geometry->circle.scissor[1] < 0
-        || geometry->circle.scissor[2] <= 0 || geometry->circle.scissor[3] <= 0
-        || right > output->render.width || bottom > output->render.height)
-        return false;
-
-    if (geometry->family == WALLE_LG_REVEAL_MASK_BORDER_GRID) {
-        return geometry->vertex_count == 16
-               && (geometry->index_count == 48 || geometry->index_count == 54)
-               && !geometry->clear_to_inside;
-    }
-    return geometry->family == WALLE_LG_REVEAL_MASK_COMPACT_VISIBLE_ARCS
-           && geometry->vertex_count % 4 == 0
-           && geometry->index_count == geometry->vertex_count / 4 * 6 && geometry->clear_to_inside;
-}
-
-[[nodiscard]]
-static bool upload_reveal_raster(struct wallpaper_state*              state,
-                                 const struct walle_lg_reveal_raster* raster)
-{
-    size_t row_count;
-    size_t expected_word_count;
-    if (raster->owner_count == 0
-        || raster->owner_count > WALLE_LG_REVEAL_RASTER_MAX_OWNER_COUNT
-        || raster->base_owner_count == 0
-        || raster->base_owner_count > WALLE_LG_REVEAL_RASTER_MAX_BASE_OWNER_COUNT
-        || raster->base_owner_count > raster->owner_count || raster->original_primitive_count == 0
-        || raster->original_primitive_count > WALLE_LG_REVEAL_RASTER_MAX_PRIMITIVE_COUNT
-        || raster->packed_width == 0 || raster->packed_words == nullptr
-        || raster->postguard_child_count
-               != raster->supported_postguard_child_count
-                      + raster->unsupported_postguard_child_count
-                      + raster->offscreen_postguard_child_count
-        || raster->supported_postguard_child_count
-               != raster->owner_count - raster->base_owner_count
-        || raster->owner_block.counts[0] != (int32_t)raster->owner_count
-        || raster->owner_block.counts[1] != (int32_t)raster->base_owner_count
-        || raster->owner_block.counts[2] != 0 || raster->owner_block.counts[3] != 0
-        || ckd_mul(&row_count,
-                   (size_t)raster->owner_count,
-                   WALLE_LG_RASTER_PRIMITIVE_COUNT)
-        || ckd_mul(&expected_word_count, row_count, (size_t)raster->packed_width)
-        || ckd_mul(&expected_word_count,
-                   expected_word_count,
-                   WALLE_LG_REVEAL_RASTER_CHANNEL_COUNT)
-        || raster->packed_word_count != expected_word_count
-        || !ensure_reveal_arithmetic_resources(state, raster->packed_width)) {
-        return false;
-    }
-
-    for (size_t slot = 0; slot < raster->owner_count; ++slot) {
-        const struct walle_lg_reveal_raster_quad* owner = &raster->owners[slot];
-        const int32_t* bounds = raster->owner_block.bounds[slot];
-        const int32_t* transform = raster->owner_block.origin_extent[slot];
-        const int32_t* control = raster->owner_block.control[slot];
-        int64_t        lower = bounds[0] < bounds[1] ? bounds[0] : bounds[1];
-        int64_t        upper = bounds[2] > bounds[3] ? bounds[2] : bounds[3];
-        if (memcmp(bounds, owner->visible_bounds, sizeof owner->visible_bounds) != 0
-            || transform[0] != owner->origin_fixed[0]
-            || transform[1] != owner->origin_fixed[1]
-            || transform[2] != owner->extent_fixed[0]
-            || transform[3] != owner->extent_fixed[1] || control[0] != owner->axis_start
-            || control[1] != (int32_t)owner->ascending_diagonal
-            || control[2] != owner->active_primitive_mask
-            || control[3] != (slot < raster->base_owner_count
-                                  ? 0
-                                  : WALLE_LG_POSTGUARD_CHILD_SCOPED_CENTER_FALLBACK)
-            || owner->extent_fixed[0] <= 0 || owner->extent_fixed[1] <= 0
-            || bounds[2] <= bounds[0] || bounds[3] <= bounds[1]
-            || owner->active_primitive_mask == 0 || owner->active_primitive_mask > 3
-            || owner->axis_start != lower - 1 || upper + 1 - owner->axis_start <= 0
-            || upper + 1 - owner->axis_start > raster->packed_width) {
-            return false;
-        }
-    }
-
-    GLint primitive_slots[WALLE_LG_REVEAL_RASTER_MAX_PRIMITIVE_COUNT] = {};
-    GLint primitive_rows[WALLE_LG_REVEAL_RASTER_MAX_PRIMITIVE_COUNT]  = {};
-    for (size_t primitive = 0; primitive < raster->original_primitive_count; ++primitive) {
-        const struct walle_lg_reveal_raster_primitive* mapping = &raster->primitives[primitive];
-        bool invalid_slot
-            = mapping->packed_slot == WALLE_LG_REVEAL_RASTER_INVALID_MAPPING;
-        bool invalid_primitive
-            = mapping->geometric_primitive == WALLE_LG_REVEAL_RASTER_INVALID_MAPPING;
-        if (invalid_slot != invalid_primitive)
-            return false;
-        if (invalid_slot) {
-            continue;
-        }
-        if (mapping->packed_slot >= raster->base_owner_count || mapping->geometric_primitive >= 2)
-            return false;
-        primitive_slots[primitive] = mapping->packed_slot;
-        primitive_rows[primitive]  = mapping->geometric_primitive;
-    }
-
-    glBindBuffer(GL_UNIFORM_BUFFER, state->reveal_owner_buffer);
-    glBufferSubData(GL_UNIFORM_BUFFER,
-                    0,
-                    sizeof raster->owner_block,
-                    &raster->owner_block);
-    glBindBufferBase(GL_UNIFORM_BUFFER,
-                     WALLE_LG_REVEAL_OWNER_BLOCK_BINDING,
-                     state->reveal_owner_buffer);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-    glActiveTexture(GL_TEXTURE14);
-    glBindTexture(GL_TEXTURE_2D, state->reveal_axis_texture);
-    glTexSubImage2D(GL_TEXTURE_2D,
-                    0,
-                    0,
-                    0,
-                    (GLsizei)raster->packed_width,
-                    (GLsizei)(raster->owner_count * WALLE_LG_RASTER_PRIMITIVE_COUNT),
-                    GL_RG_INTEGER,
-                    GL_UNSIGNED_INT,
-                    raster->packed_words);
-    glActiveTexture(GL_TEXTURE15);
-    glBindTexture(GL_TEXTURE_2D, state->reveal_apple_fast_sqrt_texture);
-    glActiveTexture(GL_TEXTURE0);
-
-    glUniform1iv(state->reveal_mask_u_PrimitiveSlots,
-                 WALLE_LG_REVEAL_RASTER_MAX_PRIMITIVE_COUNT,
-                 primitive_slots);
-    glUniform1iv(state->reveal_mask_u_PrimitiveRows,
-                 WALLE_LG_REVEAL_RASTER_MAX_PRIMITIVE_COUNT,
-                 primitive_rows);
-    return glGetError() == GL_NO_ERROR;
-}
-
-[[nodiscard]]
-static bool render_reveal_mask(struct wallpaper_output*                    output,
-                               const struct walle_lg_reveal_mask_geometry* geometry)
-{
-    struct wallpaper_state* state = output->render.state;
-    if (!reveal_geometry_fits_output(output, geometry))
-        return false;
-
-    struct walle_lg_reveal_raster raster = {};
-    if (geometry->index_count > 0) {
-        const struct walle_lg_raster_calibration calibration = {
-            .p25_ceil_bits          = REVEAL_RASTER_P25,
-            .p25_selector_bit_count = UINT64_C(1) << 24,
-        };
-        enum walle_lg_reveal_raster_status raster_status
-            = walle_lg_reveal_raster_construct(geometry,
-                                               (uint32_t)output->render.width,
-                                               (uint32_t)output->render.height,
-                                               &calibration,
-                                               &raster);
-        if (raster_status != WALLE_LG_REVEAL_RASTER_OK)
-            return false;
-    }
-    if (!ensure_reveal_programs(state) || !ensure_reveal_mask_resources(output)) {
-        walle_lg_reveal_raster_destroy(&raster);
-        return false;
-    }
-
-    glBindFramebuffer(GL_FRAMEBUFFER, output->reveal_mask_framebuffer);
-    glViewport(0, 0, output->render.width, output->render.height);
-    glDisable(GL_BLEND);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_SCISSOR_TEST);
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    if (!geometry->circle.empty) {
-        int32_t scissor_y
-            = output->render.height - (geometry->circle.scissor[1] + geometry->circle.scissor[3]);
-        if (scissor_y < 0) {
-            walle_lg_reveal_raster_destroy(&raster);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            return false;
-        }
-        glEnable(GL_SCISSOR_TEST);
-        glScissor(geometry->circle.scissor[0],
-                  scissor_y,
-                  geometry->circle.scissor[2],
-                  geometry->circle.scissor[3]);
-        if (geometry->clear_to_inside) {
-            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-        }
-    }
-    if (geometry->index_count > 0) {
-        if (raster.owner_count > 0) {
-            glUseProgram(state->reveal_mask_program);
-            glUniform2f(state->reveal_mask_u_Resolution,
-                        (float)output->render.width,
-                        (float)output->render.height);
-            glUniform1f(
-                state->reveal_mask_u_CompactFamily,
-                geometry->family == WALLE_LG_REVEAL_MASK_COMPACT_VISIBLE_ARCS ? 1.0f : 0.0f);
-            if (!upload_reveal_raster(state, &raster)) {
-                walle_lg_reveal_raster_destroy(&raster);
-                glDisable(GL_SCISSOR_TEST);
-                glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                return false;
-            }
-            glBindVertexArray(output->reveal_mask_vertex_array);
-            glBindBuffer(GL_ARRAY_BUFFER, output->reveal_mask_vertex_buffer);
-            glBufferSubData(GL_ARRAY_BUFFER,
-                            0,
-                            (GLsizeiptr)(geometry->vertex_count * sizeof(geometry->vertices[0])),
-                            geometry->vertices);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, output->reveal_mask_index_buffer);
-            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER,
-                            0,
-                            (GLsizeiptr)(geometry->index_count * sizeof(geometry->indices[0])),
-                            geometry->indices);
-            glDrawElements(
-                GL_TRIANGLES, (GLsizei)geometry->index_count, GL_UNSIGNED_SHORT, nullptr);
-        }
-    }
-
-    bool complete = glGetError() == GL_NO_ERROR;
-    walle_lg_reveal_raster_destroy(&raster);
-    glDisable(GL_SCISSOR_TEST);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    return complete;
-}
-
-[[nodiscard]]
-static bool ensure_output_egl_surface(struct wallpaper_output* output)
-{
-    if (output->render.egl_surface != EGL_NO_SURFACE)
-        return true;
-    if (!output->egl_window)
-        return false;
-
-#if defined(WALLE_TRACY)
-    TracyCZoneN(tracy_recreate_surface, "recreate idle EGL surface", true);
-#endif
-    output->render.egl_surface = eglCreateWindowSurface(output->render.state->egl_display,
-                                                        output->render.state->egl_config,
-                                                        (EGLNativeWindowType)output->egl_window,
-                                                        nullptr);
-#if defined(WALLE_TRACY)
-    TracyCZoneEnd(tracy_recreate_surface);
-#endif
-    if (output->render.egl_surface == EGL_NO_SURFACE) {
-        fprintf(stderr, "[EGL] Window surface recreation failed for %s\n", output->name);
-        return false;
-    }
-    return true;
-}
-
-/* eglDestroySurface destroys Mesa's client-side wl_buffer objects but does
- * not attach NULL or commit new surface state. The Wayland core protocol
- * guarantees that destroying a committed buffer does not change the surface
- * contents while its backing storage remains owned by the compositor. This
- * drops idle swapchain buffers without altering the final presented frame. */
-static void retire_idle_egl_surface(struct wallpaper_output* output)
-{
-    if (!output->render.state->mesa_wayland_wsi || output->render.egl_surface == EGL_NO_SURFACE)
-        return;
-
-#if defined(WALLE_TRACY)
-    TracyCZoneN(tracy_retire_surface, "retire idle EGL surface", true);
-#endif
-    EGLDisplay display = output->render.state->egl_display;
-    EGLSurface surface = output->render.egl_surface;
-    if (eglGetCurrentSurface(EGL_READ) == surface || eglGetCurrentSurface(EGL_DRAW) == surface)
-        eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-    if (eglDestroySurface(display, surface))
-        output->render.egl_surface = EGL_NO_SURFACE;
-    else
-        fprintf(stderr, "[EGL] Idle surface retirement failed for %s\n", output->name);
-#if defined(WALLE_TRACY)
-    TracyCZoneEnd(tracy_retire_surface);
-#endif
-}
-
-[[nodiscard]]
 static char* get_cache_filename(uint64_t hash, char** dir_out)
 {
     char* dir = resolve_cache_dir();
@@ -2523,31 +1687,6 @@ static void reveal_process_capture_fail(struct wallpaper_state* state, const cha
 }
 
 [[nodiscard]]
-static bool read_reveal_process_capture_pixels(struct wallpaper_output* output)
-{
-    if (!output->reveal_process_capture_pixels
-        || output->render.width != (int32_t)REVEAL_PROCESS_CAPTURE_WIDTH
-        || output->render.height != (int32_t)REVEAL_PROCESS_CAPTURE_HEIGHT)
-        return false;
-
-    GLint previous_pack_alignment = 0;
-    glGetIntegerv(GL_PACK_ALIGNMENT, &previous_pack_alignment);
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glBindFramebuffer(GL_FRAMEBUFFER, output->reveal_mask_framebuffer);
-    glReadPixels(0,
-                 0,
-                 output->render.width,
-                 output->render.height,
-                 GL_RED,
-                 GL_UNSIGNED_BYTE,
-                 output->reveal_process_capture_pixels);
-    GLenum error = glGetError();
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glPixelStorei(GL_PACK_ALIGNMENT, previous_pack_alignment);
-    return error == GL_NO_ERROR && glGetError() == GL_NO_ERROR;
-}
-
-[[nodiscard]]
 static bool write_all_bytes(int fd, const uint8_t* bytes, size_t byte_count)
 {
     while (byte_count > 0) {
@@ -2572,7 +1711,7 @@ static bool write_reveal_process_capture(struct wallpaper_output* output)
 {
     struct wallpaper_state* state = output->render.state;
     char                    name[sizeof "state-0000.r8"];
-    int name_length
+    int                     name_length
         = snprintf(name, sizeof(name), "state-%04u.r8", output->reveal_process_capture_state);
     if (name_length < 0 || (size_t)name_length >= sizeof(name)) {
         errno = EOVERFLOW;
@@ -2586,16 +1725,10 @@ static bool write_reveal_process_capture(struct wallpaper_output* output)
     if (fd < 0)
         return false;
 
-    bool success = true;
-    for (uint32_t top_row = 0; top_row < REVEAL_PROCESS_CAPTURE_HEIGHT; ++top_row) {
-        uint32_t gl_row = REVEAL_PROCESS_CAPTURE_HEIGHT - 1 - top_row;
-        const uint8_t* row = output->reveal_process_capture_pixels
-                             + (size_t)gl_row * REVEAL_PROCESS_CAPTURE_WIDTH;
-        if (!write_all_bytes(fd, row, REVEAL_PROCESS_CAPTURE_WIDTH)) {
-            success = false;
-            break;
-        }
-    }
+    bool success
+        = write_all_bytes(fd,
+                          output->reveal_process_capture_pixels,
+                          (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT);
 
     int saved_errno = errno;
     if (close(fd) < 0 && success) {
@@ -2610,67 +1743,60 @@ static bool write_reveal_process_capture(struct wallpaper_output* output)
 
 static void stop_failed_transition(struct wallpaper_output* output, const char* reason)
 {
-    fprintf(stderr, "[GLES] Transition stopped for %s: %s\n", output->name, reason);
+    fprintf(stderr, "[Vulkan] Transition stopped for %s: %s\n", output->name, reason);
     reveal_process_capture_fail(output->render.state, reason);
     if (output->frame_callback) {
         wl_callback_destroy(output->frame_callback);
         output->frame_callback = nullptr;
     }
     output->render.t_state = T_STATE_IDLE;
+    walle_vk_output_abort_transition(output->render.vk_output);
 }
 
 [[nodiscard]]
 static bool render_frame(struct wallpaper_output* output)
 {
-    if ((output->render.flags & F_DEAD) || output->render.egl_surface == EGL_NO_SURFACE)
-        return false;
-    if (output->render.t_state == T_STATE_IDLE)
+    if ((output->render.flags & F_DEAD) || !output->render.vk_output
+        || output->render.t_state == T_STATE_IDLE)
         return false;
 
     struct wallpaper_state* state           = output->render.state;
     bool                    process_capture = output->reveal_process_capture_active;
-
 #if defined(WALLE_TRACY)
-    TracyCZoneN(tracy_transition_frame, "transition frame", true);
+    TracyCZoneN(tracy_transition_frame, "Vulkan transition frame", true);
 #endif
 
     struct timespec now;
     clock_gettime(CLOCK_MONOTONIC, &now);
-
-    uint64_t now_ns = (uint64_t)now.tv_sec * 1000000000ULL + (uint64_t)now.tv_nsec;
+    uint64_t now_ns = (uint64_t)now.tv_sec * UINT64_C(1'000'000'000) + (uint64_t)now.tv_nsec;
     if (output->render.t_state == T_STATE_ARMED) {
         output->render.anim_start_ns = now_ns;
         output->render.t_state       = T_STATE_RUNNING;
     }
     float elapsed = (float)(now_ns - output->render.anim_start_ns) * 1e-9f;
-
-    float t_norm;
+    float progress;
     bool  finished;
     if (process_capture) {
-        t_norm = (float)output->reveal_process_capture_state
-                 / (float)(REVEAL_PROCESS_CAPTURE_STATE_COUNT - 1);
-        finished = output->reveal_process_capture_state
-                   == REVEAL_PROCESS_CAPTURE_STATE_COUNT - 1;
+        progress = (float)output->reveal_process_capture_state
+                   / (float)(REVEAL_PROCESS_CAPTURE_STATE_COUNT - 1);
+        finished = output->reveal_process_capture_state == REVEAL_PROCESS_CAPTURE_STATE_COUNT - 1;
     } else {
-        t_norm   = elapsed * output->render.duration_inv;
-        finished = false;
-        if (t_norm >= 1.0f) {
-            t_norm   = 1.0f;
-            finished = true;
-        }
+        progress = elapsed * output->render.duration_inv;
+        finished = progress >= 1.0f;
+        if (finished)
+            progress = 1.0f;
     }
 
-    struct walle_lg_reveal_mask_geometry reveal_geometry = {};
-    const struct walle_lg_reveal_mask_request reveal_request = {
-        .target_width   = (uint32_t)output->render.width,
-        .target_height  = (uint32_t)output->render.height,
-        .center_x       = process_capture ? REVEAL_PROCESS_CAPTURE_CENTER_X : output->t_center_x,
-        .center_y       = process_capture ? REVEAL_PROCESS_CAPTURE_CENTER_Y
-                                          : (double)output->render.height - output->t_center_y,
-        .maximum_radius = output->reveal_maximum_radius,
-        .progress       = t_norm,
+    struct walle_lg_reveal_mask_geometry      geometry = {};
+    const struct walle_lg_reveal_mask_request request  = {
+         .target_width   = (uint32_t)output->render.width,
+         .target_height  = (uint32_t)output->render.height,
+         .center_x       = process_capture ? REVEAL_PROCESS_CAPTURE_CENTER_X : output->t_center_x,
+         .center_y       = process_capture ? REVEAL_PROCESS_CAPTURE_CENTER_Y : output->t_center_y,
+         .maximum_radius = output->reveal_maximum_radius,
+         .progress       = progress,
     };
-    if (!walle_lg_reveal_mask_geometry_construct(&reveal_request, &reveal_geometry)) {
+    if (!walle_lg_reveal_mask_geometry_construct(&request, &geometry)) {
         stop_failed_transition(output, "public reveal geometry construction failed");
 #if defined(WALLE_TRACY)
         TracyCZoneEnd(tracy_transition_frame);
@@ -2678,102 +1804,51 @@ static bool render_frame(struct wallpaper_output* output)
         return false;
     }
 
-    if (!eglMakeCurrent(output->render.state->egl_display,
-                        output->render.egl_surface,
-                        output->render.egl_surface,
-                        output->render.state->egl_context)) {
-        stop_failed_transition(output, "eglMakeCurrent failed");
+    bool                  first_boot = !(output->render.flags & F_BOOT_COMPLETE);
+    struct walle_vk_frame frame      = {
+             .geometry          = &geometry,
+             .progress          = progress,
+             .variant           = output->glass_variant == GLASS_VARIANT_REGULAR ? 1.0f : 0.0f,
+             .center_top_left_x = geometry.circle.center[0],
+             .center_top_left_y = geometry.circle.center[1],
+             .radius            = geometry.circle.radius,
+             .first_boot        = first_boot,
+             .mask_readback     = process_capture ? output->reveal_process_capture_pixels : nullptr,
+             .mask_readback_size
+        = process_capture ? (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT
+                               : 0,
+    };
+#if defined(WALLE_TRACY)
+    TracyCZoneN(tracy_present, "Vulkan render and present", true);
+#endif
+    enum walle_vk_frame_status status = walle_vk_output_render(output->render.vk_output, &frame);
+#if defined(WALLE_TRACY)
+    TracyCZoneEnd(tracy_present);
+#endif
+    if (status == WALLE_VK_FRAME_FATAL) {
+        stop_failed_transition(output, "Vulkan reveal/composition/present failed");
 #if defined(WALLE_TRACY)
         TracyCZoneEnd(tracy_transition_frame);
 #endif
         return false;
     }
-
-    if (!render_reveal_mask(output, &reveal_geometry)) {
-        stop_failed_transition(output, "reveal mask pass failed");
+    if (status == WALLE_VK_FRAME_SURFACE_CHANGED) {
+        if (output->frame_callback)
+            wl_callback_destroy(output->frame_callback);
+        output->frame_callback = wl_surface_frame(output->surface);
+        wl_callback_add_listener(output->frame_callback, &frame_listener, output);
+        wl_surface_commit(output->surface);
 #if defined(WALLE_TRACY)
         TracyCZoneEnd(tracy_transition_frame);
 #endif
-        return false;
-    }
-    if (process_capture && !read_reveal_process_capture_pixels(output)) {
-        stop_failed_transition(output, "R8 reveal mask readback failed");
-#if defined(WALLE_TRACY)
-        TracyCZoneEnd(tracy_transition_frame);
-#endif
-        return false;
+        return true;
     }
 
-    glUseProgram(state->reveal_best_known_program);
-
-    /* On first boot B is the sole uploaded image. Binding it as both inputs
-     * is observationally identical to storing a duplicate in A, including
-     * every shader sample and derivative, while avoiding a second full image
-     * upload and allocation. The finished-frame swap below then promotes B
-     * to the retained A slot. */
-    bool   first_boot  = !(output->render.flags & F_BOOT_COMPLETE);
-    GLuint tex_a       = first_boot ? output->render.tex_B : output->render.tex_A;
-    GLuint tex_glass_a = first_boot ? output->render.tex_GlassB : output->render.tex_GlassA;
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, tex_a);
-
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, tex_glass_a);
-
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, output->render.tex_B);
-
-    glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_2D, output->render.tex_GlassB);
-
-    glActiveTexture(GL_TEXTURE4);
-    glBindTexture(GL_TEXTURE_2D, output->reveal_mask_texture);
-
-    /* Material easing stays in the composition shader. Reveal radius follows
-     * linear progress; the configured duration remains honest wall-clock. */
-    glUniform1f(state->reveal_u_Time, t_norm);
-    glUniform2f(state->reveal_u_Resolution,
-                (float)output->render.width,
-                (float)output->render.height);
-    glUniform1f(state->reveal_u_Variant,
-                output->glass_variant == GLASS_VARIANT_REGULAR ? 1.0f : 0.0f);
-    if (output->render.state->u_Appearance >= 0) {
-        float app_val = -1.0f;
-        if (output->glass_appearance == GLASS_APPEARANCE_LIGHT) app_val = 0.0f;
-        else if (output->glass_appearance == GLASS_APPEARANCE_DARK) app_val = 1.0f;
-        glUniform1f(output->render.state->u_Appearance, app_val);
-    }
-
-    glBindVertexArray(output->render.vao);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    if (glGetError() != GL_NO_ERROR) {
-        stop_failed_transition(output, "transition draw failed");
-#if defined(WALLE_TRACY)
-        TracyCZoneEnd(tracy_transition_frame);
-#endif
-        return false;
-    }
-#if defined(WALLE_TRACY)
-    TracyCZoneN(tracy_swap_buffer, "swap Wayland EGL buffer", true);
-#endif
-    EGLBoolean presented
-        = eglSwapBuffers(output->render.state->egl_display, output->render.egl_surface);
-#if defined(WALLE_TRACY)
-    TracyCZoneEnd(tracy_swap_buffer);
-#endif
-    if (!presented) {
-        stop_failed_transition(output, "eglSwapBuffers failed");
-#if defined(WALLE_TRACY)
-        TracyCZoneEnd(tracy_transition_frame);
-#endif
-        return false;
-    }
     if (process_capture) {
         if (!write_reveal_process_capture(output)) {
             char reason[160];
             snprintf(reason,
-                     sizeof(reason),
+                     sizeof reason,
                      "could not create state-%04u.r8: %s",
                      output->reveal_process_capture_state,
                      strerror(errno));
@@ -2788,8 +1863,8 @@ static bool render_frame(struct wallpaper_output* output)
             ++output->reveal_process_capture_state;
     }
 #if defined(WALLE_TRACY)
-    TracyCPlotF("transition progress", t_norm);
-    TracyCFrameMarkNamed("Walle transition frame");
+    TracyCPlotF("transition progress", progress);
+    TracyCFrameMarkNamed("Walle Vulkan transition frame");
 #endif
 
     if (finished) {
@@ -2798,42 +1873,32 @@ static bool render_frame(struct wallpaper_output* output)
             wl_callback_destroy(output->frame_callback);
             output->frame_callback = nullptr;
         }
-
-        /* Swap A<->B so next transition blends FROM current TO new. */
-        GLuint temp          = output->render.tex_A;
-        output->render.tex_A = output->render.tex_B;
-        output->render.tex_B = temp;
-
-        temp                      = output->render.tex_GlassA;
-        output->render.tex_GlassA = output->render.tex_GlassB;
-        output->render.tex_GlassB = temp;
-
-        retire_idle_egl_surface(output);
+        walle_vk_output_promote(output->render.vk_output);
     } else {
         if (output->frame_callback)
             wl_callback_destroy(output->frame_callback);
-        if (!(output->render.flags & F_DEAD) && output->surface) {
-            output->frame_callback = wl_surface_frame(output->surface);
-            wl_callback_add_listener(output->frame_callback, &frame_listener, output);
-            wl_surface_commit(output->surface);
-        }
+        output->frame_callback = wl_surface_frame(output->surface);
+        wl_callback_add_listener(output->frame_callback, &frame_listener, output);
+        wl_surface_commit(output->surface);
     }
     if (process_capture && finished) {
         state->reveal_process_capture_status   = 0;
         state->reveal_process_capture_complete = true;
-        printf("walleExecutableProcessRendered=true\n"
-               "walleLayerShellSurfaceRendered=true\n"
-               "revealMaskProcessCaptureStates=%u\n"
-               "revealMaskProcessCaptureSwaps=%u\n"
-               "revealMaskProcessCaptureCallbacks=%u\n"
-               "revealMaskProcessCaptureDimensions=2048x2048\n"
-               "revealMaskProcessCaptureCenterTopLeft=512.0,614.4\n"
-               "revealMaskProcessCaptureProgress=state/64\n"
-               "revealMaskProcessCaptureFormat=R8-top-left-row-major\n"
-               "revealMaskProcessCaptureComplete=true\n",
-               REVEAL_PROCESS_CAPTURE_STATE_COUNT,
-               state->reveal_process_capture_swap_count,
-               state->reveal_process_capture_callback_count);
+        printf(
+            "walleExecutableProcessRendered=true\n"
+            "walleLayerShellSurfaceRendered=true\n"
+            "walleRenderer=Vulkan-1.4-Slang-SPIR-V-1.6\n"
+            "revealMaskProcessCaptureStates=%u\n"
+            "revealMaskProcessCaptureSwaps=%u\n"
+            "revealMaskProcessCaptureCallbacks=%u\n"
+            "revealMaskProcessCaptureDimensions=2048x2048\n"
+            "revealMaskProcessCaptureCenterTopLeft=512.0,614.4\n"
+            "revealMaskProcessCaptureProgress=state/64\n"
+            "revealMaskProcessCaptureFormat=R8-top-left-row-major\n"
+            "revealMaskProcessCaptureComplete=true\n",
+            REVEAL_PROCESS_CAPTURE_STATE_COUNT,
+            state->reveal_process_capture_swap_count,
+            state->reveal_process_capture_callback_count);
         fflush(stdout);
     }
 #if defined(WALLE_TRACY)
@@ -2853,87 +1918,19 @@ static void frame_callback_handler(void* data, struct wl_callback* callback, uin
         reveal_process_capture_fail(output->render.state, "capture frame callback did not render");
 }
 
-[[nodiscard]]
-static bool upload_texture(struct wallpaper_output*  output,
-                           GLuint                    texture,
-                           int                       fd,
-                           const struct image_layer* layer)
-{
-#if defined(WALLE_TRACY)
-    TracyCZoneN(tracy_upload_texture, "upload texture", true);
-    TracyCZoneValue(tracy_upload_texture, layer->size);
-#endif
-    bool success = false;
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, output->render.pbo);
-#if defined(WALLE_TRACY)
-    TracyCZoneN(tracy_allocate_pbo, "allocate PBO", true);
-#endif
-    glBufferData(GL_PIXEL_UNPACK_BUFFER, (GLsizeiptr)layer->size, nullptr, GL_STREAM_DRAW);
-#if defined(WALLE_TRACY)
-    TracyCZoneEnd(tracy_allocate_pbo);
-#endif
-
-    void* mapped = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER,
-                                    0,
-                                    (GLsizeiptr)layer->size,
-                                    GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-    if (!mapped)
-        goto done;
-#if defined(WALLE_TRACY)
-    TracyCZoneN(tracy_read_pixels, "read cached pixels into PBO", true);
-#endif
-    ssize_t read_size = pread(fd, mapped, layer->size, (off_t)layer->offset);
-#if defined(WALLE_TRACY)
-    TracyCZoneEnd(tracy_read_pixels);
-#endif
-    glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-    if (read_size < 0 || (size_t)read_size != layer->size) {
-        fprintf(stderr, "[GLES] PBO read failed or partial: %zd/%zu\n", read_size, layer->size);
-        goto done;
-    }
-
-    glBindTexture(GL_TEXTURE_2D, texture);
-#if defined(WALLE_TRACY)
-    TracyCZoneN(tracy_submit_texture, "submit texture image", true);
-#endif
-    /* sRGB storage: sampling decodes to linear light for free, so every blend
-     * in the shader happens in linear space. */
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 GL_SRGB8_ALPHA8,
-                 layer->width,
-                 layer->height,
-                 0,
-                 GL_RGBA,
-                 GL_UNSIGNED_BYTE,
-                 0);
-#if defined(WALLE_TRACY)
-    TracyCZoneEnd(tracy_submit_texture);
-#endif
-    success = true;
-
-done:
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-#if defined(WALLE_TRACY)
-    TracyCZoneEnd(tracy_upload_texture);
-#endif
-    return success;
-}
-
 static void set_reveal_origin(struct wallpaper_output* output,
                               double                   center_top_left_x,
                               double                   center_top_left_y)
 {
     output->t_center_x = (float)center_top_left_x;
-    output->t_center_y = (float)((double)output->render.height - center_top_left_y);
+    output->t_center_y = (float)center_top_left_y;
 
     double d1 = hypot(center_top_left_x, center_top_left_y);
     double d2 = hypot((double)output->render.width - center_top_left_x, center_top_left_y);
     double d3 = hypot(center_top_left_x, (double)output->render.height - center_top_left_y);
     double d4 = hypot((double)output->render.width - center_top_left_x,
                       (double)output->render.height - center_top_left_y);
-    output->reveal_maximum_radius
-        = fmax(d1, fmax(d2, fmax(d3, d4))) * REVEAL_RADIUS_MARGIN;
+    output->reveal_maximum_radius = fmax(d1, fmax(d2, fmax(d3, d4))) * REVEAL_RADIUS_MARGIN;
 }
 
 static void finalize_render(struct wallpaper_output* output)
@@ -3004,26 +2001,21 @@ static void finalize_render(struct wallpaper_output* output)
         return;
     }
 
-    if (!ensure_output_egl_surface(output)
-        || !eglMakeCurrent(state->egl_display,
-                           output->render.egl_surface,
-                           output->render.egl_surface,
-                           state->egl_context)) {
-        close(res.fd);
-        if (output->reveal_process_capture_owned)
-            reveal_process_capture_fail(state, "could not activate the capture EGL surface");
-        return;
-    }
-    eglSwapInterval(state->egl_display, 0);
-
-    bool first_boot = !(output->render.flags & F_BOOT_COMPLETE);
-    bool uploaded   = upload_texture(output, output->render.tex_B, res.fd, &res.standard)
-                    && upload_texture(output, output->render.tex_GlassB, res.fd, &res.glass);
-
-    /* The queued texture copies no longer need a live staging store. */
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, output->render.pbo);
-    glBufferData(GL_PIXEL_UNPACK_BUFFER, 0, nullptr, GL_STREAM_DRAW);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    bool                              first_boot = !(output->render.flags & F_BOOT_COMPLETE);
+    const struct walle_vk_image_layer standard   = {
+          .offset = res.standard.offset,
+          .size   = res.standard.size,
+          .width  = res.standard.width,
+          .height = res.standard.height,
+    };
+    const struct walle_vk_image_layer glass = {
+        .offset = res.glass.offset,
+        .size   = res.glass.size,
+        .width  = res.glass.width,
+        .height = res.glass.height,
+    };
+    bool uploaded = output->render.vk_output
+                    && walle_vk_output_upload(output->render.vk_output, res.fd, &standard, &glass);
 
     close(res.fd);
     if (!uploaded) {
@@ -3044,9 +2036,8 @@ static void finalize_render(struct wallpaper_output* output)
         if (output->reveal_process_capture_owned) {
             output->reveal_process_capture_state  = 0;
             output->reveal_process_capture_active = true;
-            set_reveal_origin(output,
-                              REVEAL_PROCESS_CAPTURE_CENTER_X,
-                              REVEAL_PROCESS_CAPTURE_CENTER_Y);
+            set_reveal_origin(
+                output, REVEAL_PROCESS_CAPTURE_CENTER_X, REVEAL_PROCESS_CAPTURE_CENTER_Y);
         } else {
             int cx = (int)xoshiro256pp_bounded(&g_rng, output->render.width / 2)
                      + output->render.width / 4;
@@ -3087,12 +2078,9 @@ static void finalize_render(struct wallpaper_output* output)
         /* Single frame at Time=1: the circle mask must already cover the
          * whole screen, because nothing outside the circle ever fades to the
          * incoming image (a tiny radius would leave the OLD wallpaper up). */
-        set_reveal_origin(output,
-                          (double)output->render.width * 0.5,
-                          (double)output->render.height * 0.5);
+        set_reveal_origin(
+            output, (double)output->render.width * 0.5, (double)output->render.height * 0.5);
     }
-
-    glUseProgram(0);
 
     if (first_boot) {
         if (render_frame(output)) {
@@ -3156,37 +2144,10 @@ static void destroy_output(struct wallpaper_output* o)
         dbg_print("[INFO] Render thread active on '%s'. Deferring cleanup.", o->name);
     }
 
-    if (state->egl_initialized) {
-        EGLDisplay display = state->egl_display;
-
-        if (o->render.flags & F_TEX_INIT) {
-            if (egl_make_current_utility(state)) {
-                destroy_reveal_mask_resources(o);
-                glDeleteTextures(1, &o->render.tex_A);
-                glDeleteTextures(1, &o->render.tex_GlassA);
-                glDeleteTextures(1, &o->render.tex_B);
-                glDeleteTextures(1, &o->render.tex_GlassB);
-                glDeleteBuffers(1, &o->vbo);
-                glDeleteBuffers(1, &o->render.pbo);
-                glDeleteVertexArrays(1, &o->render.vao);
-                o->render.flags &= ~F_TEX_INIT;
-                eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-            }
-        }
-
-        if (o->render.egl_surface != EGL_NO_SURFACE) {
-            if (eglGetCurrentSurface(EGL_READ) == o->render.egl_surface
-                || eglGetCurrentSurface(EGL_DRAW) == o->render.egl_surface) {
-                eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-            }
-            eglDestroySurface(display, o->render.egl_surface);
-            o->render.egl_surface = EGL_NO_SURFACE;
-        }
-    }
-
-    if (o->egl_window) {
-        wl_egl_window_destroy(o->egl_window);
-        o->egl_window = nullptr;
+    if (o->render.vk_output) {
+        walle_vk_output_destroy(o->render.vk_output);
+        o->render.vk_output = nullptr;
+        o->render.flags &= ~F_RENDERER_INIT;
     }
     if (o->frame_callback) {
         wl_callback_destroy(o->frame_callback);
@@ -3582,14 +2543,6 @@ static int config_handler(void* user, const char* section, const char* name, con
                     value);
             oc->variant = GLASS_VARIANT_CLEAR;
         }
-    } else if (strcasecmp(name, "transition_appearance") == 0) {
-        if (strcasecmp(value, "light") == 0) {
-            oc->appearance = GLASS_APPEARANCE_LIGHT;
-        } else if (strcasecmp(value, "dark") == 0) {
-            oc->appearance = GLASS_APPEARANCE_DARK;
-        } else {
-            oc->appearance = GLASS_APPEARANCE_AUTO;
-        }
     } else if (strcasecmp(name, "gamemode") == 0) {
         oc->gamemode = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     }
@@ -3652,7 +2605,6 @@ static void apply_config_to_output(struct wallpaper_output* output, struct outpu
         output->render.flags &= ~F_TRANSITION_ON;
     output->transition_duration = config->transition_duration;
     output->glass_variant       = config->variant;
-    output->glass_appearance    = config->appearance;
 
     if (output->current_item_index >= output->num_items)
         output->current_item_index = 0;
@@ -3750,18 +2702,18 @@ static struct output_config* get_config_for_output(struct wallpaper_state* state
 static bool scaled_buffer_dimensions(uint32_t logical_width,
                                      uint32_t logical_height,
                                      int32_t  scale,
-                                     GLint    maximum_texture_size,
+                                     uint32_t maximum_image_dimension,
                                      int32_t* buffer_width,
                                      int32_t* buffer_height)
 {
     int64_t scaled_width;
     int64_t scaled_height;
     if (logical_width == 0 || logical_height == 0 || logical_width > INT32_MAX
-        || logical_height > INT32_MAX || scale <= 0 || maximum_texture_size <= 0
+        || logical_height > INT32_MAX || scale <= 0 || maximum_image_dimension == 0
         || ckd_mul(&scaled_width, (int64_t)logical_width, (int64_t)scale)
         || ckd_mul(&scaled_height, (int64_t)logical_height, (int64_t)scale)
         || scaled_width > INT32_MAX || scaled_height > INT32_MAX
-        || scaled_width > maximum_texture_size || scaled_height > maximum_texture_size) {
+        || scaled_width > maximum_image_dimension || scaled_height > maximum_image_dimension) {
         return false;
     }
     *buffer_width  = (int32_t)scaled_width;
@@ -3772,32 +2724,21 @@ static bool scaled_buffer_dimensions(uint32_t logical_width,
 static void layer_surface_configure(
     void* data, struct zwlr_layer_surface_v1* surf, uint32_t serial, uint32_t w, uint32_t h)
 {
-    dbg_print("layer_surface_configure: %ux%u", w, h);
     auto output = (struct wallpaper_output*)data;
-
-    if (output->render.flags & F_DEAD) {
-        zwlr_layer_surface_v1_ack_configure(surf, serial);
-        return;
-    }
-
+    dbg_print("layer_surface_configure: %ux%u", w, h);
     zwlr_layer_surface_v1_ack_configure(surf, serial);
+    if (output->render.flags & F_DEAD)
+        return;
 
+    struct wallpaper_state* state = output->render.state;
     if (w == 0 || h == 0) {
-        if (output->render.state->reveal_process_capture) {
-            reveal_process_capture_fail(output->render.state,
-                                        "compositor returned a zero-sized capture surface");
+        if (state->reveal_process_capture) {
+            reveal_process_capture_fail(state, "compositor returned a zero-sized capture surface");
             destroy_output(output);
-            return;
         }
-        /* Layer shell 0 means "client decides"; an anchored fullscreen
-         * background cannot decide meaningfully — wait for a real size. */
-        dbg_print("Ignoring 0x0 configure for '%s'", output->name);
         return;
     }
-
-    struct wallpaper_state* state             = output->render.state;
-    bool                    exact_static_gate = state->exact_static_gate;
-    bool                    process_capture   = state->reveal_process_capture;
+    bool process_capture = state->reveal_process_capture;
     if (process_capture
         && (w != REVEAL_PROCESS_CAPTURE_WIDTH || h != REVEAL_PROCESS_CAPTURE_HEIGHT)) {
         reveal_process_capture_fail(state, "compositor rejected the canonical 2048x2048 size");
@@ -3807,96 +2748,57 @@ static void layer_surface_configure(
     if (process_capture && (output->render.flags & F_CONFIGURED))
         return;
 
-    int32_t scale = (exact_static_gate || process_capture)
-                        ? 1
-                        : (output->scale > 0 ? output->scale : 1);
-    int32_t buffer_w;
-    int32_t buffer_h;
-    bool dimensions_valid
-        = exact_static_gate
-              ? w <= INT32_MAX && h <= INT32_MAX
-              : scaled_buffer_dimensions(w,
-                                         h,
-                                         scale,
-                                         state->reveal_max_texture_size,
-                                         &buffer_w,
-                                         &buffer_h);
-    if (!dimensions_valid) {
+    int32_t scale = process_capture ? 1 : (output->scale > 0 ? output->scale : 1);
+    int32_t buffer_width;
+    int32_t buffer_height;
+    if (!scaled_buffer_dimensions(
+            w, h, scale, state->vk_max_image_dimension, &buffer_width, &buffer_height)) {
         fprintf(stderr,
-                "[EGL] Rejecting unsupported layer size %ux%u at scale %d for %s.\n",
+                "[Vulkan] Rejecting unsupported layer size %ux%u at scale %d for %s.\n",
                 w,
                 h,
                 scale,
                 output->name);
-        reveal_process_capture_fail(state, "capture surface dimensions exceed GLES limits");
+        reveal_process_capture_fail(state, "capture surface dimensions exceed Vulkan limits");
         destroy_output(output);
         return;
     }
-    output->logical_w = (int32_t)w;
-    output->logical_h = (int32_t)h;
-    if (exact_static_gate)
-        buffer_w = buffer_h = 1'024;
-    output->render.width  = buffer_w;
-    output->render.height = buffer_h;
-    output->render.flags |= F_CONFIGURED;
 
-    /* Keep buffer scale in lockstep with the buffer size chosen here; a
-     * scale change that lands between init and this configure would
-     * otherwise leave a scale-1 surface with a scale-N buffer forever. */
+    bool size_changed
+        = output->render.width != buffer_width || output->render.height != buffer_height;
+    output->logical_w     = (int32_t)w;
+    output->logical_h     = (int32_t)h;
+    output->render.width  = buffer_width;
+    output->render.height = buffer_height;
+    output->render.flags |= F_CONFIGURED;
     if (wl_proxy_get_version((struct wl_proxy*)output->surface)
         >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
         wl_surface_set_buffer_scale(output->surface, scale);
 
-    if (output->render.state->egl_initialized) {
-        if (output->egl_window) {
-            wl_egl_window_resize(
-                output->egl_window, output->render.width, output->render.height, 0, 0);
-        } else {
-            output->egl_window = wl_egl_window_create(
-                output->surface, output->render.width, output->render.height);
-            output->render.egl_surface
-                = eglCreateWindowSurface(output->render.state->egl_display,
-                                         output->render.state->egl_config,
-                                         (EGLNativeWindowType)output->egl_window,
-                                         nullptr);
-            if (output->render.egl_surface == EGL_NO_SURFACE) {
-                fprintf(stderr, "[EGL] Window surface creation failed for %s\n", output->name);
-                destroy_output(output);
-                return;
-            }
-            if (exact_static_gate) {
-                if (!eglMakeCurrent(state->egl_display,
-                                    output->render.egl_surface,
-                                    output->render.egl_surface,
-                                    state->egl_context)) {
-                    fprintf(stderr, "[PARITY] Could not make the layer surface current.\n");
-                    state->exact_gate_status = 1;
-                } else {
-                    eglSwapInterval(state->egl_display, 0);
-                    state->exact_gate_status = walle_exact_static_gl_render_current(
-                        state->egl_display,
-                        output->render.egl_surface,
-                        nullptr,
-                        g_exact_static_gate.fixture_directory,
-                        g_exact_static_gate.vertex_shader,
-                        g_exact_static_gate.fragment_shader,
-                        g_exact_static_gate.intrinsic_table);
-                }
-                state->exact_gate_complete = true;
-                printf(
-                    "walleExecutableProcessRendered=true\n"
-                    "walleLayerShellSurfaceRendered=true\n"
-                    "walleStaticDiagnosticExact=%s\n",
-                    state->exact_gate_status == 0 ? "true" : "false");
-            } else {
-                init_output_gl(output);
-                if (process_capture && !(output->render.flags & F_TEX_INIT)) {
-                    reveal_process_capture_fail(state, "could not initialize capture GL objects");
-                    destroy_output(output);
-                    return;
-                }
-            }
+    bool renderer_ready;
+    if (!output->render.vk_output) {
+        renderer_ready = walle_vk_output_create(state->vk_renderer,
+                                                output->surface,
+                                                (uint32_t)buffer_width,
+                                                (uint32_t)buffer_height,
+                                                &output->render.vk_output);
+        if (renderer_ready) {
+            output->render.flags |= F_RENDERER_INIT;
+            state->vk_max_image_dimension
+                = walle_vk_renderer_max_image_dimension(state->vk_renderer);
         }
+    } else {
+        renderer_ready = !size_changed
+                         || walle_vk_output_resize(output->render.vk_output,
+                                                   (uint32_t)buffer_width,
+                                                   (uint32_t)buffer_height);
+        if (size_changed)
+            output->render.flags &= ~F_BOOT_COMPLETE;
+    }
+    if (!renderer_ready) {
+        reveal_process_capture_fail(state, "Vulkan Wayland output creation/resize failed");
+        destroy_output(output);
+        return;
     }
 
     if (process_capture && !output->reveal_process_capture_pixels) {
@@ -3915,8 +2817,7 @@ static void layer_surface_configure(
             return;
         }
     }
-
-    if (!exact_static_gate && !state->reveal_process_capture_complete)
+    if (!state->reveal_process_capture_complete)
         launch_async_render(output);
 }
 
@@ -3971,21 +2872,19 @@ static void output_handle_done(void* data, struct wl_output* wl_output)
     initialize_output(output);
 
     /* Scale changed after init (display settings): rescale the buffer. */
-    if (!output->render.state->exact_static_gate
-        && !output->render.state->reveal_process_capture && !(output->render.flags & F_DEAD)
-        && output->surface && output->egl_window && output->logical_w > 0) {
+    if (!output->render.state->reveal_process_capture && !(output->render.flags & F_DEAD)
+        && output->surface && output->render.vk_output && output->logical_w > 0) {
         int32_t scale = output->scale > 0 ? output->scale : 1;
         int32_t bw;
         int32_t bh;
         if (!scaled_buffer_dimensions((uint32_t)output->logical_w,
                                       (uint32_t)output->logical_h,
                                       scale,
-                                      output->render.state->reveal_max_texture_size,
+                                      output->render.state->vk_max_image_dimension,
                                       &bw,
                                       &bh)) {
-            fprintf(stderr,
-                    "[EGL] Rejecting unsupported scaled layer size for %s.\n",
-                    output->name);
+            fprintf(
+                stderr, "[Vulkan] Rejecting unsupported scaled layer size for %s.\n", output->name);
             destroy_output(output);
             return;
         }
@@ -3993,9 +2892,13 @@ static void output_handle_done(void* data, struct wl_output* wl_output)
             if (wl_proxy_get_version((struct wl_proxy*)output->surface)
                 >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
                 wl_surface_set_buffer_scale(output->surface, scale);
-            wl_egl_window_resize(output->egl_window, bw, bh, 0, 0);
+            if (!walle_vk_output_resize(output->render.vk_output, (uint32_t)bw, (uint32_t)bh)) {
+                destroy_output(output);
+                return;
+            }
             output->render.width  = bw;
             output->render.height = bh;
+            output->render.flags &= ~F_BOOT_COMPLETE;
             launch_async_render(output);
         }
     }
@@ -4020,15 +2923,6 @@ static void initialize_output(struct wallpaper_output* output)
     struct wallpaper_state* state = output->render.state;
     if (state->shutting_down)
         return;
-
-    if (state->exact_static_gate) {
-        if (state->exact_output_claimed) {
-            output->render.flags |= F_INITIALIZED;
-            return;
-        }
-        state->exact_output_claimed = true;
-        goto create_surface;
-    }
 
     if (state->reveal_process_capture) {
         if (state->reveal_process_capture_output_claimed) {
@@ -4109,7 +3003,6 @@ static void initialize_output(struct wallpaper_output* output)
 
     setup_rotation_timer(output);
 
-create_surface:
     if (!state->compositor || !state->layer_shell) {
         fprintf(stderr, "[ERROR] Missing Wayland globals for %s\n", output->name);
         goto init_failed;
@@ -4131,7 +3024,7 @@ create_surface:
         wl_region_destroy(opaque);
     }
 
-    if (!state->exact_static_gate && !state->reveal_process_capture && output->scale > 1
+    if (!state->reveal_process_capture && output->scale > 1
         && wl_proxy_get_version((struct wl_proxy*)output->surface)
                >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
         wl_surface_set_buffer_scale(output->surface, output->scale);
@@ -4148,10 +3041,9 @@ create_surface:
         goto init_failed;
     }
 
-    if (state->exact_static_gate || state->reveal_process_capture) {
-        uint32_t width  = state->exact_static_gate ? 1024 : REVEAL_PROCESS_CAPTURE_WIDTH;
-        uint32_t height = state->exact_static_gate ? 1024 : REVEAL_PROCESS_CAPTURE_HEIGHT;
-        zwlr_layer_surface_v1_set_size(output->layer_surface, width, height);
+    if (state->reveal_process_capture) {
+        zwlr_layer_surface_v1_set_size(
+            output->layer_surface, REVEAL_PROCESS_CAPTURE_WIDTH, REVEAL_PROCESS_CAPTURE_HEIGHT);
         zwlr_layer_surface_v1_set_anchor(output->layer_surface,
                                          ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP
                                              | ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT);
@@ -4200,15 +3092,15 @@ static void registry_global(
             fprintf(stderr, "FATAL: aligned_alloc failed\n");
             return;
         }
-        uint32_t v = ver < 4 ? ver : 4;
-        *o = (struct wallpaper_output){.render   = {.state = state, .egl_surface = EGL_NO_SURFACE},
-                                       .timer_fd = -1,
-                                       .event_fd = -1,
-                                       .slot_event     = -1,
-                                       .slot_timer     = -1,
-                                       .scale          = 1,
-                                       .wl_output_name = name,
-                                       .async_result   = {.fd = -1}};
+        uint32_t v   = ver < 4 ? ver : 4;
+        *o           = (struct wallpaper_output){.render         = {.state = state},
+                                                 .timer_fd       = -1,
+                                                 .event_fd       = -1,
+                                                 .slot_event     = -1,
+                                                 .slot_timer     = -1,
+                                                 .scale          = 1,
+                                                 .wl_output_name = name,
+                                                 .async_result   = {.fd = -1}};
         o->wl_output = wl_registry_bind(reg, name, &wl_output_interface, v);
         wl_output_add_listener(o->wl_output, &output_listener, o);
         wl_list_insert(&state->outputs, &o->link);
@@ -4304,11 +3196,7 @@ static void print_usage(const char* argv0)
         "      --reveal-mask-process-capture <empty-directory>\n"
         "          write state-0000.r8..state-0064.r8 (2048x2048, top-left), then exit\n"
         "\n"
-        "Exact static parity gate (all four paths are required):\n"
-        "      --exact-static-fixture <directory>\n"
-        "      --exact-static-vertex <file>\n"
-        "      --exact-static-fragment <file>\n"
-        "      --exact-static-intrinsic <file>\n",
+        "Renderer: Vulkan 1.4, offline Slang/SPIR-V 1.6 (no fallback).\n",
         argv0);
 }
 
@@ -4374,20 +3262,12 @@ int main(int argc, char* argv[])
 {
     enum
     {
-        OPT_EXACT_STATIC_FIXTURE = 256,
-        OPT_EXACT_STATIC_VERTEX,
-        OPT_EXACT_STATIC_FRAGMENT,
-        OPT_EXACT_STATIC_INTRINSIC,
-        OPT_REVEAL_MASK_PROCESS_CAPTURE,
+        OPT_REVEAL_MASK_PROCESS_CAPTURE = 256,
     };
     static const struct option LONG_OPTS[] = {
         {"config", required_argument, nullptr, 'c'},
         {"help", no_argument, nullptr, 'h'},
         {"version", no_argument, nullptr, 'V'},
-        {"exact-static-fixture", required_argument, nullptr, OPT_EXACT_STATIC_FIXTURE},
-        {"exact-static-vertex", required_argument, nullptr, OPT_EXACT_STATIC_VERTEX},
-        {"exact-static-fragment", required_argument, nullptr, OPT_EXACT_STATIC_FRAGMENT},
-        {"exact-static-intrinsic", required_argument, nullptr, OPT_EXACT_STATIC_INTRINSIC},
         {"reveal-mask-process-capture",
          required_argument,
          nullptr,
@@ -4406,18 +3286,6 @@ int main(int argc, char* argv[])
             case 'V':
                 printf("walle %s\n", WALLE_VERSION);
                 return 0;
-            case OPT_EXACT_STATIC_FIXTURE:
-                g_exact_static_gate.fixture_directory = optarg;
-                break;
-            case OPT_EXACT_STATIC_VERTEX:
-                g_exact_static_gate.vertex_shader = optarg;
-                break;
-            case OPT_EXACT_STATIC_FRAGMENT:
-                g_exact_static_gate.fragment_shader = optarg;
-                break;
-            case OPT_EXACT_STATIC_INTRINSIC:
-                g_exact_static_gate.intrinsic_table = optarg;
-                break;
             case OPT_REVEAL_MASK_PROCESS_CAPTURE:
                 reveal_process_capture_directory = optarg;
                 break;
@@ -4431,21 +3299,6 @@ int main(int argc, char* argv[])
         print_usage(argv[0]);
         return 1;
     }
-    bool exact_gate_requested
-        = g_exact_static_gate.fixture_directory || g_exact_static_gate.vertex_shader
-          || g_exact_static_gate.fragment_shader || g_exact_static_gate.intrinsic_table;
-    if (exact_gate_requested
-        && (!g_exact_static_gate.fixture_directory || !g_exact_static_gate.vertex_shader
-            || !g_exact_static_gate.fragment_shader || !g_exact_static_gate.intrinsic_table)) {
-        fprintf(stderr, "All four exact-static parity paths are required.\n");
-        return 1;
-    }
-    if (exact_gate_requested && reveal_process_capture_directory) {
-        fprintf(stderr,
-                "--reveal-mask-process-capture cannot be combined with the exact-static gate.\n");
-        return 1;
-    }
-
     /* Block SIGINT/SIGTERM before ANY thread exists (vips spawns workers,
      * which inherit the mask); both are consumed via signalfd in the loop. */
     sigset_t sigmask;
@@ -4459,12 +3312,11 @@ int main(int argc, char* argv[])
     signal(SIGPIPE, SIG_IGN);
 
     struct wallpaper_state state = {
-        .util_surface                        = EGL_NO_SURFACE,
-        .exact_static_gate                   = exact_gate_requested,
         .reveal_process_capture              = reveal_process_capture_directory != nullptr,
         .reveal_process_capture_directory_fd = -1,
         .signal_fd                           = -1,
         .inotify_fd                          = -1,
+        .vk_max_image_dimension              = UINT32_MAX,
     };
     int rc = 0;
 
@@ -4497,7 +3349,7 @@ int main(int argc, char* argv[])
 
     xoshiro256pp_seed(&g_rng, (uint64_t)time(nullptr) ^ (uint64_t)getpid());
 
-    if (!state.exact_static_gate && !state.reveal_process_capture)
+    if (!state.reveal_process_capture)
         launch_cache_maintenance_service();
 
     wl_list_init(&state.outputs);
@@ -4521,88 +3373,13 @@ int main(int argc, char* argv[])
     /* Armed only while a flush is blocked on EAGAIN. */
     ev_slot_at(&state.ev, EV_WL_OUT)->fd = wl_display_get_fd(state.display);
 
-    /* Prefer the explicit Wayland platform over legacy display guessing. */
-    state.egl_display = EGL_NO_DISPLAY;
-    const char* cexts = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
-    if (cexts
-        && (strstr(cexts, "EGL_KHR_platform_wayland")
-            || strstr(cexts, "EGL_EXT_platform_wayland"))) {
-        auto get_platform_display
-            = (PFNEGLGETPLATFORMDISPLAYEXTPROC)eglGetProcAddress("eglGetPlatformDisplayEXT");
-        if (get_platform_display)
-            state.egl_display
-                = get_platform_display(EGL_PLATFORM_WAYLAND_KHR, state.display, nullptr);
-    }
-    if (state.egl_display == EGL_NO_DISPLAY)
-        state.egl_display = eglGetDisplay((EGLNativeDisplayType)state.display);
-    if (state.egl_display == EGL_NO_DISPLAY) {
-        fprintf(stderr, "FATAL: no EGL display (missing GL driver / glvnd vendor config?).\n");
+    if (!walle_vk_renderer_create(state.display, &state.vk_renderer)) {
+        fprintf(stderr, "FATAL: Vulkan 1.4 renderer initialization failed.\n");
         rc = 1;
         goto teardown;
     }
 
-    EGLint major, minor;
-    if (!eglInitialize(state.egl_display, &major, &minor)) {
-        fprintf(stderr, "FATAL: eglInitialize failed (0x%04x).\n", eglGetError());
-        state.egl_display = EGL_NO_DISPLAY;
-        rc                = 1;
-        goto teardown;
-    }
-
-    EGLint config_attribs[] = {EGL_SURFACE_TYPE,
-                               EGL_WINDOW_BIT,
-                               EGL_RED_SIZE,
-                               8,
-                               EGL_GREEN_SIZE,
-                               8,
-                               EGL_BLUE_SIZE,
-                               8,
-                               EGL_ALPHA_SIZE,
-                               8,
-                               EGL_RENDERABLE_TYPE,
-                               EGL_OPENGL_BIT,
-                               EGL_NONE};
-    EGLint n_config;
-    if (!eglChooseConfig(state.egl_display, config_attribs, &state.egl_config, 1, &n_config)
-        || n_config != 1) {
-        // Fallback to any RGBA8888 config if EGL_OPENGL_BIT is not explicitly filtered by driver
-        EGLint fallback_attribs[] = {EGL_SURFACE_TYPE, EGL_WINDOW_BIT, EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8, EGL_ALPHA_SIZE, 8, EGL_NONE};
-        if (!eglChooseConfig(state.egl_display, fallback_attribs, &state.egl_config, 1, &n_config) || n_config != 1) {
-            fprintf(stderr, "FATAL: no RGBA8888 EGL config available.\n");
-            rc = 1;
-            goto teardown;
-        }
-    }
-
-    if (!eglBindAPI(EGL_OPENGL_API)) {
-        fprintf(stderr, "FATAL: eglBindAPI(EGL_OPENGL_API) failed; Desktop OpenGL 4.5 core required for 100%% bit-exact Liquid Glass parity.\n");
-        rc = 1;
-        goto teardown;
-    }
-
-    EGLint ctx_attribs[] = {
-        0x3098, 4,          // EGL_CONTEXT_MAJOR_VERSION_KHR
-        0x3099, 5,          // EGL_CONTEXT_MINOR_VERSION_KHR
-        EGL_NONE
-    };
-    state.egl_context = eglCreateContext(state.egl_display, state.egl_config, EGL_NO_CONTEXT, ctx_attribs);
-    if (state.egl_context == EGL_NO_CONTEXT) {
-        // Try fallback to major version 4 minor version 0 or default Desktop GL context
-        EGLint ctx_attribs_simple[] = {0x3098, 4, EGL_NONE};
-        state.egl_context = eglCreateContext(state.egl_display, state.egl_config, EGL_NO_CONTEXT, ctx_attribs_simple);
-    }
-    if (state.egl_context == EGL_NO_CONTEXT) {
-        fprintf(stderr, "FATAL: eglCreateContext for Desktop OpenGL failed with EGL error 0x%04x.\n", eglGetError());
-    }
-    state.egl_initialized = (state.egl_context != EGL_NO_CONTEXT);
-
-    if (!state.egl_initialized || !init_gl_resources(&state)) {
-        fprintf(stderr, "FATAL: Desktop OpenGL 4.5 core initialization failed.\n");
-        rc = 1;
-        goto teardown;
-    }
-
-    if (!state.exact_static_gate) {
+    {
         state.config_path = get_config_path();
         if (state.config_path) {
             struct config_parse_ctx ctx  = {.config_list = &state.output_configs};
@@ -4701,10 +3478,6 @@ int main(int argc, char* argv[])
             }
         }
 
-        if (state.exact_gate_complete && !state.shutting_down) {
-            rc = state.exact_gate_status;
-            begin_shutdown(&state);
-        }
         if (state.reveal_process_capture_complete && !state.shutting_down) {
             rc = state.reveal_process_capture_status;
             begin_shutdown(&state);
@@ -4976,24 +3749,8 @@ teardown:
 
     gamemode_cleanup(&state);
 
-    if (state.egl_initialized) {
-        if ((state.reveal_best_known_program || state.reveal_mask_program
-             || state.reveal_owner_buffer || state.reveal_axis_texture
-             || state.reveal_apple_fast_sqrt_texture)
-            && egl_make_current_utility(&state)) {
-            if (state.reveal_best_known_program)
-                glDeleteProgram(state.reveal_best_known_program);
-            if (state.reveal_mask_program)
-                glDeleteProgram(state.reveal_mask_program);
-            destroy_reveal_arithmetic_resources(&state);
-        }
-        eglMakeCurrent(state.egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        if (state.util_surface != EGL_NO_SURFACE)
-            eglDestroySurface(state.egl_display, state.util_surface);
-        eglDestroyContext(state.egl_display, state.egl_context);
-    }
-    if (state.egl_display != EGL_NO_DISPLAY)
-        eglTerminate(state.egl_display);
+    walle_vk_renderer_destroy(state.vk_renderer);
+    state.vk_renderer = nullptr;
 
     if (state.layer_shell) {
         /* The destroy request only exists since v3; on an older bind just

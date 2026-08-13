@@ -19,6 +19,8 @@ export GNUMAKEFLAGS :=
 # 2. Project Structure
 # =============================================================================
 
+# Build variants must never share objects: optimization, instrumentation,
+# analyzer, and sanitizer flags all get their own output directory.
 MODE ?= DEBUG
 NATIVE ?= 0
 ANALYZE ?=
@@ -27,21 +29,25 @@ TRACY ?= 0
 PROFILE ::= $(if $(filter release,$(MODE)),release,debug)$(if $(filter 1,$(NATIVE)),-native)$(if $(strip $(SANITIZER)),-sanitized)$(if $(strip $(ANALYZE)),-analyzed)$(if $(filter 1,$(TRACY)),-tracy)
 
 # Directories (Use POSIX simple expansion ::=)
-BUILD_DIR    ::= build
-OBJ_DIR      ::= $(BUILD_DIR)/obj/$(PROFILE)
-BIN_DIR      ::= $(BUILD_DIR)/bin
+BUILD_DIR       ::= build
+OBJ_DIR         ::= $(BUILD_DIR)/obj/$(PROFILE)
+BIN_DIR         ::= $(BUILD_DIR)/bin
 PROFILE_BIN_DIR ::= $(BIN_DIR)/$(PROFILE)
-TEST_DIR     ::= $(BUILD_DIR)/tests/$(PROFILE)
-PROTOCOL_DIR ::= protocols
-SHADER_DIR   ::= shaders
+PROTOCOL_DIR    ::= protocols
+SHADER_DIR      ::= shaders
+SPIRV_DIR       ::= $(BUILD_DIR)/shaders
 
-TARGET     ::= $(PROFILE_BIN_DIR)/walle
-URING_TEST ::= $(TEST_DIR)/uring_smoke
-TILDE_TEST ::= $(TEST_DIR)/tilde_smoke
-TESTS      ::= $(URING_TEST) $(TILDE_TEST)
+TARGET        ::= $(PROFILE_BIN_DIR)/walle
+ACTIVE_TARGET ::= $(BIN_DIR)/walle
 
 # Core Application Sources (Located in root)
-APP_SOURCES ::= walle.c shiro.c tilde.c uring.c
+APP_SOURCES ::= walle.c shiro.c vulkan_renderer.c \
+	parity/liquid_glass_reveal_mask_model.c parity/liquid_glass_postguard.c \
+	parity/liquid_glass_raster.c
+
+SPIRV_TARGETS ::= $(SPIRV_DIR)/maskVertex.spv $(SPIRV_DIR)/maskFragment.spv \
+	$(SPIRV_DIR)/composeVertex.spv $(SPIRV_DIR)/composeFragment.spv
+SPIRV_DEPS ::= $(SPIRV_TARGETS:%=%.d)
 
 # 3. Toolchain and C23 Compliance Flags
 # =============================================================================
@@ -59,6 +65,16 @@ ifneq ($(origin PKG_CONFIG),command line)
 PKG_CONFIG := pkg-config
 endif
 endif
+ifneq ($(origin SLANGC),environment)
+ifneq ($(origin SLANGC),command line)
+SLANGC := slangc
+endif
+endif
+ifneq ($(origin SPIRV_VAL),environment)
+ifneq ($(origin SPIRV_VAL),command line)
+SPIRV_VAL := spirv-val
+endif
+endif
 RM ::= rm -f
 CPPFLAGS ::=
 
@@ -69,8 +85,9 @@ C23_STRICT ::=\
     -Wimplicit-fallthrough
 
 # Usage:
-#   make              (Debug: Assertions ON, Symbols ON, -O0/O2)
-#   make MODE=release (Release: NDEBUG Defined, -O3, LTO, Strip Symbols)
+#   make                       (Debug: assertions and symbols)
+#   make MODE=release          (Release: NDEBUG, -O3, LTO)
+#   make MODE=release TRACY=1  (separate opt-in Tracy profile)
 # NATIVE=1 additionally enables -march=native (host-specific binary; never for
 # distributed/packaged builds).
 
@@ -109,8 +126,7 @@ CFLAGS  ::= $(C23_STRICT) $(C23_OPTIMIZE) $(C23_SECURITY) $(SANITIZER_FLAGS)
 LDFLAGS ::= $(SANITIZER_FLAGS)
 LDLIBS  ::= -lm
 
-# pthreads are part of the C library on current glibc, but -pthread also
-# supplies the compiler-side thread model and remains the portable contract.
+# Supply the compiler-side thread model as well as the linker contract.
 CFLAGS  += -pthread
 LDFLAGS += -pthread
 
@@ -120,10 +136,9 @@ DEPFLAGS ::= -MMD -MP
 # Base Include Paths
 CFLAGS += -I. -I$(PROTOCOL_DIR)
 
-# Opt-in profiling build. The flake dev shells provide Tracy's installed
-# headers and client library through the compiler wrapper; ordinary and
-# packaged builds do not acquire instrumentation overhead or a Tracy runtime
-# dependency.
+# The development shell exposes Tracy's installed headers and client library
+# through its compiler wrapper. Normal builds retain no profiling overhead or
+# Tracy runtime dependency.
 ifeq ($(TRACY),1)
 CPPFLAGS += -DWALLE_TRACY=1 -DTRACY_ENABLE=1 -DTRACY_ON_DEMAND=1
 LDLIBS += -lTracyClient
@@ -148,7 +163,7 @@ LDLIBS += $(INIH_LDLIBS)
 # =============================================================================
 
 # Probe Wayland environment. Use != for immediate shell assignment (Make 4.0+).
-WAYLAND_DEPS ::= wayland-client wayland-egl
+WAYLAND_DEPS ::= wayland-client
 
 WAYLAND_CFLAGS != $(PKG_CONFIG) --cflags $(WAYLAND_DEPS)
 $(call CHECK_STATUS)
@@ -189,31 +204,21 @@ $(call CHECK_STATUS)
 CFLAGS += $(HASH_CFLAGS)
 LDLIBS += $(HASH_LDLIBS)
 
-# 5.3 System Probing (Rendering)
+# 5.3 System Probing (Vulkan 1.4)
 # =============================================================================
-RENDER_DEPS ::= glesv2 egl
-CORE_RENDER_DEPS ::= opengl egl
+RENDER_DEPS ::= vulkan
 
 RENDER_CFLAGS != $(PKG_CONFIG) --cflags $(RENDER_DEPS)
 $(call CHECK_STATUS)
 RENDER_LDLIBS != $(PKG_CONFIG) --libs $(RENDER_DEPS)
 $(call CHECK_STATUS)
-CORE_RENDER_CFLAGS != $(PKG_CONFIG) --cflags $(CORE_RENDER_DEPS)
-$(call CHECK_STATUS)
-CORE_RENDER_LDLIBS != $(PKG_CONFIG) --libs $(CORE_RENDER_DEPS)
-$(call CHECK_STATUS)
-
 CFLAGS += $(RENDER_CFLAGS)
 LDLIBS += $(RENDER_LDLIBS)
-CFLAGS += $(CORE_RENDER_CFLAGS)
-LDLIBS += $(CORE_RENDER_LDLIBS)
 
 # 5.4 System Probing (Memory Allocator)
 # =============================================================================
 # jemalloc mitigates glibc memory fragmentation in long-running multi-threaded
-# processes with many small allocations. Sanitizers must own the allocation
-# entry points so their interceptors remain compatible with Mesa's LLVM stack.
-ifeq ($(strip $(SANITIZER)),)
+# processes with many small allocations (recommended by libvips documentation).
 JEMALLOC_DEPS ::= jemalloc
 
 JEMALLOC_CFLAGS != $(PKG_CONFIG) --cflags $(JEMALLOC_DEPS)
@@ -223,12 +228,11 @@ $(call CHECK_STATUS)
 
 CFLAGS += $(JEMALLOC_CFLAGS)
 LDLIBS += $(JEMALLOC_LDLIBS)
-endif
 
 # 5.5 System Probing (D-Bus / GameMode Integration)
 # =============================================================================
 # libsystemd provides sd-bus for monitoring org.freedesktop.portal.GameMode
-SYSTEMD_DEPS ::= libsystemd liburing
+SYSTEMD_DEPS ::= libsystemd
 
 SYSTEMD_CFLAGS != $(PKG_CONFIG) --cflags $(SYSTEMD_DEPS)
 $(call CHECK_STATUS)
@@ -237,6 +241,21 @@ $(call CHECK_STATUS)
 
 CFLAGS += $(SYSTEMD_CFLAGS)
 LDLIBS += $(SYSTEMD_LDLIBS)
+
+# 5.6 System Probing (io_uring Event Core)
+# =============================================================================
+# liburing >= 2.4 (sync-cancel API); runtime kernel floor is 5.15, probed at
+# startup — see the event-core section in walle.c.
+URING_DEPS ::= liburing >= 2.4
+
+URING_CFLAGS != $(PKG_CONFIG) --cflags '$(URING_DEPS)'
+$(call CHECK_STATUS)
+URING_LDLIBS != $(PKG_CONFIG) --libs '$(URING_DEPS)'
+$(call CHECK_STATUS)
+
+# -isystem: liburing's UAPI headers use zero-size arrays that trip -Wpedantic.
+CFLAGS += $(patsubst -I%,-isystem %,$(URING_CFLAGS))
+LDLIBS += $(URING_LDLIBS)
 
 # 6. Wayland Protocol Definitions
 # =============================================================================
@@ -281,40 +300,68 @@ ALL_SOURCES ::= $(APP_SOURCES) $(GENERATED_SOURCES)
 OBJECTS ::= $(ALL_SOURCES:%.c=$(OBJ_DIR)/%.c.o)
 DEPS    ::= $(OBJECTS:.o=.d)
 
-.PHONY: all check clean fuzz
+.PHONY: all activate clean fuzz reveal-best-known-corpus-gate \
+	reveal-best-known-process-gate reveal-mask-model-gate reveal-raster-gate
 
-all: $(TARGET) | $(BIN_DIR)
-	@ln -sfn $(PROFILE)/walle $(BIN_DIR)/walle
+all: $(TARGET) activate
 
-check: $(TESTS)
-	@echo "[TEST] raw io_uring reactor"
-	$(URING_TEST)
-	@echo "[TEST] tilde expansion"
-	$(TILDE_TEST)
+activate: $(TARGET) | $(BIN_DIR)
+	ln -sfn $(PROFILE)/walle $(ACTIVE_TARGET)
 
-$(URING_TEST): tests/uring_smoke.c uring.c uring.h Makefile | $(TEST_DIR)
-	@echo "[CCLD] $@"
-	$(CC) $(CPPFLAGS) $(CFLAGS) tests/uring_smoke.c uring.c -o $@
+reveal-mask-model-gate:
+	./parity/run_liquid_glass_reveal_mask_model_gate.sh
 
-$(TILDE_TEST): tests/tilde_smoke.c tilde.c tilde.h Makefile | $(TEST_DIR)
-	@echo "[CCLD] $@"
-	$(CC) $(CPPFLAGS) $(CFLAGS) tests/tilde_smoke.c tilde.c -o $@
+reveal-raster-gate: parity/raster_p25_selector_ceil_bits.bin \
+		artifacts/apple-float-intrinsics-r8-30556057571.bin \
+		parity/apple_fast_sqrt_correction_nibbles.bin
+	bash parity/run_liquid_glass_reveal_raster_gate.sh
+
+reveal-best-known-corpus-gate: reveal-best-known-process-gate
+
+reveal-best-known-process-gate: $(TARGET) \
+		analysis/run_walle_reveal_process_capture_gate.sh
+	bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
 
 # --- Linking Rule ---
-$(TARGET): $(OBJECTS) Makefile | $(PROFILE_BIN_DIR)
+$(TARGET): $(OBJECTS) | $(PROFILE_BIN_DIR)
 	@echo "MODE: $(MODE)"
 	@echo "[LD] $@"
-	$(CC) $(CFLAGS) $(LDFLAGS) $(filter-out Makefile,$^) $(LDLIBS) -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 # --- Unified Compilation Rule ---
 # This single pattern handles sources in the root, vendor/, and protocols/ directories.
-$(OBJ_DIR)/%.c.o: %.c Makefile
+$(OBJ_DIR)/%.c.o: %.c
 	@echo "[CC] $<"
 	@# Ensure the specific output subdirectory (e.g., build/obj/vendor/inih/src) exists.
 	@mkdir -p $(@D)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
-$(OBJ_DIR)/parity/render_walle_exact_static_gl.c.o: private CPPFLAGS += -DWALLE_EXACT_STATIC_GL_NO_MAIN=1
+$(OBJ_DIR)/vulkan_renderer.c.o: $(SPIRV_TARGETS)
+
+SLANG_COMMON ::= -target spirv -profile spirv_1_6 -std 2026 -O2 \
+	-capability vk_mem_model \
+	-emit-spirv-directly -matrix-layout-row-major -restrictive-capability-check \
+	-fp-mode precise -fvk-use-entrypoint-name -default-image-format-unknown
+
+$(SPIRV_DIR)/maskVertex.spv: $(SHADER_DIR)/reveal_mask.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry maskVertex -stage vertex $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
+
+$(SPIRV_DIR)/maskFragment.spv: $(SHADER_DIR)/reveal_mask.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry maskFragment -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
+
+$(SPIRV_DIR)/composeVertex.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry composeVertex -stage vertex $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
+
+$(SPIRV_DIR)/composeFragment.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry composeFragment -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
 
 # Cold-start correctness: on the first build no .d files exist yet, so objects
 # must explicitly depend on the generated protocol headers or a parallel build
@@ -342,11 +389,12 @@ endif
 
 # --- Infrastructure (Directories) ---
 # Order-only prerequisites (|) ensure creation without triggering unnecessary rebuilds.
-$(BIN_DIR) $(PROFILE_BIN_DIR) $(TEST_DIR) $(PROTOCOL_DIR):
+$(BIN_DIR) $(PROFILE_BIN_DIR) $(PROTOCOL_DIR) $(SPIRV_DIR):
 	@mkdir -p $@
 
 # Include generated dependency files.
 -include $(DEPS)
+-include $(SPIRV_DEPS)
 
 # 8. Utility Targets
 # =============================================================================

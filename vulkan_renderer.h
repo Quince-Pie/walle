@@ -1,0 +1,82 @@
+#ifndef WALLE_VULKAN_RENDERER_H
+#define WALLE_VULKAN_RENDERER_H
+
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <wayland-client-core.h>
+
+struct wl_surface;
+
+#include "parity/liquid_glass_reveal_mask_model.h"
+
+struct walle_vk_renderer;
+struct walle_vk_output;
+
+struct walle_vk_image_layer
+{
+    size_t  offset;
+    size_t  size;
+    int32_t width;
+    int32_t height;
+};
+
+struct walle_vk_frame
+{
+    const struct walle_lg_reveal_mask_geometry* geometry;
+    float                                       progress;
+    float                                       variant;
+    float                                       center_top_left_x;
+    float                                       center_top_left_y;
+    float                                       radius;
+    bool                                        first_boot;
+
+    /* Optional diagnostic destination, tightly packed in top-left row order. */
+    uint8_t* mask_readback;
+    size_t   mask_readback_size;
+};
+
+enum walle_vk_frame_status : uint8_t
+{
+    WALLE_VK_FRAME_OK = 0,
+    WALLE_VK_FRAME_SURFACE_CHANGED,
+    WALLE_VK_FRAME_FATAL,
+};
+
+[[nodiscard]]
+bool walle_vk_renderer_create(struct wl_display* display, struct walle_vk_renderer** result);
+
+void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer);
+
+[[nodiscard]]
+uint32_t walle_vk_renderer_max_image_dimension(const struct walle_vk_renderer* renderer);
+
+[[nodiscard]]
+bool walle_vk_output_create(struct walle_vk_renderer* renderer,
+                            struct wl_surface*        surface,
+                            uint32_t                  width,
+                            uint32_t                  height,
+                            struct walle_vk_output**  result);
+
+[[nodiscard]]
+bool walle_vk_output_resize(struct walle_vk_output* output, uint32_t width, uint32_t height);
+
+[[nodiscard]]
+bool walle_vk_output_upload(struct walle_vk_output*            output,
+                            int                                fd,
+                            const struct walle_vk_image_layer* standard,
+                            const struct walle_vk_image_layer* glass);
+
+[[nodiscard]]
+enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      output,
+                                                  const struct walle_vk_frame* frame);
+
+/* Retain the incoming wallpaper as the sole idle image and release all
+ * outgoing and transition-only GPU allocations. */
+void walle_vk_output_promote(struct walle_vk_output* output);
+
+void walle_vk_output_abort_transition(struct walle_vk_output* output);
+
+void walle_vk_output_destroy(struct walle_vk_output* output);
+
+#endif

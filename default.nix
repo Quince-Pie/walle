@@ -1,5 +1,4 @@
 {
-  lib,
   gcc15Stdenv,
   pkg-config,
   vips,
@@ -9,9 +8,13 @@
   wayland-protocols,
   wlr-protocols,
   wayland-scanner,
-  libglvnd,
+  vulkan-loader,
+  vulkan-headers,
+  shader-slang,
+  spirv-tools,
   inih,
   xxhash,
+  liburing,
 }:
 
 # gcc15Stdenv.mkDerivation (not `gcc15` in nativeBuildInputs): the stdenv's cc
@@ -21,36 +24,27 @@ gcc15Stdenv.mkDerivation {
   pname = "walle";
   version = "0.0.1";
 
-  src = lib.fileset.toSource {
-    root = ./.;
-    fileset = lib.fileset.unions [
-      ./Makefile
-      ./walle.c
-      ./shiro.c
-      ./shiro.h
-      ./tilde.c
-      ./tilde.h
-      ./uring.c
-      ./uring.h
-      ./shaders
-    ];
-  };
+  src = ./.;
 
   nativeBuildInputs = [
     pkg-config
     wayland-scanner
+    shader-slang
+    spirv-tools
   ];
 
   buildInputs = [
     vips
     systemd.dev
     wayland
-    libglvnd.dev
+    vulkan-loader
+    vulkan-headers
     inih
     xxhash
     wayland-protocols
     wlr-protocols
     jemalloc
+    liburing
   ];
 
   makeFlags = [ "MODE=release" ];
