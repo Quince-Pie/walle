@@ -77,6 +77,11 @@ ifneq ($(origin SPIRV_VAL),command line)
 SPIRV_VAL := spirv-val
 endif
 endif
+ifneq ($(origin SPIRV_DIS),environment)
+ifneq ($(origin SPIRV_DIS),command line)
+SPIRV_DIS := spirv-dis
+endif
+endif
 RM ::= rm -f
 CPPFLAGS ::=
 
@@ -373,6 +378,10 @@ $(SPIRV_DIR)/composeFragment.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(
 	@echo "[SLANG] $@"
 	$(SLANGC) $< -entry composeFragment -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
 	$(SPIRV_VAL) --target-env vulkan1.4 $@
+	$(SPIRV_DIS) $@ -o - | grep -Eq \
+		'OpMemberDecorate[[:space:]]+%ComposePush_std430[[:space:]]+0[[:space:]]+Offset[[:space:]]+0'
+	$(SPIRV_DIS) $@ -o - | grep -Eq \
+		'OpMemberDecorate[[:space:]]+%ComposePush_std430[[:space:]]+1[[:space:]]+Offset[[:space:]]+16'
 
 # Cold-start correctness: on the first build no .d files exist yet, so objects
 # must explicitly depend on the generated protocol headers or a parallel build

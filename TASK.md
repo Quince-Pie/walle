@@ -69,6 +69,8 @@ Per-output resource policy:
 - the previous frame fence is waited before any mapped/staging overwrite;
 - descriptor sets are updated only when their transition resources change;
 - exactly one reveal draw and one composition draw per transition frame.
+- composition push constants are two 16-byte lanes (`timeline`, `geometry`);
+  C asserts offsets 0/16 and the build checks the same SPIR-V std430 offsets.
 
 WSI result handling is deliberately per-output. A suboptimal acquisition is a
 successful acquisition: Walle renders/presents it, recreates that output with

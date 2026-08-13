@@ -118,16 +118,14 @@ struct walle_vk_mask_push
 
 struct walle_vk_compose_push
 {
-    float time;
-    float resolution[2];
-    float variant;
-    float center_top_left[2];
-    float radius;
-    float padding;
+    float timeline[4];
+    float geometry[4];
 };
 
 static_assert(sizeof(struct walle_vk_mask_push) == 32);
 static_assert(sizeof(struct walle_vk_compose_push) == 32);
+static_assert(offsetof(struct walle_vk_compose_push, timeline) == 0);
+static_assert(offsetof(struct walle_vk_compose_push, geometry) == 16);
 
 struct walle_vk_renderer
 {
@@ -2513,11 +2511,11 @@ static bool record_frame(struct walle_vk_output*              output,
                            VK_SHADER_STAGE_FRAGMENT_BIT,
                            output->compose_set);
     struct walle_vk_compose_push compose_push = {
-        .time            = frame->progress,
-        .resolution      = {(float)output->extent.width, (float)output->extent.height},
-        .variant         = frame->variant,
-        .center_top_left = {frame->center_top_left_x, frame->center_top_left_y},
-        .radius          = frame->radius,
+        .timeline = {frame->progress,
+                     (float)output->extent.width,
+                     (float)output->extent.height,
+                     frame->variant},
+        .geometry = {frame->center_top_left_x, frame->center_top_left_y, frame->radius, 0.0f},
     };
     push_constants_14(command_buffer,
                       renderer->compose_pipeline_layout,

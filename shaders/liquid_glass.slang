@@ -11,12 +11,10 @@
 
 struct ComposePush
 {
-    float time;
-    float2 resolution;
-    float variant;
-    float2 centerTopLeft;
-    float radius;
-    float _padding;
+    // Two float4 lanes keep the Vulkan and C layouts identical without
+    // relying on scalar-versus-std430 member alignment.
+    float4 timeline; // time, resolution.x, resolution.y, variant
+    float4 geometry; // centerTopLeft.x, centerTopLeft.y, radius, reserved
 };
 
 struct ComposeVertexOutput
@@ -124,20 +122,24 @@ float4 composeFragment(
     ComposeVertexOutput input,
     uniform ComposePush push) : SV_Target0
 {
-    float tFade = smoothstep(kFadeStart, 1.0, push.time);
-    float thickness = smoothstep(0.0, kMaterialize, push.time) * (1.0 - tFade);
-    float regular = push.variant;
+    float time = push.timeline.x;
+    float2 resolution = push.timeline.yz;
+    float regular = push.timeline.w;
+    float2 centerTopLeft = push.geometry.xy;
+    float radiusPixels = push.geometry.z;
+
+    float tFade = smoothstep(kFadeStart, 1.0, time);
+    float thickness = smoothstep(0.0, kMaterialize, time) * (1.0 - tFade);
 
     // Express the material in the original bottom-left pixel coordinates while
     // Vulkan resources and mask storage remain naturally top-left.
     float2 fragmentTopLeft = input.position.xy;
-    float2 fragmentPixels = float2(fragmentTopLeft.x, push.resolution.y - fragmentTopLeft.y);
+    float2 fragmentPixels = float2(fragmentTopLeft.x, resolution.y - fragmentTopLeft.y);
     float2 centerPixels = float2(
-        push.centerTopLeft.x,
-        push.resolution.y - push.centerTopLeft.y);
+        centerTopLeft.x,
+        resolution.y - centerTopLeft.y);
     float2 delta = fragmentPixels - centerPixels;
     float distancePixels = length(delta);
-    float radiusPixels = push.radius;
     float sdf = distancePixels - radiusPixels;
     float2 normalOut = distancePixels > 0.5 ? delta / distancePixels : float2(0.0, 1.0);
     float mask = float(revealMask.Load(int3(int2(fragmentTopLeft), 0))) / 255.0;
@@ -149,8 +151,8 @@ float4 composeFragment(
         return float4(linearToSrgb(texA.Sample(linearSampler, input.uv).rgb), 1.0);
 
     float2 uv = input.uv;
-    float2 pixelToUv = 1.0 / push.resolution;
-    float diagonal = length(push.resolution);
+    float2 pixelToUv = 1.0 / resolution;
+    float diagonal = length(resolution);
 
     float2 e1 = float2(0.30, 0.0);
     float2 e2 = float2(0.0, 0.30);
@@ -241,7 +243,7 @@ float4 composeFragment(
     float ringWidth = lerp(edgeWidth, topWidth, smoothstep(0.0, 1.0, max(ringNormal.y, 0.0)));
     float ringProfile = exp(-(ringSdf * ringSdf) / (ringWidth * ringWidth));
 
-    float angle = radians(125.0) - radians(30.0) * push.time;
+    float angle = radians(125.0) - radians(30.0) * time;
     float2 light = float2(cos(angle), sin(angle));
     float normalDot = dot(ringNormal, light);
     float lobes = kRingBaseGain
@@ -249,7 +251,7 @@ float4 composeFragment(
         + kRingDownGain * pow(max(-normalDot, 0.0), 2.0);
     float3 ringLight = float3(ringProfile * lobes * thickness * mask);
 
-    float glowTime = thickness * (1.0 - smoothstep(0.18, 0.55, push.time));
+    float glowTime = thickness * (1.0 - smoothstep(0.18, 0.55, time));
     float glow = exp(
         -(distancePixels * distancePixels)
         / max(radiusPixels * radiusPixels * 0.45, 1.0));
@@ -262,7 +264,7 @@ float4 composeFragment(
     float3 result = lerp(shadowedBackground, insideColor, mask);
 
     float3 encoded = linearToSrgb(clamp(result, 0.0, 1.0));
-    encoded += triangularDither(fragmentPixels + push.time * 61.0)
+    encoded += triangularDither(fragmentPixels + time * 61.0)
         * kDitherLsb * (1.0 - tFade);
     return float4(encoded, 1.0);
 }
