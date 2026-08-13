@@ -35,7 +35,7 @@ not a public-input Linux algorithm.
 The hard runtime contract is:
 
 - `VK_API_VERSION_1_4` for the loader, instance, and physical device;
-- Wayland WSI and FIFO presentation;
+- direct Vulkan-exported `linux-dmabuf` presentation using compositor feedback;
 - dynamic rendering and synchronization2;
 - Vulkan 1.4 maintenance5 direct-SPIR-V pipeline creation and maintenance6,
   including `vkCmdBindDescriptorSets2` and `vkCmdPushConstants2`;
@@ -47,21 +47,22 @@ The hard runtime contract is:
 - no render-pass/framebuffer objects and no runtime shader compilation.
 
 `vulkan_renderer.c` owns the Vulkan instance/device, two graphics pipelines,
-one shared 4 MiB nibble-packed Apple fast-sqrt buffer, Wayland swapchains, and
-per-output lifecycle. `walle.c` owns wallpaper policy, image preparation,
-timers, and layer-shell surfaces.
+one transition-live shared 4 MiB nibble-packed Apple fast-sqrt buffer, adaptive
+dma-buf presentation pools, and per-output lifecycle. `walle.c` owns wallpaper
+policy, image preparation, timers, retained render backing, and layer-shell
+surfaces.
 
 Per-output resource policy:
 
-- compositor-minimum FIFO swapchain;
+- one direct dma-buf presentation image per output while idle, with a second
+  created lazily while frames change and released again after promotion;
 - `auto` prefers a qualifying discrete GPU and never selects a CPU Vulkan
   device; `[walle] vulkan_device`, `--vulkan-device`, or `WALLE_VK_DEVICE`
   can explicitly select a type, enumerated index, or device-name substring;
-- one frame fence/acquire semaphore and one present semaphore per swapchain
-  image;
-- current standard+glass wallpaper pair retained while idle;
-- incoming wallpaper pair exists only during upload/transition and becomes
-  current by move on successful promotion;
+- one frame fence per output and no acquire/present semaphores;
+- current wallpaper render backing retained as a file descriptor while idle;
+- current and incoming standard+glass GPU texture pairs exist only during a
+  transition and are both destroyed on successful promotion or abort;
 - R8_UINT mask, descriptors, geometry/owner/axis data, and readback buffer are
   transition-lived;
 - vertex, index, owner, primitive-map, and RG32 axis data share one allocation;
@@ -73,18 +74,24 @@ Per-output resource policy:
 - composition push constants are two 16-byte lanes (`timeline`, `geometry`);
   C asserts offsets 0/16 and the build checks the same SPIR-V std430 offsets.
 
-WSI result handling is deliberately per-output. A suboptimal acquisition is a
-successful acquisition: Walle renders/presents it, recreates that output with
-the previous handle in `VkSwapchainCreateInfoKHR.oldSwapchain`, and continues.
-An out-of-date acquire recreates and retries once immediately; a repeated
-out-of-date result schedules the next frame callback. Only actual device loss
-may poison the shared renderer; ordinary WSI changes must not stop sibling
-outputs.
+Presentation is deliberately per-output. Walle exports modifier-backed Vulkan
+images as Wayland buffers and transfers queue ownership to/from
+`VK_QUEUE_FAMILY_FOREIGN_EXT`. A busy two-image active pool schedules the next
+frame callback without allocating a third image or poisoning the shared
+renderer. Promotion requests compaction; an already released spare is
+destroyed immediately and a compositor-owned spare is destroyed from its
+eventual `wl_buffer.release` callback.
 
 The wallpaper textures are `VK_FORMAT_R8G8B8A8_SRGB`; the compact glass image
 keeps its native downsampled size. The mask is `VK_FORMAT_R8_UINT`. The
-swapchain is `VK_FORMAT_B8G8R8A8_UNORM`, and the composition shader performs
-the final linear-to-sRGB transfer once.
+presentation image is `VK_FORMAT_B8G8R8A8_UNORM`, and the composition shader
+performs the final linear-to-sRGB transfer once.
+
+Measured idle VRAM on the 5120×2880 + 2560×2880 desktop is about 97.6 MiB:
+86.25 MiB for one compositor-held modifier-backed image per output and roughly
+11.4 MiB for shared Vulkan/driver state. The raw visible pixels alone are
+84.375 MiB. The previous four-image-per-output WSI implementation used about
+448 MiB.
 
 ## Shader/build contract
 
@@ -125,12 +132,11 @@ Green on the current implementation:
 - SPIR-V validation for all four modules against Vulkan 1.4;
 - actual Wayland/Vulkan process capture: 65 states, 65 presents, 64 frame
   callbacks, no validation warning/error, canonical 91-residual inventory;
-- actual swapchain BGRA readback at fixed state 32 for both clear and regular,
+- actual presented BGRA readback at fixed state 32 for both clear and regular,
   requiring at least 1% distinct bytes; this catches material/push-ABI
   regressions but is not an Apple composed-frame parity claim;
-- the same process/corpus gate with `vkAcquireNextImageKHR` forced once to
-  return `VK_SUBOPTIMAL_KHR` and then `VK_ERROR_OUT_OF_DATE_KHR` in separate
-  runs, each still producing exactly 65 canonical presents;
+- direct dma-buf presentation through the actual layer-shell process, with 65
+  canonical presents and no swapchain/acquire compatibility path;
 - same process inventory on integrated Radeon and RX 9070 XT;
 - production binary has no EGL/OpenGL/OpenGL ES runtime dependency.
 

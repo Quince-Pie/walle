@@ -40,6 +40,7 @@
             ))
             heaptrack
             jemalloc
+            libdrm
             systemd.dev
             llvmPackages_21.clang-tools
             pkg-config

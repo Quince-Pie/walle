@@ -3,6 +3,7 @@
 #include "vulkan_renderer.h"
 
 #include <assert.h>
+#include <drm_fourcc.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <inttypes.h>
@@ -14,13 +15,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <sys/mman.h>
 #include <sys/types.h>
 #include <unistd.h>
-
 #define VK_USE_PLATFORM_WAYLAND_KHR
 #include <vulkan/vulkan.h>
 
 #include "parity/liquid_glass_raster.h"
+#include "protocols/linux-dmabuf-v1.h"
 
 enum
 {
@@ -38,7 +40,7 @@ enum
 
 constexpr uint32_t WALLE_VK_OWNER_VECTOR_COUNT
     = sizeof(struct walle_lg_reveal_owner_block) / sizeof(int32_t[4]);
-constexpr VkFormat WALLE_VK_SWAPCHAIN_FORMAT     = VK_FORMAT_B8G8R8A8_UNORM;
+constexpr VkFormat WALLE_VK_PRESENT_FORMAT       = VK_FORMAT_B8G8R8A8_UNORM;
 constexpr VkFormat WALLE_VK_WALLPAPER_FORMAT     = VK_FORMAT_R8G8B8A8_SRGB;
 constexpr VkFormat WALLE_VK_MASK_FORMAT          = VK_FORMAT_R8_UINT;
 constexpr uint32_t WALLE_VK_REQUIRED_API_VERSION = VK_API_VERSION_1_4;
@@ -106,6 +108,44 @@ struct walle_vk_texture_pair
     struct walle_vk_image glass;
 };
 
+struct walle_vk_dmabuf_format
+{
+    uint32_t format;
+    uint32_t padding;
+    uint64_t modifier;
+};
+
+struct walle_vk_dmabuf_candidate
+{
+    uint32_t format;
+    uint64_t modifier;
+};
+
+struct walle_vk_dmabuf_feedback
+{
+    struct zwp_linux_dmabuf_v1*          factory;
+    struct zwp_linux_dmabuf_feedback_v1* object;
+    struct walle_vk_dmabuf_format*       table;
+    size_t                               table_size;
+    struct walle_vk_dmabuf_candidate*    candidates;
+    size_t                               candidate_count;
+    size_t                               candidate_capacity;
+    bool                                 ready;
+    bool                                 failed;
+};
+
+struct walle_vk_output;
+
+struct walle_vk_present_image
+{
+    struct walle_vk_output* output;
+    struct walle_vk_image   image;
+    struct wl_buffer*       buffer;
+    VkImageLayout           layout;
+    bool                    busy;
+    bool                    foreign_owned;
+};
+
 struct walle_vk_mask_push
 {
     float    resolution[2];
@@ -135,13 +175,15 @@ struct walle_vk_renderer
     VkInstance               instance;
     VkDebugUtilsMessengerEXT debug_messenger;
 
-    VkPhysicalDevice                   physical_device;
-    VkPhysicalDeviceProperties         properties;
-    VkPhysicalDeviceMemoryProperties   memory_properties;
-    VkPhysicalDeviceVulkan14Properties properties14;
-    VkDevice                           device;
-    uint32_t                           queue_family;
-    VkQueue                            queue;
+    VkPhysicalDevice                             physical_device;
+    VkPhysicalDeviceProperties                   properties;
+    VkPhysicalDeviceMemoryProperties             memory_properties;
+    VkPhysicalDeviceVulkan14Properties           properties14;
+    VkDevice                                     device;
+    uint32_t                                     queue_family;
+    VkQueue                                      queue;
+    PFN_vkGetMemoryFdKHR                         get_memory_fd;
+    PFN_vkGetImageDrmFormatModifierPropertiesEXT get_image_drm_format_modifier_properties;
 
     VkDescriptorSetLayout mask_set_layout;
     VkDescriptorSetLayout compose_set_layout;
@@ -152,9 +194,12 @@ struct walle_vk_renderer
     VkSampler             linear_sampler;
 
     struct walle_vk_buffer sqrt_buffer;
+    uint32_t               transition_resource_users;
     VkCommandPool          upload_command_pool;
     VkCommandBuffer        upload_command_buffer;
     VkFence                upload_fence;
+
+    struct walle_vk_dmabuf_feedback dmabuf;
 
     bool validation_enabled;
     bool device_ready;
@@ -165,19 +210,21 @@ struct walle_vk_output
 {
     struct walle_vk_renderer* renderer;
     VkSurfaceKHR              surface;
-    VkSwapchainKHR            swapchain;
+    struct wl_surface*        wayland_surface;
     VkExtent2D                extent;
 
-    uint32_t       swapchain_image_count;
-    VkImage*       swapchain_images;
-    VkImageView*   swapchain_views;
-    VkImageLayout* swapchain_layouts;
-    VkSemaphore*   render_complete_semaphores;
+    struct walle_vk_present_image present_images[2];
+    uint32_t                      next_present_image;
+    uint32_t                      last_present_image;
+    uint32_t                      idle_present_image;
+    uint32_t                      present_drm_format;
+    uint32_t                      present_plane_count;
+    uint64_t                      present_modifier;
+    bool                          compact_present;
 
     VkCommandPool   command_pool;
     VkCommandBuffer command_buffer;
     VkFence         frame_fence;
-    VkSemaphore     image_acquired_semaphore;
 
     VkDescriptorPool descriptor_pool;
     VkDescriptorSet  mask_set;
@@ -206,10 +253,142 @@ struct walle_vk_output
     bool     composition_readback_enabled;
 };
 
-static bool swapchain_result_has_image(VkResult result)
+static void dmabuf_feedback_reset_table(struct walle_vk_dmabuf_feedback* feedback)
 {
-    return result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR;
+    if (feedback->table)
+        munmap(feedback->table, feedback->table_size);
+    feedback->table           = nullptr;
+    feedback->table_size      = 0;
+    feedback->candidate_count = 0;
+    feedback->ready           = false;
 }
+
+static void dmabuf_feedback_done(void* data, struct zwp_linux_dmabuf_feedback_v1* object)
+{
+    (void)object;
+    auto feedback   = (struct walle_vk_dmabuf_feedback*)data;
+    feedback->ready = !feedback->failed && feedback->table && feedback->candidate_count != 0;
+}
+
+static void dmabuf_feedback_format_table(void*                                data,
+                                         struct zwp_linux_dmabuf_feedback_v1* object,
+                                         int32_t                              fd,
+                                         uint32_t                             size)
+{
+    (void)object;
+    auto feedback = (struct walle_vk_dmabuf_feedback*)data;
+    dmabuf_feedback_reset_table(feedback);
+    if (fd < 0 || size == 0 || size % sizeof(struct walle_vk_dmabuf_format) != 0) {
+        feedback->failed = true;
+        if (fd >= 0)
+            close(fd);
+        return;
+    }
+    void* table = mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd, 0);
+    int   saved = errno;
+    close(fd);
+    if (table == MAP_FAILED) {
+        errno            = saved;
+        feedback->failed = true;
+        return;
+    }
+    feedback->table      = table;
+    feedback->table_size = size;
+    feedback->failed     = false;
+}
+
+static void dmabuf_feedback_device(void*                                data,
+                                   struct zwp_linux_dmabuf_feedback_v1* object,
+                                   struct wl_array*                     device)
+{
+    (void)object;
+    auto feedback = (struct walle_vk_dmabuf_feedback*)data;
+    if (!device || device->size != sizeof(dev_t))
+        feedback->failed = true;
+}
+
+static void dmabuf_feedback_tranche_done(void* data, struct zwp_linux_dmabuf_feedback_v1* object)
+{
+    (void)data;
+    (void)object;
+}
+
+static bool dmabuf_feedback_append(struct walle_vk_dmabuf_feedback* feedback,
+                                   uint32_t                         format,
+                                   uint64_t                         modifier)
+{
+    if ((format != DRM_FORMAT_XRGB8888 && format != DRM_FORMAT_ARGB8888)
+        || modifier == DRM_FORMAT_MOD_INVALID)
+        return true;
+    for (size_t index = 0; index < feedback->candidate_count; ++index) {
+        if (feedback->candidates[index].format == format
+            && feedback->candidates[index].modifier == modifier)
+            return true;
+    }
+    if (feedback->candidate_count == feedback->candidate_capacity) {
+        size_t capacity = feedback->candidate_capacity ? feedback->candidate_capacity * 2 : 16;
+        size_t bytes;
+        if (capacity < feedback->candidate_capacity
+            || ckd_mul(&bytes, capacity, sizeof *feedback->candidates))
+            return false;
+        void* candidates = realloc(feedback->candidates, bytes);
+        if (!candidates)
+            return false;
+        feedback->candidates         = candidates;
+        feedback->candidate_capacity = capacity;
+    }
+    feedback->candidates[feedback->candidate_count++] = (struct walle_vk_dmabuf_candidate){
+        .format   = format,
+        .modifier = modifier,
+    };
+    return true;
+}
+
+static void dmabuf_feedback_tranche_formats(void*                                data,
+                                            struct zwp_linux_dmabuf_feedback_v1* object,
+                                            struct wl_array*                     indices)
+{
+    (void)object;
+    auto feedback = (struct walle_vk_dmabuf_feedback*)data;
+    if (!feedback->table || !indices || indices->size % sizeof(uint16_t) != 0) {
+        feedback->failed = true;
+        return;
+    }
+    size_t table_count = feedback->table_size / sizeof *feedback->table;
+    size_t count       = indices->size / sizeof(uint16_t);
+    for (size_t offset = 0; offset < count; ++offset) {
+        uint16_t table_index;
+        memcpy(&table_index,
+               (const uint8_t*)indices->data + offset * sizeof table_index,
+               sizeof table_index);
+        if (table_index >= table_count
+            || !dmabuf_feedback_append(feedback,
+                                       feedback->table[table_index].format,
+                                       feedback->table[table_index].modifier)) {
+            feedback->failed = true;
+            return;
+        }
+    }
+}
+
+static void dmabuf_feedback_tranche_flags(void*                                data,
+                                          struct zwp_linux_dmabuf_feedback_v1* object,
+                                          uint32_t                             flags)
+{
+    (void)data;
+    (void)object;
+    (void)flags;
+}
+
+static const struct zwp_linux_dmabuf_feedback_v1_listener dmabuf_feedback_listener = {
+    .done                  = dmabuf_feedback_done,
+    .format_table          = dmabuf_feedback_format_table,
+    .main_device           = dmabuf_feedback_device,
+    .tranche_done          = dmabuf_feedback_tranche_done,
+    .tranche_target_device = dmabuf_feedback_device,
+    .tranche_formats       = dmabuf_feedback_tranche_formats,
+    .tranche_flags         = dmabuf_feedback_tranche_flags,
+};
 
 static const char* vk_result_name(VkResult result)
 {
@@ -535,14 +714,344 @@ static bool create_image(struct walle_vk_renderer* renderer,
     return true;
 }
 
-static void image_barrier(VkCommandBuffer       command_buffer,
-                          VkImage               image,
-                          VkPipelineStageFlags2 source_stage,
-                          VkAccessFlags2        source_access,
-                          VkPipelineStageFlags2 destination_stage,
-                          VkAccessFlags2        destination_access,
-                          VkImageLayout         old_layout,
-                          VkImageLayout         new_layout)
+static bool present_modifier_exportable(struct walle_vk_renderer* renderer,
+                                        uint64_t                  modifier,
+                                        VkImageUsageFlags         usage)
+{
+    VkPhysicalDeviceExternalImageFormatInfo external = {
+        .sType      = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_IMAGE_FORMAT_INFO,
+        .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+    };
+    VkPhysicalDeviceImageDrmFormatModifierInfoEXT drm = {
+        .sType             = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT,
+        .pNext             = &external,
+        .drmFormatModifier = modifier,
+        .sharingMode       = VK_SHARING_MODE_EXCLUSIVE,
+        .queueFamilyIndexCount = 0,
+    };
+    VkPhysicalDeviceImageFormatInfo2 info = {
+        .sType  = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2,
+        .pNext  = &drm,
+        .format = WALLE_VK_PRESENT_FORMAT,
+        .type   = VK_IMAGE_TYPE_2D,
+        .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+        .usage  = usage,
+    };
+    VkExternalImageFormatProperties external_properties = {
+        .sType = VK_STRUCTURE_TYPE_EXTERNAL_IMAGE_FORMAT_PROPERTIES,
+    };
+    VkImageFormatProperties2 properties = {
+        .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2,
+        .pNext = &external_properties,
+    };
+    return vkGetPhysicalDeviceImageFormatProperties2(renderer->physical_device, &info, &properties)
+               == VK_SUCCESS
+           && (external_properties.externalMemoryProperties.externalMemoryFeatures
+               & VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT)
+                  != 0;
+}
+
+static bool select_present_modifier(struct walle_vk_renderer* renderer,
+                                    VkImageUsageFlags         usage,
+                                    uint32_t*                 drm_format,
+                                    uint64_t*                 modifier,
+                                    uint32_t*                 plane_count)
+{
+    VkDrmFormatModifierPropertiesList2EXT list = {
+        .sType = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_2_EXT,
+    };
+    VkFormatProperties2 properties = {
+        .sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2,
+        .pNext = &list,
+    };
+    vkGetPhysicalDeviceFormatProperties2(
+        renderer->physical_device, WALLE_VK_PRESENT_FORMAT, &properties);
+    if (list.drmFormatModifierCount == 0)
+        return false;
+    list.pDrmFormatModifierProperties
+        = calloc(list.drmFormatModifierCount, sizeof *list.pDrmFormatModifierProperties);
+    if (!list.pDrmFormatModifierProperties)
+        return false;
+    vkGetPhysicalDeviceFormatProperties2(
+        renderer->physical_device, WALLE_VK_PRESENT_FORMAT, &properties);
+
+    const VkFormatFeatureFlags2 required
+        = VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_2_TRANSFER_SRC_BIT;
+    bool found = false;
+    for (unsigned format_pass = 0; format_pass < 2 && !found; ++format_pass) {
+        uint32_t preferred_format = format_pass == 0 ? DRM_FORMAT_XRGB8888 : DRM_FORMAT_ARGB8888;
+        for (size_t candidate_index = 0;
+             candidate_index < renderer->dmabuf.candidate_count && !found;
+             ++candidate_index) {
+            const struct walle_vk_dmabuf_candidate* candidate
+                = &renderer->dmabuf.candidates[candidate_index];
+            if (candidate->format != preferred_format)
+                continue;
+            for (uint32_t property_index = 0; property_index < list.drmFormatModifierCount;
+                 ++property_index) {
+                const VkDrmFormatModifierProperties2EXT* property
+                    = &list.pDrmFormatModifierProperties[property_index];
+                if (property->drmFormatModifier == candidate->modifier
+                    && (property->drmFormatModifierTilingFeatures & required) == required
+                    && property->drmFormatModifierPlaneCount != 0
+                    && property->drmFormatModifierPlaneCount <= 4
+                    && present_modifier_exportable(renderer, candidate->modifier, usage)) {
+                    *drm_format  = preferred_format;
+                    *modifier    = candidate->modifier;
+                    *plane_count = property->drmFormatModifierPlaneCount;
+                    found        = true;
+                    break;
+                }
+            }
+        }
+    }
+    free(list.pDrmFormatModifierProperties);
+    return found;
+}
+
+static VkImageAspectFlagBits memory_plane_aspect(uint32_t plane)
+{
+    switch (plane) {
+        case 0:
+            return VK_IMAGE_ASPECT_MEMORY_PLANE_0_BIT_EXT;
+        case 1:
+            return VK_IMAGE_ASPECT_MEMORY_PLANE_1_BIT_EXT;
+        case 2:
+            return VK_IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT;
+        case 3:
+            return VK_IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT;
+        default:
+            return 0;
+    }
+}
+
+static void destroy_present_image(VkDevice device, struct walle_vk_present_image* image);
+
+static void present_buffer_released(void* data, struct wl_buffer* buffer)
+{
+    (void)buffer;
+    auto image  = (struct walle_vk_present_image*)data;
+    image->busy = false;
+    if (image->output && image->output->compact_present
+        && image != &image->output->present_images[image->output->idle_present_image])
+        destroy_present_image(image->output->renderer->device, image);
+}
+
+static const struct wl_buffer_listener present_buffer_listener = {
+    .release = present_buffer_released,
+};
+
+static void destroy_present_image(VkDevice device, struct walle_vk_present_image* image)
+{
+    if (image->buffer)
+        wl_buffer_destroy(image->buffer);
+    destroy_image(device, &image->image);
+    *image = (struct walle_vk_present_image){};
+}
+
+static bool create_present_image(struct walle_vk_output*        output,
+                                 uint32_t                       drm_format,
+                                 uint64_t                       modifier,
+                                 uint32_t                       plane_count,
+                                 VkImageUsageFlags              usage,
+                                 struct walle_vk_present_image* result)
+{
+    struct walle_vk_renderer* renderer       = output->renderer;
+    *result                                  = (struct walle_vk_present_image){};
+    result->output                           = output;
+    VkExternalMemoryImageCreateInfo external = {
+        .sType       = VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO,
+        .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+    };
+    VkImageDrmFormatModifierListCreateInfoEXT modifiers = {
+        .sType                  = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_LIST_CREATE_INFO_EXT,
+        .pNext                  = &external,
+        .drmFormatModifierCount = 1,
+        .pDrmFormatModifiers    = &modifier,
+    };
+    VkImageCreateInfo create_info = {
+        .sType       = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+        .pNext       = &modifiers,
+        .imageType   = VK_IMAGE_TYPE_2D,
+        .format      = WALLE_VK_PRESENT_FORMAT,
+        .extent      = {.width = output->extent.width, .height = output->extent.height, .depth = 1},
+        .mipLevels   = 1,
+        .arrayLayers = 1,
+        .samples     = VK_SAMPLE_COUNT_1_BIT,
+        .tiling      = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+        .usage       = usage,
+        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+        .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+    };
+    result->image.width  = output->extent.width;
+    result->image.height = output->extent.height;
+    result->image.format = WALLE_VK_PRESENT_FORMAT;
+    if (!vk_check(vkCreateImage(renderer->device, &create_info, nullptr, &result->image.handle),
+                  "vkCreateImage(dma-buf present)"))
+        return false;
+
+    VkMemoryRequirements requirements;
+    vkGetImageMemoryRequirements(renderer->device, result->image.handle, &requirements);
+    uint32_t memory_type;
+    if (!find_memory_type(renderer,
+                          requirements.memoryTypeBits,
+                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                          &memory_type))
+        goto failed;
+    VkExportMemoryAllocateInfo export_info = {
+        .sType       = VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO,
+        .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+    };
+    VkMemoryDedicatedAllocateInfo dedicated = {
+        .sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO,
+        .pNext = &export_info,
+        .image = result->image.handle,
+    };
+    VkMemoryAllocateInfo allocation = {
+        .sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+        .pNext           = &dedicated,
+        .allocationSize  = requirements.size,
+        .memoryTypeIndex = memory_type,
+    };
+    result->image.memory.size = requirements.size;
+    result->image.memory.properties
+        = renderer->memory_properties.memoryTypes[memory_type].propertyFlags;
+    if (!vk_check(
+            vkAllocateMemory(renderer->device, &allocation, nullptr, &result->image.memory.handle),
+            "vkAllocateMemory(dma-buf present)")
+        || !vk_check(vkBindImageMemory(
+                         renderer->device, result->image.handle, result->image.memory.handle, 0),
+                     "vkBindImageMemory(dma-buf present)"))
+        goto failed;
+
+    VkImageViewCreateInfo view_info = {
+        .sType    = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+        .image    = result->image.handle,
+        .viewType = VK_IMAGE_VIEW_TYPE_2D,
+        .format   = WALLE_VK_PRESENT_FORMAT,
+        .subresourceRange = {
+            .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+            .levelCount = 1,
+            .layerCount = 1,
+        },
+    };
+    if (!vk_check(vkCreateImageView(renderer->device, &view_info, nullptr, &result->image.view),
+                  "vkCreateImageView(dma-buf present)"))
+        goto failed;
+
+    VkImageDrmFormatModifierPropertiesEXT modifier_properties = {
+        .sType = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_PROPERTIES_EXT,
+    };
+    if (!vk_check(renderer->get_image_drm_format_modifier_properties(
+                      renderer->device, result->image.handle, &modifier_properties),
+                  "vkGetImageDrmFormatModifierPropertiesEXT")
+        || modifier_properties.drmFormatModifier != modifier)
+        goto failed;
+    VkMemoryGetFdInfoKHR fd_info = {
+        .sType      = VK_STRUCTURE_TYPE_MEMORY_GET_FD_INFO_KHR,
+        .memory     = result->image.memory.handle,
+        .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+    };
+    int memory_fd = -1;
+    if (!vk_check(renderer->get_memory_fd(renderer->device, &fd_info, &memory_fd),
+                  "vkGetMemoryFdKHR"))
+        goto failed;
+
+    struct zwp_linux_buffer_params_v1* params
+        = zwp_linux_dmabuf_v1_create_params(renderer->dmabuf.factory);
+    bool planes_valid = params != nullptr;
+    for (uint32_t plane = 0; planes_valid && plane < plane_count; ++plane) {
+        VkImageSubresource subresource = {
+            .aspectMask = memory_plane_aspect(plane),
+        };
+        VkSubresourceLayout layout;
+        vkGetImageSubresourceLayout(renderer->device, result->image.handle, &subresource, &layout);
+        int plane_fd = fcntl(memory_fd, F_DUPFD_CLOEXEC, 0);
+        if (subresource.aspectMask == 0 || layout.offset > UINT32_MAX
+            || layout.rowPitch > UINT32_MAX || plane_fd < 0) {
+            if (plane_fd >= 0)
+                close(plane_fd);
+            planes_valid = false;
+            break;
+        }
+        zwp_linux_buffer_params_v1_add(params,
+                                       plane_fd,
+                                       plane,
+                                       (uint32_t)layout.offset,
+                                       (uint32_t)layout.rowPitch,
+                                       (uint32_t)(modifier >> 32),
+                                       (uint32_t)modifier);
+        close(plane_fd);
+    }
+    close(memory_fd);
+    if (!planes_valid) {
+        if (params)
+            zwp_linux_buffer_params_v1_destroy(params);
+        goto failed;
+    }
+    result->buffer = zwp_linux_buffer_params_v1_create_immed(
+        params, (int32_t)output->extent.width, (int32_t)output->extent.height, drm_format, 0);
+    zwp_linux_buffer_params_v1_destroy(params);
+    if (!result->buffer
+        || wl_buffer_add_listener(result->buffer, &present_buffer_listener, result) != 0)
+        goto failed;
+    return true;
+
+failed:
+    destroy_present_image(renderer->device, result);
+    return false;
+}
+
+static bool create_present_slot(struct walle_vk_output* output, uint32_t index)
+{
+    constexpr VkImageUsageFlags usage
+        = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+    if (index >= 2 || output->present_images[index].image.handle)
+        return false;
+    return create_present_image(output,
+                                output->present_drm_format,
+                                output->present_modifier,
+                                output->present_plane_count,
+                                usage,
+                                &output->present_images[index]);
+}
+
+static bool initialize_present_images(struct walle_vk_output* output)
+{
+    constexpr VkImageUsageFlags usage
+        = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+    if (!select_present_modifier(output->renderer,
+                                 usage,
+                                 &output->present_drm_format,
+                                 &output->present_modifier,
+                                 &output->present_plane_count)) {
+        fprintf(stderr, "FATAL: no shared Vulkan/linux-dmabuf presentation modifier.\n");
+        return false;
+    }
+    if (!create_present_slot(output, 0)) {
+        return false;
+    }
+    fprintf(stderr,
+            "[Vulkan] Adaptive direct buffer: DRM format 0x%08" PRIx32 ", modifier 0x%016" PRIx64
+            ", %u plane%s.\n",
+            output->present_drm_format,
+            output->present_modifier,
+            output->present_plane_count,
+            output->present_plane_count == 1 ? "" : "s");
+    return true;
+}
+
+static void image_barrier_queues(VkCommandBuffer       command_buffer,
+                                 VkImage               image,
+                                 VkPipelineStageFlags2 source_stage,
+                                 VkAccessFlags2        source_access,
+                                 VkPipelineStageFlags2 destination_stage,
+                                 VkAccessFlags2        destination_access,
+                                 VkImageLayout         old_layout,
+                                 VkImageLayout         new_layout,
+                                 uint32_t              source_queue,
+                                 uint32_t              destination_queue)
 {
     VkImageMemoryBarrier2 barrier = {
         .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2,
@@ -552,8 +1061,8 @@ static void image_barrier(VkCommandBuffer       command_buffer,
         .dstAccessMask = destination_access,
         .oldLayout = old_layout,
         .newLayout = new_layout,
-        .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-        .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+        .srcQueueFamilyIndex = source_queue,
+        .dstQueueFamilyIndex = destination_queue,
         .image = image,
         .subresourceRange = {
             .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
@@ -569,6 +1078,27 @@ static void image_barrier(VkCommandBuffer       command_buffer,
         .pImageMemoryBarriers    = &barrier,
     };
     vkCmdPipelineBarrier2(command_buffer, &dependency);
+}
+
+static void image_barrier(VkCommandBuffer       command_buffer,
+                          VkImage               image,
+                          VkPipelineStageFlags2 source_stage,
+                          VkAccessFlags2        source_access,
+                          VkPipelineStageFlags2 destination_stage,
+                          VkAccessFlags2        destination_access,
+                          VkImageLayout         old_layout,
+                          VkImageLayout         new_layout)
+{
+    image_barrier_queues(command_buffer,
+                         image,
+                         source_stage,
+                         source_access,
+                         destination_stage,
+                         destination_access,
+                         old_layout,
+                         new_layout,
+                         VK_QUEUE_FAMILY_IGNORED,
+                         VK_QUEUE_FAMILY_IGNORED);
 }
 
 static void buffer_barrier(VkCommandBuffer       command_buffer,
@@ -750,30 +1280,6 @@ format_supports(VkPhysicalDevice physical_device, VkFormat format, VkFormatFeatu
     return (properties3.optimalTilingFeatures & required) == required;
 }
 
-static bool surface_has_required_format(VkPhysicalDevice physical_device, VkSurfaceKHR surface)
-{
-    uint32_t count = 0;
-    if (vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device, surface, &count, nullptr)
-            != VK_SUCCESS
-        || count == 0)
-        return false;
-    VkSurfaceFormatKHR* formats = calloc(count, sizeof *formats);
-    if (!formats)
-        return false;
-    bool available = vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device, surface, &count, formats)
-                     == VK_SUCCESS;
-    bool found = false;
-    for (uint32_t index = 0; available && index < count; ++index) {
-        if (formats[index].format == WALLE_VK_SWAPCHAIN_FORMAT
-            && formats[index].colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-            found = true;
-            break;
-        }
-    }
-    free(formats);
-    return found;
-}
-
 static bool select_queue_family(VkPhysicalDevice   physical_device,
                                 VkSurfaceKHR       surface,
                                 struct wl_display* display,
@@ -820,9 +1326,13 @@ static bool device_candidate(struct walle_vk_renderer*           renderer,
     };
     vkGetPhysicalDeviceProperties2(physical_device, properties2);
     if (properties2->properties.apiVersion < WALLE_VK_REQUIRED_API_VERSION
-        || !device_extension_available(physical_device, VK_KHR_SWAPCHAIN_EXTENSION_NAME)
-        || !select_queue_family(physical_device, surface, renderer->display, queue_family)
-        || !surface_has_required_format(physical_device, surface))
+        || !device_extension_available(physical_device, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME)
+        || !device_extension_available(physical_device,
+                                       VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME)
+        || !device_extension_available(physical_device,
+                                       VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME)
+        || !device_extension_available(physical_device, VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME)
+        || !select_queue_family(physical_device, surface, renderer->display, queue_family))
         return false;
 
     VkPhysicalDeviceVulkan14Features features14 = {
@@ -861,7 +1371,7 @@ static bool device_candidate(struct walle_vk_renderer*           renderer,
                                 | VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_BIT
                                 | VK_FORMAT_FEATURE_2_TRANSFER_SRC_BIT)
         || !format_supports(
-            physical_device, WALLE_VK_SWAPCHAIN_FORMAT, VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT))
+            physical_device, WALLE_VK_PRESENT_FORMAT, VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT))
         return false;
     return true;
 }
@@ -1171,7 +1681,7 @@ static bool create_pipelines(struct walle_vk_renderer* renderer)
                                        sizeof WALLE_VK_COMPOSE_FRAGMENT_SPIRV,
                                        "composeFragment",
                                        renderer->compose_pipeline_layout,
-                                       WALLE_VK_SWAPCHAIN_FORMAT,
+                                       WALLE_VK_PRESENT_FORMAT,
                                        false,
                                        &renderer->compose_pipeline);
 }
@@ -1221,6 +1731,14 @@ static bool create_global_resources(struct walle_vk_renderer* renderer)
                   "vkCreateFence(upload)"))
         return false;
 
+    return true;
+}
+
+static bool ensure_sqrt_buffer(struct walle_vk_renderer* renderer)
+{
+    if (renderer->sqrt_buffer.handle)
+        return true;
+
     struct walle_vk_buffer staging = {};
     bool                   success
         = create_buffer(renderer,
@@ -1257,6 +1775,8 @@ static bool create_global_resources(struct walle_vk_renderer* renderer)
         success = end_upload(renderer);
     }
     destroy_buffer(renderer->device, &staging);
+    if (!success)
+        destroy_buffer(renderer->device, &renderer->sqrt_buffer);
     return success;
 }
 
@@ -1267,7 +1787,7 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
         return vkGetPhysicalDeviceSurfaceSupportKHR(
                    renderer->physical_device, renderer->queue_family, surface, &supported)
                    == VK_SUCCESS
-               && supported && surface_has_required_format(renderer->physical_device, surface);
+               && supported;
     }
 
     uint32_t count = 0;
@@ -1367,19 +1887,34 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
         .geometryShader = VK_TRUE,
         .shaderInt64    = VK_TRUE,
     };
-    const char*        extensions[] = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
-    VkDeviceCreateInfo create_info  = {
-         .sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-         .pNext                   = &features11,
-         .queueCreateInfoCount    = 1,
-         .pQueueCreateInfos       = &queue_info,
-         .enabledExtensionCount   = 1,
-         .ppEnabledExtensionNames = extensions,
-         .pEnabledFeatures        = &features,
+    const char* extensions[] = {
+        VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
+        VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME,
+        VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME,
+        VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME,
+    };
+    VkDeviceCreateInfo create_info = {
+        .sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+        .pNext                   = &features11,
+        .queueCreateInfoCount    = 1,
+        .pQueueCreateInfos       = &queue_info,
+        .enabledExtensionCount   = sizeof extensions / sizeof *extensions,
+        .ppEnabledExtensionNames = extensions,
+        .pEnabledFeatures        = &features,
     };
     if (!vk_check(vkCreateDevice(selected, &create_info, nullptr, &renderer->device),
                   "vkCreateDevice"))
         return false;
+
+    renderer->get_memory_fd
+        = (PFN_vkGetMemoryFdKHR)vkGetDeviceProcAddr(renderer->device, "vkGetMemoryFdKHR");
+    renderer->get_image_drm_format_modifier_properties
+        = (PFN_vkGetImageDrmFormatModifierPropertiesEXT)vkGetDeviceProcAddr(
+            renderer->device, "vkGetImageDrmFormatModifierPropertiesEXT");
+    if (!renderer->get_memory_fd || !renderer->get_image_drm_format_modifier_properties) {
+        fprintf(stderr, "FATAL: Vulkan dma-buf export entry points are unavailable.\n");
+        return false;
+    }
 
     renderer->physical_device = selected;
     renderer->properties      = selected_properties.properties;
@@ -1401,7 +1936,7 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
     renderer->device_ready = true;
     fprintf(stderr,
             "[Vulkan] Selected device %u: %s [%s], API %u.%u.%u, SPIR-V 1.6, dynamic "
-            "rendering, synchronization2.\n",
+            "rendering, synchronization2, adaptive one/two-image linux-dmabuf presentation.\n",
             selected_index,
             renderer->properties.deviceName,
             physical_device_type_name(renderer->properties.deviceType),
@@ -1436,6 +1971,32 @@ bool walle_vk_renderer_create(struct wl_display*         display,
     return true;
 }
 
+bool walle_vk_renderer_bind_linux_dmabuf(struct walle_vk_renderer* renderer,
+                                         struct wl_registry*       registry,
+                                         uint32_t                  name,
+                                         uint32_t                  version)
+{
+    if (!renderer || !registry || renderer->dmabuf.factory || version < 4)
+        return false;
+    uint32_t bind_version = version < 5 ? version : 5;
+    renderer->dmabuf.factory
+        = wl_registry_bind(registry, name, &zwp_linux_dmabuf_v1_interface, bind_version);
+    if (!renderer->dmabuf.factory)
+        return false;
+    renderer->dmabuf.object = zwp_linux_dmabuf_v1_get_default_feedback(renderer->dmabuf.factory);
+    if (!renderer->dmabuf.object
+        || zwp_linux_dmabuf_feedback_v1_add_listener(
+               renderer->dmabuf.object, &dmabuf_feedback_listener, &renderer->dmabuf)
+               != 0)
+        return false;
+    return true;
+}
+
+bool walle_vk_renderer_linux_dmabuf_ready(const struct walle_vk_renderer* renderer)
+{
+    return renderer && renderer->dmabuf.ready && !renderer->dmabuf.failed;
+}
+
 void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
 {
     if (!renderer)
@@ -1463,6 +2024,12 @@ void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
             vkDestroyDescriptorSetLayout(renderer->device, renderer->compose_set_layout, nullptr);
         vkDestroyDevice(renderer->device, nullptr);
     }
+    if (renderer->dmabuf.object)
+        zwp_linux_dmabuf_feedback_v1_destroy(renderer->dmabuf.object);
+    if (renderer->dmabuf.factory)
+        zwp_linux_dmabuf_v1_destroy(renderer->dmabuf.factory);
+    dmabuf_feedback_reset_table(&renderer->dmabuf);
+    free(renderer->dmabuf.candidates);
     destroy_debug_messenger(renderer);
     if (renderer->instance)
         vkDestroyInstance(renderer->instance, nullptr);
@@ -1482,190 +2049,25 @@ static void destroy_texture_pair(VkDevice device, struct walle_vk_texture_pair* 
     destroy_image(device, &pair->glass);
 }
 
-static void destroy_swapchain(struct walle_vk_output* output)
+static void destroy_present_images(struct walle_vk_output* output)
 {
-    VkDevice device = output->renderer->device;
-    if (output->swapchain_views) {
-        for (uint32_t index = 0; index < output->swapchain_image_count; ++index) {
-            if (output->swapchain_views[index])
-                vkDestroyImageView(device, output->swapchain_views[index], nullptr);
-        }
-    }
-    if (output->render_complete_semaphores) {
-        for (uint32_t index = 0; index < output->swapchain_image_count; ++index) {
-            if (output->render_complete_semaphores[index])
-                vkDestroySemaphore(device, output->render_complete_semaphores[index], nullptr);
-        }
-    }
-    free(output->swapchain_images);
-    free(output->swapchain_views);
-    free(output->swapchain_layouts);
-    free(output->render_complete_semaphores);
-    output->swapchain_images           = nullptr;
-    output->swapchain_views            = nullptr;
-    output->swapchain_layouts          = nullptr;
-    output->render_complete_semaphores = nullptr;
-    output->swapchain_image_count      = 0;
-    if (output->swapchain)
-        vkDestroySwapchainKHR(device, output->swapchain, nullptr);
-    output->swapchain = VK_NULL_HANDLE;
-    output->extent    = (VkExtent2D){};
+    for (size_t index = 0; index < 2; ++index)
+        destroy_present_image(output->renderer->device, &output->present_images[index]);
+    output->next_present_image = 0;
+    output->last_present_image = 0;
+    output->idle_present_image = 0;
+    output->compact_present    = false;
 }
 
-static void move_swapchain(struct walle_vk_output* destination, struct walle_vk_output* source)
+static void compact_present_images(struct walle_vk_output* output)
 {
-    destination->swapchain                  = source->swapchain;
-    destination->extent                     = source->extent;
-    destination->swapchain_image_count      = source->swapchain_image_count;
-    destination->swapchain_images           = source->swapchain_images;
-    destination->swapchain_views            = source->swapchain_views;
-    destination->swapchain_layouts          = source->swapchain_layouts;
-    destination->render_complete_semaphores = source->render_complete_semaphores;
-    source->swapchain                       = VK_NULL_HANDLE;
-    source->extent                          = (VkExtent2D){};
-    source->swapchain_image_count           = 0;
-    source->swapchain_images                = nullptr;
-    source->swapchain_views                 = nullptr;
-    source->swapchain_layouts               = nullptr;
-    source->render_complete_semaphores      = nullptr;
-}
-
-static bool create_swapchain(struct walle_vk_output* output,
-                             uint32_t                width,
-                             uint32_t                height,
-                             VkSwapchainKHR          old_swapchain)
-{
-    struct walle_vk_renderer* renderer = output->renderer;
-    VkSurfaceCapabilitiesKHR  capabilities;
-    if (!vk_check(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
-                      renderer->physical_device, output->surface, &capabilities),
-                  "vkGetPhysicalDeviceSurfaceCapabilitiesKHR"))
-        return false;
-    if ((capabilities.supportedUsageFlags & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) == 0
-        || (capabilities.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR) == 0) {
-        fprintf(stderr, "FATAL: Wayland swapchain lacks opaque color-attachment support.\n");
-        return false;
+    output->idle_present_image = output->last_present_image;
+    output->compact_present    = true;
+    for (uint32_t index = 0; index < 2; ++index) {
+        if (index != output->idle_present_image && output->present_images[index].image.handle
+            && !output->present_images[index].busy)
+            destroy_present_image(output->renderer->device, &output->present_images[index]);
     }
-    if (output->composition_readback_enabled
-        && (capabilities.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) == 0) {
-        fprintf(stderr, "FATAL: Wayland swapchain does not support diagnostic readback.\n");
-        return false;
-    }
-
-    VkExtent2D extent = {.width = width, .height = height};
-    if (capabilities.currentExtent.width != UINT32_MAX)
-        extent = capabilities.currentExtent;
-    if (extent.width != width || extent.height != height
-        || width < capabilities.minImageExtent.width || height < capabilities.minImageExtent.height
-        || width > capabilities.maxImageExtent.width
-        || height > capabilities.maxImageExtent.height) {
-        fprintf(stderr,
-                "[Vulkan] compositor extent %ux%u does not match requested %ux%u.\n",
-                extent.width,
-                extent.height,
-                width,
-                height);
-        return false;
-    }
-
-    uint32_t image_count = capabilities.minImageCount;
-    if (capabilities.maxImageCount && image_count > capabilities.maxImageCount)
-        return false;
-    VkSwapchainCreateInfoKHR create_info = {
-        .sType            = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-        .surface          = output->surface,
-        .minImageCount    = image_count,
-        .imageFormat      = WALLE_VK_SWAPCHAIN_FORMAT,
-        .imageColorSpace  = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR,
-        .imageExtent      = extent,
-        .imageArrayLayers = 1,
-        .imageUsage
-        = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-          | (output->composition_readback_enabled ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
-        .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
-        .preTransform     = capabilities.currentTransform,
-        .compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-        .presentMode      = VK_PRESENT_MODE_FIFO_KHR,
-        .clipped          = VK_TRUE,
-        .oldSwapchain     = old_swapchain,
-    };
-    if (!vk_check(vkCreateSwapchainKHR(renderer->device, &create_info, nullptr, &output->swapchain),
-                  "vkCreateSwapchainKHR"))
-        return false;
-    if (!vk_check(
-            vkGetSwapchainImagesKHR(renderer->device, output->swapchain, &image_count, nullptr),
-            "vkGetSwapchainImagesKHR(count)"))
-        return false;
-
-    output->swapchain_images  = calloc(image_count, sizeof *output->swapchain_images);
-    output->swapchain_views   = calloc(image_count, sizeof *output->swapchain_views);
-    output->swapchain_layouts = calloc(image_count, sizeof *output->swapchain_layouts);
-    output->render_complete_semaphores
-        = calloc(image_count, sizeof *output->render_complete_semaphores);
-    if (!output->swapchain_images || !output->swapchain_views || !output->swapchain_layouts
-        || !output->render_complete_semaphores)
-        return false;
-    if (!vk_check(vkGetSwapchainImagesKHR(
-                      renderer->device, output->swapchain, &image_count, output->swapchain_images),
-                  "vkGetSwapchainImagesKHR"))
-        return false;
-    output->swapchain_image_count = image_count;
-    output->extent                = extent;
-
-    VkSemaphoreCreateInfo semaphore_info = {
-        .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
-    };
-    for (uint32_t index = 0; index < image_count; ++index) {
-        VkImageViewCreateInfo view_info = {
-            .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-            .image = output->swapchain_images[index],
-            .viewType = VK_IMAGE_VIEW_TYPE_2D,
-            .format = WALLE_VK_SWAPCHAIN_FORMAT,
-            .subresourceRange = {
-                .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                .levelCount = 1,
-                .layerCount = 1,
-            },
-        };
-        if (!vk_check(vkCreateImageView(
-                          renderer->device, &view_info, nullptr, &output->swapchain_views[index]),
-                      "vkCreateImageView(swapchain)"))
-            return false;
-        if (!vk_check(vkCreateSemaphore(renderer->device,
-                                        &semaphore_info,
-                                        nullptr,
-                                        &output->render_complete_semaphores[index]),
-                      "vkCreateSemaphore(render complete)"))
-            return false;
-        output->swapchain_layouts[index] = VK_IMAGE_LAYOUT_UNDEFINED;
-    }
-    return true;
-}
-
-static bool recreate_swapchain(struct walle_vk_output* output)
-{
-    uint32_t width  = output->extent.width;
-    uint32_t height = output->extent.height;
-    if (width == 0 || height == 0
-        || !vk_check(vkDeviceWaitIdle(output->renderer->device),
-                     "vkDeviceWaitIdle(swapchain recreation)"))
-        return false;
-
-    struct walle_vk_output replacement = {
-        .renderer                     = output->renderer,
-        .surface                      = output->surface,
-        .composition_readback_enabled = output->composition_readback_enabled,
-    };
-    if (!create_swapchain(&replacement, width, height, output->swapchain)) {
-        destroy_swapchain(&replacement);
-        return false;
-    }
-
-    struct walle_vk_output retired = {.renderer = output->renderer};
-    move_swapchain(&retired, output);
-    move_swapchain(output, &replacement);
-    destroy_swapchain(&retired);
-    return true;
 }
 
 static bool create_output_command_resources(struct walle_vk_output* output)
@@ -1693,15 +2095,8 @@ static bool create_output_command_resources(struct walle_vk_output* output)
         .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
         .flags = VK_FENCE_CREATE_SIGNALED_BIT,
     };
-    VkSemaphoreCreateInfo semaphore_info = {
-        .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
-    };
     return vk_check(vkCreateFence(renderer->device, &fence_info, nullptr, &output->frame_fence),
-                    "vkCreateFence(frame)")
-           && vk_check(
-               vkCreateSemaphore(
-                   renderer->device, &semaphore_info, nullptr, &output->image_acquired_semaphore),
-               "vkCreateSemaphore(image acquired)");
+                    "vkCreateFence(frame)");
 }
 
 bool walle_vk_output_create(struct walle_vk_renderer* renderer,
@@ -1718,6 +2113,8 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
     if (!output)
         return false;
     output->renderer                           = renderer;
+    output->wayland_surface                    = surface;
+    output->extent                             = (VkExtent2D){.width = width, .height = height};
     output->composition_readback_enabled       = enable_composition_readback;
     VkWaylandSurfaceCreateInfoKHR surface_info = {
         .sType   = VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
@@ -1730,8 +2127,7 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
                    && initialize_device(renderer, output->surface)
                    && width <= renderer->properties.limits.maxImageDimension2D
                    && height <= renderer->properties.limits.maxImageDimension2D
-                   && create_swapchain(output, width, height, VK_NULL_HANDLE)
-                   && create_output_command_resources(output);
+                   && initialize_present_images(output) && create_output_command_resources(output);
     if (!success) {
         walle_vk_output_destroy(output);
         return false;
@@ -1751,8 +2147,9 @@ bool walle_vk_output_resize(struct walle_vk_output* output, uint32_t width, uint
     walle_vk_output_abort_transition(output);
     destroy_texture_pair(output->renderer->device, &output->current);
     destroy_texture_pair(output->renderer->device, &output->incoming);
-    destroy_swapchain(output);
-    return create_swapchain(output, width, height, VK_NULL_HANDLE);
+    destroy_present_images(output);
+    output->extent = (VkExtent2D){.width = width, .height = height};
+    return initialize_present_images(output);
 }
 
 static bool read_layer_exact(int fd, const struct walle_vk_image_layer* layer, void* destination)
@@ -1930,6 +2327,25 @@ bool walle_vk_output_upload(struct walle_vk_output*            output,
     return true;
 }
 
+bool walle_vk_output_restore_current(struct walle_vk_output*            output,
+                                     int                                fd,
+                                     const struct walle_vk_image_layer* standard,
+                                     const struct walle_vk_image_layer* glass)
+{
+    if (!output || output->renderer->fatal)
+        return false;
+    if (output->current.standard.handle && output->current.glass.handle)
+        return true;
+    if (output->current.standard.handle || output->current.glass.handle)
+        return false;
+    struct walle_vk_texture_pair pair = {};
+    if (!upload_texture_pair(output, fd, standard, glass, &pair))
+        return false;
+    output->current                   = pair;
+    output->compose_descriptors_ready = false;
+    return true;
+}
+
 static VkDeviceSize align_device_size(VkDeviceSize value, VkDeviceSize alignment)
 {
     if (alignment <= 1)
@@ -2034,7 +2450,9 @@ static bool reveal_raster_valid(const struct walle_lg_reveal_raster* raster)
 
 static void destroy_transition_resources(struct walle_vk_output* output)
 {
-    VkDevice device = output->renderer->device;
+    struct walle_vk_renderer* renderer = output->renderer;
+    VkDevice                  device   = renderer->device;
+    bool                      counted  = output->transition_resources_ready;
     if (output->descriptor_pool)
         vkDestroyDescriptorPool(device, output->descriptor_pool, nullptr);
     output->descriptor_pool = VK_NULL_HANDLE;
@@ -2054,6 +2472,11 @@ static void destroy_transition_resources(struct walle_vk_output* output)
     output->transition_resources_ready = false;
     output->mask_descriptors_ready     = false;
     output->compose_descriptors_ready  = false;
+    if (counted) {
+        assert(renderer->transition_resource_users != 0);
+        if (--renderer->transition_resource_users == 0)
+            destroy_buffer(device, &renderer->sqrt_buffer);
+    }
 }
 
 static bool create_transition_descriptor_sets(struct walle_vk_output* output)
@@ -2107,32 +2530,42 @@ static bool create_transition_descriptor_sets(struct walle_vk_output* output)
 static bool ensure_transition_base(struct walle_vk_output* output, bool readback)
 {
     struct walle_vk_renderer* renderer = output->renderer;
-    if (!output->mask.handle
-        && !create_image(renderer,
-                         output->extent.width,
-                         output->extent.height,
-                         WALLE_VK_MASK_FORMAT,
-                         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-                             | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
-                         &output->mask))
-        return false;
-    if (!output->descriptor_pool && !create_transition_descriptor_sets(output))
-        return false;
+    bool                      success  = ensure_sqrt_buffer(renderer);
+    if (success && !output->mask.handle)
+        success = create_image(renderer,
+                               output->extent.width,
+                               output->extent.height,
+                               WALLE_VK_MASK_FORMAT,
+                               VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
+                                   | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+                               &output->mask);
+    if (success && !output->descriptor_pool)
+        success = create_transition_descriptor_sets(output);
     if (readback && !output->readback_buffer.handle) {
         VkDeviceSize size;
-        if (ckd_mul(&size, (VkDeviceSize)output->extent.width, (VkDeviceSize)output->extent.height)
-            || (output->composition_readback_enabled && ckd_mul(&size, size, (VkDeviceSize)5))
-            || !create_buffer(renderer,
-                              size,
-                              VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-                              VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-                                  | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                              VK_MEMORY_PROPERTY_HOST_CACHED_BIT,
-                              true,
-                              &output->readback_buffer))
-            return false;
+        success
+            = success
+              && !ckd_mul(
+                  &size, (VkDeviceSize)output->extent.width, (VkDeviceSize)output->extent.height)
+              && (!output->composition_readback_enabled || !ckd_mul(&size, size, (VkDeviceSize)5))
+              && create_buffer(renderer,
+                               size,
+                               VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+                                   | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                               VK_MEMORY_PROPERTY_HOST_CACHED_BIT,
+                               true,
+                               &output->readback_buffer);
     }
-    output->transition_resources_ready = true;
+    if (!success) {
+        if (renderer->transition_resource_users == 0)
+            destroy_buffer(renderer->device, &renderer->sqrt_buffer);
+        return false;
+    }
+    if (!output->transition_resources_ready) {
+        output->transition_resources_ready = true;
+        ++renderer->transition_resource_users;
+    }
     return true;
 }
 
@@ -2401,8 +2834,9 @@ static bool record_frame(struct walle_vk_output*              output,
                          bool                                 host_written,
                          VkDeviceSize                         mask_size)
 {
-    struct walle_vk_renderer* renderer       = output->renderer;
-    VkCommandBuffer           command_buffer = output->command_buffer;
+    struct walle_vk_renderer*      renderer       = output->renderer;
+    struct walle_vk_present_image* present        = &output->present_images[image_index];
+    VkCommandBuffer                command_buffer = output->command_buffer;
     if (!vk_check(vkResetCommandBuffer(command_buffer, 0), "vkResetCommandBuffer(frame)"))
         return false;
     VkCommandBufferBeginInfo begin_info = {
@@ -2574,17 +3008,20 @@ static bool record_frame(struct walle_vk_output*              output,
     }
     output->mask_layout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL;
 
-    image_barrier(command_buffer,
-                  output->swapchain_images[image_index],
-                  VK_PIPELINE_STAGE_2_NONE,
-                  VK_ACCESS_2_NONE,
-                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-                  output->swapchain_layouts[image_index],
-                  VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL);
+    image_barrier_queues(command_buffer,
+                         present->image.handle,
+                         VK_PIPELINE_STAGE_2_NONE,
+                         VK_ACCESS_2_NONE,
+                         VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                         VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                         present->layout,
+                         VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                         present->foreign_owned ? VK_QUEUE_FAMILY_FOREIGN_EXT
+                                                : VK_QUEUE_FAMILY_IGNORED,
+                         present->foreign_owned ? renderer->queue_family : VK_QUEUE_FAMILY_IGNORED);
     VkRenderingAttachmentInfo compose_attachment = {
         .sType       = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
-        .imageView   = output->swapchain_views[image_index],
+        .imageView   = present->image.view,
         .imageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
         .loadOp      = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
         .storeOp     = VK_ATTACHMENT_STORE_OP_STORE,
@@ -2619,7 +3056,7 @@ static bool record_frame(struct walle_vk_output*              output,
     vkCmdEndRendering(command_buffer);
     if (frame->composition_readback) {
         image_barrier(command_buffer,
-                      output->swapchain_images[image_index],
+                      present->image.handle,
                       VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
                       VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
                       VK_PIPELINE_STAGE_2_COPY_BIT,
@@ -2639,31 +3076,61 @@ static bool record_frame(struct walle_vk_output*              output,
             },
         };
         vkCmdCopyImageToBuffer(command_buffer,
-                               output->swapchain_images[image_index],
+                               present->image.handle,
                                VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                output->readback_buffer.handle,
                                1,
                                &copy);
-        image_barrier(command_buffer,
-                      output->swapchain_images[image_index],
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_READ_BIT,
-                      VK_PIPELINE_STAGE_2_NONE,
-                      VK_ACCESS_2_NONE,
-                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+        image_barrier_queues(command_buffer,
+                             present->image.handle,
+                             VK_PIPELINE_STAGE_2_COPY_BIT,
+                             VK_ACCESS_2_TRANSFER_READ_BIT,
+                             VK_PIPELINE_STAGE_2_NONE,
+                             VK_ACCESS_2_NONE,
+                             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                             VK_IMAGE_LAYOUT_GENERAL,
+                             renderer->queue_family,
+                             VK_QUEUE_FAMILY_FOREIGN_EXT);
     } else {
-        image_barrier(command_buffer,
-                      output->swapchain_images[image_index],
-                      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-                      VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-                      VK_PIPELINE_STAGE_2_NONE,
-                      VK_ACCESS_2_NONE,
-                      VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                      VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+        image_barrier_queues(command_buffer,
+                             present->image.handle,
+                             VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                             VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                             VK_PIPELINE_STAGE_2_NONE,
+                             VK_ACCESS_2_NONE,
+                             VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                             VK_IMAGE_LAYOUT_GENERAL,
+                             renderer->queue_family,
+                             VK_QUEUE_FAMILY_FOREIGN_EXT);
     }
-    output->swapchain_layouts[image_index] = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    present->layout        = VK_IMAGE_LAYOUT_GENERAL;
+    present->foreign_owned = true;
     return vk_check(vkEndCommandBuffer(command_buffer), "vkEndCommandBuffer(frame)");
+}
+
+static bool take_present_image(struct walle_vk_output* output, uint32_t* result)
+{
+    for (uint32_t offset = 0; offset < 2; ++offset) {
+        uint32_t index = (output->next_present_image + offset) % 2;
+        if (output->present_images[index].image.handle && !output->present_images[index].busy) {
+            *result                    = index;
+            output->next_present_image = (index + 1) % 2;
+            return true;
+        }
+    }
+    for (uint32_t index = 0; index < 2; ++index) {
+        if (!output->present_images[index].image.handle) {
+            output->compact_present = false;
+            if (!create_present_slot(output, index)) {
+                output->renderer->fatal = true;
+                return false;
+            }
+            *result                    = index;
+            output->next_present_image = (index + 1) % 2;
+            return true;
+        }
+    }
+    return false;
 }
 
 enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      output,
@@ -2692,6 +3159,10 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
                   "vkWaitForFences(frame)"))
         return WALLE_VK_FRAME_FATAL;
 
+    uint32_t image_index;
+    if (!take_present_image(output, &image_index))
+        return output->renderer->fatal ? WALLE_VK_FRAME_FATAL : WALLE_VK_FRAME_RETRY;
+
     struct walle_lg_reveal_raster raster       = {};
     VkBufferCopy                  copies[5]    = {};
     uint32_t                      copy_count   = 0;
@@ -2716,38 +3187,6 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
         return WALLE_VK_FRAME_FATAL;
     }
 
-    uint32_t image_index       = 0;
-    bool     acquire_recreated = false;
-    VkResult acquire;
-    do {
-        acquire = vkAcquireNextImageKHR(device,
-                                        output->swapchain,
-                                        UINT64_MAX,
-                                        output->image_acquired_semaphore,
-                                        VK_NULL_HANDLE,
-                                        &image_index);
-        if (acquire != VK_ERROR_OUT_OF_DATE_KHR || acquire_recreated)
-            break;
-        if (!recreate_swapchain(output)) {
-            walle_lg_reveal_raster_destroy(&raster);
-            fprintf(stderr, "[Vulkan] Could not recreate an out-of-date swapchain.\n");
-            return WALLE_VK_FRAME_FATAL;
-        }
-        acquire_recreated = true;
-        fprintf(stderr, "[Vulkan] Recreated an out-of-date swapchain.\n");
-    } while (true);
-    if (acquire == VK_ERROR_OUT_OF_DATE_KHR) {
-        walle_lg_reveal_raster_destroy(&raster);
-        return WALLE_VK_FRAME_SURFACE_CHANGED;
-    }
-    bool acquire_suboptimal = acquire == VK_SUBOPTIMAL_KHR;
-    if (!swapchain_result_has_image(acquire)) {
-        vk_check(acquire, "vkAcquireNextImageKHR");
-        if (acquire == VK_ERROR_DEVICE_LOST)
-            output->renderer->fatal = true;
-        walle_lg_reveal_raster_destroy(&raster);
-        return WALLE_VK_FRAME_FATAL;
-    }
     if (!record_frame(
             output, image_index, frame, &raster, copies, copy_count, host_written, mask_size)
         || !vk_check(vkResetFences(device, 1, &output->frame_fence), "vkResetFences(frame)")) {
@@ -2757,50 +3196,21 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
     }
     walle_lg_reveal_raster_destroy(&raster);
 
-    VkSemaphoreSubmitInfo wait_info = {
-        .sType     = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO,
-        .semaphore = output->image_acquired_semaphore,
-        .stageMask = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-    };
     VkCommandBufferSubmitInfo command_info = {
         .sType         = VK_STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO,
         .commandBuffer = output->command_buffer,
     };
-    VkSemaphoreSubmitInfo signal_info = {
-        .sType     = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO,
-        .semaphore = output->render_complete_semaphores[image_index],
-        .stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
-    };
     VkSubmitInfo2 submit_info = {
-        .sType                    = VK_STRUCTURE_TYPE_SUBMIT_INFO_2,
-        .waitSemaphoreInfoCount   = 1,
-        .pWaitSemaphoreInfos      = &wait_info,
-        .commandBufferInfoCount   = 1,
-        .pCommandBufferInfos      = &command_info,
-        .signalSemaphoreInfoCount = 1,
-        .pSignalSemaphoreInfos    = &signal_info,
+        .sType                  = VK_STRUCTURE_TYPE_SUBMIT_INFO_2,
+        .commandBufferInfoCount = 1,
+        .pCommandBufferInfos    = &command_info,
     };
     if (!vk_check(vkQueueSubmit2(output->renderer->queue, 1, &submit_info, output->frame_fence),
                   "vkQueueSubmit2(frame)")) {
         output->renderer->fatal = true;
         return WALLE_VK_FRAME_FATAL;
     }
-    VkPresentInfoKHR present_info = {
-        .sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
-        .waitSemaphoreCount = 1,
-        .pWaitSemaphores    = &output->render_complete_semaphores[image_index],
-        .swapchainCount     = 1,
-        .pSwapchains        = &output->swapchain,
-        .pImageIndices      = &image_index,
-    };
-    VkResult present = vkQueuePresentKHR(output->renderer->queue, &present_info);
-    if (present != VK_SUCCESS && present != VK_SUBOPTIMAL_KHR
-        && present != VK_ERROR_OUT_OF_DATE_KHR) {
-        vk_check(present, "vkQueuePresentKHR");
-        if (present == VK_ERROR_DEVICE_LOST)
-            output->renderer->fatal = true;
-        return WALLE_VK_FRAME_FATAL;
-    }
+    struct walle_vk_present_image* present = &output->present_images[image_index];
     if (readback) {
         if (!vk_check(vkWaitForFences(device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX),
                       "vkWaitForFences(mask readback)")) {
@@ -2814,15 +3224,14 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
                    (uint8_t*)output->readback_buffer.memory.mapped + (size_t)mask_size,
                    (size_t)composition_size);
     }
-    if (acquire_suboptimal || present == VK_SUBOPTIMAL_KHR || present == VK_ERROR_OUT_OF_DATE_KHR) {
-        if (!recreate_swapchain(output)) {
-            fprintf(stderr, "[Vulkan] Could not recreate a changed swapchain.\n");
-            return WALLE_VK_FRAME_FATAL;
-        }
-        fprintf(stderr, "[Vulkan] Recreated a changed swapchain.\n");
-        if (present == VK_ERROR_OUT_OF_DATE_KHR)
-            return WALLE_VK_FRAME_SURFACE_CHANGED;
-    }
+    wl_surface_attach(output->wayland_surface, present->buffer, 0, 0);
+    wl_surface_damage_buffer(output->wayland_surface,
+                             0,
+                             0,
+                             (int32_t)output->extent.width,
+                             (int32_t)output->extent.height);
+    present->busy              = true;
+    output->last_present_image = image_index;
     return WALLE_VK_FRAME_OK;
 }
 
@@ -2834,9 +3243,9 @@ void walle_vk_output_promote(struct walle_vk_output* output)
     if (output->frame_fence)
         vkWaitForFences(device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX);
     destroy_texture_pair(device, &output->current);
-    output->current  = output->incoming;
-    output->incoming = (struct walle_vk_texture_pair){};
+    destroy_texture_pair(device, &output->incoming);
     destroy_transition_resources(output);
+    compact_present_images(output);
 }
 
 void walle_vk_output_abort_transition(struct walle_vk_output* output)
@@ -2846,8 +3255,10 @@ void walle_vk_output_abort_transition(struct walle_vk_output* output)
     VkDevice device = output->renderer->device;
     if (output->frame_fence)
         vkWaitForFences(device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX);
+    destroy_texture_pair(device, &output->current);
     destroy_texture_pair(device, &output->incoming);
     destroy_transition_resources(output);
+    compact_present_images(output);
 }
 
 void walle_vk_output_destroy(struct walle_vk_output* output)
@@ -2860,13 +3271,11 @@ void walle_vk_output_destroy(struct walle_vk_output* output)
         destroy_texture_pair(renderer->device, &output->current);
         destroy_texture_pair(renderer->device, &output->incoming);
         destroy_transition_resources(output);
-        if (output->image_acquired_semaphore)
-            vkDestroySemaphore(renderer->device, output->image_acquired_semaphore, nullptr);
         if (output->frame_fence)
             vkDestroyFence(renderer->device, output->frame_fence, nullptr);
         if (output->command_pool)
             vkDestroyCommandPool(renderer->device, output->command_pool, nullptr);
-        destroy_swapchain(output);
+        destroy_present_images(output);
     }
     if (renderer && renderer->instance && output->surface)
         vkDestroySurfaceKHR(renderer->instance, output->surface, nullptr);

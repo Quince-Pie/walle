@@ -3,6 +3,7 @@
   pkg-config,
   vips,
   jemalloc,
+  libdrm,
   systemd,
   wayland,
   wayland-protocols,
@@ -44,6 +45,7 @@ gcc15Stdenv.mkDerivation {
     wayland-protocols
     wlr-protocols
     jemalloc
+    libdrm
     liburing
   ];
 

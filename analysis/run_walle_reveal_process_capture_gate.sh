@@ -8,9 +8,6 @@ labwc_binary=${LABWC:-/run/current-system/sw/bin/labwc}
 scorer="$task_root/analysis/score_reveal_vulkan_capture.py"
 expected_candidate_inventory=9062b7bfde617f88638c9b48fdb8ace7b6f91b4518d54c5a6e54abcb51e93644
 expected_count_hash=d6c006d789b551e875555f3e8ef32f0c46c3ec3911802fea405ef9d3458edb5d
-acquire_interposer=${WALLE_VK_ACQUIRE_INTERPOSER:-}
-forced_acquire_result=${WALLE_VK_FORCED_ACQUIRE_RESULT:-SUBOPTIMAL}
-forced_acquire_name=
 cli_device_selector=${WALLE_VK_CLI_SELECTOR:-}
 expected_device_type=${WALLE_EXPECTED_VK_DEVICE_TYPE:-}
 capture_width=2048
@@ -27,9 +24,6 @@ fail()
 [[ -x "$walle_binary" ]] || fail "missing Walle binary: $walle_binary"
 [[ -x "$labwc_binary" ]] || fail "missing Labwc binary: $labwc_binary"
 [[ -f "$scorer" ]] || fail "missing Vulkan capture scorer: $scorer"
-if [[ -n "$acquire_interposer" && ! -f "$acquire_interposer" ]]; then
-    fail "missing Vulkan acquire interposer: $acquire_interposer"
-fi
 if ldd "$walle_binary" | grep -Eiq 'lib(EGL|GLES|GLX|OpenGL)'; then
     fail 'Walle still links an OpenGL/EGL runtime'
 fi
@@ -94,23 +88,6 @@ declare -a walle_arguments=()
 if [[ -n "$cli_device_selector" ]]; then
     walle_arguments+=(--vulkan-device "$cli_device_selector")
 fi
-if [[ -n "$acquire_interposer" ]]; then
-    case "$forced_acquire_result" in
-        SUBOPTIMAL) forced_acquire_name=VK_SUBOPTIMAL_KHR ;;
-        OUT_OF_DATE) forced_acquire_name=VK_ERROR_OUT_OF_DATE_KHR ;;
-        *) fail "unsupported forced Vulkan acquire result: $forced_acquire_result" ;;
-    esac
-    preload=$acquire_interposer
-    asan_runtime=$(ldd "$walle_binary" | awk '$1 ~ /^libasan[.]so/ { print $3; exit }')
-    if [[ -n "$asan_runtime" ]]; then
-        preload="$asan_runtime:$preload"
-    fi
-    walle_environment+=(
-        "LD_PRELOAD=$preload"
-        "WALLE_TEST_VK_ACQUIRE_RESULT=$forced_acquire_result"
-    )
-fi
-
 if ! timeout 90s env "${walle_environment[@]}" \
     "$walle_binary" \
     "${walle_arguments[@]}" \
@@ -177,43 +154,42 @@ python3 "$scorer" "$capture_directory" \
     --expect-count-hash "$expected_count_hash" \
     >"$gate_root/vulkan-score.stdout"
 
-if [[ -z "$acquire_interposer" ]]; then
-    regular_capture_directory="$gate_root/capture-regular"
-    regular_config="$gate_root/walle-regular.ini"
-    install -d -m 700 -- "$regular_capture_directory"
-    printf '[walle]\nvulkan_device = auto\n\n[default]\nfiles =\n\tstretch:%s\n\tstretch:%s\n%s\n' \
-        "$black_image" \
-        "$white_image" \
-        $'timeout = 0\ntransition = true\ntransition_duration = 1\ntransition_variant = regular\nrandomize = false\ngamemode = false' \
-        >"$regular_config"
-    if ! timeout 90s env "${walle_environment[@]}" \
-        "$walle_binary" \
-        "${walle_arguments[@]}" \
-        --config "$regular_config" \
-        --reveal-mask-process-capture "$regular_capture_directory" \
-        >"$gate_root/walle-regular.log" 2>&1; then
-        sed -n '1,320p' "$gate_root/walle-regular.log" >&2
-        fail 'regular-material process capture did not complete successfully'
-    fi
-    if grep -Eq '\[Vulkan (WARN|ERROR)\]|Validation Error|VUID-' \
-        "$gate_root/walle-regular.log"; then
-        sed -n '1,320p' "$gate_root/walle-regular.log" >&2
-        fail 'regular-material Vulkan validation reported an error'
-    fi
-    regular_composition="$regular_capture_directory/composition-state-0032.bgra"
-    [[ -f "$regular_composition" ]] || fail 'missing regular composition readback'
-    [[ $(stat -c '%s' "$regular_composition") -eq "$composition_bytes" ]] \
-        || fail 'regular composition readback has the wrong byte count'
-    python3 "$scorer" "$regular_capture_directory" \
-        --output "$gate_root/vulkan-regular-score.json" \
-        --expect-mismatches 91 \
-        --expect-candidate-inventory "$expected_candidate_inventory" \
-        --expect-count-hash "$expected_count_hash" \
-        >"$gate_root/vulkan-regular-score.stdout"
-    if cmp -s -- "$clear_composition" "$regular_composition"; then
-        fail 'clear and regular composed swapchain bytes are identical'
-    fi
-    composition_different_bytes=$(python3 - "$clear_composition" "$regular_composition" <<'PY'
+regular_capture_directory="$gate_root/capture-regular"
+regular_config="$gate_root/walle-regular.ini"
+install -d -m 700 -- "$regular_capture_directory"
+printf '[walle]\nvulkan_device = auto\n\n[default]\nfiles =\n\tstretch:%s\n\tstretch:%s\n%s\n' \
+    "$black_image" \
+    "$white_image" \
+    $'timeout = 0\ntransition = true\ntransition_duration = 1\ntransition_variant = regular\nrandomize = false\ngamemode = false' \
+    >"$regular_config"
+if ! timeout 90s env "${walle_environment[@]}" \
+    "$walle_binary" \
+    "${walle_arguments[@]}" \
+    --config "$regular_config" \
+    --reveal-mask-process-capture "$regular_capture_directory" \
+    >"$gate_root/walle-regular.log" 2>&1; then
+    sed -n '1,320p' "$gate_root/walle-regular.log" >&2
+    fail 'regular-material process capture did not complete successfully'
+fi
+if grep -Eq '\[Vulkan (WARN|ERROR)\]|Validation Error|VUID-' \
+    "$gate_root/walle-regular.log"; then
+    sed -n '1,320p' "$gate_root/walle-regular.log" >&2
+    fail 'regular-material Vulkan validation reported an error'
+fi
+regular_composition="$regular_capture_directory/composition-state-0032.bgra"
+[[ -f "$regular_composition" ]] || fail 'missing regular composition readback'
+[[ $(stat -c '%s' "$regular_composition") -eq "$composition_bytes" ]] \
+    || fail 'regular composition readback has the wrong byte count'
+python3 "$scorer" "$regular_capture_directory" \
+    --output "$gate_root/vulkan-regular-score.json" \
+    --expect-mismatches 91 \
+    --expect-candidate-inventory "$expected_candidate_inventory" \
+    --expect-count-hash "$expected_count_hash" \
+    >"$gate_root/vulkan-regular-score.stdout"
+if cmp -s -- "$clear_composition" "$regular_composition"; then
+    fail 'clear and regular composed presentation bytes are identical'
+fi
+composition_different_bytes=$(python3 - "$clear_composition" "$regular_composition" <<'PY'
 import sys
 
 import numpy as np
@@ -227,10 +203,9 @@ if different < clear.size // 100:
     raise SystemExit(f"material variants differ in only {different} bytes")
 print(different)
 PY
-    )
-    clear_composition_sha=$(sha256sum "$clear_composition" | cut -d' ' -f1)
-    regular_composition_sha=$(sha256sum "$regular_composition" | cut -d' ' -f1)
-fi
+)
+clear_composition_sha=$(sha256sum "$clear_composition" | cut -d' ' -f1)
+regular_composition_sha=$(sha256sum "$regular_composition" | cut -d' ' -f1)
 
 if env XDG_RUNTIME_DIR="$runtime_directory" WAYLAND_DISPLAY="$wayland_display" \
     "$walle_binary" --config "$walle_config" \
@@ -269,13 +244,8 @@ printf '%s\n' \
     'mismatchedPixels=91' \
     'exactPixelPercentage=99.99996662139893' \
     "actualProcessCandidateInventorySha256=$expected_candidate_inventory"
-if [[ -z "$acquire_interposer" ]]; then
-    printf '%s\n' \
-        'materialVariantCompositionReadbackVerified=true' \
-        "materialVariantDifferentBytes=$composition_different_bytes" \
-        "clearCompositionSha256=$clear_composition_sha" \
-        "regularCompositionSha256=$regular_composition_sha"
-fi
-if [[ -n "$acquire_interposer" ]]; then
-    printf 'forcedAcquireResult=%s\n' "$forced_acquire_name"
-fi
+printf '%s\n' \
+    'materialVariantCompositionReadbackVerified=true' \
+    "materialVariantDifferentBytes=$composition_different_bytes" \
+    "clearCompositionSha256=$clear_composition_sha" \
+    "regularCompositionSha256=$regular_composition_sha"

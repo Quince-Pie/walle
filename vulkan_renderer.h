@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <wayland-client-core.h>
 
+struct wl_registry;
 struct wl_surface;
 
 #include "parity/liquid_glass_reveal_mask_model.h"
@@ -41,7 +42,7 @@ struct walle_vk_frame
 enum walle_vk_frame_status : uint8_t
 {
     WALLE_VK_FRAME_OK = 0,
-    WALLE_VK_FRAME_SURFACE_CHANGED,
+    WALLE_VK_FRAME_RETRY,
     WALLE_VK_FRAME_FATAL,
 };
 
@@ -49,6 +50,15 @@ enum walle_vk_frame_status : uint8_t
 bool walle_vk_renderer_create(struct wl_display*         display,
                               const char*                device_selector,
                               struct walle_vk_renderer** result);
+
+[[nodiscard]]
+bool walle_vk_renderer_bind_linux_dmabuf(struct walle_vk_renderer* renderer,
+                                         struct wl_registry*       registry,
+                                         uint32_t                  name,
+                                         uint32_t                  version);
+
+[[nodiscard]]
+bool walle_vk_renderer_linux_dmabuf_ready(const struct walle_vk_renderer* renderer);
 
 void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer);
 
@@ -71,6 +81,12 @@ bool walle_vk_output_upload(struct walle_vk_output*            output,
                             int                                fd,
                             const struct walle_vk_image_layer* standard,
                             const struct walle_vk_image_layer* glass);
+
+[[nodiscard]]
+bool walle_vk_output_restore_current(struct walle_vk_output*            output,
+                                     int                                fd,
+                                     const struct walle_vk_image_layer* standard,
+                                     const struct walle_vk_image_layer* glass);
 
 [[nodiscard]]
 enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      output,

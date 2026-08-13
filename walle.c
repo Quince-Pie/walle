@@ -243,6 +243,8 @@ struct wallpaper_output
     pthread_t render_thread;
 
     struct render_result async_result;
+    struct render_result current_source;
+    struct render_result pending_source;
     struct wl_callback*  frame_callback;
 
     struct wl_list                link;
@@ -363,6 +365,7 @@ struct wallpaper_state
 
     struct walle_vk_renderer* vk_renderer;
     uint32_t                  vk_max_image_dimension;
+    bool                      globals_ready;
 
     bool     reveal_process_capture;
     bool     reveal_process_capture_output_claimed;
@@ -394,6 +397,13 @@ static void update_wallpaper(struct wallpaper_output* output);
 static void launch_async_render(struct wallpaper_output* output);
 static struct output_config* get_config_for_output(struct wallpaper_state* state, const char* name);
 static void                  launch_cache_maintenance_service(void);
+
+static void release_render_result(struct render_result* result)
+{
+    if (result->fd >= 0)
+        close(result->fd);
+    *result = (struct render_result){.fd = -1};
+}
 
 /* Applied when an output's section disappears on hot reload: empties the
  * item list, disarms rotation, keeps the last frame on screen. */
@@ -1781,6 +1791,7 @@ static void stop_failed_transition(struct wallpaper_output* output, const char* 
     }
     output->render.t_state = T_STATE_IDLE;
     walle_vk_output_abort_transition(output->render.vk_output);
+    release_render_result(&output->pending_source);
 }
 
 enum render_frame_result : uint8_t
@@ -1879,7 +1890,7 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
 #endif
         return RENDER_FRAME_FAILED;
     }
-    if (status == WALLE_VK_FRAME_SURFACE_CHANGED) {
+    if (status == WALLE_VK_FRAME_RETRY) {
         if (output->frame_callback)
             wl_callback_destroy(output->frame_callback);
         output->frame_callback = wl_surface_frame(output->surface);
@@ -1928,7 +1939,11 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
             wl_callback_destroy(output->frame_callback);
             output->frame_callback = nullptr;
         }
+        wl_surface_commit(output->surface);
         walle_vk_output_promote(output->render.vk_output);
+        release_render_result(&output->current_source);
+        output->current_source = output->pending_source;
+        output->pending_source = (struct render_result){.fd = -1};
     } else {
         if (output->frame_callback)
             wl_callback_destroy(output->frame_callback);
@@ -2071,15 +2086,39 @@ static void finalize_render(struct wallpaper_output* output)
         .width  = res.glass.width,
         .height = res.glass.height,
     };
-    bool uploaded = output->render.vk_output
+    bool restored = first_boot;
+    if (!first_boot && output->current_source.fd >= 0) {
+        const struct walle_vk_image_layer current_standard = {
+            .offset = output->current_source.standard.offset,
+            .size   = output->current_source.standard.size,
+            .width  = output->current_source.standard.width,
+            .height = output->current_source.standard.height,
+        };
+        const struct walle_vk_image_layer current_glass = {
+            .offset = output->current_source.glass.offset,
+            .size   = output->current_source.glass.size,
+            .width  = output->current_source.glass.width,
+            .height = output->current_source.glass.height,
+        };
+        restored = output->render.vk_output
+                   && walle_vk_output_restore_current(output->render.vk_output,
+                                                      output->current_source.fd,
+                                                      &current_standard,
+                                                      &current_glass);
+    }
+    bool uploaded = restored && output->render.vk_output
                     && walle_vk_output_upload(output->render.vk_output, res.fd, &standard, &glass);
 
-    close(res.fd);
     if (!uploaded) {
+        release_render_result(&res);
+        walle_vk_output_abort_transition(output->render.vk_output);
         if (output->reveal_process_capture_owned)
             reveal_process_capture_fail(state, "wallpaper texture upload failed");
         return;
     }
+    release_render_result(&output->pending_source);
+    output->pending_source = res;
+    res                    = (struct render_result){.fd = -1};
 
     /* Keep the cache watermark honored on long-lived daemons. */
     if (++state->renders_since_gc >= GC_RENDER_PERIOD) {
@@ -2179,6 +2218,8 @@ static void destroy_output(struct wallpaper_output* o)
     o->reveal_process_capture_pixels = nullptr;
     free(o->reveal_process_composition_pixels);
     o->reveal_process_composition_pixels = nullptr;
+    release_render_result(&o->current_source);
+    release_render_result(&o->pending_source);
 
     /* Slots own their fds: cancel-then-close makes a CQE-after-free
      * impossible (generation bump) before the fd is released. */
@@ -2951,6 +2992,8 @@ static void output_handle_done(void* data, struct wl_output* wl_output)
 {
     (void)wl_output;
     auto output = (struct wallpaper_output*)data;
+    if (!output->render.state->globals_ready)
+        return;
     initialize_output(output);
 
     /* Scale changed after init (display settings): rescale the buffer. */
@@ -3161,6 +3204,9 @@ static void registry_global(
         /* v3+ makes the destroy request legal at shutdown. */
         state->layer_shell
             = wl_registry_bind(reg, name, &zwlr_layer_shell_v1_interface, ver < 3 ? ver : 3);
+    } else if (strcmp(interface, "zwp_linux_dmabuf_v1") == 0) {
+        if (!walle_vk_renderer_bind_linux_dmabuf(state->vk_renderer, reg, name, ver))
+            fprintf(stderr, "FATAL: could not bind modern linux-dmabuf feedback.\n");
     } else if (strcmp(interface, wl_output_interface.name) == 0) {
         if (state->shutting_down)
             return; /* a hotplug mid-shutdown must not resurrect the daemon */
@@ -3182,7 +3228,9 @@ static void registry_global(
                                                  .slot_timer     = -1,
                                                  .scale          = 1,
                                                  .wl_output_name = name,
-                                                 .async_result   = {.fd = -1}};
+                                                 .async_result   = {.fd = -1},
+                                                 .current_source = {.fd = -1},
+                                                 .pending_source = {.fd = -1}};
         o->wl_output = wl_registry_bind(reg, name, &wl_output_interface, v);
         wl_output_add_listener(o->wl_output, &output_listener, o);
         wl_list_insert(&state->outputs, &o->link);
@@ -3544,6 +3592,14 @@ int main(int argc, char* argv[])
         rc = 1;
         goto teardown;
     }
+    if (!walle_vk_renderer_linux_dmabuf_ready(state.vk_renderer)) {
+        fprintf(stderr,
+                "FATAL: compositor lacks usable linux-dmabuf v4 feedback; "
+                "Walle requires adaptive direct Vulkan presentation.\n");
+        rc = 1;
+        goto teardown;
+    }
+    state.globals_ready = true;
 
     /* Outputs whose events all arrived within the initial burst (e.g. a v1
      * wl_output announced before the layer shell) initialize here, once all

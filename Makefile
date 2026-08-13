@@ -36,11 +36,9 @@ PROFILE_BIN_DIR ::= $(BIN_DIR)/$(PROFILE)
 PROTOCOL_DIR    ::= protocols
 SHADER_DIR      ::= shaders
 SPIRV_DIR       ::= $(BUILD_DIR)/shaders
-VULKAN_TEST_DIR ::= $(BUILD_DIR)/tests/$(PROFILE)
 
 TARGET        ::= $(PROFILE_BIN_DIR)/walle
 ACTIVE_TARGET ::= $(BIN_DIR)/walle
-VULKAN_SUBOPTIMAL_INTERPOSER ::= $(VULKAN_TEST_DIR)/libwalle-vulkan-suboptimal.so
 
 # Core Application Sources (Located in root)
 APP_SOURCES ::= walle.c shiro.c vulkan_renderer.c \
@@ -236,6 +234,18 @@ $(call CHECK_STATUS)
 CFLAGS += $(JEMALLOC_CFLAGS)
 LDLIBS += $(JEMALLOC_LDLIBS)
 
+# 5.4.1 Linux DRM format/modifier definitions
+# =============================================================================
+LIBDRM_DEPS ::= libdrm
+
+LIBDRM_CFLAGS != $(PKG_CONFIG) --cflags $(LIBDRM_DEPS)
+$(call CHECK_STATUS)
+LIBDRM_LDLIBS != $(PKG_CONFIG) --libs $(LIBDRM_DEPS)
+$(call CHECK_STATUS)
+
+CFLAGS += $(LIBDRM_CFLAGS)
+LDLIBS += $(LIBDRM_LDLIBS)
+
 # 5.5 System Probing (D-Bus / GameMode Integration)
 # =============================================================================
 # libsystemd provides sd-bus for monitoring org.freedesktop.portal.GameMode
@@ -269,6 +279,7 @@ LDLIBS += $(URING_LDLIBS)
 
 # Protocol XML Sources
 XDG_SHELL_XML ::= $(WAYLAND_PROTOCOLS_DIR)/stable/xdg-shell/xdg-shell.xml
+LINUX_DMABUF_XML ::= $(WAYLAND_PROTOCOLS_DIR)/stable/linux-dmabuf/linux-dmabuf-v1.xml
 
 # Robustly locate WLR protocols (often requires the 'wlr-protocols' package).
 # Attempt pkg-config first, fallback to standard directory if pkg-config fails or returns empty.
@@ -280,9 +291,11 @@ XDG_C ::= $(PROTOCOL_DIR)/xdg-shell.c
 XDG_H ::= $(PROTOCOL_DIR)/xdg-shell.h
 WLR_C ::= $(PROTOCOL_DIR)/wlr-layer-shell-unstable-v1.c
 WLR_H ::= $(PROTOCOL_DIR)/wlr-layer-shell-unstable-v1.h
+LINUX_DMABUF_C ::= $(PROTOCOL_DIR)/linux-dmabuf-v1.c
+LINUX_DMABUF_H ::= $(PROTOCOL_DIR)/linux-dmabuf-v1.h
 
-GENERATED_SOURCES ::= $(XDG_C)
-GENERATED_HEADERS ::= $(XDG_H)
+GENERATED_SOURCES ::= $(XDG_C) $(LINUX_DMABUF_C)
+GENERATED_HEADERS ::= $(XDG_H) $(LINUX_DMABUF_H)
 
 # wlr-layer-shell is a hard requirement: walle renders exclusively onto
 # zwlr_layer_shell_v1 background surfaces and is useless without it.
@@ -326,17 +339,8 @@ reveal-raster-gate: parity/raster_p25_selector_ceil_bits.bin \
 reveal-best-known-corpus-gate: reveal-best-known-process-gate
 
 reveal-best-known-process-gate: $(TARGET) \
-		analysis/run_walle_reveal_process_capture_gate.sh \
-		$(VULKAN_SUBOPTIMAL_INTERPOSER)
+		analysis/run_walle_reveal_process_capture_gate.sh
 	bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
-	WALLE_VK_ACQUIRE_INTERPOSER=$(abspath $(VULKAN_SUBOPTIMAL_INTERPOSER)) \
-		bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
-	WALLE_VK_ACQUIRE_INTERPOSER=$(abspath $(VULKAN_SUBOPTIMAL_INTERPOSER)) \
-		WALLE_VK_FORCED_ACQUIRE_RESULT=OUT_OF_DATE \
-		bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
-
-$(VULKAN_SUBOPTIMAL_INTERPOSER): analysis/inject_vulkan_suboptimal.c Makefile | $(VULKAN_TEST_DIR)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -fPIC -shared $< -ldl -o $@
 
 # --- Linking Rule ---
 $(TARGET): $(OBJECTS) | $(PROFILE_BIN_DIR)
@@ -398,6 +402,11 @@ $(XDG_C) $(XDG_H) &: $(XDG_SHELL_XML) | $(PROTOCOL_DIR)
 	$(WAYLAND_SCANNER) client-header $< $(XDG_H)
 	$(WAYLAND_SCANNER) private-code $< $(XDG_C)
 
+$(LINUX_DMABUF_C) $(LINUX_DMABUF_H) &: $(LINUX_DMABUF_XML) | $(PROTOCOL_DIR)
+	@echo "[WL_SCAN] Linux dma-buf ($<)"
+	$(WAYLAND_SCANNER) client-header $< $(LINUX_DMABUF_H)
+	$(WAYLAND_SCANNER) private-code $< $(LINUX_DMABUF_C)
+
 # Rule for WLR Layer Shell (Conditional)
 ifneq ($(WLR_LAYER_SHELL_XML),)
 $(WLR_C) $(WLR_H) &: $(WLR_LAYER_SHELL_XML) | $(PROTOCOL_DIR)
@@ -409,7 +418,7 @@ endif
 
 # --- Infrastructure (Directories) ---
 # Order-only prerequisites (|) ensure creation without triggering unnecessary rebuilds.
-$(BIN_DIR) $(PROFILE_BIN_DIR) $(PROTOCOL_DIR) $(SPIRV_DIR) $(VULKAN_TEST_DIR):
+$(BIN_DIR) $(PROFILE_BIN_DIR) $(PROTOCOL_DIR) $(SPIRV_DIR):
 	@mkdir -p $@
 
 # Include generated dependency files.
