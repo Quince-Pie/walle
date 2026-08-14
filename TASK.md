@@ -2277,3 +2277,26 @@ The identification is at the stage where the remaining freedom is
 the exact alignment/rounding datapath generating these; every new
 capture now adds an exact constraint in minutes.  Goal steps 2-3
 (compose+rescore; port 91->80->0) remain queued on this law.
+
+## 2026-08-14 (later 63): ay-phase scan closes the round; law state summary
+
+Capture a2-wobble-ayphase-plan-v1 (32 sub-tile ay phases x transect;
+capture.raw sha256
+832d4a124e7477101bc3b5f25ad06a7a811a0fef961ed42d3a4b6f13b0b03a56):
+- The boundary POSITION is invariant under ay phase: tx* = 56
+  whenever visible (pure-ax position law confirmed:
+  tx* = floor(ax/8192) - 4 + block).
+- VISIBILITY toggles with ay's sub-tile phase: 11/32 phases show the
+  jump (~1/3, matching the later-56 g-scan statistic); k=12/16 show
+  the whole transect on the upper word (global phase crossing).
+- Case 2's full-screen null (later-62) is therefore a phase-
+  visibility effect, not a position change: at ay%8192=640 every
+  in-window tile's phase sits clear of the word boundary.
+THE JOIN-JUMP LAW, assembled: position = pure function of ax (+block
+index, + slope-binade-delta coefficient for the boundary slope);
+magnitude = sub-ulp internal step whose word-visibility follows the
+value phase; storage = block-float triple, smaller-slope lane.
+Remaining to write down: the closed-form internal step (the ~3-lsb27
+base / 10-16-lsb large-alignment values as a function of the
+alignment shift), then goal steps 2 (compose + rescore 38,612 pts +
+dense corpus) and 3 (port 91 -> 80 -> 0).
