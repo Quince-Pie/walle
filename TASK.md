@@ -3071,3 +3071,24 @@ NEXT-WINDOW START: wire internal vertex values into the child
 scorer; rescore cancellation children (expect them to join the
 perfect list); then L3 G-pulses for the remaining rows; theta
 closed form; held-out; ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 102): internal slope integrated - 12 perfect children
+
+Using the banked build28 internal 28-bit slope (n28 x sel, frame
+2^(g+se-8) per subpixel) instead of the exported 24-bit B word:
+TOTAL 13906/18862, *** 12 perfect children *** (was 8).  Newly
+(near-)fixed: s35 o104 0->532/569, s47 o2 0->483/789, s40 o104
+526/651, s41 o2 0->101, s42 o2 0->148.  The measured internal-slope
+deficit (-1.08 ulp24-relative vs the exported word on s41 o2) is
+exactly what build28 produces - CONFIRMING the internal-slope
+hypothesis and the banked chain for most children.
+Remaining failures (s35/40/45 o2 at 0; s41/s42 o2 partial; s39/s44
+o6 partial) trace to the slope chain's low bits being +-1-2 ulp28
+off for a SUBSET of children - the same reciprocal-path gap as the
+108-basis-words (72/108).  ONE remaining imperfect law (the
+selector/reciprocal chain low bits) now gates both fronts.
+NEXT: nail the reciprocal chain's last bits (probe: children where
+cancellation rows pin the internal slope to sub-ulp28 - s41 o2's
+rows ARE such an instrument: solve slope_int from the hw C words
+exactly, compare against build28 variants); then rescore; theta
+closed form; held-out; ports.
