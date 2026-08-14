@@ -3474,3 +3474,20 @@ q^2 mod 128, binary reversal.  NEXT: fit delta(q_odd) exactly over
 the 16 points (consider two-term forms 64/q + saw(...); the {7,9}
 pair at 3 and {1,3,5,15} at 0 suggest a floor/threshold in the
 recursion); then wide_law update; theta collapse test; ports.
+
+## 2026-08-15 (later 124): theta does NOT collapse - the residue is the ripple
+
+With MEASURED cuts, per-class global theta stays phase-spread
+(tt4 25 / tz4 37 / tz5 41 / tz8 33 / tz9 31 / 1664:35 / 6528:39)
+and corpus children at the SAME phase fit different theta
+(6528: s60o4->25, s58o4->17, s58o106->49): theta is absorbing a
+smooth +-20v ripple delta2(dm, q) - the last continuous term (the
+non-band residual in the later-117 deviant map).  The universal
+export threshold is (25,17)-ish (p=0 child: 21 mid); everything
+else phase/dm-dependent is delta2.
+NEXT-WINDOW START: fit delta2(dm,q) on thp2's 128-dm ripple at
+q=6528/1664 (bands removed, windows +-32v): candidate family
+c*wrap((dm*q) mod 2^k)*2^(bl-a) with k in 20..24 (the SECOND
+recursion level of the same rounder - q=64's delta2 vanishing
+explains why tt4 never showed it); then compose L1+cut-table+delta2
++theta(25,17), rescore everything; then dense; then ports.
