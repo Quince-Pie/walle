@@ -2170,3 +2170,26 @@ NEXT: derive tx*(ax, ay, ty) exactly from the banked mid-product
 chain (the shift changes at bl(didx) transitions are computable
 input-only); test on all five wobble captures; then compose with the
 X-law constraints and rescore everything.
+
+## 2026-08-14 (later 59): exact jump iso-invariants measured
+
+Boundary invariants (didx_x = ax - 8192*(tx+1) right-edge, didx_y =
+8192*ty - ay corner, subpixels):
+- base geometry (ax=494848): 4*didx_x + didx_y = 318080 EXACT at
+  ty = 0/4/8/12 boundary tiles (56/57/58/59).
+- shift -8 (ax=429312): 4*didx_x - 5*didx_y = -396416 EXACT at
+  ty = 0/4 (tiles 32/27) - the dy coefficient flips +1 -> -5 with
+  the displacement regime.
+- C-difference derivation of the slope FALSIFIED cleanly: exact-
+  product C27 differences wobble far MORE than hw (182/729); hw's
+  slope is computed once with ONE conditional adjustment, gated by
+  these linear displacement invariants.
+Small-shift position law: tx* = floor(ax/8192) - 4 (right-edge 2^15
+crossing) confirmed for shifts 0/-1/-2/+4.
+DERIVATION TARGET: coefficients (4, +1) vs (4, -5) and the constants
+318080 / -396416 must fall out of the mid-product normalization
+(didx24 shifts and the join alignment) - the 4:1 weight with EQUAL
+slopes cannot come from value magnitudes; it is a shift-alignment
+property.  Next session: derive them from the banked chain's
+alignment arithmetic; then the composed rescore; then the ports
+(91 -> 80 -> 0) per the standing goal.
