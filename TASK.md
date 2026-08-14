@@ -3285,3 +3285,21 @@ ed9c156e85ee07eae93506e63650588d06eff60a3e4c8aceb4ce6d7d23c6e21e):
 NEXT-WINDOW START: family-census the q=6528 ladders (the later-90
 method) -> large-q L1 correction -> re-derive theta(q,ty) surface ->
 closed form -> gated composite -> held-out -> ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 114): odd-form sawtooth eliminated; large-q gap quantified
+
+Original folding (dm*q mod 2^19) vs odd-part form (dm*q_odd mod 2^19,
+scale shifted): odd-form is MUCH worse at large q (q=6528: 13.2% vs
+78.1% in-window; q=1664: 51.4% vs 75.9%) - decisively eliminated;
+the original folding stands.  In-window rates (excursion-tolerant,
++-32v): small q 82-93%, corpus phases 76-78% - the large-q gap is
+~22% of cells falling outside half-a-granule (L3 pulses + a real
+large-q L1 second-order term).  CAVEAT for the census method: the
+per-cell export mid is only +-32v resolution - the apparent t-mod-3
+"residual cycle" at q=6528 may be aliased export noise; only
+window-membership statistics are trustworthy at single-export
+resolution.  Sub-v resolution needs the eps-lever instrument
+combined with the phase scan (eps tomography AT q=6528).
+NEXT-WINDOW: eps-lever + phase instrument for corpus phases (pin the
+internal value to ~2v at q=1664/6528 as eps-v3 did at q=64), then
+the large-q L1 term, then theta closed form, then ports.
