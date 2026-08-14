@@ -2692,3 +2692,35 @@ Basis-chain eliminations (108 hw words):
 - Parts sum at >=28-bit internal precision (sequential-f32 orders
   score 52..56/108 vs 72 for the 28-bit-norm model).
 - Remaining misses are INSIDE the per-part product chain (task #3).
+
+## 2026-08-14 (later 82): THE WALK HYPOTHESIS (reframe of layer 3)
+
+Smoking gun from eps-v3: with ALL-EXACT inputs (u in {0,16,32,48}:
+A, X exact granule multiples; t=0 wide part exact), exports deviate
+by WHOLE GRANULES (+1/-1/+2), row- and u-dependent (rows 19..33
+table banked in analysis; rows 34..63 exact at u=0).  Exact-input
+whole-granule errors cannot come from any per-cell rounding rule -
+they are accumulated carries: *** the per-tile C constants are
+produced by a SEQUENTIAL TILE WALK from the anchor row with per-step
+quantization, not by direct evaluation ***.  This unifies: tt3's
+exactness (narrow partial sums never round -> walk == direct = the
+proven narrow law), the wide-path "compensation" (accumulated step
+roundings), K(tz) means, the killer d_o=1793 (walk carry boundary;
+one granule low at exact inputs, ty=30 u=0), the phase-0 census
+(step-phase statistic), and s58's banked "drift -2u/row with resync
+jumps" (the walk observed directly).
+First walk fits (analysis/wide_walk_law.py; seed = first probed row,
+step = dm*pitch, quantize each step):
+  rne28-walk: tt4 13637/18001, tt3 17457/18001, tt1 1125/1305
+  rna27-walk: tt4 12447, rne24-walk: tt4 6464
+- rne28 nearly matches the direct-law baseline (13876) with NO
+  special cases, but tt3 must be exact (17457 != 18001): the
+  accumulator must hold >=30 bits OR quantize on an absolute grid
+  anchored at the walk seed's binade, not renormalized per step.
+NEXT: sweep walk variants: seed row (geometric anchor ty=16, d_o=1),
+accumulator width 28..32, absolute-grid vs renormalized quantization,
+per-step vs per-export rounding split (eps decode says the export
+rounds at 24 with the X-part granule-RNE; the accumulator itself is
+finer), walk direction, and the 2-D version (x-walk then y-walk -
+the a2 basis planes need the x-axis walk too).  Rescore tt1/tt3/tt4
++ dense + 38612 held-out; then ports 91 -> 80 -> 0.
