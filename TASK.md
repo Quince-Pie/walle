@@ -3491,3 +3491,22 @@ c*wrap((dm*q) mod 2^k)*2^(bl-a) with k in 20..24 (the SECOND
 recursion level of the same rounder - q=64's delta2 vanishing
 explains why tt4 never showed it); then compose L1+cut-table+delta2
 +theta(25,17), rescore everything; then dense; then ports.
+
+## 2026-08-15 (later 125): ripple is row-AND-dm dependent; class-constant forms fail
+
+thp2 (q,dm) windows intersected across 12 rows: only 68/458 valid
+(rest contradictory) - the ripple varies BY ROW at the corpus
+phases; per-(dm mod m) class constants fit only 23-35/68 for
+m in {3,17,13,51}; second-recursion wrap forms score below the
+zero baseline.  The ripple is a (dm, d_o) interaction term
+(+-20v), not a per-dm constant nor a mod-class function.
+STATE at window end: L1 sawtooth + measured 16-phase cut table +
+theta ~ (25,17): per-class 90-94%; the ripple is the last
+continuous unknown (plus 11 boundary cells + L3 pulses).
+NEXT-WINDOW: the ripple needs per-(dm,row) resolved data - the
+careful eps decode of epq2 (12 t x 12 rows x both phases, dither-
+median, eps-base-subtracted) gives exactly that at ~2-4v; fit
+delta2(dm,d_o,q) forms on it (products of both operands' low bits
+are the natural family: the SECOND operand's sawtooth
+wrap((d_o * p2) mod 2^19) with p2 = subrow phase, or the cross
+term wrap((dm*d_o) mod 2^k)); then compose; then ports.
