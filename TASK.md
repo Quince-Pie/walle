@@ -2219,3 +2219,33 @@ mantissas aligned); the smaller slope's stored mantissa changes by
 one step where an alignment-relevant quantity (linear in didx with
 slope-binade-dependent coefficients) crosses a threshold.  This is
 the last arithmetic to pin for step 1 of the goal.
+
+## 2026-08-14 (later 61): coefficient law confirmed; traversal-counter model
+
+Capture a2-wobble-ratios-plan-v1 (4 geometries, 1795 draws;
+capture.raw sha256
+8ed26b539de228bbf344b1098991b0b7e627c6c2a1c5261f76af11505f159e0e):
+1. c1 = 4 + (binade(A) - binade(B)) CONFIRMED at three points:
+   ratio 1:1 -> 4, 2:1 -> 5 (later-60), 4:1 -> 6 (case 0: boundary
+   advance +1 tile per ~6 rows, first-X 59 x ty0-5 then 60).
+2. Case 3 (A slightly smaller than B, span 1833px): BOTH lanes jump
+   at the same near-vertical boundary tx~30 (~ the didx_x 2^18
+   crossing at 28.4), with LARGE steps: A +10 lsb, B +16 lsb -
+   bigger alignment shifts produce bigger re-quantization steps,
+   as block-float storage predicts.
+3. Case 1 (B = 2A: A smaller): no wobble in the mapped window
+   (boundary elsewhere - coverage miss, not falsification).
+   Case 2 (ay + 100px): wobble vanished from the window although the
+   naive K-invariant predicts ~u*=55: K depends on the anchor in a
+   way the current form misses - a wrinkle for the derivation.
+4. MODEL CANDIDATE unifying the 4:1 quantum: the coefficient
+   traversal walks tile-x within 4-row blocks then steps block-y,
+   decrementing ONE shared displacement counter by one tile-quantum
+   per traversal step; the jump = the counter's binade crossings
+   (2^15 base case, 2^18 case 3), which change the block-float
+   alignment of the smaller slope's stored mantissa.  c1 = 4 + dbin
+   would follow if the counter's per-x-step decrement scales with
+   the slope-binade difference.  NEXT: formalize counter arithmetic;
+   fit all six wobble datasets exactly; then compose with the
+   mid-product X law and rescore (goal steps 1-2), then port
+   (step 3).
