@@ -1634,3 +1634,21 @@ NEXT (concrete): (a) explain the ty24/25-vs-ty26/27 Mb=24 split -
   under the same probe series; (c) once the multiplier rule is exact
   on 2610/2610, re-run the s58-o4 tomography (1800 pts) and the dense
   33.7k scorer, then the corpus gate.
+
+## 2026-08-13 (later 37): session close-out; best Booth variant so far
+
+Per-sign partial rounding sweep: best = Booth(multiplier=didx24,
+multiplicand=dm), B=20, positive partials FLOORED, negative partials
+ROUND-HALF at B, K=0: 2340/2610 (89.7%) on the truth table - the best
+closed form to date, still not exact.  The identification is now a
+bounded search: a truncated radix-4 Booth array over dm x didx24 with
+per-position correction/sign-extension handling, scored against three
+frozen datasets in ascending strictness:
+  1. c-truthtable-plan-v1: 2610 pts (sel transparent) - must be 100%
+  2. c-walk-tomography-plan-v1: 1800 pts (sel=18280236 engaged)
+  3. residual-children-dense-plan-v1: 33,736 C-tiles (all children)
+then the corpus gate (expect the ~34 walk-gated bytes to flip green,
+91 -> ~57 -> chase the rest).  All three datasets + loaders exist in
+analysis/ (hunt_c_walk_seed.py loaders, score_c_chain_dense.py).
+The Mb=24 ty24/25-vs-ty26/27 split (later-36 fact 2) remains the
+sharpest single discriminator any candidate must pass.
