@@ -3181,3 +3181,16 @@ validated (12 perfect children); clean-row exactness 98.6%; class
 tables ~96%; the residual is a single small structured term plus
 theta(path).  Gate remains 91; the port milestones (91->80->0) queue
 behind the exact closure.
+
+## 2026-08-15 (later 108): tie-rule elimination
+
+The 32 clean-row violators are all exact-v-grid ties within +-1v of
+theta, split by dm parity (even up / odd down) - but the UNCONDITIONAL
+dm-parity tie shift scores WORSE (2230/2298 vs 2266; all-rows 16491
+vs 16463 baseline is +28 net but clean rows regress): the parity
+pattern does not generalize; the discriminator among near-theta ties
+is something else (candidates: parity of a deeper pipeline word, the
+27-stage lattice position, or the t mod 4 storage-jam bits).  Next
+window: build the tie-cell census across ALL rows/classes (every
+exact-grid cell within +-1v of theta, with full dm/d_o/r context)
+and solve the discriminator exactly; it is the last cell-level term.
