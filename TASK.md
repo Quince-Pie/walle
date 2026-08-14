@@ -2489,3 +2489,27 @@ eb61f273411a956dc19f999d5e24ae499354e98346d44326664ea2547487ebdb):
 REMAINING: region membership wrinkles (later-70/71), C-lane analogue
 (likely the same jam at the C storage - testable on the region C
 words in existing captures), compose, rescore, port.
+
+## 2026-08-14 (later 73): C-lane jam confirmed; membership = anchor proximity
+
+1. C-LANE JAM: in-region C words of the base wobble capture are
+   52/60 = 87% congruent 2 mod 4 (vs uniform 25% outside): the
+   region storage jams C exactly like the slopes.  (Exceptions ~8
+   tiles - likely corner-sliver/edge membership, to refine.)
+2. MEMBERSHIP is anchor PROXIMITY: |R| < quantum (~32768 for A=B),
+   not one-sided R < quantum: base map's beyond-anchor tiles
+   (R = -4864, -13056) are in-region; tt3's probes (R = -368640,
+   44 tiles right of the anchor) are correctly OUT - resolving the
+   would-be contradiction with tt3's exact narrow-law words.
+3. THE tt1 ANOMALY IDENTIFICATION: tt1's bl<=30 deviating cells
+   (d_o = 51, 115 <-> rows ty = 20, 21) are exactly the rows adjacent
+   to the anchor row (19.2) - the Y-DIRECTION region band.  The
+   wide-path X phenomenology = the region system seen from the C
+   lane (with a storage variant to pin: those cells' words end 0b11,
+   not 0b10 - the y-region C storage granularity differs, or the jam
+   sits at 26-bit pre-export for C in that regime).
+The unified picture: anchor-proximity regions (x- and y-bands, one
+block quantum wide, value-ratio-scaled, 4-row sheared) whose stored
+triples are 2-bit-jammed; everything else is the exact chain.
+NEXT: pin the y-band's storage granularity from tt1's deviation set;
+formalize both bands; rescore tt1/tt3/tt4 (38,612) + dense; port.
