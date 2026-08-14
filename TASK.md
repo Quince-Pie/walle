@@ -3146,3 +3146,20 @@ The law stack is: L1 sawtooth (closed) + L2' second-order cell term
 residual cells directly (which dm's deviate from the row threshold,
 vs dm bits/r-position) on tt4 rows with the cleanest windows - the
 same family-census method that cracked L1 (later-90).
+
+## 2026-08-15 (later 106): residual census in clean rows - second harmonic hypothesis
+
+Rows 49-54 of tt4 under L1+theta(25,17): 2266/2298 (98.6%); the 32
+violations are structured: tiny-t cells (t=3..45, r=18/26) round
+DOWN 1v above threshold; t in [196..251] (r=16/24) round UP 1v
+below; t = 0x0E00-family at r=0 (+1).  Cut variants (27/64, 28/64)
+score WORSE (2246) - not a cut shift; integer-vs-exact threshold
+comparison is identical (algebra).  The +-1v tilt within each 256-t
+block suggests a SECOND, weaker sawtooth one scale down (the same
+biased rounder at the next pipeline stage - self-similar cascade):
+delta2 ~ -wrap((dm*p) mod 2^13)*2^(bl-48)-scale.  98.6% on clean
+rows means the L1 law + simple theta is already at the corpus-
+useful level for most rows; the harmonic closes the last 1.4%.
+NEXT: fit the second harmonic's (modulus, cut, amplitude) against
+the 32-violation census + all-class residuals; then the dense gated
+composite + per-path theta; held-out; ports.
