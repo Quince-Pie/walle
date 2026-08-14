@@ -2142,3 +2142,31 @@ didx-threshold hypothesis (power-of-2 crossings of the mid-product);
 asymmetric triangle for g/u* scaling; then the composed model
 (mid-product X law + join jump) rescored on tt1/tt3/tt4 and the
 dense corpus captures.
+
+## 2026-08-14 (later 58): jump position = displacement binade crossing (partial law)
+
+Capture a2-wobble-map8-plan-v1 (full 2-D maps, shifts -8 and +4 tiles;
+1349 draws; capture.raw sha256
+7d6ff22087fea8ad59d33fc3278e2eeafa99113dc7f2843f9feac0b0c6ac2169):
+- Shift +4: identical structure, u* = 60 = 56+4 (geometry-locked,
+  confirming later-57).
+- Shift -8: boundary ORIENTATION REVERSES: first-X tx per row falls
+  ~-5/4 tiles/row (32 at ty0 -> 8 at ty18) vs +1/4 in the base case.
+- POSITION LAW (small shifts): tx* = the tile where the anchor
+  x-displacement didx_x = ax - 8192*tx crosses 2^15 subpx:
+  base ax=494848: crossing 56.4 -> tx*=56; +4: 60.4 -> 60;
+  -1: 55.4 -> 55 (all match); the -8 case (ax=429312, crossing 48.4)
+  does NOT match its observed 32 - it sits in a different regime
+  (bigger didx binades in-triangle), consistent with the orientation
+  flip: the governing quantity involves BOTH didx components (the
+  base case fits didx_x + didx_y/4 = 342.6px across ty; -8 fits
+  ~tx + 5ty/4 = 31.5 iso-lines).  The jump is a MID-PRODUCT BINADE
+  EVENT: when didx crosses a power of two, the product normalization
+  shift changes by one, moving the join's rounding position -> the
+  ~3-lsb27 step (later-56).  This finally connects the join jump to
+  the SAME didx-binade arithmetic as the wide-path X law (bl(disp)=19
+  diagonal, tz classes) - one mechanism family, two observables.
+NEXT: derive tx*(ax, ay, ty) exactly from the banked mid-product
+chain (the shift changes at bl(didx) transitions are computable
+input-only); test on all five wobble captures; then compose with the
+X-law constraints and rescore everything.
