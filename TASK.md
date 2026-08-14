@@ -1592,3 +1592,45 @@ was an artifact of coarse anchoring):
    Next: extract exact dropped-mass delta per (k, ty) from tight-ulp
    rows; test radix-4 Booth truncated multiply with sign-correction
    compensation.
+
+## 2026-08-13 (later 36): C-PRODUCT TRUTH TABLE (major dataset + laws)
+
+NEW CAPTURE: c-truthtable-plan-v1 (2610 draws; capture.raw sha256
+20f331d807081c616f37738658e9b26218793e984023c62aa354b790e789d6ed).
+Synthetic child: v0=(512,614.5,val 0)[anchor] v1=(2560,614.5,val 0)
+v2=(2560,2662.5,val probe); edge=2048, det=2^38 subpx^2 (selector =
+exact power of two => the capture isolates PRODUCT+EXPORT stages).
+C(ty) must equal Q(delta * didx)/2048, didx = ty*8192-157312 (tz=7).
+Probe words: 1.0, 1+2^-j (j=1..23), dense tails, 0.5x twins (0.5x
+twins behave IDENTICALLY - binade-invariant).
+
+HARD FACTS (bit-exact reads):
+1. delta with <= 14 low-significant mantissa bits (product needs <=27
+   result bits): hw C = RNE24(exact product), 45/45 rows each,
+   including ties resolved to EVEN (j=13: +0.5 ties UP where up=even).
+2. j=15 (28-bit products): hw = keep-top-24-of-M TRUNCATION toward
+   zero (-0.5/-0.75/-0.375 signatures = RTZ of Mb=25/26/27), 25-bit
+   ties broken TOWARD ZERO not to-even; EXCEPT Mb=24 rows split:
+   ty24/25 export M exactly, ty26/27 export M-1 (same product frame,
+   same binade, M odd in all four) - a Booth-digit/row-parity level
+   discriminator that defeats every closed-form rounding tried.
+3. j=18 (31-bit products, needs MORE precision): hw = RNE24(exact),
+   45/45 incl. round-UP rows (NOT truncation) - so the rounding regime
+   is not a simple function of product width either.
+4. Model families swept to their ceilings (~88-89% of 2610): self-
+   binade quantize W in 24..30 x rne/rtz/away/rna; fixed-48-frame
+   truncation; pps partial truncation T in 12..24 with consts; radix-4
+   Booth truncated (floor and faithful ~x+dropped-correction forms),
+   both operand orientations; f32 fma chains; DDA accumulators with
+   free sub-word seeds.  All plateau ~2300/2610; the same ~300
+   observations (concentrated in j=15/19 and tail4/8 words) resist.
+Scorer for candidates: analysis/score_c_chain_dense.py (full dense
+capture 33,736 C-tiles; banked chain baseline 23,024-24,561 there).
+NEXT (concrete): (a) explain the ty24/25-vs-ty26/27 Mb=24 split -
+  candidates: sticky/guard from the 48-bit frame (bit 23 = M lsb) with
+  round-to-odd-then-RNE24 double rounding, carry-save array parity;
+  test round-to-odd at 25/26 bits then RNE24; (b) second truth-table
+  capture with det NOT a power of two to expose the selector stage
+  under the same probe series; (c) once the multiplier rule is exact
+  on 2610/2610, re-run the s58-o4 tomography (1800 pts) and the dense
+  33.7k scorer, then the corpus gate.
