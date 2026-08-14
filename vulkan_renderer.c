@@ -150,7 +150,7 @@ struct walle_vk_mask_push
 {
     float    resolution[2];
     float    compact_family;
-    float    padding;
+    uint32_t general_child_count;
     uint32_t owner_count;
     uint32_t base_owner_count;
     uint32_t packed_width;
@@ -244,6 +244,9 @@ struct walle_vk_output
     VkDeviceSize owner_offset;
     VkDeviceSize mapping_offset;
     VkDeviceSize axis_offset;
+    VkDeviceSize general_offset;
+    VkDeviceSize general_constant_offset;
+    VkDeviceSize general_constant_capacity;
 
     uint32_t axis_packed_width;
     bool     transition_resources_ready;
@@ -1446,8 +1449,8 @@ static bool device_selector_matches(const char*                       selector,
 
 static bool create_descriptor_layouts(struct walle_vk_renderer* renderer)
 {
-    VkDescriptorSetLayoutBinding mask_bindings[4] = {};
-    for (uint32_t index = 0; index < 4; ++index) {
+    VkDescriptorSetLayoutBinding mask_bindings[6] = {};
+    for (uint32_t index = 0; index < 6; ++index) {
         mask_bindings[index] = (VkDescriptorSetLayoutBinding){
             .binding         = index,
             .descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
@@ -1457,7 +1460,7 @@ static bool create_descriptor_layouts(struct walle_vk_renderer* renderer)
     }
     VkDescriptorSetLayoutCreateInfo mask_info = {
         .sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-        .bindingCount = 4,
+        .bindingCount = 6,
         .pBindings    = mask_bindings,
     };
     if (!vk_check(vkCreateDescriptorSetLayout(
@@ -2483,7 +2486,7 @@ static bool create_transition_descriptor_sets(struct walle_vk_output* output)
 {
     struct walle_vk_renderer* renderer     = output->renderer;
     VkDescriptorPoolSize      pool_sizes[] = {
-        {.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, .descriptorCount = 4},
+        {.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, .descriptorCount = 6},
         {.type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, .descriptorCount = 5},
         {.type = VK_DESCRIPTOR_TYPE_SAMPLER, .descriptorCount = 1},
     };
@@ -2569,8 +2572,9 @@ static bool ensure_transition_base(struct walle_vk_output* output, bool readback
     return true;
 }
 
-static bool ensure_transition_buffers(struct walle_vk_output*              output,
-                                      const struct walle_lg_reveal_raster* raster)
+static bool ensure_transition_buffers(struct walle_vk_output*               output,
+                                      const struct walle_lg_reveal_raster*  raster,
+                                      const struct walle_lg_reveal_general* general)
 {
     struct walle_vk_renderer* renderer = output->renderer;
     VkDeviceSize storage_alignment = renderer->properties.limits.minStorageBufferOffsetAlignment;
@@ -2592,8 +2596,24 @@ static bool ensure_transition_buffers(struct walle_vk_output*              outpu
         output->owner_offset + sizeof(struct walle_lg_reveal_owner_block), storage_alignment);
     output->axis_offset
         = align_device_size(output->mapping_offset + mapping_size, storage_alignment);
+    VkDeviceSize general_size = 16
+        + (VkDeviceSize)WALLE_LG_REVEAL_GENERAL_MAX_CHILD_COUNT * 6 * 16;
+    VkDeviceSize general_constant_size = 16;
+    if (general != nullptr && general->constant_word_count != 0) {
+        if (ckd_mul(&general_constant_size,
+                    (VkDeviceSize)general->constant_word_count,
+                    (VkDeviceSize)sizeof(uint32_t)))
+            return false;
+    }
+    output->general_offset
+        = align_device_size(output->axis_offset + axis_size, storage_alignment);
+    output->general_constant_offset
+        = align_device_size(output->general_offset + general_size, storage_alignment);
+    if (general_constant_size < output->general_constant_capacity)
+        general_constant_size = output->general_constant_capacity;
+    output->general_constant_capacity = general_constant_size;
     VkDeviceSize total_size;
-    if (ckd_add(&total_size, output->axis_offset, axis_size))
+    if (ckd_add(&total_size, output->general_constant_offset, general_constant_size))
         return false;
 
     if (output->transition_buffer.capacity < total_size) {
@@ -2640,11 +2660,11 @@ static bool ensure_transition_buffers(struct walle_vk_output*              outpu
     if (output->mask_descriptors_ready)
         return true;
 
-    VkDescriptorBufferInfo buffer_infos[4] = {
+    VkDescriptorBufferInfo buffer_infos[6] = {
         {
             .buffer = output->transition_buffer.handle,
             .offset = output->axis_offset,
-            .range  = output->transition_buffer.capacity - output->axis_offset,
+            .range  = output->general_offset - output->axis_offset,
         },
         {
             .buffer = renderer->sqrt_buffer.handle,
@@ -2661,9 +2681,19 @@ static bool ensure_transition_buffers(struct walle_vk_output*              outpu
             .offset = output->mapping_offset,
             .range  = mapping_size,
         },
+        {
+            .buffer = output->transition_buffer.handle,
+            .offset = output->general_offset,
+            .range  = general_size,
+        },
+        {
+            .buffer = output->transition_buffer.handle,
+            .offset = output->general_constant_offset,
+            .range  = output->transition_buffer.capacity - output->general_constant_offset,
+        },
     };
-    VkWriteDescriptorSet writes[4] = {};
-    for (uint32_t index = 0; index < 4; ++index) {
+    VkWriteDescriptorSet writes[6] = {};
+    for (uint32_t index = 0; index < 6; ++index) {
         writes[index] = (VkWriteDescriptorSet){
             .sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
             .dstSet          = output->mask_set,
@@ -2673,7 +2703,7 @@ static bool ensure_transition_buffers(struct walle_vk_output*              outpu
             .pBufferInfo     = &buffer_infos[index],
         };
     }
-    vkUpdateDescriptorSets(renderer->device, 4, writes, 0, nullptr);
+    vkUpdateDescriptorSets(renderer->device, 6, writes, 0, nullptr);
     output->mask_descriptors_ready = true;
     return true;
 }
@@ -2714,11 +2744,12 @@ static bool update_compose_descriptors(struct walle_vk_output* output, bool firs
 static bool stage_reveal_data(struct walle_vk_output*                     output,
                               const struct walle_lg_reveal_mask_geometry* geometry,
                               const struct walle_lg_reveal_raster*        raster,
-                              VkBufferCopy                                copies[static 5],
+                              const struct walle_lg_reveal_general*       general,
+                              VkBufferCopy                                copies[static 7],
                               uint32_t*                                   copy_count,
                               bool*                                       host_written)
 {
-    if (!ensure_transition_buffers(output, raster))
+    if (!ensure_transition_buffers(output, raster, general))
         return false;
     bool     direct = output->transition_buffer.memory.mapped != nullptr;
     uint8_t* staging
@@ -2740,6 +2771,54 @@ static bool stage_reveal_data(struct walle_vk_output*                     output
         mappings[primitive][1] = mapping->geometric_primitive;
     }
     memcpy(staging + output->axis_offset, raster->packed_words, (size_t)axis_size);
+
+    VkDeviceSize general_size = 16;
+    VkDeviceSize general_constant_size = 16;
+    {
+        int32_t* header = (int32_t*)(staging + output->general_offset);
+        memset(header, 0, 16);
+        header[0] = general != nullptr ? (int32_t)general->child_count : 0;
+        if (general != nullptr) {
+            for (uint32_t child = 0; child < general->child_count; ++child) {
+                const struct walle_lg_reveal_general_child* source = &general->children[child];
+                int32_t* record = header + 4 + (size_t)child * 24;
+                record[0]  = source->fixed[0][0];
+                record[1]  = source->fixed[0][1];
+                record[2]  = source->fixed[1][0];
+                record[3]  = source->fixed[1][1];
+                record[4]  = source->fixed[2][0];
+                record[5]  = source->fixed[2][1];
+                record[6]  = source->det_sign;
+                record[7]  = (int32_t)source->source_primitive;
+                record[8]  = source->visible_bounds[0];
+                record[9]  = source->visible_bounds[1];
+                record[10] = source->visible_bounds[2];
+                record[11] = source->visible_bounds[3];
+                record[12] = source->tile_low[0];
+                record[13] = source->tile_low[1];
+                record[14] = source->tile_high[0];
+                record[15] = source->tile_high[1];
+                record[16] = (int32_t)source->slope_bits[0][0];
+                record[17] = (int32_t)source->slope_bits[0][1];
+                record[18] = (int32_t)source->slope_bits[1][0];
+                record[19] = (int32_t)source->slope_bits[1][1];
+                record[20] = (int32_t)source->constant_offset;
+                record[21] = source->tile_high[0] - source->tile_low[0];
+                record[22] = 0;
+                record[23] = 0;
+            }
+            general_size = 16 + (VkDeviceSize)general->child_count * 6 * 16;
+            if (general->constant_word_count != 0) {
+                general_constant_size
+                    = general->constant_word_count * sizeof(uint32_t);
+                memcpy(staging + output->general_constant_offset,
+                       general->constant_words,
+                       (size_t)general_constant_size);
+            }
+        }
+        if (general == nullptr || general->constant_word_count == 0)
+            memset(staging + output->general_constant_offset, 0, 16);
+    }
 
     *host_written = direct;
     if (direct) {
@@ -2772,6 +2851,16 @@ static bool stage_reveal_data(struct walle_vk_output*                     output
         .srcOffset = output->axis_offset,
         .dstOffset = output->axis_offset,
         .size      = axis_size,
+    };
+    copies[count++] = (VkBufferCopy){
+        .srcOffset = output->general_offset,
+        .dstOffset = output->general_offset,
+        .size      = general_size,
+    };
+    copies[count++] = (VkBufferCopy){
+        .srcOffset = output->general_constant_offset,
+        .dstOffset = output->general_constant_offset,
+        .size      = general_constant_size,
     };
     *copy_count = count;
     return true;
@@ -2829,7 +2918,8 @@ static bool record_frame(struct walle_vk_output*              output,
                          uint32_t                             image_index,
                          const struct walle_vk_frame*         frame,
                          const struct walle_lg_reveal_raster* raster,
-                         const VkBufferCopy                   copies[static 5],
+                         uint32_t                             general_child_count,
+                         const VkBufferCopy                   copies[static 7],
                          uint32_t                             copy_count,
                          bool                                 host_written,
                          VkDeviceSize                         mask_size)
@@ -2941,6 +3031,7 @@ static bool record_frame(struct walle_vk_output*              output,
             .resolution = {(float)output->extent.width, (float)output->extent.height},
             .compact_family
             = frame->geometry->family == WALLE_LG_REVEAL_MASK_COMPACT_VISIBLE_ARCS ? 1.0f : 0.0f,
+            .general_child_count = general_child_count,
             .owner_count      = raster->owner_count,
             .base_owner_count = raster->base_owner_count,
             .packed_width     = raster->packed_width,
@@ -3163,10 +3254,16 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
     if (!take_present_image(output, &image_index))
         return output->renderer->fatal ? WALLE_VK_FRAME_FATAL : WALLE_VK_FRAME_RETRY;
 
-    struct walle_lg_reveal_raster raster       = {};
-    VkBufferCopy                  copies[5]    = {};
-    uint32_t                      copy_count   = 0;
-    bool                          host_written = false;
+    struct walle_lg_reveal_raster  raster       = {};
+    struct walle_lg_reveal_general general      = {};
+    VkBufferCopy                   copies[7]    = {};
+    uint32_t                       copy_count   = 0;
+    bool                           host_written = false;
+    static int general_enabled = -1;
+    if (general_enabled < 0) {
+        const char* env = getenv("WALLE_REVEAL_GENERAL");
+        general_enabled = env != nullptr && env[0] == '1' ? 1 : 0;
+    }
     if (frame->geometry->index_count) {
         const struct walle_lg_raster_calibration calibration = {
             .p25_ceil_bits          = WALLE_VK_REVEAL_RASTER_P25,
@@ -3174,26 +3271,51 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
         };
         enum walle_lg_reveal_raster_status status = walle_lg_reveal_raster_construct(
             frame->geometry, output->extent.width, output->extent.height, &calibration, &raster);
+        if (status == WALLE_LG_REVEAL_RASTER_OK && general_enabled
+            && walle_lg_reveal_general_construct(frame->geometry,
+                                                 output->extent.width,
+                                                 output->extent.height,
+                                                 &calibration,
+                                                 &general)
+                   != WALLE_LG_REVEAL_RASTER_OK) {
+            walle_lg_reveal_general_destroy(&general);
+        }
         if (status != WALLE_LG_REVEAL_RASTER_OK || !reveal_raster_valid(&raster)
-            || !stage_reveal_data(
-                output, frame->geometry, &raster, copies, &copy_count, &host_written)) {
+            || !stage_reveal_data(output,
+                                  frame->geometry,
+                                  &raster,
+                                  general_enabled ? &general : nullptr,
+                                  copies,
+                                  &copy_count,
+                                  &host_written)) {
+            walle_lg_reveal_general_destroy(&general);
             walle_lg_reveal_raster_destroy(&raster);
             return WALLE_VK_FRAME_FATAL;
         }
     }
 
     if (!update_compose_descriptors(output, frame->first_boot)) {
+        walle_lg_reveal_general_destroy(&general);
         walle_lg_reveal_raster_destroy(&raster);
         return WALLE_VK_FRAME_FATAL;
     }
 
-    if (!record_frame(
-            output, image_index, frame, &raster, copies, copy_count, host_written, mask_size)
+    if (!record_frame(output,
+                      image_index,
+                      frame,
+                      &raster,
+                      general_enabled ? general.child_count : 0u,
+                      copies,
+                      copy_count,
+                      host_written,
+                      mask_size)
         || !vk_check(vkResetFences(device, 1, &output->frame_fence), "vkResetFences(frame)")) {
         output->renderer->fatal = true;
+        walle_lg_reveal_general_destroy(&general);
         walle_lg_reveal_raster_destroy(&raster);
         return WALLE_VK_FRAME_FATAL;
     }
+    walle_lg_reveal_general_destroy(&general);
     walle_lg_reveal_raster_destroy(&raster);
 
     VkCommandBufferSubmitInfo command_info = {

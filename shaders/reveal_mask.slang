@@ -11,7 +11,7 @@ struct MaskPush
 {
     float2 resolution;
     float compactFamily;
-    float _padding;
+    uint generalChildCount;
     uint ownerCount;
     uint baseOwnerCount;
     uint packedWidth;
@@ -35,6 +35,8 @@ struct MaskVertexOutput
 [[vk::binding(1, 0)]] ByteAddressBuffer appleFastSqrtTable;
 [[vk::binding(2, 0)]] StructuredBuffer<int4> ownerData;
 [[vk::binding(3, 0)]] StructuredBuffer<int2> primitiveMappings;
+[[vk::binding(4, 0)]] StructuredBuffer<int4> generalData;
+[[vk::binding(5, 0)]] StructuredBuffer<uint> generalConstants;
 
 uint roundShiftRightToEven(uint value, uint shift)
 {
@@ -357,6 +359,228 @@ float2 partnerCoordinates(
     return ownerCoordinates(coordinate, slot, primitive, push.packedWidth);
 }
 
+
+// ---------------------------------------------------------------------------
+// General per-triangle post-guard children (measured AGX setup laws).  The
+// CPU reference is walle_lg_reveal_general_value; this path must match it
+// bit for bit.  Child header: 6 int4 records starting at 1 + child * 6.
+// ---------------------------------------------------------------------------
+
+static const uint kGeneralStride = 6;
+
+int4 generalRecord(uint child, uint word)
+{
+    return generalData[1 + child * kGeneralStride + word];
+}
+
+bool generalContains(uint child, int2 coordinate)
+{
+    int4 q2 = generalRecord(child, 2);
+    if (coordinate.x < q2.x || coordinate.y < q2.y
+        || coordinate.x >= q2.z || coordinate.y >= q2.w)
+        return false;
+    int4 q0 = generalRecord(child, 0);
+    int4 q1 = generalRecord(child, 1);
+    int detSign = q1.z;
+    int2 vertices[3] = { q0.xy, q0.zw, q1.xy };
+    int64_t centerX = int64_t(coordinate.x) * 256 + 128;
+    int64_t centerY = int64_t(coordinate.y) * 256 + 128;
+    for (uint edge = 0; edge < 3; ++edge)
+    {
+        uint next = edge == 2 ? 0 : edge + 1;
+        int64_t edgeX = int64_t(vertices[next].x - vertices[edge].x);
+        int64_t edgeY = int64_t(vertices[next].y - vertices[edge].y);
+        int64_t cross = edgeX * (centerY - int64_t(vertices[edge].y))
+                      - edgeY * (centerX - int64_t(vertices[edge].x));
+        if (cross == 0)
+        {
+            int64_t orientedX = detSign < 0 ? -edgeX : edgeX;
+            int64_t orientedY = detSign < 0 ? -edgeY : edgeY;
+            bool top = orientedY == 0 && orientedX < 0;
+            bool left = orientedY > 0;
+            if (!(top || left))
+                return false;
+            continue;
+        }
+        if ((cross < 0 ? -1 : 1) != detSign)
+            return false;
+    }
+    return true;
+}
+
+int generalChildAt(int2 coordinate, uint childCount, int expectedSource)
+{
+    // The override refines the owner primitive's plane: only children carved
+    // from the pixel's final owner qualify (hardware evaluates the fragment's
+    // own rasterizer triple, so foreign children must not hijack the sample).
+    for (int child = int(childCount) - 1; child >= 0; --child)
+    {
+        if (generalRecord(uint(child), 1).w != expectedSource)
+            continue;
+        if (generalContains(uint(child), coordinate))
+            return child;
+    }
+    return -1;
+}
+
+void generalDecompose(uint bits, out uint significand, out int exponent, out int sign)
+{
+    sign = (bits >> 31u) != 0u ? -1 : 1;
+    uint encoded = (bits >> 23u) & 0xffu;
+    if (encoded == 0u)
+    {
+        significand = bits & 0x7fffffu;
+        exponent = -149;
+    }
+    else
+    {
+        significand = (bits & 0x7fffffu) | 0x800000u;
+        exponent = int(encoded) - 150;
+    }
+}
+
+uint3 generalShift96(uint64_t value, uint shift)
+{
+    // value < 2^31, shift <= 64: result fits 96 bits.
+    uint lo = uint(value);
+    uint hi = uint(value >> 32u);
+    if (shift == 0)
+        return uint3(lo, hi, 0u);
+    if (shift < 32)
+        return uint3(lo << shift,
+                     (hi << shift) | (lo >> (32u - shift)),
+                     hi >> (32u - shift));
+    if (shift == 32)
+        return uint3(0u, lo, hi);
+    if (shift < 64)
+        return uint3(0u, lo << (shift - 32u),
+                     (hi << (shift - 32u)) | (lo >> (64u - shift)));
+    return uint3(0u, 0u, lo);
+}
+
+uint3 generalNegate96(uint3 value)
+{
+    uint3 inverted = uint3(~value.x, ~value.y, ~value.z);
+    uint lo = inverted.x + 1u;
+    uint carry0 = lo == 0u ? 1u : 0u;
+    uint mid = inverted.y + carry0;
+    uint carry1 = (carry0 != 0u && mid == 0u) ? 1u : 0u;
+    return uint3(lo, mid, inverted.z + carry1);
+}
+
+uint3 generalAdd96(uint3 left, uint3 right)
+{
+    uint lo = left.x + right.x;
+    uint carry0 = lo < left.x ? 1u : 0u;
+    uint mid = left.y + right.y;
+    uint carry1 = mid < left.y ? 1u : 0u;
+    mid += carry0;
+    if (carry0 != 0u && mid == 0u)
+        carry1 += 1u;
+    return uint3(lo, mid, left.z + right.z + carry1);
+}
+
+uint generalTowardZeroWord(uint3 total, int gridExponent)
+{
+    if (total.x == 0u && total.y == 0u && total.z == 0u)
+        return 0u;
+    uint signBit = (total.z >> 31u) & 1u;
+    uint3 magnitude = signBit != 0u ? generalNegate96(total) : total;
+    int high;
+    if (magnitude.z != 0u)
+        high = 64 + int(firstbithigh(magnitude.z));
+    else if (magnitude.y != 0u)
+        high = 32 + int(firstbithigh(magnitude.y));
+    else
+        high = int(firstbithigh(magnitude.x));
+    // extract bits [high .. high-23]
+    uint mantissa;
+    int low = high - 23;
+    if (low <= 0)
+    {
+        // value has fewer than 24 magnitude bits above the grid: shift up
+        uint64_t wide = (uint64_t(magnitude.y) << 32u) | uint64_t(magnitude.x);
+        mantissa = uint(wide << uint(-low));
+    }
+    else if (low < 32)
+    {
+        uint64_t wide = (uint64_t(magnitude.y) << 32u) | uint64_t(magnitude.x);
+        mantissa = uint(wide >> uint(low));
+    }
+    else if (low < 64)
+    {
+        uint64_t wide = (uint64_t(magnitude.z) << 32u) | uint64_t(magnitude.y);
+        mantissa = uint(wide >> uint(low - 32));
+    }
+    else
+    {
+        mantissa = magnitude.z >> uint(low - 64);
+    }
+    int exponentCode = gridExponent + low + 150;
+    if (exponentCode <= 0)
+        return signBit << 31u;          // flushes to signed zero
+    if (exponentCode >= 255)
+        return (signBit << 31u) | 0x7f000000u;
+    return (signBit << 31u) | (uint(exponentCode) << 23u) | (mantissa & 0x7fffffu);
+}
+
+float2 generalValue(uint child, int2 coordinate)
+{
+    int4 q3 = generalRecord(child, 3);
+    int4 q4 = generalRecord(child, 4);
+    int4 q5 = generalRecord(child, 5);
+    int tileX = coordinate.x >> 5;
+    int tileY = coordinate.y >> 5;
+    int tilesX = q3.z - q3.x;
+    int cell = (tileY - q3.y) * tilesX + (tileX - q3.x);
+    int localX = coordinate.x - (tileX << 5);
+    int localY = coordinate.y - (tileY << 5);
+    float2 result;
+    for (uint channel = 0; channel < 2; ++channel)
+    {
+        uint constantBits = generalConstants[uint(q5.x) + uint(2 * cell) + channel];
+        uint slopeXBits = channel == 0 ? asuint(q4.x) : asuint(q4.z);
+        uint slopeYBits = channel == 0 ? asuint(q4.y) : asuint(q4.w);
+        uint mantC, mantX, mantY;
+        int expC, expX, expY, signC, signX, signY;
+        generalDecompose(constantBits, mantC, expC, signC);
+        generalDecompose(slopeXBits, mantX, expX, signX);
+        generalDecompose(slopeYBits, mantY, expY, signY);
+        uint64_t productX = uint64_t(mantX) * uint64_t(2 * localX + 1);
+        uint64_t productY = uint64_t(mantY) * uint64_t(2 * localY + 1);
+        expX -= 1;
+        expY -= 1;
+        int maxExponent = -1000;
+        if (mantC != 0u) maxExponent = max(maxExponent, expC);
+        if (productX != 0) maxExponent = max(maxExponent, expX);
+        if (productY != 0) maxExponent = max(maxExponent, expY);
+        if (maxExponent == -1000)
+        {
+            result[channel] = asfloat((constantBits >> 31u) << 31u);
+            continue;
+        }
+        int grid = maxExponent - 64;
+        uint3 total = uint3(0u);
+        if (mantC != 0u)
+        {
+            uint3 term = generalShift96(uint64_t(mantC), uint(expC - grid));
+            total = generalAdd96(total, signC < 0 ? generalNegate96(term) : term);
+        }
+        if (productX != 0)
+        {
+            uint3 term = generalShift96(productX, uint(expX - grid));
+            total = generalAdd96(total, signX < 0 ? generalNegate96(term) : term);
+        }
+        if (productY != 0)
+        {
+            uint3 term = generalShift96(productY, uint(expY - grid));
+            total = generalAdd96(total, signY < 0 ? generalNegate96(term) : term);
+        }
+        result[channel] = asfloat(generalTowardZeroWord(total, grid));
+    }
+    return result;
+}
+
 [shader("vertex")]
 MaskVertexOutput maskVertex(MaskVertexInput input, uniform MaskPush push)
 {
@@ -396,22 +620,44 @@ uint maskFragment(
     if (centerCode > 0)
         decodeOwnerCode(centerCode, centerSlot, centerPrimitive);
 
-    float distanceValue = appleLength(ownerCoordinates(
-        coordinate, centerSlot, centerPrimitive, push.packedWidth));
-    float distanceX = appleLength(partnerCoordinates(
-        int2(coordinate.x ^ 1, coordinate.y),
-        centerSlot,
-        centerPrimitive,
-        fallbackSlot,
-        fallbackPrimitive,
-        push));
-    float distanceY = appleLength(partnerCoordinates(
-        int2(coordinate.x, coordinate.y ^ 1),
-        centerSlot,
-        centerPrimitive,
-        fallbackSlot,
-        fallbackPrimitive,
-        push));
+    // Hardware LDCF semantics: one rasterizer coefficient triple per
+    // fragment, evaluated at the center and both partner coordinates.  The
+    // general child (if any) replaces that triple only when it refines the
+    // pixel's own final owner primitive.
+    int expectedSource = centerSlot * 2 + centerPrimitive;
+    int generalCenter =
+        generalChildAt(coordinate, push.generalChildCount, expectedSource);
+    int2 partnerXCoord = int2(coordinate.x ^ 1, coordinate.y);
+    int2 partnerYCoord = int2(coordinate.x, coordinate.y ^ 1);
+    float2 centerCoords;
+    float2 partnerXCoords;
+    float2 partnerYCoords;
+    if (generalCenter >= 0)
+    {
+        centerCoords = generalValue(uint(generalCenter), coordinate);
+        partnerXCoords = generalValue(uint(generalCenter), partnerXCoord);
+        partnerYCoords = generalValue(uint(generalCenter), partnerYCoord);
+    }
+    else
+    {
+        centerCoords =
+            ownerCoordinates(coordinate, centerSlot, centerPrimitive, push.packedWidth);
+        partnerXCoords = partnerCoordinates(partnerXCoord,
+                                            centerSlot,
+                                            centerPrimitive,
+                                            fallbackSlot,
+                                            fallbackPrimitive,
+                                            push);
+        partnerYCoords = partnerCoordinates(partnerYCoord,
+                                            centerSlot,
+                                            centerPrimitive,
+                                            fallbackSlot,
+                                            fallbackPrimitive,
+                                            push);
+    }
+    float distanceValue = appleLength(centerCoords);
+    float distanceX = appleLength(partnerXCoords);
+    float distanceY = appleLength(partnerYCoords);
     if (input.sdf.x > 1.0e30)
         distanceValue = input.sdf.x;
 
