@@ -3421,3 +3421,16 @@ directly - scans exist in epq2 (t=117/121 are in its TVALS!).
 NEXT-WINDOW START: read epq2's t=117/121 q=6528 scans (internal V
 at the boundary band) -> the last wrap bit; update wide_law.py
 (cut 60/128 + parity term); rescore all; theta; ports.
+
+## 2026-08-15 (later 121): wide_law updated (cut 60/128-parity); tables refit
+
+wide_law.py now carries the seven-phase wrap law (self-test OK).
+Rescore with corrected cut (global theta): tt4 16607 (unchanged),
+tz4 16924 -> 17013, tz5 16720 -> 16810.  Per-row theta refits:
+tt4 17275, tz4 17187 (+85), tz5 17158 (+52).  Tables keep the
+structure: bases 25/37/41 (parity split 8), universal crossings
+(ty=48 -> 9 in all three; ty=32 -> 17/25/25), tz4's 37/33 ty-parity
+alternation, late-row climbs (tt4 55+: 43-45).  Theta base offsets
+vs 32v: q=16:+1, 32:+5, 64:-11, 256:-3, 512:-3 - no simple q
+pattern yet; the theta closed form remains the one open item beside
+the 11 wrap-boundary cells and L3 pulses.

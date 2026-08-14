@@ -21,15 +21,25 @@ from __future__ import annotations
 
 FBITS = 48
 MOD19 = 1 << 19
-CUT19 = (29 * MOD19) // 64
+# later-120: joint fit over seven phases (1777/1788): threshold
+# 60/128 with a -1/128 adjustment when floor(dm*p / 2^19) is odd.
+CUT19 = (29 * MOD19) // 64  # legacy constant (superseded by wrap_cut)
+
+
+def wrap_cut(A: int) -> int:
+    base = (60 * MOD19) // 128
+    if (A >> 19) & 1:
+        base -= MOD19 // 128
+    return base
 
 
 def sawtooth_f(dm: int, p: int, bl: int) -> int:
     """Sawtooth in the F=2^48-per-P-unit frame (exact integer)."""
     if p == 0:
         return 0
-    tm = (dm * p) % MOD19
-    d = -tm + (MOD19 if tm >= CUT19 else 0)
+    A = dm * p
+    tm = A % MOD19
+    d = -tm + (MOD19 if tm >= wrap_cut(A) else 0)
     # d * 2^(bl-42) P-units  ->  * 2^(bl-42+48) in F frame
     sh = bl - 42 + FBITS
     return d << sh if sh >= 0 else (d >> -sh if d >= 0 else -((-d) >> -sh))
