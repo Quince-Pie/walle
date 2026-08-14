@@ -2765,3 +2765,19 @@ NEXT: fix tt1 signed walk; then sweep the residual family finer
 width, step pre-round) toward 18001/18001/2610; then eps-v3
 granule table and the 108 basis words (2-D walk); then dense +
 held-out; then ports 91 -> 80 -> 0.
+
+## 2026-08-14 (later 85): tt1 signed walk (frame fixed, mode differs)
+
+Signed walk over tt1's zero-crossing d_o (disp>>7 signed, walk
+ascending, symmetric rounding): best 1158/1305 at r=4 Qres=floor
+(direct-law equivalent baseline ~1150).  The winning Qres mode
+differs from tt4's (floor vs rne) and the gain is small - the tt1
+walk frame is still not right (candidates: walk starts at the
+geometric anchor and goes outward in both directions rather than
+ascending through zero; the Mb=24 split rows suggest per-tile-column
+walks; mixed families per d_o may collapse in the dm-keyed dict).
+State of the walk law: tt3 18001/18001 exact, tt4 14011/18001
+(beats direct 13876), tt1 1158/1305 (~baseline).  The family is
+right (exact-input granule deviations + s58 drift are walk-only
+phenomena); the per-step residual law needs the finer sweep of
+later-84's NEXT list.
