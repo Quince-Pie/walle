@@ -3452,3 +3452,25 @@ STATE: wide_law.py carries L1 + seven-phase wrap law; theta tables
 refit (17275/17187/17158 on tt4/tz4/tz5); remaining unknowns:
 theta closed form, 11 wrap-boundary cells, L3 pulses, then the
 composite + ports.
+
+## 2026-08-15 (later 123): the odd-part cut table (16 phases, sharp windows)
+
+Captures c-thetaphase4-plan-v1 (sha 42e89cc56c6a80d124bdc472ce374ca
+ba6d8bcc47e5ab03ec83b1764460dced4) and c-thetaphase5-plan-v1 (sha
+28d69e1a915637b1a6279f8cd570a855b321579809bc347fcdf7d7267160500a):
+boundary-band t scans per phase (t ~ cut*2^19/q) x 6 rows.
+Even-floor wrap-cut windows (in 128ths of 2^19):
+  q_odd:  1     3      5      7      9      11     13     15
+  cut:    60    60.2   60.0   62.9   63.1   66.0   65.0   59.9
+  q_odd:  17    19     21     25     33     37     41     51
+  cut:    63.9  66.6   63.1   62.4   61.9   64.8   61.6   64.0
+(each window +-0.35/128 wide; lesson banked: the t-range must span
+cut*2^19/q - thp3's small-t scan never reached the boundary.)
+Partial structure: delta = cut-60 matches 64/q_odd for q_odd in
+{11,13,17,21,25,33,41} (5.8,4.9,3.8,3.0,2.6,1.9,1.6 vs measured
+6,5,4,3.1,2.4,2,1.6) but NOT for {1,3,5,15}->0, {7,9}->3, 19->6.5,
+37->4.8, 51->4.  Candidates eliminated: bl(q_odd), 2^19 mod q_odd,
+q^2 mod 128, binary reversal.  NEXT: fit delta(q_odd) exactly over
+the 16 points (consider two-term forms 64/q + saw(...); the {7,9}
+pair at 3 and {1,3,5,15} at 0 suggest a floor/threshold in the
+recursion); then wide_law update; theta collapse test; ports.
