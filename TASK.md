@@ -3020,3 +3020,20 @@ the product term to its own export precision BEFORE the subtraction
 sawtooth+theta at the PRODUCT stage inside the banked parts chain
 (score_c_chain_dense c_word with the product stage swapped), not on
 the final difference.  That is the remaining integration.
+
+## 2026-08-15 (later 99): cancellation children diagnosed - frame right, staging wrong
+
+s41 o2 ctx1 model-vs-hw VALUES match (ratio 1.0000 across tiles):
+geometry/frames confirmed.  The hw C words carry difference bits
+FINER than the product's 24-bit granule (0.00469 at 24-bit mantissa
+= 2^-31.7 absolute vs product granule 2^-23) => the av+product
+subtraction happens at >=28-bit precision BEFORE export (the banked
+28-bit numerator stage); stage-1 product rounding at 24 bits is
+wrong for cancellation children (staged total 12845 < flat 13125).
+The flat model with sawtooth got s42 o2 to 328/729 with one global
+theta; cancellation children have long walks (anchors at negative
+tiles, 40+ rows) -> they need the per-row theta layer / the theta
+closed form - the single remaining law piece.
+NEXT: per-row theta for cancellation children (expect +15-30pts),
+then theta(path) closed form from all tables, then the two-axis
+children, held-out corpus, ports.
