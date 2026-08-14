@@ -3633,3 +3633,17 @@ Ported the A2 presentation secondary into the renderer:
 TASK #4 DELIVERED END-TO-END.  Remaining: the 80 raster pixels
 (states 31-60 per-state counts unchanged) - the wide-path C law in
 the general path.
+
+## 2026-08-15 (later 133): *** GATE 80 -> 70: GENERAL PATH IS NOW THE DEFAULT ***
+
+WALLE_REVEAL_GENERAL flipped to default-on (opt-out with =0): the
+measured per-tile general path beats the analytic fallback on the
+parity gate: 70 mismatched bytes (was 80), exact frames 52 -> 55
+(states 33/34/35-class children now byte-exact).  Official gate
+green at 70; inventory sha 3b734e72696d0f26ad018af74c6d4f5e8b36f8ca
+592b7aff3908b8b1eba8193c, count sha 5a0bc88cde747ee8e57f0445074342
+147a234d953911366a5ad3c92a2dd510a0.
+SESSION GATE ARC: 91 -> 80 (presentation secondary) -> 70 (general
+default).  Remaining 70 = the wide-path C constants inside
+wlg_child chains - the target for the measured law stack
+(sawtooth + cut table + theta).

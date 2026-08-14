@@ -3280,8 +3280,12 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
     bool                           host_written = false;
     static int general_enabled = -1;
     if (general_enabled < 0) {
+        /* The measured per-tile general path outperforms the analytic
+           fallback on the parity gate (70 vs 80 mismatched bytes,
+           TASK.md later-133); it is now the default.  Set
+           WALLE_REVEAL_GENERAL=0 to force the fallback. */
         const char* env = getenv("WALLE_REVEAL_GENERAL");
-        general_enabled = env != nullptr && env[0] == '1' ? 1 : 0;
+        general_enabled = env == nullptr || env[0] != '0' ? 1 : 0;
     }
     if (frame->geometry->index_count) {
         const struct walle_lg_raster_calibration calibration = {
