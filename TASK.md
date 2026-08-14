@@ -3263,3 +3263,25 @@ Theta(q, ty) surface from the phase instrument (L1-clean cells,
   128+ dm per (q,row) on 6 phases x 12 rows for clean windows.
 NEXT: denser theta capture; then closed form/table; gated composite;
 held-out; ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 113): dense theta capture - large-q L1 gap exposed; port math clarified
+
+Capture c-thetaphase2-plan-v1 (9216 draws; 6 phases incl corpus
+phases 1664/6528; 128 odd dm x 12 rows; capture.raw sha256
+ed9c156e85ee07eae93506e63650588d06eff60a3e4c8aceb4ce6d7d23c6e21e):
+- q=64 column: theta windows CONSISTENT and pinned (23.3-23.6 at
+  rows 33-45; 26 at 21-29/49-53; 42-46 at 57-63) - L1+theta exact
+  at the calibration phase with 128-dm ladders.
+- q=1664/6528 (corpus phases): 30-40v window contradictions - L1's
+  dm-structure at LARGE q is wrong (the small-q instrument never
+  tested it).  KEY INSIGHT: corpus children carry ONE slope mantissa
+  each, so any dm-dependent L1 error is a per-child constant folded
+  into theta - which is exactly why 12 children scored perfect with
+  fitted theta while the multi-dm truth tables expose the gap.
+- Port math: the gate needs correctness only at the corpus's actual
+  (slope, phase) pairs; the general input-only law needs the large-q
+  L1 correction, for which thp2's 128-dm ladders at q=1664/6528 are
+  the direct census data.
+NEXT-WINDOW START: family-census the q=6528 ladders (the later-90
+method) -> large-q L1 correction -> re-derive theta(q,ty) surface ->
+closed form -> gated composite -> held-out -> ports 91 -> 80 -> 0.
