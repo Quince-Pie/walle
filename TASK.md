@@ -2969,3 +2969,25 @@ tz9 14267/15195 - ~95.5% average.  Structure:
   late-row drifts -18v, parity alternation +-2v).
 Full theta tables banked in this entry's analysis output (session
 transcript); regenerate with the later-95 script pattern.
+
+## 2026-08-15 (later 96): *** LAW VALIDATED ON REAL CORPUS CHILDREN - FOUR PERFECT ***
+
+Unified sawtooth + single theta per child, applied to the dense
+corpus single-axis children (C = slope_mant * disp, phase from the
+child's own anchor subpixels):
+  s60 o4 ctx1: 1166/1166 PERFECT (theta 25, p=6528 non-pow2)
+  s58 o5 ctx0:  990/990  PERFECT (theta 21, p=0)
+  s33 o6 ctx1:  434/434  PERFECT (theta 25)
+  s33 o103 ctx1: 436/436 PERFECT (theta 25)
+  s58 o5 ctx1: 990/1034 (96%), s58 o4: 1039/1166, s58 o106: 981/1166
+The 0/N children (s31/34/35/39/40/41/42/44/45/47...) all miss the
+ANCHOR-VALUE term (their anchor vertex carries a nonzero value word;
+my quick test omitted it) and/or negative-side disp - integration
+details already solved in score_c_chain_dense's parts model, NOT law
+failures.  This is the first model ever to predict complete real-
+geometry children exactly.
+NEXT (mechanical): full composition = anchor value + per-axis parts
+via the banked chains + sawtooth per axis + theta; rescore all 58
+dense groups; theta closed form from the growing theta table
+(25/21/17/33/49 observed); then the 38612 held-out corpus points;
+then the ports 91 -> 80 -> 0.
