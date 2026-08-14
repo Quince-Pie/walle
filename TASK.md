@@ -1765,3 +1765,18 @@ narrow) to produce per-tile f16 alpha constants; select secondary =
 that constant; verify the 18 residual pixels flip to apple's byte and
 nothing else moves (corpus gate).  This makes #4 independent of the
 wide-path law (task #3).
+
+## 2026-08-14 (later 43): A2 transfer vertex layout decoded (state-42)
+
+48B stride, 16 verts = 4x4 grid with DUPLICATED middle row/col (seams):
+x in {-909, 512, 512, 1933}, y in {-806.5, 614.5, 614.5, 2035.5} - the
+center cell is the reveal bbox and the seams sit exactly on the corpus
+children's anchor (512, 614.5).  Layout per vertex (f32 LE):
+[0] posX [1] posY [2] 0.0 [3] 1.0 [4] uvX=posX+1 [5] uvY=posY+1
+[6] ndcX [7] ndcY (= +-1.00070 = 0xbf801713-class, or 0)
+[8..9] varying pair (v0 bytes 003c003c... - alignment vs f16 pair
+(0x3C00,0x3C00) still to be pinned against the shader's input layout)
+[10..11] tail (uninitialized-looking, varies per vert).
+NEXT for #4: pin slots [8..11] against the PBGRAXm_A2Xghfc vertex
+descriptor (fresh-native-scale-a2-resource-trace-v103 may hold it),
+then run the narrow setup law over the 16 triangles per state.
