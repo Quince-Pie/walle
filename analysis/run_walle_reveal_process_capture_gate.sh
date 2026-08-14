@@ -6,8 +6,8 @@ task_root=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
 walle_binary=${1:-"$task_root/build/bin/release/walle"}
 labwc_binary=${LABWC:-/run/current-system/sw/bin/labwc}
 scorer="$task_root/analysis/score_reveal_vulkan_capture.py"
-expected_candidate_inventory=9062b7bfde617f88638c9b48fdb8ace7b6f91b4518d54c5a6e54abcb51e93644
-expected_count_hash=d6c006d789b551e875555f3e8ef32f0c46c3ec3911802fea405ef9d3458edb5d
+expected_candidate_inventory=08665d249eec348f19390e3a70ee587d77812b5b64557a69ac6dd1b6aa5b7268
+expected_count_hash=86b4c6786d083f1d4c2190a27eb6b24804f3950138e348f9331486d0254f968d
 cli_device_selector=${WALLE_VK_CLI_SELECTOR:-}
 expected_device_type=${WALLE_EXPECTED_VK_DEVICE_TYPE:-}
 capture_width=2048
@@ -149,7 +149,7 @@ clear_composition="$capture_directory/composition-state-0032.bgra"
 
 python3 "$scorer" "$capture_directory" \
     --output "$gate_root/vulkan-score.json" \
-    --expect-mismatches 91 \
+    --expect-mismatches 80 \
     --expect-candidate-inventory "$expected_candidate_inventory" \
     --expect-count-hash "$expected_count_hash" \
     >"$gate_root/vulkan-score.stdout"
@@ -182,7 +182,7 @@ regular_composition="$regular_capture_directory/composition-state-0032.bgra"
     || fail 'regular composition readback has the wrong byte count'
 python3 "$scorer" "$regular_capture_directory" \
     --output "$gate_root/vulkan-regular-score.json" \
-    --expect-mismatches 91 \
+    --expect-mismatches 80 \
     --expect-candidate-inventory "$expected_candidate_inventory" \
     --expect-count-hash "$expected_count_hash" \
     >"$gate_root/vulkan-regular-score.stdout"

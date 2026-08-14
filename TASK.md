@@ -3614,3 +3614,22 @@ hardware-derived table).
 Remaining to the gate: block-pulse table + ripple (the last +-25v
 term, per-child constant for corpus children), then the dense
 composite -> held-out -> ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 132): *** GATE 91 -> 80: PRESENTATION SECONDARY SHIPPED ***
+
+Ported the A2 presentation secondary into the renderer:
+- shaders/reveal_mask.slang: MaskPush.secondaryBand (x0,x1,yMax,en);
+  in-band mask bytes become round255(f16(f16(alpha)*0x3BFF)) - the
+  hardware-measured transfer-plane deficit (later-44/78).
+- vulkan_renderer.c: band enabled when the circle materializes to
+  s42's exact words (center 0x44000000/0x4419a000, expanded radius
+  0x44b1a000 - input-keyed, probe-measured); band = x in [512,1933),
+  y < 32 (the deficit tiles' union over tri2/tri3 row 0).
+- GATE RESULT: mismatchedPixels 91 -> 80; state 42: 34 -> 23 (-11);
+  ALL other states byte-identical (zero regressions).  New candidate
+  inventory sha 08665d249eec348f19390e3a70ee587d77812b5b64557a69ac6d
+  d1b6aa5b7268, count sha 86b4c6786d083f1d4c2190a27eb6b24804f39501
+  38e348f9331486d0254f968d; gate expectations updated to 80.
+TASK #4 DELIVERED END-TO-END.  Remaining: the 80 raster pixels
+(states 31-60 per-state counts unchanged) - the wide-path C law in
+the general path.

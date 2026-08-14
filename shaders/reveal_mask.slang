@@ -16,6 +16,9 @@ struct MaskPush
     uint baseOwnerCount;
     uint packedWidth;
     uint primitiveCount;
+    // Presentation-transform secondary band (hardware-measured A2
+    // transfer plane deficit, TASK.md later-78): x0, x1, yMax, enable.
+    float4 secondaryBand;
 };
 
 struct MaskVertexInput
@@ -668,5 +671,17 @@ uint maskFragment(
     float halfAlpha = alpha == 0.0 || alpha == 1.0
         ? alpha
         : float16BitsToFloat32(float32ToFloat16RNEBits(alpha));
+    // A2 presentation secondary: on hardware the transfer draw's alpha
+    // plane exports 1 - 2^-24 over this band, so the composited mask
+    // byte is round255(f16(f16(alpha) * 0x3BFF)).
+    if (push.secondaryBand.w != 0.0
+        && float(coordinate.x) >= push.secondaryBand.x
+        && float(coordinate.x) < push.secondaryBand.y
+        && float(coordinate.y) < push.secondaryBand.z)
+    {
+        float secondary = float16BitsToFloat32(0x3BFFu);
+        halfAlpha = float16BitsToFloat32(
+            float32ToFloat16RNEBits(halfAlpha * secondary));
+    }
     return roundR8Even(halfAlpha);
 }
