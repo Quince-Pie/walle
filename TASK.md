@@ -2823,3 +2823,25 @@ D(dm mod 8, S, d_o) for every ladder cell and enumerate the
 residual-register variants (R in {rna27,rne27}, res in ulp27 units,
 width 2-3 bits, saturation/wrap) against the tables - hundreds of
 crisp constraints; the right member should snap to 100%.
+
+## 2026-08-15 (later 88): crossing-aware walk best; two-product subtraction inferior
+
+- Binade-crossing variants on the residual walk: forcing the residual
+  negative at each crossing ("minus") is the new best family member:
+  total 91540/108006 across the six anchor classes with tt3 EXACT
+  (tz-classes up to 15155; tt4 trades down to 13541).  Crossing
+  events are load-bearing (predicted by the ladder algebra: S=256
+  steps are always grid-aligned, so only crossings can lose the
+  observed ulp).
+- Tested the no-walk alternative for the anchor dependence: C =
+  rW(dm*tile*8192) - rW(dm*ay) (two wide products, task-#2 shape),
+  W=28..33 x rna/rne/rtz: best 89742, breaks tt3 - INFERIOR to the
+  walk family; the anchor dependence is not a simple pre-subtraction
+  rounding.
+Running totals (wide classes, tt3-exact members): plain res-walk
+90955 -> crossing-minus 91540 (+585).  The remaining ~15% misses
+concentrate in tt4 lo-block and the crossing neighborhoods; next:
+per-ladder-cell autopsy of crossing steps (state trace vs the 5-S
+ladder for single cells), then eps-v3 rows 19..33 as crossing
+tests (their 4-row-block granule table maps crossing rows), then
+joint refit; then dense + held-out; then ports.
