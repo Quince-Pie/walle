@@ -1974,3 +1974,24 @@ vs K=f(anchor bit pattern) is not yet separated.  Next captures: same
 tz with different odd parts and different subpixel fractions; tz
 10/11/12 to bracket the decay to zero at 13; K vs bl(disp) along the
 diagonal.
+
+## 2026-08-14 (later 51): integrator verification of the later-50 solve
+
+Re-ran analysis/a2_solver_validate.py independently: TOTAL residuals
+91 -> 80, state 42 only (34 -> 23), zero regressions.  ACCEPTED.
+Corrections to my earlier entries hereby adopted: later-41's "18
+presentation pixels" census retracted (walle has NO secondary stage,
+so apple = walle+1 residuals are primary-class by construction);
+later-44's "per-tile-constants dead" blocker and later-46's oblique-
+plane requirement rested on (1838,106) and are retracted with it; the
+later-44 hardware C words (3f7fffff at tile row 0 / 3f800000 at
+(57,3)) agree with the solved plane exactly - the hardware was right
+and my constraint set was over-fit.  New campaign arithmetic:
+80 raster residuals (task #3/#8 target) + 11 presentation (solved at
+model level) = 91.  Remaining for #4: (a) input-only generation rule
+for which transfer tiles export C = 1 - 2^-24 given constant-1.0
+varyings = the banked two-product cancellation residue at binary32 on
+the transfer triangles (state-42 hardware verification already in
+later-44); validate against the full 45-pixel sensitive-3BFF census;
+(b) implement apple's secondary stage in the parity model + renderer;
+(c) corpus gate expecting 80.
