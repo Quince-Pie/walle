@@ -2327,3 +2327,17 @@ NEXT WINDOW (goal step 1 completion): formalize region decomposition
 region for slopes AND the C base/increments; fit the six wobble maps
 exactly, then tt1/tt3/tt4 (38,612 pts) and the dense corpus captures
 (step 2); then port (step 3: 91 -> 80 -> 0).
+
+## 2026-08-14 (later 65): REGION LAW FIRST EXACT FITS
+
+Law: R(tile) = ax - 8192*(tx + 1 - floor(ty/4)); tiles with R < 2^15
+belong to the anchor region and export RNE24(rna_s(idx27)) with s=2
+(s=4 equivalent on this data); all others export RNE24(idx27).
+Scores: shift+4 map EXACT 665/665; base map 727/729 with both misses
+at corner-sliver tiles (60,18)/(60,19) (partially covered right-
+bottom corner; rows 16/17 of the same band fit).  asym2x 331/356
+(needs the c1=4+dbin shear generalization); shift-8 119/684 (the
+reversed regime needs its own threshold/shear - candidate 2^17).
+The slope-lane storage law is now essentially identified for the
+base family; remaining: dbin shear form, the reversed regime, the
+C-lane region law, then compose and rescore (goal step 2).
