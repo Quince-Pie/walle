@@ -2532,3 +2532,14 @@ COMPOSED MODEL STATE:
     stands; likely the same jam at a didx-binade-dependent granule.
 NEXT: test layer-3 as jam-at-granule (didx-binade-scaled positions)
 against tt4's 18001; then compose all three layers, rescore, port.
+
+## 2026-08-14 (later 75): layer-3 plain jam insufficient; window state
+
+Global wide-only jam on tt4: const-1/2-bit 14210/18001 (+334 over
+baseline, below the cascade 14524 and T17K9 14850) - layer 3 is not
+a uniform jam; its didx-binade/tz structure (solvers' constraint set,
+later-48..52) stands as the remaining identification.  Layers 1-2
+(narrow chain; anchor-proximity regions with 2-bit-jam storage) are
+PROVEN and cover the slope lanes completely.  Continue: layer-3
+against tt4/tt1 with jam positions tied to the didx-normalization
+shift per Track B's fixed-frame facts, then compose and port.
