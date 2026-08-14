@@ -2558,3 +2558,34 @@ cell's -1-granule at drop=0, and the phase-0 census.  Candidate
 family for next window: the 27-bit stage's OWN storage jam at a
 tz-dependent position (2-bit jam proven at region storage; the wide
 path may jam at bl(didx)-shifted positions in the same RAM format).
+
+## 2026-08-14 (later 77): epsilon tomography - the sum pipeline has its own wide bias
+
+New instrument: tt4 geometry + exact narrow anchor value eps on V0
+(anchor term eps, x-part -eps*dx/2048; probe scans eps finely and the
+exported C word's flip positions read the internal sum).  Three
+captures (plans committed; capture.raw sha256 first-20 banked below):
+- c-epsilon-tomography-plan-v1 (0x3F800000+j signed scan): flips move
+  ~G/29..G/35 per step; artifacts at |j|=16 binade crossing.
+  sha 4b4f326a5f9aa6e22c...
+- v2 (single binade (64+j)*2^k, column 60): monotone with narrow +-1
+  word dither zones.  sha e83a9f8547d90f21d1...
+- v3 (column 48, lever exactly eps/2, all eps terms 4v-multiples):
+  STILL non-monotone locally =>
+  *** the C sum is NOT a single exact accumulation: parts are
+  quantized on a 27-bit grid (8v quanta, v = 2^(bl-30)) before the
+  final 24-bit round; consecutive crossing spacings alternate
+  (period-2 stutter = the eps x-part (odd multiple of 4v) rounding
+  alternately on the 8v grid) ***  sha 6ba5fc8344c369fa46...
+- flat-sum + RNE24 reproduces t=0 scans EXCEPT zones where hw rounds
+  UP EARLY (e.g. bl31: up at dropped >= ~24v instead of 32v): the
+  wide-path biased threshold applies to the SUM's export round, not
+  only to products - layer 3 is (at least partly) IN THE QUANTIZER.
+- Single-threshold-per-row fits fail hard for bl>=33 (up to 39/64
+  misses): the export threshold is not constant per row; combined
+  with the 27-bit part grid this needs a two-stage model
+  (part-quantize at 27 bits, then biased final round).
+- v4 (column 64) invalid: tile 64 is outside the 2048px target -
+  probe rejects (draw 0); plan kept for the record, no capture.
+Next: two-stage decode of the v3 scans (27-bit part rounding rule x
+final threshold rule) - or pivot: the corpus gate first (91->80 port).
