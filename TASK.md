@@ -2806,3 +2806,20 @@ part's walk would be exact (dm = 2^23 power-of-two) - those
 artifacts live in the multi-part SUM pipe, so the eps instrument
 measures walk + sum jointly; the cross-anchor tables are the cleaner
 walk probe (single-part cells, no eps).
+
+## 2026-08-15 (later 87): the step-size ladders - crisp walk-law constraints
+
+Cross-anchor ladders (same (dm,d_o) at S = 16..1024, L = (d_o-1)/S
+rounding events): deviations vs exact rne24(P) are DETERMINISTIC in
+(dm mod 4, S, d_o) - e.g. d_o=3073: S128/L24 exact for ALL t;
+S256/L12 = -1 for ALL t; S512/L6 and S1024/L3 = 0 for t=1 mod 4,
+-1 for t=3 mod 4.  d_o=5121: -1 nearly everywhere, S512 exact only
+at t=6 mod 8.  NON-MONOTONE in L (L=24 exact while L=12 low) =>
+plain per-step rounding modes cannot fit (checked by hand: rna27/
+rne27/rtz27 all predict wrong signs); the finite residual register
+holding half-grid residues until overflow is the only family that
+produces such resonances.  NEXT: build the full deviation tables
+D(dm mod 8, S, d_o) for every ladder cell and enumerate the
+residual-register variants (R in {rna27,rne27}, res in ulp27 units,
+width 2-3 bits, saturation/wrap) against the tables - hundreds of
+crisp constraints; the right member should snap to 100%.
