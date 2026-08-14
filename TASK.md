@@ -2885,3 +2885,18 @@ Value-space rescan of tt4 (exact binade-aligned comparison):
    sawtooth's exact formula, then compose: value' = P + delta(L)
    with threshold theta = 32v - 13v and the crossing/walk terms;
    rescore all classes.
+
+## 2026-08-15 (later 91): family excursions are row-dependent (windows banked)
+
+Per-row windows for family k=20 (L=0x1400): [0,+64] for bl35 rows
+with +64..+128 spikes at ty=45/47; [+16,+80] uniformly for bl36
+rows.  The excursion delta(L, ty) shifts by +16v at the bl35->36
+crossing and spikes a full granule at isolated rows - consistent
+with the sawtooth being applied at a fixed absolute bit position
+(so its v-scaled window shifts with bl) plus crossing events.
+NEXT-WINDOW (start here): build the complete delta(L, ty) table for
+all 32 families x 47 rows (window intersection per (L, ty) is
+mostly a single 64v-window: the value is pinned mod G; stitch
+adjacent-row continuity to pin absolutes), fit the closed sawtooth
+formula, compose with theta = 32v-13v threshold + walk residue,
+rescore all six classes -> dense -> held-out -> ports 91 -> 80 -> 0.
