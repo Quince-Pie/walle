@@ -3110,3 +3110,22 @@ rows fit theta; tt3's all-narrow rows fit the chain.)
 NEXT-WINDOW START: implement the gated composite in the dense scorer;
 expect > 23028 immediately and > 30k with per-child theta; then the
 L3 pulses; then held-out; then ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 104): slope24 gating; theta(path) confirmed as the last blocker
+
+Slope24-frame gate (wide iff bl(slope24*odd(disp)) >= 31): 19668/33736
+global-theta - still under the banked baseline 23028 because 22269
+exports go wide and a GLOBAL theta throws away what the banked
+chain's intermediate quantizations partially emulate.  The single-
+axis evidence (12 perfect children, 73.7% with per-ROW theta) says
+the wide law + per-path theta wins where theta is allowed to follow
+the path.  CONCLUSION: every integration route now funnels into the
+single remaining unknown - the theta(path) closed form (the L2
+tables: base per class, universal crossing drops 9/17/25, parity
+split 8, +-2v alternations, late-row climbs).
+NEXT-WINDOW START (concrete): fit theta(path) as
+  theta = base + f(rows-since-crossing, d_o mod 2^k, parity(ty))
+against the five banked class tables + the per-child tables from the
+12 perfect children (their fitted thetas are known-good anchors);
+then the gated dense composite with theta(path); then held-out;
+then ports 91 -> 80 -> 0.
