@@ -2404,3 +2404,23 @@ Structure retained: region storage + block-float + anchor-relative
 traversal is the right frame; the exact region geometry (c1, c2,
 quanta, K as functions of A, B binades, anchor bits incl. bit 16)
 is the one remaining derivation.
+
+## 2026-08-14 (later 69): s41 is base-family; cross-channel block-float
+
+CORRECTION to later-68: my boundary extractor caught the triangle's
+LEFT EDGE (coverage boundary), not the wobble boundary.  The full s41
+o2 A-lane map shows the true structure: the minority word (3a3d2316,
+48 tiles) forms an ANCHOR-SIDE region at the right (first-dot tx per
+ty: 55@0, ~57@5, ~58@10, 59@14, gone@18: +1 per ~4-5 rows), i.e. the
+BASE-FAMILY law (anchor region, ~4-row shear, storage rounded DOWN
+this time).  s41's ax = 486144 (bit16 odd - consistent with the
+odd-parity family), ax mod 8192 = 2816, and the ty0 boundary
+dx_r = 2816 + 3*8192 -> n = 3, same as the A=B toy case, despite
+B = 0.  RESOLUTION HYPOTHESIS: the block-float record is shared
+ACROSS ALL FOUR CHANNELS of the tile RAM entry (LDCF fetches
+channelwise but storage shares one exponent): s41-ctx0's pairing
+ratio is set by the other channels' slopes (ctx1 B ~ A0 -> ratio ~ 1
+-> n = 3).  The toy captures used identical varyings on all four
+channels, hiding this.  Test: toy capture with DIFFERENT per-channel
+varyings to move the shared exponent and watch the region shift.
+The 8-4B/A interpolation must be recast with the RECORD-max slope.
