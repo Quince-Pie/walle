@@ -2862,3 +2862,26 @@ residual register best at 91540/108006 (later-88), crossing rows
 localized as the law's remaining unknown.  Next window: model the
 crossing-row transition exactly (state trace vs the excursion table
 per dm class at ty=48/34-38), then joint refit -> dense -> ports.
+
+## 2026-08-15 (later 90): THE DM-FAMILY SAWTOOTH (atomic excursion law)
+
+Value-space rescan of tt4 (exact binade-aligned comparison):
+1. Atomic threshold at the first wide row (ty=17, bl31): hw rounds
+   up at dropped >= 19v = 32v - 13v for odd parity - the 13/64
+   constant IS the atomic threshold bias, visible in a single
+   rounding event with no history.
+2. Granule-excursion families: dm's with low-8 bits zero and low-13
+   part L = k*256: excursion windows (intersected across rows, in v):
+   k=6,7: [-16,0]; k=8..11 descending toward -32; k=12 (0xC00,
+   killer): PINNED -32v = -G/2; k=13..15: row-varying; k=16
+   (0x1000): [+32,+96]; k=17..23 positive row-varying; k=24
+   (0x1800): PINNED +32v = +G/2; k=26: +32; k=29: +16; k=28,30,31:
+   [0,+32].  A SAWTOOTH around L = 4096 (dm's 2^13 half-point):
+   negative below, positive at/above, decaying by k=31 - the
+   signature of dm being segmented/rounded at bit 13 in one of the
+   multiplier's paths, with the error scaled to ~2^-25 relative
+   (32v = G/2).  Row-varying windows for k=13..23 mean delta also
+   depends on ty/r - next: per-row delta(L, ty) tables to close the
+   sawtooth's exact formula, then compose: value' = P + delta(L)
+   with threshold theta = 32v - 13v and the crossing/walk terms;
+   rescore all classes.
