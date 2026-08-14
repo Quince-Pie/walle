@@ -2845,3 +2845,20 @@ per-ladder-cell autopsy of crossing steps (state trace vs the 5-S
 ladder for single cells), then eps-v3 rows 19..33 as crossing
 tests (their 4-row-block granule table maps crossing rows), then
 joint refit; then dense + held-out; then ports.
+
+## 2026-08-15 (later 89): dC autopsy - crossings spike, exports add noise
+
+Consecutive-row exported-word differences dC(ty) = C(ty+1)-C(ty):
+- For clean dm (0x800001): dC = exact step everywhere EXCEPT
+  excursions at specific rows; killer dm 0x800C00 shows NEGATIVE
+  spikes exactly at its crossing rows (ty=30 = d_o 1793, ty=48).
+- In general dC mixes the two adjacent export roundings (+-ulp24
+  noise, odd multiples of ulp27), so the step law cannot be read
+  from single differences; but crossing rows spike at 2^34-scale
+  (e.g. ty=48: -1x2^34 x34 dm's, +1x2^34 x25) - crossing events
+  remain the dominant special structure.
+Session state: path-dependence proven (later-86), walk frame with
+residual register best at 91540/108006 (later-88), crossing rows
+localized as the law's remaining unknown.  Next window: model the
+crossing-row transition exactly (state trace vs the excursion table
+per dm class at ty=48/34-38), then joint refit -> dense -> ports.
