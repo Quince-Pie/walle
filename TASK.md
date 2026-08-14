@@ -1807,3 +1807,25 @@ draws; capture.raw sha256
 (1837,103) and (1838,106) share tile (57,3) with opposite corpus
 directions - killing any per-tile-constant secondary model; the
 per-pixel f16-RTZ law is the only survivor and is now hw-verified.
+
+## 2026-08-14 (later 45): #4 narrowed to the vertex-shader varying ulps
+
+Captures a2-transfer-values-plan-v1/v2/v3 (variant probe, per-pixel
+iter center values; shas 44186754/82f2508a/b70093ce):
+- v1 (buffer coords, varyings exactly 1.0): center = 3f7fffff exactly
+  at the nine y<=31 residuals (f16-RTZ -> 0x3BFF ok) and 3f800000
+  across all of tile (57,3) - (1837,103) unexplained.
+- v2 (intendedPhysicalFrameEdges verts): everything 1.0 - the real
+  rasterized verts are the BUFFER coords, not the physical mapping.
+- v3 (8 half-pixel offset candidates x key pixels): x-shifts preserve
+  the band (A=0), y-shifts kill it, nothing flips (1837,103).
+CONCLUSION: the remaining knob is the VARYING VALUES: the CA vertex
+shader (VfxXgh) emits alpha = 1.0 +- few f32 ulps per vertex (from
+its uniform transform arithmetic), which shifts the plane at the
+2^-32 scale needed to split (1837,103) [<1] from (1838,106) [>=1]
+within one tile.  The uniform buffer is captured (v103 trace:
+uniformBufferLength=48, recordOffset=96) - next: recover the real
+uniform words, reproduce VfxXgh's arithmetic for the four tri-2/6
+verts, feed the resulting varying words to the value probe, expect
+12/12 state-42 signs; then sweep the remaining 5 states' pixels
+(31/33/40/41/58/60) the same way.
