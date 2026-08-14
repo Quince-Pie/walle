@@ -1724,3 +1724,27 @@ iterated-add law; the wide path is a direct computation whose X
 function remains the one open item.  The three frozen datasets
 (tt3 exact / tt4 dense-scan / tt1 mixed) + the X facts of later-39
 fully specify the identification problem.
+
+## 2026-08-14 (later 41): presentation class (task #4) characterized
+
+The 18 presentation pixels verified against build/_residual_list.txt:
+all are +-1 byte deltas, and the sign SPLITS: 14 have apple = walle-1
+(s40, s41, s42 x10, s58, s60) and 4 have apple = walle+1 (s31:249:1628,
+s33:70:1639, s42:1838:106, s42:259:2011).  Under the banked second-
+stage model round255(h16(h16(primary) * secondary)), secondary in
+{0x3C00, 0x3BFF} per (tile row x primitive), BOTH renderers apply a
+tile-local secondary; the 18 pixels are tiles where apple's and
+walle's selections DISAGREE in either direction.  walle's 0x3BFF
+arises inside the coverage alpha (f16 alpha_half_bits, see
+parity/test_liquid_glass_reveal_mask_model.c case 0x3bff); apple's
+comes from the transfer draw's interpolated alpha-plane TILE CONSTANT
+(f16 export of the AGX setup C for the alpha varying).  Closing #4
+therefore needs the transfer draw's per-state alpha-plane geometry
+(captured in the a2-geometry artifacts) plus the f16 C-tile export
+law - the same setup laws now being closed for R8, at f16 precision.
+NOTE: the old classifier _analyze_reveal_second_stage.py no longer
+runs (SelectorTableOverride API drift in
+analysis/liquid_glass_runtime_raster_coefficients).
+Wide-path law search delegated to a solver subagent (brief:
+analysis/WIDE_PATH_SOLVER_BRIEF.md; falsification log:
+analysis/wide_solver_log.md).
