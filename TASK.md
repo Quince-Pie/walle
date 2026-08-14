@@ -3361,3 +3361,20 @@ noise - needs the cleaned eps decode).
 NEXT-WINDOW START: wrap-decision extraction per (q,t) from thp2 ->
 cut law; cleaned eps decode for the ripple; then compose; then
 theta; then ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 118): wrap decision is a parity-split rounder at 2^19 - phase conflict open
+
+Empirical wrap classification at q=6528 (unwrap/wrap per t near the
+boundary): the decision follows cut = 32/64 for floor(dm*q/2^19)
+EVEN, 35/64 for ODD - every boundary cell consistent (t=199 unwrap
+at 0.478/even, 201 wrap 0.503/even, 121/123 unwrap 0.507/0.532/odd,
+125 wrap 0.556/odd, all higher args wrap).  The wrap is ANOTHER
+biased parity rounder (same motif as the export's 25/17).
+CONFLICT: tt4 (q=64) global scoring prefers flat 29/64 (16607) over
+(32,35)-parity (16281) - the cut law is phase-dependent OR the
+parity bit is not floor(dm*q/2^19)&1 (at q=64 that bit is dm bit 13
+= 0 for the lo-block; conflict is 29-vs-32 for the SAME even class).
+ARBITRATION: extract q=1664's empirical wrap boundary (band
+t=143..159) the same way; three phases will pin the true cut law.
+NEXT-WINDOW START: q=1664 wrap extraction -> unified cut law ->
+rescore all phases -> theta -> composite -> held-out -> ports.
