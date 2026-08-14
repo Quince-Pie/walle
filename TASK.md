@@ -3303,3 +3303,21 @@ combined with the phase scan (eps tomography AT q=6528).
 NEXT-WINDOW: eps-lever + phase instrument for corpus phases (pin the
 internal value to ~2v at q=1664/6528 as eps-v3 did at q=64), then
 the large-q L1 term, then theta closed form, then ports.
+
+## 2026-08-15 (later 115): eps-at-phase instrument captured at corpus phases
+
+Captures (both banked, plans committed):
+- c-epsphase-plan-v1 (k=bl-64 lever: too coarse, every step flips;
+  calibration lesson: k = bl(dm*disp) - 70 reproduces eps-v3's
+  frame) sha f70bda817309a6c13a9166917bf3473f28c8d9a00a51273bf3a59a
+- c-epsphase-plan-v2 (k=bl-70): flips/scan 4-13 - usable resolution
+  (lever step ~G/3..G/8).  sha
+  882b149ba1455cabd9284a609cc4881e5daac3e60af0215db8e0171a9ad34691
+  Scans: q in {1664, 6528} x 12 t values (incl. killer 3072, 0xF00
+  3840, census t=65..199 band) x 12 rows x 32 eps steps.
+NEXT-WINDOW START: decode epq2 with SELF-CALIBRATED levers (lever
+slope from consecutive up-flip spacing within each scan; boundary
+values from the exported words) -> V_internal(q,t,ty) at ~2-4v ->
+subtract P + L1 -> the large-q correction map -> close L1 general
+form -> theta closed form / 14-phase table -> gated composite ->
+held-out -> ports 91 -> 80 -> 0.
