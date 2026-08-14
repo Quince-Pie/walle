@@ -2654,3 +2654,15 @@ NEXT-WINDOW PLAN (in order):
    gated ports (presentation secondary stage in the renderer via the
    closed basis chain; general path flip) with zero-regression
    contracts 91 -> 80 -> 0.
+
+## 2026-08-14 (later 80): basis-word micro-fits (nulls banked)
+
+On the 108 hw basis words: knobs ('slope',10,32,20) = 72/108 (best);
+final-RTZ24 68/108; global multiplicative biases (1-2^-25/-26 etc)
+all <= 72.  Mismatch mantissa deltas (hw-model): -1 x18 (dominant
+low-bias), +2/+4/+23 at the tiny-value walk cells (absolute-scale
+walk deviations, same word 3b95e3a0 repeating across tiles),
+-2/-4/-6 tails.  hw-vs-exact-barycentric ulp histogram centers at
+-0.25 ulp (systematic low).  Not a global bias: per-cell walk/
+reciprocal structure - proceed with the later-79 next-window plan
+(two-stage eps-v3 decode; 108-word reciprocal-path fit).
