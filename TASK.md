@@ -3400,3 +3400,24 @@ NEXT: fit the odd-part cut shift (candidates: second-level rounder
 consuming bits 19..21 of dm*q; q_odd-scaled bias), update
 wide_law.py to cut=30/64 + odd-part term, rescore everything;
 then theta; then ports.
+
+## 2026-08-15 (later 120): wrap law at 99.4% across seven phases
+
+Joint fit over 1788 empirically-classified wrap decisions (7 phases:
+tz4/5/tt4/tz8/tz9 + corpus 1664/6528):
+  *** wrap iff (dm*q mod 2^19) >= 60/128*2^19 - 1/128*2^19*((dm*q>>19)&1)
+      -> 1777/1788 (99.4%) ***
+The 11 misfits are contiguous t-bands at the corpus phases (1664:
+t=151..159 cl0; 6528: t=39,119-123,199) - hw UNWRAPPED at args
+0.478..0.53 where the fit wraps.  Same-class pow2 cells (tz4 cl0)
+wrap from 0.4688, so (A>>19)&7 is NOT the full discriminator; the
+remaining bit distinguishes odd-part phases in the boundary zone
+only (~0.6% of wrap decisions ~ 0.02% of all cells).  Candidates
+eliminated: floor mod 4 alone, tz(A) monotone cut.  Best structural
+candidate: the boundary zone is the SECOND-level rounder's own
+transition (recursion depth 2), needing the eps-instrument at a
+boundary-band (t=119..123, q=6528) to read the internal value
+directly - scans exist in epq2 (t=117/121 are in its TVALS!).
+NEXT-WINDOW START: read epq2's t=117/121 q=6528 scans (internal V
+at the boundary band) -> the last wrap bit; update wide_law.py
+(cut 60/128 + parity term); rescore all; theta; ports.
