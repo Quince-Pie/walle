@@ -1889,3 +1889,62 @@ remains outside all current laws.  Corpus-side note: the parity
 narrow-branch port (rna27 half-up) remains gate-neutral at 91, but
 its correctness domain must be restated in frame terms before task
 #8 flips the general path.
+
+## 2026-08-14 (later 47): #4 re-scoped - presentation class is 11 px, solved
+
+The dense-constraint solve of the A2 transfer plane is done (brief:
+analysis/A2_PLANE_SOLVER_BRIEF.md; falsification log:
+analysis/a2_solver_log.md; scripts analysis/a2_solver_*.py).
+
+FIRST: the Python public-raster model runs again.  The later-41
+"SelectorTableOverride API drift" is a missing 20-line helper class, not a
+changed algorithm - analysis/liquid_glass_runtime_raster_coefficients.py
+reads a selector table through len() and one [index] only.  The shim in
+analysis/a2_solver_primary.py restores render_primary_half /
+_overlay_triangle / score_reveal_v74_public_raster, and the restored model
+reproduces build/_residual_list.txt per state exactly (31:5 33:2 34:4 35:4
+39:1 40:12 41:1 42:34 44:3 45:4 47:2 58:11 60:8, all |delta|=1).
+
+CENSUS (a2_solver_census.py, all 51 border-grid states): 10,486 pixels are
+"sensitive" (the two secondaries give different bytes); 45 of them carry
+apple's 0x3BFF; ZERO match neither candidate.  That independently confirms
+byte = round255(h16(h16(primary)*secondary)) and walle's primary.
+
+The later-41 census of "18 presentation pixels" was wrong.  A secondary
+<= 1.0 can only LOWER a byte, so every apple = walle+1 residual is a primary
+residual by construction - including (1838,106) and (259,2011), which
+later-44/46 used as plane constraints.  Removing (1838,106) removes the
+"per-tile constants are dead" blocker AND the later-46 obliqueness argument.
+
+THE SPLIT (a2_solver_plane.py, exact integer cones; a2_solver_slope_cone.py;
+a2_solver_tile_offsets.py):
+- 11 px = state 42 transfer tile (56,0), triangle 2: the ONLY tile-filling
+  LOW cluster in the corpus (11 LOW / 0 HIGH).  Solved plane cone (g = D -
+  2^-25 on doubled pixel centres) is simplicial with extreme rays
+  (-1116,250,2008179), (-185,41,333158), (6,-4,-10713); it contains the
+  pure-y family whose crossing row is pinned to Y* in (31.5, 34.5] - i.e.
+  the 32-row tile boundary, matching later-44's measured C words
+  (3f7fffff in tile row 0, 3f800000 in tile row 1) exactly.
+- 34 px = isolated LOW pixels inside otherwise-HIGH tiles (states 33/35/40/
+  41/42/44/45/58/60).  NOT the transfer plane: adding (1837,103) makes
+  state 42's cone INFEASIBLE; states 40/58/60 are infeasible for any affine
+  plane per triangle, for any per-tile constant at any tile size 8..128 and
+  any phase, and for the AGX per-tile-constant + shared-slope shape down to
+  4x4 tiles.  Two of them share one 2x2 quad with opposite labels
+  ((1852,434)/(1852,435) in state 40).  These are one-binary16-ulp PRIMARY
+  residuals - the same class as the 54 insensitive residuals - visible only
+  because a byte boundary sits under them.  Also falsified: alternate
+  binary16->unorm8 conversion laws, and "walle's binary32 alpha sits on its
+  binary16 rounding boundary" (flip headroom is 0.3-2.5 binary32 distance
+  ulps at LOW pixels while HIGH pixels needing 0.002 ulps did not flip).
+
+VALIDATION (a2_solver_validate.py): applying the solved plane over all 51
+states takes the corpus from 91 to 80 residuals - state 42 34 -> 23, every
+other state unchanged, zero regressions.
+
+REMAINING for #4: the input-only generation rule is now a single question -
+which transfer tiles export C = 1 - 2^-24 for a constant-1.0 varying.  That
+is the task #2/#3 two-product cancellation residue evaluated at binary32 on
+the transfer triangle, not a new unknown; the hardware already produced the
+right answer for state 42 (later-44).  The other 80 residuals belong to the
+raster/interpolator programme (#3), which is now 80 pixels, not 73.

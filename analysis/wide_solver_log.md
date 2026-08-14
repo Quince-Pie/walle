@@ -444,3 +444,43 @@ Capture provenance: the .raw files live under `build/analysis-agx-basis/`
 Plans are reproducible from `wide_solver_B_gen_plan.py --tz <tz>`; plan
 sha256 prefixes b56c8e60 (tz3), a43f02f9 (tz4), 858fbeaa (tz5), beb89f19
 (tz8), 0aaf9a19 (tz9).
+
+### B10. Column-truncated array + normaliser compensation — FALSIFIED
+
+`wide_solver_B_ctarray.py`.  The one shape that reconciles both halves of
+B9: an array that omits partial-product bits below a fixed column T of the
+raw subpixel frame (so tz controls the dropped sum, and tt3 is gated off
+automatically because tz=13 leaves nothing to drop for T <= 13), combined
+with a compensation added by the normaliser (so it is result-relative and
+therefore flat along each row of the (tz, cut) table).
+
+For each T the optimal c is SOLVED by interval stabbing, so these are
+ceilings for the family, not sweep results:
+
+| T | joint best c | joint | tt3 | tt4 | tt1 | tz3 | tz4 | tz5 | tz8 | tz9 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 7 | -3.91 | 109073/128617 | 18001 | 14850 | 2310 | 15572 | 15165 | 15202 | 15214 | 14911 |
+| 9 | -4.00 | 109069 | 18001 | 14838 | 2312 | 15506 | 15165 | 15197 | 15213 | 14911 |
+| 11 | -4.00 | 109049 | 18001 | 14730 | 2308 | 15490 | 15133 | 15113 | 15209 | 14913 |
+| 13 | -2.00 | 108405 | 18001 | 14274 | 2266 | 15600 | 15037 | 14911 | 15035 | 14841 |
+| 14 | 0.00 | 105814 | 17553 | 13598 | 2206 | 15273 | 14764 | 14643 | 14551 | 14585 |
+
+T=7 is effectively no truncation for these captures, and the ceilings fall
+monotonically as T grows — the column truncation actively destroys
+agreement rather than explaining the tz dependence.  FALSIFIED.  (T=14 also
+breaks the tt3 holdout, confirming the gate is real: tt3 tolerates T <= 13
+exactly as predicted from its tz.)
+
+Joint ceiling of the whole family (any T, single global c) is
+109073/128617 = 84.8%.
+
+### Track B summary of the state
+
+Established: the compensation is result-relative in magnitude and
+frame-dependent in value; its value per tz is measured (B9 table); the
+bl(P)<=30 gate is dead (B2); no dm-only rule can close it (ceiling theorem,
+solver-2 section); tt4's +9 and the bias-sum-13 identity are tz=6 facts.
+Open: the mechanism that makes the compensation depend on tz while staying
+cut-independent.  The (tz, cut) table in B9 is the object to explain, and
+the five new captures make it measurable at will — a new class costs one
+anchor change and about a second of GPU time.
