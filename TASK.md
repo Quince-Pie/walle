@@ -1711,3 +1711,16 @@ across rows into (dm, d_o, X) triples); (2) test 'rounded-operand'
 family: dm' = round(dm, N bits) or d_o' = round(d_o, N), P' = dm'*d_o'
 with correction; (3) once tt4+tt1 both 100%: tomography (sel stage),
 dense 33.7k, corpus gate.  Narrow law (later-38) remains PROVEN.
+
+## 2026-08-13 (later 40): iterated-walk revival tested and bounded
+
+Tested: acc(k+1) = rna27(acc(k) + full-precision step), seeded at the
+anchor tile, export RNE24 - scores tt4 12447/18001, tt3 15605/18001,
+tt1 2008/2552.  tt3's perfection under the DIRECT law (later-38)
+proves hw does NOT per-step-round at 27 bits; and the killer cell's
+X ~ -1024 at bl=34 over <=14 tile steps excludes wide-accumulator
+(W>=31) walks (error budget ±2/step).  Conclusion: no uniform
+iterated-add law; the wide path is a direct computation whose X
+function remains the one open item.  The three frozen datasets
+(tt3 exact / tt4 dense-scan / tt1 mixed) + the X facts of later-39
+fully specify the identification problem.
