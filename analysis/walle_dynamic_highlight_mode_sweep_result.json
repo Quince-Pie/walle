@@ -1,0 +1,1253 @@
+{
+  "baseModes": {
+    "alphaUlpBias": 0,
+    "band": 0,
+    "coordinate": 0,
+    "coverage": 1,
+    "derivative": 1,
+    "destinationDivision": 0,
+    "floatDivision": 3,
+    "mix": 0,
+    "normalize": 1,
+    "normalizedCoordinate": 0,
+    "sdfArithmetic": 0,
+    "sdfDistanceUlpBias": 0,
+    "sdfSquaredUlpBias": 0,
+    "sourceConstruction": 1,
+    "sourceDivision": 0
+  },
+  "bestByMode": {
+    "alphaUlpBias": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3696,
+      "mismatchedPixels": 1380,
+      "mode": "alphaUlpBias",
+      "value": 4
+    },
+    "band": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "band",
+      "value": 0
+    },
+    "coordinate": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 20,
+      "mismatchedPixels": 17,
+      "mode": "coordinate",
+      "value": 1
+    },
+    "coverage": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "coverage",
+      "value": 0
+    },
+    "derivative": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3739,
+      "mismatchedPixels": 1390,
+      "mode": "derivative",
+      "value": 0
+    },
+    "destinationDivision": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3757,
+      "mismatchedPixels": 1395,
+      "mode": "destinationDivision",
+      "value": 3
+    },
+    "floatDivision": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "floatDivision",
+      "value": 0
+    },
+    "mix": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "mix",
+      "value": 0
+    },
+    "normalize": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3756,
+      "mismatchedPixels": 1397,
+      "mode": "normalize",
+      "value": 0
+    },
+    "normalizedCoordinate": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "normalizedCoordinate",
+      "value": 0
+    },
+    "sdfArithmetic": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfArithmetic",
+      "value": 0
+    },
+    "sdfDistanceUlpBias": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3737,
+      "mismatchedPixels": 1392,
+      "mode": "sdfDistanceUlpBias",
+      "value": -3
+    },
+    "sdfSquaredUlpBias": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": -4
+    },
+    "sourceConstruction": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sourceConstruction",
+      "value": 1
+    },
+    "sourceDivision": {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1394,
+      "mode": "sourceDivision",
+      "value": 2
+    }
+  },
+  "candidateCount": 89,
+  "classification": "diagnostic one-axis exact-frame arithmetic sweep",
+  "deviceIndex": 0,
+  "results": [
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3739,
+      "mismatchedPixels": 1390,
+      "mode": "derivative",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "derivative",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3739,
+      "mismatchedPixels": 1390,
+      "mode": "derivative",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "derivative",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3739,
+      "mismatchedPixels": 1390,
+      "mode": "derivative",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "coordinate",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 20,
+      "mismatchedPixels": 17,
+      "mode": "coordinate",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3838,
+      "mismatchedPixels": 1416,
+      "mode": "alphaUlpBias",
+      "value": -4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3811,
+      "mismatchedPixels": 1401,
+      "mode": "alphaUlpBias",
+      "value": -3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3789,
+      "mismatchedPixels": 1396,
+      "mode": "alphaUlpBias",
+      "value": -2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3780,
+      "mismatchedPixels": 1397,
+      "mode": "alphaUlpBias",
+      "value": -1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "alphaUlpBias",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3727,
+      "mismatchedPixels": 1392,
+      "mode": "alphaUlpBias",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3727,
+      "mismatchedPixels": 1386,
+      "mode": "alphaUlpBias",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3722,
+      "mismatchedPixels": 1387,
+      "mode": "alphaUlpBias",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3696,
+      "mismatchedPixels": 1380,
+      "mode": "alphaUlpBias",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "floatDivision",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "floatDivision",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "floatDivision",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "floatDivision",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "floatDivision",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "floatDivision",
+      "value": 5
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "coverage",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "coverage",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "coverage",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "mix",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "mix",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "mix",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "mix",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "mix",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "band",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 33,
+      "mismatchedBytes": 6264,
+      "mismatchedPixels": 1808,
+      "mode": "band",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 33,
+      "mismatchedBytes": 6261,
+      "mismatchedPixels": 1805,
+      "mode": "band",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3756,
+      "mismatchedPixels": 1397,
+      "mode": "normalize",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "normalize",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3758,
+      "mismatchedPixels": 1395,
+      "mode": "normalize",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "normalize",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3758,
+      "mismatchedPixels": 1395,
+      "mode": "normalize",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "normalize",
+      "value": 5
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "normalizedCoordinate",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "normalizedCoordinate",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3761,
+      "mismatchedPixels": 1397,
+      "mode": "normalizedCoordinate",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3761,
+      "mismatchedPixels": 1397,
+      "mode": "normalizedCoordinate",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3761,
+      "mismatchedPixels": 1396,
+      "mode": "normalizedCoordinate",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3762,
+      "mismatchedPixels": 1396,
+      "mode": "normalizedCoordinate",
+      "value": 5
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3761,
+      "mismatchedPixels": 1396,
+      "mode": "normalizedCoordinate",
+      "value": 6
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3761,
+      "mismatchedPixels": 1397,
+      "mode": "normalizedCoordinate",
+      "value": 7
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3762,
+      "mismatchedPixels": 1400,
+      "mode": "normalizedCoordinate",
+      "value": 8
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfArithmetic",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfArithmetic",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfArithmetic",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfArithmetic",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": -4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": -3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": -2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": -1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfSquaredUlpBias",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3741,
+      "mismatchedPixels": 1393,
+      "mode": "sdfDistanceUlpBias",
+      "value": -4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3737,
+      "mismatchedPixels": 1392,
+      "mode": "sdfDistanceUlpBias",
+      "value": -3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3740,
+      "mismatchedPixels": 1393,
+      "mode": "sdfDistanceUlpBias",
+      "value": -2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3748,
+      "mismatchedPixels": 1391,
+      "mode": "sdfDistanceUlpBias",
+      "value": -1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sdfDistanceUlpBias",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3754,
+      "mismatchedPixels": 1389,
+      "mode": "sdfDistanceUlpBias",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3753,
+      "mismatchedPixels": 1389,
+      "mode": "sdfDistanceUlpBias",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3754,
+      "mismatchedPixels": 1382,
+      "mode": "sdfDistanceUlpBias",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3772,
+      "mismatchedPixels": 1395,
+      "mode": "sdfDistanceUlpBias",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sourceDivision",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3765,
+      "mismatchedPixels": 1396,
+      "mode": "sourceDivision",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1394,
+      "mode": "sourceDivision",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sourceDivision",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sourceDivision",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3761,
+      "mismatchedPixels": 1398,
+      "mode": "sourceConstruction",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sourceConstruction",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1398,
+      "mode": "sourceConstruction",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1398,
+      "mode": "sourceConstruction",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1398,
+      "mode": "sourceConstruction",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "sourceConstruction",
+      "value": 5
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3761,
+      "mismatchedPixels": 1398,
+      "mode": "sourceConstruction",
+      "value": 6
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3757,
+      "mismatchedPixels": 1395,
+      "mode": "destinationDivision",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 5
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 6
+    }
+  ],
+  "schemaVersion": 1,
+  "topCandidates": [
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 1,
+      "mismatchedBytes": 20,
+      "mismatchedPixels": 17,
+      "mode": "coordinate",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3696,
+      "mismatchedPixels": 1380,
+      "mode": "alphaUlpBias",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3722,
+      "mismatchedPixels": 1387,
+      "mode": "alphaUlpBias",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3727,
+      "mismatchedPixels": 1386,
+      "mode": "alphaUlpBias",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3727,
+      "mismatchedPixels": 1392,
+      "mode": "alphaUlpBias",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3737,
+      "mismatchedPixels": 1392,
+      "mode": "sdfDistanceUlpBias",
+      "value": -3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3739,
+      "mismatchedPixels": 1390,
+      "mode": "derivative",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3739,
+      "mismatchedPixels": 1390,
+      "mode": "derivative",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3739,
+      "mismatchedPixels": 1390,
+      "mode": "derivative",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3740,
+      "mismatchedPixels": 1393,
+      "mode": "sdfDistanceUlpBias",
+      "value": -2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3741,
+      "mismatchedPixels": 1393,
+      "mode": "sdfDistanceUlpBias",
+      "value": -4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3748,
+      "mismatchedPixels": 1391,
+      "mode": "sdfDistanceUlpBias",
+      "value": -1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3753,
+      "mismatchedPixels": 1389,
+      "mode": "sdfDistanceUlpBias",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3754,
+      "mismatchedPixels": 1382,
+      "mode": "sdfDistanceUlpBias",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3754,
+      "mismatchedPixels": 1389,
+      "mode": "sdfDistanceUlpBias",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3756,
+      "mismatchedPixels": 1397,
+      "mode": "normalize",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3757,
+      "mismatchedPixels": 1395,
+      "mode": "destinationDivision",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3758,
+      "mismatchedPixels": 1395,
+      "mode": "normalize",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3758,
+      "mismatchedPixels": 1395,
+      "mode": "normalize",
+      "value": 4
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1394,
+      "mode": "sourceDivision",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "alphaUlpBias",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "band",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "coordinate",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "coverage",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "coverage",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "coverage",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "derivative",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "derivative",
+      "value": 3
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 0
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 1
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 2
+    },
+    {
+      "checkedBytes": 4194304,
+      "exact": false,
+      "maximumChannelDelta": 7,
+      "mismatchedBytes": 3759,
+      "mismatchedPixels": 1396,
+      "mode": "destinationDivision",
+      "value": 4
+    }
+  ]
+}

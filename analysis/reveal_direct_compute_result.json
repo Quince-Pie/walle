@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "classification": "analysis-only output-blind prototype",
+  "productionFilesModified": false,
+  "scope": {
+    "target": "retained 2048x2048 public 65-state reveal corpus",
+    "candidateConstructionReadsReferencePixels": false,
+    "perStateOrPixelCorrectionLookupUsed": false,
+    "knownGeneralityLimit": "The prototype guard is fixed at [-512,2560] on both axes and intersections use host long double. It is not valid evidence for other target extents or CPU ABIs."
+  },
+  "heldInputs": {
+    "renderer": {
+      "path": "build/bin/quality/verify_reveal_best_known_gles",
+      "sha256": "792ee916e797253010bd3be1a36ae67465677be5c01974902af742672b9ef2cd"
+    },
+    "scorer": {
+      "path": "analysis/score_reveal_best_known_gles.py",
+      "sha256": "bfb8449d83d3f7231c6040d73d0fa5f520552ef2ed738b948cef5b9c0aff1423"
+    },
+    "fragmentShader": {
+      "path": "shaders/reveal_mask.frag.glsl",
+      "sha256": "466b818dad411fb4466dd3d6f926bae444b9107cdf1efa6cc437697e57dac39c"
+    },
+    "rasterSource": {
+      "path": "parity/liquid_glass_raster.c",
+      "sha256": "23ceab25f3d6bb66e16e1408cd59ca0e0395128539a64af9595a534e044d57cd"
+    },
+    "rasterHeader": {
+      "path": "parity/liquid_glass_raster.h",
+      "sha256": "ef0051c861c39675e4107c274c58ea5b955e22af97321785af5790dc28c6d44f"
+    },
+    "p25Selector": {
+      "path": "parity/raster_p25_selector_ceil_bits.bin",
+      "sha256": "9fbc083dfd9c89fc0bcdc89308acfc4530d408e93789a7dab89ee59ff60a198f"
+    },
+    "appleFastSqrtCorrection": {
+      "path": "parity/apple_fast_sqrt_correction_nibbles.bin",
+      "sha256": "dcd882a8af21ac9f2c0f82a3239d6d5f247e2eb5b3535348f6931b65c41f23b1"
+    }
+  },
+  "directCompute": {
+    "source": {
+      "path": "analysis/reveal_direct_compute_interposer.c",
+      "sha256": "412a24c397968a6da62cf20376ffde5d4a8cfb2f0af8c4eea307eaf26d330fef"
+    },
+    "binary": {
+      "path": "build/direct-raster/libreveal_direct_compute_interposer.so",
+      "sha256": "d48c22e7f6027593c1bfb6812988f31c03348669f524a9e14fa8d603a75942da"
+    },
+    "ownerOnly": {
+      "report": "build/direct-raster/direct-owner-full65.json",
+      "reportSha256": "ba232f03b576cecb17116f1a51e693baec3a017b2d2429c254d9193ce43b8d4c",
+      "mismatchedPixels": 141,
+      "absoluteError": 141,
+      "maximumError": 1,
+      "exactFrameCount": 45,
+      "candidateInventorySha256": "787d00a0bcd35297ecc4e928ddca2feb1eb95484f43c35dc665105234d0f53a3",
+      "verdict": "Bypassing native clipping and fragment invocation alone is byte-identical to production and does not close the 50-pixel gap."
+    },
+    "canonicalRepresentableChildOverlays": {
+      "igpuReport": "build/direct-raster/direct-canonical-owner-cropped-full65.json",
+      "igpuReportSha256": "bf68b4f4443c7637e6f3511170f601dc4fbf069f9c6f258dd51875883604366f",
+      "rx9070Report": "build/direct-raster/direct-canonical-owner-cropped-full65-rx9070.json",
+      "rx9070ReportSha256": "4a3f9cd05d0be820c4eb63ad6ed18e4d98d40dc46e962fcff7aee5abb6a571ad",
+      "mismatchedPixels": 91,
+      "absoluteError": 91,
+      "maximumError": 1,
+      "exactFrameCount": 52,
+      "exactPixelPercentage": 99.99996662139893,
+      "candidateInventorySha256": "9062b7bfde617f88638c9b48fdb8ace7b6f91b4518d54c5a6e54abcb51e93644"
+    }
+  },
+  "oneNativeDrawExpandedOwners": {
+    "source": {
+      "path": "analysis/reveal_expanded_owner_interposer.c",
+      "sha256": "f8af37595605d52f99e241a04d2ce9d8b8e05a5fdffd793bafd0eff21477077d"
+    },
+    "binary": {
+      "path": "build/direct-raster/libreveal_expanded_owner_interposer.so",
+      "sha256": "6181efa16190a1037c70c184f77ccd82b9e00033e8bb38f3b5bb0de385d653ca"
+    },
+    "algorithm": [
+      "Retain the original native geometry draw and base axis table.",
+      "Canonical-clip public source triangles in source order and append only children accepted by the public raster constructor.",
+      "Resolve the center owner with last-appended-slot-wins semantics.",
+      "For a base-owned center, restrict center/XOR partner lookup to base owners.",
+      "For a child-owned center, lock center/XOR samples to that selected child slot, falling back to its selected geometric primitive when a partner is outside the active child half."
+    ],
+    "glCallDelta": {
+      "drawElementsPerMask": 1,
+      "additionalOverlayDraws": 0,
+      "computeDispatches": 0,
+      "framebufferBlits": 0,
+      "rgba8StagingTargets": 0,
+      "additionalChildAxisUploadWhenChildrenExist": 1
+    },
+    "full65": {
+      "igpuReport": "build/direct-raster/expanded-owner-final-full65.json",
+      "igpuReportSha256": "11eff7b088beff250fe61f6272ff6eabf6127be05d57ec6f68406c676b4ffbe3",
+      "rx9070Report": "build/direct-raster/expanded-owner-final-full65-rx9070.json",
+      "rx9070ReportSha256": "73fe068325b39e7efcf3f3d213a88fa47522332eb20c3cfcb867d2440df714a1",
+      "mismatchedPixels": 91,
+      "absoluteError": 91,
+      "maximumError": 1,
+      "exactFrameCount": 52,
+      "exactPixelPercentage": 99.99996662139893,
+      "candidateInventorySha256": "9062b7bfde617f88638c9b48fdb8ace7b6f91b4518d54c5a6e54abcb51e93644",
+      "perStateMismatchCountSha256": "d6c006d789b551e875555f3e8ef32f0c46c3ec3911802fea405ef9d3458edb5d",
+      "residuals": [[31, 5], [33, 2], [34, 4], [35, 4], [39, 1], [40, 12], [41, 1], [42, 34], [44, 3], [45, 4], [47, 2], [58, 11], [60, 8]]
+    },
+    "benchmark256": {
+      "igpu": {
+        "productionSynchronizedMilliseconds": 15.859610,
+        "prototypeSynchronizedMilliseconds": 17.248165,
+        "productionThroughputMilliseconds": 13.317125,
+        "prototypeThroughputMilliseconds": 13.040923,
+        "prototypeFramesPerSecond": 57.977,
+        "prototypeThroughputFramesPerSecond": 76.682,
+        "childSetupMeanMilliseconds": 1.918423
+      },
+      "rx9070": {
+        "productionSynchronizedMilliseconds": 2.499947,
+        "prototypeSynchronizedMilliseconds": 4.305710,
+        "productionThroughputMilliseconds": 2.028914,
+        "prototypeThroughputMilliseconds": 3.734750,
+        "prototypeFramesPerSecond": 232.250,
+        "prototypeThroughputFramesPerSecond": 267.756,
+        "childSetupMeanMilliseconds": 1.720828
+      },
+      "drawCount": 576,
+      "appendedChildCount": 1584,
+      "unsupportedChildAttemptCount": 855,
+      "combinedOwnerSlotSum": 3780,
+      "maximumCombinedOwnerSlots": 12,
+      "note": "The duplicate-base-free interposer still constructs supported and unsupported child setups separately. That CPU work dominates the RX 9070 overhead; a production batch constructor is required before judging final cost."
+    }
+  },
+  "retainedSetupBoundary": {
+    "formalUnsupportedChildCases": 95,
+    "visibleUnsupportedChildCases": 88,
+    "fullyOffScissorUnsupportedChildCases": 7,
+    "verdict": "No retained public-input-only arbitrary non-axis postclip setup law is executable. Unsupported children must retain base output explicitly; approximation is not authorized."
+  },
+  "validation": {
+    "strictC23Warnings": "pass",
+    "gccAnalyzer": "pass",
+    "asanUbsanNoWrapvState34": {
+      "status": "pass",
+      "candidateSha256": "41b44b43cf48e87bc436eb0660101a59f5e697efeae8b3a7a8c12f3e25fea14e",
+      "matchesCanonicalCandidate": true
+    },
+    "cleanRebuildMatchesHeldBinary": true,
+    "computeSnapshotIndependentAudit": "pass as an output-blind corpus prototype; rejected as a production interposer"
+  },
+  "productionReadiness": {
+    "oneDrawArchitectureLandableAfterGeneralization": true,
+    "currentPrototypeLandable": false,
+    "blockers": [
+      "Replace fixed 2048 guard planes with per-axis NDC guard bounds -extent/4 and 5*extent/4.",
+      "Replace host long-double interpolation with exact finite-binary32 rational interpolation and one explicit round-to-nearest-even result.",
+      "Support every 0..7-vertex clipped polygon and fan children in stable source order.",
+      "Use a typed batch-construction status so only known unsupported setup retains base output; allocation, bounds, capacity, and malformed geometry fail closed.",
+      "Pass public geometry directly and use renderer-owned per-context resources rather than GL-call interception.",
+      "Move expanded owner metadata to a capacity-safe texture or storage buffer unless a smaller bound is formally proven across target sizes.",
+      "Add provenance that hashes the expanded renderer/shader/environment before replacing the frozen 141 baseline."
+    ]
+  },
+  "productionPatchMap": [
+    "Extend parity/liquid_glass_raster.[ch] with an exact general-resolution postguard batch constructor and explicit diagnostics; reuse its existing C23 128-bit dyadic machinery.",
+    "Generalize shaders/reveal_mask.frag.glsl with BaseOwnerSlotCount and seam-locked child sampling, while keeping one native geometry draw.",
+    "In walle.c, construct base plus supported children before upload, upload one combined axis table, and keep unsupported children on explicit base ownership.",
+    "Resize the shared axis texture for active combined owner rows; do not add a compute program, staging texture, framebuffer, or per-output compute resource.",
+    "Update the standalone GLES gate to call the same batch API and shader, then freeze the 91-pixel inventory on both GPUs.",
+    "Update the corpus expectation from 141 to 91 and the process-gate candidate inventory from 787d00a0...a3 to 9062b7bf...3644 only after general-size and lifecycle gates pass."
+  ],
+  "requiredTests": [
+    "Exact clip-unit vectors for target extents 1,2,3,5,7,255,257,1023,2047,2048,2049,4095 and asymmetric width/height combinations.",
+    "Vertices exactly on, one binary32 ULP inside, and one ULP outside each -extent/4 and 5*extent/4 guard plane.",
+    "Empty, degenerate, triangle, quad, and maximum seven-vertex clip output with canonical fan and overlap order.",
+    "Tiny/odd scissor rectangles, fully off-scissor children, resize/hotplug/context recreation, and nondefault GL state.",
+    "Failure injection for allocation, packed-size overflow, owner-capacity overflow, malformed indices, and known unsupported non-axis children.",
+    "Cross-architecture candidate equality under altered floating-point environment and contraction settings.",
+    "Full65 iGPU/RX9070 score, ordinary GLES gate, actual-process capture gate, GCC analyzer, ASan/UBSan with -fno-wrapv, and TSan on renderer-owned state."
+  ]
+}

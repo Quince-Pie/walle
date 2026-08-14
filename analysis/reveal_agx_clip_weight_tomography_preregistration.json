@@ -1,0 +1,88 @@
+{
+  "acceptance": {
+    "captureIntegrity": "The analysis-only IOKit interposer must report exactly one authenticated shader signature match and exactly one applied coefficient-export patch. Every preregistered record must retain its exact header and identity, and each of the four exported finite binary32 (A,B,C) triples must repeat identically across all sixteen stores in its patched region.",
+    "discoveryBoundary": "Candidate arithmetic may inspect only group 0 (discovery-v256-left-h64). Groups 1 through 4 remain unopened until one complete input-only law, including every rounding point and exceptional case, is frozen and hashed.",
+    "holdoutBoundary": "The frozen law must predict every raw (A,B,C) word in all four holdout groups bit for bit. No tolerance, fitted exception, state table, captured coefficient lookup, or reference-pixel input is allowed.",
+    "legacyJoin": "The four legacy-centered patterns must join the retained fixed-post-clip discriminator witnesses under the already authenticated LDCF evaluation order ffma(x,A,ffma(y,B,C)).",
+    "productionBoundary": "A holdout-exact coefficient law is still analysis-only. Walle may change only after the law is implemented from public geometry, the 65-state retained mask corpus reaches zero mismatch without output feedback on both qualified GPUs, and the actual Walle process capture is byte-identical to that renderer.",
+    "tolerance": "bit-exact binary32 coefficients and exact record accounting only"
+  },
+  "algebraicDiscriminators": {
+    "complement": "zero-to-scale and scale-to-zero distinguish a retained clip weight from its complement without subtracting two nearly equal mid-range values",
+    "homogeneity": "power-of-two, signed, normal, and small-normal endpoints test whether scaling occurs before or after coefficient quantization",
+    "legacyCentered": "four patterns preserve all sixteen earlier centered deltas so the new direct export cannot silently measure a different setup path",
+    "signedCancellation": "opposite signs and one-ULP endpoint perturbations expose staged addition, cancellation, and endpoint order",
+    "translation": "the same unit delta at offsets zero, one, plus 2^20, and minus 2^20 distinguishes affine weight composition from endpoint materialization and cancellation"
+  },
+  "authority": {
+    "capturedCoefficientReadBeforeFreeze": false,
+    "outputBlindPlan": true,
+    "productionIntegrationAuthorized": false,
+    "referencePixelRead": false,
+    "remoteExecutionAuthorized": true,
+    "scope": "one isolated analysis-only Metal capture on the authenticated Mac probe and coefficient-export interposer"
+  },
+  "capture": {
+    "expectedCoefficientWords": 1006464,
+    "expectedMetadataWords": 1677440,
+    "expectedPatchAppliedCount": 1,
+    "expectedPatchMatchCount": 1,
+    "rawBytes": 135537152,
+    "recordBytes": 1616,
+    "recordCount": 83872,
+    "recordVectorCount": 101,
+    "repeatedCoefficientWordComparisons": 15096960
+  },
+  "frozenPlan": {
+    "generator": {
+      "path": "analysis/generate_reveal_agx_clip_weight_tomography.py",
+      "sha256": "780bae4e02711c1da22a2a56b7919455bdf8bda8419726feb002b6ab4c4e8bf1"
+    },
+    "manifest": {
+      "bytes": 5662,
+      "path": "build/analysis-agx-clip-weight/prospective-plan/manifest.json",
+      "sha256": "32019708f66ed0d728de15ce9aa45f5236e5f5d288ad1476a434aed62d4b726a"
+    },
+    "patternCount": 8,
+    "plan": {
+      "bytes": 7380760,
+      "path": "build/analysis-agx-clip-weight/prospective-plan/reveal-agx-clip-weight-plan.bin",
+      "sha256": "f90e4e3b5f0d46b0fb8250c97aa40eb4ddb32c67050c9823feaecb0a20baaf8d"
+    },
+    "recordCounts": {
+      "discovery-v256-left-h64": 65544,
+      "holdout-v512-bottom-h192": 4624,
+      "holdout-v512-left-h96": 4544,
+      "holdout-v512-right-h128": 4608,
+      "holdout-v512-top-h160": 4552
+    }
+  },
+  "intervention": {
+    "distance": "The rejected edge moves through every 1/256-pixel distance from 0 through 32 pixels in discovery. Holdout includes 0 through 1/4 pixel, every power of two, and a SHA-256-selected subset of all remaining distances.",
+    "geometry": "Each group fixes the generated guard-to-inner-edge span at one power-of-two viewport width. Only the rejected edge moves. Cross spans and clip planes differ in holdout.",
+    "varyings": "Eight four-lane endpoint patterns isolate scaling, complement, translation, sign, and cancellation while retaining the old sixteen centered witnesses.",
+    "measurement": "The authenticated fragment is byte-identical to the prior LDCF probe. The opt-in interposer replaces four result-store regions so they expose the rasterizer-generated coefficient triples directly rather than evaluated pulls.",
+    "sample": "One preregistered strictly interior pixel is scissored for each group; the sample never depends on captured output."
+  },
+  "limitations": {
+    "arbitraryPostClipSetupRecoveredAtPreregistration": false,
+    "endToEndParityEstablished": false,
+    "hardwarePortabilityClaimed": false,
+    "reason": "The experiment is designed to identify the final fixed-function AGX post-clip coefficient transform. It does not assume that the transform is portable or authorize a near-match."
+  },
+  "observedAtPreregistration": false,
+  "priorEvidence": {
+    "clipSetupSplitAnalyzer": {
+      "path": "analysis/analyze_reveal_agx_clip_setup_split.py",
+      "sha256": "591f9a9fef2caafe43d4d1464377deeacaf2fd5c057cb1337703ac3a1f4f820c"
+    },
+    "clipSetupSplitResult": {
+      "path": "build/analysis-agx-basis/reveal-agx-clip-setup-split-result.json",
+      "sha256": "737bcd1aee20dc75258bf45b4bc4a2e942f7ffe9ea5d9d7e0e4bc978525e2f3e"
+    },
+    "established": "ITER/LDCF/FFMA evaluation is authenticated, and ordinary direct-child plus unclipped-source setup is exact for 2460/2460 measured coefficient triples.",
+    "remainingUnknown": "Only the fixed-function guard clipper's generated varying/coefficient transform remains between public geometry and the retained 91 one-code mask residuals."
+  },
+  "role": "prospective-output-blind-agx-clip-weight-tomography",
+  "schemaVersion": 1
+}

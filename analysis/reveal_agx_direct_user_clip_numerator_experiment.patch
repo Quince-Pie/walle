@@ -1,0 +1,21 @@
+--- reveal_agx_direct_user_clip_zero_crossing_experiment.swift
++++ reveal_agx_direct_user_clip_numerator_experiment.swift
+@@ -81,7 +81,17 @@
+     const bool isOuter = !isRight;
+     const float viewport = metadata[caseIndex].x == 0u ? 256.0f : 512.0f;
+     (void)viewport;
++    const uint pattern = metadata[caseIndex].y;
++    const float numerator = pattern == 0u ? 1.0f
++                          : pattern == 1u ? 2.0f
++                          : pattern == 2u ? 3.0f
++                          : pattern == 3u ? 5.0f
++                          : pattern == 4u ? 7.0f
++                          : pattern == 5u ? 255.0f
++                          : pattern == 6u ? 256.0f
++                                          : 257.0f;
+     const float denominator = 65536.0f + float(metadata[caseIndex].z);
+-    const float distanceValue = isOuter ? -1.0f : denominator - 1.0f;
++    const float distanceValue =
++        isOuter ? -numerator : denominator - numerator;
+     const float x = distanceValue * 0x1p-17f;
+     const float y = isBottom ? 0.5f : -0.5f;

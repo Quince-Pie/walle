@@ -1,0 +1,61 @@
+{
+  "schema": "walle-reveal-agx-post-completion-allocation-preregistration-v1",
+  "classification": "analysis-only AGX allocation lifetime and TVB discovery probe",
+  "host": {
+    "machine": "quince",
+    "address": "10.0.41.19",
+    "operatingSystem": "macOS 26.6.1",
+    "build": "25G76",
+    "gpu": "M1 Max"
+  },
+  "inputs": {
+    "catalog": {
+      "path": "build/analysis-agx-basis/reveal-agx-basis-catalog.json",
+      "sha256": "bc8b96dc4d3dc7c2fb6383dda49baa839eb207b60128739604ad8ddcd9402bd6"
+    },
+    "interposerPreimage": {
+      "path": "analysis/macos_agx_iokit_trace.c",
+      "sha256": "27395c57e1e086724eeb402aa9cbda4fb9cfbed7ae82e8ccf97b32fc1d50b6f6"
+    },
+    "interposerPostimage": {
+      "sha256": "c504e7bda77b5dd5209739924f4827cac43fc94ce27e768863f4d57f1038148b"
+    },
+    "probePreimage": {
+      "path": "analysis/reveal_agx_basis_probe.swift",
+      "sha256": "345c607289eb12fce84c2ace3e056b15ec7083166bdff164a9342b895cad5ce4"
+    },
+    "probePostimage": {
+      "sha256": "4bb1a8c13870e1232a4bbba178c8fedc404a38c9535cf8375ea6ce796ded4936"
+    }
+  },
+  "execution": {
+    "commandBufferCount": 1,
+    "probeWaitsUntilCompleted": true,
+    "postCompletionHookInvocationCount": 1,
+    "dumpLimitBytesPerAllocation": 8388608,
+    "environment": {
+      "WALLE_AGX_POST_COMPLETION_DUMP": "1",
+      "WALLE_AGX_TRACE_DIR": "fresh isolated directory",
+      "DYLD_INSERT_LIBRARIES": "fresh interposer build"
+    }
+  },
+  "analysis": {
+    "compare": "Every CPU-mapped allocation dumped immediately before the first submission is paired by handle, GPU address, and size with its dump after command-buffer completion. Changed byte ranges are reported without consulting a reference image or retained mask output.",
+    "primaryQuestion": "Does any captured CPU mapping expose TA-written TVB, generated-vertex, tile-list, or coefficient-setup data after completion?",
+    "secondaryQuestion": "Which allocation handles and byte ranges are GPU-written, and which command-stream pointers join those allocations?"
+  },
+  "failClosed": [
+    "Reject a non-exact opt-in environment value.",
+    "Reject a missing post-completion hook symbol.",
+    "Reject a probe command buffer that does not complete successfully.",
+    "Reject a missing or size-mismatched pre/post allocation pair.",
+    "Do not interpret an allocation as TVB solely because it changed; require a command-pointer, structure, or controlled-input join."
+  ],
+  "authority": {
+    "opensReferencePixels": false,
+    "usesFinalMaskOutputForModelSelection": false,
+    "modifiesProductionWalle": false,
+    "establishesParity": false,
+    "permitsFollowupControlledCapture": true
+  }
+}

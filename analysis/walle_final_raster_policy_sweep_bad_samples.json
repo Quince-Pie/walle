@@ -1,0 +1,717 @@
+{
+  "best": [
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 575,
+      "mismatchedChannels": [
+        1834,
+        1990
+      ],
+      "mismatchedSamples": {
+        "16": 1687,
+        "24": 893,
+        "4": 1244
+      },
+      "mismatchedWords": 3824,
+      "name": "reciprocal-truncation-24",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 24,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 578,
+      "mismatchedChannels": [
+        2077,
+        2025
+      ],
+      "mismatchedSamples": {
+        "16": 1070,
+        "24": 1881,
+        "4": 1151
+      },
+      "mismatchedWords": 4102,
+      "name": "tile-truncation-24",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 24
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 576,
+      "mismatchedChannels": [
+        2153,
+        2343
+      ],
+      "mismatchedSamples": {
+        "16": 1130,
+        "24": 1915,
+        "4": 1451
+      },
+      "mismatchedWords": 4496,
+      "name": "reciprocal-truncation-23",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 23,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 830,
+      "mismatchedChannels": [
+        2236,
+        2297
+      ],
+      "mismatchedSamples": {
+        "16": 1043,
+        "24": 1931,
+        "4": 1559
+      },
+      "mismatchedWords": 4533,
+      "name": "tile-truncation-23",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 23
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 832,
+      "mismatchedChannels": [
+        2394,
+        2281
+      ],
+      "mismatchedSamples": {
+        "16": 1085,
+        "24": 1915,
+        "4": 1675
+      },
+      "mismatchedWords": 4675,
+      "name": "reciprocal-truncation-22",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 22,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 958,
+      "mismatchedChannels": [
+        2520,
+        2463
+      ],
+      "mismatchedSamples": {
+        "16": 1377,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 4983,
+      "name": "tile-truncation-22",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 22
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 962,
+      "mismatchedChannels": [
+        2580,
+        2463
+      ],
+      "mismatchedSamples": {
+        "16": 1437,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5043,
+      "name": "reciprocal-truncation-21",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 21,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 962,
+      "mismatchedChannels": [
+        2640,
+        2523
+      ],
+      "mismatchedSamples": {
+        "16": 1557,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5163,
+      "name": "tile-truncation-21",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 21
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1026,
+      "mismatchedChannels": [
+        2640,
+        2523
+      ],
+      "mismatchedSamples": {
+        "16": 1557,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5163,
+      "name": "reciprocal-bias-31",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 31,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1026,
+      "mismatchedChannels": [
+        2640,
+        2523
+      ],
+      "mismatchedSamples": {
+        "16": 1557,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5163,
+      "name": "reciprocal-truncation-20",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 20,
+        "slope_first_bias": 15,
+        "tile_bias": 10,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 962,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-30",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 30,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 962,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-31",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 31,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-16",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 16,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-17",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 17,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-18",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 18,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-19",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 19,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-20",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 20,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-21",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 21,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-22",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 22,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-23",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 23,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-24",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 24,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-25",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 25,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-26",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 26,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    },
+    {
+      "checkedWords": 6058,
+      "exact": false,
+      "maximumUnsignedBitDistance": 1022,
+      "mismatchedChannels": [
+        2640,
+        2583
+      ],
+      "mismatchedSamples": {
+        "16": 1617,
+        "24": 1931,
+        "4": 1675
+      },
+      "mismatchedWords": 5223,
+      "name": "tile-bias-27",
+      "policy": {
+        "constant_first_bias": 15,
+        "reciprocal_bias": 20,
+        "reciprocal_truncation_bits": 19,
+        "slope_first_bias": 15,
+        "tile_bias": 27,
+        "tile_carry_mode": "top-columns",
+        "tile_propagated_column_count": 1,
+        "tile_sticky_carry_limit": 1,
+        "tile_truncation_bits": 19
+      }
+    }
+  ],
+  "capture": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02",
+  "exactPolicies": [],
+  "fixtures": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures",
+  "oracle": {
+    "16": {
+      "oracleWords": 2022,
+      "quadFixedBounds": [
+        66276,
+        66325,
+        195819,
+        195868
+      ],
+      "trace": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 256036,
+        "rawFile": "transition-background-uniform-16-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    },
+    "24": {
+      "oracleWords": 2038,
+      "quadFixedBounds": [
+        65765,
+        65813,
+        196331,
+        196379
+      ],
+      "trace": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 260100,
+        "rawFile": "transition-background-uniform-24-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    },
+    "4": {
+      "oracleWords": 1998,
+      "quadFixedBounds": [
+        67088,
+        67055,
+        195089,
+        195056
+      ],
+      "trace": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 250000,
+        "rawFile": "transition-background-uniform-04-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    }
+  },
+  "policyCount": 181,
+  "schemaVersion": 1,
+  "scope": "Apple final-highlight unique SDF axis interpolants"
+}

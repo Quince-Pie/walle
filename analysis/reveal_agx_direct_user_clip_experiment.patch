@@ -1,0 +1,51 @@
+--- reveal_agx_clip_weight_tomography_probe.swift
++++ reveal_agx_direct_user_clip_experiment.swift
+@@ -54,5 +54,6 @@
+ struct BasisVertexOutput {
+     float4 position [[position]];
+     float4 basis [[user(reveal_basis)]];
+     uint caseIndex [[user(reveal_case), flat]];
++    float clipDistance [[clip_distance]];
+ };
+@@ -79,15 +80,14 @@
+-    const uint plane = metadata[caseIndex].w;
+-    const bool isOuter = plane == 0u ? !isRight
+-                       : plane == 1u ? isRight
+-                       : plane == 2u ? !isBottom
+-                                     : isBottom;
+-    const float4 geometry = as_type<float4>(geometryBits[caseIndex]);
+-    const float x = isRight ? geometry.y : geometry.x;
+-    const float y = isBottom ? geometry.w : geometry.z;
++    (void)geometryBits;
++    const bool isOuter = !isRight;
++    const float viewport = metadata[caseIndex].x == 0u ? 256.0f : 512.0f;
++    const float x = isRight ? viewport * 0.75f : viewport * 0.25f;
++    const float y = isBottom ? viewport * 0.25f : viewport * 0.75f;
++    const float denominator = 65536.0f + float(metadata[caseIndex].z);
+     BasisVertexOutput output;
+     output.position = mvp * float4(x, y, 0.0f, 1.0f);
+     output.basis = as_type<float4>(
+         isOuter ? outerBits[caseIndex] : innerBits[caseIndex]);
+     output.caseIndex = caseIndex;
++    output.clipDistance = isOuter ? -1.0f : denominator - 1.0f;
+     return output;
+ }
+@@ -321,7 +321,7 @@
+     let pipeline = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+ 
+     var completedRecords = 0
+-    for span in spans {
++    for span in spans.prefix(1) {
+         var chunkStart = span.range.lowerBound
+         while chunkStart < span.range.upperBound {
+             let chunkEnd = min(chunkStart + commandChunkRecords, span.range.upperBound)
+@@ -415,9 +415,9 @@
+     let words = outputBuffer.contents().bindMemory(
+         to: UInt32.self,
+         capacity: outputBytes / MemoryLayout<UInt32>.stride
+     )
+-    for record in records {
++    for record in records.prefix(spans[0].range.upperBound) {
+         let base = Int(record.recordIndex) * recordWords
+         guard words[base] == record.sample.x,
+               words[base + 1] == record.sample.y,

@@ -1780,3 +1780,30 @@ children's anchor (512, 614.5).  Layout per vertex (f32 LE):
 NEXT for #4: pin slots [8..11] against the PBGRAXm_A2Xghfc vertex
 descriptor (fresh-native-scale-a2-resource-trace-v103 may hold it),
 then run the narrow setup law over the 16 triangles per state.
+
+## 2026-08-14 (later 44): TASK #4 MECHANISM PROVEN ON HARDWARE
+
+New capture a2-transfer-residue-plan-v1 (state-42 transfer triangles
+2 and 6 redrawn via the setup probe with all-1.0 f32 varyings; 45
+draws; capture.raw sha256
+3850f4354d1b27d0fc8c5da56ed65ddd0a063da54eef7f9acdcfa40a388e70fa):
+1. The constant-1.0 varying does NOT set up as zeros: tri 2 exports
+   A=0, B=2e68b4e5/2e68b4e4 (residue ~ +2^-34, tile-dependent low
+   bit); tris 6/7 export A=B=00000001 (DENORMAL residue slopes).
+2. C tile words: 3f7fffff (1 - 2^-24) at exactly the tiles hosting
+   the nine y<=31 state-42 residuals; 3f800000 elsewhere probed.
+3. SELECTION LAW CONFIRMED: secondary factor = f16-RTZ of the
+   interpolated residue plane per pixel (center-RTZ evaluation);
+   signs reproduce 11/12 state-42 residuals from first principles:
+   - y<=31 band: C=3f7fffff => value < 1 => 0x3BFF (apple=walle-1) OK
+   - (1838,106): C=3f800000, B>0 => value >= 1 => 0x3C00 (+1) OK
+   - (259,2011) tri 6: denormal positive slopes => value >= 1 (+1) OK
+   - (1837,103) (-1) NOT yet: same tile as (1838,106) with C=1.0 and
+     B>0 cannot split; the real draw feeds verts through the CA
+     vertex shader NDC path (slots [6,7] = +-1.00070) and the
+     rasterizer's NDC->screen conversion produces slightly different
+     fixed-point verts than the direct pixel feed - next capture:
+     feed NDC-transformed vertex positions and re-read the plane.
+(1837,103) and (1838,106) share tile (57,3) with opposite corpus
+directions - killing any per-tile-constant secondary model; the
+per-pixel f16-RTZ law is the only survivor and is now hw-verified.

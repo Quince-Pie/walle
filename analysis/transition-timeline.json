@@ -1,0 +1,8 @@
+{
+  "appearance" : "light",
+  "direction" : "materialize",
+  "error" : "presentation glassBackground snapshot unavailable at sample 31",
+  "material" : "clear",
+  "probe" : "paced-presentation-state-window-timeline",
+  "schemaVersion" : 5
+}

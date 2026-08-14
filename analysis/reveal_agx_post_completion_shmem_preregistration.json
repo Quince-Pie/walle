@@ -1,0 +1,44 @@
+{
+  "schema": "walle-reveal-agx-post-completion-shmem-preregistration-v1",
+  "classification": "analysis-only AGX shared command/result buffer completion probe",
+  "parent": {
+    "result": "build/analysis-agx-tvb-post-completion/reveal-agx-post-completion-allocation-result.json",
+    "sha256AtPreregistration": "ea6f8c85c31160e2aa1e7efa49fc04bd8f3a9cc7fbfac4325138ade8e99e37c4",
+    "currentSupersedingSha256": "a0e5daff8876eea028c81793815186ed53b82105aabe2ef0e90c81e580def719",
+    "supersedingReason": "The same analyzer was extended after this preregistration to report post-completion shared-buffer pairs and to inventory the copied source inputs. The underlying first capture and its allocation verdict did not change.",
+    "established": "Of 27 ordinary CPU-mapped allocations, only the exact fragment result mapping changed after completion."
+  },
+  "inputs": {
+    "catalogSha256": "bc8b96dc4d3dc7c2fb6383dda49baa839eb207b60128739604ad8ddcd9402bd6",
+    "probeSha256": "4bb1a8c13870e1232a4bbba178c8fedc404a38c9535cf8375ea6ce796ded4936",
+    "interposerSha256": "50fac2205a4198a324911527d58c6f8980a4afc1166041bea0ef2c904f354c79"
+  },
+  "execution": {
+    "host": "quince@10.0.41.19",
+    "operatingSystem": "macOS 26.6.1 (25G76)",
+    "commandBufferCount": 1,
+    "postCompletionHookInvocationCount": 1,
+    "expectedSharedBufferCount": 2,
+    "snapshots": [
+      "submit-000-shmem-<identifier>.bin immediately before submission",
+      "post-submit-000-shmem-<identifier>.bin after waitUntilCompleted"
+    ]
+  },
+  "analysis": {
+    "primaryQuestion": "Which shared command/result-buffer words change on completion, and do any changed words identify TVB allocation, tile-list, or result/statistics addresses?",
+    "method": "Pair buffers by identifier and length, enumerate changed byte and aligned-word spans, then join pointer-shaped words only against independently captured GPU allocation ranges and decoded command structures.",
+    "referencePixelsOpened": false
+  },
+  "failClosed": [
+    "Reject anything other than one completed command buffer and one hook call.",
+    "Reject a missing, duplicate, or size-mismatched shared-buffer pair.",
+    "Do not label a changed word as a pointer without an allocation or decoded-structure join.",
+    "Do not infer TVB contents merely from completion counters or statistics."
+  ],
+  "authority": {
+    "modifiesProductionWalle": false,
+    "establishesTVBLayout": false,
+    "establishesParity": false,
+    "permitsTargetedPointer-followingCapture": true
+  }
+}

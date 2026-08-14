@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "question": "Which already-recovered AGX fixed-function detail closes the seven-byte sample-28 border-highlight residual without changing Liquid Glass shader arithmetic?",
+  "frozenEvidence": {
+    "captureTimelineSha256": "c028e232c0eb06ade31f826578c7209ea2e19f69b65a65cdc723187bc34adc44",
+    "sampleIndex": 28,
+    "topology": "four independently constructed quads, eight triangles, 24 uint16 indices",
+    "baseline": {
+      "mismatchedBytes": 7,
+      "mismatchedPixels": 3,
+      "maximumChannelDelta": 1
+    },
+    "backgroundPrefixExact": true,
+    "geometryAndUniformConstructionExact": true,
+    "productionShaderModified": false
+  },
+  "decisionTree": [
+    {
+      "step": 1,
+      "name": "selector-neighborhood",
+      "candidates": {
+        "baseSelector": "the authenticated fractional selector table value for the observed fixed determinant",
+        "integerOffsetsInclusive": [-16, 16]
+      },
+      "selection": "Rank only by unequal BGRA8 bytes, then unequal pixels, then maximum channel delta. An exact result must be unique before it can become a holdout candidate."
+    },
+    {
+      "step": 2,
+      "name": "captured-Iscd-interpolant",
+      "condition": "Run only if no unique exact selector candidate exists.",
+      "action": "Capture the current Iscd draw explicitly rather than the later zero-coverage Irsd draw, and compare every rasterized SDF interpolant word against the independent constructor."
+    }
+  ],
+  "promotionGate": "A candidate fitted against this frame is not parity evidence. Promotion requires a distinct subsequent Retina capture whose full admitted eight-state frame gate is byte-exact on AMD, with no captured interpolant or final image supplied as a renderer input.",
+  "forbidden": [
+    "pixel tolerance",
+    "shader-quality reduction",
+    "per-pixel captured correction surface",
+    "using the comparison image as renderer input"
+  ]
+}

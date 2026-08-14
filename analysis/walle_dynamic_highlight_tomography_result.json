@@ -1,0 +1,5537 @@
+{
+  "capture": "/tmp/walle/artifacts/local-highlight-tomography-current-01",
+  "exactDivisionModes": [],
+  "fixtures": "/tmp/walle/build/generated/liquid-glass/dynamic-highlight-tomography-fixtures",
+  "nearSquareSelectorCalibration": "/tmp/walle/lg-test/Analysis/raster_small_near_square_selectors_u32le.zlib",
+  "samples": [
+    {
+      "divisionModes": {
+        "0": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x33e1",
+                  "candidateBits": "0x33e2",
+                  "x": 569,
+                  "y": 285
+                },
+                {
+                  "appleBits": "0x3907",
+                  "candidateBits": "0x3908",
+                  "x": 672,
+                  "y": 313
+                },
+                {
+                  "appleBits": "0x3633",
+                  "candidateBits": "0x3632",
+                  "x": 552,
+                  "y": 415
+                },
+                {
+                  "appleBits": "0x3aab",
+                  "candidateBits": "0x3aaa",
+                  "x": 711,
+                  "y": 644
+                },
+                {
+                  "appleBits": "0x3a05",
+                  "candidateBits": "0x3a04",
+                  "x": 682,
+                  "y": 661
+                }
+              ],
+              "mismatchedHalfWords": 5,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a41",
+                  "candidateBits": "0x3a42",
+                  "x": 320,
+                  "y": 359
+                },
+                {
+                  "appleBits": "0x38f3",
+                  "candidateBits": "0x38f4",
+                  "x": 411,
+                  "y": 639
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3921",
+                  "candidateBits": "0x3920",
+                  "x": 687,
+                  "y": 365
+                },
+                {
+                  "appleBits": "0x33e7",
+                  "candidateBits": "0x33e8",
+                  "x": 317,
+                  "y": 462
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3111",
+                  "candidateBits": "0x3110",
+                  "x": 695,
+                  "y": 541
+                },
+                {
+                  "appleBits": "0x3b5f",
+                  "candidateBits": "0x3b5e",
+                  "x": 534,
+                  "y": 565
+                },
+                {
+                  "appleBits": "0x394b",
+                  "candidateBits": "0x394a",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x3b51",
+                  "candidateBits": "0x3b50",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x3a5c",
+                  "candidateBits": "0x3a5a",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 5,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3806",
+                  "candidateBits": "0x3805",
+                  "x": 371,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3854",
+                  "candidateBits": "0x3853",
+                  "x": 410,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3868",
+                  "candidateBits": "0x3867",
+                  "x": 419,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3878",
+                  "candidateBits": "0x3877",
+                  "x": 426,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3886",
+                  "candidateBits": "0x3885",
+                  "x": 432,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3892",
+                  "candidateBits": "0x3891",
+                  "x": 437,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x38a8",
+                  "candidateBits": "0x38a7",
+                  "x": 446,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x39fa",
+                  "candidateBits": "0x39f9",
+                  "x": 573,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a04",
+                  "candidateBits": "0x3a03",
+                  "x": 577,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a1a",
+                  "candidateBits": "0x3a19",
+                  "x": 586,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a26",
+                  "candidateBits": "0x3a25",
+                  "x": 591,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a34",
+                  "candidateBits": "0x3a33",
+                  "x": 597,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a44",
+                  "candidateBits": "0x3a43",
+                  "x": 604,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a58",
+                  "candidateBits": "0x3a57",
+                  "x": 613,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 651,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3812",
+                  "candidateBits": "0x3811",
+                  "x": 378,
+                  "y": 264
+                }
+              ],
+              "mismatchedHalfWords": 4244,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 263,
+                  "y": 371
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 756,
+                  "y": 371
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 758,
+                  "y": 371
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 760,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 272,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 270,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 749,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 751,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aa2",
+                  "candidateBits": "0x3aa1",
+                  "x": 268,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 270,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 751,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 753,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3a9c",
+                  "candidateBits": "0x3a9b",
+                  "x": 264,
+                  "y": 377
+                },
+                {
+                  "appleBits": "0x3a9e",
+                  "candidateBits": "0x3a9d",
+                  "x": 266,
+                  "y": 377
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 751,
+                  "y": 377
+                },
+                {
+                  "appleBits": "0x3aa2",
+                  "candidateBits": "0x3aa1",
+                  "x": 753,
+                  "y": 377
+                }
+              ],
+              "mismatchedHalfWords": 4308,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x1f38",
+                  "candidateBits": "0x1f7a",
+                  "x": 552,
+                  "y": 415
+                },
+                {
+                  "appleBits": "0x3bfe",
+                  "candidateBits": "0x3bfd",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x395d",
+                  "candidateBits": "0x395c",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x361d",
+                  "candidateBits": "0x361e",
+                  "x": 711,
+                  "y": 644
+                },
+                {
+                  "appleBits": "0x3734",
+                  "candidateBits": "0x3735",
+                  "x": 682,
+                  "y": 661
+                },
+                {
+                  "appleBits": "0x386c",
+                  "candidateBits": "0x386b",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3486",
+                  "x": 493,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 494,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 495,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 496,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 497,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 498,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 499,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 500,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 501,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 502,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 503,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 504,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 505,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 506,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 507,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 508,
+                  "y": 263
+                }
+              ],
+              "mismatchedHalfWords": 157,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 2,
+          "mismatchedHalfWords": 8729
+        },
+        "1": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x33e1",
+                  "candidateBits": "0x33e2",
+                  "x": 569,
+                  "y": 285
+                },
+                {
+                  "appleBits": "0x3907",
+                  "candidateBits": "0x3908",
+                  "x": 672,
+                  "y": 313
+                },
+                {
+                  "appleBits": "0x3633",
+                  "candidateBits": "0x3632",
+                  "x": 552,
+                  "y": 415
+                },
+                {
+                  "appleBits": "0x3aab",
+                  "candidateBits": "0x3aaa",
+                  "x": 711,
+                  "y": 644
+                },
+                {
+                  "appleBits": "0x3a05",
+                  "candidateBits": "0x3a04",
+                  "x": 682,
+                  "y": 661
+                }
+              ],
+              "mismatchedHalfWords": 5,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a41",
+                  "candidateBits": "0x3a42",
+                  "x": 320,
+                  "y": 359
+                },
+                {
+                  "appleBits": "0x38f3",
+                  "candidateBits": "0x38f4",
+                  "x": 411,
+                  "y": 639
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3921",
+                  "candidateBits": "0x3920",
+                  "x": 687,
+                  "y": 365
+                },
+                {
+                  "appleBits": "0x33e7",
+                  "candidateBits": "0x33e8",
+                  "x": 317,
+                  "y": 462
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3111",
+                  "candidateBits": "0x3110",
+                  "x": 695,
+                  "y": 541
+                },
+                {
+                  "appleBits": "0x3b5f",
+                  "candidateBits": "0x3b5e",
+                  "x": 534,
+                  "y": 565
+                },
+                {
+                  "appleBits": "0x394b",
+                  "candidateBits": "0x394a",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x3b51",
+                  "candidateBits": "0x3b50",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x3a5c",
+                  "candidateBits": "0x3a5a",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 5,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x39fd",
+                  "candidateBits": "0x39fe",
+                  "x": 569,
+                  "y": 285
+                },
+                {
+                  "appleBits": "0x3b02",
+                  "candidateBits": "0x3b03",
+                  "x": 672,
+                  "y": 313
+                },
+                {
+                  "appleBits": "0x375e",
+                  "candidateBits": "0x375d",
+                  "x": 411,
+                  "y": 639
+                }
+              ],
+              "mismatchedHalfWords": 3,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3723",
+                  "candidateBits": "0x3724",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x35ca",
+                  "candidateBits": "0x35cb",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x366d",
+                  "candidateBits": "0x366f",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 3,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x1f38",
+                  "candidateBits": "0x1f7a",
+                  "x": 552,
+                  "y": 415
+                },
+                {
+                  "appleBits": "0x3bfe",
+                  "candidateBits": "0x3bfd",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x395d",
+                  "candidateBits": "0x395c",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x361d",
+                  "candidateBits": "0x361e",
+                  "x": 711,
+                  "y": 644
+                },
+                {
+                  "appleBits": "0x3734",
+                  "candidateBits": "0x3735",
+                  "x": 682,
+                  "y": 661
+                },
+                {
+                  "appleBits": "0x386c",
+                  "candidateBits": "0x386b",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3486",
+                  "x": 493,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 494,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 495,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 496,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 497,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 498,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 499,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 500,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 501,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 502,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 503,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 504,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 505,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 506,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 507,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 508,
+                  "y": 263
+                }
+              ],
+              "mismatchedHalfWords": 157,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 2,
+          "mismatchedHalfWords": 183
+        },
+        "2": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x33e1",
+                  "candidateBits": "0x33e2",
+                  "x": 569,
+                  "y": 285
+                },
+                {
+                  "appleBits": "0x3907",
+                  "candidateBits": "0x3908",
+                  "x": 672,
+                  "y": 313
+                },
+                {
+                  "appleBits": "0x3633",
+                  "candidateBits": "0x3632",
+                  "x": 552,
+                  "y": 415
+                },
+                {
+                  "appleBits": "0x3aab",
+                  "candidateBits": "0x3aaa",
+                  "x": 711,
+                  "y": 644
+                },
+                {
+                  "appleBits": "0x3a05",
+                  "candidateBits": "0x3a04",
+                  "x": 682,
+                  "y": 661
+                }
+              ],
+              "mismatchedHalfWords": 5,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a41",
+                  "candidateBits": "0x3a42",
+                  "x": 320,
+                  "y": 359
+                },
+                {
+                  "appleBits": "0x38f3",
+                  "candidateBits": "0x38f4",
+                  "x": 411,
+                  "y": 639
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3921",
+                  "candidateBits": "0x3920",
+                  "x": 687,
+                  "y": 365
+                },
+                {
+                  "appleBits": "0x33e7",
+                  "candidateBits": "0x33e8",
+                  "x": 317,
+                  "y": 462
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3111",
+                  "candidateBits": "0x3110",
+                  "x": 695,
+                  "y": 541
+                },
+                {
+                  "appleBits": "0x3b5f",
+                  "candidateBits": "0x3b5e",
+                  "x": 534,
+                  "y": 565
+                },
+                {
+                  "appleBits": "0x394b",
+                  "candidateBits": "0x394a",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x3b51",
+                  "candidateBits": "0x3b50",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x3a5c",
+                  "candidateBits": "0x3a5a",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 5,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3806",
+                  "candidateBits": "0x3805",
+                  "x": 371,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3854",
+                  "candidateBits": "0x3853",
+                  "x": 410,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3868",
+                  "candidateBits": "0x3867",
+                  "x": 419,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3878",
+                  "candidateBits": "0x3877",
+                  "x": 426,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3886",
+                  "candidateBits": "0x3885",
+                  "x": 432,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3892",
+                  "candidateBits": "0x3891",
+                  "x": 437,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x38a8",
+                  "candidateBits": "0x38a7",
+                  "x": 446,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x39fa",
+                  "candidateBits": "0x39f9",
+                  "x": 573,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a04",
+                  "candidateBits": "0x3a03",
+                  "x": 577,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a1a",
+                  "candidateBits": "0x3a19",
+                  "x": 586,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a26",
+                  "candidateBits": "0x3a25",
+                  "x": 591,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a34",
+                  "candidateBits": "0x3a33",
+                  "x": 597,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a44",
+                  "candidateBits": "0x3a43",
+                  "x": 604,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3a58",
+                  "candidateBits": "0x3a57",
+                  "x": 613,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 651,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x3812",
+                  "candidateBits": "0x3811",
+                  "x": 378,
+                  "y": 264
+                }
+              ],
+              "mismatchedHalfWords": 4244,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 263,
+                  "y": 371
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 756,
+                  "y": 371
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 758,
+                  "y": 371
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 760,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 272,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 270,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 749,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 751,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aa2",
+                  "candidateBits": "0x3aa1",
+                  "x": 268,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 270,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 751,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 753,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3a9c",
+                  "candidateBits": "0x3a9b",
+                  "x": 264,
+                  "y": 377
+                },
+                {
+                  "appleBits": "0x3a9e",
+                  "candidateBits": "0x3a9d",
+                  "x": 266,
+                  "y": 377
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 751,
+                  "y": 377
+                },
+                {
+                  "appleBits": "0x3aa2",
+                  "candidateBits": "0x3aa1",
+                  "x": 753,
+                  "y": 377
+                }
+              ],
+              "mismatchedHalfWords": 4308,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x1f38",
+                  "candidateBits": "0x1f7a",
+                  "x": 552,
+                  "y": 415
+                },
+                {
+                  "appleBits": "0x3bfe",
+                  "candidateBits": "0x3bfd",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x395d",
+                  "candidateBits": "0x395c",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x361d",
+                  "candidateBits": "0x361e",
+                  "x": 711,
+                  "y": 644
+                },
+                {
+                  "appleBits": "0x3734",
+                  "candidateBits": "0x3735",
+                  "x": 682,
+                  "y": 661
+                },
+                {
+                  "appleBits": "0x386c",
+                  "candidateBits": "0x386b",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3486",
+                  "x": 493,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 494,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 495,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 496,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 497,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 498,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 499,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 500,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 501,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 502,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 503,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 504,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 505,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 506,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 507,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 508,
+                  "y": 263
+                }
+              ],
+              "mismatchedHalfWords": 157,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 2,
+          "mismatchedHalfWords": 8729
+        },
+        "3": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x33e1",
+                  "candidateBits": "0x33e2",
+                  "x": 569,
+                  "y": 285
+                },
+                {
+                  "appleBits": "0x3907",
+                  "candidateBits": "0x3908",
+                  "x": 672,
+                  "y": 313
+                },
+                {
+                  "appleBits": "0x3633",
+                  "candidateBits": "0x3632",
+                  "x": 552,
+                  "y": 415
+                },
+                {
+                  "appleBits": "0x3aab",
+                  "candidateBits": "0x3aaa",
+                  "x": 711,
+                  "y": 644
+                },
+                {
+                  "appleBits": "0x3a05",
+                  "candidateBits": "0x3a04",
+                  "x": 682,
+                  "y": 661
+                }
+              ],
+              "mismatchedHalfWords": 5,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a41",
+                  "candidateBits": "0x3a42",
+                  "x": 320,
+                  "y": 359
+                },
+                {
+                  "appleBits": "0x38f3",
+                  "candidateBits": "0x38f4",
+                  "x": 411,
+                  "y": 639
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3921",
+                  "candidateBits": "0x3920",
+                  "x": 687,
+                  "y": 365
+                },
+                {
+                  "appleBits": "0x33e7",
+                  "candidateBits": "0x33e8",
+                  "x": 317,
+                  "y": 462
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3111",
+                  "candidateBits": "0x3110",
+                  "x": 695,
+                  "y": 541
+                },
+                {
+                  "appleBits": "0x3b5f",
+                  "candidateBits": "0x3b5e",
+                  "x": 534,
+                  "y": 565
+                },
+                {
+                  "appleBits": "0x394b",
+                  "candidateBits": "0x394a",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x3b51",
+                  "candidateBits": "0x3b50",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x3a5c",
+                  "candidateBits": "0x3a5a",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 5,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x39fd",
+                  "candidateBits": "0x39fe",
+                  "x": 569,
+                  "y": 285
+                },
+                {
+                  "appleBits": "0x3b02",
+                  "candidateBits": "0x3b03",
+                  "x": 672,
+                  "y": 313
+                },
+                {
+                  "appleBits": "0x375e",
+                  "candidateBits": "0x375d",
+                  "x": 411,
+                  "y": 639
+                }
+              ],
+              "mismatchedHalfWords": 3,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3723",
+                  "candidateBits": "0x3724",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x35ca",
+                  "candidateBits": "0x35cb",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x366d",
+                  "candidateBits": "0x366f",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 3,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x1f38",
+                  "candidateBits": "0x1f7a",
+                  "x": 552,
+                  "y": 415
+                },
+                {
+                  "appleBits": "0x3bfe",
+                  "candidateBits": "0x3bfd",
+                  "x": 393,
+                  "y": 616
+                },
+                {
+                  "appleBits": "0x395d",
+                  "candidateBits": "0x395c",
+                  "x": 563,
+                  "y": 628
+                },
+                {
+                  "appleBits": "0x361d",
+                  "candidateBits": "0x361e",
+                  "x": 711,
+                  "y": 644
+                },
+                {
+                  "appleBits": "0x3734",
+                  "candidateBits": "0x3735",
+                  "x": 682,
+                  "y": 661
+                },
+                {
+                  "appleBits": "0x386c",
+                  "candidateBits": "0x386b",
+                  "x": 638,
+                  "y": 677
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3486",
+                  "x": 493,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 494,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 495,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 496,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 497,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 498,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 499,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 500,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 501,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 502,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 503,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 504,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 505,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 506,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 507,
+                  "y": 263
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 508,
+                  "y": 263
+                }
+              ],
+              "mismatchedHalfWords": 157,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 2,
+          "mismatchedHalfWords": 183
+        }
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "remainingFloat32Bits": "0x3f778be0",
+      "sampleIndex": 1
+    },
+    {
+      "divisionModes": {
+        "0": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35f0",
+                  "candidateBits": "0x35f1",
+                  "x": 599,
+                  "y": 293
+                },
+                {
+                  "appleBits": "0x2b7a",
+                  "candidateBits": "0x2b7b",
+                  "x": 523,
+                  "y": 319
+                },
+                {
+                  "appleBits": "0x37b4",
+                  "candidateBits": "0x37b5",
+                  "x": 602,
+                  "y": 347
+                },
+                {
+                  "appleBits": "0x3ada",
+                  "candidateBits": "0x3adb",
+                  "x": 748,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x3ba5",
+                  "candidateBits": "0x3ba6",
+                  "x": 719,
+                  "y": 575
+                },
+                {
+                  "appleBits": "0x38b8",
+                  "candidateBits": "0x38b9",
+                  "x": 600,
+                  "y": 632
+                },
+                {
+                  "appleBits": "0x3aa3",
+                  "candidateBits": "0x3aa2",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x39c9",
+                  "candidateBits": "0x39c8",
+                  "x": 659,
+                  "y": 652
+                },
+                {
+                  "appleBits": "0x375a",
+                  "candidateBits": "0x375b",
+                  "x": 597,
+                  "y": 676
+                }
+              ],
+              "mismatchedHalfWords": 9,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3376",
+                  "candidateBits": "0x3377",
+                  "x": 463,
+                  "y": 308
+                },
+                {
+                  "appleBits": "0x31df",
+                  "candidateBits": "0x31e0",
+                  "x": 485,
+                  "y": 368
+                },
+                {
+                  "appleBits": "0x3b15",
+                  "candidateBits": "0x3b16",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x3bd1",
+                  "candidateBits": "0x3bd0",
+                  "x": 262,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x39b1",
+                  "candidateBits": "0x39b2",
+                  "x": 436,
+                  "y": 586
+                },
+                {
+                  "appleBits": "0x34a3",
+                  "candidateBits": "0x34a4",
+                  "x": 437,
+                  "y": 758
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a5c",
+                  "candidateBits": "0x3a5a",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3976",
+                  "candidateBits": "0x3975",
+                  "x": 339,
+                  "y": 350
+                },
+                {
+                  "appleBits": "0x3bbc",
+                  "candidateBits": "0x3bbb",
+                  "x": 474,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x3862",
+                  "candidateBits": "0x3861",
+                  "x": 328,
+                  "y": 391
+                },
+                {
+                  "appleBits": "0x3682",
+                  "candidateBits": "0x3681",
+                  "x": 737,
+                  "y": 411
+                },
+                {
+                  "appleBits": "0x375b",
+                  "candidateBits": "0x375a",
+                  "x": 347,
+                  "y": 426
+                },
+                {
+                  "appleBits": "0x3726",
+                  "candidateBits": "0x3725",
+                  "x": 359,
+                  "y": 435
+                },
+                {
+                  "appleBits": "0x3642",
+                  "candidateBits": "0x3641",
+                  "x": 663,
+                  "y": 447
+                },
+                {
+                  "appleBits": "0x303e",
+                  "candidateBits": "0x303d",
+                  "x": 263,
+                  "y": 478
+                },
+                {
+                  "appleBits": "0x3be8",
+                  "candidateBits": "0x3be7",
+                  "x": 516,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x3108",
+                  "candidateBits": "0x3107",
+                  "x": 683,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x3498",
+                  "candidateBits": "0x3497",
+                  "x": 566,
+                  "y": 495
+                },
+                {
+                  "appleBits": "0x3840",
+                  "candidateBits": "0x383f",
+                  "x": 489,
+                  "y": 497
+                }
+              ],
+              "mismatchedHalfWords": 13,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x2c05",
+                  "candidateBits": "0x2c04",
+                  "x": 325,
+                  "y": 523
+                },
+                {
+                  "appleBits": "0x31e0",
+                  "candidateBits": "0x31df",
+                  "x": 655,
+                  "y": 538
+                },
+                {
+                  "appleBits": "0x32a8",
+                  "candidateBits": "0x32a7",
+                  "x": 694,
+                  "y": 550
+                },
+                {
+                  "appleBits": "0x339a",
+                  "candidateBits": "0x3399",
+                  "x": 296,
+                  "y": 564
+                },
+                {
+                  "appleBits": "0x351d",
+                  "candidateBits": "0x351c",
+                  "x": 674,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x3666",
+                  "candidateBits": "0x3665",
+                  "x": 267,
+                  "y": 618
+                },
+                {
+                  "appleBits": "0x3bea",
+                  "candidateBits": "0x3be9",
+                  "x": 528,
+                  "y": 620
+                },
+                {
+                  "appleBits": "0x387a",
+                  "candidateBits": "0x3879",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x38dd",
+                  "candidateBits": "0x38dc",
+                  "x": 697,
+                  "y": 653
+                }
+              ],
+              "mismatchedHalfWords": 9,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3814",
+                  "candidateBits": "0x3813",
+                  "x": 378,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3816",
+                  "candidateBits": "0x3815",
+                  "x": 379,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x384a",
+                  "candidateBits": "0x3849",
+                  "x": 405,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3874",
+                  "candidateBits": "0x3873",
+                  "x": 424,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3890",
+                  "candidateBits": "0x388f",
+                  "x": 436,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x38f0",
+                  "candidateBits": "0x38ef",
+                  "x": 474,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a02",
+                  "candidateBits": "0x3a01",
+                  "x": 577,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a18",
+                  "candidateBits": "0x3a17",
+                  "x": 586,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a24",
+                  "candidateBits": "0x3a23",
+                  "x": 591,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a32",
+                  "candidateBits": "0x3a31",
+                  "x": 597,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a42",
+                  "candidateBits": "0x3a41",
+                  "x": 604,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a58",
+                  "candidateBits": "0x3a57",
+                  "x": 614,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3aa0",
+                  "candidateBits": "0x3a9f",
+                  "x": 650,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3808",
+                  "candidateBits": "0x3807",
+                  "x": 372,
+                  "y": 262
+                },
+                {
+                  "appleBits": "0x3856",
+                  "candidateBits": "0x3855",
+                  "x": 411,
+                  "y": 262
+                },
+                {
+                  "appleBits": "0x386a",
+                  "candidateBits": "0x3869",
+                  "x": 420,
+                  "y": 262
+                }
+              ],
+              "mismatchedHalfWords": 4297,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3b74",
+                  "candidateBits": "0x3b73",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 761,
+                  "y": 368
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 264,
+                  "y": 370
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 266,
+                  "y": 370
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 262,
+                  "y": 371
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 754,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 756,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 758,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa2",
+                  "candidateBits": "0x3aa1",
+                  "x": 760,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 271,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 273,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 269,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 271,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3a9a",
+                  "candidateBits": "0x3a99",
+                  "x": 261,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3a9c",
+                  "candidateBits": "0x3a9b",
+                  "x": 263,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3a9e",
+                  "candidateBits": "0x3a9d",
+                  "x": 265,
+                  "y": 376
+                }
+              ],
+              "mismatchedHalfWords": 4353,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x36a9",
+                  "candidateBits": "0x36aa",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3336",
+                  "candidateBits": "0x3338",
+                  "x": 474,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x391a",
+                  "candidateBits": "0x391b",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x2c49",
+                  "candidateBits": "0x2c4d",
+                  "x": 683,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x27cc",
+                  "candidateBits": "0x27dd",
+                  "x": 566,
+                  "y": 495
+                },
+                {
+                  "appleBits": "0x3417",
+                  "candidateBits": "0x3416",
+                  "x": 674,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x3bff",
+                  "candidateBits": "0x3c00",
+                  "x": 436,
+                  "y": 586
+                },
+                {
+                  "appleBits": "0x362d",
+                  "candidateBits": "0x362c",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x3790",
+                  "candidateBits": "0x3791",
+                  "x": 659,
+                  "y": 652
+                },
+                {
+                  "appleBits": "0x36aa",
+                  "candidateBits": "0x36a9",
+                  "x": 697,
+                  "y": 653
+                }
+              ],
+              "mismatchedHalfWords": 10,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 493,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 494,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 495,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 496,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 497,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 498,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 499,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 500,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 501,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 502,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 503,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 504,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 505,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 506,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 507,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x347f",
+                  "x": 508,
+                  "y": 261
+                }
+              ],
+              "mismatchedHalfWords": 126,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 2,
+          "mismatchedHalfWords": 8823
+        },
+        "1": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35f0",
+                  "candidateBits": "0x35f1",
+                  "x": 599,
+                  "y": 293
+                },
+                {
+                  "appleBits": "0x2b7a",
+                  "candidateBits": "0x2b7b",
+                  "x": 523,
+                  "y": 319
+                },
+                {
+                  "appleBits": "0x37b4",
+                  "candidateBits": "0x37b5",
+                  "x": 602,
+                  "y": 347
+                },
+                {
+                  "appleBits": "0x3ada",
+                  "candidateBits": "0x3adb",
+                  "x": 748,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x3ba5",
+                  "candidateBits": "0x3ba6",
+                  "x": 719,
+                  "y": 575
+                },
+                {
+                  "appleBits": "0x38b8",
+                  "candidateBits": "0x38b9",
+                  "x": 600,
+                  "y": 632
+                },
+                {
+                  "appleBits": "0x3aa3",
+                  "candidateBits": "0x3aa2",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x39c9",
+                  "candidateBits": "0x39c8",
+                  "x": 659,
+                  "y": 652
+                },
+                {
+                  "appleBits": "0x375a",
+                  "candidateBits": "0x375b",
+                  "x": 597,
+                  "y": 676
+                }
+              ],
+              "mismatchedHalfWords": 9,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3376",
+                  "candidateBits": "0x3377",
+                  "x": 463,
+                  "y": 308
+                },
+                {
+                  "appleBits": "0x31df",
+                  "candidateBits": "0x31e0",
+                  "x": 485,
+                  "y": 368
+                },
+                {
+                  "appleBits": "0x3b15",
+                  "candidateBits": "0x3b16",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x3bd1",
+                  "candidateBits": "0x3bd0",
+                  "x": 262,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x39b1",
+                  "candidateBits": "0x39b2",
+                  "x": 436,
+                  "y": 586
+                },
+                {
+                  "appleBits": "0x34a3",
+                  "candidateBits": "0x34a4",
+                  "x": 437,
+                  "y": 758
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a5c",
+                  "candidateBits": "0x3a5a",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3976",
+                  "candidateBits": "0x3975",
+                  "x": 339,
+                  "y": 350
+                },
+                {
+                  "appleBits": "0x3bbc",
+                  "candidateBits": "0x3bbb",
+                  "x": 474,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x3862",
+                  "candidateBits": "0x3861",
+                  "x": 328,
+                  "y": 391
+                },
+                {
+                  "appleBits": "0x3682",
+                  "candidateBits": "0x3681",
+                  "x": 737,
+                  "y": 411
+                },
+                {
+                  "appleBits": "0x375b",
+                  "candidateBits": "0x375a",
+                  "x": 347,
+                  "y": 426
+                },
+                {
+                  "appleBits": "0x3726",
+                  "candidateBits": "0x3725",
+                  "x": 359,
+                  "y": 435
+                },
+                {
+                  "appleBits": "0x3642",
+                  "candidateBits": "0x3641",
+                  "x": 663,
+                  "y": 447
+                },
+                {
+                  "appleBits": "0x303e",
+                  "candidateBits": "0x303d",
+                  "x": 263,
+                  "y": 478
+                },
+                {
+                  "appleBits": "0x3be8",
+                  "candidateBits": "0x3be7",
+                  "x": 516,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x3108",
+                  "candidateBits": "0x3107",
+                  "x": 683,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x3498",
+                  "candidateBits": "0x3497",
+                  "x": 566,
+                  "y": 495
+                },
+                {
+                  "appleBits": "0x3840",
+                  "candidateBits": "0x383f",
+                  "x": 489,
+                  "y": 497
+                }
+              ],
+              "mismatchedHalfWords": 13,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x2c05",
+                  "candidateBits": "0x2c04",
+                  "x": 325,
+                  "y": 523
+                },
+                {
+                  "appleBits": "0x31e0",
+                  "candidateBits": "0x31df",
+                  "x": 655,
+                  "y": 538
+                },
+                {
+                  "appleBits": "0x32a8",
+                  "candidateBits": "0x32a7",
+                  "x": 694,
+                  "y": 550
+                },
+                {
+                  "appleBits": "0x339a",
+                  "candidateBits": "0x3399",
+                  "x": 296,
+                  "y": 564
+                },
+                {
+                  "appleBits": "0x351d",
+                  "candidateBits": "0x351c",
+                  "x": 674,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x3666",
+                  "candidateBits": "0x3665",
+                  "x": 267,
+                  "y": 618
+                },
+                {
+                  "appleBits": "0x3bea",
+                  "candidateBits": "0x3be9",
+                  "x": 528,
+                  "y": 620
+                },
+                {
+                  "appleBits": "0x387a",
+                  "candidateBits": "0x3879",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x38dd",
+                  "candidateBits": "0x38dc",
+                  "x": 697,
+                  "y": 653
+                }
+              ],
+              "mismatchedHalfWords": 9,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35f2",
+                  "candidateBits": "0x35f1",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x3b8c",
+                  "candidateBits": "0x3b8b",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x3890",
+                  "candidateBits": "0x388f",
+                  "x": 437,
+                  "y": 758
+                }
+              ],
+              "mismatchedHalfWords": 3,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3b74",
+                  "candidateBits": "0x3b73",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3564",
+                  "candidateBits": "0x3565",
+                  "x": 528,
+                  "y": 620
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x36a9",
+                  "candidateBits": "0x36aa",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3336",
+                  "candidateBits": "0x3338",
+                  "x": 474,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x391a",
+                  "candidateBits": "0x391b",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x2c49",
+                  "candidateBits": "0x2c4d",
+                  "x": 683,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x27cc",
+                  "candidateBits": "0x27dd",
+                  "x": 566,
+                  "y": 495
+                },
+                {
+                  "appleBits": "0x3417",
+                  "candidateBits": "0x3416",
+                  "x": 674,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x3bff",
+                  "candidateBits": "0x3c00",
+                  "x": 436,
+                  "y": 586
+                },
+                {
+                  "appleBits": "0x362d",
+                  "candidateBits": "0x362c",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x3790",
+                  "candidateBits": "0x3791",
+                  "x": 659,
+                  "y": 652
+                },
+                {
+                  "appleBits": "0x36aa",
+                  "candidateBits": "0x36a9",
+                  "x": 697,
+                  "y": 653
+                }
+              ],
+              "mismatchedHalfWords": 10,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 493,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 494,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 495,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 496,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 497,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 498,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 499,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 500,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 501,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 502,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 503,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 504,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 505,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 506,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 507,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x347f",
+                  "x": 508,
+                  "y": 261
+                }
+              ],
+              "mismatchedHalfWords": 126,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 2,
+          "mismatchedHalfWords": 178
+        },
+        "2": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35f0",
+                  "candidateBits": "0x35f1",
+                  "x": 599,
+                  "y": 293
+                },
+                {
+                  "appleBits": "0x2b7a",
+                  "candidateBits": "0x2b7b",
+                  "x": 523,
+                  "y": 319
+                },
+                {
+                  "appleBits": "0x37b4",
+                  "candidateBits": "0x37b5",
+                  "x": 602,
+                  "y": 347
+                },
+                {
+                  "appleBits": "0x3ada",
+                  "candidateBits": "0x3adb",
+                  "x": 748,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x3ba5",
+                  "candidateBits": "0x3ba6",
+                  "x": 719,
+                  "y": 575
+                },
+                {
+                  "appleBits": "0x38b8",
+                  "candidateBits": "0x38b9",
+                  "x": 600,
+                  "y": 632
+                },
+                {
+                  "appleBits": "0x3aa3",
+                  "candidateBits": "0x3aa2",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x39c9",
+                  "candidateBits": "0x39c8",
+                  "x": 659,
+                  "y": 652
+                },
+                {
+                  "appleBits": "0x375a",
+                  "candidateBits": "0x375b",
+                  "x": 597,
+                  "y": 676
+                }
+              ],
+              "mismatchedHalfWords": 9,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3376",
+                  "candidateBits": "0x3377",
+                  "x": 463,
+                  "y": 308
+                },
+                {
+                  "appleBits": "0x31df",
+                  "candidateBits": "0x31e0",
+                  "x": 485,
+                  "y": 368
+                },
+                {
+                  "appleBits": "0x3b15",
+                  "candidateBits": "0x3b16",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x3bd1",
+                  "candidateBits": "0x3bd0",
+                  "x": 262,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x39b1",
+                  "candidateBits": "0x39b2",
+                  "x": 436,
+                  "y": 586
+                },
+                {
+                  "appleBits": "0x34a3",
+                  "candidateBits": "0x34a4",
+                  "x": 437,
+                  "y": 758
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a5c",
+                  "candidateBits": "0x3a5a",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3976",
+                  "candidateBits": "0x3975",
+                  "x": 339,
+                  "y": 350
+                },
+                {
+                  "appleBits": "0x3bbc",
+                  "candidateBits": "0x3bbb",
+                  "x": 474,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x3862",
+                  "candidateBits": "0x3861",
+                  "x": 328,
+                  "y": 391
+                },
+                {
+                  "appleBits": "0x3682",
+                  "candidateBits": "0x3681",
+                  "x": 737,
+                  "y": 411
+                },
+                {
+                  "appleBits": "0x375b",
+                  "candidateBits": "0x375a",
+                  "x": 347,
+                  "y": 426
+                },
+                {
+                  "appleBits": "0x3726",
+                  "candidateBits": "0x3725",
+                  "x": 359,
+                  "y": 435
+                },
+                {
+                  "appleBits": "0x3642",
+                  "candidateBits": "0x3641",
+                  "x": 663,
+                  "y": 447
+                },
+                {
+                  "appleBits": "0x303e",
+                  "candidateBits": "0x303d",
+                  "x": 263,
+                  "y": 478
+                },
+                {
+                  "appleBits": "0x3be8",
+                  "candidateBits": "0x3be7",
+                  "x": 516,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x3108",
+                  "candidateBits": "0x3107",
+                  "x": 683,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x3498",
+                  "candidateBits": "0x3497",
+                  "x": 566,
+                  "y": 495
+                },
+                {
+                  "appleBits": "0x3840",
+                  "candidateBits": "0x383f",
+                  "x": 489,
+                  "y": 497
+                }
+              ],
+              "mismatchedHalfWords": 13,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x2c05",
+                  "candidateBits": "0x2c04",
+                  "x": 325,
+                  "y": 523
+                },
+                {
+                  "appleBits": "0x31e0",
+                  "candidateBits": "0x31df",
+                  "x": 655,
+                  "y": 538
+                },
+                {
+                  "appleBits": "0x32a8",
+                  "candidateBits": "0x32a7",
+                  "x": 694,
+                  "y": 550
+                },
+                {
+                  "appleBits": "0x339a",
+                  "candidateBits": "0x3399",
+                  "x": 296,
+                  "y": 564
+                },
+                {
+                  "appleBits": "0x351d",
+                  "candidateBits": "0x351c",
+                  "x": 674,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x3666",
+                  "candidateBits": "0x3665",
+                  "x": 267,
+                  "y": 618
+                },
+                {
+                  "appleBits": "0x3bea",
+                  "candidateBits": "0x3be9",
+                  "x": 528,
+                  "y": 620
+                },
+                {
+                  "appleBits": "0x387a",
+                  "candidateBits": "0x3879",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x38dd",
+                  "candidateBits": "0x38dc",
+                  "x": 697,
+                  "y": 653
+                }
+              ],
+              "mismatchedHalfWords": 9,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3814",
+                  "candidateBits": "0x3813",
+                  "x": 378,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3816",
+                  "candidateBits": "0x3815",
+                  "x": 379,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x384a",
+                  "candidateBits": "0x3849",
+                  "x": 405,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3874",
+                  "candidateBits": "0x3873",
+                  "x": 424,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3890",
+                  "candidateBits": "0x388f",
+                  "x": 436,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x38f0",
+                  "candidateBits": "0x38ef",
+                  "x": 474,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a02",
+                  "candidateBits": "0x3a01",
+                  "x": 577,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a18",
+                  "candidateBits": "0x3a17",
+                  "x": 586,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a24",
+                  "candidateBits": "0x3a23",
+                  "x": 591,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a32",
+                  "candidateBits": "0x3a31",
+                  "x": 597,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a42",
+                  "candidateBits": "0x3a41",
+                  "x": 604,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3a58",
+                  "candidateBits": "0x3a57",
+                  "x": 614,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3aa0",
+                  "candidateBits": "0x3a9f",
+                  "x": 650,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x3808",
+                  "candidateBits": "0x3807",
+                  "x": 372,
+                  "y": 262
+                },
+                {
+                  "appleBits": "0x3856",
+                  "candidateBits": "0x3855",
+                  "x": 411,
+                  "y": 262
+                },
+                {
+                  "appleBits": "0x386a",
+                  "candidateBits": "0x3869",
+                  "x": 420,
+                  "y": 262
+                }
+              ],
+              "mismatchedHalfWords": 4297,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3b74",
+                  "candidateBits": "0x3b73",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 761,
+                  "y": 368
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 264,
+                  "y": 370
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 266,
+                  "y": 370
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 262,
+                  "y": 371
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 754,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 756,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 758,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa2",
+                  "candidateBits": "0x3aa1",
+                  "x": 760,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 271,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 273,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 269,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 271,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3a9a",
+                  "candidateBits": "0x3a99",
+                  "x": 261,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3a9c",
+                  "candidateBits": "0x3a9b",
+                  "x": 263,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3a9e",
+                  "candidateBits": "0x3a9d",
+                  "x": 265,
+                  "y": 376
+                }
+              ],
+              "mismatchedHalfWords": 4353,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x36a9",
+                  "candidateBits": "0x36aa",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3336",
+                  "candidateBits": "0x3338",
+                  "x": 474,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x391a",
+                  "candidateBits": "0x391b",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x2c49",
+                  "candidateBits": "0x2c4d",
+                  "x": 683,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x27cc",
+                  "candidateBits": "0x27dd",
+                  "x": 566,
+                  "y": 495
+                },
+                {
+                  "appleBits": "0x3417",
+                  "candidateBits": "0x3416",
+                  "x": 674,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x3bff",
+                  "candidateBits": "0x3c00",
+                  "x": 436,
+                  "y": 586
+                },
+                {
+                  "appleBits": "0x362d",
+                  "candidateBits": "0x362c",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x3790",
+                  "candidateBits": "0x3791",
+                  "x": 659,
+                  "y": 652
+                },
+                {
+                  "appleBits": "0x36aa",
+                  "candidateBits": "0x36a9",
+                  "x": 697,
+                  "y": 653
+                }
+              ],
+              "mismatchedHalfWords": 10,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 493,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 494,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 495,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 496,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 497,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 498,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 499,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 500,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 501,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 502,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 503,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 504,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 505,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 506,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 507,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x347f",
+                  "x": 508,
+                  "y": 261
+                }
+              ],
+              "mismatchedHalfWords": 126,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 2,
+          "mismatchedHalfWords": 8823
+        },
+        "3": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35f0",
+                  "candidateBits": "0x35f1",
+                  "x": 599,
+                  "y": 293
+                },
+                {
+                  "appleBits": "0x2b7a",
+                  "candidateBits": "0x2b7b",
+                  "x": 523,
+                  "y": 319
+                },
+                {
+                  "appleBits": "0x37b4",
+                  "candidateBits": "0x37b5",
+                  "x": 602,
+                  "y": 347
+                },
+                {
+                  "appleBits": "0x3ada",
+                  "candidateBits": "0x3adb",
+                  "x": 748,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x3ba5",
+                  "candidateBits": "0x3ba6",
+                  "x": 719,
+                  "y": 575
+                },
+                {
+                  "appleBits": "0x38b8",
+                  "candidateBits": "0x38b9",
+                  "x": 600,
+                  "y": 632
+                },
+                {
+                  "appleBits": "0x3aa3",
+                  "candidateBits": "0x3aa2",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x39c9",
+                  "candidateBits": "0x39c8",
+                  "x": 659,
+                  "y": 652
+                },
+                {
+                  "appleBits": "0x375a",
+                  "candidateBits": "0x375b",
+                  "x": 597,
+                  "y": 676
+                }
+              ],
+              "mismatchedHalfWords": 9,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3376",
+                  "candidateBits": "0x3377",
+                  "x": 463,
+                  "y": 308
+                },
+                {
+                  "appleBits": "0x31df",
+                  "candidateBits": "0x31e0",
+                  "x": 485,
+                  "y": 368
+                },
+                {
+                  "appleBits": "0x3b15",
+                  "candidateBits": "0x3b16",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x3bd1",
+                  "candidateBits": "0x3bd0",
+                  "x": 262,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x39b1",
+                  "candidateBits": "0x39b2",
+                  "x": 436,
+                  "y": 586
+                },
+                {
+                  "appleBits": "0x34a3",
+                  "candidateBits": "0x34a4",
+                  "x": 437,
+                  "y": 758
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a5c",
+                  "candidateBits": "0x3a5a",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3976",
+                  "candidateBits": "0x3975",
+                  "x": 339,
+                  "y": 350
+                },
+                {
+                  "appleBits": "0x3bbc",
+                  "candidateBits": "0x3bbb",
+                  "x": 474,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x3862",
+                  "candidateBits": "0x3861",
+                  "x": 328,
+                  "y": 391
+                },
+                {
+                  "appleBits": "0x3682",
+                  "candidateBits": "0x3681",
+                  "x": 737,
+                  "y": 411
+                },
+                {
+                  "appleBits": "0x375b",
+                  "candidateBits": "0x375a",
+                  "x": 347,
+                  "y": 426
+                },
+                {
+                  "appleBits": "0x3726",
+                  "candidateBits": "0x3725",
+                  "x": 359,
+                  "y": 435
+                },
+                {
+                  "appleBits": "0x3642",
+                  "candidateBits": "0x3641",
+                  "x": 663,
+                  "y": 447
+                },
+                {
+                  "appleBits": "0x303e",
+                  "candidateBits": "0x303d",
+                  "x": 263,
+                  "y": 478
+                },
+                {
+                  "appleBits": "0x3be8",
+                  "candidateBits": "0x3be7",
+                  "x": 516,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x3108",
+                  "candidateBits": "0x3107",
+                  "x": 683,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x3498",
+                  "candidateBits": "0x3497",
+                  "x": 566,
+                  "y": 495
+                },
+                {
+                  "appleBits": "0x3840",
+                  "candidateBits": "0x383f",
+                  "x": 489,
+                  "y": 497
+                }
+              ],
+              "mismatchedHalfWords": 13,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x2c05",
+                  "candidateBits": "0x2c04",
+                  "x": 325,
+                  "y": 523
+                },
+                {
+                  "appleBits": "0x31e0",
+                  "candidateBits": "0x31df",
+                  "x": 655,
+                  "y": 538
+                },
+                {
+                  "appleBits": "0x32a8",
+                  "candidateBits": "0x32a7",
+                  "x": 694,
+                  "y": 550
+                },
+                {
+                  "appleBits": "0x339a",
+                  "candidateBits": "0x3399",
+                  "x": 296,
+                  "y": 564
+                },
+                {
+                  "appleBits": "0x351d",
+                  "candidateBits": "0x351c",
+                  "x": 674,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x3666",
+                  "candidateBits": "0x3665",
+                  "x": 267,
+                  "y": 618
+                },
+                {
+                  "appleBits": "0x3bea",
+                  "candidateBits": "0x3be9",
+                  "x": 528,
+                  "y": 620
+                },
+                {
+                  "appleBits": "0x387a",
+                  "candidateBits": "0x3879",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x38dd",
+                  "candidateBits": "0x38dc",
+                  "x": 697,
+                  "y": 653
+                }
+              ],
+              "mismatchedHalfWords": 9,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35f2",
+                  "candidateBits": "0x35f1",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x3b8c",
+                  "candidateBits": "0x3b8b",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x3890",
+                  "candidateBits": "0x388f",
+                  "x": 437,
+                  "y": 758
+                }
+              ],
+              "mismatchedHalfWords": 3,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3b74",
+                  "candidateBits": "0x3b73",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3564",
+                  "candidateBits": "0x3565",
+                  "x": 528,
+                  "y": 620
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x36a9",
+                  "candidateBits": "0x36aa",
+                  "x": 370,
+                  "y": 326
+                },
+                {
+                  "appleBits": "0x3336",
+                  "candidateBits": "0x3338",
+                  "x": 474,
+                  "y": 369
+                },
+                {
+                  "appleBits": "0x391a",
+                  "candidateBits": "0x391b",
+                  "x": 292,
+                  "y": 396
+                },
+                {
+                  "appleBits": "0x2c49",
+                  "candidateBits": "0x2c4d",
+                  "x": 683,
+                  "y": 484
+                },
+                {
+                  "appleBits": "0x27cc",
+                  "candidateBits": "0x27dd",
+                  "x": 566,
+                  "y": 495
+                },
+                {
+                  "appleBits": "0x3417",
+                  "candidateBits": "0x3416",
+                  "x": 674,
+                  "y": 566
+                },
+                {
+                  "appleBits": "0x3bff",
+                  "candidateBits": "0x3c00",
+                  "x": 436,
+                  "y": 586
+                },
+                {
+                  "appleBits": "0x362d",
+                  "candidateBits": "0x362c",
+                  "x": 707,
+                  "y": 643
+                },
+                {
+                  "appleBits": "0x3790",
+                  "candidateBits": "0x3791",
+                  "x": 659,
+                  "y": 652
+                },
+                {
+                  "appleBits": "0x36aa",
+                  "candidateBits": "0x36a9",
+                  "x": 697,
+                  "y": 653
+                }
+              ],
+              "mismatchedHalfWords": 10,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 493,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3485",
+                  "x": 494,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 495,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 496,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3484",
+                  "x": 497,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 498,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3483",
+                  "x": 499,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 500,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 501,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3482",
+                  "x": 502,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 503,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3481",
+                  "x": 504,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 505,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 506,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x3480",
+                  "x": 507,
+                  "y": 261
+                },
+                {
+                  "appleBits": "0x0000",
+                  "candidateBits": "0x347f",
+                  "x": 508,
+                  "y": 261
+                }
+              ],
+              "mismatchedHalfWords": 126,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 2,
+          "mismatchedHalfWords": 178
+        }
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "remainingFloat32Bits": "0x3f3fbcb0",
+      "sampleIndex": 8
+    },
+    {
+      "divisionModes": {
+        "0": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3927",
+                  "candidateBits": "0x3926",
+                  "x": 676,
+                  "y": 316
+                },
+                {
+                  "appleBits": "0x39e7",
+                  "candidateBits": "0x39e6",
+                  "x": 713,
+                  "y": 327
+                },
+                {
+                  "appleBits": "0x365d",
+                  "candidateBits": "0x365c",
+                  "x": 585,
+                  "y": 342
+                },
+                {
+                  "appleBits": "0x38df",
+                  "candidateBits": "0x38de",
+                  "x": 561,
+                  "y": 447
+                },
+                {
+                  "appleBits": "0x3803",
+                  "candidateBits": "0x3802",
+                  "x": 535,
+                  "y": 471
+                },
+                {
+                  "appleBits": "0x3b19",
+                  "candidateBits": "0x3b18",
+                  "x": 724,
+                  "y": 622
+                },
+                {
+                  "appleBits": "0x30c5",
+                  "candidateBits": "0x30c4",
+                  "x": 537,
+                  "y": 680
+                }
+              ],
+              "mismatchedHalfWords": 7,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35c7",
+                  "candidateBits": "0x35c6",
+                  "x": 417,
+                  "y": 267
+                },
+                {
+                  "appleBits": "0x3763",
+                  "candidateBits": "0x3764",
+                  "x": 401,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x3a02",
+                  "candidateBits": "0x3a00",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3a6f",
+                  "candidateBits": "0x3a70",
+                  "x": 374,
+                  "y": 613
+                },
+                {
+                  "appleBits": "0x38fb",
+                  "candidateBits": "0x38fa",
+                  "x": 403,
+                  "y": 648
+                },
+                {
+                  "appleBits": "0x3797",
+                  "candidateBits": "0x3796",
+                  "x": 396,
+                  "y": 726
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3bfb",
+                  "candidateBits": "0x3bfa",
+                  "x": 496,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x35cb",
+                  "candidateBits": "0x35cc",
+                  "x": 351,
+                  "y": 449
+                },
+                {
+                  "appleBits": "0x315d",
+                  "candidateBits": "0x315e",
+                  "x": 708,
+                  "y": 478
+                },
+                {
+                  "appleBits": "0x2ed5",
+                  "candidateBits": "0x2ed6",
+                  "x": 303,
+                  "y": 489
+                },
+                {
+                  "appleBits": "0x2063",
+                  "candidateBits": "0x2064",
+                  "x": 348,
+                  "y": 510
+                },
+                {
+                  "appleBits": "0x1779",
+                  "candidateBits": "0x1778",
+                  "x": 291,
+                  "y": 511
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x30dd",
+                  "candidateBits": "0x30de",
+                  "x": 652,
+                  "y": 533
+                },
+                {
+                  "appleBits": "0x30e3",
+                  "candidateBits": "0x30e4",
+                  "x": 716,
+                  "y": 543
+                },
+                {
+                  "appleBits": "0x3393",
+                  "candidateBits": "0x3392",
+                  "x": 271,
+                  "y": 570
+                },
+                {
+                  "appleBits": "0x36f5",
+                  "candidateBits": "0x36f6",
+                  "x": 382,
+                  "y": 574
+                },
+                {
+                  "appleBits": "0x376a",
+                  "candidateBits": "0x376b",
+                  "x": 285,
+                  "y": 630
+                },
+                {
+                  "appleBits": "0x3ba1",
+                  "candidateBits": "0x3ba0",
+                  "x": 577,
+                  "y": 718
+                },
+                {
+                  "appleBits": "0x3b17",
+                  "candidateBits": "0x3b16",
+                  "x": 393,
+                  "y": 738
+                },
+                {
+                  "appleBits": "0x3be1",
+                  "candidateBits": "0x3be0",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 8,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3810",
+                  "candidateBits": "0x380f",
+                  "x": 375,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3856",
+                  "candidateBits": "0x3855",
+                  "x": 410,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x38ca",
+                  "candidateBits": "0x38c9",
+                  "x": 459,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x38dc",
+                  "candidateBits": "0x38db",
+                  "x": 466,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3906",
+                  "candidateBits": "0x3905",
+                  "x": 482,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x390e",
+                  "candidateBits": "0x390d",
+                  "x": 485,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x39ca",
+                  "candidateBits": "0x39c9",
+                  "x": 555,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x39dc",
+                  "candidateBits": "0x39db",
+                  "x": 562,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a0e",
+                  "candidateBits": "0x3a0d",
+                  "x": 582,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a1a",
+                  "candidateBits": "0x3a19",
+                  "x": 587,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a36",
+                  "candidateBits": "0x3a35",
+                  "x": 599,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a48",
+                  "candidateBits": "0x3a47",
+                  "x": 607,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a62",
+                  "candidateBits": "0x3a61",
+                  "x": 619,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a92",
+                  "candidateBits": "0x3a91",
+                  "x": 643,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a94",
+                  "candidateBits": "0x3a93",
+                  "x": 644,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 655,
+                  "y": 260
+                }
+              ],
+              "mismatchedHalfWords": 4163,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 763,
+                  "y": 368
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 269,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 756,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 758,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 760,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 265,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 267,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 758,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa0",
+                  "candidateBits": "0x3a9f",
+                  "x": 762,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3a9e",
+                  "candidateBits": "0x3a9d",
+                  "x": 261,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aa0",
+                  "candidateBits": "0x3a9f",
+                  "x": 263,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 267,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 749,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 276,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 749,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 274,
+                  "y": 377
+                }
+              ],
+              "mismatchedHalfWords": 4220,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x346b",
+                  "candidateBits": "0x346a",
+                  "x": 417,
+                  "y": 267
+                },
+                {
+                  "appleBits": "0x3545",
+                  "candidateBits": "0x3546",
+                  "x": 401,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x1ce6",
+                  "candidateBits": "0x1d28",
+                  "x": 585,
+                  "y": 342
+                },
+                {
+                  "appleBits": "0x3823",
+                  "candidateBits": "0x3822",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3545",
+                  "candidateBits": "0x3546",
+                  "x": 724,
+                  "y": 622
+                },
+                {
+                  "appleBits": "0x39c7",
+                  "candidateBits": "0x39c6",
+                  "x": 577,
+                  "y": 718
+                },
+                {
+                  "appleBits": "0x3bd4",
+                  "candidateBits": "0x3bd3",
+                  "x": 396,
+                  "y": 726
+                },
+                {
+                  "appleBits": "0x3a3d",
+                  "candidateBits": "0x3a3c",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 8,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 3,
+          "mismatchedHalfWords": 8418
+        },
+        "1": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3927",
+                  "candidateBits": "0x3926",
+                  "x": 676,
+                  "y": 316
+                },
+                {
+                  "appleBits": "0x39e7",
+                  "candidateBits": "0x39e6",
+                  "x": 713,
+                  "y": 327
+                },
+                {
+                  "appleBits": "0x365d",
+                  "candidateBits": "0x365c",
+                  "x": 585,
+                  "y": 342
+                },
+                {
+                  "appleBits": "0x38df",
+                  "candidateBits": "0x38de",
+                  "x": 561,
+                  "y": 447
+                },
+                {
+                  "appleBits": "0x3803",
+                  "candidateBits": "0x3802",
+                  "x": 535,
+                  "y": 471
+                },
+                {
+                  "appleBits": "0x3b19",
+                  "candidateBits": "0x3b18",
+                  "x": 724,
+                  "y": 622
+                },
+                {
+                  "appleBits": "0x30c5",
+                  "candidateBits": "0x30c4",
+                  "x": 537,
+                  "y": 680
+                }
+              ],
+              "mismatchedHalfWords": 7,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35c7",
+                  "candidateBits": "0x35c6",
+                  "x": 417,
+                  "y": 267
+                },
+                {
+                  "appleBits": "0x3763",
+                  "candidateBits": "0x3764",
+                  "x": 401,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x3a02",
+                  "candidateBits": "0x3a00",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3a6f",
+                  "candidateBits": "0x3a70",
+                  "x": 374,
+                  "y": 613
+                },
+                {
+                  "appleBits": "0x38fb",
+                  "candidateBits": "0x38fa",
+                  "x": 403,
+                  "y": 648
+                },
+                {
+                  "appleBits": "0x3797",
+                  "candidateBits": "0x3796",
+                  "x": 396,
+                  "y": 726
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3bfb",
+                  "candidateBits": "0x3bfa",
+                  "x": 496,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x35cb",
+                  "candidateBits": "0x35cc",
+                  "x": 351,
+                  "y": 449
+                },
+                {
+                  "appleBits": "0x315d",
+                  "candidateBits": "0x315e",
+                  "x": 708,
+                  "y": 478
+                },
+                {
+                  "appleBits": "0x2ed5",
+                  "candidateBits": "0x2ed6",
+                  "x": 303,
+                  "y": 489
+                },
+                {
+                  "appleBits": "0x2063",
+                  "candidateBits": "0x2064",
+                  "x": 348,
+                  "y": 510
+                },
+                {
+                  "appleBits": "0x1779",
+                  "candidateBits": "0x1778",
+                  "x": 291,
+                  "y": 511
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x30dd",
+                  "candidateBits": "0x30de",
+                  "x": 652,
+                  "y": 533
+                },
+                {
+                  "appleBits": "0x30e3",
+                  "candidateBits": "0x30e4",
+                  "x": 716,
+                  "y": 543
+                },
+                {
+                  "appleBits": "0x3393",
+                  "candidateBits": "0x3392",
+                  "x": 271,
+                  "y": 570
+                },
+                {
+                  "appleBits": "0x36f5",
+                  "candidateBits": "0x36f6",
+                  "x": 382,
+                  "y": 574
+                },
+                {
+                  "appleBits": "0x376a",
+                  "candidateBits": "0x376b",
+                  "x": 285,
+                  "y": 630
+                },
+                {
+                  "appleBits": "0x3ba1",
+                  "candidateBits": "0x3ba0",
+                  "x": 577,
+                  "y": 718
+                },
+                {
+                  "appleBits": "0x3b17",
+                  "candidateBits": "0x3b16",
+                  "x": 393,
+                  "y": 738
+                },
+                {
+                  "appleBits": "0x3be1",
+                  "candidateBits": "0x3be0",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 8,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x36a9",
+                  "candidateBits": "0x36ab",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3aac",
+                  "candidateBits": "0x3aab",
+                  "x": 535,
+                  "y": 471
+                },
+                {
+                  "appleBits": "0x3661",
+                  "candidateBits": "0x3660",
+                  "x": 374,
+                  "y": 613
+                }
+              ],
+              "mismatchedHalfWords": 3,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a4c",
+                  "candidateBits": "0x3a4d",
+                  "x": 351,
+                  "y": 449
+                },
+                {
+                  "appleBits": "0x356a",
+                  "candidateBits": "0x356b",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x346b",
+                  "candidateBits": "0x346a",
+                  "x": 417,
+                  "y": 267
+                },
+                {
+                  "appleBits": "0x3545",
+                  "candidateBits": "0x3546",
+                  "x": 401,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x1ce6",
+                  "candidateBits": "0x1d28",
+                  "x": 585,
+                  "y": 342
+                },
+                {
+                  "appleBits": "0x3823",
+                  "candidateBits": "0x3822",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3545",
+                  "candidateBits": "0x3546",
+                  "x": 724,
+                  "y": 622
+                },
+                {
+                  "appleBits": "0x39c7",
+                  "candidateBits": "0x39c6",
+                  "x": 577,
+                  "y": 718
+                },
+                {
+                  "appleBits": "0x3bd4",
+                  "candidateBits": "0x3bd3",
+                  "x": 396,
+                  "y": 726
+                },
+                {
+                  "appleBits": "0x3a3d",
+                  "candidateBits": "0x3a3c",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 8,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 3,
+          "mismatchedHalfWords": 40
+        },
+        "2": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3927",
+                  "candidateBits": "0x3926",
+                  "x": 676,
+                  "y": 316
+                },
+                {
+                  "appleBits": "0x39e7",
+                  "candidateBits": "0x39e6",
+                  "x": 713,
+                  "y": 327
+                },
+                {
+                  "appleBits": "0x365d",
+                  "candidateBits": "0x365c",
+                  "x": 585,
+                  "y": 342
+                },
+                {
+                  "appleBits": "0x38df",
+                  "candidateBits": "0x38de",
+                  "x": 561,
+                  "y": 447
+                },
+                {
+                  "appleBits": "0x3803",
+                  "candidateBits": "0x3802",
+                  "x": 535,
+                  "y": 471
+                },
+                {
+                  "appleBits": "0x3b19",
+                  "candidateBits": "0x3b18",
+                  "x": 724,
+                  "y": 622
+                },
+                {
+                  "appleBits": "0x30c5",
+                  "candidateBits": "0x30c4",
+                  "x": 537,
+                  "y": 680
+                }
+              ],
+              "mismatchedHalfWords": 7,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35c7",
+                  "candidateBits": "0x35c6",
+                  "x": 417,
+                  "y": 267
+                },
+                {
+                  "appleBits": "0x3763",
+                  "candidateBits": "0x3764",
+                  "x": 401,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x3a02",
+                  "candidateBits": "0x3a00",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3a6f",
+                  "candidateBits": "0x3a70",
+                  "x": 374,
+                  "y": 613
+                },
+                {
+                  "appleBits": "0x38fb",
+                  "candidateBits": "0x38fa",
+                  "x": 403,
+                  "y": 648
+                },
+                {
+                  "appleBits": "0x3797",
+                  "candidateBits": "0x3796",
+                  "x": 396,
+                  "y": 726
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3bfb",
+                  "candidateBits": "0x3bfa",
+                  "x": 496,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x35cb",
+                  "candidateBits": "0x35cc",
+                  "x": 351,
+                  "y": 449
+                },
+                {
+                  "appleBits": "0x315d",
+                  "candidateBits": "0x315e",
+                  "x": 708,
+                  "y": 478
+                },
+                {
+                  "appleBits": "0x2ed5",
+                  "candidateBits": "0x2ed6",
+                  "x": 303,
+                  "y": 489
+                },
+                {
+                  "appleBits": "0x2063",
+                  "candidateBits": "0x2064",
+                  "x": 348,
+                  "y": 510
+                },
+                {
+                  "appleBits": "0x1779",
+                  "candidateBits": "0x1778",
+                  "x": 291,
+                  "y": 511
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x30dd",
+                  "candidateBits": "0x30de",
+                  "x": 652,
+                  "y": 533
+                },
+                {
+                  "appleBits": "0x30e3",
+                  "candidateBits": "0x30e4",
+                  "x": 716,
+                  "y": 543
+                },
+                {
+                  "appleBits": "0x3393",
+                  "candidateBits": "0x3392",
+                  "x": 271,
+                  "y": 570
+                },
+                {
+                  "appleBits": "0x36f5",
+                  "candidateBits": "0x36f6",
+                  "x": 382,
+                  "y": 574
+                },
+                {
+                  "appleBits": "0x376a",
+                  "candidateBits": "0x376b",
+                  "x": 285,
+                  "y": 630
+                },
+                {
+                  "appleBits": "0x3ba1",
+                  "candidateBits": "0x3ba0",
+                  "x": 577,
+                  "y": 718
+                },
+                {
+                  "appleBits": "0x3b17",
+                  "candidateBits": "0x3b16",
+                  "x": 393,
+                  "y": 738
+                },
+                {
+                  "appleBits": "0x3be1",
+                  "candidateBits": "0x3be0",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 8,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3810",
+                  "candidateBits": "0x380f",
+                  "x": 375,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3856",
+                  "candidateBits": "0x3855",
+                  "x": 410,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x38ca",
+                  "candidateBits": "0x38c9",
+                  "x": 459,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x38dc",
+                  "candidateBits": "0x38db",
+                  "x": 466,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3906",
+                  "candidateBits": "0x3905",
+                  "x": 482,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x390e",
+                  "candidateBits": "0x390d",
+                  "x": 485,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x39ca",
+                  "candidateBits": "0x39c9",
+                  "x": 555,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x39dc",
+                  "candidateBits": "0x39db",
+                  "x": 562,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a0e",
+                  "candidateBits": "0x3a0d",
+                  "x": 582,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a1a",
+                  "candidateBits": "0x3a19",
+                  "x": 587,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a36",
+                  "candidateBits": "0x3a35",
+                  "x": 599,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a48",
+                  "candidateBits": "0x3a47",
+                  "x": 607,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a62",
+                  "candidateBits": "0x3a61",
+                  "x": 619,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a92",
+                  "candidateBits": "0x3a91",
+                  "x": 643,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3a94",
+                  "candidateBits": "0x3a93",
+                  "x": 644,
+                  "y": 260
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 655,
+                  "y": 260
+                }
+              ],
+              "mismatchedHalfWords": 4163,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 763,
+                  "y": 368
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 269,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 756,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 758,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 760,
+                  "y": 372
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 265,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 267,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 758,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3aa0",
+                  "candidateBits": "0x3a9f",
+                  "x": 762,
+                  "y": 373
+                },
+                {
+                  "appleBits": "0x3a9e",
+                  "candidateBits": "0x3a9d",
+                  "x": 261,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aa0",
+                  "candidateBits": "0x3a9f",
+                  "x": 263,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aa4",
+                  "candidateBits": "0x3aa3",
+                  "x": 267,
+                  "y": 374
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 749,
+                  "y": 375
+                },
+                {
+                  "appleBits": "0x3aaa",
+                  "candidateBits": "0x3aa9",
+                  "x": 276,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa8",
+                  "candidateBits": "0x3aa7",
+                  "x": 749,
+                  "y": 376
+                },
+                {
+                  "appleBits": "0x3aa6",
+                  "candidateBits": "0x3aa5",
+                  "x": 274,
+                  "y": 377
+                }
+              ],
+              "mismatchedHalfWords": 4220,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x346b",
+                  "candidateBits": "0x346a",
+                  "x": 417,
+                  "y": 267
+                },
+                {
+                  "appleBits": "0x3545",
+                  "candidateBits": "0x3546",
+                  "x": 401,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x1ce6",
+                  "candidateBits": "0x1d28",
+                  "x": 585,
+                  "y": 342
+                },
+                {
+                  "appleBits": "0x3823",
+                  "candidateBits": "0x3822",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3545",
+                  "candidateBits": "0x3546",
+                  "x": 724,
+                  "y": 622
+                },
+                {
+                  "appleBits": "0x39c7",
+                  "candidateBits": "0x39c6",
+                  "x": 577,
+                  "y": 718
+                },
+                {
+                  "appleBits": "0x3bd4",
+                  "candidateBits": "0x3bd3",
+                  "x": 396,
+                  "y": 726
+                },
+                {
+                  "appleBits": "0x3a3d",
+                  "candidateBits": "0x3a3c",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 8,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 3,
+          "mismatchedHalfWords": 8418
+        },
+        "3": {
+          "cases": [
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3927",
+                  "candidateBits": "0x3926",
+                  "x": 676,
+                  "y": 316
+                },
+                {
+                  "appleBits": "0x39e7",
+                  "candidateBits": "0x39e6",
+                  "x": 713,
+                  "y": 327
+                },
+                {
+                  "appleBits": "0x365d",
+                  "candidateBits": "0x365c",
+                  "x": 585,
+                  "y": 342
+                },
+                {
+                  "appleBits": "0x38df",
+                  "candidateBits": "0x38de",
+                  "x": 561,
+                  "y": 447
+                },
+                {
+                  "appleBits": "0x3803",
+                  "candidateBits": "0x3802",
+                  "x": 535,
+                  "y": 471
+                },
+                {
+                  "appleBits": "0x3b19",
+                  "candidateBits": "0x3b18",
+                  "x": 724,
+                  "y": 622
+                },
+                {
+                  "appleBits": "0x30c5",
+                  "candidateBits": "0x30c4",
+                  "x": 537,
+                  "y": 680
+                }
+              ],
+              "mismatchedHalfWords": 7,
+              "name": "positive-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x35c7",
+                  "candidateBits": "0x35c6",
+                  "x": 417,
+                  "y": 267
+                },
+                {
+                  "appleBits": "0x3763",
+                  "candidateBits": "0x3764",
+                  "x": 401,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x3a02",
+                  "candidateBits": "0x3a00",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3a6f",
+                  "candidateBits": "0x3a70",
+                  "x": 374,
+                  "y": 613
+                },
+                {
+                  "appleBits": "0x38fb",
+                  "candidateBits": "0x38fa",
+                  "x": 403,
+                  "y": 648
+                },
+                {
+                  "appleBits": "0x3797",
+                  "candidateBits": "0x3796",
+                  "x": 396,
+                  "y": 726
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "negative-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3bfb",
+                  "candidateBits": "0x3bfa",
+                  "x": 496,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x35cb",
+                  "candidateBits": "0x35cc",
+                  "x": 351,
+                  "y": 449
+                },
+                {
+                  "appleBits": "0x315d",
+                  "candidateBits": "0x315e",
+                  "x": 708,
+                  "y": 478
+                },
+                {
+                  "appleBits": "0x2ed5",
+                  "candidateBits": "0x2ed6",
+                  "x": 303,
+                  "y": 489
+                },
+                {
+                  "appleBits": "0x2063",
+                  "candidateBits": "0x2064",
+                  "x": 348,
+                  "y": 510
+                },
+                {
+                  "appleBits": "0x1779",
+                  "candidateBits": "0x1778",
+                  "x": 291,
+                  "y": 511
+                }
+              ],
+              "mismatchedHalfWords": 6,
+              "name": "positive-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x30dd",
+                  "candidateBits": "0x30de",
+                  "x": 652,
+                  "y": 533
+                },
+                {
+                  "appleBits": "0x30e3",
+                  "candidateBits": "0x30e4",
+                  "x": 716,
+                  "y": 543
+                },
+                {
+                  "appleBits": "0x3393",
+                  "candidateBits": "0x3392",
+                  "x": 271,
+                  "y": 570
+                },
+                {
+                  "appleBits": "0x36f5",
+                  "candidateBits": "0x36f6",
+                  "x": 382,
+                  "y": 574
+                },
+                {
+                  "appleBits": "0x376a",
+                  "candidateBits": "0x376b",
+                  "x": 285,
+                  "y": 630
+                },
+                {
+                  "appleBits": "0x3ba1",
+                  "candidateBits": "0x3ba0",
+                  "x": 577,
+                  "y": 718
+                },
+                {
+                  "appleBits": "0x3b17",
+                  "candidateBits": "0x3b16",
+                  "x": 393,
+                  "y": 738
+                },
+                {
+                  "appleBits": "0x3be1",
+                  "candidateBits": "0x3be0",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 8,
+              "name": "negative-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x36a9",
+                  "candidateBits": "0x36ab",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3aac",
+                  "candidateBits": "0x3aab",
+                  "x": 535,
+                  "y": 471
+                },
+                {
+                  "appleBits": "0x3661",
+                  "candidateBits": "0x3660",
+                  "x": 374,
+                  "y": 613
+                }
+              ],
+              "mismatchedHalfWords": 3,
+              "name": "normalized-normal-x"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x3a4c",
+                  "candidateBits": "0x3a4d",
+                  "x": 351,
+                  "y": 449
+                },
+                {
+                  "appleBits": "0x356a",
+                  "candidateBits": "0x356b",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 2,
+              "name": "normalized-normal-y"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [
+                {
+                  "appleBits": "0x346b",
+                  "candidateBits": "0x346a",
+                  "x": 417,
+                  "y": 267
+                },
+                {
+                  "appleBits": "0x3545",
+                  "candidateBits": "0x3546",
+                  "x": 401,
+                  "y": 299
+                },
+                {
+                  "appleBits": "0x1ce6",
+                  "candidateBits": "0x1d28",
+                  "x": 585,
+                  "y": 342
+                },
+                {
+                  "appleBits": "0x3823",
+                  "candidateBits": "0x3822",
+                  "x": 451,
+                  "y": 458
+                },
+                {
+                  "appleBits": "0x3545",
+                  "candidateBits": "0x3546",
+                  "x": 724,
+                  "y": 622
+                },
+                {
+                  "appleBits": "0x39c7",
+                  "candidateBits": "0x39c6",
+                  "x": 577,
+                  "y": 718
+                },
+                {
+                  "appleBits": "0x3bd4",
+                  "candidateBits": "0x3bd3",
+                  "x": 396,
+                  "y": 726
+                },
+                {
+                  "appleBits": "0x3a3d",
+                  "candidateBits": "0x3a3c",
+                  "x": 555,
+                  "y": 756
+                }
+              ],
+              "mismatchedHalfWords": 8,
+              "name": "original-directional"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "shifted-scaled-distance"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "leading-coverage"
+            },
+            {
+              "checkedHalfWords": 1048576,
+              "firstMismatches": [],
+              "mismatchedHalfWords": 0,
+              "name": "original-coverage"
+            }
+          ],
+          "checkedHalfWords": 10485760,
+          "exactCaseCount": 3,
+          "mismatchedHalfWords": 40
+        }
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "remainingFloat32Bits": "0x3f1fe580",
+      "sampleIndex": 12
+    }
+  ],
+  "schemaVersion": 1,
+  "scope": "current QuartzCore final-highlight uniform tomography",
+  "squareSelectorCalibration": "/tmp/walle/lg-test/Analysis/raster_small_square_selectors_u32le.zlib",
+  "totals": {
+    "0": {
+      "checkedHalfWords": 31457280,
+      "exactCaseCount": 7,
+      "mismatchedHalfWords": 25970
+    },
+    "1": {
+      "checkedHalfWords": 31457280,
+      "exactCaseCount": 7,
+      "mismatchedHalfWords": 401
+    },
+    "2": {
+      "checkedHalfWords": 31457280,
+      "exactCaseCount": 7,
+      "mismatchedHalfWords": 25970
+    },
+    "3": {
+      "checkedHalfWords": 31457280,
+      "exactCaseCount": 7,
+      "mismatchedHalfWords": 401
+    }
+  }
+}

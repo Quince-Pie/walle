@@ -1,0 +1,29 @@
+--- reveal_agx_builtin_guard_endpoint_isolation_experiment.swift
++++ reveal_agx_builtin_guard_boundary_origin_experiment.swift
+@@ -382,7 +382,7 @@
+             var transform = matrix(viewport: span.viewport)
+             encoder.setRenderPipelineState(pipeline)
+             encoder.setViewport(MTLViewport(
+-                originX: 0,
++                originX: 64,
+                 originY: 0,
+                 width: Double(span.viewport),
+                 height: Double(span.viewport),
+@@ -390,7 +390,7 @@
+                 zfar: 1
+             ))
+             encoder.setScissorRect(MTLScissorRect(
+-                x: Int(span.sample.x),
++                x: 13,
+                 y: Int(span.sample.y),
+                 width: 1,
+                 height: 1
+@@ -460,7 +460,7 @@
+     )
+     for record in records.prefix(spans[0].range.upperBound) {
+         let base = Int(record.recordIndex) * recordWords
+-        guard words[base] == record.sample.x,
++        guard words[base] == 13,
+               words[base + 1] == record.sample.y,
+               words[base + 2] <= 1,
+               words[base + 3] == record.recordIndex,

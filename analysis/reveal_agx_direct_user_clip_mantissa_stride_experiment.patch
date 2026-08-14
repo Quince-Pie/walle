@@ -1,0 +1,14 @@
+--- reveal_agx_direct_user_clip_zero_crossing_experiment.swift
++++ reveal_agx_direct_user_clip_mantissa_stride_experiment.swift
+@@ -81,7 +81,11 @@
+     const float viewport = metadata[caseIndex].x == 0u ? 256.0f : 512.0f;
+     (void)viewport;
+-    const float denominator = 65536.0f + float(metadata[caseIndex].z);
++    const uint pattern = metadata[caseIndex].y;
++    const uint mantissa =
++        (metadata[caseIndex].z * 8u + pattern) * 128u;
++    const float denominator =
++        as_type<float>(0x47800000u + mantissa);
+     const float distanceValue = isOuter ? -1.0f : denominator - 1.0f;
+     const float x = distanceValue * 0x1p-17f;
+     const float y = isBottom ? 0.5f : -0.5f;

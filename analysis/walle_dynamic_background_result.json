@@ -1,0 +1,1332 @@
+{
+  "capture": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02",
+  "captureTimelineSha256": "71eec0992cecac4755ee706be8160c40daac3a00ccf015517ddac42972945e7c",
+  "cases": [
+    {
+      "appleReference": {
+        "path": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02/transition-background-uniform-01-pre-final-highlight-reference-bgra8.raw",
+        "sha256": "4fae4c4444d2d0f59f9ba9cdf1af7372ca4f3bc23b0e13d17f643a887b424c94"
+      },
+      "backgroundScissor": {
+        "glBottomLeft": [
+          112,
+          112,
+          816,
+          816
+        ],
+        "source": "captured-structural-diagnostic"
+      },
+      "comparison": {
+        "checkedBytes": 4194304,
+        "firstMismatches": [
+          {
+            "apple": [
+              14,
+              14,
+              14,
+              240
+            ],
+            "walle": [
+              14,
+              14,
+              14,
+              239
+            ],
+            "x": 612,
+            "yBottomLeft": 294
+          },
+          {
+            "apple": [
+              14,
+              14,
+              14,
+              227
+            ],
+            "walle": [
+              13,
+              13,
+              13,
+              227
+            ],
+            "x": 401,
+            "yBottomLeft": 299
+          },
+          {
+            "apple": [
+              11,
+              11,
+              11,
+              183
+            ],
+            "walle": [
+              11,
+              11,
+              11,
+              182
+            ],
+            "x": 637,
+            "yBottomLeft": 307
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              24
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              23
+            ],
+            "x": 693,
+            "yBottomLeft": 353
+          },
+          {
+            "apple": [
+              8,
+              8,
+              8,
+              149
+            ],
+            "walle": [
+              8,
+              8,
+              8,
+              148
+            ],
+            "x": 299,
+            "yBottomLeft": 400
+          },
+          {
+            "apple": [
+              14,
+              14,
+              14,
+              227
+            ],
+            "walle": [
+              13,
+              13,
+              13,
+              227
+            ],
+            "x": 299,
+            "yBottomLeft": 401
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              2
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "x": 770,
+            "yBottomLeft": 434
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              23
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              24
+            ],
+            "x": 269,
+            "yBottomLeft": 487
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "x": 246,
+            "yBottomLeft": 515
+          },
+          {
+            "apple": [
+              7,
+              7,
+              7,
+              111
+            ],
+            "walle": [
+              7,
+              7,
+              7,
+              112
+            ],
+            "x": 280,
+            "yBottomLeft": 576
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              11
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              10
+            ],
+            "x": 759,
+            "yBottomLeft": 584
+          },
+          {
+            "apple": [
+              5,
+              5,
+              5,
+              82
+            ],
+            "walle": [
+              5,
+              5,
+              5,
+              83
+            ],
+            "x": 664,
+            "yBottomLeft": 698
+          },
+          {
+            "apple": [
+              3,
+              3,
+              3,
+              66
+            ],
+            "walle": [
+              3,
+              3,
+              3,
+              67
+            ],
+            "x": 402,
+            "yBottomLeft": 726
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              36
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              35
+            ],
+            "x": 556,
+            "yBottomLeft": 752
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              35
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              34
+            ],
+            "x": 532,
+            "yBottomLeft": 756
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              11
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              10
+            ],
+            "x": 576,
+            "yBottomLeft": 767
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 20,
+        "mismatchedBytesByChannel": [
+          2,
+          2,
+          2,
+          14
+        ],
+        "mismatchedPixels": 16
+      },
+      "fixture": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures/regular-dark-dematerialize-01",
+      "sampleIndex": 1
+    },
+    {
+      "appleReference": {
+        "path": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02/transition-background-uniform-04-pre-final-highlight-reference-bgra8.raw",
+        "sha256": "a8aa5b1a4e670686433bff5d37e180e2bfc7914a86f0f057cf688914409e93e3"
+      },
+      "backgroundScissor": {
+        "glBottomLeft": [
+          134,
+          134,
+          816,
+          816
+        ],
+        "source": "captured-structural-diagnostic"
+      },
+      "comparison": {
+        "checkedBytes": 4194304,
+        "firstMismatches": [
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              5
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "x": 471,
+            "yBottomLeft": 262
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              12
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              11
+            ],
+            "x": 363,
+            "yBottomLeft": 316
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              5
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "x": 254,
+            "yBottomLeft": 479
+          },
+          {
+            "apple": [
+              5,
+              5,
+              5,
+              87
+            ],
+            "walle": [
+              5,
+              5,
+              5,
+              86
+            ],
+            "x": 643,
+            "yBottomLeft": 714
+          },
+          {
+            "apple": [
+              8,
+              8,
+              8,
+              157
+            ],
+            "walle": [
+              8,
+              8,
+              8,
+              158
+            ],
+            "x": 419,
+            "yBottomLeft": 734
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              28
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              29
+            ],
+            "x": 514,
+            "yBottomLeft": 758
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              15
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              16
+            ],
+            "x": 449,
+            "yBottomLeft": 760
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 7,
+        "mismatchedBytesByChannel": [
+          0,
+          0,
+          0,
+          7
+        ],
+        "mismatchedPixels": 7
+      },
+      "fixture": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures/regular-dark-dematerialize-04",
+      "sampleIndex": 4
+    },
+    {
+      "appleReference": {
+        "path": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02/transition-background-uniform-08-pre-final-highlight-reference-bgra8.raw",
+        "sha256": "7a39fde5a05e08b008c8c619ec9b00d57b46044b44b544177c0040384264e4f3"
+      },
+      "backgroundScissor": {
+        "glBottomLeft": [
+          164,
+          164,
+          801,
+          801
+        ],
+        "source": "captured-structural-diagnostic"
+      },
+      "comparison": {
+        "checkedBytes": 4194304,
+        "firstMismatches": [
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              2
+            ],
+            "x": 445,
+            "yBottomLeft": 264
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              11
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              12
+            ],
+            "x": 269,
+            "yBottomLeft": 465
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              5
+            ],
+            "x": 768,
+            "yBottomLeft": 535
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              15
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              16
+            ],
+            "x": 269,
+            "yBottomLeft": 554
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              7
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              8
+            ],
+            "x": 757,
+            "yBottomLeft": 580
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              22
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              23
+            ],
+            "x": 558,
+            "yBottomLeft": 754
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              13
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              14
+            ],
+            "x": 441,
+            "yBottomLeft": 756
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              5
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              6
+            ],
+            "x": 608,
+            "yBottomLeft": 756
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              6
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              7
+            ],
+            "x": 439,
+            "yBottomLeft": 763
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              7
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              8
+            ],
+            "x": 572,
+            "yBottomLeft": 765
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              5
+            ],
+            "x": 527,
+            "yBottomLeft": 776
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 11,
+        "mismatchedBytesByChannel": [
+          0,
+          0,
+          0,
+          11
+        ],
+        "mismatchedPixels": 11
+      },
+      "fixture": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures/regular-dark-dematerialize-08",
+      "sampleIndex": 8
+    },
+    {
+      "appleReference": {
+        "path": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02/transition-background-uniform-12-pre-final-highlight-reference-bgra8.raw",
+        "sha256": "09f910a0e65112117e3c693775d45d55f5c41cf2696f7a3537255968f8963162"
+      },
+      "backgroundScissor": {
+        "glBottomLeft": [
+          194,
+          194,
+          744,
+          744
+        ],
+        "source": "captured-structural-diagnostic"
+      },
+      "comparison": {
+        "checkedBytes": 4194304,
+        "firstMismatches": [
+          {
+            "apple": [
+              6,
+              6,
+              6,
+              176
+            ],
+            "walle": [
+              6,
+              6,
+              6,
+              177
+            ],
+            "x": 457,
+            "yBottomLeft": 275
+          },
+          {
+            "apple": [
+              8,
+              8,
+              8,
+              230
+            ],
+            "walle": [
+              8,
+              8,
+              8,
+              229
+            ],
+            "x": 565,
+            "yBottomLeft": 275
+          },
+          {
+            "apple": [
+              6,
+              6,
+              6,
+              157
+            ],
+            "walle": [
+              5,
+              5,
+              5,
+              157
+            ],
+            "x": 445,
+            "yBottomLeft": 278
+          },
+          {
+            "apple": [
+              2,
+              2,
+              2,
+              36
+            ],
+            "walle": [
+              2,
+              2,
+              2,
+              37
+            ],
+            "x": 372,
+            "yBottomLeft": 312
+          },
+          {
+            "apple": [
+              9,
+              9,
+              9,
+              254
+            ],
+            "walle": [
+              9,
+              9,
+              9,
+              255
+            ],
+            "x": 649,
+            "yBottomLeft": 312
+          },
+          {
+            "apple": [
+              5,
+              5,
+              5,
+              116
+            ],
+            "walle": [
+              5,
+              5,
+              5,
+              117
+            ],
+            "x": 707,
+            "yBottomLeft": 367
+          },
+          {
+            "apple": [
+              3,
+              3,
+              3,
+              58
+            ],
+            "walle": [
+              3,
+              3,
+              3,
+              59
+            ],
+            "x": 711,
+            "yBottomLeft": 372
+          },
+          {
+            "apple": [
+              3,
+              3,
+              3,
+              73
+            ],
+            "walle": [
+              3,
+              3,
+              3,
+              74
+            ],
+            "x": 737,
+            "yBottomLeft": 420
+          },
+          {
+            "apple": [
+              8,
+              8,
+              8,
+              221
+            ],
+            "walle": [
+              8,
+              8,
+              8,
+              220
+            ],
+            "x": 747,
+            "yBottomLeft": 570
+          },
+          {
+            "apple": [
+              3,
+              3,
+              3,
+              69
+            ],
+            "walle": [
+              3,
+              3,
+              3,
+              68
+            ],
+            "x": 310,
+            "yBottomLeft": 648
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              13
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              12
+            ],
+            "x": 568,
+            "yBottomLeft": 757
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              14
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              13
+            ],
+            "x": 476,
+            "yBottomLeft": 760
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 14,
+        "mismatchedBytesByChannel": [
+          1,
+          1,
+          1,
+          11
+        ],
+        "mismatchedPixels": 12
+      },
+      "fixture": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures/regular-dark-dematerialize-12",
+      "sampleIndex": 12
+    },
+    {
+      "appleReference": {
+        "path": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02/transition-background-uniform-16-pre-final-highlight-reference-bgra8.raw",
+        "sha256": "1751e74c79cbf3368220f741c0a25bd319e8da8434c0ff396af6a22b2d1dfcb1"
+      },
+      "backgroundScissor": {
+        "glBottomLeft": [
+          224,
+          224,
+          687,
+          687
+        ],
+        "source": "captured-structural-diagnostic"
+      },
+      "comparison": {
+        "checkedBytes": 4194304,
+        "firstMismatches": [
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              2
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "x": 535,
+            "yBottomLeft": 265
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              2
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "x": 257,
+            "yBottomLeft": 543
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              5
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "x": 266,
+            "yBottomLeft": 565
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              2
+            ],
+            "x": 761,
+            "yBottomLeft": 574
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              2
+            ],
+            "x": 566,
+            "yBottomLeft": 769
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 5,
+        "mismatchedBytesByChannel": [
+          0,
+          0,
+          0,
+          5
+        ],
+        "mismatchedPixels": 5
+      },
+      "fixture": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures/regular-dark-dematerialize-16",
+      "sampleIndex": 16
+    },
+    {
+      "appleReference": {
+        "path": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02/transition-background-uniform-20-pre-final-highlight-reference-bgra8.raw",
+        "sha256": "49af104c09526410123387765cad581928332c447d3138713863a8ebe3c725ad"
+      },
+      "backgroundScissor": {
+        "glBottomLeft": [
+          254,
+          254,
+          630,
+          630
+        ],
+        "source": "captured-structural-diagnostic"
+      },
+      "comparison": {
+        "checkedBytes": 4194304,
+        "firstMismatches": [
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              5
+            ],
+            "x": 757,
+            "yBottomLeft": 508
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "x": 442,
+            "yBottomLeft": 757
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              5
+            ],
+            "x": 500,
+            "yBottomLeft": 765
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 3,
+        "mismatchedBytesByChannel": [
+          0,
+          0,
+          0,
+          3
+        ],
+        "mismatchedPixels": 3
+      },
+      "fixture": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures/regular-dark-dematerialize-20",
+      "sampleIndex": 20
+    },
+    {
+      "appleReference": {
+        "path": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02/transition-background-uniform-24-pre-final-highlight-reference-bgra8.raw",
+        "sha256": "cc3d4a30c7cc508a9a77dc5d0e4513ac4dedc0f38df26aedb95a16262a76e28e"
+      },
+      "backgroundScissor": {
+        "glBottomLeft": [
+          284,
+          284,
+          573,
+          573
+        ],
+        "source": "captured-structural-diagnostic"
+      },
+      "comparison": {
+        "checkedBytes": 4194304,
+        "firstMismatches": [
+          {
+            "apple": [
+              2,
+              2,
+              2,
+              194
+            ],
+            "walle": [
+              2,
+              2,
+              2,
+              195
+            ],
+            "x": 388,
+            "yBottomLeft": 299
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "x": 307,
+            "yBottomLeft": 651
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "x": 319,
+            "yBottomLeft": 668
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "x": 403,
+            "yBottomLeft": 737
+          },
+          {
+            "apple": [
+              1,
+              1,
+              1,
+              70
+            ],
+            "walle": [
+              1,
+              1,
+              1,
+              71
+            ],
+            "x": 598,
+            "yBottomLeft": 742
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "x": 602,
+            "yBottomLeft": 745
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              37
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              38
+            ],
+            "x": 458,
+            "yBottomLeft": 752
+          },
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              3
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              4
+            ],
+            "x": 558,
+            "yBottomLeft": 758
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 8,
+        "mismatchedBytesByChannel": [
+          0,
+          0,
+          0,
+          8
+        ],
+        "mismatchedPixels": 8
+      },
+      "fixture": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures/regular-dark-dematerialize-24",
+      "sampleIndex": 24
+    },
+    {
+      "appleReference": {
+        "path": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02/transition-background-uniform-28-pre-final-highlight-reference-bgra8.raw",
+        "sha256": "2459816e0fa69309b9574d104c2a2e634b29f8d3e246e47812c0efb51a167bc1"
+      },
+      "backgroundScissor": {
+        "glBottomLeft": [
+          314,
+          314,
+          516,
+          516
+        ],
+        "source": "captured-structural-diagnostic"
+      },
+      "comparison": {
+        "checkedBytes": 4194304,
+        "firstMismatches": [
+          {
+            "apple": [
+              0,
+              0,
+              0,
+              170
+            ],
+            "walle": [
+              0,
+              0,
+              0,
+              169
+            ],
+            "x": 686,
+            "yBottomLeft": 337
+          },
+          {
+            "apple": [
+              1,
+              1,
+              1,
+              230
+            ],
+            "walle": [
+              1,
+              1,
+              1,
+              231
+            ],
+            "x": 716,
+            "yBottomLeft": 374
+          },
+          {
+            "apple": [
+              1,
+              1,
+              1,
+              248
+            ],
+            "walle": [
+              1,
+              1,
+              1,
+              249
+            ],
+            "x": 713,
+            "yBottomLeft": 653
+          },
+          {
+            "apple": [
+              1,
+              1,
+              1,
+              248
+            ],
+            "walle": [
+              1,
+              1,
+              1,
+              249
+            ],
+            "x": 653,
+            "yBottomLeft": 713
+          }
+        ],
+        "maximumChannelDelta": 1,
+        "mismatchedBytes": 4,
+        "mismatchedBytesByChannel": [
+          0,
+          0,
+          0,
+          4
+        ],
+        "mismatchedPixels": 4
+      },
+      "fixture": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures/regular-dark-dematerialize-28",
+      "sampleIndex": 28
+    }
+  ],
+  "classification": "captured-scissor background-only AMD pixel comparison",
+  "fixtures": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures",
+  "implementation": {
+    "GL_RENDERER": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "GL_VENDOR": "AMD",
+    "GL_VERSION": "4.6 (Core Profile) Mesa 26.1.5",
+    "device": "/dev/dri/renderD129",
+    "deviceIndex": 0
+  },
+  "schemaVersion": 1,
+  "totals": {
+    "checkedBytes": 33554432,
+    "maximumChannelDelta": 1,
+    "mismatchedBytes": 72,
+    "mismatchedBytesByChannel": [
+      3,
+      3,
+      3,
+      63
+    ],
+    "mismatchedPixels": 66
+  }
+}

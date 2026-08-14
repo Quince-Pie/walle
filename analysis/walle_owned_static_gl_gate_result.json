@@ -1,0 +1,503 @@
+{
+  "gate": {
+    "productionWalleParityEstablished": false,
+    "walleOwnedStaticGlExact": true
+  },
+  "implementation": {
+    "fixtureManifest": {
+      "fixtures": [
+        {
+          "appearance": "light",
+          "capturedFinalOutputUsedForComparisonOnly": true,
+          "files": {
+            "config.bin": {
+              "byteCount": 52,
+              "role": "independent-input",
+              "sha256": "28efdbfeb43a69d213f975813d4bc6d6b2cf2ca00cdf893e8681b769abf606f0"
+            },
+            "destination.rgba8": {
+              "byteCount": 4194304,
+              "role": "independent-input",
+              "sha256": "5e4b62d5a4982428e362849f62198279a2641cef8a24cfda0589f249324d0f94"
+            },
+            "highlight-indices.u16": {
+              "byteCount": 12,
+              "role": "independent-input",
+              "sha256": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de"
+            },
+            "highlight-uniform.bin": {
+              "byteCount": 248,
+              "role": "independent-input",
+              "sha256": "ffd866689cc7391ffc0a19cf61446ea5b173869316ea7de6df0f37ab9506024a"
+            },
+            "highlight-vertices.f32": {
+              "byteCount": 128,
+              "role": "independent-input",
+              "sha256": "b9376d453933c068175272d6cb6feb900cd75e8d38447f848bced465c6127a97"
+            },
+            "interpolant-coefficients.rgba32ui": {
+              "byteCount": 832,
+              "role": "independent-input",
+              "sha256": "c0ad965c9aa922a24dc3a1d5261f6a9dc69a86e1b287fb5de38a9b3976a609ee"
+            },
+            "main-vertices.f32": {
+              "byteCount": 192,
+              "role": "independent-input",
+              "sha256": "473d3e9a212b09d4e7435868d28ef37fbb1fe6b3e4a144755d3f01a7b5f7f2cb"
+            },
+            "profile.bin": {
+              "byteCount": 258,
+              "role": "independent-input",
+              "sha256": "641c05867fa4c104e2fa730e5aaec5f406415a86a183dc8ed5e9f417447307cd"
+            },
+            "reference-bottom-left.rgba8": {
+              "byteCount": 4194304,
+              "role": "captured-comparison-oracle-only",
+              "sha256": "9e22315ac9057860f690dae0ef2bb8f5ccb78032fb4d23e70ca7d8089434fc1d"
+            },
+            "shadow-indices.u16": {
+              "byteCount": 96,
+              "role": "independent-input",
+              "sha256": "f40397376a64aba7c2051aa3cfd9adb2d7b94519a40255dc106ac7166c01909c"
+            },
+            "shadow-vertices.f32": {
+              "byteCount": 512,
+              "role": "independent-input",
+              "sha256": "3693e93b40f045a5567aaa0d18d023f928b325780979f7c18cfd998deb7f4b0a"
+            },
+            "source-mip-0.rgba8": {
+              "byteCount": 802816,
+              "role": "independent-input",
+              "sha256": "826a138ebc367130f941ce167d011139260619abf63d2d0e539a0e57b231e373"
+            },
+            "source-mip-1.rgba8": {
+              "byteCount": 200704,
+              "role": "independent-input",
+              "sha256": "7ba37de8d8d56353c0a36fac64313545f4c55c1a2d183dc5baeafe1fa126d618"
+            }
+          },
+          "material": "clear",
+          "name": "clear-light",
+          "renderInputsCaptured": false,
+          "schemaVersion": 1
+        },
+        {
+          "appearance": "dark",
+          "capturedFinalOutputUsedForComparisonOnly": true,
+          "files": {
+            "config.bin": {
+              "byteCount": 52,
+              "role": "independent-input",
+              "sha256": "083afe486f799a2a9dff43496dfd3182bc915b61eded637232330359ed93b113"
+            },
+            "destination.rgba8": {
+              "byteCount": 4194304,
+              "role": "independent-input",
+              "sha256": "5e4b62d5a4982428e362849f62198279a2641cef8a24cfda0589f249324d0f94"
+            },
+            "highlight-indices.u16": {
+              "byteCount": 12,
+              "role": "independent-input",
+              "sha256": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de"
+            },
+            "highlight-uniform.bin": {
+              "byteCount": 248,
+              "role": "independent-input",
+              "sha256": "8d1566019f250198bc23c0cae912bb2c94c79f7829f40dafc200bb18091b4297"
+            },
+            "highlight-vertices.f32": {
+              "byteCount": 128,
+              "role": "independent-input",
+              "sha256": "b9376d453933c068175272d6cb6feb900cd75e8d38447f848bced465c6127a97"
+            },
+            "interpolant-coefficients.rgba32ui": {
+              "byteCount": 832,
+              "role": "independent-input",
+              "sha256": "c0ad965c9aa922a24dc3a1d5261f6a9dc69a86e1b287fb5de38a9b3976a609ee"
+            },
+            "main-vertices.f32": {
+              "byteCount": 192,
+              "role": "independent-input",
+              "sha256": "473d3e9a212b09d4e7435868d28ef37fbb1fe6b3e4a144755d3f01a7b5f7f2cb"
+            },
+            "profile.bin": {
+              "byteCount": 258,
+              "role": "independent-input",
+              "sha256": "641c05867fa4c104e2fa730e5aaec5f406415a86a183dc8ed5e9f417447307cd"
+            },
+            "reference-bottom-left.rgba8": {
+              "byteCount": 4194304,
+              "role": "captured-comparison-oracle-only",
+              "sha256": "8485b506f4026452b376c6993face0805bc2023c55388e7b22ee91c8f8e0fd77"
+            },
+            "shadow-indices.u16": {
+              "byteCount": 96,
+              "role": "independent-input",
+              "sha256": "f40397376a64aba7c2051aa3cfd9adb2d7b94519a40255dc106ac7166c01909c"
+            },
+            "shadow-vertices.f32": {
+              "byteCount": 512,
+              "role": "independent-input",
+              "sha256": "3693e93b40f045a5567aaa0d18d023f928b325780979f7c18cfd998deb7f4b0a"
+            },
+            "source-mip-0.rgba8": {
+              "byteCount": 802816,
+              "role": "independent-input",
+              "sha256": "826a138ebc367130f941ce167d011139260619abf63d2d0e539a0e57b231e373"
+            },
+            "source-mip-1.rgba8": {
+              "byteCount": 200704,
+              "role": "independent-input",
+              "sha256": "7ba37de8d8d56353c0a36fac64313545f4c55c1a2d183dc5baeafe1fa126d618"
+            }
+          },
+          "material": "clear",
+          "name": "clear-dark",
+          "renderInputsCaptured": false,
+          "schemaVersion": 1
+        },
+        {
+          "appearance": "light",
+          "capturedFinalOutputUsedForComparisonOnly": true,
+          "files": {
+            "config.bin": {
+              "byteCount": 52,
+              "role": "independent-input",
+              "sha256": "d3c0f0e4cbad03f99a2a63d892e499afefc5cece7eeacf90d8dc9946bd3191e6"
+            },
+            "destination.rgba8": {
+              "byteCount": 4194304,
+              "role": "independent-input",
+              "sha256": "5e4b62d5a4982428e362849f62198279a2641cef8a24cfda0589f249324d0f94"
+            },
+            "highlight-indices.u16": {
+              "byteCount": 12,
+              "role": "independent-input",
+              "sha256": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de"
+            },
+            "highlight-uniform.bin": {
+              "byteCount": 248,
+              "role": "independent-input",
+              "sha256": "30b19e8ab9929db4306f7b54145a59575ce5cae0cbf72b8def454edf9115d39d"
+            },
+            "highlight-vertices.f32": {
+              "byteCount": 128,
+              "role": "independent-input",
+              "sha256": "5f37fb364ebdea9721228c2e0eb2f8124bcc907fd800a03abd83195ee3278843"
+            },
+            "interpolant-coefficients.rgba32ui": {
+              "byteCount": 832,
+              "role": "independent-input",
+              "sha256": "b1c7e1329c59e268ae927b91511934d167e2582ab1b038423380b6c5db2ca6a5"
+            },
+            "main-vertices.f32": {
+              "byteCount": 192,
+              "role": "independent-input",
+              "sha256": "164003d885a71f69034b5afc1f4445a601c6188563d6ac4c311bce3ab8996d24"
+            },
+            "profile.bin": {
+              "byteCount": 258,
+              "role": "independent-input",
+              "sha256": "3998c5348a9514b9258250bf473a94b1e2ac9201f0ce712bea9462eec2b3ccb6"
+            },
+            "reference-bottom-left.rgba8": {
+              "byteCount": 4194304,
+              "role": "captured-comparison-oracle-only",
+              "sha256": "363dcc211fc4dadfc4e6af91a615df9a1a845585134d2e3d72b055500af01333"
+            },
+            "shadow-indices.u16": {
+              "byteCount": 96,
+              "role": "independent-input",
+              "sha256": "f40397376a64aba7c2051aa3cfd9adb2d7b94519a40255dc106ac7166c01909c"
+            },
+            "shadow-vertices.f32": {
+              "byteCount": 512,
+              "role": "independent-input",
+              "sha256": "e9f3daa4e56c5919074b51b71b4c2abc995df46b7b4e5530a4aa3bf0b49d303c"
+            },
+            "source-mip-0.rgba8": {
+              "byteCount": 589824,
+              "role": "independent-input",
+              "sha256": "d80b6f6b908e5ff52f19c17679d4cef1368d2f7158bb5bc36c84779e0402e504"
+            },
+            "source-mip-1.rgba8": {
+              "byteCount": 147456,
+              "role": "independent-input",
+              "sha256": "2d3d2058daa48a53b33222f0eaf4710e9c2684fbd25cd7fc278a9ff54fc8302a"
+            },
+            "source-mip-2.rgba8": {
+              "byteCount": 36864,
+              "role": "independent-input",
+              "sha256": "d8d9d1de13dedc5a130fab0e06e65e1df05d90d15d241dc3b25bb20db2fa1994"
+            },
+            "source-mip-3.rgba8": {
+              "byteCount": 9216,
+              "role": "independent-input",
+              "sha256": "ec6b863bf8495c90a7a44da34890d52bfebc34d000999d98a5a35b2e1424bad8"
+            },
+            "source-mip-4.rgba8": {
+              "byteCount": 2304,
+              "role": "independent-input",
+              "sha256": "893798a24112d992c095fd7d80205259121ff6146ce023778974b300c26b926e"
+            },
+            "source-mip-5.rgba8": {
+              "byteCount": 576,
+              "role": "independent-input",
+              "sha256": "c503dd81c4bb5a354b48a6fcf720ee45635d5cef72a5601d82f5762a8d99c608"
+            }
+          },
+          "material": "regular",
+          "name": "regular-light",
+          "renderInputsCaptured": false,
+          "schemaVersion": 1
+        },
+        {
+          "appearance": "dark",
+          "capturedFinalOutputUsedForComparisonOnly": true,
+          "files": {
+            "config.bin": {
+              "byteCount": 52,
+              "role": "independent-input",
+              "sha256": "5a3af9e329d2fc12e877570ffdfcb560f85e5e5c7449e7de22e6f419b05d8dd6"
+            },
+            "destination.rgba8": {
+              "byteCount": 4194304,
+              "role": "independent-input",
+              "sha256": "5e4b62d5a4982428e362849f62198279a2641cef8a24cfda0589f249324d0f94"
+            },
+            "highlight-indices.u16": {
+              "byteCount": 12,
+              "role": "independent-input",
+              "sha256": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de"
+            },
+            "highlight-uniform.bin": {
+              "byteCount": 248,
+              "role": "independent-input",
+              "sha256": "bd34dd789e2db6e19d2badf5c4625bcdb42bbbfcc7db0c159017bff7d3f37129"
+            },
+            "highlight-vertices.f32": {
+              "byteCount": 128,
+              "role": "independent-input",
+              "sha256": "5f37fb364ebdea9721228c2e0eb2f8124bcc907fd800a03abd83195ee3278843"
+            },
+            "interpolant-coefficients.rgba32ui": {
+              "byteCount": 832,
+              "role": "independent-input",
+              "sha256": "b1c7e1329c59e268ae927b91511934d167e2582ab1b038423380b6c5db2ca6a5"
+            },
+            "main-vertices.f32": {
+              "byteCount": 192,
+              "role": "independent-input",
+              "sha256": "164003d885a71f69034b5afc1f4445a601c6188563d6ac4c311bce3ab8996d24"
+            },
+            "profile.bin": {
+              "byteCount": 258,
+              "role": "independent-input",
+              "sha256": "af5399ab1c0e8815864b093d1f94eefa1d27787a16e4f4f0a5cda0a65d54f851"
+            },
+            "reference-bottom-left.rgba8": {
+              "byteCount": 4194304,
+              "role": "captured-comparison-oracle-only",
+              "sha256": "d957bf4826ea4d58cabd8b8134f4191a2d3671dc6a693c6c2597de8e27f17110"
+            },
+            "shadow-indices.u16": {
+              "byteCount": 96,
+              "role": "independent-input",
+              "sha256": "f40397376a64aba7c2051aa3cfd9adb2d7b94519a40255dc106ac7166c01909c"
+            },
+            "shadow-vertices.f32": {
+              "byteCount": 512,
+              "role": "independent-input",
+              "sha256": "e9f3daa4e56c5919074b51b71b4c2abc995df46b7b4e5530a4aa3bf0b49d303c"
+            },
+            "source-mip-0.rgba8": {
+              "byteCount": 589824,
+              "role": "independent-input",
+              "sha256": "d80b6f6b908e5ff52f19c17679d4cef1368d2f7158bb5bc36c84779e0402e504"
+            },
+            "source-mip-1.rgba8": {
+              "byteCount": 147456,
+              "role": "independent-input",
+              "sha256": "2d3d2058daa48a53b33222f0eaf4710e9c2684fbd25cd7fc278a9ff54fc8302a"
+            },
+            "source-mip-2.rgba8": {
+              "byteCount": 36864,
+              "role": "independent-input",
+              "sha256": "d8d9d1de13dedc5a130fab0e06e65e1df05d90d15d241dc3b25bb20db2fa1994"
+            },
+            "source-mip-3.rgba8": {
+              "byteCount": 9216,
+              "role": "independent-input",
+              "sha256": "ec6b863bf8495c90a7a44da34890d52bfebc34d000999d98a5a35b2e1424bad8"
+            },
+            "source-mip-4.rgba8": {
+              "byteCount": 2304,
+              "role": "independent-input",
+              "sha256": "893798a24112d992c095fd7d80205259121ff6146ce023778974b300c26b926e"
+            },
+            "source-mip-5.rgba8": {
+              "byteCount": 576,
+              "role": "independent-input",
+              "sha256": "c503dd81c4bb5a354b48a6fcf720ee45635d5cef72a5601d82f5762a8d99c608"
+            }
+          },
+          "material": "regular",
+          "name": "regular-dark",
+          "renderInputsCaptured": false,
+          "schemaVersion": 1
+        }
+      ],
+      "schemaVersion": 1
+    },
+    "fixtureManifestSha256": "eec406115e6b3c2727c4178058e75a4fc6b3595421cb3e15033243e9d4efbe4c",
+    "intrinsicTableSha256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449",
+    "rendererBinary": "build/bin/quality/render_walle_exact_static_gl",
+    "rendererBinarySha256": "287df99cd5f0b98d8da9b2f042ff7241ec9deeaa57b63528714adfefdfb82745",
+    "rendererSource": "parity/render_walle_exact_static_gl.c",
+    "rendererSourceSha256": "54ac70301b62239d937094af503af2fb36cfef11f181ac8706c6e04b24563b96",
+    "shaderManifestSha256": "7ef34c6b86326f56b376b9a4f33987f363cb3e09f0daeb66eb8cfc3f2bf73945"
+  },
+  "productionShader": {
+    "path": "shaders/frag.glsl",
+    "renderedByThisGate": false,
+    "sha256": "6489828f12de599da9633d6183266a81b71ed846a1b03c03cb4eb9c23639352d"
+  },
+  "runs": [
+    {
+      "checkedBytes": 4194304,
+      "deviceIndex": 0,
+      "elapsedMilliseconds": 364.26248704083264,
+      "exact": true,
+      "exitCode": 0,
+      "fixture": "clear-light",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "material": "clear",
+      "maximumChannelDelta": 0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0,
+      "renderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+      "stderr": ""
+    },
+    {
+      "checkedBytes": 4194304,
+      "deviceIndex": 0,
+      "elapsedMilliseconds": 361.63124116137624,
+      "exact": true,
+      "exitCode": 0,
+      "fixture": "clear-dark",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "material": "clear",
+      "maximumChannelDelta": 0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0,
+      "renderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+      "stderr": ""
+    },
+    {
+      "checkedBytes": 4194304,
+      "deviceIndex": 0,
+      "elapsedMilliseconds": 449.59534890949726,
+      "exact": true,
+      "exitCode": 0,
+      "fixture": "regular-light",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "material": "regular",
+      "maximumChannelDelta": 0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0,
+      "renderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+      "stderr": ""
+    },
+    {
+      "checkedBytes": 4194304,
+      "deviceIndex": 0,
+      "elapsedMilliseconds": 463.7897920329124,
+      "exact": true,
+      "exitCode": 0,
+      "fixture": "regular-dark",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "material": "regular",
+      "maximumChannelDelta": 0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0,
+      "renderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+      "stderr": ""
+    },
+    {
+      "checkedBytes": 4194304,
+      "deviceIndex": 1,
+      "elapsedMilliseconds": 362.08020406775177,
+      "exact": true,
+      "exitCode": 0,
+      "fixture": "clear-light",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "material": "clear",
+      "maximumChannelDelta": 0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0,
+      "renderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "stderr": ""
+    },
+    {
+      "checkedBytes": 4194304,
+      "deviceIndex": 1,
+      "elapsedMilliseconds": 420.1684801373631,
+      "exact": true,
+      "exitCode": 0,
+      "fixture": "clear-dark",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "material": "clear",
+      "maximumChannelDelta": 0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0,
+      "renderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "stderr": ""
+    },
+    {
+      "checkedBytes": 4194304,
+      "deviceIndex": 1,
+      "elapsedMilliseconds": 497.9904368519783,
+      "exact": true,
+      "exitCode": 0,
+      "fixture": "regular-light",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "material": "regular",
+      "maximumChannelDelta": 0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0,
+      "renderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "stderr": ""
+    },
+    {
+      "checkedBytes": 4194304,
+      "deviceIndex": 1,
+      "elapsedMilliseconds": 465.03737196326256,
+      "exact": true,
+      "exitCode": 0,
+      "fixture": "regular-dark",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "material": "regular",
+      "maximumChannelDelta": 0,
+      "mismatchedBytes": 0,
+      "mismatchedPixels": 0,
+      "renderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "stderr": ""
+    }
+  ],
+  "schemaVersion": 1,
+  "scope": {
+    "capturedFinalOutputsUsedForComparisonOnly": true,
+    "capturedRenderInputs": false,
+    "formalLiquidGlassParity": false,
+    "independentlyGeneratedCompleteStaticRenderInputs": true,
+    "physicalRetinaOutput": false,
+    "productionWalleProcessRendered": false,
+    "productionWalleWaylandSurfaceRendered": false,
+    "walleOwnedCGlRendererRendered": true
+  },
+  "totals": {
+    "checkedBytes": 33554432,
+    "mismatchedBytes": 0,
+    "mismatchedPixels": 0
+  }
+}

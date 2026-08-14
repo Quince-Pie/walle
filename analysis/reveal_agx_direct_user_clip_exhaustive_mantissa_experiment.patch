@@ -1,0 +1,48 @@
+--- reveal_agx_direct_user_clip_zero_crossing_experiment.swift
++++ reveal_agx_direct_user_clip_exhaustive_mantissa_experiment.swift
+@@ -81,6 +81,10 @@
+     const float viewport = metadata[caseIndex].x == 0u ? 256.0f : 512.0f;
+     (void)viewport;
+-    const float denominator = 65536.0f + float(metadata[caseIndex].z);
++    const uint pattern = metadata[caseIndex].y;
++    const uint mantissa =
++        ((metadata[caseIndex].z * 8u + pattern) << 7u)
++        | WALLE_MANTISSA_LOW7;
++    const float denominator = as_type<float>(0x47800000u + mantissa);
+     const float distanceValue = isOuter ? -1.0f : denominator - 1.0f;
+     const float x = distanceValue * 0x1p-17f;
+     const float y = isBottom ? 0.5f : -0.5f;
+@@ -285,6 +289,13 @@
+     records: [PlanRecord],
+     spans: [GroupSpan]
+ ) throws -> (Data, [String: Any]) {
++    guard let mantissaLow7Text = ProcessInfo.processInfo.environment[
++        "WALLE_AGX_MANTISSA_LOW7"
++    ], let mantissaLow7 = UInt32(mantissaLow7Text), mantissaLow7 < 128 else {
++        throw ProbeError.invalid("WALLE_AGX_MANTISSA_LOW7 must be 0...127")
++    }
++    let configuredMetalSource = metalSource.replacingOccurrences(
++        of: "WALLE_MANTISSA_LOW7", with: "\(mantissaLow7)u")
+     guard let device = MTLCreateSystemDefaultDevice(),
+           let queue = device.makeCommandQueue(),
+           let target = makeTarget(device: device)
+@@ -317,7 +328,10 @@
+ 
+     let options = MTLCompileOptions()
+     options.fastMathEnabled = true
+-    let library = try device.makeLibrary(source: metalSource, options: options)
++    let library = try device.makeLibrary(
++        source: configuredMetalSource,
++        options: options
++    )
+     guard let vertex = library.makeFunction(name: "reveal_basis_vertex"),
+           let fragment = library.makeFunction(name: "reveal_basis_fragment")
+     else {
+@@ -461,6 +475,7 @@
+                 "drawScissor": "one strictly interior pixel per record",
+                 "commandChunkRecords": commandChunkRecords,
+                 "fragmentSourceBody": "byte-identical to authenticated basis-phase probe",
++                "mantissaLow7": mantissaLow7,
+             ],
+         ]
+     )

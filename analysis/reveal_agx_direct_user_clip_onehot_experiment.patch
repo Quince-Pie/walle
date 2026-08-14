@@ -1,0 +1,20 @@
+--- reveal_agx_direct_user_clip_experiment.swift
++++ reveal_agx_direct_user_clip_onehot_experiment.swift
+@@ -85,9 +85,14 @@
+     const float y = isBottom ? viewport * 0.25f : viewport * 0.75f;
+     const float denominator = 65536.0f + float(metadata[caseIndex].z);
++    const uint local = corner % 3u;
++    const float3 oneHot = local == 0u ? float3(1.0f, 0.0f, 0.0f)
++                        : local == 1u ? float3(0.0f, 1.0f, 0.0f)
++                                      : float3(0.0f, 0.0f, 1.0f);
+     BasisVertexOutput output;
+     output.position = mvp * float4(x, y, 0.0f, 1.0f);
+-    output.basis = as_type<float4>(
+-        isOuter ? outerBits[caseIndex] : innerBits[caseIndex]);
++    (void)outerBits;
++    (void)innerBits;
++    output.basis = float4(oneHot, dot(oneHot, float3(1.0f, 2.0f, 4.0f)));
+     output.caseIndex = caseIndex;
+     output.clipDistance = isOuter ? -1.0f : denominator - 1.0f;
+     return output;
+ }

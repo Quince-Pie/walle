@@ -1,0 +1,20 @@
+--- reveal_agx_direct_user_clip_experiment.swift
++++ reveal_agx_direct_user_clip_basis_experiment.swift
+@@ -85,11 +85,15 @@
+     const float y = isBottom ? viewport * 0.25f : viewport * 0.75f;
+     const float denominator = 65536.0f + float(metadata[caseIndex].z);
++    const float distanceValue = isOuter ? -1.0f : denominator - 1.0f;
+     BasisVertexOutput output;
+     output.position = mvp * float4(x, y, 0.0f, 1.0f);
+-    output.basis = as_type<float4>(
+-        isOuter ? outerBits[caseIndex] : innerBits[caseIndex]);
++    (void)outerBits;
++    (void)innerBits;
++    output.basis = float4(x, distanceValue,
++                          isOuter ? 0.0f : 1.0f,
++                          isOuter ? 1.0f : 0.0f);
+     output.caseIndex = caseIndex;
+-    output.clipDistance = isOuter ? -1.0f : denominator - 1.0f;
++    output.clipDistance = distanceValue;
+     return output;
+ }

@@ -1,0 +1,68 @@
+settings set auto-confirm true
+settings set stop-disassembly-count 0
+
+breakpoint set --name IOGPUMetalCommandBufferStorageBeginKernelCommands
+breakpoint command add 1
+  script print("WALLE_LLDB_BEGIN_KERNEL_COMMANDS")
+  bt 8
+  register read x0 x1 x2 x3 x4 x5 x6 x7
+  memory read --force --format x --size 8 --count 32 $x0
+  continue
+DONE
+
+breakpoint set --name IOGPUMetalCommandBufferStorageBeginSegment
+breakpoint command add 2
+  script print("WALLE_LLDB_BEGIN_SEGMENT")
+  bt 14
+  register read x0 x1 x2 x3 x4 x5 x6 x7
+  memory read --force --format x --size 8 --count 24 $x0
+  continue
+DONE
+
+breakpoint set --name IOGPUMetalCommandBufferStorageEndSegment
+breakpoint command add 3
+  script print("WALLE_LLDB_END_SEGMENT")
+  bt 14
+  register read x0 x1 x2 x3 x4 x5 x6 x7
+  memory read --force --format x --size 8 --count 24 $x0
+  continue
+DONE
+
+breakpoint set --name IOGPUMetalCommandBufferStorageEndKernelCommands
+breakpoint command add 4
+  script print("WALLE_LLDB_END_KERNEL_COMMANDS")
+  bt 8
+  register read x0 x1 x2 x3 x4 x5 x6 x7
+  memory read --force --format x --size 8 --count 32 $x0
+  continue
+DONE
+
+breakpoint set --name IOGPUMetalCommandBufferStorageFinalizeShmemHeader
+breakpoint command add 5
+  script print("WALLE_LLDB_FINALIZE_SHMEM_HEADER")
+  bt 8
+  register read x0 x1 x2 x3 x4 x5 x6 x7
+  memory read --force --format x --size 8 --count 32 $x0
+  script p=lldb.debugger.GetSelectedTarget().GetProcess(); e=lldb.SBError(); b=int(lldb.frame.FindRegister("x0").GetValue(),16); c=p.ReadUnsignedFromMemory(b+0x28,8,e); ce=p.ReadUnsignedFromMemory(b+0x30,8,e); s=p.ReadUnsignedFromMemory(b+0x68,8,e); se=p.ReadUnsignedFromMemory(b+0x88,8,e); open("/private/tmp/walle-agx-command-buffer.bin","wb").write(p.ReadMemory(c,ce-c,e)); open("/private/tmp/walle-agx-segment-list.bin","wb").write(p.ReadMemory(s,se-s,e)); print("WALLE_LLDB_DUMP",hex(c),hex(ce),hex(s),hex(se))
+  continue
+DONE
+
+breakpoint set --name IOGPUMetalCommandBufferStorageGetSegmentListPointers
+breakpoint command add 6
+  script print("WALLE_LLDB_SEGMENT_LIST_POINTERS")
+  bt 8
+  register read x0 x1 x2 x3 x4 x5 x6 x7
+  memory read --force --format x --size 8 --count 32 $x0
+  continue
+DONE
+
+breakpoint set --name IOGPUCommandQueueSubmitCommandBuffers
+breakpoint command add 7
+  script print("WALLE_LLDB_SUBMIT_COMMAND_BUFFERS")
+  bt 8
+  register read x0 x1 x2 x3 x4 x5 x6 x7
+  memory read --force --format x --size 8 --count 16 $x3
+  continue
+DONE
+
+run

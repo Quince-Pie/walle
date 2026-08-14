@@ -1,0 +1,254 @@
+{
+  "device": {
+    "renderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "vendor": "AMD",
+    "version": "4.6 (Core Profile) Mesa 26.1.5"
+  },
+  "fixtures": [
+    {
+      "checkedBytes": 4194304,
+      "checkedPixels": 1048576,
+      "comparison": {
+        "exact": false,
+        "maximumChannelDelta": 2,
+        "meanAbsoluteChannelDelta": 7.128715515136719e-05,
+        "mismatchedBytes": 297,
+        "mismatchedPixels": 260
+      },
+      "finalHighlight": {
+        "indexSha256": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de",
+        "source": "independent-static-highlight-construction",
+        "uniformPrefixByteCount": 248,
+        "uniformPrefixSha256": "ffd866689cc7391ffc0a19cf61446ea5b173869316ea7de6df0f37ab9506024a",
+        "vertexComponentSha256": "b9376d453933c068175272d6cb6feb900cd75e8d38447f848bced465c6127a97"
+      },
+      "height": 1024,
+      "name": "clear-light",
+      "passGeometry": {
+        "mainVertexComponentSha256": "473d3e9a212b09d4e7435868d28ef37fbb1fe6b3e4a144755d3f01a7b5f7f2cb",
+        "shadowIndexSha256": "f40397376a64aba7c2051aa3cfd9adb2d7b94519a40255dc106ac7166c01909c",
+        "shadowVertexComponentSha256": "3693e93b40f045a5567aaa0d18d023f928b325780979f7c18cfd998deb7f4b0a",
+        "source": "independent-static-circle-construction"
+      },
+      "profilePayload": {
+        "byteCount": 258,
+        "sha256": "641c05867fa4c104e2fa730e5aaec5f406415a86a183dc8ed5e9f417447307cd",
+        "source": "independent-static-profile-construction"
+      },
+      "staticBackground": {
+        "destinationBgraSha256": "25be6fc6fd65b25af8fd06534cb5c80d2bd0e98c009e1db0bd19762b295be1dd",
+        "source": "independent-coordinate-hash-construction",
+        "wallpaperRgbaSha256": "5e4b62d5a4982428e362849f62198279a2641cef8a24cfda0589f249324d0f94"
+      },
+      "width": 1024
+    },
+    {
+      "checkedBytes": 4194304,
+      "checkedPixels": 1048576,
+      "comparison": {
+        "exact": false,
+        "maximumChannelDelta": 2,
+        "meanAbsoluteChannelDelta": 6.961822509765625e-05,
+        "mismatchedBytes": 261,
+        "mismatchedPixels": 230
+      },
+      "finalHighlight": {
+        "indexSha256": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de",
+        "source": "independent-static-highlight-construction",
+        "uniformPrefixByteCount": 248,
+        "uniformPrefixSha256": "8d1566019f250198bc23c0cae912bb2c94c79f7829f40dafc200bb18091b4297",
+        "vertexComponentSha256": "b9376d453933c068175272d6cb6feb900cd75e8d38447f848bced465c6127a97"
+      },
+      "height": 1024,
+      "name": "clear-dark",
+      "passGeometry": {
+        "mainVertexComponentSha256": "473d3e9a212b09d4e7435868d28ef37fbb1fe6b3e4a144755d3f01a7b5f7f2cb",
+        "shadowIndexSha256": "f40397376a64aba7c2051aa3cfd9adb2d7b94519a40255dc106ac7166c01909c",
+        "shadowVertexComponentSha256": "3693e93b40f045a5567aaa0d18d023f928b325780979f7c18cfd998deb7f4b0a",
+        "source": "independent-static-circle-construction"
+      },
+      "profilePayload": {
+        "byteCount": 258,
+        "sha256": "641c05867fa4c104e2fa730e5aaec5f406415a86a183dc8ed5e9f417447307cd",
+        "source": "independent-static-profile-construction"
+      },
+      "staticBackground": {
+        "destinationBgraSha256": "25be6fc6fd65b25af8fd06534cb5c80d2bd0e98c009e1db0bd19762b295be1dd",
+        "source": "independent-coordinate-hash-construction",
+        "wallpaperRgbaSha256": "5e4b62d5a4982428e362849f62198279a2641cef8a24cfda0589f249324d0f94"
+      },
+      "width": 1024
+    },
+    {
+      "checkedBytes": 4194304,
+      "checkedPixels": 1048576,
+      "comparison": {
+        "exact": false,
+        "maximumChannelDelta": 2,
+        "meanAbsoluteChannelDelta": 6.890296936035156e-05,
+        "mismatchedBytes": 275,
+        "mismatchedPixels": 244
+      },
+      "finalHighlight": {
+        "indexSha256": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de",
+        "source": "independent-static-highlight-construction",
+        "uniformPrefixByteCount": 248,
+        "uniformPrefixSha256": "30b19e8ab9929db4306f7b54145a59575ce5cae0cbf72b8def454edf9115d39d",
+        "vertexComponentSha256": "5f37fb364ebdea9721228c2e0eb2f8124bcc907fd800a03abd83195ee3278843"
+      },
+      "height": 1024,
+      "name": "regular-light",
+      "passGeometry": {
+        "mainVertexComponentSha256": "164003d885a71f69034b5afc1f4445a601c6188563d6ac4c311bce3ab8996d24",
+        "shadowIndexSha256": "f40397376a64aba7c2051aa3cfd9adb2d7b94519a40255dc106ac7166c01909c",
+        "shadowVertexComponentSha256": "e9f3daa4e56c5919074b51b71b4c2abc995df46b7b4e5530a4aa3bf0b49d303c",
+        "source": "independent-static-circle-construction"
+      },
+      "profilePayload": {
+        "byteCount": 258,
+        "sha256": "3998c5348a9514b9258250bf473a94b1e2ac9201f0ce712bea9462eec2b3ccb6",
+        "source": "independent-static-profile-construction"
+      },
+      "staticBackground": {
+        "destinationBgraSha256": "25be6fc6fd65b25af8fd06534cb5c80d2bd0e98c009e1db0bd19762b295be1dd",
+        "source": "independent-coordinate-hash-construction",
+        "wallpaperRgbaSha256": "5e4b62d5a4982428e362849f62198279a2641cef8a24cfda0589f249324d0f94"
+      },
+      "width": 1024
+    },
+    {
+      "checkedBytes": 4194304,
+      "checkedPixels": 1048576,
+      "comparison": {
+        "exact": false,
+        "maximumChannelDelta": 3,
+        "meanAbsoluteChannelDelta": 7.152557373046875e-05,
+        "mismatchedBytes": 254,
+        "mismatchedPixels": 205
+      },
+      "finalHighlight": {
+        "indexSha256": "cdd30f0b81cab4dfa7b9612bc1866099b922c77e381302d6efd3f70ca0a9d0de",
+        "source": "independent-static-highlight-construction",
+        "uniformPrefixByteCount": 248,
+        "uniformPrefixSha256": "bd34dd789e2db6e19d2badf5c4625bcdb42bbbfcc7db0c159017bff7d3f37129",
+        "vertexComponentSha256": "5f37fb364ebdea9721228c2e0eb2f8124bcc907fd800a03abd83195ee3278843"
+      },
+      "height": 1024,
+      "name": "regular-dark",
+      "passGeometry": {
+        "mainVertexComponentSha256": "164003d885a71f69034b5afc1f4445a601c6188563d6ac4c311bce3ab8996d24",
+        "shadowIndexSha256": "f40397376a64aba7c2051aa3cfd9adb2d7b94519a40255dc106ac7166c01909c",
+        "shadowVertexComponentSha256": "e9f3daa4e56c5919074b51b71b4c2abc995df46b7b4e5530a4aa3bf0b49d303c",
+        "source": "independent-static-circle-construction"
+      },
+      "profilePayload": {
+        "byteCount": 258,
+        "sha256": "af5399ab1c0e8815864b093d1f94eefa1d27787a16e4f4f0a5cda0a65d54f851",
+        "source": "independent-static-profile-construction"
+      },
+      "staticBackground": {
+        "destinationBgraSha256": "25be6fc6fd65b25af8fd06534cb5c80d2bd0e98c009e1db0bd19762b295be1dd",
+        "source": "independent-coordinate-hash-construction",
+        "wallpaperRgbaSha256": "5e4b62d5a4982428e362849f62198279a2641cef8a24cfda0589f249324d0f94"
+      },
+      "width": 1024
+    }
+  ],
+  "gate": {
+    "amdCircleReferenceExact": false,
+    "amdRadeonsiDevice": true,
+    "observedDeviceAdmitted": false,
+    "productionWalleParityEstablished": false
+  },
+  "provenance": {
+    "fixtures": {
+      "clear-dark": {
+        "byteCount": 918569737,
+        "fileCount": 426,
+        "sha256": "190a347558b2bb4acb9521b5f90a69ea065bc285d6f87b67584c87be2ca54f9c"
+      },
+      "clear-light": {
+        "byteCount": 918562768,
+        "fileCount": 426,
+        "sha256": "8878b38899e772781f1e45504de4db16ac5d234b892f53af5f66175043c96c59"
+      },
+      "regular-dark": {
+        "byteCount": 953708560,
+        "fileCount": 471,
+        "sha256": "06e67eea120d9aa06aa911d973841c4029b2f9cf3a4953556d30c83e4e9d756f"
+      },
+      "regular-light": {
+        "byteCount": 953694227,
+        "fileCount": 471,
+        "sha256": "85d1ae00b6dccba3467fe34a27386defeeacdf1f193953805bb1b9d3e5e27f9a"
+      }
+    },
+    "oracleSources": {
+      "analysis/apple_glass_reference.frag.glsl": "e55157fce1bbb96282e8b34d5f89e9f4b4cc22e2aed7ef171d4a870b9ab09610",
+      "analysis/apple_glass_reference.vert.glsl": "99d6942f6b39b52460c23b4e52c498f2d98a03cb6ffc32d87ef6e94c43e7a958",
+      "analysis/apple_glass_reference_renderer.py": "cc60beb7fe2654113d9c695f561f3db6d930e862b555fb568d9f4885910e8631",
+      "analysis/liquid_glass_backdrop_pyramid.py": "f67be9eb8eadc7633c5092a6e9ea3664e41089403ce420420db9dd3ff05bd558",
+      "analysis/liquid_glass_geometry_transfer.py": "622f6bfa71bebc2255b3ebd6713498878a74394001ef176a81368414cef4c84f",
+      "analysis/liquid_glass_independent_mips.py": "932cf6a8ff261eb15a414cabf22468b5c459b755468bc863d8e1ae31dcdf52ab",
+      "analysis/liquid_glass_profile_matrix.py": "f8e3c1889b999f29b6cc09a50aa1e4f8881414af2560b2f06dc2b50bff858611",
+      "analysis/liquid_glass_raster_interpolant.py": "44976f1eea71a67a9843c42885fb600b90bbe42447b0864d74dffd1898c28d61",
+      "analysis/liquid_glass_runtime_raster_coefficients.py": "f9c1759a0e75ad527754f2d43ab1ace5c9e9077632fd4cd30d13a0341270d489",
+      "analysis/liquid_glass_shader_specialization.py": "d631aa10c78ff7ef61f010e3f53807c6301923255cbab43c11203c6c56330665",
+      "analysis/liquid_glass_static_background.py": "29a5c43ccf9d7371ca8d609c5814cf904964b7e7b363f69c66840d75f48b4cdd",
+      "analysis/liquid_glass_static_geometry.py": "13165815a355b6883a9edbd821d195482f624a888786afeda061b1e9e4be9857",
+      "analysis/liquid_glass_static_highlight.py": "0da14294a3a474e27dc64977badb87031acb77dfd59f7ce78a9b5cbfc7e1e259",
+      "analysis/liquid_glass_static_profile.py": "bd145eac6b0337825a725b79daa91d31175df6ec4a3fedfb617b277dbb77b9b8",
+      "artifacts/apple-float-intrinsics-r8-30556057571.bin": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449",
+      "lg-test/Analysis/raster_tile_coefficient_model.py": "69b8546e26dbd17009260621b1a72610e9c25efee21e68022b07c9f00c599248",
+      "lg-test/Analysis/raster_tile_coefficient_model_v3.py": "99c1725d9fdec0877b8510fb92aaa4a4ee398e61b0c579f0b1c1a0471520f1fe",
+      "lg-test/Analysis/raster_tile_iterator_model.py": "bf0b926e759f9234d924ccd82654abc07ad8bb9ff10c9058ba5a284886dd2429",
+      "lg-test/Analysis/raster_tile_selector_model.py": "1874d8c452dce244bd8ae2cb7fbf05d0d454a815c0c37c285e1c377524c9369d",
+      "lg-test/Analysis/raster_tile_selector_model_v4.py": "f1918f51974f486510ce5d68724cff015bb2e7f618a1153016d464cd9240a103",
+      "parity/liquid_glass_static_profile.c": "f871cac9ff04614344da9625e75c9e72a77e9b27b3c2bb09471f39b64542f340",
+      "parity/liquid_glass_static_profile.h": "70635f2cba97b9ebaf6f609129a0b60b17bed0b5287900ff5f1f658e886ee172"
+    },
+    "productionShader": {
+      "path": "shaders/frag.glsl",
+      "renderedByThisGate": false,
+      "sha256": "6489828f12de599da9633d6183266a81b71ed846a1b03c03cb4eb9c23639352d"
+    }
+  },
+  "schemaVersion": 1,
+  "scope": {
+    "amdCircleSpecializationRendered": true,
+    "capturedDestinationPrepass": false,
+    "capturedFinalHighlightInputs": false,
+    "capturedPassGeometry": false,
+    "capturedPrivateProfilePayloads": false,
+    "formalLiquidGlassParity": false,
+    "independentlyGeneratedBackdropPyramid": true,
+    "independentlyGeneratedDestinationPrepass": true,
+    "independentlyGeneratedFinalHighlightInputs": true,
+    "independentlyGeneratedStaticPassGeometry": true,
+    "independentlyGeneratedStaticProfilePayloads": true,
+    "independentlyGeneratedStaticWallpaper": true,
+    "physicalRetinaOutput": false,
+    "productionWalleDisplayContextUsed": false,
+    "productionWalleProcessRendered": false
+  },
+  "testedRenderer": {
+    "inputMode": "independently-generated-complete-static-render-inputs",
+    "kind": "amd-gles-compatible-circle-reference-gate",
+    "shaders": {
+      "clear": {
+        "byteCount": 124355,
+        "sha256": "5fe884e7e1e52eb4f5860ad8d9a62e91310e7dad4411c00c553bdfb324a887bf"
+      },
+      "regular": {
+        "byteCount": 124339,
+        "sha256": "f24cb92063148ea34bc0573f587fd2ea66a03c79d45ab79051031928553bed0a"
+      }
+    }
+  },
+  "totals": {
+    "checkedBytes": 16777216,
+    "checkedPixels": 4194304,
+    "mismatchedBytes": 1087,
+    "mismatchedPixels": 939
+  }
+}

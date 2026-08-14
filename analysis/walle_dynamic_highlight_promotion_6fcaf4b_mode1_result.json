@@ -1,0 +1,562 @@
+{
+  "anchorPolicy": null,
+  "appleOracles": {
+    "1": {
+      "alpha": {
+        "activePixels": 2479,
+        "inactiveRgbIsZero": true,
+        "outputAlphaIsOne": true,
+        "rawFile": "transition-background-uniform-01-current-system-alpha-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+        "rgbChannelsEqual": true
+      },
+      "interpolant": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 248004,
+        "rawFile": "transition-background-uniform-01-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    },
+    "12": {
+      "alpha": {
+        "activePixels": 2482,
+        "inactiveRgbIsZero": true,
+        "outputAlphaIsOne": true,
+        "rawFile": "transition-background-uniform-12-current-system-alpha-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+        "rgbChannelsEqual": true
+      },
+      "interpolant": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 254016,
+        "rawFile": "transition-background-uniform-12-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    },
+    "16": {
+      "alpha": {
+        "activePixels": 2498,
+        "inactiveRgbIsZero": true,
+        "outputAlphaIsOne": true,
+        "rawFile": "transition-background-uniform-16-current-system-alpha-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+        "rgbChannelsEqual": true
+      },
+      "interpolant": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 256036,
+        "rawFile": "transition-background-uniform-16-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    },
+    "20": {
+      "alpha": {
+        "activePixels": 2508,
+        "inactiveRgbIsZero": true,
+        "outputAlphaIsOne": true,
+        "rawFile": "transition-background-uniform-20-current-system-alpha-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+        "rgbChannelsEqual": true
+      },
+      "interpolant": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 258064,
+        "rawFile": "transition-background-uniform-20-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    },
+    "24": {
+      "alpha": {
+        "activePixels": 2493,
+        "inactiveRgbIsZero": true,
+        "outputAlphaIsOne": true,
+        "rawFile": "transition-background-uniform-24-current-system-alpha-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+        "rgbChannelsEqual": true
+      },
+      "interpolant": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 260100,
+        "rawFile": "transition-background-uniform-24-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    },
+    "28": {
+      "alpha": {
+        "activePixels": 0,
+        "inactiveRgbIsZero": true,
+        "outputAlphaIsOne": true,
+        "rawFile": "transition-background-uniform-28-current-system-alpha-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+        "rgbChannelsEqual": true
+      },
+      "interpolant": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 0,
+        "rawFile": "transition-background-uniform-28-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    },
+    "4": {
+      "alpha": {
+        "activePixels": 2406,
+        "inactiveRgbIsZero": true,
+        "outputAlphaIsOne": true,
+        "rawFile": "transition-background-uniform-04-current-system-alpha-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+        "rgbChannelsEqual": true
+      },
+      "interpolant": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 250000,
+        "rawFile": "transition-background-uniform-04-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    },
+    "8": {
+      "alpha": {
+        "activePixels": 2482,
+        "inactiveRgbIsZero": true,
+        "outputAlphaIsOne": true,
+        "rawFile": "transition-background-uniform-08-current-system-alpha-final-highlight-alpha-rebuilt-rgba16float-rgba16f.raw",
+        "rgbChannelsEqual": true
+      },
+      "interpolant": {
+        "components": [
+          "sdf-x",
+          "sdf-y",
+          "source-x",
+          "source-y"
+        ],
+        "rasterizedPixels": 252004,
+        "rawFile": "transition-background-uniform-08-current-system-alpha-final-highlight-alpha-interpolant-rgba32uint-rgba32ui.raw"
+      }
+    }
+  },
+  "capture": "artifacts/capture-natural-promotion-6fcaf4b-01",
+  "cases": [
+    {
+      "appleActivePixels": 2479,
+      "candidateActivePixels": 2479,
+      "checkedHalfWords": 1048576,
+      "finalHighlightBackFacing": false,
+      "firstMismatches": [],
+      "highlightArithmeticModes": {
+        "alphaUlpBias": 0,
+        "band": 0,
+        "coordinate": 1,
+        "coverage": 1,
+        "derivative": 1,
+        "destinationDivision": 0,
+        "floatDivision": 1,
+        "mix": 0,
+        "normalize": 1,
+        "normalizedCoordinate": 0,
+        "sdfArithmetic": 0,
+        "sdfDistanceUlpBias": 0,
+        "sdfSquaredUlpBias": 0,
+        "sourceConstruction": 1,
+        "sourceDivision": 0,
+        "useAppleHalfIntrinsicTable": false
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "maximumPositiveHalfBitDistance": 0,
+      "mismatchPairs": [],
+      "mismatchedHalfWords": 0,
+      "remainingFloat32Bits": "0x3f77c1d0",
+      "sampleIndex": 1,
+      "sdfInterpolants": {
+        "appleRasterizedPixels": 248004,
+        "candidateRasterizedPixels": 248004,
+        "checkedWords": 2097152,
+        "firstMismatches": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      }
+    },
+    {
+      "appleActivePixels": 2406,
+      "candidateActivePixels": 2406,
+      "checkedHalfWords": 1048576,
+      "finalHighlightBackFacing": false,
+      "firstMismatches": [],
+      "highlightArithmeticModes": {
+        "alphaUlpBias": 0,
+        "band": 0,
+        "coordinate": 1,
+        "coverage": 1,
+        "derivative": 1,
+        "destinationDivision": 0,
+        "floatDivision": 1,
+        "mix": 0,
+        "normalize": 1,
+        "normalizedCoordinate": 0,
+        "sdfArithmetic": 0,
+        "sdfDistanceUlpBias": 0,
+        "sdfSquaredUlpBias": 0,
+        "sourceConstruction": 1,
+        "sourceDivision": 0,
+        "useAppleHalfIntrinsicTable": false
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "maximumPositiveHalfBitDistance": 0,
+      "mismatchPairs": [],
+      "mismatchedHalfWords": 0,
+      "remainingFloat32Bits": "0x3f5ff800",
+      "sampleIndex": 4,
+      "sdfInterpolants": {
+        "appleRasterizedPixels": 250000,
+        "candidateRasterizedPixels": 250000,
+        "checkedWords": 2097152,
+        "firstMismatches": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      }
+    },
+    {
+      "appleActivePixels": 2482,
+      "candidateActivePixels": 2482,
+      "checkedHalfWords": 1048576,
+      "finalHighlightBackFacing": false,
+      "firstMismatches": [],
+      "highlightArithmeticModes": {
+        "alphaUlpBias": 0,
+        "band": 0,
+        "coordinate": 1,
+        "coverage": 1,
+        "derivative": 1,
+        "destinationDivision": 0,
+        "floatDivision": 1,
+        "mix": 0,
+        "normalize": 1,
+        "normalizedCoordinate": 0,
+        "sdfArithmetic": 0,
+        "sdfDistanceUlpBias": 0,
+        "sdfSquaredUlpBias": 0,
+        "sourceConstruction": 1,
+        "sourceDivision": 0,
+        "useAppleHalfIntrinsicTable": false
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "maximumPositiveHalfBitDistance": 0,
+      "mismatchPairs": [],
+      "mismatchedHalfWords": 0,
+      "remainingFloat32Bits": "0x3f3fb850",
+      "sampleIndex": 8,
+      "sdfInterpolants": {
+        "appleRasterizedPixels": 252004,
+        "candidateRasterizedPixels": 252004,
+        "checkedWords": 2097152,
+        "firstMismatches": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      }
+    },
+    {
+      "appleActivePixels": 2482,
+      "candidateActivePixels": 2482,
+      "checkedHalfWords": 1048576,
+      "finalHighlightBackFacing": false,
+      "firstMismatches": [],
+      "highlightArithmeticModes": {
+        "alphaUlpBias": 0,
+        "band": 0,
+        "coordinate": 1,
+        "coverage": 1,
+        "derivative": 1,
+        "destinationDivision": 0,
+        "floatDivision": 1,
+        "mix": 0,
+        "normalize": 1,
+        "normalizedCoordinate": 0,
+        "sdfArithmetic": 0,
+        "sdfDistanceUlpBias": 0,
+        "sdfSquaredUlpBias": 0,
+        "sourceConstruction": 1,
+        "sourceDivision": 0,
+        "useAppleHalfIntrinsicTable": false
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "maximumPositiveHalfBitDistance": 0,
+      "mismatchPairs": [],
+      "mismatchedHalfWords": 0,
+      "remainingFloat32Bits": "0x3f1fedb0",
+      "sampleIndex": 12,
+      "sdfInterpolants": {
+        "appleRasterizedPixels": 254016,
+        "candidateRasterizedPixels": 254016,
+        "checkedWords": 2097152,
+        "firstMismatches": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      }
+    },
+    {
+      "appleActivePixels": 2498,
+      "candidateActivePixels": 2498,
+      "checkedHalfWords": 1048576,
+      "finalHighlightBackFacing": false,
+      "firstMismatches": [],
+      "highlightArithmeticModes": {
+        "alphaUlpBias": 0,
+        "band": 0,
+        "coordinate": 1,
+        "coverage": 1,
+        "derivative": 1,
+        "destinationDivision": 0,
+        "floatDivision": 1,
+        "mix": 0,
+        "normalize": 1,
+        "normalizedCoordinate": 0,
+        "sdfArithmetic": 0,
+        "sdfDistanceUlpBias": 0,
+        "sdfSquaredUlpBias": 0,
+        "sourceConstruction": 1,
+        "sourceDivision": 0,
+        "useAppleHalfIntrinsicTable": false
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "maximumPositiveHalfBitDistance": 0,
+      "mismatchPairs": [],
+      "mismatchedHalfWords": 0,
+      "remainingFloat32Bits": "0x3eff4be0",
+      "sampleIndex": 16,
+      "sdfInterpolants": {
+        "appleRasterizedPixels": 256036,
+        "candidateRasterizedPixels": 256036,
+        "checkedWords": 2097152,
+        "firstMismatches": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      }
+    },
+    {
+      "appleActivePixels": 2508,
+      "candidateActivePixels": 2508,
+      "checkedHalfWords": 1048576,
+      "finalHighlightBackFacing": false,
+      "firstMismatches": [],
+      "highlightArithmeticModes": {
+        "alphaUlpBias": 0,
+        "band": 0,
+        "coordinate": 1,
+        "coverage": 1,
+        "derivative": 1,
+        "destinationDivision": 0,
+        "floatDivision": 1,
+        "mix": 0,
+        "normalize": 1,
+        "normalizedCoordinate": 0,
+        "sdfArithmetic": 0,
+        "sdfDistanceUlpBias": 0,
+        "sdfSquaredUlpBias": 0,
+        "sourceConstruction": 1,
+        "sourceDivision": 0,
+        "useAppleHalfIntrinsicTable": false
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "maximumPositiveHalfBitDistance": 0,
+      "mismatchPairs": [],
+      "mismatchedHalfWords": 0,
+      "remainingFloat32Bits": "0x3ebf7020",
+      "sampleIndex": 20,
+      "sdfInterpolants": {
+        "appleRasterizedPixels": 258064,
+        "candidateRasterizedPixels": 258064,
+        "checkedWords": 2097152,
+        "firstMismatches": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      }
+    },
+    {
+      "appleActivePixels": 2493,
+      "candidateActivePixels": 2493,
+      "checkedHalfWords": 1048576,
+      "finalHighlightBackFacing": false,
+      "firstMismatches": [],
+      "highlightArithmeticModes": {
+        "alphaUlpBias": 0,
+        "band": 0,
+        "coordinate": 1,
+        "coverage": 1,
+        "derivative": 1,
+        "destinationDivision": 0,
+        "floatDivision": 1,
+        "mix": 0,
+        "normalize": 1,
+        "normalizedCoordinate": 0,
+        "sdfArithmetic": 0,
+        "sdfDistanceUlpBias": 0,
+        "sdfSquaredUlpBias": 0,
+        "sourceConstruction": 1,
+        "sourceDivision": 0,
+        "useAppleHalfIntrinsicTable": false
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "maximumPositiveHalfBitDistance": 0,
+      "mismatchPairs": [],
+      "mismatchedHalfWords": 0,
+      "remainingFloat32Bits": "0x3e7f9600",
+      "sampleIndex": 24,
+      "sdfInterpolants": {
+        "appleRasterizedPixels": 260100,
+        "candidateRasterizedPixels": 260100,
+        "checkedWords": 2097152,
+        "firstMismatches": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      }
+    },
+    {
+      "appleActivePixels": 0,
+      "candidateActivePixels": 0,
+      "checkedHalfWords": 1048576,
+      "finalHighlightBackFacing": true,
+      "firstMismatches": [],
+      "highlightArithmeticModes": {
+        "alphaUlpBias": 0,
+        "band": 0,
+        "coordinate": 1,
+        "coverage": 1,
+        "derivative": 1,
+        "destinationDivision": 0,
+        "floatDivision": 1,
+        "mix": 0,
+        "normalize": 1,
+        "normalizedCoordinate": 0,
+        "sdfArithmetic": 0,
+        "sdfDistanceUlpBias": 0,
+        "sdfSquaredUlpBias": 0,
+        "sourceConstruction": 1,
+        "sourceDivision": 0,
+        "useAppleHalfIntrinsicTable": false
+      },
+      "implementation": {
+        "fragmentShaderBytes": 127884,
+        "fragmentShaderSha256": "db6d8b23575b1b98ac688ff304f29fd86900fa4d2d7e31e5075536b54be91dba",
+        "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+        "glVendor": "AMD",
+        "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+        "moderngl": "5.12.0",
+        "numpy": "2.4.4",
+        "python": "3.14.4"
+      },
+      "maximumPositiveHalfBitDistance": 0,
+      "mismatchPairs": [],
+      "mismatchedHalfWords": 0,
+      "remainingFloat32Bits": "0x3dfee500",
+      "sampleIndex": 28,
+      "sdfInterpolants": {
+        "appleRasterizedPixels": 0,
+        "candidateRasterizedPixels": 0,
+        "checkedWords": 2097152,
+        "firstMismatches": [],
+        "mismatchedPixels": 0,
+        "mismatchedWords": 0
+      }
+    }
+  ],
+  "coordinateMode": 4,
+  "fixtures": "build/generated/liquid-glass/dynamic-highlight-promotion-6fcaf4b-fixtures",
+  "interpolantGeometry": "axis-highlight",
+  "modeOverrides": {
+    "floatDivision": 1
+  },
+  "nearSquareSelectorCalibration": "/tmp/walle/lg-test/Analysis/raster_small_near_square_selectors_u32le.zlib",
+  "schemaVersion": 1,
+  "scope": "natural current-Iscd internal binary16 highlight alpha",
+  "squareSelectorCalibration": "/tmp/walle/lg-test/Analysis/raster_small_square_selectors_u32le.zlib",
+  "totals": {
+    "checkedHalfWords": 8388608,
+    "checkedSdfInterpolantWords": 16777216,
+    "maximumPositiveHalfBitDistance": 0,
+    "mismatchedHalfWords": 0,
+    "mismatchedSdfInterpolantPixels": 0,
+    "mismatchedSdfInterpolantWords": 0
+  }
+}

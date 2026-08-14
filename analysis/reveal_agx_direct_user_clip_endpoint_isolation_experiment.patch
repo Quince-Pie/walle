@@ -1,0 +1,60 @@
+--- reveal_agx_direct_user_clip_distance_numerator_experiment.swift
++++ reveal_agx_direct_user_clip_endpoint_isolation_experiment.swift
+@@ -88,15 +88,52 @@
+     const float x = distanceValue * 0x1p-17f;
+     const float y = isBottom ? 0.5f : -0.5f;
+-    const uint local = corner % 3u;
+-    const float3 oneHot = local == 0u ? float3(1.0f, 0.0f, 0.0f)
+-                        : local == 1u ? float3(0.0f, 1.0f, 0.0f)
+-                                      : float3(0.0f, 0.0f, 1.0f);
++    const uint pattern = metadata[caseIndex].y;
++    const float a = as_type<float>(0x3f800001u);
++    const float b = as_type<float>(0x3f7fffffu);
++    const float small = as_type<float>(0x35800001u);
++    const float large = as_type<float>(0x49800001u);
++    float4 outer;
++    float4 inner;
++    switch (pattern) {
++    case 0u:
++        outer = float4(a, 0.0f, -a, 0.0f);
++        inner = float4(0.0f, a, 0.0f, -a);
++        break;
++    case 1u:
++        outer = float4(b, 0.0f, -b, 0.0f);
++        inner = float4(0.0f, b, 0.0f, -b);
++        break;
++    case 2u:
++        outer = float4(small, 0.0f, -small, 0.0f);
++        inner = float4(0.0f, small, 0.0f, -small);
++        break;
++    case 3u:
++        outer = float4(large, 0.0f, -large, 0.0f);
++        inner = float4(0.0f, large, 0.0f, -large);
++        break;
++    case 4u:
++        outer = float4(a, -a, b, -b);
++        inner = float4(-a, a, -b, b);
++        break;
++    case 5u:
++        outer = float4(small, -small, large, -large);
++        inner = float4(-small, small, -large, large);
++        break;
++    case 6u:
++        outer = float4(a, b, -a, -b);
++        inner = float4(b, a, -b, -a);
++        break;
++    default:
++        outer = float4(0.25f, -0.25f, 1024.0f, -1024.0f);
++        inner = float4(0.75f, -0.75f, 1025.0f, -1025.0f);
++        break;
++    }
+     BasisVertexOutput output;
+     (void)mvp;
+     output.position = float4(x, y, 0.0f, 1.0f);
+     (void)outerBits;
+     (void)innerBits;
+-    output.basis = float4(oneHot, dot(oneHot, float3(1.0f, 2.0f, 4.0f)));
++    output.basis = isOuter ? outer : inner;
+     output.caseIndex = caseIndex;
+     output.clipDistance = distanceValue;
+     return output;

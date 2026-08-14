@@ -1,0 +1,139 @@
+{
+  "fixtures": [
+    {
+      "checkedBytes": 4194304,
+      "checkedPixels": 1048576,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "height": 1024,
+      "name": "clear-light",
+      "width": 1024
+    },
+    {
+      "checkedBytes": 4194304,
+      "checkedPixels": 1048576,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "height": 1024,
+      "name": "clear-dark",
+      "width": 1024
+    },
+    {
+      "checkedBytes": 4194304,
+      "checkedPixels": 1048576,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "height": 1024,
+      "name": "regular-light",
+      "width": 1024
+    },
+    {
+      "checkedBytes": 4194304,
+      "checkedPixels": 1048576,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "height": 1024,
+      "name": "regular-dark",
+      "width": 1024
+    }
+  ],
+  "gate": {
+    "capturedInputReferenceExact": true,
+    "productionWalleParityEstablished": false
+  },
+  "provenance": {
+    "fixtures": {
+      "clear-dark": {
+        "byteCount": 918569737,
+        "fileCount": 426,
+        "sha256": "190a347558b2bb4acb9521b5f90a69ea065bc285d6f87b67584c87be2ca54f9c"
+      },
+      "clear-light": {
+        "byteCount": 918562768,
+        "fileCount": 426,
+        "sha256": "8878b38899e772781f1e45504de4db16ac5d234b892f53af5f66175043c96c59"
+      },
+      "regular-dark": {
+        "byteCount": 953708560,
+        "fileCount": 471,
+        "sha256": "06e67eea120d9aa06aa911d973841c4029b2f9cf3a4953556d30c83e4e9d756f"
+      },
+      "regular-light": {
+        "byteCount": 953694227,
+        "fileCount": 471,
+        "sha256": "85d1ae00b6dccba3467fe34a27386defeeacdf1f193953805bb1b9d3e5e27f9a"
+      }
+    },
+    "oracleSources": {
+      "analysis/apple_glass_reference.frag.glsl": "e55157fce1bbb96282e8b34d5f89e9f4b4cc22e2aed7ef171d4a870b9ab09610",
+      "analysis/apple_glass_reference.vert.glsl": "99d6942f6b39b52460c23b4e52c498f2d98a03cb6ffc32d87ef6e94c43e7a958",
+      "analysis/apple_glass_reference_renderer.py": "cc60beb7fe2654113d9c695f561f3db6d930e862b555fb568d9f4885910e8631",
+      "analysis/liquid_glass_backdrop_pyramid.py": "f67be9eb8eadc7633c5092a6e9ea3664e41089403ce420420db9dd3ff05bd558",
+      "analysis/liquid_glass_geometry_transfer.py": "622f6bfa71bebc2255b3ebd6713498878a74394001ef176a81368414cef4c84f",
+      "analysis/liquid_glass_independent_mips.py": "932cf6a8ff261eb15a414cabf22468b5c459b755468bc863d8e1ae31dcdf52ab",
+      "analysis/liquid_glass_profile_matrix.py": "f8e3c1889b999f29b6cc09a50aa1e4f8881414af2560b2f06dc2b50bff858611",
+      "analysis/liquid_glass_raster_interpolant.py": "44976f1eea71a67a9843c42885fb600b90bbe42447b0864d74dffd1898c28d61",
+      "analysis/liquid_glass_runtime_raster_coefficients.py": "f9c1759a0e75ad527754f2d43ab1ace5c9e9077632fd4cd30d13a0341270d489",
+      "analysis/liquid_glass_shader_specialization.py": "55ba44abb26799026263d4d34cd53d90cde8491b3d71c0273711103fcae72866",
+      "analysis/liquid_glass_static_background.py": "29a5c43ccf9d7371ca8d609c5814cf904964b7e7b363f69c66840d75f48b4cdd",
+      "analysis/liquid_glass_static_geometry.py": "13165815a355b6883a9edbd821d195482f624a888786afeda061b1e9e4be9857",
+      "analysis/liquid_glass_static_highlight.py": "0da14294a3a474e27dc64977badb87031acb77dfd59f7ce78a9b5cbfc7e1e259",
+      "analysis/liquid_glass_static_profile.py": "bd145eac6b0337825a725b79daa91d31175df6ec4a3fedfb617b277dbb77b9b8",
+      "artifacts/apple-float-intrinsics-r8-30556057571.bin": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449",
+      "lg-test/Analysis/raster_tile_coefficient_model.py": "69b8546e26dbd17009260621b1a72610e9c25efee21e68022b07c9f00c599248",
+      "lg-test/Analysis/raster_tile_coefficient_model_v3.py": "99c1725d9fdec0877b8510fb92aaa4a4ee398e61b0c579f0b1c1a0471520f1fe",
+      "lg-test/Analysis/raster_tile_iterator_model.py": "bf0b926e759f9234d924ccd82654abc07ad8bb9ff10c9058ba5a284886dd2429",
+      "lg-test/Analysis/raster_tile_selector_model.py": "1874d8c452dce244bd8ae2cb7fbf05d0d454a815c0c37c285e1c377524c9369d",
+      "lg-test/Analysis/raster_tile_selector_model_v4.py": "f1918f51974f486510ce5d68724cff015bb2e7f618a1153016d464cd9240a103",
+      "parity/liquid_glass_static_profile.c": "f871cac9ff04614344da9625e75c9e72a77e9b27b3c2bb09471f39b64542f340",
+      "parity/liquid_glass_static_profile.h": "70635f2cba97b9ebaf6f609129a0b60b17bed0b5287900ff5f1f658e886ee172"
+    },
+    "productionShader": {
+      "path": "shaders/frag.glsl",
+      "renderedByThisGate": false,
+      "sha256": "6489828f12de599da9633d6183266a81b71ed846a1b03c03cb4eb9c23639352d"
+    }
+  },
+  "schemaVersion": 1,
+  "scope": {
+    "capturedBackdropMips": true,
+    "capturedInputReferenceRenderer": true,
+    "capturedPrivateUniforms": true,
+    "formalLiquidGlassParity": false,
+    "generatedRasterCoefficients": true,
+    "independentOpticalInputs": false,
+    "physicalRetinaOutput": false,
+    "productionWalleShaderRendered": false
+  },
+  "testedRenderer": {
+    "fragmentShaderPath": "analysis/apple_glass_reference.frag.glsl",
+    "kind": "captured-input-reference-oracle",
+    "specializedFragmentShaderSha256": "425e49b0d478a824d8eb29becc14b71952d722a5e01dbb834d95561603f69242"
+  },
+  "totals": {
+    "checkedBytes": 16777216,
+    "checkedPixels": 4194304,
+    "mismatchedBytes": 0,
+    "mismatchedPixels": 0
+  }
+}

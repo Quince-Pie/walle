@@ -1,0 +1,865 @@
+{
+  "baseModes": {
+    "alphaUlpBias": 0,
+    "band": 0,
+    "coordinate": 1,
+    "coverage": 1,
+    "derivative": 1,
+    "destinationDivision": 0,
+    "floatDivision": 3,
+    "mix": 0,
+    "normalize": 1,
+    "normalizedCoordinate": 0,
+    "sdfArithmetic": 0,
+    "sdfDistanceUlpBias": 0,
+    "sdfSquaredUlpBias": 0,
+    "sourceConstruction": 1,
+    "sourceDivision": 0
+  },
+  "bestByMode": {
+    "derivative": {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 224,
+      "mismatchedPixels": 188,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 30,
+          "mismatchedPixels": 26
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 46,
+          "mismatchedPixels": 39
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 26,
+          "mismatchedPixels": 24
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 14
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 22,
+          "mismatchedPixels": 22
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 17
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 17,
+          "mismatchedPixels": 15
+        }
+      ],
+      "value": 1
+    }
+  },
+  "candidateCount": 5,
+  "classification": "diagnostic one-axis exact-frame arithmetic sweep",
+  "deviceIndex": 0,
+  "fixtureCount": 8,
+  "fixtures": [
+    "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+    "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+    "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+    "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+    "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+    "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+    "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+    "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28"
+  ],
+  "results": [
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 609,
+      "mismatchedPixels": 462,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 75,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 86,
+          "mismatchedPixels": 72
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 96,
+          "mismatchedPixels": 64
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 77,
+          "mismatchedPixels": 59
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 83,
+          "mismatchedPixels": 52
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 69,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 80,
+          "mismatchedPixels": 62
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        }
+      ],
+      "value": 0
+    },
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 224,
+      "mismatchedPixels": 188,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 30,
+          "mismatchedPixels": 26
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 46,
+          "mismatchedPixels": 39
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 26,
+          "mismatchedPixels": 24
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 14
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 22,
+          "mismatchedPixels": 22
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 17
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 17,
+          "mismatchedPixels": 15
+        }
+      ],
+      "value": 1
+    },
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 609,
+      "mismatchedPixels": 462,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 75,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 86,
+          "mismatchedPixels": 72
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 96,
+          "mismatchedPixels": 64
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 77,
+          "mismatchedPixels": 59
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 83,
+          "mismatchedPixels": 52
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 69,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 80,
+          "mismatchedPixels": 62
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        }
+      ],
+      "value": 2
+    },
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 224,
+      "mismatchedPixels": 188,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 30,
+          "mismatchedPixels": 26
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 46,
+          "mismatchedPixels": 39
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 26,
+          "mismatchedPixels": 24
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 14
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 22,
+          "mismatchedPixels": 22
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 17
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 17,
+          "mismatchedPixels": 15
+        }
+      ],
+      "value": 3
+    },
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 609,
+      "mismatchedPixels": 462,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 75,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 86,
+          "mismatchedPixels": 72
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 96,
+          "mismatchedPixels": 64
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 77,
+          "mismatchedPixels": 59
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 83,
+          "mismatchedPixels": 52
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 69,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 80,
+          "mismatchedPixels": 62
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        }
+      ],
+      "value": 4
+    }
+  ],
+  "schemaVersion": 1,
+  "topCandidates": [
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 224,
+      "mismatchedPixels": 188,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 30,
+          "mismatchedPixels": 26
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 46,
+          "mismatchedPixels": 39
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 26,
+          "mismatchedPixels": 24
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 14
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 22,
+          "mismatchedPixels": 22
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 17
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 17,
+          "mismatchedPixels": 15
+        }
+      ],
+      "value": 1
+    },
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 224,
+      "mismatchedPixels": 188,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 30,
+          "mismatchedPixels": 26
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 46,
+          "mismatchedPixels": 39
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 26,
+          "mismatchedPixels": 24
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 14
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 22,
+          "mismatchedPixels": 22
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 20,
+          "mismatchedPixels": 17
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 17,
+          "mismatchedPixels": 15
+        }
+      ],
+      "value": 3
+    },
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 609,
+      "mismatchedPixels": 462,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 75,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 86,
+          "mismatchedPixels": 72
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 96,
+          "mismatchedPixels": 64
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 77,
+          "mismatchedPixels": 59
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 83,
+          "mismatchedPixels": 52
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 69,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 80,
+          "mismatchedPixels": 62
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        }
+      ],
+      "value": 0
+    },
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 609,
+      "mismatchedPixels": 462,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 75,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 86,
+          "mismatchedPixels": 72
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 96,
+          "mismatchedPixels": 64
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 77,
+          "mismatchedPixels": 59
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 83,
+          "mismatchedPixels": 52
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 69,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 80,
+          "mismatchedPixels": 62
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        }
+      ],
+      "value": 2
+    },
+    {
+      "checkedBytes": 33554432,
+      "exact": false,
+      "maximumChannelDelta": 2,
+      "mismatchedBytes": 609,
+      "mismatchedPixels": 462,
+      "mode": "derivative",
+      "perFixture": [
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-01",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 75,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-04",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 86,
+          "mismatchedPixels": 72
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-08",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 96,
+          "mismatchedPixels": 64
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-12",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 77,
+          "mismatchedPixels": 59
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-16",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 83,
+          "mismatchedPixels": 52
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-20",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 69,
+          "mismatchedPixels": 61
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-24",
+          "maximumChannelDelta": 1,
+          "mismatchedBytes": 80,
+          "mismatchedPixels": 62
+        },
+        {
+          "checkedBytes": 4194304,
+          "exact": false,
+          "fixture": "build/generated/liquid-glass/dynamic-fixtures/regular-dark-dematerialize-28",
+          "maximumChannelDelta": 2,
+          "mismatchedBytes": 43,
+          "mismatchedPixels": 31
+        }
+      ],
+      "value": 4
+    }
+  ]
+}

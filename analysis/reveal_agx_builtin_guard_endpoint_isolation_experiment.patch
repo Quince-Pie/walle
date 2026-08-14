@@ -1,0 +1,68 @@
+--- reveal_agx_clip_weight_tomography_probe.swift
++++ reveal_agx_builtin_guard_endpoint_isolation_experiment.swift
+@@ -85,9 +85,51 @@
+     const float x = isRight ? geometry.y : geometry.x;
+     const float y = isBottom ? geometry.w : geometry.z;
++    const uint pattern = metadata[caseIndex].y;
++    const float a = as_type<float>(0x3f800001u);
++    const float b = as_type<float>(0x3f7fffffu);
++    const float small = as_type<float>(0x35800001u);
++    const float large = as_type<float>(0x49800001u);
++    float4 outer;
++    float4 inner;
++    switch (pattern) {
++    case 0u:
++        outer = float4(a, 0.0f, -a, 0.0f);
++        inner = float4(0.0f, a, 0.0f, -a);
++        break;
++    case 1u:
++        outer = float4(b, 0.0f, -b, 0.0f);
++        inner = float4(0.0f, b, 0.0f, -b);
++        break;
++    case 2u:
++        outer = float4(small, 0.0f, -small, 0.0f);
++        inner = float4(0.0f, small, 0.0f, -small);
++        break;
++    case 3u:
++        outer = float4(large, 0.0f, -large, 0.0f);
++        inner = float4(0.0f, large, 0.0f, -large);
++        break;
++    case 4u:
++        outer = float4(a, -a, b, -b);
++        inner = float4(-a, a, -b, b);
++        break;
++    case 5u:
++        outer = float4(small, -small, large, -large);
++        inner = float4(-small, small, -large, large);
++        break;
++    case 6u:
++        outer = float4(a, b, -a, -b);
++        inner = float4(b, a, -b, -a);
++        break;
++    default:
++        outer = float4(0.25f, -0.25f, 1024.0f, -1024.0f);
++        inner = float4(0.75f, -0.75f, 1025.0f, -1025.0f);
++        break;
++    }
+     BasisVertexOutput output;
+     output.position = mvp * float4(x, y, 0.0f, 1.0f);
+-    output.basis = as_type<float4>(
+-        isOuter ? outerBits[caseIndex] : innerBits[caseIndex]);
++    (void)outerBits;
++    (void)innerBits;
++    output.basis = isOuter ? outer : inner;
+     output.caseIndex = caseIndex;
+     return output;
+ }
+@@ -327,4 +369,4 @@
+-    for span in spans {
++    for span in spans.prefix(1) {
+         var chunkStart = span.range.lowerBound
+         while chunkStart < span.range.upperBound {
+             let chunkEnd = min(chunkStart + commandChunkRecords, span.range.upperBound)
+@@ -418,4 +460,4 @@
+-    for record in records {
++    for record in records.prefix(spans[0].range.upperBound) {
+         let base = Int(record.recordIndex) * recordWords
+         guard words[base] == record.sample.x,
+               words[base + 1] == record.sample.y,

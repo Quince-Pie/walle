@@ -1,0 +1,1250 @@
+{
+  "backgroundScissor": {
+    "glBottomLeft": [
+      224,
+      224,
+      687,
+      687
+    ],
+    "metalTopLeft": [
+      224,
+      113,
+      687,
+      687
+    ]
+  },
+  "capture": "/tmp/walle/artifacts/local-natural-walle-current-alpha-interpolant-02",
+  "classification": "natural background arithmetic stage isolation",
+  "endpoint": {
+    "checkedBytes": 4194304,
+    "firstMismatches": [
+      {
+        "apple": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "walle": [
+          0,
+          0,
+          0,
+          2
+        ],
+        "x": 566,
+        "yTopLeft": 254
+      },
+      {
+        "apple": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "walle": [
+          0,
+          0,
+          0,
+          2
+        ],
+        "x": 761,
+        "yTopLeft": 449
+      },
+      {
+        "apple": [
+          0,
+          0,
+          0,
+          5
+        ],
+        "walle": [
+          0,
+          0,
+          0,
+          4
+        ],
+        "x": 266,
+        "yTopLeft": 458
+      },
+      {
+        "apple": [
+          0,
+          0,
+          0,
+          2
+        ],
+        "walle": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "x": 257,
+        "yTopLeft": 480
+      },
+      {
+        "apple": [
+          0,
+          0,
+          0,
+          2
+        ],
+        "walle": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "x": 535,
+        "yTopLeft": 758
+      }
+    ],
+    "maximumChannelDelta": 1,
+    "mismatchedBytes": 5,
+    "mismatchedPixels": 5
+  },
+  "endpointMismatchStageValues": [
+    {
+      "stages": {
+        "composite-holding": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "final-color": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf-coverage": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "source-face": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        }
+      },
+      "x": 566,
+      "yBottomLeft": 769,
+      "yTopLeft": 254
+    },
+    {
+      "stages": {
+        "composite-holding": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "final-color": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf-coverage": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "source-face": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        }
+      },
+      "x": 761,
+      "yBottomLeft": 574,
+      "yTopLeft": 449
+    },
+    {
+      "stages": {
+        "composite-holding": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "final-color": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf-coverage": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "source-face": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        }
+      },
+      "x": 266,
+      "yBottomLeft": 565,
+      "yTopLeft": 458
+    },
+    {
+      "stages": {
+        "composite-holding": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "final-color": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf-coverage": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "source-face": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        }
+      },
+      "x": 257,
+      "yBottomLeft": 543,
+      "yTopLeft": 480
+    },
+    {
+      "stages": {
+        "composite-holding": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "final-color": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "sdf-coverage": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        },
+        "source-face": {
+          "appleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ],
+          "exact": true,
+          "walleHex": [
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000",
+            "0x0000"
+          ]
+        }
+      },
+      "x": 535,
+      "yBottomLeft": 265,
+      "yTopLeft": 758
+    }
+  ],
+  "firstDivergentStage": "sdf",
+  "fixture": "/tmp/walle/build/generated/liquid-glass/dynamic-current-alpha-interpolant-fixtures/regular-dark-dematerialize-16",
+  "implementation": {
+    "fragmentShaderBytes": 128445,
+    "fragmentShaderSha256": "75f802849879a8479a484f467da0e066e4c1706703018b69610521f00b4bdf95",
+    "glRenderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+    "glVendor": "AMD",
+    "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+    "moderngl": "5.12.0",
+    "numpy": "2.4.4",
+    "python": "3.14.4"
+  },
+  "inputs": {
+    "fixtureManifestSHA256": "adfbc4815b77b08c653e82cf3050e71587cc9bca4077069028b9f0e1cdb2f26a",
+    "floatIntrinsicTableSHA256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449",
+    "fragmentShaderSHA256": "75f802849879a8479a484f467da0e066e4c1706703018b69610521f00b4bdf95",
+    "traceSHA256": {
+      "color-stages-a": "13dfb8430263b927cb569a27943928a9bd4e0a4ad07c345f043d9801c359ae4e",
+      "color-stages-b": "2b6df2052667b2ce228b13fd90a2e1120485cc7bfddc48c35df01325c4e6e8ed",
+      "final-color": "087dac2b3a84f6927cb7737953172dbded9aa7559a419aad31eb0616adad1f34",
+      "sdf": "2206af62591a35ac25912818513f34b4c8b2aec613bcdd25cb7ab81c1bc1669d",
+      "sdf-coverage": "f77b4f68eaf99f38e93ef3f47e36f93d56668e586b8a27d9b63e6297fc550954"
+    }
+  },
+  "schemaVersion": 1,
+  "stageComparisons": {
+    "composite-holding": {
+      "comparedWords": 8388608,
+      "exact": true,
+      "firstMismatches": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    },
+    "final-color": {
+      "comparedWords": 4194304,
+      "exact": true,
+      "firstMismatches": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    },
+    "sdf": {
+      "comparedWords": 4194304,
+      "exact": false,
+      "firstMismatches": [
+        {
+          "appleHex": [
+            "0x4eba",
+            "0x373d",
+            "0x3b22",
+            "0x0000"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0x4eba",
+            "0x373e",
+            "0x3b22",
+            "0x0000"
+          ],
+          "x": 634,
+          "yTopLeft": 270
+        },
+        {
+          "appleHex": [
+            "0xc97d",
+            "0xb378",
+            "0x3bc7",
+            "0x3c00"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0xc97d",
+            "0xb379",
+            "0x3bc7",
+            "0x3c00"
+          ],
+          "x": 457,
+          "yTopLeft": 285
+        },
+        {
+          "appleHex": [
+            "0x4dea",
+            "0x385a",
+            "0x3ab7",
+            "0x0000"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0x4dea",
+            "0x385a",
+            "0x3ab6",
+            "0x0000"
+          ],
+          "x": 657,
+          "yTopLeft": 287
+        },
+        {
+          "appleHex": [
+            "0xca01",
+            "0x3725",
+            "0x3b29",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xca01",
+            "0x3725",
+            "0x3b28",
+            "0x3c00"
+          ],
+          "x": 615,
+          "yTopLeft": 304
+        },
+        {
+          "appleHex": [
+            "0xd52e",
+            "0x31ae",
+            "0x3bdf",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd52e",
+            "0x31ae",
+            "0x3be0",
+            "0x3c00"
+          ],
+          "x": 540,
+          "yTopLeft": 353
+        },
+        {
+          "appleHex": [
+            "0x4dea",
+            "0x3ab6",
+            "0x385a",
+            "0x0000"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0x4dea",
+            "0x3ab7",
+            "0x385a",
+            "0x0000"
+          ],
+          "x": 736,
+          "yTopLeft": 366
+        },
+        {
+          "appleHex": [
+            "0x45a8",
+            "0xbad6",
+            "0x3827",
+            "0x0000"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0x45a8",
+            "0xbad7",
+            "0x3827",
+            "0x0000"
+          ],
+          "x": 298,
+          "yTopLeft": 382
+        },
+        {
+          "appleHex": [
+            "0xd70f",
+            "0x3552",
+            "0x3b8b",
+            "0x3c00"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0xd70f",
+            "0x3553",
+            "0x3b8b",
+            "0x3c00"
+          ],
+          "x": 555,
+          "yTopLeft": 388
+        },
+        {
+          "appleHex": [
+            "0xd3a6",
+            "0x39ef",
+            "0x395e",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd3a6",
+            "0x39ef",
+            "0x395d",
+            "0x3c00"
+          ],
+          "x": 647,
+          "yTopLeft": 389
+        },
+        {
+          "appleHex": [
+            "0xd35c",
+            "0xba48",
+            "0x38f4",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd35c",
+            "0xba48",
+            "0x38f3",
+            "0x3c00"
+          ],
+          "x": 366,
+          "yTopLeft": 397
+        },
+        {
+          "appleHex": [
+            "0xd572",
+            "0xbb50",
+            "0x367d",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd572",
+            "0xbb50",
+            "0x367c",
+            "0x3c00"
+          ],
+          "x": 368,
+          "yTopLeft": 448
+        },
+        {
+          "appleHex": [
+            "0xda5d",
+            "0xb9d5",
+            "0x397a",
+            "0x3c00"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0xda5d",
+            "0xb9d6",
+            "0x397a",
+            "0x3c00"
+          ],
+          "x": 482,
+          "yTopLeft": 484
+        },
+        {
+          "appleHex": [
+            "0xd478",
+            "0x3be9",
+            "0x30c0",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd478",
+            "0x3be9",
+            "0x30bf",
+            "0x3c00"
+          ],
+          "x": 682,
+          "yTopLeft": 486
+        },
+        {
+          "appleHex": [
+            "0xd833",
+            "0x3bff",
+            "0x2833",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd833",
+            "0x3bff",
+            "0x2832",
+            "0x3c00"
+          ],
+          "x": 621,
+          "yTopLeft": 508
+        },
+        {
+          "appleHex": [
+            "0xd8c5",
+            "0xbc00",
+            "0xa3de",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd8c5",
+            "0xbc00",
+            "0xa3dd",
+            "0x3c00"
+          ],
+          "x": 420,
+          "yTopLeft": 513
+        },
+        {
+          "appleHex": [
+            "0xd833",
+            "0xbbfd",
+            "0xab7b",
+            "0x3c00"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0xd833",
+            "0xbbfc",
+            "0xab7b",
+            "0x3c00"
+          ],
+          "x": 402,
+          "yTopLeft": 518
+        },
+        {
+          "appleHex": [
+            "0xda46",
+            "0xbbaa",
+            "0xb498",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xda46",
+            "0xbbaa",
+            "0xb497",
+            "0x3c00"
+          ],
+          "x": 470,
+          "yTopLeft": 524
+        },
+        {
+          "appleHex": [
+            "0xd948",
+            "0x3bda",
+            "0xb226",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd948",
+            "0x3bda",
+            "0xb225",
+            "0x3c00"
+          ],
+          "x": 585,
+          "yTopLeft": 526
+        },
+        {
+          "appleHex": [
+            "0xdac7",
+            "0x38e7",
+            "0xba53",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xdac7",
+            "0x38e7",
+            "0xba52",
+            "0x3c00"
+          ],
+          "x": 528,
+          "yTopLeft": 533
+        },
+        {
+          "appleHex": [
+            "0xcb80",
+            "0x3bf3",
+            "0xaf1a",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xcb80",
+            "0x3bf3",
+            "0xaf19",
+            "0x3c00"
+          ],
+          "x": 739,
+          "yTopLeft": 537
+        },
+        {
+          "appleHex": [
+            "0xd813",
+            "0xba70",
+            "0xb8c0",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd813",
+            "0xba70",
+            "0xb8bf",
+            "0x3c00"
+          ],
+          "x": 420,
+          "yTopLeft": 579
+        },
+        {
+          "appleHex": [
+            "0xd8e2",
+            "0xb6d1",
+            "0xbb3d",
+            "0x3c00"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0xd8e2",
+            "0xb6d2",
+            "0xbb3d",
+            "0x3c00"
+          ],
+          "x": 474,
+          "yTopLeft": 591
+        },
+        {
+          "appleHex": [
+            "0x3592",
+            "0xbb8b",
+            "0xb555",
+            "0x3340"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0x3592",
+            "0xbb8b",
+            "0xb554",
+            "0x3340"
+          ],
+          "x": 281,
+          "yTopLeft": 593
+        },
+        {
+          "appleHex": [
+            "0xd8c5",
+            "0xa3dd",
+            "0xbc00",
+            "0x3c00"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0xd8c5",
+            "0xa3de",
+            "0xbc00",
+            "0x3c00"
+          ],
+          "x": 510,
+          "yTopLeft": 603
+        },
+        {
+          "appleHex": [
+            "0xc430",
+            "0x3b53",
+            "0xb66f",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xc430",
+            "0x3b53",
+            "0xb66e",
+            "0x3c00"
+          ],
+          "x": 731,
+          "yTopLeft": 608
+        },
+        {
+          "appleHex": [
+            "0xd843",
+            "0x2bd8",
+            "0xbbfc",
+            "0x3c00"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0xd843",
+            "0x2bd9",
+            "0xbbfc",
+            "0x3c00"
+          ],
+          "x": 518,
+          "yTopLeft": 619
+        },
+        {
+          "appleHex": [
+            "0xd833",
+            "0xab7a",
+            "0xbbfc",
+            "0x3c00"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0xd833",
+            "0xab7b",
+            "0xbbfc",
+            "0x3c00"
+          ],
+          "x": 505,
+          "yTopLeft": 621
+        },
+        {
+          "appleHex": [
+            "0xd611",
+            "0x38a9",
+            "0xba81",
+            "0x3c00"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0xd611",
+            "0x38a9",
+            "0xba80",
+            "0x3c00"
+          ],
+          "x": 597,
+          "yTopLeft": 631
+        },
+        {
+          "appleHex": [
+            "0xd35c",
+            "0x38f3",
+            "0xba48",
+            "0x3c00"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0xd35c",
+            "0x38f4",
+            "0xba48",
+            "0x3c00"
+          ],
+          "x": 626,
+          "yTopLeft": 657
+        },
+        {
+          "appleHex": [
+            "0x5006",
+            "0xba02",
+            "0xb949",
+            "0x0000"
+          ],
+          "channels": [
+            2
+          ],
+          "walleHex": [
+            "0x5006",
+            "0xba02",
+            "0xb948",
+            "0x0000"
+          ],
+          "x": 304,
+          "yTopLeft": 694
+        },
+        {
+          "appleHex": [
+            "0x3592",
+            "0xb554",
+            "0xbb8b",
+            "0x3340"
+          ],
+          "channels": [
+            1
+          ],
+          "walleHex": [
+            "0x3592",
+            "0xb555",
+            "0xbb8b",
+            "0x3340"
+          ],
+          "x": 430,
+          "yTopLeft": 742
+        }
+      ],
+      "mismatchedPixels": 31,
+      "mismatchedWords": 31
+    },
+    "sdf-coverage": {
+      "comparedWords": 4194304,
+      "exact": true,
+      "firstMismatches": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    },
+    "source-face": {
+      "comparedWords": 8388608,
+      "exact": true,
+      "firstMismatches": [],
+      "mismatchedPixels": 0,
+      "mismatchedWords": 0
+    }
+  }
+}

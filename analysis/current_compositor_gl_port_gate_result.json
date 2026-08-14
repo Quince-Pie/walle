@@ -1,0 +1,420 @@
+{
+  "capture": {
+    "appleConstructionUnknowns": 0,
+    "path": "/tmp/walle/artifacts/local-current-final-compositor-transfer-walle-gl-port-01-v7",
+    "timelineSha256": "cf0497adfa050395c9fb2b74cb2fb66b61aee6d2ca6e04801e752591c52d29b5",
+    "validationSha256": "3719d14e7c6fffe96f796928bde68861a1b8eea8b216d6dde53106c1aa2ac6ca"
+  },
+  "devices": [
+    {
+      "deviceIndex": 0,
+      "renderer": "AMD Ryzen 9 9950X3D 16-Core Processor (radeonsi, raphael_mendocino, ACO, DRM 3.64, 6.18.38)",
+      "vendor": "AMD",
+      "version": "4.6 (Core Profile) Mesa 26.1.5"
+    },
+    {
+      "deviceIndex": 1,
+      "renderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "vendor": "AMD",
+      "version": "4.6 (Core Profile) Mesa 26.1.5"
+    }
+  ],
+  "gate": {
+    "currentCompositorGlslPortExact": true,
+    "productionWalleParityEstablished": false
+  },
+  "implementation": {
+    "destinationDivisionMode": 0,
+    "fragmentShaderPath": "analysis/apple_glass_reference.frag.glsl",
+    "sourceConstructionMode": 1,
+    "sourceDivisionMode": 0,
+    "specializedFragmentShaderSha256": "ba59f9c92e7c37fd712470d881249452251b52a97211b6cf3b43acfac42df282",
+    "vibrantArithmeticMode": 10,
+    "vibrantFMAAccumulationOrder": "g-r-b"
+  },
+  "runs": [
+    {
+      "case": "zero-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Iscd"
+    },
+    {
+      "case": "unit-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Iscd"
+    },
+    {
+      "case": "identity-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Iscd"
+    },
+    {
+      "case": "permuted-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Iscd"
+    },
+    {
+      "case": "identity-rgb-destination-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Iscd"
+    },
+    {
+      "case": "asymmetric-constant-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Iscd"
+    },
+    {
+      "case": "natural-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Iscd"
+    },
+    {
+      "case": "zero-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Irsd"
+    },
+    {
+      "case": "unit-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Irsd"
+    },
+    {
+      "case": "identity-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Irsd"
+    },
+    {
+      "case": "permuted-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Irsd"
+    },
+    {
+      "case": "identity-rgb-destination-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Irsd"
+    },
+    {
+      "case": "asymmetric-constant-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Irsd"
+    },
+    {
+      "case": "natural-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 0,
+      "role": "Irsd"
+    },
+    {
+      "case": "zero-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Iscd"
+    },
+    {
+      "case": "unit-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Iscd"
+    },
+    {
+      "case": "identity-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Iscd"
+    },
+    {
+      "case": "permuted-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Iscd"
+    },
+    {
+      "case": "identity-rgb-destination-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Iscd"
+    },
+    {
+      "case": "asymmetric-constant-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Iscd"
+    },
+    {
+      "case": "natural-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Iscd"
+    },
+    {
+      "case": "zero-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Irsd"
+    },
+    {
+      "case": "unit-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Irsd"
+    },
+    {
+      "case": "identity-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Irsd"
+    },
+    {
+      "case": "permuted-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Irsd"
+    },
+    {
+      "case": "identity-rgb-destination-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Irsd"
+    },
+    {
+      "case": "asymmetric-constant-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Irsd"
+    },
+    {
+      "case": "natural-rgb-unit-alpha",
+      "checkedBytes": 4194304,
+      "comparison": {
+        "exact": true,
+        "maximumChannelDelta": 0,
+        "meanAbsoluteChannelDelta": 0.0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0
+      },
+      "deviceIndex": 1,
+      "role": "Irsd"
+    }
+  ],
+  "schemaVersion": 1,
+  "scope": {
+    "capturedDestinationSeeds": true,
+    "capturedFinalHighlightAlphaFields": true,
+    "capturedFinalOutputsUsedForComparisonOnly": true,
+    "formalLiquidGlassParity": false,
+    "freshDirectRetinaMacCapture": true,
+    "githubActionsCapture": false,
+    "independentlyConstructedDynamicAlphaFields": false,
+    "independentlyRecoveredCurrentCompositorArithmetic": true,
+    "physicalRetinaOutput": false,
+    "productionWalleProcessRendered": false,
+    "walleGlslPathRendered": true
+  },
+  "totals": {
+    "checkedBytes": 117440512,
+    "mismatchedBytes": 0,
+    "mismatchedPixels": 0
+  }
+}

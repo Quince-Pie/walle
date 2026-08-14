@@ -1,0 +1,8 @@
+settings set target.process.stop-on-sharedlibrary-events false
+target create clip-oracle
+breakpoint set --func-regex getSetupKernelVariant
+breakpoint command add 1 -o 'script print("WALLE_SETUP_KERNEL_BREAKPOINT_HIT")' -o 'bt 8' -o 'continue'
+breakpoint set --name '-[AGXG13XFamilyRenderContext endEncoding]'
+breakpoint command add 2 -o 'script print("WALLE_FIRST_RENDER_END_ENCODING")' -o 'bt 8' -o 'process kill'
+run capture
+quit

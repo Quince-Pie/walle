@@ -1,0 +1,51 @@
+{
+  "capture": {
+    "commit": "fd24b42dd40e4cdb4f77303b7978aa987725507c",
+    "contextSHA256": "102c5207ac3fc88a1782fdb79bc17415cdc842913ade17e1d88fb819aff729bf",
+    "githubActionsUsed": false,
+    "host": "physical Retina M1 Max, macOS 26.6.1 build 25G76",
+    "nativeCaptureDebuggerUsed": false,
+    "nixStorePathInNativeBuildOrCapture": false,
+    "preflightSHA256": "a424b3c50899149ba79ef5e70687a01f896e8fbf058da5437a5a564c71a14034",
+    "preregistrationSHA256": "a0bc89497c5b7799e30d9c4731c12bccd289a99431a2488a3c8d6cb488514174",
+    "timelineSHA256": "d0584a6b95147630018c9477ca542311e71ea95361d2e669962f1444deafb1ce"
+  },
+  "classification": "fresh output-blind direct-Retina holdout",
+  "discriminator": {
+    "applePassReplayMismatchedBytes": 0,
+    "directionalPredicatePredictedBorder": false,
+    "extent": [
+      494.0108947753906,
+      494.0108947753906
+    ],
+    "halfExtentFloat32Bits": [
+      "0x43770165",
+      "0x43770165"
+    ],
+    "observedIndexCount": 6,
+    "observedVertexCount": 4,
+    "oldInequalityPredicatePredictedBorder": true,
+    "radiusFloat32Bits": [
+      "0x43770164",
+      "0x43770164"
+    ],
+    "radiusUlpDelta": [
+      -1,
+      -1
+    ],
+    "remaining": 0.12431907653808594,
+    "sampleIndex": 28
+  },
+  "gate": {
+    "freshProductionWalleFrameRequired": true,
+    "oldPredicateFalsified": true,
+    "productionWalleParityEstablished": false,
+    "prospectiveDiscriminatorExact": true,
+    "remainingWalleAlgorithmUnknowns": 0,
+    "selectorMayBeIntegratedIntoWalle": true,
+    "shaderQualityReductionAllowed": false
+  },
+  "promotedRule": "hx=b32(width/2), hy=b32(height/2), rx=b32(b32(hx+9)-9), ry=b32(b32(hy+9)-9); border iff rx>hx or ry>hy or rx!=ry",
+  "status": "prospective-negative-ulp-selector-exact",
+  "walleCurrentFinalTopologySelectorResultSchemaVersion": 1
+}

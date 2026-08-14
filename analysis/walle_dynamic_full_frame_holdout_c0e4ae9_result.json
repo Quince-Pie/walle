@@ -1,0 +1,294 @@
+{
+  "capture": {
+    "captureCommit": "c0e4ae9b1c6f2082e5ce1f5451fe3495acfdf7a6",
+    "contextSHA256": "b6ded2dacab1933a0129fbc1cef755500e2bc18e5bd34cbd7ae2b30ebb3b2a47",
+    "failedSamples": 0,
+    "path": "/tmp/walle/artifacts/local-walle-dynamic-full-frame-c0e4ae9-run1-v1",
+    "preflightSHA256": "a424b3c50899149ba79ef5e70687a01f896e8fbf058da5437a5a564c71a14034",
+    "profile": {
+      "appearance": "dark",
+      "backingScaleFactor": 2,
+      "direction": "dematerialize",
+      "geometry": "circle-480-center",
+      "material": "regular"
+    },
+    "sampleIndices": [
+      1,
+      4,
+      8,
+      12,
+      16,
+      20,
+      24,
+      28
+    ],
+    "timelineSHA256": "9343c8d2e2edb3748869c35dac1f0e6c381bd58426d86d4d6f84ae4556eaeade"
+  },
+  "gate": {
+    "productionWalleParityEstablished": false,
+    "prospectiveEightStateFullFrameExact": true,
+    "universalTopologySelectorEstablished": false
+  },
+  "implementation": {
+    "floatIntrinsicTableSHA256": "fff71cc0d4428677ca5bc58b91212a7166b701e4efe504c3d71cab70846d0449",
+    "fragmentShaderSHA256": "2422332165e5b95c6bc2ca57f54175969dbfa096a6963270ff7f7cad994f11d4",
+    "generator": "/tmp/walle/analysis/generate_walle_exact_dynamic_fixture.py",
+    "generatorSHA256": "fd2279e05014847b88471617f3e9a09de1176055d3c973a9f490ba1f54e18daf",
+    "profileEmitter": "/tmp/walle/build/bin/quality/emit_liquid_glass_transition_profile",
+    "profileEmitterSHA256": "25f04f80fc0742017260d3d4ca342922205ddf79dd8a5230bf09868226fdfa7a",
+    "protectedProductionShaderSHA256": "6489828f12de599da9633d6183266a81b71ed846a1b03c03cb4eb9c23639352d",
+    "renderer": "/tmp/walle/build/bin/quality/render_walle_exact_static_gl",
+    "rendererSHA256": "b55e43c1c857496e4a57b95412ecc5c34fc35c6307d3936344b3c9659ea63d49",
+    "rendererSourceSHA256": "babe4ea8c3945bfd2a01037847e5669d5b296fbd7adc56d26a88d63e85848955",
+    "vertexShaderSHA256": "99d6942f6b39b52460c23b4e52c498f2d98a03cb6ffc32d87ef6e94c43e7a958"
+  },
+  "runs": [
+    {
+      "comparison": {
+        "candidateSHA256": "49bea9c42e4822ab414d737d84d487d4ade2f0f9257b63bea66ee3fe781af01b",
+        "checkedBytes": 4194304,
+        "exact": true,
+        "firstMismatchedByte": -1,
+        "maximumChannelDelta": 0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0,
+        "referenceSHA256": "49bea9c42e4822ab414d737d84d487d4ade2f0f9257b63bea66ee3fe781af01b"
+      },
+      "device": "/dev/dri/renderD128",
+      "elapsedMilliseconds": 660.7221849262714,
+      "fixture": {
+        "fileCount": 23,
+        "highlightBackFacing": false,
+        "highlightIndexCount": 6,
+        "highlightVertexCount": 4,
+        "manifestSHA256": "38c11c8520afdd98ed70b22d09870c3276d1db66c3b820771e6ae62661bab54d",
+        "remainingFloat32Bits": "0x3f777ca0"
+      },
+      "glRenderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "glVendor": "AMD",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "rendererExitCode": 0,
+      "rendererStderr": "",
+      "sampleIndex": 1
+    },
+    {
+      "comparison": {
+        "candidateSHA256": "4099cdacddae37ab301ac2bd84b3e61c5d8800b7e8e9206648360399671f970e",
+        "checkedBytes": 4194304,
+        "exact": true,
+        "firstMismatchedByte": -1,
+        "maximumChannelDelta": 0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0,
+        "referenceSHA256": "4099cdacddae37ab301ac2bd84b3e61c5d8800b7e8e9206648360399671f970e"
+      },
+      "device": "/dev/dri/renderD128",
+      "elapsedMilliseconds": 648.643878987059,
+      "fixture": {
+        "fileCount": 23,
+        "highlightBackFacing": false,
+        "highlightIndexCount": 6,
+        "highlightVertexCount": 4,
+        "manifestSHA256": "37288e338455b08221ed812185572da4fa29fa861291323b28b209f74ba1dae3",
+        "remainingFloat32Bits": "0x3f5ffe30"
+      },
+      "glRenderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "glVendor": "AMD",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "rendererExitCode": 0,
+      "rendererStderr": "",
+      "sampleIndex": 4
+    },
+    {
+      "comparison": {
+        "candidateSHA256": "17e033781454d5a39ce397c6fe3e8c9f64f34bca43a75a5082f12714894a9921",
+        "checkedBytes": 4194304,
+        "exact": true,
+        "firstMismatchedByte": -1,
+        "maximumChannelDelta": 0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0,
+        "referenceSHA256": "17e033781454d5a39ce397c6fe3e8c9f64f34bca43a75a5082f12714894a9921"
+      },
+      "device": "/dev/dri/renderD128",
+      "elapsedMilliseconds": 640.9230530261993,
+      "fixture": {
+        "fileCount": 23,
+        "highlightBackFacing": false,
+        "highlightIndexCount": 6,
+        "highlightVertexCount": 4,
+        "manifestSHA256": "04da4144e2c08174e990b8f71861440ec5f93cd2792ebbaa1a5a44fc0eb1025f",
+        "remainingFloat32Bits": "0x3f3fa230"
+      },
+      "glRenderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "glVendor": "AMD",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "rendererExitCode": 0,
+      "rendererStderr": "",
+      "sampleIndex": 8
+    },
+    {
+      "comparison": {
+        "candidateSHA256": "0231df48746ec35f785f60b0799c675a907f0fc79e69237fb5b43a9f2e9ab0d5",
+        "checkedBytes": 4194304,
+        "exact": true,
+        "firstMismatchedByte": -1,
+        "maximumChannelDelta": 0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0,
+        "referenceSHA256": "0231df48746ec35f785f60b0799c675a907f0fc79e69237fb5b43a9f2e9ab0d5"
+      },
+      "device": "/dev/dri/renderD128",
+      "elapsedMilliseconds": 662.6909470651299,
+      "fixture": {
+        "fileCount": 23,
+        "highlightBackFacing": false,
+        "highlightIndexCount": 6,
+        "highlightVertexCount": 4,
+        "manifestSHA256": "02310c2e965b8e55027266fe60b550ae77dd19828ef4811b397251ebd015cca1",
+        "remainingFloat32Bits": "0x3f1fab80"
+      },
+      "glRenderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "glVendor": "AMD",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "rendererExitCode": 0,
+      "rendererStderr": "",
+      "sampleIndex": 12
+    },
+    {
+      "comparison": {
+        "candidateSHA256": "617328f3f1267d4e9272d39455bde9dd642258e70e0d8a0b701b1e65f8a3cb97",
+        "checkedBytes": 4194304,
+        "exact": true,
+        "firstMismatchedByte": -1,
+        "maximumChannelDelta": 0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0,
+        "referenceSHA256": "617328f3f1267d4e9272d39455bde9dd642258e70e0d8a0b701b1e65f8a3cb97"
+      },
+      "device": "/dev/dri/renderD128",
+      "elapsedMilliseconds": 676.0536851361394,
+      "fixture": {
+        "fileCount": 23,
+        "highlightBackFacing": false,
+        "highlightIndexCount": 6,
+        "highlightVertexCount": 4,
+        "manifestSHA256": "7e8f84fe4d8975cbcb3cec327ce46bf6826974bb1c87d361a6d51e2d403f93cf",
+        "remainingFloat32Bits": "0x3eff2f80"
+      },
+      "glRenderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "glVendor": "AMD",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "rendererExitCode": 0,
+      "rendererStderr": "",
+      "sampleIndex": 16
+    },
+    {
+      "comparison": {
+        "candidateSHA256": "c9098dd98bae9ae7926051dc5d44d112d27bbaecfb45068c934976ea809a8ca3",
+        "checkedBytes": 4194304,
+        "exact": true,
+        "firstMismatchedByte": -1,
+        "maximumChannelDelta": 0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0,
+        "referenceSHA256": "c9098dd98bae9ae7926051dc5d44d112d27bbaecfb45068c934976ea809a8ca3"
+      },
+      "device": "/dev/dri/renderD128",
+      "elapsedMilliseconds": 617.5361617933959,
+      "fixture": {
+        "fileCount": 23,
+        "highlightBackFacing": false,
+        "highlightIndexCount": 6,
+        "highlightVertexCount": 4,
+        "manifestSHA256": "106ab67fa5585e3a605fa59c613291b00bb0f5d58b8318852b12437fc764a8e2",
+        "remainingFloat32Bits": "0x3ebff980"
+      },
+      "glRenderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "glVendor": "AMD",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "rendererExitCode": 0,
+      "rendererStderr": "",
+      "sampleIndex": 20
+    },
+    {
+      "comparison": {
+        "candidateSHA256": "cdc09dc3c052270b20405f6c10a69b60f3c2aef04d08261be87fdecab1c9c391",
+        "checkedBytes": 4194304,
+        "exact": true,
+        "firstMismatchedByte": -1,
+        "maximumChannelDelta": 0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0,
+        "referenceSHA256": "cdc09dc3c052270b20405f6c10a69b60f3c2aef04d08261be87fdecab1c9c391"
+      },
+      "device": "/dev/dri/renderD128",
+      "elapsedMilliseconds": 663.064680993557,
+      "fixture": {
+        "fileCount": 22,
+        "highlightBackFacing": false,
+        "highlightIndexCount": 6,
+        "highlightVertexCount": 4,
+        "manifestSHA256": "1cf28a778c5d9c5bb29974de29094a7a3fe742f2d77f5e06d433478203fb2e6c",
+        "remainingFloat32Bits": "0x3e7f4380"
+      },
+      "glRenderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "glVendor": "AMD",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "rendererExitCode": 0,
+      "rendererStderr": "",
+      "sampleIndex": 24
+    },
+    {
+      "comparison": {
+        "candidateSHA256": "5cd56994a45cee4fda1f4e3b0e8f7e3da79b7945450bf0a31bc779751735f205",
+        "checkedBytes": 4194304,
+        "exact": true,
+        "firstMismatchedByte": -1,
+        "maximumChannelDelta": 0,
+        "mismatchedBytes": 0,
+        "mismatchedPixels": 0,
+        "referenceSHA256": "5cd56994a45cee4fda1f4e3b0e8f7e3da79b7945450bf0a31bc779751735f205"
+      },
+      "device": "/dev/dri/renderD128",
+      "elapsedMilliseconds": 658.2602020353079,
+      "fixture": {
+        "fileCount": 21,
+        "highlightBackFacing": true,
+        "highlightIndexCount": 24,
+        "highlightVertexCount": 16,
+        "manifestSHA256": "b16c18a2333d065e3c8ebc5b984b24d1cc047f781ba58cdb9160641998e40653",
+        "remainingFloat32Bits": "0x3dffa900"
+      },
+      "glRenderer": "AMD Radeon RX 9070 XT (radeonsi, gfx1201, ACO, DRM 3.64, 6.18.38)",
+      "glVendor": "AMD",
+      "glVersion": "4.6 (Core Profile) Mesa 26.1.5",
+      "rendererExitCode": 0,
+      "rendererStderr": "",
+      "sampleIndex": 28
+    }
+  ],
+  "schemaVersion": 1,
+  "scope": {
+    "capturedFinalOutputsUsedForComparisonOnly": true,
+    "capturedRenderInputs": false,
+    "independentlyGeneratedCompleteRenderInputs": true,
+    "physicalRetinaWalleOutput": false,
+    "productionWalleProcessRendered": false,
+    "prospectiveNaturalCapture": true,
+    "qualityRegressionAllowed": false,
+    "tolerance": 0,
+    "walleOwnedCGlRendererRendered": true
+  },
+  "status": "accepted-prospective-eight-state-full-frame-exact",
+  "topologyCounts": {
+    "24": 1,
+    "6": 7
+  },
+  "totals": {
+    "checkedBytes": 33554432,
+    "maximumChannelDelta": 0,
+    "mismatchedBytes": 0,
+    "mismatchedPixels": 0
+  }
+}

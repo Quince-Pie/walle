@@ -1,0 +1,167 @@
+{
+  "classification": "analysis-only general-resolution canonical post-guard child constructor",
+  "corpus": {
+    "allOwnerPoliciesChildScopedCenterFallback": true,
+    "maximumChildrenInOneState": 12,
+    "maximumClippedPolygonVertexCount": 4,
+    "orderedChildBitstreamSHA256": "ec61a19156337a121a5686bbbcdd8bb43863995100b4fc18b44758f03949be71",
+    "perStateChildCountSHA256": "c9fc719c2dd0a5f30908ccdefab1dc5201b283253b4b51872bf1ceaed6a9e5e8",
+    "perStateChildCounts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      6,
+      1,
+      6,
+      9,
+      9,
+      9,
+      9,
+      2,
+      9,
+      9,
+      9,
+      9,
+      2,
+      9,
+      9,
+      9,
+      9,
+      1,
+      9,
+      9,
+      9,
+      9,
+      9,
+      0,
+      9,
+      9,
+      9,
+      12,
+      1,
+      12,
+      12,
+      12,
+      12,
+      12
+    ],
+    "stateCount": 65,
+    "totalChildCount": 271
+  },
+  "generalResolutionAuthority": "mathematical exactness only; retained Apple reveal captures are 2048x2048",
+  "guardDefinition": "NDC [-1.5,+1.5] maps to [-extent/4,5*extent/4] per axis",
+  "hostLongDoubleUsed": false,
+  "intersectionArithmetic": "exact binary32 rational with software RNE",
+  "ownerPolicy": "child center locks the slot for all three samples; an active in-bounds XOR partner re-evaluates within that child, otherwise it falls back to the center primitive",
+  "roundingVectors": {
+    "exactCancellationCanonicalizesToPositiveZero": true,
+    "negativeUnderflowPreservesSign": true,
+    "observedComponentBits": {
+      "exact-signed-cancellation": "00000000",
+      "negative-half-minsub-to-negative-zero": "80000000",
+      "negative-subnormal-tie-even": "80000002",
+      "normal-tie-even-down": "3f800000",
+      "normal-tie-even-up": "3f800002",
+      "positive-half-minsub-to-positive-zero": "00000000",
+      "subnormal-tie-even-down": "00000002",
+      "subnormal-tie-even-up": "00000002"
+    },
+    "vectorCount": 8
+  },
+  "schemaVersion": 1,
+  "score": {
+    "absoluteError": 91,
+    "candidateCompletedBeforeObservedFrameOpen": true,
+    "completeExactFrameCount": 52,
+    "exactPixelPercentage": 99.99996662139893,
+    "exactPixels": 272629669,
+    "maximumError": 1,
+    "mismatchedPixels": 91,
+    "perStateMismatchCountSHA256": "d6c006d789b551e875555f3e8ef32f0c46c3ec3911802fea405ef9d3458edb5d",
+    "totalPixels": 272629760,
+    "unsupportedPostGuardSetupCount": 95
+  },
+  "sourceSHA256": {
+    "reveal_postguard_children.c": "bc2161ee2b19eb3cc9ae23c7b1bdd841e14821096b373c3649224b1d7c7072aa",
+    "reveal_postguard_children.h": "766c233f342680242c8e13948986ae8bccff1b7d0d1a5d44f93a37aab84877e1",
+    "reveal_postguard_children_test_shim.c": "5a0c8ba026d259f8b349cfad94ac8b02070e8b9f62116d41214d290099402215",
+    "reveal_postguard_children_test_shim.h": "c7604639fdc8f7fc02f9e4f42af32875fcef22856eb05acd0997ed5f086e4fb0",
+    "test_reveal_postguard_children.py": "3a5869a65bca0485dec45a27ddd1d66c49e1e719a127e44f5030bf5bc6955cc4"
+  },
+  "synthetic": {
+    "extentCount": 7,
+    "extents": [
+      [
+        1,
+        1
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        7,
+        9
+      ],
+      [
+        511,
+        513
+      ],
+      [
+        2049,
+        3073
+      ],
+      [
+        16777217,
+        16777219
+      ],
+      [
+        4294967295,
+        4294967293
+      ]
+    ],
+    "maximumCapacityChildCount": 90,
+    "maximumClippedPolygonVertexCount": 7,
+    "orderedSyntheticBitstreamSHA256": "8dfbf675d6a1d47360821054de31d40fed8f027a6b1aca7deb8b9243d698231a",
+    "randomTriangleCount": 1792,
+    "sevenVertexFinalPlaneFanVerified": true,
+    "sixVertexThenNoOpPlaneVerified": true,
+    "undersizedConsumerStatus": 4
+  },
+  "validationVectors": {
+    "malformedIndexCountStatus": 2,
+    "nonemptyEmptyFamilyStatus": 2,
+    "nonfiniteVertexStatus": 2,
+    "outOfRangeIndexStatus": 2,
+    "validEmptyFamilyStatus": 0,
+    "zeroExtentStatus": 2
+  }
+}

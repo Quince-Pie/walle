@@ -1,0 +1,13 @@
+--- reveal_agx_builtin_guard_boundary_origin_experiment.swift
++++ reveal_agx_builtin_guard_boundary_origin_nonzero_experiment.swift
+@@ -458,7 +458,9 @@
+         to: UInt32.self,
+         capacity: outputBytes / MemoryLayout<UInt32>.stride
+     )
+-    for record in records.prefix(spans[0].range.upperBound) {
++    for record in records
++        .prefix(spans[0].range.upperBound)
++        .dropFirst(planPatternCount) {
+         let base = Int(record.recordIndex) * recordWords
+         guard words[base] == 13,
+               words[base + 1] == record.sample.y,

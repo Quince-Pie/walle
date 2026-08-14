@@ -1,0 +1,32 @@
+--- reveal_agx_unclipped_source_phase_probe.swift
++++ reveal_agx_direct_guard_equivalence_experiment.swift
+@@ -78,6 +78,7 @@
+     float4 position [[position]];
+     float4 basis [[user(reveal_basis)]];
+     uint caseIndex [[user(reveal_case), flat]];
++    float clipDistance [[clip_distance]] [4];
+ };
+ 
+ struct BasisFragmentInput {
+@@ -103,5 +104,9 @@
+     output.position = mvp * float4(position, 0.0f, 1.0f);
+     output.basis = float4(oneHot, dot(oneHot, float3(1.0f, 2.0f, 4.0f)));
+     output.caseIndex = caseIndex;
++    output.clipDistance[0] = position.x + 512.0f;
++    output.clipDistance[1] = 2560.0f - position.x;
++    output.clipDistance[2] = position.y + 512.0f;
++    output.clipDistance[3] = 2560.0f - position.y;
+     return output;
+ }
+@@ -408,7 +413,10 @@
+                 "centerPath": "interpolant.interpolate_at_center / AGX ITER",
+                 "offsetPath": "interpolant.interpolate_at_offset / AGX LDCF+FFMA",
+                 "drawScissor": "one strictly interior pixel per record",
+-                "geometryPath": "original source triangle with clipping-free 8192 viewport",
++                "geometryPath": "original source triangle in 8192 viewport with four explicit public guard clip distances",
++                "clipDistances": [
++                    "x+512", "2560-x", "y+512", "2560-y",
++                ],
+                 "probeRasterExtent": probeRasterExtent,
+                 "pullLattice": [
+                     "X0=tile-origin+(phase/16,0)",

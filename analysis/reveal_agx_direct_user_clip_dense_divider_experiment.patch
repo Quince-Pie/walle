@@ -1,0 +1,12 @@
+--- reveal_agx_direct_user_clip_zero_crossing_experiment.swift
++++ reveal_agx_direct_user_clip_dense_divider_experiment.swift
+@@ -81,7 +81,8 @@
+     const bool isOuter = !isRight;
+     const float viewport = metadata[caseIndex].x == 0u ? 256.0f : 512.0f;
+     (void)viewport;
+-    const float denominator = 65536.0f + float(metadata[caseIndex].z);
++    const float denominator =
++        as_type<float>(0x47800000u + metadata[caseIndex].z);
+     const float distanceValue = isOuter ? -1.0f : denominator - 1.0f;
+     const float x = distanceValue * 0x1p-17f;
+     const float y = isBottom ? 0.5f : -0.5f;
