@@ -2050,3 +2050,25 @@ THE SAME unknown - the per-tile derivation of the coefficient RAM
 no didx product, numerator constant, output = the per-tile stage's
 rounding alone.  Next: dense per-tile slope-word map over a whole
 triangle.
+
+## 2026-08-14 (later 54): the per-tile internal drift law measured exactly
+
+Dense wobble map a2-slope-wobble-plan-v1 (729 tiles of state-42 tri 2,
+basis1 varying; capture.raw sha256
+21365468281ba5d583c8b55989efb9a7046b90c20786e240f06d165b108664da):
+the exported B word takes exactly two values (3a387a81/82) split by a
+boundary that satisfies *** tx - floor(ty/4) = 56 EXACTLY *** (18
+rows, zero exceptions; least-squares slope 0.2477 ~ 1/4 with clean
+4-row steps).  Therefore the internal per-tile slope value =
+s0 + g*(tx - floor(ty/4)): the coefficient traversal advances with
++g bias per tile-x step and -g per FOUR-ROW BLOCK step (equal
+magnitude, opposite sign) - i.e. the parameter-buffer walk processes
+4-row tile bands, and both step kinds carry a single rounding bias g
+with opposite signs.  Also measured: hardware self-consistency
+C(t+1y) = RNE24(C(t) + 32*B(t)) holds 623/684 (deltas +1 x41, -3
+x19) - the coefficient RAM is near-affine in the exports but the
+internals drift per the block law.  Next discriminators: (a) taller/
+wider triangle - does the 4-row blocking persist; (b) asymmetric
+slopes (A != B) - how the two biases scale with step values; then
+re-derive the C X-function as the SAME walk's accumulated bias, which
+would unify tasks #3 and #4 into one implementable law.
