@@ -2666,3 +2666,29 @@ walk deviations, same word 3b95e3a0 repeating across tiles),
 -0.25 ulp (systematic low).  Not a global bias: per-cell walk/
 reciprocal structure - proceed with the later-79 next-window plan
 (two-stage eps-v3 decode; 108-word reciprocal-path fit).
+
+## 2026-08-14 (later 81): eps-v3 t=0 decode progress + basis-chain eliminations
+
+Instrument decode (t=0 rows, all-exact wide part):
+- The X-part (negative eps lever) enters GRANULE-QUANTIZED with RNE:
+  down-jumps at u == 8 (mod 16) exactly (ties wobble to even).  The
+  A-part staircase is NOT plain RNE/RNA/ceil at granule scale; the
+  net sequences have period 32 (bl31; exact repeat) / period 64 with
+  tie alternation (bl36).  Exhaustive 2-stage pipelines (3 orders x
+  {rne,rna,rtz,floor,jam} x {24,27,28} inner x {rne24,rna24,chain}
+  final) cap at 46%; sequential-f32 caps at 36/64 on ty63: the sum
+  has at least three quantization events with at least one biased.
+- u=0 column (eps exact powers: A=8G, X=-4G): rows 34..63 export
+  P+4G EXACTLY at t=0; ty=30 (d_o=1793 - the killer d_o) exports
+  ONE GRANULE LOW at the same all-exact inputs (earlier dump):
+  the killer mechanism is d_o-selective, input-exactness-independent.
+- t=3072 (killer dm) u=0: all bl35 rows sit at exact half-granule
+  (P mod G = G/2) and ALL floor (no round-up at the tie) - with the
+  27v/19v thresholds a 32v tie should round up; so either D < 0
+  shifts the position sub-half, or the tie rule differs at exact
+  half.  Constant per-bl-class columns = P mod G phase, not D.
+Basis-chain eliminations (108 hw words):
+- Reciprocal word confirmed exact (sel+-1/2 score 46/24 vs 72 at 0).
+- Parts sum at >=28-bit internal precision (sequential-f32 orders
+  score 52..56/108 vs 72 for the 28-bit-norm model).
+- Remaining misses are INSIDE the per-part product chain (task #3).
