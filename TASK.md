@@ -1687,3 +1687,27 @@ WIDE PATH (bl >= 31) facts:
 Corpus relevance: real children numerators are ~28 bits x didx 9-12
 bit odd parts => products 36-40 bits: corpus C tiles are ALL wide-path.
 The wide law is the last gate for the ~34 AGX corpus bytes.
+
+## 2026-08-13 (later 39): wide-path X-function partially mapped; session end
+
+Wide-path (bl>=31) hw value = P + X(dm, d_o, ...) before rna27+RNE24.
+X measurements (tt4, exact intervals):
+- ty17/18/20 (d_o=129/257/513), odd P: X constant per row, = +26*(ty-16)
+  within +-1, i.e. X ~ +13*(d_o-1)/64 = +P*13*2^-29 (fits rows 17-20).
+- even-P: smaller, varies within row (not constant per (row,parity)).
+- larger d_o rows: X turns NEGATIVE (ty63 etc.); per-(bl,parity)
+  constants all infeasible; linear-in-dropped-bits infeasible
+  (dropped=0 cells have X != 0).
+- killer cell (dm=0x800C00, d_o=1793, dropped=0): X in [-1536,-512]
+  (~ -1024 = signed-low-12 of dm; but +t-block cells contradict plain
+  sdm12 forms: 'wide + sdm12', '-|sdm12|', widths 11-13 all score
+  WORSE than X=0 globally).
+- flip-based X extraction disagrees with interval-based (phase-drift
+  artifact suspected in the flip method - see later-39 scripts); trust
+  intervals; redo flip method with per-t phase correction.
+NEXT SESSION: (1) build the exact X-table from tt4 intervals cell by
+cell (only boundary-adjacent cells pin X; collect the ~2k tight cells
+across rows into (dm, d_o, X) triples); (2) test 'rounded-operand'
+family: dm' = round(dm, N bits) or d_o' = round(d_o, N), P' = dm'*d_o'
+with correction; (3) once tt4+tt1 both 100%: tomography (sel stage),
+dense 33.7k, corpus gate.  Narrow law (later-38) remains PROVEN.
