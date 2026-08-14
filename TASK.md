@@ -3234,3 +3234,17 @@ house-legal if banked as hardware-validated law data - the corpus
 children's p values are all in {0, 768, 1152, 1664, 1920, 3072,
 3328, 3968, 4224, 6144, 6400, 6528, 7296, 7808} (from later-96/97
 runs) - a 14-phase table.
+
+## 2026-08-15 (later 111): theta-phase instrument captured (14 phases x 24 rows x 24 dm)
+
+Capture c-thetaphase-plan-v1 (8064 draws; tt4 geometry with ay =
+131072 - q for q in {8..512}; capture.raw sha256
+c09ad6eae6ea3a8bdcece1a6d73607bbad9b5b534c6235555c975173f1f961c6).
+First read: per-(q,row) theta windows under the p=64-calibrated
+sawtooth are mostly contradictory - at new phases the L1 sawtooth
+itself must be re-verified per phase BEFORE theta can be read (the
+wrap/cut may be phase-dependent, or the 24-dm sample mixes sawtooth
+errors into the windows).  NEXT-WINDOW START: per-phase L1 check
+(the 24 dm ladder per (q,row) is enough to fit wrap/cut per q),
+then the theta(p,d_o) surface, then the closed form or the
+14-phase port table; then gated composite -> held-out -> ports.
