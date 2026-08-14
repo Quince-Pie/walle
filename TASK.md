@@ -3321,3 +3321,23 @@ values from the exported words) -> V_internal(q,t,ty) at ~2-4v ->
 subtract P + L1 -> the large-q correction map -> close L1 general
 form -> theta closed form / 14-phase table -> gated composite ->
 held-out -> ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 116): eps-phase decode confirms the large-q term (t-selective, ~1.7G)
+
+First-pass self-calibrated decode of epq2 (lever slope from flip
+spacing; NOTE: the printed corrections carry a systematic +4G-ish
+offset = the eps base at u=0, not yet subtracted; deviations FROM
+the +261v baseline are the signal, scatter +-20v decode noise):
+- Most (q,t,ty): baseline (L1 correct within noise).
+- q=6528, t in {117,121,199}: corrections ~ -110v vs baseline
+  across ALL rows (ty23 ~ -150) - REAL internal deviations ~1.7G,
+  dm-selective, row-stable: the large-q L1 second-order term is a
+  PER-dm CONSTANT at fixed phase (matching the per-child constant-
+  fold insight of later-113; these t are the census band).
+- t=3072/3840 (killer/0xF00 families): baseline at q=6528 - the
+  small-q families are NOT the large-q deviants; the large-q term
+  has its own dm-selection rule (t=117=0x75, 121=0x79, 199=0xC7...).
+NEXT-WINDOW: clean the decode (subtract eps base, median-filter
+lever), map the large-q deviant set exactly over the 128-dm ladders
+of thp2 (which t deviate at q=1664/6528 and by how much), fit the
+rule; then compose; then ports.
