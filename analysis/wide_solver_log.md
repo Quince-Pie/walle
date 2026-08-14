@@ -349,3 +349,98 @@ tz-dependent does not reconcile the two regimes; whatever varies with the
 frame changes the ramp's sign/phase, not just its period.  Combined with B3
 (tt4 wants +9, tt1 wants -4) the next thing to try is a tz-dependent SIGN or
 phase offset, not a tz-dependent period.
+
+### B8. NEW HARDWARE CAPTURES: five tz classes (M1, this session)
+
+Generator `wide_solver_B_gen_plan.py`, loader `wide_solver_B_data.py`.
+Each capture clones tt4's geometry exactly (x-edge 2048, height 4096, det a
+power of two, same 383-word dm scan, rows ty=17..63) and moves ONLY the
+anchor's subpixel position, by at most two pixels.  With tiles 8192 subpixels
+apart and `ay = 2^k * odd`, `disp = 2^k * (2^(13-k)*ty - odd)` has tz = k for
+every row and d_o odd — so the anchor alone sets the class.
+
+| class | anchor y | ay | ay factorisation | d_o range | bl(d_o) | bl(P) | scale | capture.raw sha256 |
+|---|---|---|---|---|---|---|---|---|
+| tz=3 | 511.96875 | 131064 | 2^3 * 16383 | 1025..48129 | 11..16 | 34..39 | -17 | 4645bec9b5ab13c638639b63c4a93418e05182fa39ac9d5026bccc8620f524a5 |
+| tz=4 | 511.9375 | 131056 | 2^4 * 8191 | 513..24065 | 10..15 | 33..38 | -16 | 85f0bbcd30481df7ef2240e1235f574c48f56bf3c2540a4cd0e29695097f94f7 |
+| tz=5 | 511.875 | 131040 | 2^5 * 4095 | 257..12033 | 9..14 | 32..37 | -15 | f4b39ca2348cd3cfce3b3a81d58490f6f3b676c8cd53c61bb0f1d61d563aca1a |
+| tz=8 | 511.0 | 130816 | 2^8 * 511 | 33..1505 | 6..11 | 29..34 | -12 | 32847213979bffd9976322c2841225f1ab0a8753b1bbb53deb70e7bb03224ae9 |
+| tz=9 | 510.0 | 130560 | 2^9 * 255 | 17..753 | 5..10 | 28..33 | -11 | 31e99c340520579a4ef62e8efd08d678d0bfcd29a4bd8863b9656c05ef9647ae |
+
+All five value scales were CALIBRATED from the captures, not assumed, and
+every one landed on the predicted `tz - 20` (the tt4-cloned det), which
+validates the geometry.  Narrow-law baselines: tz3 15442, tz4 15165,
+tz5 14705, tz8 14829, tz9 14379 (of 18001 each).
+
+**The confound is broken.** `cut + tz = bl(disp) - 1` is 13..18 in every
+capture including tt3/tt4/tt1, and bl(d_o) ranges now overlap heavily across
+classes (bl(d_o)=10 occurs at tz=4,5,8,9 and tt1's 7; bl(d_o)=11 at
+tz=3,4,5,8, tt1 and tt4).  So tz can be varied with bl(d_o) held fixed.
+
+### B9. *** THE +9 COMPENSATION IS SPECIFIC TO tz=6, NOT UNIVERSAL ***
+
+Every tz-class capture uses tt4's dm scan, so dm is pinned near 2^23 in all
+of them and any difference is attributable to tz alone.  Best global
+compensation `narrow(P + K*2^(bl(P)-30))` per class (K swept -40..40):
+
+| class | tz | narrow law | best K | best | gain |
+|---|---|---|---|---|---|
+| tt3 | 13 | 18001 | 0 | 18001 | +0 |
+| tz3 | 3 | 15442 | -4 | 15490 | +48 |
+| tz4 | 4 | 15165 | 0 | 15165 | +0 |
+| tz5 | 5 | 14705 | -7 | 15201 | +496 |
+| **tt4** | **6** | 13876 | **+9** | 14850 | +974 |
+| tt1 | 7 | 2300 | -2 | 2308 | +8 |
+| tz8 | 8 | 14829 | -4 | 15213 | +384 |
+| tz9 | 9 | 14379 | -4 | 14911 | +532 |
+
+Threshold brackets on the low-dm block agree and are sharp where the
+threshold model holds at all: tz=6 gives +9.000 ulp30 (range [+8.75, +9.00]
+over five clean brackets) and tz=5 gives -7.06 (range [-7.38, -7.00] over
+ten).  tz=8 and tz=9 produce NO separable bracket at any cut — the threshold
+model fails outright there.
+
+Best K per (tz, cut), "." = no K explains >50% of the group:
+
+| tz \ cut | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 3 | | | | | | | -13 | -5 | -5 | -3 | 0 | 0 |
+| 4 | | | | | | 1 | 1 | 1 | 0 | -5 | 0 | |
+| 5 | | | | | -7 | -7 | -7 | -7 | -7 | 1 | | |
+| 6 | | | | 9 | 9 | 9 | 9 | 9 | -9 | | | |
+| 7 | | | | | -11 | -13 | -1 | -1 | | | | |
+| 8 | | -7 | -7 | -7 | -7 | -7 | -4 | | | | | |
+| 9 | -5 | -7 | -7 | -13 | -13 | -4 | | | | | | |
+| 13 | 0 | 0 | | | | | | | | | | |
+
+Two readings, both important:
+
+1. **K is essentially constant along a row (fixed tz) and varies wildly down
+   a column (fixed cut).**  At cut=9: K = +1 (tz4), -7 (tz5), +9 (tz6),
+   -4 (tz9).  Same dm scan, same bl(d_o), different tz, different answer.
+   So the compensation is a function of the FRAME, and tz is a real
+   parameter of the law — this is the empirical closure of the tz question
+   that tt1 alone could not give (tt1 differs from tt4 in both tz and dm
+   distribution).
+2. **+9 is a tz=6 fact, not a law.**  tz = 5, 8, 9 all want about -7/-4;
+   tz=4 and tz=13 want 0.  Consequently the "total bias 13 = stages
+   {29,27,26}" identity is a statement about tt4's regime only and must not
+   be imposed as a constraint on candidates for other tz.  Likewise the
+   {29,27,26} cascade, which was tuned to that sum, should not be expected
+   to generalise.
+
+Also visible: every class changes behaviour on the LAST diagonal,
+`cut + tz = 18` i.e. bl(disp) = 19 — tz6 flips +9 -> -9, tz5 -7 -> +1,
+tz8/tz9 -7 -> -4, tz3/tz4 -> 0.  That is the same bl=36 anomaly reported
+earlier for tt4, and it is now shown to be a property of the DISPLACEMENT
+width (19 bits) rather than of the product width.
+
+Holdout status: tt3 remains at 18001 with K=0, so none of this disturbs the
+narrow control.  tt3/tt4/tt1 were not used to fit anything in B8/B9.
+
+Capture provenance: the .raw files live under `build/analysis-agx-basis/`
+(gitignored, as tt3/tt4/tt1 are) and on the M1 at
+`/tmp/walle-agx-single-axis-multi-anchor.GRzoaQ/c-tzclass<tz>-plan-v1/capture/`.
+Plans are reproducible from `wide_solver_B_gen_plan.py --tz <tz>`; plan
+sha256 prefixes b56c8e60 (tz3), a43f02f9 (tz4), 858fbeaa (tz5), beb89f19
+(tz8), 0aaf9a19 (tz9).
