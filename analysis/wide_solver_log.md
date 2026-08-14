@@ -36,15 +36,109 @@ interval.  Harness: `wide_solver_fast.py` (exact) / `wide_solver_np.py`
 | operand perturbation `E = eps(dm) * d_o` (and * didx24, * P, * 2^cut, * 2^bl(d_o)); `E = eta(d_o) * dm` | infeasible | - | interval intersection: 266..327 of 383 dm groups infeasible |
 | sawtooth ramp in P: `E = (q - ((P>>j) - wrap mod 2^13)) * 2^(cut-13)`, j 0..12 and cut-relative | 14903 | 2252 | product-based ramp is worse than dm-based |
 
-## Live lead
+## Best rule found on this line of attack
 
 Sawtooth ramp in dm (`wide_solver_saw.py`, `wide_solver_saw2.py`):
 `E = (q - ((dm - wrap) mod 2^13)) * 2^(cut-13)` applied only when
 `bl(P) > 30`.  Best `q = 5728, wrap = 3712`: **tt4 16672**, tt3 18001,
-tt1 2124.  Best tt4 seen so far, but tt1 falls below baseline, so the
-ramp is capturing something that is dm-offset-specific to tt4 (where dm
-only ever lies in `[2^23, 2^23 + 32512]`).  The value at `dm = 2^23`
-is `1248/8192 ~ 9/64`, matching the measured constant.
+tt1 2124.  Best tt4 of any closed form tried, but tt1 falls below the
+narrow-law baseline of 2300, so the ramp is fitting something that is
+dm-offset-specific to tt4 (where dm only ever lies in
+`[2^23, 2^23 + 32512]`).  The value at `dm = 2^23` is `1248/8192 ~ 9/64`,
+matching solver-2's measured compensation constant.
+
+Variant that strictly beats the campaign baseline on all three
+simultaneously: `q = 5568, wrap = 3840` -> tt4 16668, tt3 18001, tt1 2128.
+Reported for completeness only: **the plain narrow law still beats every
+one of these on tt1 (2300)**, so no single rule found this session
+improves all three datasets at once.
+
+## *** CEILING THEOREM IS EXPORT-INDEPENDENT (extends solver-2 section 2) ***
+
+Solver-2's ceiling assumes `hw_word = encode(narrow(V))`.  If the wide
+path rounded differently the preimage - and hence the ceiling - would be
+wrong.  `wide_solver_export.py` recomputes the preimage of every wide
+capture (bl >= 31) under **24 different export stages** (outer rne/rna/
+rtz/rup at 24 bits, optionally preceded by rna/rne/rtz/rodd/rup at 27
+bits) and re-runs the stabbing ceiling for a bias keyed on dm:
+
+| export | tt4 wide ceiling | tt1 wide ceiling |
+|---|---|---|
+| rne24(rup27) | 17307 | 2410 |
+| **narrow = rne24(rna27)** | **17294** | **2412** |
+| rne24 direct | 17067 | 2396 |
+| rtz24 direct | 16664 | 2382 |
+| rup24 direct | 16639 | 2360 |
+
+No export choice moves the ceiling materially, and none reaches 18001.
+**The bias-on-dm family is dead regardless of the export rounding.**  The
+narrow export is also (near) the best of the 24, which independently
+corroborates `RNE24(rna27(.))` as the real export stage.
+
+## Extra keys ceilinged (`wide_solver_ceiling2.py`)
+
+Nothing reaches 18001.  Keys built from the result mantissa `M = P >> cut`
+are legitimate low-dimensional keys depending on BOTH operands, and they
+still fail:
+
+| key / scale | groups (tt4) | tt4 ceiling | tt1 ceiling |
+|---|---|---|---|
+| (dm, bl) / d_o | 2298 | 17710 | 2600 |
+| (dm mod 2^13, M mod 4) / d_o | 1107 | 17518 | 2600 |
+| (dm mod 2^13, M mod 2) / d_o | 570 | 17372 | 2592 |
+| dm / d_o | 383 | 17294 | 2578 |
+| dropped = P mod 2^cut / d_o | 3143 | 16229 | 2584 |
+| d_o / anything | 47 | 15528 | 2418 |
+| phi30 (top bits below the 30-bit cut) / 2^(bl-30) | 64 | 15040 | 2394 |
+
+## Additional falsifications (mine; tt3 = 18001 unless noted)
+
+| family | tt4 | tt1 | verdict |
+|---|---|---|---|
+| sawtooth ramp in P: `(q - ((P>>j) - wrap mod 2^13)) * 2^(cut-13)`, j=0..12 absolute and cut-relative | 14903 | 2252 | FALSIFIED - a product-based ramp is strictly worse than a dm-based one, so the period-2^13 structure really lives in dm |
+| **array truncation + granule-relative constant** (`wide_solver_guard.py`): drop every column below T of `dm * (d_o << (24-bl(d_o)))`, then add `c/64` of a result ulp; T=8..23 x rtz/rne/rna x c=0..64 | 14084 (T=19, rna, c<=1) | 2290 | FALSIFIED.  This was the one combination solver-2's section 3 left open (they falsified absolute-constant truncation, and separately measured the constant to be granule-relative).  It also structurally preserves tt3: for T <= 18 the drop position `u = T - 24 + bl(d_o)` is <= 0 for every tt3 row, so tt3 stays exact by construction rather than by fiat |
+| information test (`wide_solver_info.py`): is the export a function of the top W bits of P, W=24..40 x rtz/rne/rodd | - | - | NO POWER - the three datasets have almost no product collisions (37288 distinct keys for 38612 captures), so this cannot discriminate.  Do not repeat it |
+
+## *** WHERE THE REMAINING STRUCTURE IS (sharpest counterexamples) ***
+
+Take the **best possible** `f(dm)` (interval-stabbing optimum, solved
+jointly over tt4+tt1 wide cells by `wide_solver_fdm.py`; it scores tt4
+17188 / tt1 2412 and is a 383-entry table, not a law).  Its 845 residual
+misses are not uniform - they concentrate exactly where a Booth/carry
+recoding of dm would misbehave:
+
+- **`dm = 0x801000` misses all 47/47 tt4 rows.**  This is the single
+  sharpest counterexample in the corpus: `dm - 2^23 = 4096 = 2^12`
+  exactly, and *no* perturbation value works for it at any d_o.  Any
+  candidate law should be checked against this dm first.
+- Next worst dm, with their bit patterns: `0x80000f` (24/47, low bits
+  `0b1111`), `0x8000ff` (22/47, `0b11111111`), `0x800008` (11/47, `2^3`),
+  `0x8000c1` (7/47, `0b11000001`), `0x80003f` (6/47, `0b111111`),
+  `0x800041` (6/47, `0b1000001`).  **Runs of ones and isolated powers of
+  two** - the classic radix-4 Booth recoding boundaries.
+- By product width: tt4 bl=36 misses 9.0%, bl=31..35 miss 1.3-3.7%,
+  tt1 bl=31,32 miss 0%.  The failure grows with the product width.
+- By row: tt4 d_o = 4993..6017 (tileY 55..63, the largest displacements)
+  account for 477 of the 553 bl=36 misses, ~50/383 each; every other row
+  is <= 26/383.
+
+Together with the +-1-ulp magnitude, this says the residual mechanism is a
+**signed-digit (Booth) recoding of dm whose partial-product signs
+interact with d_o** - not any additive bias.  Note the earlier campaign's
+Booth sweeps (TASK.md later-36/37) predate both the proven narrow export
+and this interval-stabbing harness, so re-testing Booth *with the narrow
+export and a granule-relative compensation* is not a repeat.
+
+## Two dead ends worth not repeating
+
+- The proven narrow law is proven only over **tt3's range, bl 24..29**.
+  tt1 contains bl=30 cells and they are NOT all exact (6/54 fail), plus
+  8/54 at bl=29 and 2/52 at bl=27.  Do not assume bl <= 30 is safe.
+- Cross-dataset collision audit: of 19 `(dm, d_o)` pairs shared between
+  datasets, exactly one disagrees (`dm=0x800004, d_o=13`, tt1 vs tt3) -
+  the negative-displacement sign effect solver-2 already isolated.  So
+  apart from sign, the law IS a function of `(dm, d_o)`; the scale/
+  alignment of the capture does not enter.
 
 ---
 
@@ -237,3 +331,20 @@ common c, but vacuously — every one of them has the wide interval
 [-32, 32], because those dm make P land on the grid where the narrow law is
 already right.  tt1 cannot confirm or refute period-2^13 periodicity across
 the binade; the informative dm are the low-bit-pattern ones.
+
+### B7. tz-parameterised frame ramp — FALSIFIED
+
+`wide_solver_B_tzramp.py`.  The obvious fix implied by B6: move the ramp's
+argument from dm into the raw subpixel frame, `u = ((dm << z) - wrap) mod
+2^Wf`, so the modulus becomes `2^(Wf - z)` — 2^13 for tt4 (z=6, reproducing
+the period seen there) and 2^12 for tt1 (z=7).  Amplitude normalised to one
+output granule, bias still granule-relative, gated off when no columns drop.
+
+Swept Wf = 18/19/20 x wrap x q on a coarse grid.  Best: Wf=19,
+**tt4 16463, tt3 18001, tt1 2120** — it recovers the tt4 gain (a finer grid
+would approach the 16672 of the dm-indexed ramp) but tt1 still lands *below*
+its 2300 narrow-law baseline.  So simply making the sawtooth's MODULUS
+tz-dependent does not reconcile the two regimes; whatever varies with the
+frame changes the ramp's sign/phase, not just its period.  Combined with B3
+(tt4 wants +9, tt1 wants -4) the next thing to try is a tz-dependent SIGN or
+phase offset, not a tz-dependent period.
