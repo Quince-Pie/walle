@@ -2121,3 +2121,24 @@ OPEN: what u* = 56 is geometrically (not parallel to any edge; the
 anchor sits deep inside the jump region) - the asymmetric-triangle
 and translated-geometry captures will pin whether u* tracks the
 anchor, the edge, or a fixed superblock grid.
+
+## 2026-08-14 (later 57): the jump is geometry-anchored; frame pinned next
+
+Capture a2-wobble-translate-plan-v1 (x-translations 0/-1/-2/-8 tiles;
+232 draws; capture.raw sha256
+73f8fd01c77a3f8ef2d01f6c81e3d6ebadeae59c28c69a283dc7ba3fbfb05e7d):
+- Shifts -1/-2 move the jump boundary EXACTLY with the geometry
+  (tx* 56 -> 55 -> 54 at ty=0; 57 -> 56 -> 55 at ty=4): the jump
+  position is ANCHOR-RELATIVE, not a screen-fixed superblock grid.
+- Shift -8 (256px) REORGANIZES the pattern (tx* = 32 at ty=0, 27 at
+  ty=4 - not 48/49, and the per-block advance flips sign): the
+  position is not linear in the anchor either; candidate mechanism:
+  the jump sits where a displacement quantity crosses a power of two
+  (didx_x + didx_y/4 = 342.6px fits cases 0/-1/-2 at both ty but NOT
+  case -8; case -8 may also expose a second transition my single-
+  boundary finder conflated - needs a full map, not transects).
+NEXT SESSION: full 2-D wobble maps for the -8 case and a +8 case;
+didx-threshold hypothesis (power-of-2 crossings of the mid-product);
+asymmetric triangle for g/u* scaling; then the composed model
+(mid-product X law + join jump) rescored on tt1/tt3/tt4 and the
+dense corpus captures.
