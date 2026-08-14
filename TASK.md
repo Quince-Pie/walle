@@ -1995,3 +1995,30 @@ the transfer triangles (state-42 hardware verification already in
 later-44); validate against the full 45-pixel sensitive-3BFF census;
 (b) implement apple's secondary stage in the parity model + renderer;
 (c) corpus gate expecting 80.
+
+## 2026-08-14 (later 52): adjudication of T=17 K=9; Track A complete
+
+ADJUDICATION (integrator rerun, both reproduced exactly): the banked
+"T=17 K=9 keeps tt3 at 18001 (DERIVED)" holds ONLY under an inject-
+zero-when-fractional convention (sh_f > T => nothing added): tt3
+18001/18001.  Under an honest fractional add tt3 = 16561/18001
+(Track A's number).  The cutoff is itself a gate needing hardware
+justification; later-48's "derived" is downgraded to "derived given
+the cutoff convention".  Track A's structural point adopted: in the
+normalized didx24 frame nothing is simultaneously tt3-exact-without-
+a-gate and large enough to matter; the raw subpixel frame R = dm*disp
+(trailing zeros tt3 13..18, tt4 6, tt1 7) is structurally tt3-safe
+for cuts T <= 13 but bounded ~2^13, unreachable from the killer
+cell's [-102400, -28673] granule excursion.
+
+TRACK A COMPLETE (commit 1db4e24): segmented multiplier falsified -
+36,000 configs ceiling tt4 14506/tt3 18001/tt1 2240; recursive
+variant 2,160 configs ceiling 14504/18001/2240.  BORROW HYPOTHESIS
+CONFIRMED MECHANICALLY: exactly 360/36000 configs reproduce the
+killer cell and every one uses a SIGNED low segment (borrow) - but
+those configs score below the narrow law on the bulk (12971/2164):
+the bulk-fitting and killer-explaining configs are disjoint.
+CARRY-FORWARD: the true law's low-order term is signed and carries a
+borrow, but is not combined with the high partial as a plain
+two-segment product - e.g. it may modulate the ROUNDING stage rather
+than the product.
