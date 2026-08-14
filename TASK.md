@@ -2193,3 +2193,29 @@ slopes cannot come from value magnitudes; it is a shift-alignment
 property.  Next session: derive them from the banked chain's
 alignment arithmetic; then the composed rescore; then the ports
 (91 -> 80 -> 0) per the standing goal.
+
+## 2026-08-14 (later 60): asymmetric map - block-float storage identified
+
+Capture a2-wobble-asym-plan-v1 (x-leg 710.5, y-leg 1421: A = 2B; 356
+draws; capture.raw sha256
+1db462d7e9388228ab608e2a9553f4f6b58db34663bb2a8965c5616cab058f73):
+1. ONLY THE SMALLER slope's lane wobbles (B; the doubled A=3ab87a81
+   is constant everywhere).  With equal slopes it was also B (the
+   second lane).  => the per-tile triple is stored BLOCK-FLOATING:
+   shared exponent from the larger slope; the smaller slope's
+   mantissa is alignment-shifted, and the jump is its re-quantization.
+2. Boundary fit: first-X = 58 (ty0-4), 59 (ty5-11), 60 (ty12-16):
+   5*didx_x(right edge) + didx_y = 264064 fits ty0/ty5 exactly
+   (ty12 sits at the anchor column, edge effects).  x-coefficient
+   4 -> 5 as the slope-binade difference went 0 -> 1: c1 = 4 +
+   (binade(A) - binade(B)) candidate; c2 = 1.  The -8 case's (4,-5)
+   remains the outlier to derive (regime flip).
+3. My banked chain's internal events (mid exponent steps at tiles
+   55/58, product-bit changes) do NOT coincide with the measured
+   boundary (56/57): the jump lives in a storage/alignment stage
+   AFTER the modeled chain.
+The mechanism picture: coefficient RAM = block-float (shared exp,
+mantissas aligned); the smaller slope's stored mantissa changes by
+one step where an alignment-relevant quantity (linear in didx with
+slope-binade-dependent coefficients) crosses a threshold.  This is
+the last arithmetic to pin for step 1 of the goal.
