@@ -2744,3 +2744,24 @@ word plus a FINITE-PRECISION RESIDUAL REGISTER:
   tomography capture f785aa14 + dense capture rows), (b) tt4/tt3/tt1
   full tables, (c) eps-v3 exact-input granule table (rows 19..33),
   (d) the 108 a2 basis words (2-D: x-walk then y-walk).
+
+## 2026-08-14 (later 84): residual-register walk BEATS the direct law
+
+analysis/wide_walk_resreg.py sweep (t = c + dm*pitch + res;
+c' = R(t); res' = Qres(t - c', grid = ulp24(c')/2^r)):
+  *** r=5, Qres=RNE, R=chain(rna27->rne24):
+      tt4 = 14011/18001  (direct-law baseline 13876)
+      tt3 = 18001/18001  EXACT ***
+First candidate ever to beat the wide baseline while keeping the
+narrow table perfect - and it does so with the PROVEN narrow chain
+as its per-step rounder (the narrow law is the walk's fixed point;
+zero extra machinery).  r=6/rtz/floor variants cluster just below.
+tt1 = 28/1305 is a FRAME BUG, not model failure: tt1's d_o crosses
+zero (d_o = 64*ty - 1229 goes negative below the anchor) and the
+loader's abs() breaks the walk order/seed; needs a signed walk from
+the anchor outward (re-derive disp from tileY in a custom loader).
+NEXT: fix tt1 signed walk; then sweep the residual family finer
+(r, per-direction modes, seed at geometric anchor d_o=1, res clamp
+width, step pre-round) toward 18001/18001/2610; then eps-v3
+granule table and the 108 basis words (2-D walk); then dense +
+held-out; then ports 91 -> 80 -> 0.
