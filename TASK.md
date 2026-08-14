@@ -2465,3 +2465,27 @@ CONTINUATION ORDER (all instruments ready, goal unchanged):
 Since later-53: 20 hardware captures, every one sha-banked; the
 region-storage law's value-unit condition (later-70) is the
 campaign's deepest structural result to date.
+
+## 2026-08-14 (later 72): *** THE STORAGE RULE: 2-BIT VON NEUMANN JAM ***
+
+Capture s41-storage-kscan-plan-v2 (anchor-value +-16 ulp scan x
+in/out-region tiles; capture.raw sha256
+eb61f273411a956dc19f999d5e24ae499354e98346d44326664ea2547487ebdb):
+- The base (out-region) word is k-invariant (the two numerator parts
+  nearly cancel the perturbation - an accidental sub-ulp phase scan).
+- The REGION word alternates 3a3d2316 <-> 3a3d231A with period ~5.3k:
+  two adjacent points of a 4-lsb grid whose members end in binary
+  "10" =>
+  *** region storage = truncate the slope mantissa at 2 bits and JAM
+  the half bit: m_stored = (m_internal >> 2 << 2) | 2 ***
+  (the classic hardware jam/von-Neumann rounding).
+- ONE RULE explains every observed region word across ALL captures:
+  base 3a387a81 -> jam -> 3a387a82 (+1 seen); s41 3a3d2317 -> jam ->
+  3a3d2316 (-1 seen); span1833 landings 3a0f037e / 3a387a72 - every
+  region word ever captured ends in bits "10" (82, 16, 1A, 7e, 72).
+- The k-alternation maps the internal sub-ulp phase directly
+  (~0.75 lsb/k), giving a per-child instrument for the exact internal
+  slope low bits.
+REMAINING: region membership wrinkles (later-70/71), C-lane analogue
+(likely the same jam at the C storage - testable on the region C
+words in existing captures), compose, rescore, port.
