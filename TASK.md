@@ -2919,3 +2919,25 @@ export = floor(value'/G) + [dropped >= theta(path)].  Remaining 710
 misses = sub-row theta structure.  NEXT: theta(ty) closed form
 (crossing resets + steps), cross-class validation (tz sets, tt3
 exactness, tt1), then dense + held-out, then ports.
+
+## 2026-08-15 (later 93): *** UNIFIED SAWTOOTH LAW - INPUT-ONLY, CROSS-CLASS ***
+
+delta = -wrap((dm * p) mod 2^19) * 2^(bl-42),  wrap cut at 29/64
+where p = the anchor's fractional subpixel phase (8192 - ay mod 8192:
+tt4 64, tz4 16, tz5 32, tz8 256, tz9 512).  Equivalently: the
+hardware computes the anchor-offset product dm*p only to 2^19
+granularity (biased wrap at 29/64 - the same 32-13 asymmetry as the
+export threshold), and the dropped low bits are the sawtooth.
+Global-theta scores (single (theta, theta-8) parity pair per class):
+  tt4 (p=64):  16607/18001  theta 25   [identical to the t-mod-8192
+               form - confirms unification: 64*(t mod 8192)]
+  tz4 (p=16):  16924/18001  theta 37   [was 14074 before unification]
+  tz5 (p=32):  16720/18001  theta 41
+(tz8/tz9 sweep pending - timed out; phases 256/512.)
+ALL INPUTS: dm (probe mantissa), ay (anchor geometry), bl (product
+width) - fully house-legal.  With per-row theta (the walk shadow,
++2v/row drift, crossing resets) tt4 reached 17291 (96.1%); the same
+composition should lift every class similarly.
+NEXT: tz8/tz9 + tt3 (exactness check: p=0 - sawtooth VANISHES for
+phase-0 anchors, explaining tt3's perfection for free!!) + tt1
+(p=1664?); close theta(path); rescore dense + 38612 held-out; ports.
