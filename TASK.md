@@ -1829,3 +1829,23 @@ uniform words, reproduce VfxXgh's arithmetic for the four tri-2/6
 verts, feed the resulting varying words to the value probe, expect
 12/12 state-42 signs; then sweep the remaining 5 states' pixels
 (31/33/40/41/58/60) the same way.
+
+## 2026-08-14 (later 46): varying-ulp scan; #4 constraint-solve plan
+
+Capture a2-transfer-values-plan-v4 (sha 1d6d02c7...): tri 2 with all
+125 combos of per-vertex varying words 1.0 +- {0..2} ulps, 6
+discriminator pixels.  Response surface (banked in the plan dir):
+baseline (0,0,0) reproduces band-v/controls-ok; NO combo splits
+(1837,103) [v] from (1838,106) [.]: with per-vertex-constant words
+the crossing line lands outside the pair every time.  Constraint
+algebra: the split requires an OBLIQUE deficit plane (nonzero A tilt;
+v3-deficit alone gives y* = 614.5 - 1421/k for integer k in 2^-25
+units: k=3 -> 140.8, k=2 -> -96, neither in (103,106]), and the iter
+output rounds at the 1 - 2^-25 boundary (f32-RNE of the wide plane).
+NEXT (pure CPU, no M1 needed): dump walle's per-pixel primary f16 +
+own secondary for state 42 from the parity CPU model; every
+secondary-SENSITIVE pixel where apple==walle pins apple's secondary
+= walle's; the 12 residuals pin the opposite; hundreds of pins =>
+solve apple's deficit plane (A, B, C_int) exactly per triangle; then
+validate across states 31/33/40/41/58/60 and derive the input-only
+generation rule (CA vertex-shader arithmetic) from the solved planes.
