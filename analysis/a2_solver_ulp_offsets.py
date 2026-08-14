@@ -43,7 +43,7 @@ def main() -> int:
     base, bitmap = primary.load_tables()
     census: Counter[str] = Counter()
     for state in sorted(rows):
-        half, _, _, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
+        half, _, _, _, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
         for x, y, walle, apple in rows[state]:
             bits = int(half[y, x])
             deltas = offsets_for(bits, apple)

@@ -39,7 +39,7 @@ def epsilon_needed(alpha: float, bits: int) -> Fraction:
 
 
 def collect(state: int, *, base: tuple[int, ...], bitmap: bytes):
-    half, _, exact, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
+    half, _, exact, _, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
     built = constraints.build(state, base=base, bitmap=bitmap)
     records = []
     for label in (constraints.LABEL_LOW, constraints.LABEL_HIGH):

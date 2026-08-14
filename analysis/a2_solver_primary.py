@@ -67,11 +67,13 @@ def _render_body(
     scissor: tuple[int, int, int, int],
     base: tuple[int, ...],
     bitmap: bytes,
-) -> tuple[np.ndarray, np.ndarray]:
-    """second_stage.render_primary_half, also returning the binary32 alpha."""
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """render_primary_half, also returning binary32 alpha/distance/feather."""
     crop_left, crop_top, crop_width, crop_height = scissor
     result = np.zeros((crop_height, crop_width), dtype=np.uint16)
     exact = np.zeros((crop_height, crop_width), dtype=np.float32)
+    exact_distance = np.zeros((crop_height, crop_width), dtype=np.float32)
+    exact_feather = np.zeros((crop_height, crop_width), dtype=np.float32)
     covered = np.zeros(result.shape, dtype=np.bool_)
     for draw in range(9):
         draw_indices = indices[draw * 6 : draw * 6 + 6]
@@ -97,6 +99,8 @@ def _render_body(
         primitives = raster.primitive_ids(quad, xx, yy)
         half_bits = np.empty(xx.shape, dtype=np.uint16)
         alpha_bits = np.empty(xx.shape, dtype=np.float32)
+        distance_bits = np.empty(xx.shape, dtype=np.float32)
+        feather_bits = np.empty(xx.shape, dtype=np.float32)
         for primitive in (0, 1):
             selected = primitives == primitive
             if not np.any(selected):
@@ -145,14 +149,18 @@ def _render_body(
             )
             half_bits[selected] = alpha.astype(np.float16).view(np.uint16)[selected]
             alpha_bits[selected] = alpha[selected]
+            distance_bits[selected] = distance[selected]
+            feather_bits[selected] = feather[selected]
         destination_x = slice(target_left - crop_left, target_right - crop_left)
         destination_y = slice(target_top - crop_top, target_bottom - crop_top)
         result[destination_y, destination_x] = half_bits
         exact[destination_y, destination_x] = alpha_bits
+        exact_distance[destination_y, destination_x] = distance_bits
+        exact_feather[destination_y, destination_x] = feather_bits
         covered[destination_y, destination_x] = True
     if not np.all(covered):
         raise ValueError("circle mesh left uncovered pixels")
-    return result, exact
+    return result, exact, exact_distance, exact_feather
 
 
 def _overlay_triangle_half(
@@ -307,21 +315,25 @@ def render_state_half(
     *,
     base: tuple[int, ...],
     bitmap: bytes,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, int]:
-    """Return (binary16 alpha bits, covered mask, binary32 alpha, unsupported)."""
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict[str, np.ndarray], int]:
+    """Return (binary16 alpha, covered, binary32 alpha, extras, unsupported)."""
     geometry = public_geometry.construct_state_geometry(state)
     half = np.zeros((HEIGHT, WIDTH), dtype=np.uint16)
     covered = np.zeros((HEIGHT, WIDTH), dtype=np.bool_)
     exact = np.zeros((HEIGHT, WIDTH), dtype=np.float32)
+    extras = {
+        "distance": np.zeros((HEIGHT, WIDTH), dtype=np.float32),
+        "feather": np.zeros((HEIGHT, WIDTH), dtype=np.float32),
+    }
     if geometry is None:
-        return half, covered, exact, 0
+        return half, covered, exact, extras, 0
     if geometry.family != "border-grid":
         raise NotImplementedError(f"state {state} family {geometry.family}")
     scissor = geometry.scissor
     if scissor.width == 0 or scissor.height == 0:
-        return half, covered, exact, 0
+        return half, covered, exact, extras, 0
     vertices = [tuple(vertex) for vertex in geometry.vertices]
-    body, body_exact = _render_body(
+    body, body_exact, body_distance, body_feather = _render_body(
         vertices,
         geometry.indices,
         scissor=(scissor.x, scissor.y, scissor.width, scissor.height),
@@ -334,6 +346,8 @@ def render_state_half(
     ]
     half[window] = body
     exact[window] = body_exact
+    extras["distance"][window] = body_distance
+    extras["feather"][window] = body_feather
     covered[window] = True
     unsupported = _overlay_border_guard_half(
         half,
@@ -350,7 +364,7 @@ def render_state_half(
         base=base,
         bitmap=bitmap,
     )
-    return half, covered, exact, unsupported
+    return half, covered, exact, extras, unsupported
 
 
 def load_tables() -> tuple[tuple[int, ...], bytes]:
@@ -375,7 +389,7 @@ def _main(argv: list[str]) -> int:
     states = [int(value) for value in argv[1:]] or [42]
     base, bitmap = load_tables()
     for state in states:
-        half, covered, _, unsupported = render_state_half(
+        half, covered, _, _, unsupported = render_state_half(
             state, base=base, bitmap=bitmap
         )
         candidate = np.where(covered, packed_bytes(half, 0x3C00), np.uint8(0))

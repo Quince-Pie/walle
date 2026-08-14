@@ -204,3 +204,36 @@ hardware exports M-1 (X in [-1536,-512]).  Consistent with the integrator's
 the ceiling theorem (solver-2 section) shows cannot be a function of dm
 alone.  Any winning candidate must produce a NEGATIVE excursion of about one
 granule at drop = 0 for this dm while keeping +9 as the mean.
+
+### B6. *** CROSS-DATASET COUNTEREXAMPLE: c IS NOT A FUNCTION OF dm ***
+
+tt4 and tt1 share 19 dm values, and they differ ONLY in the subpixel
+trailing-zero count of the displacement (tt4 z=6, tt1 z=7).  Intersecting
+the admissible interval for `c` (bias in units of `2^(bl(P)-30)`) over each
+dataset's rows separately:
+
+| dm | tt4 (z=6) requires c in | tt1 (z=7) requires c in | joint |
+|---|---|---|---|
+| 0x801000 | **[36.00, 91.50]** | **[-32.00, 32.00]** | ***EMPTY*** |
+| 0x800040 | [4.00, 19.75] | infeasible | — |
+| 0x800080 | [4.00, 19.88] | infeasible | — |
+| 0x800100 | [4.00, 19.94] | infeasible | — |
+| 0x800400 | [-28.00, 3.97] | [-4.00, 27.94] | ok |
+| 0x800800 | [-28.00, 3.98] | [-28.00, 27.97] | ok |
+
+**dm = 0x801000 is a hard input-level contradiction**: both datasets admit a
+constant on their own, and the two constants are disjoint.  This proves,
+without any family-ceiling argument, that the compensation coefficient
+cannot be a function of dm — a ramp/sawtooth/table in dm fitted on tt4 is
+guaranteed to be wrong on tt1, which is exactly why the tt4-fitted sawtooth
+lands at tt1 2124, below the 2300 narrow-law baseline.  Any dm-indexed ramp
+must be parameterised by the frame (tz is the only systematic difference).
+
+Note also that tt1 alone leaves 10 of its 29 dm values infeasible for a
+constant c, so tt1 needs finer-than-dm structure independently of tt4.
+
+Periodicity caveat: tt1's dm values with `dm = 0 (mod 8192)` do share a
+common c, but vacuously — every one of them has the wide interval
+[-32, 32], because those dm make P land on the grid where the narrow law is
+already right.  tt1 cannot confirm or refute period-2^13 periodicity across
+the binade; the informative dm are the low-bit-pattern ones.

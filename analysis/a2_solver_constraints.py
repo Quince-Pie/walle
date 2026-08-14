@@ -114,7 +114,7 @@ class StateConstraints(NamedTuple):
 
 
 def build(state: int, *, base: tuple[int, ...], bitmap: bytes) -> StateConstraints:
-    half, covered, _, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
+    half, covered, _, _, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
     high_byte = primary.packed_bytes(half, 0x3C00)
     low_byte = primary.packed_bytes(half, 0x3BFF)
     observed = primary.observed_frame(state)

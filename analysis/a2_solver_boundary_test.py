@@ -41,7 +41,7 @@ def main() -> int:
     base, bitmap = primary.load_tables()
     states = [int(value) for value in sys.argv[1:]] or [40, 41, 42, 58, 60]
     for state in states:
-        half, _, exact, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
+        half, _, exact, _, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
         built = constraints.build(state, base=base, bitmap=bitmap)
         for label, name in ((constraints.LABEL_LOW, "LOW "),
                             (constraints.LABEL_HIGH, "high")):

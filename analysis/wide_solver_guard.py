@@ -30,7 +30,7 @@ def score_scaled(law, name: str, scale: int) -> int:
     return int(np.count_nonzero((d >= lo * scale) & (d <= hi * scale)))
 
 
-SCALE = 64
+SCALE = 1   # everything below is integral in P units for bl >= 31
 
 
 def make(t: int, const: int, mode: str, thresh: int = 30):
@@ -43,11 +43,8 @@ def make(t: int, const: int, mode: str, thresh: int = 30):
         else:
             base = quant_at(p, u, mode)
         wide = bl > thresh
-        v = np.where(wide, base * SCALE + const * (np.int64(1) << (bl - 30)),
-                     p * SCALE)
-        if mode != "rtz":
-            v = np.where(wide, v, p * SCALE)
-        return v
+        bump = const * (np.int64(1) << np.maximum(bl - 30, 0))
+        return np.where(wide, base * SCALE + bump, p * SCALE)
     return law
 
 

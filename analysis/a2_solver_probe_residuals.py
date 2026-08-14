@@ -23,7 +23,7 @@ def main() -> int:
     base, bitmap = primary.load_tables()
     states = [int(value) for value in sys.argv[1:]] or sorted(rows)
     for state in states:
-        half, covered, _, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
+        half, covered, _, _, _ = primary.render_state_half(state, base=base, bitmap=bitmap)
         byte_one = primary.packed_bytes(half, 0x3C00)
         byte_low = primary.packed_bytes(half, 0x3BFF)
         observed = primary.observed_frame(state)
