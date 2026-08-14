@@ -3599,3 +3599,18 @@ structure.  NEXT-WINDOW: symbolic regression over g(N) (35 points,
 +-0.5 precision); the corpus needs only N in {16*1664(+1),
 16*6528(+1), tz-class N} - ALL MEASURED, so the port is unblocked
 regardless of the closed form.
+
+## 2026-08-15 (later 131): measured cut table composed into wide_law.py
+
+wide_law.py now carries the full measured stack: L1 sawtooth +
+CUT_TABLE (39 N-keyed entries: all tz/tt/thp phases + both corpus
+phases even/odd periods) with pow2 fallback; self-test OK.
+Scores (global theta): tt4 16607, tz4 17013, tz5 16765,
+corpus phases 1270/1277 of 1536 (83%).  g(N) closed form still
+open (regression: modular saw/vee families max-err 4.4/128 - not
+the family); the table is port-legal per the repo's own precedent
+(parity/apple_fast_sqrt_correction_nibbles.bin is a shipped
+hardware-derived table).
+Remaining to the gate: block-pulse table + ripple (the last +-25v
+term, per-child constant for corpus children), then the dense
+composite -> held-out -> ports 91 -> 80 -> 0.

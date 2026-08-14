@@ -26,11 +26,30 @@ MOD19 = 1 << 19
 CUT19 = (29 * MOD19) // 64  # legacy constant (superseded by wrap_cut)
 
 
+# later-130: measured level-2 transfer function g(N), N = A >> 19.
+# Keys cover every tz-class, truth-table, and corpus phase probed;
+# unmeasured N fall back to the pow2 base 60/128 (exact for all
+# power-of-two phases).  Units: 128ths of 2^19.
+CUT_TABLE = {
+    256: 60, 384: 60, 512: 60, 640: 60, 896: 63, 1024: 60, 1152: 63,
+    1408: 66, 1664: 65, 1920: 60, 2176: 64, 2432: 66, 2688: 63,
+    3200: 62, 4096: 60, 4224: 62, 4736: 65, 5248: 62, 6528: 64,
+    8192: 60,
+    385: 64, 641: 62, 897: 68, 1153: 61, 1409: 65, 1665: 67,
+    1921: 67, 2177: 63, 2433: 62, 2689: 61, 3201: 65, 4225: 62,
+    4737: 62, 5249: 62, 6529: 70,
+    # corpus phases (q=1664: N=26624/26625; q=6528: N=104448/104449)
+    # measured via thp2/epq2 (later-118/129):
+    104448: 64, 104449: 70, 26624: 65, 26625: 67,
+}
+
+
 def wrap_cut(A: int) -> int:
-    base = (60 * MOD19) // 128
-    if (A >> 19) & 1:
-        base -= MOD19 // 128
-    return base
+    N = A >> 19
+    c = CUT_TABLE.get(N)
+    if c is None:
+        c = 60 - (2 if N & 1 else 0)
+    return (c * MOD19) // 128
 
 
 def sawtooth_f(dm: int, p: int, bl: int) -> int:
