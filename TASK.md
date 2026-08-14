@@ -3163,3 +3163,21 @@ useful level for most rows; the harmonic closes the last 1.4%.
 NEXT: fit the second harmonic's (modulus, cut, amplitude) against
 the 32-violation census + all-class residuals; then the dense gated
 composite + per-path theta; held-out; ports.
+
+## 2026-08-15 (later 107): eliminations on the 32-cell residual
+
+Tried on rows 49-54 (2266/2298 baseline with L1+theta(25,17)):
+- wrap cut 27/64 or 28/64: WORSE (2246)
+- second harmonic -wrap((dm*p) mod 2^M2)*2^(bl-amp), M2 in {12,13,14},
+  cuts {16..40}/64, amp {44..52}: no gain (2266 unchanged at best)
+- rna27/rne27 stage between sawtooth and threshold: WORSE (2254/2226)
+The 32 residual cells (t=3..45 down-1v-late, t=196..251 up-1v-early,
+0x0E00-family at r=0) need exact per-cell inversion next: compute
+each cell's required (value, threshold) preimage and difference
+against the L1 model - the preimage method at cell scale (as used
+for the wide windows in later-85/87).
+STATE SUMMARY at window end: L1 unified sawtooth closed and corpus-
+validated (12 perfect children); clean-row exactness 98.6%; class
+tables ~96%; the residual is a single small structured term plus
+theta(path).  Gate remains 91; the port milestones (91->80->0) queue
+behind the exact closure.
