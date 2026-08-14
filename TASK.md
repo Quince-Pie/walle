@@ -2095,3 +2095,29 @@ Next: (a) map basis1's A word across the same tiles (is the drift on
 one lane or both); (b) an asymmetric triangle (A != B) to scale g
 against step values; (c) express the C X-function as the accumulated
 block-walk bias and rescore tt1/tt3/tt4.
+
+## 2026-08-14 (later 56): the join-path wobble is a DISCRETE fixed-position jump
+
+Capture a2-wobble-gscan-plan-v1 (v1-value dm-scan k=-20..19 x tile
+transects ty=0/8; 2480 draws; capture.raw sha256
+6cf461122aa583c9b24a388bc3a90b52716a9fc69b9d173d438f9d82fef30c5f):
+1. The wobble boundary does NOT move with the value word: whenever a
+   within-row transition is visible it sits at tx*=56 (ty=0) and
+   tx*=58 (ty=8) for every k - both = u* = 56 in the block metric
+   u = tx - floor(ty/4).  A continuous internal drift would sweep the
+   crossing with the value's sub-ulp phase; it does not.
+2. Therefore the internal carries a DISCRETE jump at a fixed
+   traversal position (u >= 56): word transitions appear only for k
+   whose phase straddles a rounding boundary across the jump;
+   13/39 k values show it => jump magnitude ~ 0.33-0.36 ulp24
+   ~ 3 lsb27.  The exported slope word is otherwise CONSTANT along
+   the band (exact steps), reconfirming 4-row blocking with the
+   boundary advancing +1 tile per block.
+3. basis1's A lane shows NO wobble anywhere (drift on one lane only),
+   and tt4's geometry (single-product numerator) has C deviations
+   without slope wobble: the mid-product X law and the join-path jump
+   are SEPARATE per-tile effects that compose for corpus children.
+OPEN: what u* = 56 is geometrically (not parallel to any edge; the
+anchor sits deep inside the jump region) - the asymmetric-triangle
+and translated-geometry captures will pin whether u* tracks the
+anchor, the edge, or a fixed superblock grid.
