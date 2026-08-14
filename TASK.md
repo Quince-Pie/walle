@@ -2444,3 +2444,24 @@ this same capture); shift-8 even-parity regime; the stored-rounding
 value per region (s, direction: base +1 word, s41 -1 word); the
 C-lane analogue.  These four wrinkles are the whole remaining
 unknown; every one is measurable with existing instruments.
+
+## 2026-08-14 (later 71): storage-rounding wrinkle; window close-out
+
+s41 ctx0 A-lane: chain idx27 = 99162298 (mod 4 = 2); hw region word
+3a3d2316 (one BELOW base 3a3d2317) is NOT produced by rna at any s
+(rna_2 gives ...18, one above); rtz at s=4 reproduces it.  Either the
+region storage's rounding mode differs per case (base rna_2 up, s41
+rtz_4 down) or my idx27 is a few lsb off (chain approximation) - the
+partner-lane FFMA values (residual-value probe) can measure the true
+internal slope directly per child and settle it.
+CONTINUATION ORDER (all instruments ready, goal unchanged):
+1. Measure true internal slopes for s41/s33 via the value probe;
+   settle the storage rounding (mode, s) per case.
+2. Resolve s41's B=0 y-quantum and the shift-8 even-parity regime
+   (one wobble map each with targeted anchors).
+3. C-lane analogue of the region law; then compose with the narrow
+   law and rescore tt1/tt3/tt4 + dense (goal step 2).
+4. Ports with gate contracts 91 -> 80 -> 0 (goal step 3).
+Since later-53: 20 hardware captures, every one sha-banked; the
+region-storage law's value-unit condition (later-70) is the
+campaign's deepest structural result to date.
