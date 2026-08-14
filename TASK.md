@@ -2384,3 +2384,23 @@ over 8-tile superblocks; even-parity anchors reverse the boundary
 orientation (observed -5/4 slope).  Next: fit shift-8 with the
 mirrored law; extend c1/dx0 to non-integer 4B/A (span1833); then the
 C-lane, compose, rescore, port (goal steps 2-3).
+
+## 2026-08-14 (later 68): real-child wobble boundaries (the law's true testset)
+
+Dense-capture 1-ulp wobble lanes (the only clean ones among 96):
+- (33,6,ctx1,B): 3a6b0058/59, 21 wobble tiles in rows 53-54
+  (near-horizontal boundary).
+- (41,2,ctx0,A): 3a3d2316/17, boundary EXACTLY tx* = 34 - ty
+  (slope -1: didx_x + didx_y = const) across 8+ rows.  This child has
+  B = 0 EXACTLY (single-slope plane) yet its A lane wobbles -
+  contradicting later-55's "join-only" reading, and its (c1,c2) =
+  (1,1) breaks the 8-4B/A interpolation (which gave (4,1)/(6,1)/(7,1)
+  for ratios 1/2/4).  The region-geometry law is therefore richer
+  than the 3-point toy fit; the s41 and s33 boundaries plus the six
+  toy maps are the constraint set for the next fitting round.
+- The parity/boustrophedon hypothesis remains open (shift-8's
+  even-parity regime fits (3,4)-family at best 11/19 with phase).
+Structure retained: region storage + block-float + anchor-relative
+traversal is the right frame; the exact region geometry (c1, c2,
+quanta, K as functions of A, B binades, anchor bits incl. bit 16)
+is the one remaining derivation.
