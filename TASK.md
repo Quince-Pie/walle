@@ -3092,3 +3092,21 @@ cancellation rows pin the internal slope to sub-ulp28 - s41 o2's
 rows ARE such an instrument: solve slope_int from the hw C words
 exactly, compare against build28 variants); then rescore; theta
 closed form; held-out; ports.
+
+## 2026-08-15 (later 103): dense-corpus integration - wide/narrow gating needed
+
+Full 33,736-tile dense scoring:
+  banked parts chain + plain RNE24:            23028 (68.3%) baseline
+  parts chain + per-axis sawtooth added:       18550 (worse: parts
+    already quantized - double-counting)
+  EXACT parts + sawtooth + theta final:        19400 at theta 33
+    (worse than baseline: narrow tiles NEED the banked narrow chain,
+    not a flat theta export)
+CONCLUSION: the composition must GATE per part: bl(product) <= 30 ->
+banked narrow chain stage; bl >= 31 -> exact part + sawtooth; final
+export theta-threshold only when a wide part dominates, else the
+narrow RNE24.  (This mirrors how the tt classes behaved: all-wide
+rows fit theta; tt3's all-narrow rows fit the chain.)
+NEXT-WINDOW START: implement the gated composite in the dense scorer;
+expect > 23028 immediately and > 30k with per-child theta; then the
+L3 pulses; then held-out; then ports 91 -> 80 -> 0.
