@@ -3248,3 +3248,18 @@ errors into the windows).  NEXT-WINDOW START: per-phase L1 check
 (the 24 dm ladder per (q,row) is enough to fit wrap/cut per q),
 then the theta(p,d_o) surface, then the closed form or the
 14-phase port table; then gated composite -> held-out -> ports.
+
+## 2026-08-15 (later 112): theta surface first read - q mod 128 structure
+
+Theta(q, ty) surface from the phase instrument (L1-clean cells,
+24 dm/cell - noisy, many contradictory windows):
+- LOW-theta phases are exactly q = 64 mod 128 (q=64/192/320/448:
+  theta ~ 18-28) vs ~33-45 elsewhere: the anchor phase's BIT 6
+  (quarter-pixel bit) controls the theta base.
+- tt4's low base 25 (q=64) fits the pattern; corpus children mostly
+  have q = 0 mod 128 (quarter/half-pixel anchors) -> the high-theta
+  regime.
+- Surface too noisy at 24 dm/cell for exact windows; next capture:
+  128+ dm per (q,row) on 6 phases x 12 rows for clean windows.
+NEXT: denser theta capture; then closed form/table; gated composite;
+held-out; ports 91 -> 80 -> 0.
