@@ -2341,3 +2341,24 @@ reversed regime needs its own threshold/shear - candidate 2^17).
 The slope-lane storage law is now essentially identified for the
 base family; remaining: dbin shear form, the reversed regime, the
 C-lane region law, then compose and rescore (goal step 2).
+
+## 2026-08-14 (later 66): region law does not transfer naively to children
+
+Applying the later-65 law (smaller lane, R < 2^15, rna_2) to the
+dense capture's slope words: baseline 29548/38793; with the law
+28335/38793 (fixed 0, broke 1213).  The corpus children's regions
+use different thresholds/alignments than the transfer-mesh family -
+consistent with the asym (c1 = 4+dbin) and shift-8 (reversed regime)
+maps: the law's parameters (threshold, shear, s) are functions of
+the slope binades and anchor regime still to be generalized.
+STATE FOR CONTINUATION (goal unchanged, three steps):
+1. Region-storage structure PROVEN (shift+4 map exact; base 727/729
+   corner slivers).  Generalize: fit (threshold, shear, s, lane
+   rule) per wobble dataset as functions of (slope binades, anchor
+   bits); the asym and shift-8 maps are the discriminators in hand;
+   new maps cost ~1 min each on the M1 harness.
+2. Then re-apply to the dense capture (slope lanes AND C tiles with
+   region-base + in-region behavior), rescore tt1/tt3/tt4.
+3. Then the ports with gate contracts 91 -> 80 -> 0.
+All capture inventory: 15+ hardware captures today, shas in entries
+later-53..66; harness /tmp/walle-agx-single-axis-multi-anchor.GRzoaQ.
