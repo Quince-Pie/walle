@@ -3540,3 +3540,20 @@ measurements per row (47 rows x cheap); cross-fit with the theta
 tables to separate theta(row) from the block term; then epq2
 decodes give delta2(dm,row) at the corpus phases; fit; compose;
 ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 128): theta_eff(dm,ty) measured; decoder coherent with family table
+
+Full eps-v3 decode (10 dm x 47 rows, +-4v, lever-quantized ~8v):
+- t=3072 (killer) column: +19v flat for rows 48-63 -> hw = L1 - 48
+  + 19 = -29v vs later-90's family window -32+-4 - THE DECODER AND
+  THE EXPORT-WINDOW METHODS AGREE: the instrument chain is coherent
+  end-to-end.
+- t=0 column: the 4-row-block offsets (-7/-21/+7/+15); other columns
+  wander +-15v with row structure = the delta2 interaction seen at
+  decoder resolution.
+The measurement system is validated; delta2's exact fit needs the
+export windows (exact, mod-G) JOINTLY with these absolute decodes
+(+-4v, no mod ambiguity) - the two constraint types complement.
+NEXT-WINDOW: joint fit of delta2(dm,ty) over both constraint sets
+at q=64, then corpus phases via epq2 decodes; then compose; then
+dense + held-out; then ports 91 -> 80 -> 0.
