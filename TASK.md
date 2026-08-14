@@ -3434,3 +3434,21 @@ alternation, late-row climbs (tt4 55+: 43-45).  Theta base offsets
 vs 32v: q=16:+1, 32:+5, 64:-11, 256:-3, 512:-3 - no simple q
 pattern yet; the theta closed form remains the one open item beside
 the 11 wrap-boundary cells and L3 pulses.
+
+## 2026-08-15 (later 122): boundary-band eps readout - inconclusive at current decode quality
+
+epq2 readout of q=6528 t in {105,117,121} (frame note: correct
+predictions are unwrap ~ -tm/4096 v, wrap ~ +(2^19-tm)/4096 v; the
+session printout's +-4000v prediction line had a 64x frame slip):
+measured internal devs cluster -30..-45v for mid rows ~ UNWRAPPED
+(-58v) plus theta-scale offsets, but scatter is +-30v and ty=47
+reads +70v (wrap-like) - the lever decode (single up-flip pair, no
+dither handling) is too noisy to pin the boundary cells' state
+per-row.  The wrap law stands at 99.4% with the 11 boundary cells
+unresolved; their resolution needs either the careful eps decode
+(dither medians, both flip families, eps-base exact subtraction) or
+a dedicated dense-eps capture at the band.
+STATE: wide_law.py carries L1 + seven-phase wrap law; theta tables
+refit (17275/17187/17158 on tt4/tz4/tz5); remaining unknowns:
+theta closed form, 11 wrap-boundary cells, L3 pulses, then the
+composite + ports.
