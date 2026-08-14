@@ -592,3 +592,51 @@ working generator for the killer cell's down-excursion**, and it is the
 only such generator found in 38160 swept configurations. Whatever the true
 law is, its low-order term is signed and carries a borrow; but it is not
 combined with the high partial the way a plain two-segment product does.
+
+### B11. Reconciliation with Track A's correction on the T=17 injection
+
+Track A measured the frame injection as tt3-breaking; both numbers are
+right, because they are different laws.  Verified here:
+
+| law | tt4 | tt3 | tt1 |
+|---|---|---|---|
+| B1 as implemented (injection GATED off when `sh_f > T`) | 14850 | **18001** | 2226 |
+| unconditional injection in the normalised frame, `((N + 9*2^17) >> 17) << 17` | 14850 | **8424** | 2228 |
+
+So the B1 score stands, but Track A's substantive point is correct and the
+"structural / automatic" framing in B1 was too strong.  What is automatic is
+the TRUNCATION: dropping columns below bit 17 of a frame whose low bits are
+zero removes nothing.  What is NOT automatic is the injected CONSTANT — a
+physical constant-correction array injects it whether or not anything was
+dropped, and that is what breaks tt3.  B1's `sh_f > T` test is an explicit
+conditional, not something the hardware gives for free.  (This is the same
+tension already recorded in B4 and B10: an absolute compensation cannot
+coexist with the measured compensation, which is result-relative.)
+
+The gate is also tight rather than comfortable.  Measured `sh_f` ranges:
+tt3 18..23, tt4 11..16, tt1 12..20.  tt3's minimum is exactly 18, one bit
+above T=17, and 6128 of its cells sit at that minimum.
+
+### B12. Theorem (Track A's, verified here): tt3-safe XOR killer-cell-reachable
+
+For an absolute-column cut at bit T of the RAW subpixel frame `R = dm*disp`
+with a sub-cut constant `C < 2^T`, tt3-exactness needs `T <= 13` (tt3's disp
+carries 13..18 trailing zeros, so `((R+C) >> T) << T == R` with no gate at
+all — genuinely structural, unlike B1).  But then `|V - R| < 2^13 = 8192`.
+
+Measured requirement at the killer cell (dm=0x800C00, d_o=1793, drop=0):
+`X in [-1600, -449]` output units, i.e. `[-102400, -28736]` raw units at
+z=6, against a raw granule of 2^16.  The smallest admissible excursion,
+28736, exceeds the largest achievable perturbation, 8192, by 3.5x.
+
+**No absolute-column cut is both tt3-safe and able to reach the killer
+cell.**  Confirms Track A's bound independently.
+
+Carried forward from Track A: of 38160 swept segmented configurations, the
+only ones reproducing the killer cell (360 of them) use a SIGNED low segment,
+so the borrow is confirmed as the generator of the exact-on-grid
+one-granule-low excursion — but those configurations score 12971 on tt4 and
+2164 on tt1, both below the plain narrow law, so the borrow is not combined
+with the high partial the way a plain two-segment product is.  Track A also
+re-ran the dm-keyed additive-bias ceiling under 24 export roundings: best
+17307, so no rounder choice rescues a dm-keyed bias.
