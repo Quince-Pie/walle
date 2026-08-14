@@ -484,3 +484,111 @@ Open: the mechanism that makes the compensation depend on tz while staying
 cut-independent.  The (tz, cut) table in B9 is the object to explain, and
 the five new captures make it measurable at will — a new class costs one
 anchor change and about a second of GPU time.
+
+---
+
+## Track A (segmented multiplier)
+
+Owner: track-A solver. Harness `analysis/wide_solver_A_frame.py` (mine;
+`wide_solver_data.py` used read-only). Scripts prefixed `wide_solver_A_`.
+
+### A0. Correction to a banked cross-track number
+
+**The fixed-frame injection T=17 K=9 does NOT keep tt3 at 18001** — the
+lead's summary carried it as "tt3 18001 derived". Measured directly in the
+48-bit normalised frame `N = dm * (odd(d_o) << (24 - bl(odd)))`:
+
+| rule | tt4 | tt3 | tt1 |
+|---|---|---|---|
+| `((N + 9*2^17) >> 17) << 17` | 14850 | **16561** | 2228 |
+| `((N >> 17) + 9) << 17` | 14850 | **16561** | 2228 |
+| same at T=16 | 14395 | 16881 | 2266 |
+| same at T=18 | 13303 | 15313 | 1970 |
+| sub-cut constant `((N + C) >> T) << T`, best (T=21, C=13*2^17) | 14524 | **17521** | 2258 |
+
+Reason: the tt3-safety argument needs `TZ24 = 24 - bl(odd(d_o)) > T`, but
+tt3 attains `TZ24 = 18` exactly (d_o with a 6-bit odd part, e.g. 47), so a
+cut at 17 with a constant AT or ABOVE the cut still perturbs those rows,
+and a cut at 21 drops their columns 18..20. A sub-cut constant `C < 2^T`
+is invisible only when no column is dropped, which fails for the same
+rows. **No injection in the normalised frame is simultaneously tt3-exact
+and large enough to matter.** (`wide_solver_A_calib.py`)
+
+### A1. The frame that IS structurally tt3-safe
+
+Use the RAW subpixel frame `R = dm * disp` instead. Measured trailing
+zeros of `disp`: tt3 **13..18**, tt4 **6**, tt1 **7**. So a cut at column
+`T <= 13` with a sub-cut constant `C < 2^T` is exact on tt3 by
+construction while biting on tt4 and tt1 — and the tz split 6 vs 7 is
+available as the sign selector the lead asked about.
+
+But that frame caps the achievable deviation: `T <= 13` bounds `|V - R|`
+by ~`2^13` raw units, whereas the killer cell needs `V - R` in
+**[-102400, -28673]** (one granule there is `2^16 = 65536`). **An
+absolute-column cut can be tt3-safe or reach the killer cell, never
+both.** Not swept further for that reason (`wide_solver_A_gate.py`).
+
+Significant-width quantisation of the partials does have the range, and
+is also tt3-exact by construction: tt3's `odd(disp)` is at most 6 bits, so
+`H*disp` carries at most `30 - s` significant bits and `L*disp` at most
+`s + 6`; **any width >= 20 is a no-op on tt3 for every split s in 10..14**,
+while tt4/tt1 reach 25..27 bits in the same partials. That is the family
+swept below — no product-width gate anywhere in it.
+
+### A2. Segmented multiplier: FALSIFIED (`wide_solver_A_seg.py`)
+
+    H = dm >> s ;  L = dm - (H << s)     (optionally signed, borrow into H)
+    V = Q(H * disp) << s  +  Q(L * disp)
+
+36000 combinations: s=10..14 x signed/unsigned x per-partial width 18..27
+x per-partial mode in {rtz, rne, rna, rup, rodd, floor}, both partials
+independent. tt3 held at 18001 throughout, structurally.
+
+| result | tt4 | tt3 | tt1 |
+|---|---|---|---|
+| family ceiling (s=11, unsigned, hi rna23, lo rne18) | **14506** | 18001 | 2240 |
+| best that also reproduces the killer cell | **12971** | 18001 | 2164 |
+| baseline (narrow law) | 13876 | 18001 | 2300 |
+
+**The family has a hard internal conflict.** 360 of 36000 combinations
+reproduce the killer cell and *every one of them* has `signed=True` — so
+the lead's hypothesis is confirmed: a signed low segment does produce the
+exact-on-grid one-granule-LOW excursion naturally, via the borrow. But
+those same 360 score 12971 on tt4 and 2164 on tt1, both **below the plain
+narrow law**. The 14506 ceiling configurations all fail the killer cell.
+The mechanism that explains the killer cell and the mechanism that fits
+the bulk are mutually exclusive inside this family.
+
+Note the frame-anchored sweep lands on essentially the same ceiling as the
+earlier P-unit sweep (14506 vs 14504), which is good evidence the cap is a
+property of the family and not of the framing.
+
+### A3. Recursive narrow-law partials: FALSIFIED (`wide_solver_A_recursive.py`)
+
+Partials routed through the export chain itself (rna at w1 then RNE at
+w2), 2160 combinations over s=10..14 x signed/unsigned x route in
+{both, hi, lo} x w1=21..29 x w2=18..w1:
+
+| result | tt4 | tt3 | tt1 |
+|---|---|---|---|
+| ceiling (s=11, unsigned, route=hi, w1=w2=23) | 14504 | 18001 | 2240 |
+| best with no tt1 regression (s=12, signed, route=hi, w1=w2=23) | 14292 | 18001 | **2300** |
+| reproduce the killer cell | **0 of 2160** | — | — |
+
+Same 14.5k ceiling; the recursive form never reaches the killer cell at
+all.
+
+### A4. Track A verdict
+
+The segmented multiplier is **falsified in both halves of the assignment**
+and in both framings (P units and raw subpixel frame), with tt3 held at
+18001 structurally rather than by a product-width gate. Its ceiling
+(14506) sits below the already-banked fixed-frame injection (14850) and it
+cannot beat the narrow law on tt1 (2240 vs 2300) except at a configuration
+that gives up 200 cells of tt4.
+
+The one durable finding to carry forward: **a signed low segment is a
+working generator for the killer cell's down-excursion**, and it is the
+only such generator found in 38160 swept configurations. Whatever the true
+law is, its low-order term is signed and carries a borrow; but it is not
+combined with the high partial the way a plain two-segment product does.
