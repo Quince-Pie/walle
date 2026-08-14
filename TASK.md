@@ -2991,3 +2991,18 @@ via the banked chains + sawtooth per axis + theta; rescore all 58
 dense groups; theta closed form from the growing theta table
 (25/21/17/33/49 observed); then the 38612 held-out corpus points;
 then the ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 97): anchor term integrated; o2-family convention remains
+
+With the anchor-value term + signed frames: TOTAL 11378/18862 on
+single-axis dense children.  NEWLY PERFECT: s31 o6 ctx0, s31 o103
+ctx0, s33 o6 ctx0, plus near-perfect s34 o6 (460/472), s39 o6
+(550/552), s42/s44 o6 (592/600 each).  The remaining 0/N cluster is
+EXACTLY the ordinal-2/104 family (s34/35/40/41/42/45/47 o2, o104s)
+- one shared convention issue (anchor vertex selection / slope
+direction for that child family), not a law failure.  Theta values
+observed so far: {9,17,21,25,33,37,49} - quantized on the 4v grid,
+parity split 8.
+NEXT: fix the o2-family convention (check winding/anchor of ordinal-2
+children in _childgeo/CHILDSDF), rescore; two-axis children via the
+full parts model; theta closed form; held-out corpus; ports.
