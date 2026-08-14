@@ -2424,3 +2424,23 @@ ratio is set by the other channels' slopes (ctx1 B ~ A0 -> ratio ~ 1
 channels, hiding this.  Test: toy capture with DIFFERENT per-channel
 varyings to move the shared exponent and watch the region shift.
 The 8-4B/A interpolation must be recast with the RECORD-max slope.
+
+## 2026-08-14 (later 70): THE REGION CONDITION IN VALUE UNITS (scale-invariant)
+
+Capture a2-crosschan-plan-v1 (channels scaled 1/4/0.25/1 vs all-1
+control; capture.raw sha256
+4fed781690987ad36c770e0e402ec762689243d94200a44714ed5c48277718ef):
+ALL FOUR channels show the IDENTICAL boundary (56/57/58 at ty 0/4/8)
+in both cases - cross-channel exponent coupling FALSIFIED, and the
+boundary is invariant under slope SCALE.  This pins the condition:
+*** REGION <=> A * didx_x < B * 128px ***
+(x-value-distance to the anchor less than one 4-row block of
+y-value; scale-invariant in the channel, consistent with all three
+span maps: boundary tile-distance = 4*B/A exactly -> n+1 = 4, 2, 1
+for spans 1421/710.5/355.25) plus the +1-per-c1-rows shear with
+c1 = 8 - 4B/A as fitted.  OPEN WRINKLES: s41 (B = 0) still shows
+n = 3 - its y-quantum source unresolved (record-max-B falsified by
+this same capture); shift-8 even-parity regime; the stored-rounding
+value per region (s, direction: base +1 word, s41 -1 word); the
+C-lane analogue.  These four wrinkles are the whole remaining
+unknown; every one is measurable with existing instruments.
