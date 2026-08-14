@@ -3510,3 +3510,17 @@ delta2(dm,d_o,q) forms on it (products of both operands' low bits
 are the natural family: the SECOND operand's sawtooth
 wrap((d_o * p2) mod 2^19) with p2 = subrow phase, or the cross
 term wrap((dm*d_o) mod 2^k)); then compose; then ports.
+
+## 2026-08-15 (later 126): eps decoder not yet at spec - validation path defined
+
+Dither-median decode of epq2: low rows (ty 19-31) read delta2 in
+(-200,+30)v but the t=0 control columns read -30..-70v where the
+answer must be EXACTLY 0 (dm=2^23, L1=0), and rows >=35 diverge
+(errors doubling with bl => a frame/scale bug in the V
+reconstruction).  The decoder needs unit-tested construction:
+NEXT-WINDOW: build analysis/eps_decode.py with self-tests against
+GROUND TRUTH first - eps-v3's q=64 t=0 scans (V = P exactly known;
+the decoder must return 0 +-2v there across all rows/binades),
+then apply to epq2 for the delta2(dm,d_o) tables; then fit the
+cross-term; then compose; then ports.
+The delta2 fit is the LAST continuous unknown of the law.
