@@ -2249,3 +2249,31 @@ capture.raw sha256
    fit all six wobble datasets exactly; then compose with the
    mid-product X law and rescore (goal steps 1-2), then port
    (step 3).
+
+## 2026-08-14 (later 62): jump existence is phase-dependent (wide-map nulls)
+
+Capture a2-wobble-wide-plan-v1 (cases 1 and 2 full-screen maps, 1317
+draws; capture.raw sha256
+e0a71ace92af7b451b31326d4dc7dc881bfa7880c9decbec0156a7d79e23f37d):
+both cases are COMPLETELY FLAT across all covered tiles (0..63 x
+0..21) - no jump anywhere on screen:
+- case 2 (identical slopes/ax, ay shifted +100px): the C=0.5 binade
+  line DOES cross the mapped window, and the K-invariant predicts an
+  in-window boundary; both fail.  ay%8192 = 640 vs base 1664: the
+  jump's magnitude (hence visibility) depends on the anchor's
+  sub-tile phase through the y-part product low bits - the ~3-lsb27
+  step of later-56 is not a constant but a phase function.
+- case 1 (B = 2A): no jump on screen either.
+CONSOLIDATED LAW STATE (the one remaining unknown, all measured
+constraints): block-float triple storage (later-60), smaller-slope
+lane carries the jump; boundary position tx* = floor(ax/8192) - 4 + b
+for the base family (b = 4-row block index), coefficient law
+c1 = 4 + slope-binade-delta (three-point, later-61); jump size 10-16
+lsb in large-alignment regimes (later-61 case 3), ~3 lsb27 base,
+ZERO at other anchor phases (this entry); plus the entire mid-product
+X-law constraint set (K(tz) table, parity thresholds, bl(disp)=19
+diagonal, killer cell, phase-0 census, borrow requirement).
+The identification is at the stage where the remaining freedom is
+the exact alignment/rounding datapath generating these; every new
+capture now adds an exact constraint in minutes.  Goal steps 2-3
+(compose+rescore; port 91->80->0) remain queued on this law.
