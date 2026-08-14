@@ -3341,3 +3341,23 @@ NEXT-WINDOW: clean the decode (subtract eps base, median-filter
 lever), map the large-q deviant set exactly over the 128-dm ladders
 of thp2 (which t deviate at q=1664/6528 and by how much), fit the
 rule; then compose; then ports.
+
+## 2026-08-15 (later 117): large-q deviants = wrap-boundary cells; cut law refinement
+
+thp2 128-dm deviant map at corpus phases: ~100/128 t deviate with a
+smooth +-10..30v ripple PLUS ~-110v (~1.7G) BANDS at t={37-39,
+117-123, 199} (q=6528) and t={143-159} (q=1664).  Band spacing =
+2^19/q in t EXACTLY (80.3 / 315) and the band positions align with
+arg = (dm*q mod 2^19)/2^19 ~ 0.45-0.53 = MY WRAP CUT: the bands are
+cells where the model's wrap decision differs from hw's.  The wrap
+boundary is NOT the constant 29/64 measured at q=64: at large q the
+hw un-wrapped cells extend to arg ~0.53.  Candidate laws tested by
+hand (arg >= 1/2; RNA at 2^16) each fit one phase and break the
+other - the wrap decision needs the per-(q,t) empirical extraction:
+classify every band cell as hw-wrapped/unwrapped from the export,
+map the boundary in arg space per q, THEN fit.  The smooth +-20v
+ripple outside bands is separate (second-order, possibly decode
+noise - needs the cleaned eps decode).
+NEXT-WINDOW START: wrap-decision extraction per (q,t) from thp2 ->
+cut law; cleaned eps decode for the ripple; then compose; then
+theta; then ports 91 -> 80 -> 0.
