@@ -131,3 +131,76 @@ group), so those numbers are fitting artefacts, not evidence.
   -infinity.  It accounts for exactly 2 cells — do not spend time on it.
 - **No tt4 row admits a constant X**, nor constant X/granule, nor constant
   X/P (all 47 rows infeasible), so per-row constants are dead.
+
+## Track B (operand/frame)
+
+Files `wide_solver_B_*.py`.  All scores exact, all three datasets.
+
+### B1. Fixed-position injection in the dm x didx24 frame — BEST STRUCTURE
+
+`wide_solver_B_frame.py`.  didx24 = odd part of the displacement normalised
+to 24 bits; `sh_f = 24 - bl(odd(d_o)) - tz(d_o)`, so `frame = P << sh_f`.
+The array drops columns below a fixed frame bit T and injects K there:
+
+    C = narrow( P + K * 2^(T - sh_f) ),   bias = 0 when sh_f > T
+
+**T=17, K=9: tt4 14850, tt3 18001, tt1 2226.**  Same tt4 as the
+result-relative form, +18 on tt1, and — the real gain — **tt3's exactness
+becomes automatic instead of asserted**: every tt3 displacement has
+`bl(odd) + tz <= 6`, hence `sh_f >= 18 > 17`, so no tt3 column is ever
+dropped.  No `bl(P) <= 30` side condition is needed.
+T=16/K=18 is the same law one bit down and scores identically on tt4.
+
+### B2. *** THE bl(P) <= 30 GATE IS FALSIFIED ***
+
+The brief's "narrow law is PROVEN for bl(P) <= 30" is an artefact of tt3's
+displacement alignment, not a law about product width.  tt1 contains 8
+distinct cells (16 counting the 0.5x twins) with `bl(P) = 27..30` that
+deviate from the narrow law by a full granule:
+
+| dm | d_o | bl | cut | drop | D | sh_f |
+|---|---|---|---|---|---|---|
+| 0x800010 | 51 | 29 | 5 | 16/32 | -1 | 18 |
+| 0x800008 | 51 | 29 | 5 | 24/32 | -1 | 18 |
+| 0x800004 | 51 | 29 | 5 | 12/32 | +1 | 18 |
+| 0x80000F | 51 | 29 | 5 | 29/32 | -1 | 18 |
+| 0x800010 | 115 | 30 | 6 | 48/64 | -1 | 17 |
+| 0x800003 | 115 | 30 | 6 | 25/64 | +1 | 17 |
+| 0x80000F | 115 | 30 | 6 | 61/64 | -1 | 17 |
+| 0x800004 | 13 | 27 | 3 | 4/8 | +1 | 20 |
+
+tt3 is exact at the same bl and the same dm values because tt3 never probes
+`d_o > 47`.  Note d_o = 51 has `sh_f = 18`, identical to tt3's d_o = 47 —
+the frames are structurally identical — so the discriminator is the RAW
+subpixel trailing-zero count (tt1 z=7 vs tt3 z=13), confirming the lead's tz
+clue.  The last row is the known sign cell (tileY=19, negative displacement).
+
+### B3. *** tt1 AND tt4 REQUIRE OPPOSITE-SIGN COMPENSATION ***
+
+Deviation sign is inverted between the two regimes:
+tt4 `{+1: 3012, -1: 1096, +2: 17}` but tt1 `{-1: 260, +1: 50}`.
+Scanning a single global granule-relative constant `K * 2^(bl(P)-30)` over
+K = -16..+16 (no gate) gives best tt4 at K=+9 (14850) and best tt1 at
+K=-4/-2 (2308, barely over its 2300 baseline); tt3 needs K=0 exactly and
+falls to 17681 by K=-4 and 16561 by K=+9.  **No single compensation constant
+can serve tt4 and tt1 at once.**  This is the hard obstruction behind every
+"trades tt4 against tt1" result in the log, including the {29,27,26} cascade.
+
+### B4. Falsified on this track
+
+| family | tt4 | tt3 | tt1 | verdict |
+|---|---|---|---|---|
+| tz-gated granule-relative bias, `bias = K*2^(bl-30)` iff `tz(disp) < T`; T=7..13, K=0..25 | 14850 | 18001 | 2300 | best TOTAL to date (35151, T=7 K=9) but hollow: T=7 works only by excluding tt1 (z=7) from the bias entirely, leaving it at its narrow-law baseline.  T=8..13 (tt1 biased) gives tt1 2212. |
+| absolute-frame injection magnitude (constant bias in P units) | — | — | — | FALSIFIED by scaling: the measured bias grows x32 across bl=31..36, so the injected constant must be weighed on the normaliser side, not in the subpixel frame.  Confirms the earlier T-sweep ceiling of 14220. |
+| mantissa-product overflow as the tt1 discriminator (`bl(dm*didx24) == 48`, which halves a fixed injection's relative weight) | — | — | — | FALSIFIED: tt1's deviations sit in the NON-overflow set (246 of 260 D=-1 cells have no overflow; the 216 overflow cells contribute only 14). |
+| gate on `sh_f <= T` for tt1 | — | — | 2226 | over-fires: 50 tt1 cells have `bl(P) <= 30` with `sh_f <= 17`, of which only 6 actually deviate. |
+
+### B5. Killer cell status
+
+`dm=0x800C00, d_o=1793` (bl=34, drop=0) still misses under every Track B
+law: they all predict `P + 9*2^4 = P + 144`, which rounds to M, whereas the
+hardware exports M-1 (X in [-1536,-512]).  Consistent with the integrator's
+"exact-on-grid mistreatment" profile — and with the dm-dependent term that
+the ceiling theorem (solver-2 section) shows cannot be a function of dm
+alone.  Any winning candidate must produce a NEGATIVE excursion of about one
+granule at drop = 0 for this dm while keeping +9 as the mean.
