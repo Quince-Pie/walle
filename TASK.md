@@ -3129,3 +3129,20 @@ against the five banked class tables + the per-child tables from the
 12 perfect children (their fitted thetas are known-good anchors);
 then the gated dense composite with theta(path); then held-out;
 then ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 105): theta-exact windows mostly EMPTY - cell-level residual remains
+
+Exact per-row theta windows (even-parity-folded, all cells must fit):
+most rows are CONTRADICTORY by 5-10v (10-20 cells per ~380-cell row
+deviate from any single threshold); only the crossing rows (ty=48)
+give clean windows [9,64].  The earlier per-row scores were majority
+fits.  CONCLUSION: after the closed sawtooth, the residual ~4-8% is
+CELL-structured (second-order dm term), not a pure per-row theta:
+candidates - the wrap cut is not a constant 29/64 (per-bl boundaries
+showed [-7/16,+9/16] with fine structure), the parity fold is not
+exactly 8 everywhere, and +-G pulses pollute specific dm families.
+The law stack is: L1 sawtooth (closed) + L2' second-order cell term
+(open: ~4-8% of cells) + crossing pulses.  NEXT: characterize the
+residual cells directly (which dm's deviate from the row threshold,
+vs dm bits/r-position) on tt4 rows with the cleanest windows - the
+same family-census method that cracked L1 (later-90).
