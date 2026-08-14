@@ -2952,3 +2952,20 @@ global theta per class (89-94%); per-row theta adds ~+4 points
 Remaining: theta(path) closed form + the last few percent sub-row
 structure; then tt1 (p=1664, non-power-of-2 phase - key test),
 dense, held-out, ports.
+
+## 2026-08-15 (later 95): theta(ty) tables for all five classes (banked)
+
+Per-row theta with the unified sawtooth (excursion-outliers separate):
+tt4 17291/17987, tz4 17102/17891, tz5 17106/17867, tz8 15956/16755,
+tz9 14267/15195 - ~95.5% average.  Structure:
+- UNIVERSAL crossing values: theta(ty=48) = 9 in ALL five classes;
+  theta(ty=32) = 25 (17 in tt4); crossings drop theta by 8/16/17.
+- Class bases: tt4 25, tz4 36 (alternating 37/33 by ty parity),
+  tz5 42 (dropping to 33 late), tz8/tz9 ~33 -> 29 with parity
+  alternation.  tt4 late rows (55+) climb to 41-45.
+- A per-row theta shift is indistinguishable from a per-row value
+  shift delta_row = (base - theta_row)*v: the tables ARE the
+  d_o-side second-order structure (crossing pulses +8v/+16v,
+  late-row drifts -18v, parity alternation +-2v).
+Full theta tables banked in this entry's analysis output (session
+transcript); regenerate with the later-95 script pattern.
