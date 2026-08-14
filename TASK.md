@@ -2627,3 +2627,30 @@ now ORs.  Rule sketch in analysis/a2_rule_generate.py (RTZ-join of
 non-anchor basis constants + RNE anchor add) reproduces tri 2
 22/22 hw tiles but over-extends tri 0; superseded by the basis-sum
 internal-precision model of (2).
+
+## 2026-08-14 (later 79): the two remaining classes converge on ONE law
+
+Knob sweep on the a2-allts basis words: ('slope',10,32,20) fits
+72/108 (best; banked 'mid' knobs 58/108) but the one-plane score is
+KNOB-INVARIANT at 623/672, and the 49 misses are EXACTLY the deficit
+tiles (+ s58's above-1 pair): the model basis sum lands at 1.0 where
+hw is one ulp low.  The true barycentric sum is identically 1.0, so
+the deficit is a SYSTEMATIC LOW BIAS in the hw's internal per-basis
+values - the reciprocal-path chain (transfer dets are 1421^2, not
+2^k) truncating below the model's precision.  CONCLUSION: the 80
+raster residuals (wide-path C law, task #3) and the presentation
+generation rule (task #4 port) are the same missing object: the
+exact product/reciprocal chain at internal precision.  Closing the
+chain closes BOTH: 91 -> 80 -> 0.
+NEXT-WINDOW PLAN (in order):
+1. Wide-path law: two-stage decode of eps-tomography v3 (27-bit part
+   grid + biased final round; the t=0 rows constrain the quantizer,
+   the t-scans constrain the multiplier deviation D) - or the
+   equivalent read from the a2 basis words (each hw basis word =
+   chain(numerator, reciprocal, didx) with KNOWN inputs: 108 words
+   of ground truth on the reciprocal path, 1-2 ulp resolution).
+   The basis dataset is the cleanest reciprocal-path probe yet.
+2. Then rescore tt1/tt3/tt4 + dense + 38612 held-out; then the two
+   gated ports (presentation secondary stage in the renderer via the
+   closed basis chain; general path flip) with zero-regression
+   contracts 91 -> 80 -> 0.
