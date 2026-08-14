@@ -1849,3 +1849,18 @@ secondary-SENSITIVE pixel where apple==walle pins apple's secondary
 solve apple's deficit plane (A, B, C_int) exactly per triangle; then
 validate across states 31/33/40/41/58/60 and derive the input-only
 generation rule (CA vertex-shader arithmetic) from the solved planes.
+
+## 2026-08-14 (later 47): integrator: 3-stage cascade lead (best rule to date)
+
+Bias algebra unifies both threshold measurements: rna-stage biases add
+as 2^(29-W) units of 2^(bl-30); measured totals (mine 13 absolute,
+solvers' 9 above the narrow law's 4) = stages {29, 27, 26}.  Scored
+wide-only cascade rna29->rna27->rna26->RNE24: tt4 14524/18001 (best
+known; baseline 13876), tt3 intact 18001, tt1 2232 (from 2300).
+Misses: 76% at phase-0 of the 29-cut; even-dm 3-4x worse than odd
+(exact-on-grid mistreatment = the killer-cell family).  "-1 before
+round" at the 26-stage flips the trade (tt1 2304-2310 > baseline,
+tt4 drops) - every variant trades tt4 vs tt1, and the only systematic
+input difference is didx trailing zeros (6/7/13).  Handed to the
+solvers: sweep tz-parameterized final stage + explicit phase-0
+handling under the bias-sum constraint.
