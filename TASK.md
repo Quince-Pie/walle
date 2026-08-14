@@ -1890,7 +1890,7 @@ narrow-branch port (rna27 half-up) remains gate-neutral at 91, but
 its correctness domain must be restated in frame terms before task
 #8 flips the general path.
 
-## 2026-08-14 (later 47): #4 re-scoped - presentation class is 11 px, solved
+## 2026-08-14 (later 48): #4 re-scoped - presentation class is 11 px, solved
 
 The dense-constraint solve of the A2 transfer plane is done (brief:
 analysis/A2_PLANE_SOLVER_BRIEF.md; falsification log:
