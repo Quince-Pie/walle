@@ -2072,3 +2072,26 @@ wider triangle - does the 4-row blocking persist; (b) asymmetric
 slopes (A != B) - how the two biases scale with step values; then
 re-derive the C X-function as the SAME walk's accumulated bias, which
 would unify tasks #3 and #4 into one implementable law.
+
+## 2026-08-14 (later 55): wobble is join-path-only; the last unknown localized
+
+Capture a2-slope-wobble-plan-v2 (basis0 and basis2 dense maps, 1458
+draws; capture.raw sha256
+50f3a361162b4b558311c182b890e253ab532ad9f113af1d2debb069ed446af6):
+single-slope basis planes (numerator = ONE product; the passthrough
+class walle already reproduces 18/18) export CONSTANT slope words at
+all 729 tiles - NO wobble.  Only basis1 (numerator = a JOIN of two
+products; the general class holding all 80 raster residuals) wobbles,
+with the later-54 block law g*(tx - floor(ty/4)).  UNIFIED PICTURE:
+the per-tile coefficient RAM for JOINED numerators is produced by a
+4-row-block tile traversal whose accumulator carries a per-step bias
+(+g per tile-x, -g per 4-row block); single-product paths are exact.
+The campaign's one remaining unknown for all 91 bytes is this
+traversal's arithmetic, constrained by: the K(tz) table (later-49),
+the parity thresholds 27v/19v (Track A/B), the bl(disp)=19 diagonal,
+the killer cell, the phase-0 census, the borrow carry-forward
+(later-52), and now the exact block drift law (later-54/55).
+Next: (a) map basis1's A word across the same tiles (is the drift on
+one lane or both); (b) an asymmetric triangle (A != B) to scale g
+against step values; (c) express the C X-function as the accumulated
+block-walk bias and rescore tt1/tt3/tt4.
