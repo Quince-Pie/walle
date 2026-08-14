@@ -2900,3 +2900,22 @@ mostly a single 64v-window: the value is pinned mod G; stitch
 adjacent-row continuity to pin absolutes), fit the closed sawtooth
 formula, compose with theta = 32v-13v threshold + walk residue,
 rescore all six classes -> dense -> held-out -> ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 92): SAWTOOTH + THETA COMPOSITION AT 96.1% (tt4)
+
+The closed sawtooth: delta = -(t mod 8192)*2^(bl-36), WRAPPED: rep
+chosen with cut at tm >= 3712 (+8192) - fits the entire family table
+(bl36 row: delta = -4k exactly, k=0..14, wrap +68 at k=15).
+Composed with parity thresholds (theta_even, theta_odd = theta-8):
+  global theta=(25,17):        16607/18001
+  per-row theta (split locked): *** 17291/18001 (96.1%) ***
+Theta(ty) profile (the walk's 1-D shadow): base (25,17) almost
+everywhere; crossing rows DROP (ty=32: (17,9); ty=48: (9,1));
+late rows CLIMB in steps (ty=55+: (43,35) -> (45,37), ~+2v/2rows);
+occasional (21,13)/(23,15) dips.  Per-row fit quality 92-100%
+(ty=60: 383/383 PERFECT).
+Model status: value' = P - wrapped_sawtooth(t)*2^(bl-36);
+export = floor(value'/G) + [dropped >= theta(path)].  Remaining 710
+misses = sub-row theta structure.  NEXT: theta(ty) closed form
+(crossing resets + steps), cross-class validation (tz sets, tt3
+exactness, tt1), then dense + held-out, then ports.
