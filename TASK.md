@@ -1652,3 +1652,38 @@ then the corpus gate (expect the ~34 walk-gated bytes to flip green,
 analysis/ (hunt_c_walk_seed.py loaders, score_c_chain_dense.py).
 The Mb=24 ty24/25-vs-ty26/27 split (later-36 fact 2) remains the
 sharpest single discriminator any candidate must pass.
+
+## 2026-08-13 (later 38): NARROW C-PRODUCT LAW PROVEN; wide path cornered
+
+NEW CAPTURES (all synthetic clean-selector children, column 60):
+- c-truthtable2-plan-v1: anchor y=512.0, d = ty-16 in 1..47, height 2048
+  fixed later to 4096 (v2 y=4608); capture.raw sha256
+  dbd463c96bc92657a05f4866e59cdc0ff648eb41ee21ab4b82ae297367b50eaa
+- c-truthtable3-plan-v1: same geometry, dm scans 0x3F800000+t (t=0..255)
+  and +t<<8 (t=1..127); capture.raw sha256
+  3fde603b0f56759f0c1525f3b122ff995d4cb4eea982df149e9a5f60871cc526
+- c-truthtable4-plan-v1: anchor y=511.75 => d_o = 128*ty-2047 (8-13
+  bits), height 4096; same word scans; capture.raw sha256
+  9461fc6277836c48f5617ba57007cb8deb256987b550a49a231a247a062c2840
+
+*** PROVEN LAW (narrow path): for products P = mant24 x didx_odd with
+bit_length(P) <= 30: C = RNE24( rna27(P) ), where rna27 = round-half-
+AWAY to 27 bits (the banked chain's narrow branch arithmetic).
+EXACT on all 18001 tt3 points (products <= 30 bits). ***
+
+WIDE PATH (bl >= 31) facts:
+- tt4 (18001 pts): narrow law drops to 77-88% for bl 31..36.
+- Deviations organized in contiguous dm-zones; at bl=31 hw rounds UP
+  from dropped-fraction ~0.30 for ODD P, ~0.44 for even P (excess
+  E ~ +25/+12 P-lsb at d_o=129, ~ +51 at d_o=257: E ~ 0.2*d_o-ish),
+  yet ty63 (d_o=6017) shows NEGATIVE E, and rows are NOT constant-E.
+- Killer datum: cell (dm=0x800C00, d_o=1793): P exactly representable
+  after the cut (dropped=0), hw exports ONE LSB BELOW P (E in
+  [-1536,-512] at bl=34; -P*2^-24 = -897 fits): consistent with a
+  one-lsb-low selector/slope operand for THAT cell; but a global
+  P*(1-2^-24) deficit contradicts tt1 wide rows (ty24/25 exact).
+- Cascades (P->W1->27->24 all mode combos), Booth variants, preshift,
+  postround, linear-in-dropped-bits (Kaczmarz feasibility): none fit.
+Corpus relevance: real children numerators are ~28 bits x didx 9-12
+bit odd parts => products 36-40 bits: corpus C tiles are ALL wide-path.
+The wide law is the last gate for the ~34 AGX corpus bytes.
