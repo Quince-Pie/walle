@@ -1864,3 +1864,28 @@ tt4 drops) - every variant trades tt4 vs tt1, and the only systematic
 input difference is didx trailing zeros (6/7/13).  Handed to the
 solvers: sweep tz-parameterized final stage + explicit phase-0
 handling under the bias-sum constraint.
+
+## 2026-08-14 (later 48): CORRECTION - the bl(P)<=30 narrow gate is falsified
+
+Track B (wide-law-solver2, commit 0890570) falsified the later-38
+phrasing "narrow law PROVEN for products <= 30 bits"; I verified the
+counterexamples directly against tt1's raw capture:
+  dm=0x800004 d_o=51 (bl 29): hw = narrow-law + 1 lsb
+  dm=0x800010 d_o=51 (bl 29): hw = narrow-law - 1 lsb
+  dm=0x80000F d_o=115 (bl 30): hw = narrow-law - 1 lsb
+tt3's 18001/18001 exactness is an ALIGNMENT artifact (its
+displacements carry subpixel tz=13, so every frame column below the
+injection point survives), not a product-width fact.  Structural
+reframe (Track B): C = narrow(P + K*2^(T-sh_f)) with sh_f = 24 -
+bl(odd(d_o)) - tz(d_o), T=17, K=9 scores tt4 14850 / tt3 18001
+(DERIVED) / tt1 2226 - no bl side condition anywhere.  Further Track
+B facts: tt4 and tt1 need OPPOSITE-SIGN compensation (deviation
+censuses +1-dominated vs -1-dominated; no single K serves both; tz
+parity is the only systematic difference); hw round-up thresholds are
+PARITY-DEPENDENT (27v even-M / 19v odd-M, v = 2^(cut-6)); a ceiling
+theorem bounds every dm-only bias family below tt4 17.3k (extra
+dependence at bl=36, counterexample dm=0x800F00); the killer cell
+remains outside all current laws.  Corpus-side note: the parity
+narrow-branch port (rna27 half-up) remains gate-neutral at 91, but
+its correctness domain must be restated in frame terms before task
+#8 flips the general path.
