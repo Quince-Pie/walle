@@ -2543,3 +2543,18 @@ later-48..52) stands as the remaining identification.  Layers 1-2
 PROVEN and cover the slope lanes completely.  Continue: layer-3
 against tt4/tt1 with jam positions tied to the didx-normalization
 shift per Track B's fixed-frame facts, then compose and port.
+
+## 2026-08-14 (later 76): layer-3 localized to at/above the 27-bit stage
+
+Frame-positioned jams at T=15..18 (below the rna27 cut for wide
+products) leave all three datasets EXACTLY at baseline - the layer-3
+compensation cannot live below the 27-bit stage; it acts at or above
+it (consistent with Track B's value-injection findings: K*2^(bl-30)
+units, i.e. 27-bit-stage lsb multiples).  Combined layer-3 spec for
+continuation: a 27-bit-stage modification, mean +9..13 lsb30-units in
+the tz=6 regime with the K(tz) table across regimes, parity-split
+thresholds (27v/19v), the bl(disp)=19 diagonal flip, the killer
+cell's -1-granule at drop=0, and the phase-0 census.  Candidate
+family for next window: the 27-bit stage's OWN storage jam at a
+tz-dependent position (2-bit jam proven at region storage; the wide
+path may jam at bl(didx)-shifted positions in the same RAM format).
