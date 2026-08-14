@@ -3037,3 +3037,21 @@ closed form - the single remaining law piece.
 NEXT: per-row theta for cancellation children (expect +15-30pts),
 then theta(path) closed form from all tables, then the two-axis
 children, held-out corpus, ports.
+
+## 2026-08-15 (later 100): per-row theta on corpus children; G-pulse layer isolated
+
+Per-row theta over all single-axis dense children: 13814/18862 (73%).
+Since A=0 children have ONE C word per row, a row that no theta fits
+means V itself is off by >= a granule: the remaining ~27% of rows
+carry the +-G crossing/carry pulses (the eps-v3 exact-input granule
+artifacts) - child-specific crossing rows where the accumulated walk
+injects whole-granule offsets.  LAYER MAP now complete:
+  L1 closed: sawtooth = -wrap29/64((slope*p) mod 2^19)*2^(bl-42)
+  L2 open-but-tabled: theta(path) (per-row tables, universal crossing
+     values, parity split 8)
+  L3 open: +-G carry pulses at child-specific crossing rows
+NEXT WINDOW: extract the G-pulse rows per child (rows where no theta
+fits), correlate with the child's binade-crossing rows (bl(P) steps),
+fit the pulse rule from the eps granule tables (rows 19..33 banked),
+then compose L1+L2+L3 -> rescore -> theta closed form -> held-out ->
+ports 91 -> 80 -> 0.
