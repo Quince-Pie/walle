@@ -3006,3 +3006,17 @@ parity split 8.
 NEXT: fix the o2-family convention (check winding/anchor of ordinal-2
 children in _childgeo/CHILDSDF), rescore; two-axis children via the
 full parts model; theta closed form; held-out corpus; ports.
+
+## 2026-08-15 (later 98): frame fix (slope per 256 subpx); cancellation children need staged rounding
+
+Slope words are per-256-subpixel units; with nonzero anchor values
+the av/product frames were misaligned by 2^8 (pure-product children
+were scale-invariant and unaffected - why they were perfect).  Fixed:
+TOTAL 13125/18862; s34 o2: 0 -> 392/549, s42 o2: 0 -> 328/729,
+o104s partial.  Still-zero children (s35/40/41/45/47 o2, s39 o6
+ctx1) are the NEAR-CANCELLATION cases (av ~ -product): the hw rounds
+the product term to its own export precision BEFORE the subtraction
+(task #2's two-product cancellation law); the model must apply
+sawtooth+theta at the PRODUCT stage inside the banked parts chain
+(score_c_chain_dense c_word with the product stage swapped), not on
+the final difference.  That is the remaining integration.
