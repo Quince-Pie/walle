@@ -3055,3 +3055,19 @@ fits), correlate with the child's binade-crossing rows (bl(P) steps),
 fit the pulse rule from the eps granule tables (rows 19..33 banked),
 then compose L1+L2+L3 -> rescore -> theta closed form -> held-out ->
 ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 101): cancellation deficit = sub-word anchor precision
+
+s41 o2's constant absolute deficit is ~+0.49 av-lsb (between the
+word value and +2 lsb; the 2-bit jam overshoots to +386G, none
+-125G at the last row).  The anchor VALUE the hw interpolates has
+sub-f32-word precision: the SDF vertex words in _childgeo/CHILDSDF
+are rounded exports of walle's internal SDF values - the hw (and
+the parity CPU model) carry the unrounded value.  Fix: source the
+internal vertex values from the parity reveal-mask model (they are
+walle's own SDF math), not the captured word dump.  This also
+matches the eps-instrument's A-part "+delta bias" observation.
+NEXT-WINDOW START: wire internal vertex values into the child
+scorer; rescore cancellation children (expect them to join the
+perfect list); then L3 G-pulses for the remaining rows; theta
+closed form; held-out; ports 91 -> 80 -> 0.
