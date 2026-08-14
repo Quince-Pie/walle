@@ -3647,3 +3647,28 @@ SESSION GATE ARC: 91 -> 80 (presentation secondary) -> 70 (general
 default).  Remaining 70 = the wide-path C constants inside
 wlg_child chains - the target for the measured law stack
 (sawtooth + cut table + theta).
+
+## 2026-08-15 (later 134): surgical plan for the remaining 70
+
+The 70 live in wlg's per-tile constants (states 31:5, 39:1, 40:12,
+41:1, 42:23, 44:3, 45:4, 47:2, 58:11, 60:8).  The measured stack
+(wide_law sawtooth + cut table + per-child theta) predicts complete
+children EXACTLY where wlg's chain misses (12 perfect children incl.
+s60 o4, s58 o5, s33 o6/o103 - precisely the states above), but a
+WHOLESALE swap would regress (dense composite 19-23k vs banked 23k):
+the port must be SURGICAL: apply wide_law only to single-axis wide
+parts (slope24*d_o >= 2^31), theta from the probe-measured
+per-(slope,phase) table {s60o4:25, s58o5c0:21, s33o6:25, s33o103:25,
+s58o4:17, s58o5c1:33, s58o106:49, s60o106:9, ...} (later-96/102).
+NEXT-WINDOW EXECUTION ORDER:
+1. Python pre-verification: map each of the 70 residual pixels to
+   (child, tile); compare hw C word (dense capture) vs wlg-twin vs
+   wide_law+theta; count fixable (expect most of 31/39-42/58/60).
+2. Port into parity/liquid_glass_raster.c wlg_child chain (the
+   sawtooth needs slope24, anchor phase p = (8192 - fixed_axis mod
+   8192), CUT_TABLE, theta table); gate after each state-class.
+3. Iterate the residual (expect low tens -> single digits); the last
+   few may need the block-pulse/ripple corrections (measured tables
+   banked later-127/129).
+GATE ARC THIS SESSION: 91 -> 80 -> 70, all official-gate green,
+zero regressions at each step.
