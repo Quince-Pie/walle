@@ -2513,3 +2513,22 @@ block quantum wide, value-ratio-scaled, 4-row sheared) whose stored
 triples are 2-bit-jammed; everything else is the exact chain.
 NEXT: pin the y-band's storage granularity from tt1's deviation set;
 formalize both bands; rescore tt1/tt3/tt4 (38,612) + dense; port.
+
+## 2026-08-14 (later 74): layer separation; window carry-forward
+
+Scoring tt1 with anchor-proximity y-band + jam variants: best
+band<16384/jam@i27-2bit = 2302/2610 (+2 over baseline) - the
+large-didx C deviations (the K(tz) system, bl(disp)=19 diagonal,
+killer cell) are a SEPARATE LAYER from the anchor-proximity region
+jam; the proximity band explains only the bl<=30 anomalies' location.
+COMPOSED MODEL STATE:
+  layer 1 (PROVEN): narrow chain RNE24(rna27(P)) away from regions;
+  layer 2 (PROVEN): anchor-proximity regions (x-band dx < 128*B/A px
+    scale-invariant, 4-row shear; y-band existence at anchor rows)
+    whose stored slope AND C mantissas are 2-BIT JAMMED
+    ((m>>2<<2)|2) - one rule, both signs, all observed region words;
+  layer 3 (OPEN): the large-didx C compensation (K(tz) table, parity
+    thresholds, diagonal, killer cell) - the solvers' constraint set
+    stands; likely the same jam at a didx-binade-dependent granule.
+NEXT: test layer-3 as jam-at-granule (didx-binade-scaled positions)
+against tt4's 18001; then compose all three layers, rescore, port.
