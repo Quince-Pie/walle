@@ -2781,3 +2781,28 @@ State of the walk law: tt3 18001/18001 exact, tt4 14011/18001
 right (exact-input granule deviations + s58 drift are walk-only
 phenomena); the per-step residual law needs the finer sweep of
 later-84's NEXT list.
+
+## 2026-08-15 (later 86): *** PATH DEPENDENCE PROVEN - f(dm,d_o) CANNOT EXIST ***
+
+Cross-referencing tt4 against the tz-class captures (same dm, same
+odd d_o, different anchor subpixel ay): the SAME exact product
+exports DIFFERENT mantissa words:
+  tz4 vs tt4: 925/4213 differ; tz5: 2670/8809; tz8: 1180/4213;
+  tz9: 593/1915 - deltas (tt4 - tz) in {-2,-1,+1,+2}, +1 dominant
+  (~2-3:1 over -1), growing with |tz-6| and with bl; full per-bl
+  tables banked above in the analysis output.
+CONSEQUENCE: the "wide-path C-product law" hunted as a pure function
+of (dm, d_o) DOES NOT EXIST - the exported C word depends on the
+anchor context (walk length / subpixel phase).  This is why every
+input-only family plateaued at 78-90% (they were fitting the tz6
+path mixture).  The law is f(dm, d_o, anchor-context), which is
+still input-only (the anchor is a geometry input) and so still
+house-legal.  The residual-register walk (later-84: tt4 14011/tt3
+exact) is the right FRAME; its per-step law must now be fit against
+the cross-anchor delta tables - a direct measurement of the path
+term with every input known.
+Also: eps-v3 granule deviations at t=0 occur even where the wide
+part's walk would be exact (dm = 2^23 power-of-two) - those
+artifacts live in the multi-part SUM pipe, so the eps instrument
+measures walk + sum jointly; the cross-anchor tables are the cleaner
+walk probe (single-part cells, no eps).
