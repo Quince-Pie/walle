@@ -1748,3 +1748,20 @@ analysis/liquid_glass_runtime_raster_coefficients).
 Wide-path law search delegated to a solver subagent (brief:
 analysis/WIDE_PATH_SOLVER_BRIEF.md; falsification log:
 analysis/wide_solver_log.md).
+
+## 2026-08-14 (later 42): task #4 inputs located - captured A2 transfer draws
+
+/tmp/walle-analysis/A2-geometry-sweep-v74/state-N/reveal-mask-trace.json
+holds, per state, the UNMODIFIED captured CoreAnimation transfer draw
+(pipeline com.apple.coreanimation.PBGRAXm_A2Xghfc): 16 vertices x 48B
+stride (vertexStreamHex + sha), 48 indices (4x4 grid mesh, 16 tris,
+indexStreamHex), viewport/scissor.  Vertex layout begins
+posX posY z w (f32) | f32 pair | TWO f16 varyings (0x3C00 1.0 seen) |
+trailing f32s - the f16 varyings are the alpha/factor plane whose
+AGX tile constants become the "secondary" (0x3C00 vs 0x3BFF).
+PLAN for #4: decode the 48B layout across states; feed each state's
+16-tri mesh through the PROVEN narrow setup law (f16 products are
+narrow) to produce per-tile f16 alpha constants; select secondary =
+that constant; verify the 18 residual pixels flip to apple's byte and
+nothing else moves (corpus gate).  This makes #4 independent of the
+wide-path law (task #3).
