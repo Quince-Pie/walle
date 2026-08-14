@@ -2022,3 +2022,31 @@ CARRY-FORWARD: the true law's low-order term is signed and carries a
 borrow, but is not combined with the high partial as a plain
 two-segment product - e.g. it may modulate the ROUNDING stage rather
 than the product.
+
+## 2026-08-14 (later 53): BASIS-PLANE CAPTURE - the campaign converges to one problem
+
+Capture a2-basis-planes-plan-v1 (tri 2 and tri 6 of state-42's
+transfer mesh, varyings one-hot (1,0,0)/(0,1,0)/(0,0,1) + all-1.0
+control, 28 draws; capture.raw sha256
+328bfa89827f9eae50fe938cf403c0014789087eb46b08fb6f237630bef42483):
+1. hw computes PER-VERTEX BASIS PLANES and sums them internally:
+   the all-1.0 exports equal the (internal) sum of the three one-hot
+   exports - B_sum = 2e68b4e4/e5 is NOT the f32 sum of the exported
+   basis words (that cancels exactly); the sum happens at internal
+   precision.
+2. *** THE BASIS SLOPE WORDS VARY PER TILE ***: basis1's B = 3a387a81
+   at tiles (31,15)/(50,9) but 3a387a82 at (57,0)/(57,3) - a plane
+   CONSTANT wobbling +-1 ulp with the tile.  This is the banked dense-
+   capture "1-ulp main-slope miss" mystery (3a6b0059 vs 3a6b0058)
+   observed in isolation on the simplest possible signal.
+3. Residue tinies appear on exact-zero axes (basis2 B = 2d6693e4 at
+   some tiles, 0 at others; tri6 basis0 A = 2e387a82 likewise).
+4. tri6's all-1.0 sum exports A = B = 0x00000001 (DENORMAL floor):
+   sub-denormal-scale nonzero internal sums clamp to the minimum
+   denormal rather than 0.
+CONSEQUENCE: task #4's generation rule and task #3's wide-path law are
+THE SAME unknown - the per-tile derivation of the coefficient RAM
+(slopes and C).  The per-tile SLOPE wobble is the cleanest instrument:
+no didx product, numerator constant, output = the per-tile stage's
+rounding alone.  Next: dense per-tile slope-word map over a whole
+triangle.
