@@ -3212,3 +3212,25 @@ and solve the discriminator exactly; it is the last cell-level term.
   RE-ENTERS as the next row's threshold shift.  Test against the
   banked theta tables; if it holds, theta(path) is CLOSED with zero
   new constants and the composite becomes fully input-only.
+
+## 2026-08-15 (later 110): residual-feedback theta eliminated; instrument design banked
+
+Carried-residual threshold feedback (theta_eff = base*v - lambda*res
+with res = previous row's signed export residual): all lambda > 0
+score WORSE (16060 at 1/4 vs 16607 at 0) - theta drift is not raw
+carried residual.  Row-constant second-sawtooth candidates in d_o
+(q in {p,64}, K in {13,19}) do not reproduce the theta-table pattern
+(the ty=55+ +18v jump in particular).
+INSTRUMENT DESIGN for the next capture (closes theta empirically):
+tt4 geometry with the anchor's ay scanned over ~64 sub-tile phases
+(ay = 131072 - q for q in {8,16,24,...,512}) x rows 17..63 x ~16 dm
+values: measures theta(p, d_o) on a dense grid directly; factoring
+that surface gives the closed form (or a small exact table keyed by
+p - still input-only since p is a geometry input with 8192 possible
+values, of which the corpus uses a handful).
+NOTE the pragmatic port option: theta(p, d_o) as a computed table
+from the INSTRUMENT captures (hardware-derived, input-keyed) is
+house-legal if banked as hardware-validated law data - the corpus
+children's p values are all in {0, 768, 1152, 1664, 1920, 3072,
+3328, 3968, 4224, 6144, 6400, 6528, 7296, 7808} (from later-96/97
+runs) - a 14-phase table.
