@@ -2724,3 +2724,23 @@ rounds at 24 with the X-part granule-RNE; the accumulator itself is
 finer), walk direction, and the 2-D version (x-walk then y-walk -
 the a2 basis planes need the x-axis walk too).  Rescore tt1/tt3/tt4
 + dense + 38612 held-out; then ports 91 -> 80 -> 0.
+
+## 2026-08-14 (later 83): walk model refinement (residual-register family)
+
+Per-binade per-step quantization is self-contradictory (tt4 bl31 rows
+deviate while tt3 bl30 cells are exact -> no fixed significand width
+works).  The consistent family: the walk carries the EXPORTED 24-bit
+word plus a FINITE-PRECISION RESIDUAL REGISTER:
+    t      = c(row) + step_exact + res(row)
+    c(row+1)   = round24(t)
+    res(row+1) = Qres(t - c(row+1))       (few bits, lossy)
+- s58's banked walk phenomenology is this model observed: drift
+  -2u/row = per-step lossy Qres bias; +(ulp-2) resync jumps = res
+  saturation/wrap; narrow tt3 exact because res stays 0 exactly.
+- Fit knobs: res grid (ulp/2^r, r=2..6), Qres mode (floor/rtz ->
+  negative drift), res width/saturation, seed row (geometric anchor
+  ty=16 / first covered row), step = dm*pitch exact vs pre-rounded.
+- Fit targets, in order: (a) s58 o4 walk drift/resync trace (c-walk
+  tomography capture f785aa14 + dense capture rows), (b) tt4/tt3/tt1
+  full tables, (c) eps-v3 exact-input granule table (rows 19..33),
+  (d) the 108 a2 basis words (2-D: x-walk then y-walk).
