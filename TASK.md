@@ -3524,3 +3524,19 @@ the decoder must return 0 +-2v there across all rows/binades),
 then apply to epq2 for the delta2(dm,d_o) tables; then fit the
 cross-term; then compose; then ports.
 The delta2 fit is the LAST continuous unknown of the law.
+
+## 2026-08-15 (later 127): eps_decode.py at +-4v; t=0 reads theta(row) + block structure
+
+analysis/eps_decode.py (theta-aware boundaries, median-of-flips,
+exact f43 frame): v3 t=0 decode now yields STABLE per-row offsets
+quantized at the lever step (~7-8v): rows group in 4-ROW BLOCKS
+(-7/-21/+7/+15 ...), partially matching the theta tables (ty=60-63:
++15 -> theta ~ 40 vs table 41-45) but not everywhere (ty=53-55:
+-21 vs table 25): at t=0 the decoder measures theta(row) MIXED with
+the 4-row-block layer (the region-law blocks) - the instrument is
+working at +-4v and the discrepancy IS the remaining structure.
+NEXT-WINDOW: treat t=0 eps decodes as direct theta+block
+measurements per row (47 rows x cheap); cross-fit with the theta
+tables to separate theta(row) from the block term; then epq2
+decodes give delta2(dm,row) at the corpus phases; fit; compose;
+ports 91 -> 80 -> 0.
