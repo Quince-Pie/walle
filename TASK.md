@@ -3378,3 +3378,25 @@ ARBITRATION: extract q=1664's empirical wrap boundary (band
 t=143..159) the same way; three phases will pin the true cut law.
 NEXT-WINDOW START: q=1664 wrap extraction -> unified cut law ->
 rescore all phases -> theta -> composite -> held-out -> ports.
+
+## 2026-08-15 (later 119): wrap cut = 30/64 universal for power-of-2 phases
+
+Empirical cut windows per phase (unwrap-max, wrap-min in arg):
+  tz4 (q=16):  (0.4609, 0.4688]   <- tightest; EXCLUDES 29/64
+  tz5 (q=32):  (0.4531, 0.4688]
+  tt4 (q=64):  (0.4375, 0.4688]
+  tz8 (q=256): (0.3750, 0.5000]
+  tz9 (q=512): (0.2500, 0.5000]
+ALL consistent with cut = 30/64 = 0.46875 - ONE constant, NO tz
+dependence (kills the tz-cut theory; simplifies L1's final form).
+Non-power-of-2 phases (odd part != 1): cut shifts UP:
+  q=1664 (13*2^7): class-0 cut in (0.5046, 0.5110] ~ 65/128
+  q=6528 (51*2^7): even-floor ~ (0.478, 0.503], odd-floor
+    (0.5315, 0.5564] ~ 35/64 - parity-split.
+The odd part of the phase drives a +5..10/128 cut shift with a
+floor-parity split - the remaining wrap unknown, constrained by
+three phases.  q=1664/6528 boundary tables banked (later-117/118).
+NEXT: fit the odd-part cut shift (candidates: second-level rounder
+consuming bits 19..21 of dm*q; q_odd-scaled bias), update
+wide_law.py to cut=30/64 + odd-part term, rescore everything;
+then theta; then ports.
