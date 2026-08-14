@@ -1948,3 +1948,29 @@ is the task #2/#3 two-product cancellation residue evaluated at binary32 on
 the transfer triangle, not a new unknown; the hardware already produced the
 right answer for state 42 (later-44).  The other 80 residuals belong to the
 raster/interpolator programme (#3), which is now 80 pixels, not 73.
+
+## 2026-08-14 (later 49): K(tz) tabulated empirically (Track B, 5 new captures)
+
+Track B (commits d63e254, 0d3eb54; capture shas in
+analysis/wide_solver_log.md B8) cloned tt4's geometry varying ONLY the
+anchor subpixel position to set the displacement trailing-zero class:
+tz in {3,4,5,8,9} (+ originals 6/7/13).  Scales calibrated from the
+captures (all landed on predicted tz-20).  RESULT: best global
+compensation K in narrow(P + K*2^(bl-30)) is a function of tz, NOT of
+cut and NOT of bl(d_o) (confound broken: bl(d_o)=10 occurs at five
+different tz):
+    tz:  3    4    5    6    7    8    9    13
+    K:  -4    0   -7   +9   -2   -4   -4    0
+Thresholds sharp where separable (tz=6: +9.000 ulp30; tz=5: -7.06);
+tz=8/9 admit no separable bracket.  CONSEQUENCES (propagated):
+(a) "total bias 13 = {29,27,26}" is a tz=6-regime statement only;
+(b) the bl=36 anomaly is a DISPLACEMENT-width effect: every class
+changes behavior on the diagonal bl(disp)=19 (tz6 flips +9->-9,
+tz5 -7->+1, tz8/9 ->-4).  FALSIFIED: fixed-frame column truncation +
+normalizer-side compensation (family ceiling 84.8% joint; tt3 holdout
+breaks exactly at T=14, confirming the tz=13 gate).
+OPEN CONTROL (ordered): every tz class so far uses ONE anchor; K=f(tz)
+vs K=f(anchor bit pattern) is not yet separated.  Next captures: same
+tz with different odd parts and different subpixel fractions; tz
+10/11/12 to bracket the decay to zero at 13; K vs bl(disp) along the
+diagonal.
