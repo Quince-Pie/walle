@@ -2300,3 +2300,30 @@ Remaining to write down: the closed-form internal step (the ~3-lsb27
 base / 10-16-lsb large-alignment values as a function of the
 alignment shift), then goal steps 2 (compose + rescore 38,612 pts +
 dense corpus) and 3 (port 91 -> 80 -> 0).
+
+## 2026-08-14 (later 64): REGION-STORAGE MODEL - the unifying structure
+
+Exact idx27 for the base wobble slope = 96719882 (0x5c3d40a), e27=-37.
+Its re-roundings: s<=1 -> word 3a387a81; s=2 rna/rup -> 3a387a82;
+s=3 rna -> 81; s=4 rne/rna -> 82; s>=5 -> 80/other.  The observed map
+(82 uniformly from the boundary to the anchor edge, across register
+binades 15..1) is IMPOSSIBLE for any per-tile s(bl(R)) law, but exact
+for REGION STORAGE: the coefficient RAM is written ONCE PER REGION,
+where regions are delimited by binade crossings of the traversal
+register R = ax - 8192*(tx+1+floor(ty/4)); the region's stored slope
+= idx27 rounded at the REGION's alignment (base case: s=2, rna,
+giving the +1-word jump); all tiles of the region export that word.
+CONSEQUENCES (the unification):
+- position law = region boundary = R's binade crossing (pure ax) OK
+- c1 = 4+dbin boundary slope = how the region grid tilts with slope
+  binades OK; visibility = whether the region-rounding moves the
+  word (phase statistic ~1/3) OK
+- THE C LANE: per-tile C = region base value + in-region increments;
+  the wide-path X anomalies, K(tz) classes, bl(disp)=19 diagonal,
+  killer cell, and phase-0 census are REGION-BOUNDARY artifacts -
+  which is why every single-(dm,didx) pointwise model plateaued.
+NEXT WINDOW (goal step 1 completion): formalize region decomposition
+(R binade partitions x 4-row bands), storage rounding rna-at-s per
+region for slopes AND the C base/increments; fit the six wobble maps
+exactly, then tt1/tt3/tt4 (38,612 pts) and the dense corpus captures
+(step 2); then port (step 3: 91 -> 80 -> 0).
