@@ -2589,3 +2589,41 @@ captures (plans committed; capture.raw sha256 first-20 banked below):
   probe rejects (draw 0); plan kept for the record, no capture.
 Next: two-stage decode of the v3 scans (27-bit part rounding rule x
 final threshold rule) - or pivot: the corpus gate first (91->80 port).
+
+## 2026-08-14 (later 78): PRESENTATION CLASS COMPLETE AT MODEL LEVEL (91->80, all-triangle hw truth)
+
+Capture a2-allts-plan-v1 (780 draws; every non-degenerate transfer
+triangle of states 42/31/33/40/41/58/60 with all-1.0 varyings, ~6-12
+interior tiles each; PLUS the three per-vertex BASIS configs for s42
+tris 0/2/6; capture.raw sha256
+ce0ca2c02b3acb7ab81c9d5905bf3848ec16d285301e04960db8d13998f0e9b8):
+1. Hardware one-plane truth per (state, tri): s42 tri0 A=2e8ba58e
+   B=2e68b4e4 with C=3f7fffff through rows 0..10 (high at (15,18));
+   tri1 A=0 B=2f000000 low rows <=10, high row 18; tri2/tri3 A=0
+   B=2e68b4e4 low EXACTLY at tile row 0; tris 4-7 denormal slopes
+   A=B=1, C=1.0.  s41 tri0/tri1 have low bands too.  s58 tri2/tri3
+   row 0 exports C=3f800001 (ABOVE 1.0 -> f16 secondary still 1.0,
+   raster-class residual confirmed).  s31/33/40/60: no deficit tiles.
+2. BASIS DECOMPOSITION (drawn value 1 at one vertex, 0 others): hw
+   exports per-basis C words; the all-1.0 plane is NOT the f32 sum of
+   the rounded basis words (tiles (35,0) vs (34,1) sum equal, differ
+   in one-C) - the hw sums at internal >24-bit precision.  Model
+   chain vs hw basis words: 58/108 exact; misses are 1-2 ulp and
+   concentrate where the reciprocal path engages (transfer triangles
+   have non-power-of-2 det 1421^2) - the remaining chain gap.
+   Exact-sum-of-model-28bit-values -> RNE24 scores 623/672 one-C.
+3. CORPUS RESCORE with the COMPLETE hw-measured deficit sets (111
+   s42-tiles + 20 s41-tiles + full row-0 spans for s42 tri2/tri3):
+   *** TOTAL residuals 91 -> 80, ZERO regressions *** - s41's and
+   s42-tri0/tri1's deficit tiles contain no sensitive pixels, the
+   9+2 presentation pixels are exactly the sensitive pixels of the
+   s42 deficit region.  Task #4's mechanism + extent are both now
+   hardware-complete; only the input-only chain reproduction (basis
+   words at reciprocal-path precision) and the renderer port remain.
+BUG FIXED in analysis/a2_solver_validate.py: apply_plane assigned
+select[window] per tile (later tiles of another triangle in the SAME
+window erased earlier selections - (3,56,0) wiped (2,56,0)'s fix);
+now ORs.  Rule sketch in analysis/a2_rule_generate.py (RTZ-join of
+non-anchor basis constants + RNE anchor add) reproduces tri 2
+22/22 hw tiles but over-extends tri 0; superseded by the basis-sum
+internal-precision model of (2).

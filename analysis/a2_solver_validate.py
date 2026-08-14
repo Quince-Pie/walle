@@ -43,7 +43,7 @@ def apply_plane(state: int, half: np.ndarray, triangles: np.ndarray) -> np.ndarr
             tile_y * TILE : (tile_y + 1) * TILE,
             tile_x * TILE : (tile_x + 1) * TILE,
         ]
-        select[window] = triangles[window] == triangle
+        select[window] |= triangles[window] == triangle
     return np.where(select, low, high)
 
 
