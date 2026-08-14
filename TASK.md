@@ -3194,3 +3194,21 @@ is something else (candidates: parity of a deeper pipeline word, the
 window: build the tie-cell census across ALL rows/classes (every
 exact-grid cell within +-1v of theta, with full dm/d_o/r context)
 and solve the discriminator exactly; it is the last cell-level term.
+
+## 2026-08-15 (later 109): single-row boundaries are SHARP; wide_law.py module
+
+- analysis/wide_law.py: the law consolidated into one self-tested
+  module (frame 2^48/P-unit); reproduces tt4 16607/18001 exactly.
+- Correctly-scaled dm-side second harmonic (max 1v): only +31
+  (16638) - not the fine term.
+- SINGLE-ROW boundary profiles are SHARP to ~+-0.5v (ty=20: clean
+  transition at theta ~ 24, one mixed sliver bin): the pooled +-0.8v
+  smear was PER-ROW THETA VARIATION, not a cell-level term.  Theta
+  needs fractional-v resolution per row; the cell-level residual is
+  only the tie slivers.
+- Theta(path) hypothesis to test next: theta drift = carried export
+  residual (theta(ty+1) - base ~ -res(ty)/v with res = V - W*G of
+  the previous row's export) - i.e. the walk's residual register
+  RE-ENTERS as the next row's threshold shift.  Test against the
+  banked theta tables; if it holds, theta(path) is CLOSED with zero
+  new constants and the composite becomes fully input-only.
