@@ -3557,3 +3557,26 @@ export windows (exact, mod-G) JOINTLY with these absolute decodes
 NEXT-WINDOW: joint fit of delta2(dm,ty) over both constraint sets
 at q=64, then corpus phases via epq2 decodes; then compose; then
 dense + held-out; then ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 129): corpus-phase delta2 tables; odd-floor cut corrected; row pulse isolated
+
+epq2 decoded at both corpus phases (12 dm x 12 rows each, +-4v):
+1. t=121 @ q=6528 reads -111..-152v ROW-STABLE = my L1 wrapped where
+   hw didn't: the odd-floor cut at q=6528 is ~70/128 (the later-118
+   (32,35)/64 = (64,70)/128 parity fit was CORRECT for odd-part
+   phases; later-120's global 'even-2' odd adjustment only holds for
+   pow2 phases).  Cut law status: pow2: (60,58)/128-ish; q_odd=51:
+   (64,70)/128; q_odd=13: (65,?) - odd-floor cuts for odd-part
+   phases need their own table column (extractable from thp4/thp5
+   odd-floor cells - windows were left unconstrained, need denser
+   odd-floor sampling or the eps route).
+2. ty=23 reads ~-80..-90v across ALL dm AND BOTH phases: a whole-row
+   BLOCK PULSE (-1.25G) - the L3/block layer isolated cleanly at
+   decoder resolution; v3-t0's 4-row-block offsets are the same
+   layer at q=64.
+3. Remaining scatter +-25v = the (dm,d_o) ripple at working
+   resolution.
+NEXT-WINDOW: (a) odd-floor cut column for odd-part phases;
+(b) block-pulse table (row mod 4 / d_o structure) from the decoded
+tables; (c) ripple fit on the residual; then compose; dense;
+held-out; ports 91 -> 80 -> 0.
