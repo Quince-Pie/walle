@@ -183,6 +183,65 @@ void walle_lg_producer_raster_destroy(struct walle_lg_producer_raster* raster);
  * Degenerate original primitives use WALLE_LG_REVEAL_RASTER_INVALID_MAPPING
  * in both mapping fields.
  */
+enum
+{
+    WALLE_LG_REVEAL_GENERAL_MAX_CHILD_COUNT = 24,
+};
+
+/*
+ * Per-triangle post-guard child setup mirroring the measured AGX laws
+ * (per-term first products, half-up first join, RNE middle join, dynamic
+ * slope selector truncation, fixed T=20 constant selector truncation).
+ * Constants are per 32x32 tile over the child's visible tile range with
+ * both channels interleaved: word index = constant_offset
+ * + 2 * ((tileY - tile_low[1]) * (tile_high[0] - tile_low[0])
+ *        + (tileX - tile_low[0])) + channel.
+ */
+struct walle_lg_reveal_general_child
+{
+    int32_t  fixed[3][2];
+    int32_t  det_sign;
+    int32_t  visible_bounds[4];
+    int32_t  tile_low[2];
+    int32_t  tile_high[2];
+    uint32_t slope_bits[2][2];
+    uint32_t constant_offset;
+    uint8_t  source_primitive;
+};
+
+struct walle_lg_reveal_general
+{
+    uint32_t                             child_count;
+    struct walle_lg_reveal_general_child children[WALLE_LG_REVEAL_GENERAL_MAX_CHILD_COUNT];
+    size_t                               constant_word_count;
+    uint32_t*                            constant_words;
+};
+
+[[nodiscard]]
+enum walle_lg_reveal_raster_status
+walle_lg_reveal_general_construct(const struct walle_lg_reveal_mask_geometry* geometry,
+                                  uint32_t                                    target_width,
+                                  uint32_t                                    target_height,
+                                  const struct walle_lg_raster_calibration*   calibration,
+                                  struct walle_lg_reveal_general*             result);
+
+void walle_lg_reveal_general_destroy(struct walle_lg_reveal_general* general);
+
+/* Top-left fill rule containment at pixel centers. */
+[[nodiscard]]
+bool walle_lg_reveal_general_contains(const struct walle_lg_reveal_general_child* child,
+                                      int32_t                                     x,
+                                      int32_t                                     y);
+
+/* Exact CPU reference of the per-pixel ITER evaluation (toward-zero of the
+ * affine plane); the shader path must match this bit-for-bit. */
+[[nodiscard]]
+bool walle_lg_reveal_general_value(const struct walle_lg_reveal_general* general,
+                                   size_t                                child_index,
+                                   int32_t                               x,
+                                   int32_t                               y,
+                                   float                                 result[static 2]);
+
 [[nodiscard]]
 enum walle_lg_reveal_raster_status
 walle_lg_reveal_raster_construct(const struct walle_lg_reveal_mask_geometry* geometry,

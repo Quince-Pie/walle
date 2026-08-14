@@ -5,7 +5,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <math.h>
 
 /* A rounded intersection needs at most 857 bits; exact area cancellation can
  * need 1,063.  Forty limbs leave both paths bounded without heap arithmetic. */
@@ -324,6 +327,11 @@ static bool natural_compare_shifted(const struct natural* left,
     return true;
 }
 
+/* Probe-only: when set, rational roundings in this translation unit resolve
+ * halfway cases away from zero instead of to even (hardware clip-varying
+ * evidence: ruler v5c..v7). */
+static int g_clip_ties_away = 0;
+
 static bool rounded_scaled_ratio(const struct natural* numerator,
                                  const struct natural* denominator,
                                  int                   scale,
@@ -356,11 +364,21 @@ static bool rounded_scaled_ratio(const struct natural* numerator,
         }
     }
 
+    static int truncate_mode = -1;
+    if (truncate_mode < 0) {
+        const char* env = getenv("PROBE_CLIP_TRUNCATE");
+        truncate_mode = env != nullptr ? atoi(env) : 0;
+    }
+    if (truncate_mode == 1) {
+        *result = quotient;
+        return true;
+    }
     struct natural twice_remainder;
     if (!natural_shift_left(&dividend, 1, &twice_remainder))
         return false;
     int comparison = natural_compare(&twice_remainder, &divisor);
-    if (comparison > 0 || (comparison == 0 && (quotient & 1) != 0)) {
+    if (comparison > 0
+        || (comparison == 0 && (g_clip_ties_away || (quotient & 1) != 0))) {
         if (quotient == UINT32_MAX)
             return false;
         ++quotient;
@@ -543,6 +561,20 @@ static bool triangle_area_is_zero(const struct walle_lg_postguard_vertex triangl
     return true;
 }
 
+static float bits_to_float(uint32_t bits)
+{
+    float value;
+    memcpy(&value, &bits, sizeof value);
+    return value;
+}
+
+static uint32_t float_to_bits(float value)
+{
+    uint32_t bits;
+    memcpy(&bits, &value, sizeof bits);
+    return bits;
+}
+
 static bool intersection(const struct walle_lg_postguard_vertex* start,
                          const struct walle_lg_postguard_vertex* end,
                          size_t                                  axis,
@@ -572,6 +604,152 @@ static bool intersection(const struct walle_lg_postguard_vertex* start,
     }
 
     struct walle_lg_postguard_vertex output = {};
+    /* Probe-only q-law: quantize the interpolation parameter to the 2^-24
+     * grid with a sub-half round-up threshold (theta/32), then interpolate
+     * exactly against the quantized parameter and round components half-up.
+     * Configured via PROBE_CLIP_QLAW="theta32[,ties_away]". */
+    static int qlaw_mode = -2, qlaw_theta32 = 6, qlaw_ties = 1;
+    if (qlaw_mode == -2) {
+        const char* env = getenv("PROBE_CLIP_QLAW");
+        if (env != nullptr) {
+            qlaw_mode = 1;
+            sscanf(env, "%d,%d", &qlaw_theta32, &qlaw_ties);
+        } else {
+            qlaw_mode = 0;
+        }
+    }
+    if (qlaw_mode == 1
+        && fraction_numerator.negative == fraction_denominator.negative
+        && !natural_is_zero(&fraction_numerator.magnitude)) {
+        struct natural dividend;
+        struct natural divisor = fraction_denominator.magnitude;
+        if (!natural_shift_left(&fraction_numerator.magnitude, 24, &dividend))
+            return false;
+        unsigned dividend_bits = natural_bit_length(&dividend);
+        unsigned divisor_bits  = natural_bit_length(&divisor);
+        uint32_t q24           = 0;
+        if (dividend_bits >= divisor_bits) {
+            unsigned highest_bit = dividend_bits - divisor_bits;
+            if (highest_bit >= 31)
+                return false;
+            for (unsigned ordinal = highest_bit + 1; ordinal > 0; --ordinal) {
+                unsigned       shift = ordinal - 1;
+                struct natural shifted_divisor;
+                if (!natural_shift_left(&divisor, shift, &shifted_divisor))
+                    return false;
+                if (natural_compare(&dividend, &shifted_divisor) >= 0) {
+                    natural_subtract(&dividend, &shifted_divisor, &dividend);
+                    q24 |= UINT32_C(1) << shift;
+                }
+            }
+        }
+        /* frac > theta32/32  <=>  32*remainder > theta32*divisor */
+        struct natural remainder_scaled;
+        struct natural threshold_scaled = {};
+        if (!natural_shift_left(&dividend, 5, &remainder_scaled))
+            return false;
+        {
+            struct signed_natural divisor_sn   = {.negative = false,
+                                                  .magnitude = divisor};
+            struct signed_natural theta_sn     = {};
+            struct signed_natural product      = {};
+            if (!natural_from_shifted_u32((uint32_t)qlaw_theta32, 0,
+                                          &theta_sn.magnitude)
+                || !signed_multiply(divisor_sn, theta_sn, &product)) {
+                return false;
+            }
+            threshold_scaled = product.magnitude;
+        }
+        if (natural_compare(&remainder_scaled, &threshold_scaled) > 0)
+            ++q24;
+        struct signed_natural q24_sn = {};
+        struct signed_natural pow24_sn = {};
+        struct natural        pow24 = {};
+        if (!natural_from_shifted_u32(q24, 0, &q24_sn.magnitude)
+            || !natural_from_shifted_u32(1, 24, &pow24)
+            || !natural_from_shifted_u32(1, 24, &pow24_sn.magnitude)) {
+            return false;
+        }
+        bool ok = true;
+        for (size_t component = 0;
+             component < WALLE_LG_POSTGUARD_VERTEX_COMPONENT_COUNT;
+             ++component) {
+            if (component == axis) {
+                output.component_bits[component] = edge_bits;
+                continue;
+            }
+            uint32_t component_values[2] = {
+                start->component_bits[component],
+                end->component_bits[component],
+            };
+            int component_exponent;
+            struct signed_natural start_component;
+            struct signed_natural end_component;
+            struct signed_natural component_delta;
+            struct signed_natural first_product;
+            struct signed_natural second_product;
+            struct signed_natural numerator;
+            if (!common_binary32_exponent(component_values, 2,
+                                          &component_exponent)
+                || !scaled_binary32(start->component_bits[component],
+                                    component_exponent, &start_component)
+                || !scaled_binary32(end->component_bits[component],
+                                    component_exponent, &end_component)
+                || !signed_subtract(end_component, start_component,
+                                    &component_delta)
+                || !signed_multiply(start_component, pow24_sn, &first_product)
+                || !signed_multiply(q24_sn, component_delta, &second_product)
+                || !signed_add(first_product, second_product, &numerator)) {
+                ok = false;
+                break;
+            }
+            g_clip_ties_away = qlaw_ties;
+            bool rounded = rational_to_binary32(numerator, &pow24,
+                                                component_exponent,
+                                                &output.component_bits[component]);
+            g_clip_ties_away = 0;
+            if (!rounded) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok) {
+            *result = output;
+            return true;
+        }
+        output = (struct walle_lg_postguard_vertex){};
+    }
+    static int lerp_mode = -1;
+    if (lerp_mode < 0) {
+        const char* env = getenv("PROBE_CLIP_LERP");
+        lerp_mode = env != nullptr ? atoi(env) : 0;
+    }
+    if (lerp_mode != 0) {
+        float edge_value  = bits_to_float(edge_bits);
+        float start_value = bits_to_float(start->component_bits[axis]);
+        float end_value   = bits_to_float(end->component_bits[axis]);
+        float t = (edge_value - start_value) / (end_value - start_value);
+        for (size_t component = 0; component < WALLE_LG_POSTGUARD_VERTEX_COMPONENT_COUNT;
+             ++component) {
+            if (component == axis) {
+                output.component_bits[component] = edge_bits;
+                continue;
+            }
+            float sv = bits_to_float(start->component_bits[component]);
+            float ev = bits_to_float(end->component_bits[component]);
+            float value;
+            switch (lerp_mode) {
+            case 1: value = sv + t * (ev - sv); break;
+            case 2: value = fmaf(t, ev - sv, sv); break;
+            case 3: value = sv * (1.0f - t) + ev * t; break;
+            case 4: value = fmaf(t, ev, fmaf(-t, sv, sv)); break;
+            default: value = sv + t * (ev - sv); break;
+            }
+            output.component_bits[component] = float_to_bits(value);
+        }
+        *result = output;
+        return true;
+    }
     for (size_t component = 0; component < WALLE_LG_POSTGUARD_VERTEX_COMPONENT_COUNT; ++component) {
         if (component == axis) {
             output.component_bits[component] = edge_bits;
@@ -642,12 +820,33 @@ static enum walle_lg_postguard_status clip_triangle(
         uint32_t edge_bits;
         bool     keep_greater;
     };
-    const struct plane planes[4] = {
+    struct plane planes[4] = {
         {0, guard_bits[0], true},
         {0, guard_bits[1], false},
         {1, guard_bits[2], true},
         {1, guard_bits[3], false},
     };
+    static int order_code = -1;
+    if (order_code < 0) {
+        const char* env = getenv("PROBE_CLIP_ORDER");
+        order_code = env != nullptr ? atoi(env) : 123;  /* digits: plane idx */
+        if (env != nullptr && strlen(env) == 4) {
+            /* explicit 4-digit permutation, e.g. 2301 */
+            struct plane reordered[4];
+            for (size_t i = 0; i < 4; ++i)
+                reordered[i] = planes[env[i] - '0'];
+            memcpy(planes, reordered, sizeof planes);
+            order_code = 1;
+        }
+    } else if (order_code == 1) {
+        const char* env = getenv("PROBE_CLIP_ORDER");
+        if (env != nullptr && strlen(env) == 4) {
+            struct plane reordered[4];
+            for (size_t i = 0; i < 4; ++i)
+                reordered[i] = planes[env[i] - '0'];
+            memcpy(planes, reordered, sizeof planes);
+        }
+    }
     struct walle_lg_postguard_vertex current[TEMPORARY_POLYGON_CAPACITY] = {
         triangle[0],
         triangle[1],

@@ -380,6 +380,44 @@ static bool product_stage(uint64_t  multiplicand,
     return true;
 }
 
+/* M1-measured general-path stage (production-children + cancelled-numerator
+ * captures, plan shas in the ledger): products of 32 bits or fewer bypass
+ * the truncating partial-product array and emerge exact, with no bias.  The
+ * shipped packed path keeps the historical product_stage behaviour above. */
+static bool general_product_stage(uint64_t  multiplicand,
+                                  int       multiplicand_exponent,
+                                  uint64_t  multiplier,
+                                  int       multiplier_exponent,
+                                  unsigned  output_bits,
+                                  unsigned  truncation_bits,
+                                  uint64_t  bias_units,
+                                  uint64_t* result_index,
+                                  int*      result_exponent)
+{
+    uint64_t product = multiplicand * multiplier;
+    int      bits    = (int)bit_length_u64(product);
+    int      shift   = bits - (int)output_bits;
+    if (bits <= 32) {
+        if (shift <= 0) {
+            *result_index    = product;
+            *result_exponent = multiplicand_exponent + multiplier_exponent;
+            return true;
+        }
+        uint64_t rounded = (product + (UINT64_C(1) << (shift - 1))) >> shift;
+        if (bit_length_u64(rounded) > output_bits) {
+            rounded >>= 1;
+            ++shift;
+        }
+        *result_index    = rounded;
+        *result_exponent = multiplicand_exponent + multiplier_exponent + shift;
+        return true;
+    }
+    uint64_t partial = partial_product_sum(multiplicand, multiplier, truncation_bits);
+    *result_index    = (partial + (bias_units << truncation_bits)) >> shift;
+    *result_exponent = multiplicand_exponent + multiplier_exponent + shift;
+    return true;
+}
+
 static uint64_t
 propagated_discarded_carry(uint64_t multiplicand, uint64_t multiplier, unsigned truncation_bits)
 {
@@ -411,6 +449,121 @@ static bool column_product_stage(uint64_t  multiplicand,
     uint64_t adjusted = partial + ((carry + bias_units) << truncation_bits);
     *result_index     = adjusted >> shift;
     *result_exponent  = multiplicand_exponent + multiplier_exponent + shift;
+    return true;
+}
+
+/* General-path middle product with the exact-narrow-product bypass. */
+static bool general_column_product_stage(uint64_t  multiplicand,
+                                         int       multiplicand_exponent,
+                                         uint64_t  multiplier,
+                                         int       multiplier_exponent,
+                                         uint64_t* result_index,
+                                         int*      result_exponent)
+{
+    constexpr unsigned output_bits = 27;
+    constexpr uint64_t bias_units  = 10;
+    uint64_t           product     = multiplicand * multiplier;
+    int                bits        = (int)bit_length_u64(product);
+    int                shift       = bits - (int)output_bits;
+    if (bits <= 32) {
+        if (shift <= 0) {
+            *result_index    = product;
+            *result_exponent = multiplicand_exponent + multiplier_exponent;
+            return true;
+        }
+        uint64_t rounded = (product + (UINT64_C(1) << (shift - 1))) >> shift;
+        if (bit_length_u64(rounded) > output_bits) {
+            rounded >>= 1;
+            ++shift;
+        }
+        *result_index    = rounded;
+        *result_exponent = multiplicand_exponent + multiplier_exponent + shift;
+        return true;
+    }
+    /* Operand-anchored column, like the selector stages (dense capture
+     * 74610b36... all 36 contexts). */
+    unsigned truncation_bits = bit_length_u64(multiplicand) - 8;
+    uint64_t partial  = partial_product_sum(multiplicand, multiplier, truncation_bits);
+    uint64_t carry    = propagated_discarded_carry(multiplicand, multiplier, truncation_bits);
+    uint64_t adjusted = partial + ((carry + bias_units) << truncation_bits);
+    *result_index     = adjusted >> shift;
+    *result_exponent  = multiplicand_exponent + multiplier_exponent + shift;
+    return true;
+}
+
+static bool selector_product_stage(uint64_t  multiplicand,
+                                   int       multiplicand_exponent,
+                                   uint64_t  selector,
+                                   int       selector_exponent,
+                                   uint64_t* result_index,
+                                   int*      result_exponent)
+{
+    /* M1-measured law (first-cancellation capture 5d9ee7b9..., production
+     * children captures c79c9d68... / 1e7fd8c2...): the selector product
+     * truncates the partial-product columns below product_bitlen - 32 with
+     * a +20 compensation at the truncated column scale; products of 32 bits
+     * or fewer bypass the array and are exact, rounded half-up to 27 bits
+     * when wider than 27. */
+    uint64_t product = multiplicand * selector;
+    int      bits    = (int)bit_length_u64(product);
+    int      shift   = bits - 27;
+    if (bits <= 32) {
+        if (shift <= 0) {
+            *result_index    = product;
+            *result_exponent = multiplicand_exponent + selector_exponent;
+            return true;
+        }
+        uint64_t rounded = (product + (UINT64_C(1) << (shift - 1))) >> shift;
+        if (bit_length_u64(rounded) > 27) {
+            rounded >>= 1;
+            ++shift;
+        }
+        *result_index    = rounded;
+        *result_exponent = multiplicand_exponent + selector_exponent + shift;
+        return true;
+    }
+    /* Operand-anchored truncation column (sel-isolation capture
+     * 3e7a7549..., joint slope fits 2,696 rows): the array truncates at
+     * multiplicand_bits - 8 regardless of the product width. */
+    unsigned truncation = bit_length_u64(multiplicand) - 8;
+    uint64_t partial    = partial_product_sum(multiplicand, selector, truncation);
+    *result_index       = (partial + (UINT64_C(20) << truncation)) >> shift;
+    *result_exponent    = multiplicand_exponent + selector_exponent + shift;
+    return true;
+}
+
+static bool constant_selector_product_stage(uint64_t  multiplicand,
+                                            int       multiplicand_exponent,
+                                            uint64_t  selector,
+                                            int       selector_exponent,
+                                            uint64_t* result_index,
+                                            int*      result_exponent)
+{
+    /* M1-measured: the tile-constant reciprocal keeps a fixed truncation
+     * column of 20 for wide products (state-31 production capture, 408/408
+     * tiles), while narrow products bypass the array exactly. */
+    uint64_t product = multiplicand * selector;
+    int      bits    = (int)bit_length_u64(product);
+    int      shift   = bits - 27;
+    if (bits <= 32) {
+        if (shift <= 0) {
+            *result_index    = product;
+            *result_exponent = multiplicand_exponent + selector_exponent;
+            return true;
+        }
+        uint64_t rounded = (product + (UINT64_C(1) << (shift - 1))) >> shift;
+        if (bit_length_u64(rounded) > 27) {
+            rounded >>= 1;
+            ++shift;
+        }
+        *result_index    = rounded;
+        *result_exponent = multiplicand_exponent + selector_exponent + shift;
+        return true;
+    }
+    unsigned truncation = bit_length_u64(multiplicand) - 8;
+    uint64_t partial    = partial_product_sum(multiplicand, selector, truncation);
+    *result_index       = (partial + (UINT64_C(20) << truncation)) >> shift;
+    *result_exponent    = multiplicand_exponent + selector_exponent + shift;
     return true;
 }
 
@@ -2246,4 +2399,486 @@ void walle_lg_raster_tables_destroy(struct walle_lg_raster_tables* tables)
     free(tables->shadow_slopes);
     free(tables->highlight_axis);
     *tables = (struct walle_lg_raster_tables){};
+}
+
+/* ============================================================================
+ * General per-triangle post-guard child setup (M1-measured laws; see the
+ * lg-test ledger "production-children capture campaign").  The analysis
+ * probe carries an identical copy of this pipeline; the process-capture
+ * gate plus the probe's hardware-word comparisons keep them honest.
+ * ==========================================================================*/
+
+static bool wlg_quantize_half_up(struct dyadic value, unsigned precision_bits, struct dyadic* out)
+{
+    if (value.numerator == 0) {
+        *out = value;
+        return true;
+    }
+    bool     negative  = value.numerator < 0;
+    u128     magnitude = magnitude_i128(value.numerator);
+    unsigned length    = bit_length_u128(magnitude);
+    if (length > precision_bits) {
+        unsigned shift = length - precision_bits;
+        u128     half  = (u128)1 << (shift - 1);
+        magnitude      = (magnitude + half) >> shift;
+        if (bit_length_u128(magnitude) > precision_bits) {
+            magnitude >>= 1;
+            ++shift;
+        }
+        value.exponent += (int)shift;
+    }
+    i128 numerator = (i128)magnitude;
+    if (negative)
+        numerator = -numerator;
+    *out = (struct dyadic){.numerator = numerator, .exponent = value.exponent};
+    return true;
+}
+
+static int64_t wlg_triangle_determinant(const int32_t fixed[3][2])
+{
+    return (int64_t)(fixed[1][0] - fixed[0][0]) * (fixed[2][1] - fixed[0][1])
+           - (int64_t)(fixed[1][1] - fixed[0][1]) * (fixed[2][0] - fixed[0][0]);
+}
+
+static size_t wlg_top_left_anchor(const int32_t fixed[3][2])
+{
+    size_t anchor = 0;
+    for (size_t vertex = 1; vertex < 3; ++vertex) {
+        if (fixed[vertex][1] < fixed[anchor][1]
+            || (fixed[vertex][1] == fixed[anchor][1] && fixed[vertex][0] < fixed[anchor][0])) {
+            anchor = vertex;
+        }
+    }
+    return anchor;
+}
+
+static void wlg_child_edges(const int32_t fixed[3][2], int32_t edges[2][3])
+{
+    edges[0][0] = fixed[1][1] - fixed[2][1];
+    edges[0][1] = fixed[2][1] - fixed[0][1];
+    edges[0][2] = fixed[0][1] - fixed[1][1];
+    edges[1][0] = fixed[2][0] - fixed[1][0];
+    edges[1][1] = fixed[0][0] - fixed[2][0];
+    edges[1][2] = fixed[1][0] - fixed[0][0];
+}
+
+struct wlg_child_setup
+{
+    int32_t  fixed[3][2];
+    float    sdf[3][2];
+    int64_t  determinant;
+    size_t   anchor;
+    uint32_t selector;
+    int      selector_exponent;
+    int      numerator_sign[2][2];
+    uint64_t numerator_index[2][2];
+    int      numerator_exponent[2][2];
+};
+
+static bool wlg_child_numerator(const struct wlg_child_setup* setup,
+                                size_t                        channel,
+                                size_t                        axis,
+                                int*                          result_sign,
+                                uint64_t*                     result_index,
+                                int*                          result_exponent)
+{
+    int32_t edges[2][3];
+    wlg_child_edges(setup->fixed, edges);
+    float anchor_value = setup->sdf[setup->anchor][channel];
+
+    struct dyadic total = {};
+    for (size_t vertex = 0; vertex < 3; ++vertex) {
+        if (vertex == setup->anchor)
+            continue;
+        float delta = subtract_f32(setup->sdf[vertex][channel], anchor_value);
+        float edge  = round_f32((double)edges[axis][vertex] / SUBPIXEL_SCALE);
+        if (delta == 0.0f || edge == 0.0f)
+            continue;
+        uint64_t delta_index, edge_index;
+        int      delta_exponent, edge_exponent;
+        if (!positive_float_components(float_bits(fabsf(delta)), &delta_index, &delta_exponent)
+            || !positive_float_components(float_bits(fabsf(edge)), &edge_index, &edge_exponent)) {
+            return false;
+        }
+        uint64_t product_index;
+        int      product_exponent;
+        if (!general_product_stage(delta_index,
+                                   delta_exponent,
+                                   edge_index,
+                                   edge_exponent,
+                                   27,
+                                   16,
+                                   15,
+                                   &product_index,
+                                   &product_exponent)) {
+            return false;
+        }
+        int           sign = (signbit(delta) != signbit(edge)) ? -1 : 1;
+        struct dyadic term = {
+            .numerator = sign * (i128)product_index,
+            .exponent  = product_exponent,
+        };
+        if (!dyadic_add(total, term, &total))
+            return false;
+    }
+    if (total.numerator == 0) {
+        *result_sign     = 0;
+        *result_index    = 0;
+        *result_exponent = 0;
+        return true;
+    }
+    /* M1-measured (word-sweep 912ef3eb..., join-isolation ce559c7f...,
+     * residual-states 188/188): the joined numerator is kept at 28 bits,
+     * rounded to nearest, ties to even.  Every downstream consumer taps
+     * this single representation. */
+    struct dyadic normalized;
+    if (!quantize_significand(total, 28, &normalized))
+        return false;
+    *result_sign     = normalized.numerator < 0 ? -1 : 1;
+    *result_index    = (uint64_t)magnitude_i128(normalized.numerator);
+    *result_exponent = normalized.exponent;
+    return true;
+}
+
+static bool wlg_child_prepare(const struct walle_lg_vertex              vertices[static 3],
+                              const struct walle_lg_raster_calibration* calibration,
+                              struct wlg_child_setup*                   setup,
+                              struct walle_lg_reveal_general_child*     child)
+{
+    for (size_t vertex = 0; vertex < 3; ++vertex) {
+        for (size_t axis = 0; axis < 2; ++axis)
+            setup->fixed[vertex][axis] = subpixel_fixed(vertices[vertex].position[axis]);
+        setup->sdf[vertex][0] = vertices[vertex].sdf[0];
+        setup->sdf[vertex][1] = vertices[vertex].sdf[1];
+    }
+    setup->determinant = wlg_triangle_determinant(setup->fixed);
+    if (setup->determinant == 0)
+        return false;
+    setup->anchor = wlg_top_left_anchor(setup->fixed);
+
+    uint64_t determinant = setup->determinant < 0 ? (uint64_t)(-setup->determinant)
+                                                  : (uint64_t)setup->determinant;
+    unsigned determinant_exponent = bit_length_u64(determinant) - 1;
+    uint64_t key;
+    if (determinant_exponent <= 24) {
+        key = determinant << (24 - determinant_exponent);
+    } else {
+        unsigned shift     = determinant_exponent - 24;
+        uint64_t quotient  = determinant >> shift;
+        uint64_t remainder = determinant - (quotient << shift);
+        key = quotient + (remainder >= (UINT64_C(1) << (shift - 1)) ? 1u : 0u);
+    }
+    setup->selector_exponent = -(int)bit_length_u64(determinant - 1) - 8;
+    if ((determinant & (determinant - 1)) == 0 || key == P25_KEY_UPPER) {
+        setup->selector = UINT32_C(1) << 24;
+    } else if (key < P25_KEY_LOWER || key >= P25_KEY_UPPER) {
+        return false;
+    } else {
+        uint64_t bit_index = key - P25_KEY_LOWER;
+        bool     ceil
+            = (((uint32_t)calibration->p25_ceil_bits[bit_index >> 3] >> (bit_index & 7u)) & 1u)
+              != 0;
+        uint64_t floor  = P25_RECIPROCAL / key;
+        setup->selector = (uint32_t)(floor + (ceil && P25_RECIPROCAL % key != 0 ? 1u : 0u));
+    }
+
+    for (size_t channel = 0; channel < 2; ++channel) {
+        for (size_t axis = 0; axis < 2; ++axis) {
+            int      sign;
+            uint64_t numerator;
+            int      exponent;
+            if (!wlg_child_numerator(setup, channel, axis, &sign, &numerator, &exponent))
+                return false;
+            setup->numerator_sign[channel][axis]     = sign;
+            setup->numerator_index[channel][axis]    = numerator;
+            setup->numerator_exponent[channel][axis] = exponent;
+            if (sign == 0) {
+                child->slope_bits[channel][axis] = 0;
+                continue;
+            }
+            uint64_t coefficient;
+            int      coefficient_exponent;
+            if (!selector_product_stage(numerator,
+                                        exponent,
+                                        setup->selector,
+                                        setup->selector_exponent,
+                                        &coefficient,
+                                        &coefficient_exponent)) {
+                return false;
+            }
+            int slope_sign = setup->determinant < 0 ? -sign : sign;
+            child->slope_bits[channel][axis] = float_bits(
+                round_f32(ldexp((double)(slope_sign * (int64_t)coefficient),
+                                coefficient_exponent)));
+        }
+    }
+
+    for (size_t vertex = 0; vertex < 3; ++vertex) {
+        child->fixed[vertex][0] = setup->fixed[vertex][0];
+        child->fixed[vertex][1] = setup->fixed[vertex][1];
+    }
+    child->det_sign = setup->determinant < 0 ? -1 : 1;
+
+    int32_t low[2]  = {INT32_MAX, INT32_MAX};
+    int32_t high[2] = {INT32_MIN, INT32_MIN};
+    for (size_t vertex = 0; vertex < 3; ++vertex) {
+        for (size_t axis = 0; axis < 2; ++axis) {
+            if (setup->fixed[vertex][axis] < low[axis])
+                low[axis] = setup->fixed[vertex][axis];
+            if (setup->fixed[vertex][axis] > high[axis])
+                high[axis] = setup->fixed[vertex][axis];
+        }
+    }
+    struct raster_case bounds_case = {
+        .origin_x_fixed = low[0],
+        .origin_y_fixed = low[1],
+        .width_fixed    = high[0] - low[0],
+        .height_fixed   = high[1] - low[1],
+    };
+    if (!visible_bounds(&bounds_case, child->visible_bounds))
+        return false;
+    return true;
+}
+
+static bool wlg_child_constant_bits(const struct wlg_child_setup* setup,
+                                    float                         anchor_sdf,
+                                    size_t                        channel,
+                                    int32_t                       tile_x,
+                                    int32_t                       tile_y,
+                                    uint32_t*                     result)
+{
+    struct dyadic value    = dyadic_from_float_bits(float_bits(anchor_sdf));
+    int32_t       tiles[2] = {tile_x, tile_y};
+
+    struct dyadic middle_total = {};
+    for (size_t axis = 0; axis < 2; ++axis) {
+        int      sign      = setup->numerator_sign[channel][axis];
+        uint64_t numerator = setup->numerator_index[channel][axis];
+        int      exponent  = setup->numerator_exponent[channel][axis];
+        int64_t  displacement
+            = (int64_t)tiles[axis] * TILE_SIZE * SUBPIXEL_SCALE - setup->fixed[setup->anchor][axis];
+        if (sign == 0 || displacement == 0)
+            continue;
+        uint64_t distance_index;
+        int      distance_exponent;
+        float    distance = round_f32((double)llabs(displacement) / SUBPIXEL_SCALE);
+        if (!positive_float_components(float_bits(distance), &distance_index, &distance_exponent))
+            return false;
+        uint64_t middle;
+        int      middle_exponent;
+        if (!general_column_product_stage(numerator,
+                                          exponent,
+                                          distance_index,
+                                          distance_exponent,
+                                          &middle,
+                                          &middle_exponent)) {
+            return false;
+        }
+        struct dyadic term = {
+            .numerator = (displacement < 0 ? -sign : sign) * (i128)middle,
+            .exponent  = middle_exponent,
+        };
+        if (!dyadic_add(middle_total, term, &middle_total))
+            return false;
+    }
+    if (middle_total.numerator != 0) {
+        struct dyadic joined;
+        if (!quantize_significand(middle_total, 28, &joined))
+            return false;
+        int      joined_sign  = joined.numerator < 0 ? -1 : 1;
+        uint64_t joined_index = (uint64_t)magnitude_i128(joined.numerator);
+        uint64_t coefficient;
+        int      coefficient_exponent;
+        if (!constant_selector_product_stage(joined_index,
+                                             joined.exponent,
+                                             setup->selector,
+                                             setup->selector_exponent,
+                                             &coefficient,
+                                             &coefficient_exponent)) {
+            return false;
+        }
+        if (setup->determinant < 0)
+            joined_sign = -joined_sign;
+        struct dyadic term = {
+            .numerator = joined_sign * (i128)coefficient,
+            .exponent  = coefficient_exponent,
+        };
+        if (!dyadic_add(value, term, &value))
+            return false;
+    }
+    return quantize_composite_constant(value, result);
+}
+
+enum walle_lg_reveal_raster_status
+walle_lg_reveal_general_construct(const struct walle_lg_reveal_mask_geometry* geometry,
+                                  uint32_t                                    target_width,
+                                  uint32_t                                    target_height,
+                                  const struct walle_lg_raster_calibration*   calibration,
+                                  struct walle_lg_reveal_general*             result)
+{
+    if (geometry == nullptr || calibration == nullptr || result == nullptr
+        || calibration->p25_ceil_bits == nullptr) {
+        return WALLE_LG_REVEAL_RASTER_INVALID_ARGUMENT;
+    }
+    *result = (struct walle_lg_reveal_general){};
+
+    struct walle_lg_postguard_children children;
+    uint32_t target_extent[2] = {target_width, target_height};
+    if (walle_lg_postguard_children_construct(geometry, target_extent, &children)
+        != WALLE_LG_POSTGUARD_OK) {
+        return WALLE_LG_REVEAL_RASTER_SETUP_FAILED;
+    }
+
+    struct wlg_child_setup setups[WALLE_LG_REVEAL_GENERAL_MAX_CHILD_COUNT];
+    size_t                 constant_words = 0;
+    for (size_t index = 0; index < children.child_count; ++index) {
+        struct walle_lg_vertex triangle[3];
+        for (size_t vertex = 0; vertex < 3; ++vertex)
+            postguard_vertex(&children.children[index].vertices[vertex], &triangle[vertex]);
+        if (!reveal_vertices_valid(triangle, 3))
+            continue;
+        if (reveal_triangle_target_status(triangle, target_width, target_height)
+            != PREPARED_REVEAL_OWNER_READY) {
+            continue;
+        }
+        if (result->child_count >= WALLE_LG_REVEAL_GENERAL_MAX_CHILD_COUNT)
+            return WALLE_LG_REVEAL_RASTER_CAPACITY_EXCEEDED;
+        struct walle_lg_reveal_general_child* child = &result->children[result->child_count];
+        struct wlg_child_setup*               setup = &setups[result->child_count];
+        *child = (struct walle_lg_reveal_general_child){};
+        if (!wlg_child_prepare(triangle, calibration, setup, child))
+            continue; /* drop only this child; the packed path still covers it */
+        child->source_primitive = children.children[index].source_primitive;
+        child->tile_low[0]      = child->visible_bounds[0] >= 0
+                                      ? child->visible_bounds[0] / TILE_SIZE
+                                      : (child->visible_bounds[0] - TILE_SIZE + 1) / TILE_SIZE;
+        child->tile_low[1]      = child->visible_bounds[1] >= 0
+                                      ? child->visible_bounds[1] / TILE_SIZE
+                                      : (child->visible_bounds[1] - TILE_SIZE + 1) / TILE_SIZE;
+        child->tile_high[0]     = (child->visible_bounds[2] + TILE_SIZE - 1) / TILE_SIZE;
+        child->tile_high[1]     = (child->visible_bounds[3] + TILE_SIZE - 1) / TILE_SIZE;
+        size_t tiles_x          = (size_t)(child->tile_high[0] - child->tile_low[0]);
+        size_t tiles_y          = (size_t)(child->tile_high[1] - child->tile_low[1]);
+        child->constant_offset  = (uint32_t)constant_words;
+        constant_words += tiles_x * tiles_y * 2;
+        ++result->child_count;
+    }
+
+    if (constant_words == 0)
+        return WALLE_LG_REVEAL_RASTER_OK;
+    result->constant_words = calloc(constant_words, sizeof(uint32_t));
+    if (result->constant_words == nullptr)
+        return WALLE_LG_REVEAL_RASTER_ARITHMETIC_RANGE;
+    result->constant_word_count = constant_words;
+
+    for (size_t index = 0; index < result->child_count; ++index) {
+        struct walle_lg_reveal_general_child* child = &result->children[index];
+        struct wlg_child_setup*               setup = &setups[index];
+        size_t tiles_x = (size_t)(child->tile_high[0] - child->tile_low[0]);
+        for (int32_t tile_y = child->tile_low[1]; tile_y < child->tile_high[1]; ++tile_y) {
+            for (int32_t tile_x = child->tile_low[0]; tile_x < child->tile_high[0]; ++tile_x) {
+                size_t cell = (size_t)(tile_y - child->tile_low[1]) * tiles_x
+                              + (size_t)(tile_x - child->tile_low[0]);
+                for (size_t channel = 0; channel < 2; ++channel) {
+                    uint32_t word = 0;
+                    if (!wlg_child_constant_bits(setup,
+                                                 setup->sdf[setup->anchor][channel],
+                                                 channel,
+                                                 tile_x,
+                                                 tile_y,
+                                                 &word)) {
+                        /* Constant out of binary32 range for this tile
+                         * (possible far outside the visible area); the
+                         * child never owns pixels there, so store zero. */
+                        word = 0;
+                    }
+                    result->constant_words[child->constant_offset + 2 * cell + channel] = word;
+                }
+            }
+        }
+    }
+    return WALLE_LG_REVEAL_RASTER_OK;
+}
+
+void walle_lg_reveal_general_destroy(struct walle_lg_reveal_general* general)
+{
+    if (general == nullptr)
+        return;
+    free(general->constant_words);
+    *general = (struct walle_lg_reveal_general){};
+}
+
+bool walle_lg_reveal_general_contains(const struct walle_lg_reveal_general_child* child,
+                                      int32_t                                     x,
+                                      int32_t                                     y)
+{
+    if (x < child->visible_bounds[0] || y < child->visible_bounds[1]
+        || x >= child->visible_bounds[2] || y >= child->visible_bounds[3]) {
+        return false;
+    }
+    int64_t center_x = (int64_t)x * SUBPIXEL_SCALE + SUBPIXEL_SCALE / 2;
+    int64_t center_y = (int64_t)y * SUBPIXEL_SCALE + SUBPIXEL_SCALE / 2;
+    int     expected = child->det_sign;
+    for (size_t edge = 0; edge < 3; ++edge) {
+        size_t  next   = (edge + 1) % 3;
+        int64_t edge_x = child->fixed[next][0] - child->fixed[edge][0];
+        int64_t edge_y = child->fixed[next][1] - child->fixed[edge][1];
+        int64_t cross  = edge_x * (center_y - child->fixed[edge][1])
+                        - edge_y * (center_x - child->fixed[edge][0]);
+        if (cross == 0) {
+            int64_t oriented_x = expected < 0 ? -edge_x : edge_x;
+            int64_t oriented_y = expected < 0 ? -edge_y : edge_y;
+            bool    top        = oriented_y == 0 && oriented_x < 0;
+            bool    left       = oriented_y > 0;
+            if (!(top || left))
+                return false;
+            continue;
+        }
+        if ((cross < 0 ? -1 : 1) != expected)
+            return false;
+    }
+    return true;
+}
+
+bool walle_lg_reveal_general_value(const struct walle_lg_reveal_general* general,
+                                   size_t                                child_index,
+                                   int32_t                               x,
+                                   int32_t                               y,
+                                   float                                 result[static 2])
+{
+    if (general == nullptr || child_index >= general->child_count)
+        return false;
+    const struct walle_lg_reveal_general_child* child = &general->children[child_index];
+    int32_t tile_x = x >= 0 ? x / TILE_SIZE : (x - TILE_SIZE + 1) / TILE_SIZE;
+    int32_t tile_y = y >= 0 ? y / TILE_SIZE : (y - TILE_SIZE + 1) / TILE_SIZE;
+    if (tile_x < child->tile_low[0] || tile_x >= child->tile_high[0]
+        || tile_y < child->tile_low[1] || tile_y >= child->tile_high[1]) {
+        return false;
+    }
+    size_t tiles_x = (size_t)(child->tile_high[0] - child->tile_low[0]);
+    size_t cell    = (size_t)(tile_y - child->tile_low[1]) * tiles_x
+                  + (size_t)(tile_x - child->tile_low[0]);
+    for (size_t channel = 0; channel < 2; ++channel) {
+        uint32_t constant_bits
+            = general->constant_words[child->constant_offset + 2 * cell + channel];
+        struct dyadic constant = dyadic_from_float_bits(constant_bits);
+        struct dyadic slope_x  = dyadic_from_float_bits(child->slope_bits[channel][0]);
+        struct dyadic slope_y  = dyadic_from_float_bits(child->slope_bits[channel][1]);
+        struct dyadic term_x, term_y, exact;
+        int32_t       local_x = x - tile_x * TILE_SIZE;
+        int32_t       local_y = y - tile_y * TILE_SIZE;
+        if (!dyadic_multiply_integer(slope_x, (int64_t)(2 * local_x + 1), &term_x)
+            || !dyadic_multiply_integer(slope_y, (int64_t)(2 * local_y + 1), &term_y)) {
+            return false;
+        }
+        --term_x.exponent;
+        --term_y.exponent;
+        uint32_t out_bits = 0;
+        if (!dyadic_add(constant, term_x, &exact) || !dyadic_add(exact, term_y, &exact)
+            || !dyadic_toward_zero_float_bits(exact, &out_bits)) {
+            return false;
+        }
+        result[channel] = bits_float(out_bits);
+    }
+    return true;
 }
