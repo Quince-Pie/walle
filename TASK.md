@@ -3580,3 +3580,22 @@ NEXT-WINDOW: (a) odd-floor cut column for odd-part phases;
 (b) block-pulse table (row mod 4 / d_o structure) from the decoded
 tables; (c) ripple fit on the residual; then compose; dense;
 held-out; ports 91 -> 80 -> 0.
+
+## 2026-08-15 (later 130): odd-floor cut column measured (35-point level-2 table)
+
+Captures c-thetaphase6-plan-v1 (sha 9e46eded... - design lesson:
+one scan band = one floor parity; all cells even) and
+c-thetaphase7-plan-v1 (sha a0d83639... - period-1 band, odd floors):
+ODD-floor cuts (128ths): q_odd 3:64, 5:62, 7:67.7, 9:<=61.4,
+11:64.7, 13:67.4, 15:66.6, 17:62.8, 19:61.9, 21:<=61.4, 25:65.4,
+33:61.9, 37:61.8, 41:61.9, 51:69.7 [51 matches epq2's ~70 ✓✓].
+Parity split MIXED-SIGN (odd-even from +6.6 to -4.6) - not a
+constant adjustment.  Combined dataset: 35 (N, cut) points with
+N = floor(A/2^19) = 16q or 16q+1 - the level-2 rounder's transfer
+function; the sharp per-band boundaries prove the level-2 argument
+is constant per band (= N), so cut = 60 + g(N) with g measured at
+35 points.  Hand-tested and failed: 64/N scaling, N mod 3, factor
+structure.  NEXT-WINDOW: symbolic regression over g(N) (35 points,
++-0.5 precision); the corpus needs only N in {16*1664(+1),
+16*6528(+1), tz-class N} - ALL MEASURED, so the port is unblocked
+regardless of the closed form.
