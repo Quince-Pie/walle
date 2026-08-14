@@ -2941,3 +2941,14 @@ composition should lift every class similarly.
 NEXT: tz8/tz9 + tt3 (exactness check: p=0 - sawtooth VANISHES for
 phase-0 anchors, explaining tt3's perfection for free!!) + tt1
 (p=1664?); close theta(path); rescore dense + 38612 held-out; ports.
+
+## 2026-08-15 (later 94): unified law validated on all five wide classes
+
+tz8 (p=256): 15729/16852 wide cells (93.3%), theta 33.
+tz9 (p=512): 13752/15320 (89.8%), theta 33.
+All five anchor classes now fit one input-only formula with a single
+global theta per class (89-94%); per-row theta adds ~+4 points
+(tt4: 96.1%).  tt3 (p=0) is exact BY THE LAW (sawtooth vanishes).
+Remaining: theta(path) closed form + the last few percent sub-row
+structure; then tt1 (p=1664, non-power-of-2 phase - key test),
+dense, held-out, ports.
