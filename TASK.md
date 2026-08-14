@@ -2362,3 +2362,25 @@ STATE FOR CONTINUATION (goal unchanged, three steps):
 3. Then the ports with gate contracts 91 -> 80 -> 0.
 All capture inventory: 15+ hardware captures today, shas in entries
 later-53..66; harness /tmp/walle-agx-single-axis-multi-anchor.GRzoaQ.
+
+## 2026-08-14 (later 67): GENERAL REGION LAW (odd-parity regime) EXACT
+
+Coupled-quantum invariant fits (shear quantum = c1 rows):
+  base:    (c1=4, c2=1, K=318080) 18/18 boundary rows EXACT
+  asym2B:  (c1=6, c2=1, K=275584) 16/17
+  ratio4B: (c1=7, c2=1, K=229760) 13/15
+DECOMPOSITION (exact on all three): K = c1*dx0 - ay with
+  dx0 = (ax mod 8192) + (4*B/A - 1)*8192   [ty0 boundary distance]
+  c1  = 8 - 4*B/A
+i.e. REGION(tile) <=> didx_x(right edge) < dx0 - (32768/c1)*floor(ty/4):
+the region = tiles whose x-distance to the anchor is less than the
+value-equivalent of one 4-row block (A*dx0 ~ B*128px), sheared by
+32768/c1 per block.  Verified advance rates match asym (~0.67
+tiles/block) and base (1 tile/block).
+SHIFT-8 REVERSAL EXPLAINED (hypothesis): base ax=494848 (0x78D00),
+shift-8 ax=429312 (0x68D00) - EXACTLY 2^16 apart; bit 16 of ax
+(= 8-tile superblock parity) flips: the traversal is BOUSTROPHEDON
+over 8-tile superblocks; even-parity anchors reverse the boundary
+orientation (observed -5/4 slope).  Next: fit shift-8 with the
+mirrored law; extend c1/dx0 to non-integer 4B/A (span1833); then the
+C-lane, compose, rescore, port (goal steps 2-3).
