@@ -42,7 +42,8 @@ struct ComposeVertexOutput
 };
 
 static const float kFadeStart = 0.66;
-static const float kMaterialize = 0.12;
+// Measured exponent of the materialize ease, k = clock^n (residual 0.018).
+static const float kMaterializeEase = 2.36;
 
 
 // inputOuterRefractionHeight / R, measured 26.6.1 (0.125 * diameter).
@@ -194,14 +195,22 @@ float4 composeFragment(
     float2 centerTopLeft = push.geometry.xy;
     float radiusPixels = push.geometry.z;
 
-    // Apple's materialize timeline is EXACTLY linear: inputFaceOpacity
-    // equals the visible fraction to the bit, across both materials and both
-    // appearances (deviation 0 over 33 sampled states).  walle previously
-    // eased both ends with smoothstep, which is the wrong shape; the ramps
-    // below are linear to match, keeping walle's two-phase structure of a
-    // materialize window followed by a fade to the revealed wallpaper.
+    // Two separate laws, both measured, and they compose:
+    //
+    //   inputFaceOpacity == the visible fraction k, EXACTLY (deviation 0 over
+    //   33 states, both materials, both appearances) - so the material's
+    //   presence is linear in k;
+    //
+    //   k itself is a strongly eased function of the animation clock.
+    //   Decoding the rendered pixels of Apple's materialize capture (12
+    //   frames, clear/light, coded-field backdrop) gives k = clock^2.36 with
+    //   a maximum residual of 0.018 of full scale.  Linear-in-clock misses by
+    //   0.32 and walle's original smoothstep(0, 0.12) by 0.36 - it was the
+    //   worst of every candidate tried.
+    //
+    // walle's `time` is a linear clock, so the ease belongs here.
     float tFade = saturate((time - kFadeStart) / (1.0 - kFadeStart));
-    float thickness = saturate(time / kMaterialize) * (1.0 - tFade);
+    float thickness = pow(saturate(time), kMaterializeEase) * (1.0 - tFade);
 
     // Express the material in the original bottom-left pixel coordinates while
     // Vulkan resources and mask storage remain naturally top-left.

@@ -1,0 +1,2180 @@
+{
+  "appearances" : [
+    "light",
+    "dark"
+  ],
+  "applicationActive" : true,
+  "architecture" : "arm64",
+  "backingScaleFactor" : 2,
+  "canonicalPixelEncoding" : "sRGB RGBA8 top-left opaque-alpha",
+  "captureStartedUTC" : "2026-08-15T16:19:59Z",
+  "captures" : [
+
+  ],
+  "ciCommit" : "local",
+  "displayColorSpace" : "Color LCD colorspace",
+  "displayName" : "Built-in Retina Display",
+  "displayPixels" : [
+    3456,
+    2234
+  ],
+  "displayRefreshHz" : 120,
+  "dynamicDurationSeconds" : 0.6,
+  "dynamicFrameCount" : 12,
+  "dynamicSequences" : [
+    {
+      "analysisExclusionPixels" : [
+        {
+          "height" : 8,
+          "width" : 1024,
+          "x" : 0,
+          "y" : 0
+        }
+      ],
+      "animationCurve" : "linear",
+      "appearance" : "light",
+      "background" : "dynamic-coded-field",
+      "boundedClockProbes" : 82,
+      "captureAttempts" : 82,
+      "clockProbeSurface" : "dedicated-clock-window",
+      "cropPixels" : {
+        "height" : 1024,
+        "width" : 1024,
+        "x" : 0,
+        "y" : 0
+      },
+      "decodedSamples" : 82,
+      "durationSeconds" : 0.6,
+      "frames" : [
+        {
+          "actualSeconds" : 0,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.001308874983806163,
+          "file" : "dynamic\/materialize__regular__light\/frame-0000.png",
+          "fileSha256" : "f0d1e121d78748132a9cad85eac6caf443985e5ed5849bc359ad2b70e7f8be99",
+          "index" : 0,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "d95ee0ff6e88e0179f8cc7ea0a29fe970e1c90e9c026864f048533620efdb590",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0,
+          "timingErrorSeconds" : 0
+        },
+        {
+          "actualSeconds" : 0.05781158339232206,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008253333508037031,
+          "file" : "dynamic\/materialize__regular__light\/frame-0001.png",
+          "fileSha256" : "78b1971c98e670a22e013fd78d6e9a4d263aca03d53671b4973aa43031698b11",
+          "index" : 1,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "5299329ff9677d57d5224c2d68c2917610ccfc43ef9e4b6cbdff21fe5a690e4a",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.109375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.05454545454545454,
+          "timingErrorSeconds" : 0.0032661288468675206
+        },
+        {
+          "actualSeconds" : 0.10342433338519186,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008920833352021873,
+          "file" : "dynamic\/materialize__regular__light\/frame-0002.png",
+          "fileSha256" : "18fa222b31b9b477a4a5bc8f1682bf78dcf03ea3fcbd2a6f34c0e107a9ec812f",
+          "index" : 2,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "136ed00adfcfc6cca71ca33d3d8d86f4a93ba141ecebefbfe27f8711010ffa47",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.1787109375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.10909090909090909,
+          "timingErrorSeconds" : -0.005666575705717228
+        },
+        {
+          "actualSeconds" : 0.1629744375240989,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008632916724309325,
+          "file" : "dynamic\/materialize__regular__light\/frame-0003.png",
+          "fileSha256" : "8a8cf6ba6ef0c1f640681a700c5c8b1cf2439d631eb543b743dc979ddeb09fe9",
+          "index" : 3,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "1274c0b49534fc0a102a452e90f56ba309081e50f8d9c695ffeaef4e82dc67e1",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.2763671875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.1636363636363636,
+          "timingErrorSeconds" : -0.0006619261122647047
+        },
+        {
+          "actualSeconds" : 0.20722391665913165,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0007399166352115571,
+          "file" : "dynamic\/materialize__regular__light\/frame-0004.png",
+          "fileSha256" : "cdfc2c8f3f1bc0b7cf883392cd49c0a0d2cacd120a84ec08d287506445c43559",
+          "index" : 4,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "5670c179320fb0af9001d63087c4758f7e76959db4733576d44d2a151e4b2dfd",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.359375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.21818181818181817,
+          "timingErrorSeconds" : -0.010957901522686525
+        },
+        {
+          "actualSeconds" : 0.2654749166686088,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008874166524037719,
+          "file" : "dynamic\/materialize__regular__light\/frame-0005.png",
+          "fileSha256" : "5cc55107ccda8351a7a16d59b9a836eb7fec954776c469e3934ceababf4698a8",
+          "index" : 5,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "2df48acce19b8ef1833ce521dcad0b6f31b53c13c43e93d20e4e5145d78b7ae8",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.45703125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.2727272727272727,
+          "timingErrorSeconds" : -0.007252356058663922
+        },
+        {
+          "actualSeconds" : 0.32340560416923836,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008469583699479699,
+          "file" : "dynamic\/materialize__regular__light\/frame-0006.png",
+          "fileSha256" : "bd3636bba6775f9031a488f58948aa6b632056f01fb3ae12bb16568d6725694b",
+          "index" : 6,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "c8cbbc3b816cc8a36d2da977eaf399681544941cf70b4fbcb25e22b4a40a85d1",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.5537109375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.3272727272727272,
+          "timingErrorSeconds" : -0.0038671231034888565
+        },
+        {
+          "actualSeconds" : 0.3735486041987315,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008457916555926204,
+          "file" : "dynamic\/materialize__regular__light\/frame-0007.png",
+          "fileSha256" : "eb51f48063fab78957192f8536fa2527f981b7482289e70ea217b71a2c94b07f",
+          "index" : 7,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "1dbc0d438c6b777b194a59b49b3fcf191d00b70267246e05c6f401b91992184a",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.6376953125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.38181818181818183,
+          "timingErrorSeconds" : -0.008269577619450352
+        },
+        {
+          "actualSeconds" : 0.4234868750208989,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008442499674856663,
+          "file" : "dynamic\/materialize__regular__light\/frame-0008.png",
+          "fileSha256" : "f06431e2142d6307d943a83461e01780bdf2e3949d572cd01ff8a5b75d5fe6b3",
+          "index" : 8,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "878516e9df304e3e6089b04c2d5bceb1a840397327d1f7e65155b49045d8b861",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.720703125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.43636363636363634,
+          "timingErrorSeconds" : -0.012876761342737464
+        },
+        {
+          "actualSeconds" : 0.4823398333392106,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008041666587814689,
+          "file" : "dynamic\/materialize__regular__light\/frame-0009.png",
+          "fileSha256" : "1d7b81bfc153456a8a02de5f7462acdbe27c0fd84e380ad5bbea5e47c92149f8",
+          "index" : 9,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "814326c72e46c9311f2697f2f02e046983bcd61c51078dc1cd40c6bc84e0e403",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.818359375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.49090909090909085,
+          "timingErrorSeconds" : -0.008569257569880251
+        },
+        {
+          "actualSeconds" : 0.5430457500042394,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.00198433332843706,
+          "file" : "dynamic\/materialize__regular__light\/frame-0010.png",
+          "fileSha256" : "df281607497c3c04b17d29ad9806608b044f8704f388f5e3f84d157b7687096d",
+          "index" : 10,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "399c7d64549b6a8b3e4955b8533985a7c1b092a18d091824a46a92b36d198ba9",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.9150390625,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.5454545454545454,
+          "timingErrorSeconds" : -0.002408795450306034
+        },
+        {
+          "actualSeconds" : 0.5967378333443776,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0009245832916349173,
+          "file" : "dynamic\/materialize__regular__light\/frame-0011.png",
+          "fileSha256" : "d56acde9802dbea7a5da50558b481dc64a3da1457c5c0e0f9063a50546411384",
+          "index" : 11,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "09ac2b288312cfc08192be9b5c2e6bc3fb122c0e3b7d1020c9657f5c521015bb",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.998046875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.6,
+          "timingErrorSeconds" : -0.0032621666556224005
+        }
+      ],
+      "fullFrameCaptures" : 79,
+      "fullFrameClockDecodes" : 79,
+      "id" : "materialize__regular__light",
+      "mode" : "materialize",
+      "outgoingBackground" : "dynamic-coded-field",
+      "overlay" : "regular",
+      "phaseSchedule" : {
+        "end" : 1
+      },
+      "postSettleDelaySeconds" : 0.9,
+      "postSettleFrame" : {
+        "captureBackend" : "CGWindowListCreateImage",
+        "file" : "dynamic\/materialize__regular__light\/post-settle.png",
+        "fileSha256" : "f6689cd86d717804fd1e44f87bae1ffaf123cc3cd5118e3d3ac2bf69d1e5bdaa",
+        "pixelHeight" : 1024,
+        "pixelSha256" : "4dcce6c0d2a41ec09aa382f8e31feeda98318591418875aa694c18f3eea09d26",
+        "pixelWidth" : 1024,
+        "savedImage" : {
+          "alphaInfo" : 1,
+          "bitmapInfo" : 16385,
+          "bitsPerComponent" : 8,
+          "bitsPerPixel" : 32,
+          "bytesPerRow" : 4096,
+          "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+        },
+        "sourceImage" : {
+          "alphaInfo" : 2,
+          "bitmapInfo" : 8194,
+          "bitsPerComponent" : 8,
+          "bitsPerPixel" : 32,
+          "bytesPerRow" : 4096,
+          "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+        },
+        "stabilitySamples" : 3,
+        "stable" : true
+      },
+      "presentationClock" : "appkit-raster-monotonic",
+      "probeRole" : "material-topology-response",
+      "samplingMethod" : "continuous-bounded-clock-full-frame-verified",
+      "stateIsolation" : "fresh-swiftui-dynamic-subtree-per-sequence",
+      "tailFrames" : [
+
+      ],
+      "transientFailures" : 0
+    },
+    {
+      "analysisExclusionPixels" : [
+        {
+          "height" : 8,
+          "width" : 1024,
+          "x" : 0,
+          "y" : 0
+        }
+      ],
+      "animationCurve" : "linear",
+      "appearance" : "light",
+      "background" : "dynamic-coded-field",
+      "boundedClockProbes" : 78,
+      "captureAttempts" : 78,
+      "clockProbeSurface" : "dedicated-clock-window",
+      "cropPixels" : {
+        "height" : 1024,
+        "width" : 1024,
+        "x" : 0,
+        "y" : 0
+      },
+      "decodedSamples" : 78,
+      "durationSeconds" : 0.6,
+      "frames" : [
+        {
+          "actualSeconds" : 0,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0020976666710339487,
+          "file" : "dynamic\/materialize__clear__light\/frame-0000.png",
+          "fileSha256" : "f0d1e121d78748132a9cad85eac6caf443985e5ed5849bc359ad2b70e7f8be99",
+          "index" : 0,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "d95ee0ff6e88e0179f8cc7ea0a29fe970e1c90e9c026864f048533620efdb590",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0,
+          "timingErrorSeconds" : 0
+        },
+        {
+          "actualSeconds" : 0.05508274998283014,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008575000101700425,
+          "file" : "dynamic\/materialize__clear__light\/frame-0001.png",
+          "fileSha256" : "50a9aae7fad7d9c414284ae99d254297a48b5b3a132e3c7a3c3400ea1b8c81e1",
+          "index" : 1,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "1ed253905880fc2a28403bf9a03c700b46f80707fcbc783302aec220e526e66f",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.1064453125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.05454545454545454,
+          "timingErrorSeconds" : 0.0005372954373755942
+        },
+        {
+          "actualSeconds" : 0.0968417499680072,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0007314999820664525,
+          "file" : "dynamic\/materialize__clear__light\/frame-0002.png",
+          "fileSha256" : "59a67303c0194cb9060bf44f30a974baaee1612ad38aec9a937eb352797e3c96",
+          "index" : 2,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "3cb6b07d39af756c7840a68efb9d404accfd69950d4b1a5b40aacd970af29a1f",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.17578125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.10909090909090909,
+          "timingErrorSeconds" : -0.012249159122901879
+        },
+        {
+          "actualSeconds" : 0.16311727080028504,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008878749795258045,
+          "file" : "dynamic\/materialize__clear__light\/frame-0003.png",
+          "fileSha256" : "6574096ef83102e026e98ac3ab9fde283ea9d67717a3feec2f9c212194460862",
+          "index" : 3,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "bfbf16e94842ca6dfd8c27749a7b4230d07dc0846b829b7638367e75c3b6bbe8",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.2734375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.1636363636363636,
+          "timingErrorSeconds" : -0.0005190928360785663
+        },
+        {
+          "actualSeconds" : 0.21324474998982623,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.000844833324663341,
+          "file" : "dynamic\/materialize__clear__light\/frame-0004.png",
+          "fileSha256" : "3738a7680fd895fd8f5ff0b1b69f1147d64b602c20831ab85226a417c8125531",
+          "index" : 4,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "104156592bc0a9fce136e0cfa1f01cc714846ff2b4f269460d6c1980f222db9d",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.3701171875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.21818181818181817,
+          "timingErrorSeconds" : -0.004937068191991939
+        },
+        {
+          "actualSeconds" : 0.2694609583122656,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0010625832946971059,
+          "file" : "dynamic\/materialize__clear__light\/frame-0005.png",
+          "fileSha256" : "a22091b66cf4a8052085a064537d29923c8eff030ba1b899f6e86862ff1a7a4b",
+          "index" : 5,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "de9078400f0ff8aee9e1a7457445d57d35b149649f07722ca636ba8fc4e1ddbe",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.4541015625,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.2727272727272727,
+          "timingErrorSeconds" : -0.003266314415007132
+        },
+        {
+          "actualSeconds" : 0.3297891874681227,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008482916746288538,
+          "file" : "dynamic\/materialize__clear__light\/frame-0006.png",
+          "fileSha256" : "9849c5fb0e9588fcd1bd9c387269afce505448400ee9b6bc8f0f396be103e091",
+          "index" : 6,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "4e697c85e0448cf160d991704945e1068ae47912ed48cc69fff4db77327b0e88",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.55078125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.3272727272727272,
+          "timingErrorSeconds" : 0.0025164601953954757
+        },
+        {
+          "actualSeconds" : 0.3726727499742992,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0007839166792109609,
+          "file" : "dynamic\/materialize__clear__light\/frame-0007.png",
+          "fileSha256" : "f9bd58fcaf367b5992a271f221f514c4f475bb1e25d0581a62948b5ceb9296db",
+          "index" : 7,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "f05ca9549a2a99af17aff73cbdc83f6c831aadc1d020032c1052d0577d555b35",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.634765625,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.38181818181818183,
+          "timingErrorSeconds" : -0.009145431843882612
+        },
+        {
+          "actualSeconds" : 0.43078752083238214,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008201249875128269,
+          "file" : "dynamic\/materialize__clear__light\/frame-0008.png",
+          "fileSha256" : "908f1f073dd8c6b0edb92f880990bb1ebef29159fb3be20cdb59a9bd7f36bfef",
+          "index" : 8,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "8f38a144d1800d925dd1a385a7545ae53d8c56e7798f8dfd53abbf6e26be1ec4",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.7314453125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.43636363636363634,
+          "timingErrorSeconds" : -0.0055761155312542
+        },
+        {
+          "actualSeconds" : 0.4884790833457373,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008674166747368872,
+          "file" : "dynamic\/materialize__clear__light\/frame-0009.png",
+          "fileSha256" : "1bde1e4ce7ceff20b6ce9e9c08e5d8ec3a8b5c42b86774e61f4712b1a2837e9c",
+          "index" : 9,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "e30031715e44fc0f4eaa57984d144e1443261ede7182f3a6f4b86c48b1a460cd",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.8291015625,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.49090909090909085,
+          "timingErrorSeconds" : -0.0024300075633535423
+        },
+        {
+          "actualSeconds" : 0.5455472500179894,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0009209999698214233,
+          "file" : "dynamic\/materialize__clear__light\/frame-0010.png",
+          "fileSha256" : "187ba2de3156c444174ba4f540624a2a7fe43e7d55df6d94f7c51b821c7ff9d2",
+          "index" : 10,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "c8eb0ad57e7c567dce4878f2a632e147844e3e6120c3658f2b9e97c0d0ce673e",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.912109375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.5454545454545454,
+          "timingErrorSeconds" : 9.270456344401268e-05
+        },
+        {
+          "actualSeconds" : 0.5947671249741688,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0009864167077466846,
+          "file" : "dynamic\/materialize__clear__light\/frame-0011.png",
+          "fileSha256" : "997c0ea2963218500cf861acb18745a70e85f33a674fc2f10b1dad34ebbc1158",
+          "index" : 11,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "9d84e34eac91eb0dfdaaaca717aa1e0887cdccf00b336d8fd7b6b09f47149d0b",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.9951171875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.6,
+          "timingErrorSeconds" : -0.005232875025831141
+        }
+      ],
+      "fullFrameCaptures" : 76,
+      "fullFrameClockDecodes" : 76,
+      "id" : "materialize__clear__light",
+      "mode" : "materialize",
+      "outgoingBackground" : "dynamic-coded-field",
+      "overlay" : "clear",
+      "phaseSchedule" : {
+        "end" : 1
+      },
+      "postSettleDelaySeconds" : 0.9,
+      "postSettleFrame" : {
+        "captureBackend" : "CGWindowListCreateImage",
+        "file" : "dynamic\/materialize__clear__light\/post-settle.png",
+        "fileSha256" : "15ebbe2a85789ba890dc0dd7608b381d574aefb0aa13c3e96638571374488ca7",
+        "pixelHeight" : 1024,
+        "pixelSha256" : "e6e9dca90c091f9431640a76d7314efe75aa8675f48ff66cb7a87a29497e00c8",
+        "pixelWidth" : 1024,
+        "savedImage" : {
+          "alphaInfo" : 1,
+          "bitmapInfo" : 16385,
+          "bitsPerComponent" : 8,
+          "bitsPerPixel" : 32,
+          "bytesPerRow" : 4096,
+          "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+        },
+        "sourceImage" : {
+          "alphaInfo" : 2,
+          "bitmapInfo" : 8194,
+          "bitsPerComponent" : 8,
+          "bitsPerPixel" : 32,
+          "bytesPerRow" : 4096,
+          "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+        },
+        "stabilitySamples" : 3,
+        "stable" : true
+      },
+      "presentationClock" : "appkit-raster-monotonic",
+      "probeRole" : "material-topology-response",
+      "samplingMethod" : "continuous-bounded-clock-full-frame-verified",
+      "stateIsolation" : "fresh-swiftui-dynamic-subtree-per-sequence",
+      "tailFrames" : [
+
+      ],
+      "transientFailures" : 0
+    },
+    {
+      "analysisExclusionPixels" : [
+        {
+          "height" : 8,
+          "width" : 1024,
+          "x" : 0,
+          "y" : 0
+        }
+      ],
+      "animationCurve" : "linear",
+      "appearance" : "dark",
+      "background" : "dynamic-coded-field",
+      "boundedClockProbes" : 78,
+      "captureAttempts" : 78,
+      "clockProbeSurface" : "dedicated-clock-window",
+      "cropPixels" : {
+        "height" : 1024,
+        "width" : 1024,
+        "x" : 0,
+        "y" : 0
+      },
+      "decodedSamples" : 78,
+      "durationSeconds" : 0.6,
+      "frames" : [
+        {
+          "actualSeconds" : 0,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0017994166701100767,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0000.png",
+          "fileSha256" : "f0d1e121d78748132a9cad85eac6caf443985e5ed5849bc359ad2b70e7f8be99",
+          "index" : 0,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "d95ee0ff6e88e0179f8cc7ea0a29fe970e1c90e9c026864f048533620efdb590",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0,
+          "timingErrorSeconds" : 0
+        },
+        {
+          "actualSeconds" : 0.04110714583657682,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0011136250104755163,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0001.png",
+          "fileSha256" : "cf8614f173e939a30745d2a033a91465eb0ea522a4d9dd9684d43e7e21456543",
+          "index" : 1,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "e85292491a0efb7ade3871f67f2c984c5f82c3ceeb1b860c700215a2716753ec",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.08203125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.05454545454545454,
+          "timingErrorSeconds" : -0.013438308708877723
+        },
+        {
+          "actualSeconds" : 0.10156462498707697,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.002103083301335573,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0002.png",
+          "fileSha256" : "920283a8af45ffa7187d012657d7721e394402705f439563eba9d1d62757541a",
+          "index" : 2,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "79a8abd1faa8692f01a9ef3fc2f43a91501c7b31deebfa61b265520a640cecae",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.1787109375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.10909090909090909,
+          "timingErrorSeconds" : -0.007526284103832118
+        },
+        {
+          "actualSeconds" : 0.14835485414369032,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.000855708378367126,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0003.png",
+          "fileSha256" : "403eb1a5363871fe647d151d0d7e6d6d57ce88c22a3dadaa7728fce1dbeb3d92",
+          "index" : 3,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "7f1e89b6caa6176efce48b0258eb45ea42e23b69c43e4e169fa8e901b32c0fde",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.26171875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.1636363636363636,
+          "timingErrorSeconds" : -0.01528150949267329
+        },
+        {
+          "actualSeconds" : 0.2142337083350867,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008292500278912485,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0004.png",
+          "fileSha256" : "824cdc195b7cf4e27b6c15ca18b57e832398f8f82c8f196133f25d9829575b8e",
+          "index" : 4,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "845d3cc92bef787f56b373f3b892d03411ed9902ea7a6711026639786d3788a8",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.359375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.21818181818181817,
+          "timingErrorSeconds" : -0.003948109846731468
+        },
+        {
+          "actualSeconds" : 0.26995343749877065,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0010159583180211484,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0005.png",
+          "fileSha256" : "3b9fe58fb6969be56068ed4a1f2f25073ee8efbfc71b1a07df97f4217f9ea183",
+          "index" : 5,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "f8305f3073268a6577aaa71efd114706ce94c36b24b90826635a0023fd121788",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.45703125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.2727272727272727,
+          "timingErrorSeconds" : -0.002773835228502053
+        },
+        {
+          "actualSeconds" : 0.31805945828091353,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0024174999562092125,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0006.png",
+          "fileSha256" : "9d3ddb697578a297a6727c99129e05886536bafa6d4fd0ca14af1350b225a682",
+          "index" : 6,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "9c26faccb3ad915c6e112815f2525187033890a87012d485f3de181bb20300c3",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.5400390625,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.3272727272727272,
+          "timingErrorSeconds" : -0.009213268991813683
+        },
+        {
+          "actualSeconds" : 0.3810134583618492,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.000607333320658654,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0007.png",
+          "fileSha256" : "d3fd0e7a4ade51a64022b0eeadc4249acce81d7d837ebe7e84a3c85fecaefd1f",
+          "index" : 7,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "f8f46eca293bb03eb69135e9ae5729eef43e04dea92ef393a10654ecfdeb150c",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.63671875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.38181818181818183,
+          "timingErrorSeconds" : -0.0008047234563326455
+        },
+        {
+          "actualSeconds" : 0.42392266663955525,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0007917500333860517,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0008.png",
+          "fileSha256" : "858f76d44a97666e119a101c83ab992cb07ace4a2f6308f1a584fb7cce084080",
+          "index" : 8,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "b1584d50711b5d8afd3fa06c7ae870bdd12ba98f9558e857efe0011fc3cbeed5",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.720703125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.43636363636363634,
+          "timingErrorSeconds" : -0.012440969724081097
+        },
+        {
+          "actualSeconds" : 0.48846222914289683,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008525416487827897,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0009.png",
+          "fileSha256" : "f3bcea03c02a814234f616b6ca79122203636c88a98c9fcc38abba6fc5e7b078",
+          "index" : 9,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "9c0312061c4ee6e6658950cf5a1dec968acf6e7f0120232e241aef48c6e1688a",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.8173828125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.49090909090909085,
+          "timingErrorSeconds" : -0.0024468617661940195
+        },
+        {
+          "actualSeconds" : 0.5451106249820441,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0009976666187867522,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0010.png",
+          "fileSha256" : "c4eed33e59f323ff2170ee1862a4f6aeae7e454f6fac3cafce6009288a86bb5f",
+          "index" : 10,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "dfbc80d763184c4f7ad9c60369a72ff962e5878a1628d74437fe8ea6bf4b966c",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.9150390625,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.5454545454545454,
+          "timingErrorSeconds" : -0.0003439204725013134
+        },
+        {
+          "actualSeconds" : 0.5898569999844767,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0009192499564960599,
+          "file" : "dynamic\/materialize__regular__dark\/frame-0011.png",
+          "fileSha256" : "1a4b91e4af35bc174805355ab6bda7a3dd6581c13c796bdc551236a661410da3",
+          "index" : 11,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "ccabc8e8ef85bdb01df0a4274691631e38f8792e3cce35665089c74b081d3292",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.998046875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.6,
+          "timingErrorSeconds" : -0.010143000015523262
+        }
+      ],
+      "fullFrameCaptures" : 76,
+      "fullFrameClockDecodes" : 76,
+      "id" : "materialize__regular__dark",
+      "mode" : "materialize",
+      "outgoingBackground" : "dynamic-coded-field",
+      "overlay" : "regular",
+      "phaseSchedule" : {
+        "end" : 1
+      },
+      "postSettleDelaySeconds" : 0.9,
+      "postSettleFrame" : {
+        "captureBackend" : "CGWindowListCreateImage",
+        "file" : "dynamic\/materialize__regular__dark\/post-settle.png",
+        "fileSha256" : "ec78415aaade919876ae6eade3895e6715f8cfd5b6f5fbc1b336fa4c1827434e",
+        "pixelHeight" : 1024,
+        "pixelSha256" : "1195d9a4aa945a27f34c4bebfd2ae20fabdf46959d2dae183cf7c1791c140cb1",
+        "pixelWidth" : 1024,
+        "savedImage" : {
+          "alphaInfo" : 1,
+          "bitmapInfo" : 16385,
+          "bitsPerComponent" : 8,
+          "bitsPerPixel" : 32,
+          "bytesPerRow" : 4096,
+          "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+        },
+        "sourceImage" : {
+          "alphaInfo" : 2,
+          "bitmapInfo" : 8194,
+          "bitsPerComponent" : 8,
+          "bitsPerPixel" : 32,
+          "bytesPerRow" : 4096,
+          "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+        },
+        "stabilitySamples" : 3,
+        "stable" : true
+      },
+      "presentationClock" : "appkit-raster-monotonic",
+      "probeRole" : "material-topology-response",
+      "samplingMethod" : "continuous-bounded-clock-full-frame-verified",
+      "stateIsolation" : "fresh-swiftui-dynamic-subtree-per-sequence",
+      "tailFrames" : [
+
+      ],
+      "transientFailures" : 0
+    },
+    {
+      "analysisExclusionPixels" : [
+        {
+          "height" : 8,
+          "width" : 1024,
+          "x" : 0,
+          "y" : 0
+        }
+      ],
+      "animationCurve" : "linear",
+      "appearance" : "dark",
+      "background" : "dynamic-coded-field",
+      "boundedClockProbes" : 80,
+      "captureAttempts" : 80,
+      "clockProbeSurface" : "dedicated-clock-window",
+      "cropPixels" : {
+        "height" : 1024,
+        "width" : 1024,
+        "x" : 0,
+        "y" : 0
+      },
+      "decodedSamples" : 80,
+      "durationSeconds" : 0.6,
+      "frames" : [
+        {
+          "actualSeconds" : 0,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.001800333324354142,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0000.png",
+          "fileSha256" : "f0d1e121d78748132a9cad85eac6caf443985e5ed5849bc359ad2b70e7f8be99",
+          "index" : 0,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "d95ee0ff6e88e0179f8cc7ea0a29fe970e1c90e9c026864f048533620efdb590",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0,
+          "timingErrorSeconds" : 0
+        },
+        {
+          "actualSeconds" : 0.057752562512177974,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0026504583656787872,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0001.png",
+          "fileSha256" : "5a9e3cab620fdc03736b90de2a13d85dfe323d0afd0ca5bb0035ea072ef9d8c7",
+          "index" : 1,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "71d38c00211ab2d78335824b4a547f95fff1fed0d081ae2f127c626d5cb7d783",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.1044921875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.05454545454545454,
+          "timingErrorSeconds" : 0.003207107966723431
+        },
+        {
+          "actualSeconds" : 0.10404212499270216,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0007587499567307532,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0002.png",
+          "fileSha256" : "63cbf30e9f463197f62f90782eb49a351cdc4264c53520d313d71d862ff08aee",
+          "index" : 2,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "488ea2e7d656fce557110ae099d0af56e40981180418364e1d82adef3f415d2a",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.1875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.10909090909090909,
+          "timingErrorSeconds" : -0.005048784098206929
+        },
+        {
+          "actualSeconds" : 0.15433006250532344,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0007567916763946414,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0003.png",
+          "fileSha256" : "fa8581f25ed765345b3759ae81d1160ff749b1a1b08e4036ecb59111ac91b976",
+          "index" : 3,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "5f87deb98db97e52c576a019d439843d17aea12ed8f6689d5fc68edc4d679d74",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.271484375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.1636363636363636,
+          "timingErrorSeconds" : -0.009306301131040168
+        },
+        {
+          "actualSeconds" : 0.21195145830279216,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008965000160969794,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0004.png",
+          "fileSha256" : "422a7d00c585b0dad685da6139d71eda9750cf9543659ce497836a02821623ea",
+          "index" : 4,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "3a4977927dd8592c6f15304e13fcfc8be65b275d46b399c93ce181bf2f0893ee",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.3544921875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.21818181818181817,
+          "timingErrorSeconds" : -0.0062303598790260095
+        },
+        {
+          "actualSeconds" : 0.2684718750533648,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0009563333005644381,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0005.png",
+          "fileSha256" : "b7dc90554981cc66c710587c3c3dc6bb4ad4c7c538248e302a804c3dacaf6d39",
+          "index" : 5,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "3d07d9f26351686b051542ea42118d8c72cee184c3858e741f90cad3ec2a618d",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.4521484375,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.2727272727272727,
+          "timingErrorSeconds" : -0.0042553976739079236
+        },
+        {
+          "actualSeconds" : 0.32257514586672187,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.002485124976374209,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0006.png",
+          "fileSha256" : "9bac3598889359ca8cb8a3511c25352b60c5907dc0d529d66d1fd578c7d07227",
+          "index" : 6,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "3fdc1d133777ec5b600fc3cc64bb75c1da52f9cd0308727eb3a86c58f58fd4f4",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.548828125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.3272727272727272,
+          "timingErrorSeconds" : -0.004697581406005347
+        },
+        {
+          "actualSeconds" : 0.370718875026796,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0007896666647866368,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0007.png",
+          "fileSha256" : "a6431bedcc465244d67d90b9271c52512cf6b69129f84002a1e595aa674b4003",
+          "index" : 7,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "8ca7c2048ede2374163a328ac404715cf8cdfff3cda2184628bcdc57944f7f48",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.6328125,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.38181818181818183,
+          "timingErrorSeconds" : -0.011099306791385821
+        },
+        {
+          "actualSeconds" : 0.43684931250754744,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008866250282153487,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0008.png",
+          "fileSha256" : "32a4b02fc6d235762a1d47a0757b48db9014202cd4b714d62ba7a0df97826df7",
+          "index" : 8,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "f02a8961d9635dad0794aee14efe8c528ce8009d033753b24846e11efff5b513",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.7294921875,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.43636363636363634,
+          "timingErrorSeconds" : 0.0004856761439110957
+        },
+        {
+          "actualSeconds" : 0.47910747915739194,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0006757083465345204,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0009.png",
+          "fileSha256" : "d6ae7fc115065998f785deb7493dc769b3b4cd5f38af8c7eb7a7745a14ef5452",
+          "index" : 9,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "65b44654a83bbdee5a54e380a42ca6a7af8702cff045efd8669be9f2e37fac13",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.8134765625,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.49090909090909085,
+          "timingErrorSeconds" : -0.011801611751698915
+        },
+        {
+          "actualSeconds" : 0.5452083750278689,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0008613333338871598,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0010.png",
+          "fileSha256" : "1eb4e3a2a86082068f491d6875494ae71e71353f9edd1d7e2f46246d479b67e3",
+          "index" : 10,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "8481c16198f487f889c4cae3e0a7330e393cfe8c895b819067b6f506fc290c33",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 0.91015625,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.5454545454545454,
+          "timingErrorSeconds" : -0.00024617042667651745
+        },
+        {
+          "actualSeconds" : 0.6037813958828337,
+          "captureBackend" : "CGWindowListCreateImage",
+          "captureDurationSeconds" : 0.0009036249830387533,
+          "file" : "dynamic\/materialize__clear__dark\/frame-0011.png",
+          "fileSha256" : "1b3ca8284add35fb4caebe8bde3bda4dcc87599f40e7c390e16ca9b80826513c",
+          "index" : 11,
+          "pixelHeight" : 1024,
+          "pixelSha256" : "c9727c4cbe9582068b21a423f25b5ebfe0e315dacde066382112fd39471a74e1",
+          "pixelWidth" : 1024,
+          "presentationProgress" : 1,
+          "savedImage" : {
+            "alphaInfo" : 1,
+            "bitmapInfo" : 16385,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+          },
+          "sourceImage" : {
+            "alphaInfo" : 2,
+            "bitmapInfo" : 8194,
+            "bitsPerComponent" : 8,
+            "bitsPerPixel" : 32,
+            "bytesPerRow" : 4096,
+            "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+          },
+          "targetSeconds" : 0.6,
+          "timingErrorSeconds" : 0.0037813958828337713
+        }
+      ],
+      "fullFrameCaptures" : 77,
+      "fullFrameClockDecodes" : 77,
+      "id" : "materialize__clear__dark",
+      "mode" : "materialize",
+      "outgoingBackground" : "dynamic-coded-field",
+      "overlay" : "clear",
+      "phaseSchedule" : {
+        "end" : 1
+      },
+      "postSettleDelaySeconds" : 0.9,
+      "postSettleFrame" : {
+        "captureBackend" : "CGWindowListCreateImage",
+        "file" : "dynamic\/materialize__clear__dark\/post-settle.png",
+        "fileSha256" : "15ebbe2a85789ba890dc0dd7608b381d574aefb0aa13c3e96638571374488ca7",
+        "pixelHeight" : 1024,
+        "pixelSha256" : "e6e9dca90c091f9431640a76d7314efe75aa8675f48ff66cb7a87a29497e00c8",
+        "pixelWidth" : 1024,
+        "savedImage" : {
+          "alphaInfo" : 1,
+          "bitmapInfo" : 16385,
+          "bitsPerComponent" : 8,
+          "bitsPerPixel" : 32,
+          "bytesPerRow" : 4096,
+          "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+        },
+        "sourceImage" : {
+          "alphaInfo" : 2,
+          "bitmapInfo" : 8194,
+          "bitsPerComponent" : 8,
+          "bitsPerPixel" : 32,
+          "bytesPerRow" : 4096,
+          "colorSpace" : "<CGColorSpace 0x946cd0000> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; Color LCD)"
+        },
+        "stabilitySamples" : 3,
+        "stable" : true
+      },
+      "presentationClock" : "appkit-raster-monotonic",
+      "probeRole" : "material-topology-response",
+      "samplingMethod" : "continuous-bounded-clock-full-frame-verified",
+      "stateIsolation" : "fresh-swiftui-dynamic-subtree-per-sequence",
+      "tailFrames" : [
+
+      ],
+      "transientFailures" : 0
+    }
+  ],
+  "exactSweepsRequested" : false,
+  "hostModel" : "MacBookPro18,2",
+  "increaseContrast" : false,
+  "osBuild" : "25G76",
+  "osVersion" : "Version 26.6.1 (Build 25G76)",
+  "overlays" : [
+    "none",
+    "regular",
+    "clear",
+    "tintedBlue",
+    "tintedOrange",
+    "clearTintedBlue"
+  ],
+  "preflightErrors" : [
+
+  ],
+  "presentationClockPreflight" : {
+    "backend" : "appkit-raster-monotonic",
+    "liveEndpointProgress" : 1,
+    "liveMidpointProgress" : 0.5478515625,
+    "probeLiveEndpointProgress" : 1,
+    "probeLiveMidpointProgress" : 0.568359375,
+    "probePixelSize" : [
+      1024,
+      8
+    ],
+    "probeStaticQuarterProgress" : 0.25,
+    "probeStaticThreeQuarterProgress" : 0.75,
+    "staticQuarterProgress" : 0.25,
+    "staticThreeQuarterProgress" : 0.75
+  },
+  "reduceMotion" : false,
+  "reduceTransparency" : false,
+  "references" : [
+    {
+      "background" : "dynamic-coded-field",
+      "family" : "dynamic",
+      "file" : "reference\/dynamic-coded-field.png",
+      "fileSha256" : "de8201bb7166f1238948449e939fec9e6e7396ed6dc90089bbbe974f4e507697",
+      "image" : {
+        "alphaInfo" : 1,
+        "bitmapInfo" : 16385,
+        "bitsPerComponent" : 8,
+        "bitsPerPixel" : 32,
+        "bytesPerRow" : 4096,
+        "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+      },
+      "pixelHeight" : 1024,
+      "pixelSha256" : "ac3b8415fd0ed2c87f31a9b89842efd20751b3221e78b0685854904c934c9f6d",
+      "pixelWidth" : 1024
+    },
+    {
+      "background" : "dynamic-coded-field-incoming",
+      "family" : "dynamic",
+      "file" : "reference\/dynamic-coded-field-incoming.png",
+      "fileSha256" : "680c8df57698abbe0cf1e370b29b442739351b3263f4de5ba1e45564160fe349",
+      "image" : {
+        "alphaInfo" : 1,
+        "bitmapInfo" : 16385,
+        "bitsPerComponent" : 8,
+        "bitsPerPixel" : 32,
+        "bytesPerRow" : 4096,
+        "colorSpace" : "<CGColorSpace 0x1053d13b0> (kCGColorSpaceICCBased; kCGColorSpaceModelRGB; sRGB IEC61966-2.1)"
+      },
+      "pixelHeight" : 1024,
+      "pixelSha256" : "52a39f8608b4ae8cb16afa615ab9368056649f523db1512f2d427d274a05a878",
+      "pixelWidth" : 1024
+    }
+  ],
+  "requestedDynamicModes" : [
+    "materialize"
+  ],
+  "requestedSuite" : "dynamic",
+  "rigVersion" : "2.19.0",
+  "runnerImageOS" : "local",
+  "runnerImageVersion" : "local",
+  "scenes" : [
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-0128-center",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 64,
+          "height" : 128,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 128
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-0256-center",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 128,
+          "height" : 256,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 256
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-0500-center",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 250,
+          "height" : 500,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 500
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-1000-center",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 500,
+          "height" : 1000,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 1000
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-1600-center",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 800,
+          "height" : 1600,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 1600
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-4000-center",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 2000,
+          "height" : 4000,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 4000
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-0500-subpixel",
+      "shapes" : [
+        {
+          "centerX" : 256.25,
+          "centerY" : 256.75,
+          "cornerRadius" : 250.25,
+          "height" : 500.5,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 500.5
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-0500-upper-left",
+      "shapes" : [
+        {
+          "centerX" : 128,
+          "centerY" : 153.6,
+          "cornerRadius" : 250,
+          "height" : 500,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 500
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-0500-upper-right",
+      "shapes" : [
+        {
+          "centerX" : 384,
+          "centerY" : 153.6,
+          "cornerRadius" : 250,
+          "height" : 500,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 500
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-0500-lower-left",
+      "shapes" : [
+        {
+          "centerX" : 128,
+          "centerY" : 358.4,
+          "cornerRadius" : 250,
+          "height" : 500,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 500
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-0500-lower-right",
+      "shapes" : [
+        {
+          "centerX" : 384,
+          "centerY" : 358.4,
+          "cornerRadius" : 250,
+          "height" : 500,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 500
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "circle-6000-upper-left",
+      "shapes" : [
+        {
+          "centerX" : 128,
+          "centerY" : 153.6,
+          "cornerRadius" : 3000,
+          "height" : 6000,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 6000
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "rect-1600x0900-r000",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 0,
+          "height" : 900,
+          "id" : "rect",
+          "kind" : "roundedRect",
+          "width" : 1600
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "rect-1600x0900-r080",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 80,
+          "height" : 900,
+          "id" : "rect",
+          "kind" : "roundedRect",
+          "width" : 1600
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "rect-1600x0900-r240",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 240,
+          "height" : 900,
+          "id" : "rect",
+          "kind" : "roundedRect",
+          "width" : 1600
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "pair-0400-gap0100-spacing000",
+      "shapes" : [
+        {
+          "centerX" : 6,
+          "centerY" : 256,
+          "cornerRadius" : 200,
+          "height" : 400,
+          "id" : "left",
+          "kind" : "circle",
+          "width" : 400
+        },
+        {
+          "centerX" : 506,
+          "centerY" : 256,
+          "cornerRadius" : 200,
+          "height" : 400,
+          "id" : "right",
+          "kind" : "circle",
+          "width" : 400
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 120,
+      "name" : "pair-0400-gap0100-spacing120",
+      "shapes" : [
+        {
+          "centerX" : 6,
+          "centerY" : 256,
+          "cornerRadius" : 200,
+          "height" : 400,
+          "id" : "left",
+          "kind" : "circle",
+          "width" : 400
+        },
+        {
+          "centerX" : 506,
+          "centerY" : 256,
+          "cornerRadius" : 200,
+          "height" : 400,
+          "id" : "right",
+          "kind" : "circle",
+          "width" : 400
+        }
+      ]
+    },
+    {
+      "name" : "legacy-three-shapes",
+      "shapes" : [
+        {
+          "centerX" : 1600,
+          "centerY" : 1000,
+          "cornerRadius" : 80,
+          "height" : 700,
+          "id" : "rounded-rect",
+          "kind" : "roundedRect",
+          "width" : 1200
+        },
+        {
+          "centerX" : 600,
+          "centerY" : 500,
+          "cornerRadius" : 250,
+          "height" : 500,
+          "id" : "circle",
+          "kind" : "circle",
+          "width" : 500
+        },
+        {
+          "centerX" : 2400,
+          "centerY" : 1600,
+          "cornerRadius" : 110,
+          "height" : 220,
+          "id" : "capsule",
+          "kind" : "capsule",
+          "width" : 900
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "rect-6000x4000-r000-center",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 0,
+          "height" : 4000,
+          "id" : "rect",
+          "kind" : "roundedRect",
+          "width" : 6000
+        }
+      ]
+    },
+    {
+      "containerSpacing" : 0,
+      "name" : "rect-4000x6000-r000-center",
+      "shapes" : [
+        {
+          "centerX" : 256,
+          "centerY" : 256,
+          "cornerRadius" : 0,
+          "height" : 6000,
+          "id" : "rect",
+          "kind" : "roundedRect",
+          "width" : 4000
+        }
+      ]
+    }
+  ],
+  "schemaVersion" : 5,
+  "settleSeconds" : 0.45,
+  "sourceRoundTripTolerance" : {
+    "maximumChangedPixelFraction" : 0.01,
+    "maximumChannelDelta" : 1,
+    "maximumMeanAbsoluteChannelDelta" : 0.0033
+  },
+  "sweepSequences" : [
+
+  ],
+  "transitionOriginNormalized" : [
+    0.25,
+    0.3
+  ],
+  "windowColorSpace" : "sRGB IEC61966-2.1 colorspace",
+  "windowKey" : true,
+  "windowPoints" : [
+    512,
+    512
+  ],
+  "xcodeVersion" : "unknown"
+}
