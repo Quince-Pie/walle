@@ -31,6 +31,10 @@ struct walle_vk_frame
     float                                       center_top_left_y;
     float                                       radius;
     bool                                        first_boot;
+    /* Compose with Apple's measured reveal blend instead of the Liquid Glass
+     * material.  Only the process-capture gate sets this; ordinary
+     * transitions always keep the material. */
+    bool                                        apple_reveal_blend;
 
     /* Optional diagnostic destination, tightly packed in top-left row order. */
     uint8_t* mask_readback;

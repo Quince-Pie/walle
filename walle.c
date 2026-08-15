@@ -1851,6 +1851,10 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
              .center_top_left_y = geometry.circle.center[1],
              .radius            = geometry.circle.radius,
              .first_boot        = first_boot,
+             /* The gate scores Apple's measured blend; WALLE_COMPOSE_MATERIAL
+              * captures the shipped Liquid Glass material instead. */
+             .apple_reveal_blend
+        = process_capture && getenv("WALLE_COMPOSE_MATERIAL") == nullptr,
              .mask_readback     = process_capture ? output->reveal_process_capture_pixels : nullptr,
              .mask_readback_size
         = process_capture ? (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT

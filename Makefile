@@ -382,13 +382,14 @@ $(SPIRV_DIR)/composeVertex.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(SP
 	$(SLANGC) $< -entry composeVertex -stage vertex $(SLANG_COMMON) -depfile $@.d -o $@
 	$(SPIRV_VAL) --target-env vulkan1.4 $@
 
-# The parity composition consumes no push constants (the reveal mask alone
-# drives the code-value blend), so no shader-side push ABI remains to assert;
-# the C-side pipeline layout keeps its superset push range.
 $(SPIRV_DIR)/composeFragment.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(SPIRV_DIR)
 	@echo "[SLANG] $@"
 	$(SLANGC) $< -entry composeFragment -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
 	$(SPIRV_VAL) --target-env vulkan1.4 $@
+	$(SPIRV_DIS) $@ -o - | grep -Eq \
+		'OpMemberDecorate[[:space:]]+%ComposePush_std430[[:space:]]+0[[:space:]]+Offset[[:space:]]+0'
+	$(SPIRV_DIS) $@ -o - | grep -Eq \
+		'OpMemberDecorate[[:space:]]+%ComposePush_std430[[:space:]]+1[[:space:]]+Offset[[:space:]]+16'
 
 # Cold-start correctness: on the first build no .d files exist yet, so objects
 # must explicitly depend on the generated protocol headers or a parallel build
