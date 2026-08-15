@@ -4038,3 +4038,41 @@ base = a*tint + b per channel over blue and orange yields a NEGATIVE green
 slope (-0.37), which is unphysical.  analysis/capture_tint_colour_sweep.sh
 adds eight spanning colours; its patched harness is verified to compile,
 vtool and codesign on the target Mac (WALLE_BUILD_ONLY=1).
+
+## 2026-08-15 (later 144): tint colour law, and the materialize ease
+
+Captured on the target M1 with an unlocked session (applicationActive and
+windowKey both true, zero preflight errors).  The earlier "screen is
+locked" reading was WRONG: System Events -1719 is a missing Accessibility
+grant for sshd, not a lock, and retrying simply worked.
+
+MATERIALIZE EASE.  Decoding the rendered pixels of Apple's materialize (12
+frames, clear/light, coded-field backdrop) shows two laws compose:
+  - inputFaceOpacity == the visible fraction k, exactly (already banked);
+  - k is itself eased against the animation clock: k = clock^2.36, maximum
+    residual 0.018 of full scale.  Linear-in-clock misses by 0.32, and
+    walle's original smoothstep(0, 0.12) by 0.36 - the worst candidate
+    tried.  Ported; walle's `time` is a linear clock so the ease lives in
+    the shader.
+
+TINT COLOUR LAW (8 colours x 6 backgrounds x 2 appearances).
+The interior over black gives the tint's base colour directly.  Fitting
+base = M @ tintColour + offset per channel, excluding channels whose base
+clips at 0 or 255:
+    light: maxResid 4.00 codes, n=[4,6,7] per channel
+      Rin -> [ 1.3517 -0.0111  0.0462]
+      Gin -> [-0.3386  1.0305  0.0440]
+      Bin -> [ 0.1344  0.1010  1.0965]   offset [-41.62 -33.62 -50.94]
+    dark: UNDERDETERMINED - only 3 unclipped samples in R.
+The structure is a saturation matrix (diagonal 1.03-1.35 with negative
+off-diagonals) plus a negative offset, i.e. the same shape as the
+material's own colour matrix.
+
+WHY DARK IS NOT SOLVED: the SwiftUI system colours are mostly saturated,
+so their bases pin at 0/255 and carry no gradient information.  Closing it
+needs mid-intensity tints (say 40-60% saturation) added to
+analysis/capture_tint_colour_sweep.sh - the same mechanism, more colours.
+
+Tint is therefore NOT yet shipped as a config option: half a law is not
+parity, and inventing the dark half would repeat the error this session
+already made once.
