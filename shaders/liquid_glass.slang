@@ -91,76 +91,31 @@ static const float kDitherLsb = 1.0 / 255.0;
 static const float3 kLuma = float3(0.2126, 0.7152, 0.0722);
 static const float kHalfPi = 1.57079632679;
 
-// --- Measured Liquid Glass material, macOS 26.6.1 (25G76) -----------------
-// Re-measured on the target M1 with the capture harness; see
-// analysis/derive_reveal_tint_law.py and its result JSON.  The 26.4 (25E246)
-// law this shader previously carried no longer holds on that build: `regular`
-// stopped being an opaque platter (it now transmits ~28% light / ~31% dark)
-// and `clear` became appearance-independent while passing white through.
-//
-// The material is affine in sRGB CODE space applied to the mega-blurred
-// backdrop - fitting the gray ladder to 0.44 codes there versus ~26 in linear
-// light, so the sRGB-space application the 26.4 note recorded still stands.
-// Saturated primaries need the full 3x3: a per-channel diagonal misses by up
-// to 105 codes, the matrix below by 1.2-2.2 mean (3.4-9.5 max) over 17-21
-// unclipped backgrounds spanning grays, primaries and secondaries.
-//
-// Rows are the contribution of one INPUT channel to (R, G, B) out.
-static const float3 kClearFromR = float3( 0.9472,  0.0301,  0.0124);
-static const float3 kClearFromG = float3( 0.0800,  1.0066,  0.0478);
-static const float3 kClearFromB = float3(-0.0016, -0.0010,  0.9697);
-static const float3 kClearOffset = float3(22.49, 20.11, 21.50) / 255.0;
+// --- Measured Liquid Glass material and tint law -------------------------
+// Every constant below is generated straight from the captures by
+// analysis/generate_material_law_header.py, so the shader and the measurement
+// cannot drift.  See that file's banner for what each law says and how well it
+// fits; see analysis/derive_material_matrices.py and analysis/derive_tint_law.py
+// for how they were measured.
+#include "material_law.slang"
 
-static const float3 kRegularLightFromR = float3( 0.4942, -0.0616, -0.0488);
-static const float3 kRegularLightFromG = float3(-0.2100,  0.3697, -0.2347);
-static const float3 kRegularLightFromB = float3(-0.0052, -0.0224,  0.5685);
-static const float3 kRegularLightOffset = float3(183.03, 181.51, 181.69) / 255.0;
+// A tint is neutral when it is EXACTLY gray.  Measured: a tint 0.645 code
+// values off the gray axis already blocks the backdrop's chroma as completely
+// as a fully saturated one, so this is not a tolerance to tune - it only has
+// to sit below the smallest chroma an 8-bit tint can carry, which is 0.845.
+static const float kTintNeutralChroma = 0.5;
 
-static const float3 kRegularDarkFromR = float3( 0.6138, -0.1128, -0.1206);
-static const float3 kRegularDarkFromG = float3(-0.2501,  0.4764, -0.2892);
-static const float3 kRegularDarkFromB = float3(-0.0503, -0.0503,  0.7232);
-static const float3 kRegularDarkOffset = float3(18.43, 18.43, 18.43) / 255.0;
 
-// --- Measured tint law, macOS 26.6.1 -------------------------------------
-// Apple's Glass exposes tint(Color?) on either base variant.  On 26.4 it
-// measured hue-free and was not modelled; on 26.6.1 it is strongly
-// hue-bearing.  Solved from eight MID-INTENSITY tints (every channel inside
-// 0.25..0.75, so nothing clips - the saturated system colours pin whole
-// channels and cannot constrain the fit) over six backgrounds.
-//
-//   base   = M_tint @ linear(tintColour) + offset      [LINEAR light]
-//   out    = clamp(sRGB(base) + T @ backdropSrgb)      [sRGB codes]
-//
-// Fit quality: dark 5.63 code values, light 19.9.  Light is not as well
-// described by a linear map and the residual is structural, not clipping -
-// excluding near-clipped samples barely moves it.  It is nonetheless
-// measured rather than invented, and far closer than omitting tint.
-static const float3 kTintBaseDarkFromR = float3( 1.2350, -0.0391, -0.0150);
-static const float3 kTintBaseDarkFromG = float3(-0.2352,  1.0513, -0.0823);
-static const float3 kTintBaseDarkFromB = float3(-0.0079,  0.0033,  1.0980);
-static const float3 kTintBaseDarkOffset = float3(-0.0080, -0.0112, -0.0081);
-
-static const float3 kTintBaseLightFromR = float3( 0.7808, -0.1201, -0.1065);
-static const float3 kTintBaseLightFromG = float3(-0.1655,  0.7099, -0.1396);
-static const float3 kTintBaseLightFromB = float3(-0.0714, -0.0693,  0.7594);
-static const float3 kTintBaseLightOffset = float3(0.0673, 0.0603, 0.0618);
-
-// Backdrop transmission through a tinted element, mean over the eight tints.
-static const float3 kTintTransDarkFromR = float3( 0.0726, -0.0066, -0.0135);
-static const float3 kTintTransDarkFromG = float3(-0.0220,  0.0380, -0.0380);
-static const float3 kTintTransDarkFromB = float3(-0.0102, -0.0027,  0.0801);
-static const float3 kTintTransLightFromR = float3(0.0524, 0.0048, 0.0008);
-static const float3 kTintTransLightFromG = float3(0.0129, 0.0563, 0.0157);
-static const float3 kTintTransLightFromB = float3(0.0009, -0.0016, 0.0424);
-
-float3 materialTransfer(float3 backdropSrgb, float3 fromR, float3 fromG,
-                        float3 fromB, float3 offset)
+// The material's colour transfer: an affine 3x3, applied in the space the
+// measurement says it lives in.  `clear` uses exponent 1, which makes both pow
+// calls the identity; `regular` uses the measured 0.795, without which its gray
+// response is 4 code values out at mid-scale in both appearances.
+float3 materialTransfer(float3 backdropSrgb, WalleMaterialTransfer transfer)
 {
-    return clamp(
-        backdropSrgb.r * fromR + backdropSrgb.g * fromG + backdropSrgb.b * fromB
-            + offset,
-        0.0,
-        1.0);
+    float3 raised = pow(saturate(backdropSrgb), transfer.exponent);
+    float3 mixed = raised.r * transfer.fromR + raised.g * transfer.fromG
+        + raised.b * transfer.fromB + transfer.offset;
+    return saturate(pow(max(mixed, 0.0), 1.0 / transfer.exponent));
 }
 
 float linearToSrgb(float value)
@@ -191,6 +146,84 @@ float3 srgbToLinear(float3 value)
         srgbToLinear(value.x),
         srgbToLinear(value.y),
         srgbToLinear(value.z));
+}
+
+// Apply the measured tint to one material's own untinted output.
+//
+// Everything here is in sRGB CODE values, which is the space the law was fitted
+// in, so the only conversion is the one at the end.
+//
+// The tint's two functions are expanded in a basis of its own colour: a
+// quadratic in all three components when the tint is chromatic, and a quadratic
+// in its single level when it is gray.  An affine basis is not enough - held
+// out one tint at a time it scores 6.43 code values rms against the quadratic's
+// 4.88 - because a strongly chromatic tint drives the base NEGATIVE in the
+// channel opposite its hue, and a plane through the rest of the colour cube
+// cannot reach that.
+float3 applyTint(float3 substrateSrgb, float3 tint, float lightness,
+                 WalleTintRegime dark, WalleTintRegime light)
+{
+    if (tint.r < 0.0)
+        return substrateSrgb;
+
+    float3 unit = saturate(tint);
+    float level = dot(unit, kLuma);
+    bool haveNeutral = dark.neutralBase[0] != 0.0 || dark.neutralBase[1] != 0.0;
+    bool neutral = length(unit * 255.0 - level * 255.0) < kTintNeutralChroma
+        && haveNeutral;
+
+    float terms[10];
+    int width;
+    if (neutral)
+    {
+        terms[0] = level;
+        terms[1] = level * level;
+        terms[2] = 1.0;
+        width = 3;
+    }
+    else
+    {
+        terms[0] = unit.r;
+        terms[1] = unit.g;
+        terms[2] = unit.b;
+        terms[3] = 1.0;
+        terms[4] = unit.r * unit.r;
+        terms[5] = unit.g * unit.g;
+        terms[6] = unit.b * unit.b;
+        terms[7] = unit.r * unit.g;
+        terms[8] = unit.r * unit.b;
+        terms[9] = unit.g * unit.b;
+        width = 10;
+    }
+
+    float3 substrateCodes = substrateSrgb * 255.0;
+    float substrateLuma = dot(substrateCodes, kLuma);
+    float3 substrateChroma = substrateCodes - substrateLuma;
+
+    float3 base = float3(0.0);
+    float3 beta = float3(0.0);
+    for (int channel = 0; channel < 3; ++channel)
+    {
+        for (int term = 0; term < width; ++term)
+        {
+            int index = channel * width + term;
+            float b = neutral
+                ? lerp(dark.neutralBase[index], light.neutralBase[index], lightness)
+                : lerp(dark.chromaticBase[index], light.chromaticBase[index],
+                       lightness);
+            float g = neutral
+                ? lerp(dark.neutralBeta[index], light.neutralBeta[index], lightness)
+                : lerp(dark.chromaticBeta[index], light.chromaticBeta[index],
+                       lightness);
+            base[channel] += b * terms[term];
+            beta[channel] += g * terms[term];
+        }
+    }
+
+    // gamma: a neutral tint lets the backdrop's colour through untouched, a
+    // chromatic one replaces it.  Measured with nothing in between.
+    float3 chroma = neutral ? substrateChroma : float3(0.0);
+    return saturate((base + beta * substrateLuma + chroma) / 255.0);
 }
 
 float hash12(float2 value)
@@ -288,36 +321,24 @@ float4 composeFragment(
     float2 pixelToUv = 1.0 / resolution;
 
 
-    float2 e1 = float2(0.30, 0.0);
-    float2 e2 = float2(0.0, 0.30);
-    float2 e3 = float2(0.21, 0.21);
-    float2 e4 = float2(0.21, -0.21);
     // The measured blur radius ramps linearly with materialize progress
     // (BLUR_RADIUS reads 0.5 at visible_fraction 0.5 and 1.0 at 1.0, with
-    // regular's maximum exactly 4x clear's).  walle holds a single
-    // pre-blurred backdrop, so approximate the ramp by opening from the
-    // sharp source to it as the material thickens.
+    // regular's maximum exactly 4x clear's).  texGlassB already carries the
+    // fully materialized backdrop at the measured radii, so the ramp is the
+    // opening from the sharp source to it as the material thickens.
     float3 sharpIncoming = texB.Sample(linearSampler, uv).rgb;
     float3 blurredIncoming = lerp(
         sharpIncoming, texGlassB.Sample(linearSampler, uv).rgb, thickness);
-    float3 wash = (
-        blurredIncoming
-        + texGlassB.Sample(linearSampler, uv + e1).rgb
-        + texGlassB.Sample(linearSampler, uv - e1).rgb
-        + texGlassB.Sample(linearSampler, uv + e2).rgb
-        + texGlassB.Sample(linearSampler, uv - e2).rgb
-        + texGlassB.Sample(linearSampler, uv + e3).rgb
-        + texGlassB.Sample(linearSampler, uv - e3).rgb
-        + texGlassB.Sample(linearSampler, uv + e4).rgb
-        + texGlassB.Sample(linearSampler, uv - e4).rgb) / 9.0;
     // Apple selects the material's appearance pole from the SYSTEM
-    // appearance.  Use it when the desktop exposes one; otherwise fall back
-    // to the content-luminance stand-in.  Measured cost of guessing wrong:
-    // regular over black reads 179 (light) against 15 (dark).
-    float washLuma = dot(wash, kLuma);
-    float lightness = push.material.x >= 0.0
-        ? push.material.x
-        : smoothstep(0.04, 0.10, washLuma);
+    // appearance, and so does walle: config, then the desktop portal, then
+    // dark.  The nine-tap content-luminance wash that used to stand in for it
+    // is gone.  It was never measured, and it cannot survive the backdrop
+    // being baked on the CPU - the blend between the material's narrow and
+    // wide layers depends on the appearance, so a per-pixel appearance means
+    // a per-pixel backdrop, and the baked backdrop and the matrices chosen
+    // here would disagree on the same pixel.  Measured cost of getting the
+    // pole wrong: regular over black reads 179 (light) against 15 (dark).
+    float lightness = saturate(push.material.x);
 
     float shadowSdf = distance(
         fragmentPixels - float2(0.0, -shadowOffset),
@@ -339,42 +360,20 @@ float4 composeFragment(
     float bandUnit = clamp(bandPosition, 0.0, 1.0);
 
     float3 glassColor;
-    if (push.material.y >= 0.0)
-    {
-        // Tinted: the tint sets the base colour, the backdrop still shows
-        // through at the measured (low) transmission.
-        float3 tintLinear = srgbToLinear(push.material.yzw);
-        float3 baseLinear = lightness >= 0.5
-            ? tintLinear.r * kTintBaseLightFromR + tintLinear.g * kTintBaseLightFromG
-                  + tintLinear.b * kTintBaseLightFromB + kTintBaseLightOffset
-            : tintLinear.r * kTintBaseDarkFromR + tintLinear.g * kTintBaseDarkFromG
-                  + tintLinear.b * kTintBaseDarkFromB + kTintBaseDarkOffset;
-        float3 backdropSrgb = linearToSrgb(blurredIncoming);
-        float3 tinted = lightness >= 0.5
-            ? materialTransfer(backdropSrgb, kTintTransLightFromR, kTintTransLightFromG,
-                               kTintTransLightFromB, linearToSrgb(saturate(baseLinear)))
-            : materialTransfer(backdropSrgb, kTintTransDarkFromR, kTintTransDarkFromG,
-                               kTintTransDarkFromB, linearToSrgb(saturate(baseLinear)));
-        glassColor = lerp(blurredIncoming, srgbToLinear(tinted), thickness);
-    }
-    else if (regular > 0.5)
+    if (regular > 0.5)
     {
         // Measured 26.6.1 regular: an affine colour matrix on the blurred
         // backdrop in sRGB space, still selected between the two measured
         // appearance poles by content luminance.
-        // The transfer input is the measured-sigma blurred backdrop.  `wash`
-        // is a nine-tap spread at +-0.30/0.21 UV - hundreds of pixels - which
-        // is right for picking the appearance pole but destroys the detail the
-        // material is measured to transmit (MTF 0.50 at period 64, against
-        // 0.11 when the wash drove the transfer).
+        // The transfer input is the measured backdrop, and only that: an
+        // earlier version fed it a nine-tap screen-wide spread and measured
+        // MTF 0.11 at period 64 where the hardware transmits 0.50.
         float3 washSrgb = linearToSrgb(blurredIncoming);
-        float3 platterDark = materialTransfer(
-            washSrgb, kRegularDarkFromR, kRegularDarkFromG,
-            kRegularDarkFromB, kRegularDarkOffset);
-        float3 platterLight = materialTransfer(
-            washSrgb, kRegularLightFromR, kRegularLightFromG,
-            kRegularLightFromB, kRegularLightOffset);
+        float3 platterDark = materialTransfer(washSrgb, kMaterialRegularDark);
+        float3 platterLight = materialTransfer(washSrgb, kMaterialRegularLight);
         float3 platterSrgb = lerp(platterDark, platterLight, lightness);
+        platterSrgb = applyTint(platterSrgb, push.material.yzw, lightness,
+                                kTintRegularDark, kTintRegularLight);
         glassColor = lerp(blurredIncoming, srgbToLinear(platterSrgb), thickness);
     }
     else
@@ -405,8 +404,9 @@ float4 composeFragment(
         // appearances (the gray ladder matches to the code across light and
         // dark), so no appearance interpolation here.  `thickness` still
         // ramps it in over the materialize window.
-        float3 veiled = materialTransfer(
-            preSrgb, kClearFromR, kClearFromG, kClearFromB, kClearOffset);
+        float3 veiled = materialTransfer(preSrgb, kMaterialClearDark);
+        veiled = applyTint(veiled, push.material.yzw, lightness,
+                           kTintClearDark, kTintClearLight);
         glassColor = srgbToLinear(lerp(preSrgb, veiled, thickness));
     }
 

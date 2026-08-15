@@ -4146,3 +4146,242 @@ shortly after real user input, and even then it is flaky - the successful
 run here was attempt 1 of a retry loop after several outright failures at
 the same idle time.  Retrying is the workaround; the preflight must not be
 patched out, since an inactive window renders the material differently.
+
+## 2026-08-15 (later 147): THE BACKDROP BLUR, MEASURED NOT GUESSED
+
+The blur shipped as a best-fit Gaussian (sigma 13.0 regular / 4.1 clear)
+fitted to six sine-grating MTF points, with a note that the residual was
+structural.  It was, and worse than the note said.
+
+MEASURED DIRECTLY from a step edge under a FULL-FRAME Glass element
+(analysis/capture_parity_gap_sweep.sh with --base-scene, artifacts-bleed,
+6400x4000 at 2x).  One capture carries every spatial frequency at once, and
+a full-frame element is what makes both plateaus real - inside the 500 pt
+circle the profile is still climbing at the edge of the usable window, and
+normalising against plateaus that do not exist made the same background read
+MTF 0.625 at period 256 but 0.522 at 512, which no real kernel can do.  The
+fit is therefore FORWARD: convolve each candidate against the true finite
+backdrop with edges replicated, compare under a free gain and offset.
+
+    clear    0.1889 * sharp         + 0.8111 * gauss(4.1727)
+    regular  w      * gauss(14.188) + (1 - w) * gauss(329.807)
+             w = 0.8846 light, 0.5164 dark
+
+in CAPTURE pixels at 2x.  Residuals 0.06 rms / 1.3 max codes (clear),
+0.35 / 1.8 light and 0.72 / 2.6 dark (regular).
+
+The blur is in sRGB CODE space: fitting clear in linear light costs 0.92 rms
+against 0.06 - a 12x difference, decisive.  Regular is less discriminating
+(0.38 vs 0.50) because its gain is 0.28, so sRGB is used for both.
+
+CORROBORATION: clear's sigma 4.1727 matches the v2.18 fixed-impulse probe's
+4.15, measured on 25E246 by a completely different method (isolated 2x2
+impulses, 248M observations).  The clear kernel did not change between
+builds; what changed is everything around it.
+
+THREE ERRORS THIS CORRECTS, all confirmed end to end by rendering walle over
+the same step and measuring it identically:
+
+  1. clear was ~4x too blurry - 38 codes wrong 5 px from the edge.  The level
+     selector did `fmax(radius, 8.0)` before picking a pyramid level, so both
+     variants picked level 1 and the measured 3.4:1 ratio between them was
+     silently discarded.
+  2. regular has a SECOND, very wide layer nothing modelled: sigma 330
+     capture px carrying 12% of the light material and 48% of the dark one.
+     This is Apple's BLEED stage, which the transition inputs already showed
+     is regular-only with a 160-unit blur radius.  Omitting it cost 11 codes
+     in dark.
+  3. clear has NO wide layer - fitted weight exactly zero, and its far field
+     is flat, two independent confirmations.
+
+    worst |walle - apple| over the step, codes
+                  before   after
+    regular light   2.58    0.97
+    regular dark   11.23    2.54
+    clear   light  37.74    2.25
+    clear   dark   38.13    2.26
+
+What is left is the material transfer's own offset (a constant ~2 codes on
+the plateaus), not the blur shape.
+
+IMPLEMENTATION.  The backdrop is now baked on the CPU with vips at the
+measured radii, in sRGB code space, edges extended by copying before blurring
+and cropped after, and uploaded as the existing single glass layer at FULL
+resolution (clear's 19% sharp term cannot survive a reduced level).  The wide
+radius reduces first - a 991-tap mask over every pixel is minutes per
+wallpaper, and a kernel that broad has nothing above the reduced Nyquist to
+lose; reduce/expand adds under 0.05 px in quadrature to a 165 px sigma.
+Render time 3.7 s for 2048x2048 including compositing.
+
+This retires the Apple material pyramid from the wallpaper path.  The AGX2
+mip cascade was a GUESS at the mechanism; the mechanism is now measured, and
+it is not a mip cascade.
+
+APPEARANCE IS NOW GLOBAL.  The shader's nine-tap content-luminance wash is
+gone.  It was never measured - Apple takes the appearance from the system
+setting and has no content-derived path - and it cannot survive a baked
+backdrop, because the narrow/wide blend depends on the appearance, so a
+per-pixel appearance means a per-pixel backdrop and the baked backdrop would
+disagree with the matrices the shader picks.  Resolution is config, then the
+desktop portal, then dark.
+
+Reveal gate unchanged: mismatchedPixels=0, composedMismatchedPixels=0.
+
+## 2026-08-15 (later 148): THE OFF-LADDER FRAME IS A SUB-PIXEL TRANSLATION
+
+later-141 quantified the one hardware frame that falls between k/64 ladder
+states at 3,838 mismatched pixels and left it there.  It is now DIAGNOSED.
+
+FIRST, the search was complete.  Every geometry walle can reach near that
+frame was enumerated from the snapping law itself and rendered - 47 of them,
+in one capture - and scored.  The gate's existing progress (0.67237980,
+radius 1455.0, centre_y 614.5) is the best reachable, at 3,838 px; the next
+best is 4,327 and the rest are worse.  Nothing was missed.
+
+SECOND, walle's snapping law is CONFIRMED, not merely assumed.  Rounding the
+circle's bounds to a finer grid is refuted outright: a half-integer grid
+changes 52 of the 65 ladder states and a quarter-integer grid changes 63, and
+all 65 are byte-exact as they stand.  The hardware snaps to integers.
+
+THIRD, the residual is not coverage or antialiasing - it is RIGID GEOMETRY.
+Walking rays out from the centre and interpolating each one's 50% coverage
+crossing, at 232 angles across the 134 degrees of arc that lie inside the
+frame, the difference between walle's mask and the hardware's fits
+
+    rho(theta) = dr + dx cos(theta) + dy sin(theta)
+    dx = -0.0009 +- 0.0036    dy = -0.1645 +- 0.0032    dr = +0.0520 +- 0.0038
+
+with a residual of 0.0133 px rms.  A circle displaced, nothing else.  The
+hardware's circle is at centre_y 614.336, and the integer grid offers only
+614.0 and 614.5.
+
+FOURTH - and this is the finding - the hardware frame is close to the
+UNSNAPPED centre and far from either snapped one.  Constraining the fit:
+
+    dy free                       residual 0.0134 px rms
+    dy = -0.100  (unsnapped 614.4) residual 0.0314
+    dy =  0      (walle's  614.5)  residual 0.0740
+    dy = -0.5    (        614.0)   residual 0.1499
+
+So the ladder sweeps snap and the live animation does not, which is exactly
+what Core Animation does: an explicitly set progress goes through the model
+layer, which lays out and rounds its bounds, while an animating layer's
+presentation values are interpolated without re-laying-out.  walle drives both
+from one code path, and the gate compares walle's EXPLICIT-progress renders
+against Apple's SWEEP frames, so snapping is right for the gate and wrong for
+the transition users see.
+
+A residual 0.065 px away from exactly-unsnapped remains, which one frame
+cannot explain - it could be a fixed sub-pixel offset in the dynamic capture
+path or a second-order effect of the animation.  analysis/
+capture_reveal_dynamic_frames.sh captures thirty-odd LIVE frames so the law
+can be measured across the animation instead of inferred from one sample; the
+early frames matter most, since a small circle lies wholly inside the frame
+and gives a full 360-degree arc rather than the 134 degrees available here.
+
+STATUS: diagnosed and bounded, not yet closed.  Closing it means giving the
+mask model a snap/no-snap distinction that mirrors the model-versus-
+presentation layer split - which must not disturb the 65-state ladder, and is
+exact BECAUSE of the snapping.
+
+## 2026-08-15 (later 149): THE TINT LAW, AND WHY EVERY EARLIER FIT FAILED
+
+`.clear.tint()` had never been captured.  The harness declares the overlay;
+no corpus run ever produced one.  walle therefore shipped the `.regular`
+law for BOTH variants, and its shader took the tint branch before it checked
+the variant - so a clear+tint configuration rendered the wrong material
+outright, by up to 50 code values, because clear passes roughly three and a
+half times as much backdrop through.
+
+THE LAW.  The tinted element is affine in the UNTINTED material's own output -
+not in the raw backdrop - and in that variable it separates into luminance and
+chroma:
+
+    substrate = the same material, same appearance, no tint
+    out = base(tint) + beta(tint) * lumaOf(substrate)
+                     + gamma(tint) * chromaOf(substrate)
+
+and gamma is the whole law.  Measured across 36 tints it is either ONE or ZERO
+and nothing between.  A NEUTRAL tint replaces the backdrop's lightness and
+lets its colour through untouched; any chromatic tint replaces the colour.
+
+The fine ladder captured to bracket that transition found none to bracket: a
+tint 0.645 code values off the gray axis - (128.01, 127.24, 127.24) - already
+has gamma = -0.0001, and only an EXACTLY gray tint has gamma = 1.  beta
+switches with it, 0.24 against 0.087 in regular/light.  The switch is exact
+equality, which is a colour SPACE distinction rather than a threshold: an
+exactly gray sRGB colour resolves to a grayscale space and takes another path.
+walle's test is `length(chroma) < 0.5`, which no 8-bit tint can straddle - the
+smallest non-zero chroma a code triple can carry is 0.845.
+
+WHY THE EARLIER FITS FAILED.  Three independent errors, each sufficient alone:
+
+  1. the substrate was read as the raw BACKDROP.  The untinted material clamps
+     on saturated backgrounds, so a neutral tint over red, green and blue does
+     not sum to what it does over white - by 54 code values - and that reads as
+     nonlinearity when it is the material's own clipping;
+  2. backgrounds whose SUBSTRATE clips were kept.  The substrate is the
+     regressor, so a pinned channel is a wrong input rather than a missing
+     output, and because the tint mixes channels one pinned channel corrupts
+     all three rows.  The four backgrounds that pin `regular` in light are
+     exactly the saturated ones the chroma response is read from;
+  3. stage two fitted the tint-to-coefficient map to the COEFFICIENTS.  The
+     per-tint matrices are individually underdetermined - many fit the sampled
+     backgrounds equally well - so their scatter is unidentifiable noise.
+     Fitting the law to the DATA instead is what closed it.
+
+BASIS.  base and beta are quadratics in the tint, not affine, and the evidence
+is HELD OUT: leaving each tint out and predicting it from the other 28, affine
+scores 6.43 rms / 45.3 max code values against quadratic's 4.88 / 33.5.  The
+affine map's failures are the strongly chromatic tints, whose base runs
+negative in the channel opposite their hue - a green tint's red base is -35 -
+and a plane through the rest of the cube cannot bend that far.
+
+CAPTURES.  Three sessions, merged: 36 tints (8 mid, 6 neutral levels, 4
+saturations, 6 fine near-neutral, 12 spanning colours) x 2 variants x 16
+backgrounds x 2 appearances, 2,504 shots.  The sessions are BYTE-IDENTICAL on
+every shared overlay, which is what made merging safe and says the harness is
+fully deterministic.
+
+## 2026-08-15 (later 150): THE UNTINTED MATERIAL IS NOT AFFINE IN sRGB
+
+`clear` is: its gray ladder is a straight line in sRGB code space to 0.27 code
+values rms, and searching for a better space returns an exponent of 1.03.
+
+`regular` is NOT.  Its gray response bows ABOVE the chord by up to 4.4 code
+values at mid-scale, in both appearances, which no affine map in sRGB can
+produce.  It is affine in x**0.795, and ONE exponent covers both appearances
+(fitting each its own returns 0.820 and 0.755 and does no better):
+
+                          sRGB    0.795 power space
+    regular light   rms   2.51 -> 1.97      max 6.73 -> 5.08
+    regular dark    rms   1.84 -> 0.95      max 3.57 -> 2.01
+
+What produces that exponent is not known.  It is not linear light, not the
+display's transfer, and not the capture path, which round-trips flat grays
+exactly.  It is carried as a measured constant rather than left as four code
+values of systematic error.
+
+The refit also drops any background whose output clips in ANY channel, for the
+same reason the tint law does, and weights the neutral axis four to one -
+because the material is applied to a BLURRED backdrop, and a blurred photograph
+is far closer to neutral than the six saturated backgrounds sampled here.  That
+weighting is the one judgement rather than measurement in the material model,
+and it is stated as such in the script.
+
+VERIFIED END TO END - walle rendered over the same backgrounds, its interior
+read the same way, 240 cases:
+
+                  before      after
+    untinted      5.48 max    2.76 max, 0.87 median
+    tinted       53.34 max   17.96 max, 2.46 median, 5.42 p90
+
+The worst remaining case is a green tint over dark backgrounds, where Apple's
+red channel is CLIPPED at 0 and walle predicts +18; the underlying law error is
+smaller than that number looks, since Apple's true internal value is at or
+below zero.
+
+Reveal gate unchanged: mismatchedPixels=0, composedMismatchedPixels=0.
+All shader constants are now GENERATED from the captures by
+analysis/generate_material_law_header.py, so the shader and the measurement
+cannot drift.

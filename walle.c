@@ -84,61 +84,97 @@ enum glass_variant : uint8_t
     GLASS_VARIANT_IDENTITY
 };
 
-/* Liquid Glass preprocess (parity): the backdrop is Apple's exact material
- * pyramid (DOWNSAMPLE_4 producer + copy-base + AGX2 mip kernels transferred
- * from hardware; parity/liquid_glass_pyramid.c).  The uploaded level is the
- * one whose kernel support matches the measured material blur.
+/* Liquid Glass preprocess (parity): the backdrop the material samples.
  *
- * The blur was re-measured on macOS 26.6.1 (25G76) from the capture rig's
- * horizontal sine gratings, periods 32..1024 px at 2x backing scale, by
- * dividing the interior modulation by the background modulation and then by
- * the material's own DC transfer.  Best-fit Gaussian sigma:
+ * MEASURED DIRECTLY on macOS 26.6.1 (25G76) from a step edge under a
+ * full-frame Glass element, so one capture carries every spatial frequency at
+ * once and both plateaus are real (analysis/derive_material_blur_kernel.py,
+ * artifacts-bleed).  Each candidate kernel is convolved forward against the
+ * true finite backdrop with its edges replicated, and compared to the measured
+ * interior under a free gain and offset, so nothing is assumed to converge and
+ * the material's own transfer cannot leak into the kernel.
  *
- *     regular  13.0 px   (max MTF error 0.103)
- *     clear     4.1 px   (max MTF error 0.066)
+ * The kernels, in CAPTURE pixels at 2x backing scale:
  *
- * The residual error is structural, not noise: sigma implied per period
- * climbs with period, so the kernel has heavier tails than a Gaussian -
- * consistent with the five-tap BLUR_DISTANCE/BLUR_OPACITY ladder the
- * measured transition law carries.
+ *   clear    0.1889 * sharp        + 0.8111 * gauss(sigma 4.1727)
+ *   regular  w      * gauss(14.188) + (1 - w) * gauss(329.807)
+ *            w = 0.8846 light, 0.5164 dark
  *
- * This supersedes the 26.4 figure this file used to carry (transmission
- * 0.011-0.027 at p=256 -> sigma ~ 0.032 * window diagonal).  That is 93 px
- * at 2048x2048 and 141 px at 4K: seven to thirty-four times too much blur
- * for this build.  Note the measured radius is ABSOLUTE, not a fraction of
- * the window, and is quoted in capture pixels at 2x scale.
- * Level N covers 2^(N+2) wallpaper pixels. */
-constexpr double GLASS_BLUR_SIGMA_REGULAR_PX = 13.0;
-constexpr double GLASS_BLUR_SIGMA_CLEAR_PX   = 4.1;
-constexpr double GLASS_CAPTURE_SCALE         = 2.0;
+ * fitting to 0.06 rms / 1.3 max code values (clear) and 0.35 / 1.8 light,
+ * 0.72 / 2.6 dark (regular).  The blur happens in sRGB CODE space: fitting
+ * clear in linear light instead costs 0.92 rms against 0.06, and the material
+ * colour matrices were already measured in that same space.
+ *
+ * Three things this corrects, all confirmed end to end by rendering walle over
+ * the same step and measuring it the same way:
+ *
+ *   * clear was roughly four times too blurry - 38 code values wrong 5 px from
+ *     the edge - because the level selector clamped its radius to 8 px and
+ *     picked the same pyramid level as regular, discarding the 3.4:1 ratio
+ *     between them that the sine gratings had already measured;
+ *   * regular has a SECOND, very wide layer that nothing modelled - Apple's own
+ *     transition inputs give it a BLEED stage with a 160-unit blur radius that
+ *     clear does not have.  It carries 12% of the light material and 48% of the
+ *     dark one, and leaving it out cost 11 code values in dark;
+ *   * clear has no wide layer at all, which is what the fitted weight of zero
+ *     and its flat far field both say independently.
+ *
+ * This supersedes the pyramid-level approximation: the AGX2 mip cascade was a
+ * guess at the mechanism, and the mechanism is now measured.  It also
+ * supersedes the 26.4 figure (sigma ~ 0.032 * window diagonal, 93 px at
+ * 2048x2048), which was seven to thirty-four times too much blur for this
+ * build.  The radii are ABSOLUTE, not a fraction of the window. */
+constexpr double GLASS_CAPTURE_SCALE = 2.0;
+/* Capture pixels; divided by GLASS_CAPTURE_SCALE to reach wallpaper points. */
+constexpr double GLASS_BLUR_CLEAR_SHARP_WEIGHT     = 0.1889;
+constexpr double GLASS_BLUR_CLEAR_SIGMA            = 4.1727;
+constexpr double GLASS_BLUR_REGULAR_SIGMA          = 14.188;
+constexpr double GLASS_BLUR_REGULAR_WIDE_SIGMA     = 329.807;
+constexpr double GLASS_BLUR_REGULAR_WEIGHT_LIGHT   = 0.8846;
+constexpr double GLASS_BLUR_REGULAR_WEIGHT_DARK    = 0.5164;
+
+/* The three weights and two radii the composite blur needs, resolved for one
+ * variant, appearance and output scale. */
+struct glass_blur_recipe
+{
+    double sharp_weight;
+    double narrow_weight;
+    double narrow_sigma;
+    double wide_weight;
+    double wide_sigma;
+};
 
 [[nodiscard]]
-static uint32_t glass_backdrop_level_count(int width, int height, enum glass_variant variant)
+static struct glass_blur_recipe glass_blur_for(enum glass_variant variant,
+                                               float              lightness,
+                                               int32_t            scale)
 {
-    (void)width;
-    (void)height;
-    double radius = (variant == GLASS_VARIANT_REGULAR ? GLASS_BLUR_SIGMA_REGULAR_PX
-                                                      : GLASS_BLUR_SIGMA_CLEAR_PX)
-                    / GLASS_CAPTURE_SCALE;
-    long   level  = lround(log2(fmax(radius, 8.0)) - 2.0);
-    if (level < 1)
-        level = 1;
-    uint32_t count = (uint32_t)level + 1u;
-    if (count > WALLE_LG_MAX_PYRAMID_LEVELS)
-        count = WALLE_LG_MAX_PYRAMID_LEVELS;
-    /* Every level must stay non-empty for this wallpaper extent. */
-    uint32_t extent[2];
-    while (count > 2u
-           && !walle_lg_wallpaper_backdrop_level_extent(
-               (uint32_t)width, (uint32_t)height, count, count - 1u, extent)) {
-        --count;
+    double points = (scale > 0 ? (double)scale : 1.0) / GLASS_CAPTURE_SCALE;
+    if (variant == GLASS_VARIANT_REGULAR) {
+        double narrow = GLASS_BLUR_REGULAR_WEIGHT_DARK
+                        + ((double)lightness
+                           * (GLASS_BLUR_REGULAR_WEIGHT_LIGHT
+                              - GLASS_BLUR_REGULAR_WEIGHT_DARK));
+        return (struct glass_blur_recipe){
+            .sharp_weight  = 0.0,
+            .narrow_weight = narrow,
+            .narrow_sigma  = GLASS_BLUR_REGULAR_SIGMA * points,
+            .wide_weight   = 1.0 - narrow,
+            .wide_sigma    = GLASS_BLUR_REGULAR_WIDE_SIGMA * points,
+        };
     }
-    return count;
+    return (struct glass_blur_recipe){
+        .sharp_weight  = GLASS_BLUR_CLEAR_SHARP_WEIGHT,
+        .narrow_weight = 1.0 - GLASS_BLUR_CLEAR_SHARP_WEIGHT,
+        .narrow_sigma  = GLASS_BLUR_CLEAR_SIGMA * points,
+        .wide_weight   = 0.0,
+        .wide_sigma    = 0.0,
+    };
 }
 
 /* Bump whenever the cached pixel pipeline changes shape (layout, band count,
  * preprocess constants). Hashed into every cache key. */
-constexpr uint32_t CACHE_SCHEMA_VERSION = 5;
+constexpr uint32_t CACHE_SCHEMA_VERSION = 6;
 
 constexpr float DEFAULT_TRANSITION_DUR = 0.6f;
 constexpr int   INOTIFY_BUF_LEN        = 4096;
@@ -326,6 +362,11 @@ struct wallpaper_output
     int32_t            job_w;
     int32_t            job_h;
     enum glass_variant job_variant;
+    /* The backdrop blur is baked on the CPU, and its blend weights depend on
+     * the appearance and the output scale, so the worker needs both as of the
+     * moment the job started rather than whatever they become mid-render. */
+    float              job_lightness;
+    int32_t            job_scale;
 
     double reveal_maximum_radius;
 
@@ -1385,6 +1426,142 @@ static inline void cleanup_vips_thread(void)
     vips_thread_shutdown();
 }
 
+/* Build the backdrop the material samples: the measured mixture of the sharp
+ * image and one or two Gaussians, evaluated in sRGB CODE space because that is
+ * where the step edge says the compositor blurs.
+ *
+ * The blur is done on a float copy so the two Gaussians and the sharp term are
+ * summed at full precision and rounded once, rather than once per stage.
+ * Edges are extended by copying the border before blurring and cropped after,
+ * which is how the compositor clamps them - and it is not optional at the wide
+ * radius, where a 165 pt kernel reaches a sixth of the way across a 4K
+ * wallpaper and any other edge rule is visible along the whole border. */
+[[nodiscard]]
+static VipsImage* glass_blur_image(VipsImage* source, const struct glass_blur_recipe* recipe)
+{
+    VipsImage* value = nullptr;
+    if (vips_cast(source, &value, VIPS_FORMAT_FLOAT, nullptr))
+        return nullptr;
+
+    VipsImage* total = nullptr;
+    if (recipe->sharp_weight > 0.0) {
+        if (vips_linear1(value, &total, recipe->sharp_weight, 0.0, nullptr)) {
+            g_object_unref(value);
+            return nullptr;
+        }
+    }
+
+    const double weights[2] = {recipe->narrow_weight, recipe->wide_weight};
+    const double sigmas[2]  = {recipe->narrow_sigma, recipe->wide_sigma};
+    for (int index = 0; index < 2; ++index) {
+        if (!(weights[index] > 0.0) || !(sigmas[index] > 0.0))
+            continue;
+        /* A direct convolution at the wide radius is a 991-tap mask over every
+         * pixel, which is minutes per wallpaper.  Reduce first instead: a
+         * kernel this broad has nothing above the reduced Nyquist to lose, and
+         * the reduce/expand pair adds under 0.05 px in quadrature to a 165 px
+         * sigma.  The narrow radii convolve directly, where the mask is small
+         * and the detail is the whole point. */
+        double reduction = 1.0;
+        while (sigmas[index] / reduction > 24.0)
+            reduction *= 2.0;
+
+        VipsImage* stage = value;
+        g_object_ref(stage);
+        if (reduction > 1.0) {
+            VipsImage* small = nullptr;
+            if (vips_reduce(stage, &small, reduction, reduction, nullptr)) {
+                g_object_unref(stage);
+                goto failed;
+            }
+            g_object_unref(stage);
+            stage = small;
+        }
+
+        /* Three sigma of margin holds all but 0.3% of the kernel; vips's own
+         * min_ampl cutoff trims the rest.  Extending by copying the border is
+         * how the compositor clamps, and at the wide radius it is not optional:
+         * the kernel reaches a sixth of the way across a 4K wallpaper, so any
+         * other edge rule is visible along the whole border. */
+        double     sigma  = sigmas[index] / reduction;
+        int        margin = (int)ceil(sigma * 3.0);
+        VipsImage* padded = nullptr;
+        int        failure = vips_embed(stage,
+                                 &padded,
+                                 margin,
+                                 margin,
+                                 stage->Xsize + 2 * margin,
+                                 stage->Ysize + 2 * margin,
+                                 "extend",
+                                 VIPS_EXTEND_COPY,
+                                 nullptr);
+        g_object_unref(stage);
+        if (failure)
+            goto failed;
+
+        VipsImage* blurred = nullptr;
+        failure = vips_gaussblur(padded, &blurred, sigma, "min_ampl", 0.001, "precision",
+                                 VIPS_PRECISION_FLOAT, nullptr);
+        g_object_unref(padded);
+        if (failure)
+            goto failed;
+
+        VipsImage* cropped = nullptr;
+        failure = vips_crop(blurred, &cropped, margin, margin, blurred->Xsize - 2 * margin,
+                            blurred->Ysize - 2 * margin, nullptr);
+        g_object_unref(blurred);
+        if (failure)
+            goto failed;
+
+        if (reduction > 1.0) {
+            VipsImage* expanded = nullptr;
+            failure = vips_resize(cropped, &expanded, (double)value->Xsize / cropped->Xsize,
+                                  "vscale", (double)value->Ysize / cropped->Ysize, nullptr);
+            g_object_unref(cropped);
+            if (failure)
+                goto failed;
+            cropped = expanded;
+        }
+
+        VipsImage* scaled = nullptr;
+        failure           = vips_linear1(cropped, &scaled, weights[index], 0.0, nullptr);
+        g_object_unref(cropped);
+        if (failure)
+            goto failed;
+
+        if (total == nullptr) {
+            total = scaled;
+            continue;
+        }
+        VipsImage* summed = nullptr;
+        failure           = vips_add(total, scaled, &summed, nullptr);
+        g_object_unref(scaled);
+        if (failure)
+            goto failed;
+        g_object_unref(total);
+        total = summed;
+    }
+    g_object_unref(value);
+    if (total == nullptr)
+        return nullptr;
+
+    /* One rounding, at the end.  vips_cast to uchar rounds to nearest and
+     * clamps, which is what the captured 8-bit output does. */
+    VipsImage* result = nullptr;
+    if (vips_cast(total, &result, VIPS_FORMAT_UCHAR, nullptr)) {
+        g_object_unref(total);
+        return nullptr;
+    }
+    g_object_unref(total);
+    return result;
+
+failed:
+    g_object_unref(value);
+    if (total != nullptr)
+        g_object_unref(total);
+    return nullptr;
+}
+
 static int write_pipeline_to_buffer_direct(VipsImage* in, void* dest, size_t len)
 {
     size_t line_size = VIPS_IMAGE_SIZEOF_LINE(in);
@@ -1445,10 +1622,11 @@ static void* render_thread_worker(void* arg)
     int                  h       = output->job_h;
     enum glass_variant   variant = output->job_variant;
 
-    /* Material backdrop level: Apple's exact pyramid, level chosen so the
-     * kernel support matches the measured material blur radius. */
-    uint32_t glass_levels = glass_backdrop_level_count(w, h, variant);
-    uint32_t glass_level  = glass_levels - 1u;
+    /* The backdrop the material samples, at the measured radii.  It is stored
+     * at full resolution because clear's mixture carries 19% of the sharp
+     * image, which a reduced level cannot represent. */
+    struct glass_blur_recipe blur
+        = glass_blur_for(variant, output->job_lightness, output->job_scale);
     long     page_size    = sysconf(_SC_PAGESIZE);
     char*    cpath        = nullptr;
     char*    cdir         = nullptr;
@@ -1481,13 +1659,8 @@ static void* render_thread_worker(void* arg)
 
     size_t aligned_raw_sz = (raw_sz + (page_size - 1)) & ~(page_size - 1);
 
-    uint32_t glass_extent[2];
-    if (!walle_lg_wallpaper_backdrop_level_extent(
-            (uint32_t)w, (uint32_t)h, glass_levels, glass_level, glass_extent)) {
-        goto finalize;
-    }
-    int gw = (int)glass_extent[0];
-    int gh = (int)glass_extent[1];
+    int gw = w;
+    int gh = h;
 
     if (ckd_mul(&glass_sz, (size_t)gw * gh, bands))
         goto finalize;
@@ -1508,8 +1681,9 @@ static void* render_thread_worker(void* arg)
     XXH64_update(xxh, &w, sizeof(w));
     XXH64_update(xxh, &h, sizeof(h));
     XXH64_update(xxh, &variant, sizeof(variant));
-    XXH64_update(xxh, &glass_levels, sizeof(glass_levels));
-    XXH64_update(xxh, &glass_level, sizeof(glass_level));
+    /* The whole recipe, because the appearance moves the blend weights and a
+     * cached entry built for the other appearance is a different image. */
+    XXH64_update(xxh, &blur, sizeof(blur));
     XXH64_update(xxh, &item->mode, sizeof(item->mode));
     if (item->mode == MODE_FILL) {
         XXH64_update(xxh, &item->crop_strategy, sizeof(item->crop_strategy));
@@ -1667,33 +1841,25 @@ static void* render_thread_worker(void* arg)
     if (write_pipeline_to_buffer_direct(img, map, raw_sz) != 0)
         goto vips_err;
 
-    /* Apple's exact material backdrop from the decoded standard layer.
-     * Single decode: the pyramid consumes the mmap'd RGBA rows directly. */
-    struct walle_lg_pyramid backdrop;
-    if (!walle_lg_build_wallpaper_backdrop(
-            map, (uint32_t)w, (uint32_t)h, glass_levels, &backdrop)) {
-        goto vips_err;
-    }
-    const struct walle_lg_pyramid_level* level = &backdrop.levels[glass_level];
-    if (level->width != (uint32_t)gw || level->height != (uint32_t)gh) {
-        walle_lg_destroy_pyramid(&backdrop);
-        goto vips_err;
-    }
-    /* Pyramid levels are BGRA8 rows bottom-up; the glass layer contract is
-     * RGBA8 rows top-down.  Both conversions are exact byte permutations. */
-    for (int y = 0; y < gh; ++y) {
-        const unsigned char* src = level->bgra8 + (size_t)(gh - 1 - y) * gw * 4u;
-        uint8_t*             dst = map + aligned_raw_sz + (size_t)y * gw * 4u;
-        for (int x = 0; x < gw; ++x) {
-            dst[4 * x + 0] = src[4 * x + 2];
-            dst[4 * x + 1] = src[4 * x + 1];
-            dst[4 * x + 2] = src[4 * x + 0];
-            dst[4 * x + 3] = src[4 * x + 3];
-        }
-    }
-    walle_lg_destroy_pyramid(&backdrop);
     g_object_unref(img);
     img = nullptr;
+
+    /* The measured backdrop, built from the rows just written rather than from
+     * the decode pipeline again: that pipeline is opened sequential-access, so
+     * a second pass over it is a use-after-read, and this way the wallpaper is
+     * still decoded exactly once. */
+    VipsImage* decoded
+        = vips_image_new_from_memory(map, raw_sz, w, h, bands, VIPS_FORMAT_UCHAR);
+    if (!decoded)
+        goto vips_err;
+    VipsImage* glass = glass_blur_image(decoded, &blur);
+    g_object_unref(decoded);
+    if (!glass)
+        goto vips_err;
+    int written = write_pipeline_to_buffer_direct(glass, map + aligned_raw_sz, glass_sz);
+    g_object_unref(glass);
+    if (written != 0)
+        goto vips_err;
 
     munmap(map, total_sz);
     map = nullptr;
@@ -1757,16 +1923,25 @@ finalize:
 /* Resolve the appearance the shader should use: explicit config wins, then
  * the desktop portal, then the content-luminance stand-in (-1). */
 [[nodiscard]]
+/* The material's appearance, as one value for the whole output.
+ *
+ * It is deliberately NOT derived from content luminance any more.  Apple takes
+ * the appearance from the system setting; there is no content-derived path in
+ * the hardware, and walle's old smoothstep over a screen-wide wash predates the
+ * portal being wired up and never had a measurement behind it.  It also cannot
+ * survive the backdrop blur being baked on the CPU: the blend between the
+ * material's narrow and wide layers depends on the appearance, so a per-pixel
+ * appearance would mean a per-pixel backdrop, and the baked backdrop and the
+ * shader's chosen colour matrices could disagree on the same pixel.
+ *
+ * Config wins, then the desktop portal, then dark - which is the only value
+ * left once neither of the two authorities answers. */
 static float glass_appearance_value(const struct wallpaper_output* output)
 {
     enum glass_appearance appearance = output->glass_appearance;
     if (appearance == GLASS_APPEARANCE_AUTO && output->render.state != nullptr)
         appearance = output->render.state->portal_appearance;
-    if (appearance == GLASS_APPEARANCE_LIGHT)
-        return 1.0f;
-    if (appearance == GLASS_APPEARANCE_DARK)
-        return 0.0f;
-    return -1.0f;
+    return appearance == GLASS_APPEARANCE_LIGHT ? 1.0f : 0.0f;
 }
 
 static void frame_callback_handler(void* data, struct wl_callback* callback, uint32_t time);
@@ -2387,9 +2562,11 @@ static void launch_async_render(struct wallpaper_output* o)
     uint64_t c;
     while (read(o->event_fd, &c, sizeof(c)) > 0)
         ;
-    o->job_w       = o->render.width;
-    o->job_h       = o->render.height;
-    o->job_variant = o->glass_variant;
+    o->job_w         = o->render.width;
+    o->job_h         = o->render.height;
+    o->job_variant   = o->glass_variant;
+    o->job_lightness = glass_appearance_value(o);
+    o->job_scale     = o->scale > 0 ? o->scale : 1;
     if (pthread_create(&o->render_thread, nullptr, render_thread_worker, o) == 0) {
         o->render.flags |= F_THREAD_ACTIVE;
     } else if (o->reveal_process_capture_owned) {

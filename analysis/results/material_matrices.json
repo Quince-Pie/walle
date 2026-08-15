@@ -1,0 +1,130 @@
+{
+  "osBuild": "25G76",
+  "records": [
+    {
+      "appearance": "light",
+      "backgroundCount": 9,
+      "exponent": 0.795,
+      "fromB": [
+        0.000245,
+        -0.010167,
+        0.421878
+      ],
+      "fromG": [
+        -0.139542,
+        0.279094,
+        -0.157679
+      ],
+      "fromR": [
+        0.367259,
+        -0.037843,
+        -0.033202
+      ],
+      "grayAxisMaximumResidualCodes": 2.686,
+      "grayAxisRootMeanSquareResidualCodes": 1.091,
+      "maximumResidualCodes": 7.692,
+      "neutralWeight": 4.0,
+      "offsetCodes": [
+        0.7572,
+        0.7537,
+        0.7538
+      ],
+      "rootMeanSquareResidualCodes": 2.238,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "backgroundCount": 9,
+      "exponent": 0.795,
+      "fromB": [
+        -0.037675,
+        -0.039938,
+        0.718134
+      ],
+      "fromG": [
+        -0.231817,
+        0.516088,
+        -0.23415
+      ],
+      "fromR": [
+        0.618041,
+        -0.12819,
+        -0.134818
+      ],
+      "grayAxisMaximumResidualCodes": 1.59,
+      "grayAxisRootMeanSquareResidualCodes": 1.056,
+      "maximumResidualCodes": 2.218,
+      "neutralWeight": 4.0,
+      "offsetCodes": [
+        0.1097,
+        0.1101,
+        0.1092
+      ],
+      "rootMeanSquareResidualCodes": 0.958,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "backgroundCount": 10,
+      "exponent": 1.0,
+      "fromB": [
+        -0.000109,
+        -0.000435,
+        0.96789
+      ],
+      "fromG": [
+        0.081922,
+        1.007377,
+        0.053828
+      ],
+      "fromR": [
+        0.94911,
+        0.030815,
+        0.010859
+      ],
+      "grayAxisMaximumResidualCodes": 2.71,
+      "grayAxisRootMeanSquareResidualCodes": 1.623,
+      "maximumResidualCodes": 9.818,
+      "neutralWeight": 4.0,
+      "offsetCodes": [
+        0.0851,
+        0.0778,
+        0.0828
+      ],
+      "rootMeanSquareResidualCodes": 4.213,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "backgroundCount": 10,
+      "exponent": 1.0,
+      "fromB": [
+        -0.000109,
+        -0.000435,
+        0.96789
+      ],
+      "fromG": [
+        0.081922,
+        1.007377,
+        0.053828
+      ],
+      "fromR": [
+        0.94911,
+        0.030815,
+        0.010859
+      ],
+      "grayAxisMaximumResidualCodes": 2.71,
+      "grayAxisRootMeanSquareResidualCodes": 1.623,
+      "maximumResidualCodes": 9.818,
+      "neutralWeight": 4.0,
+      "offsetCodes": [
+        0.0851,
+        0.0778,
+        0.0828
+      ],
+      "rootMeanSquareResidualCodes": 4.213,
+      "variant": "clear"
+    }
+  ],
+  "schemaVersion": 1
+}

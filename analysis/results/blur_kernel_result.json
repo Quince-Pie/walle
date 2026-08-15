@@ -1,0 +1,1880 @@
+{
+  "classification": "Liquid Glass backdrop blur kernel, measured from a step edge",
+  "method": "forward convolution against the true finite backdrop, free affine transfer",
+  "osBuild": "25G76",
+  "records": [
+    {
+      "appearance": "light",
+      "axis": "x",
+      "background": "kstep-x-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5985
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.579,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5982
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0001,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.579,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        64.0,
+        192.0
+      ],
+      "overlay": "none",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "dark",
+      "axis": "x",
+      "background": "kstep-x-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5985
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.579,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5982
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0001,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.579,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        64.0,
+        192.0
+      ],
+      "overlay": "none",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "light",
+      "axis": "x",
+      "background": "kstep-x-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 2.2981,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.5231,
+          "sigmaPixels": 14.9489,
+          "space": "srgbCode",
+          "transferGain": 0.26739,
+          "transferOffset": 0.7184
+        },
+        {
+          "bilinearCellPixels": 30.1634,
+          "bilinearWeight": 0.8935,
+          "gaussianSigmaPixels": 135.9338,
+          "maximumResidualCodes": 1.9969,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.3523,
+          "space": "srgbCode",
+          "transferGain": 0.27445,
+          "transferOffset": 0.7148
+        },
+        {
+          "maximumResidualCodes": 2.0663,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 12.9775,
+          "narrowWeight": 0.9,
+          "rootMeanSquareResidualCodes": 0.3401,
+          "space": "srgbCode",
+          "transferGain": 0.2749,
+          "transferOffset": 0.7146,
+          "wideSigmaPixels": 147.7204
+        },
+        {
+          "bilinearCellPixels": 12.1665,
+          "bilinearWeight": 0.1521,
+          "maximumResidualCodes": 1.6791,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 14.9793,
+          "narrowWeight": 0.7551,
+          "rootMeanSquareResidualCodes": 0.3262,
+          "space": "srgbCode",
+          "transferGain": 0.27563,
+          "transferOffset": 0.7142,
+          "wideSigmaPixels": 166.4765,
+          "wideWeight": 0.0928
+        },
+        {
+          "maximumResidualCodes": 1.4858,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.475,
+          "sigmaPixels": 14.8715,
+          "space": "linearLight",
+          "transferGain": 0.51981,
+          "transferOffset": 0.5526
+        },
+        {
+          "bilinearCellPixels": 30.0521,
+          "bilinearWeight": 0.8933,
+          "gaussianSigmaPixels": 143.9682,
+          "maximumResidualCodes": 1.1916,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.2864,
+          "space": "linearLight",
+          "transferGain": 0.53466,
+          "transferOffset": 0.5483
+        },
+        {
+          "maximumResidualCodes": 1.2587,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 12.9231,
+          "narrowWeight": 0.8991,
+          "rootMeanSquareResidualCodes": 0.2716,
+          "space": "linearLight",
+          "transferGain": 0.53568,
+          "transferOffset": 0.548,
+          "wideSigmaPixels": 156.651
+        },
+        {
+          "bilinearCellPixels": 12.3415,
+          "bilinearWeight": 0.1618,
+          "maximumResidualCodes": 0.8458,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 15.0507,
+          "narrowWeight": 0.7439,
+          "rootMeanSquareResidualCodes": 0.2547,
+          "space": "linearLight",
+          "transferGain": 0.5375,
+          "transferOffset": 0.5475,
+          "wideSigmaPixels": 178.6559,
+          "wideWeight": 0.0942
+        }
+      ],
+      "measuredEndsCodes": [
+        200.0,
+        235.0
+      ],
+      "overlay": "regular",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "dark",
+      "axis": "x",
+      "background": "kstep-x-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 3.5229,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.7143,
+          "sigmaPixels": 31.3933,
+          "space": "srgbCode",
+          "transferGain": 0.23132,
+          "transferOffset": 0.1205
+        },
+        {
+          "bilinearCellPixels": 70.4674,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 17.0491,
+          "maximumResidualCodes": 3.5875,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.7551,
+          "space": "srgbCode",
+          "transferGain": 0.23031,
+          "transferOffset": 0.121
+        },
+        {
+          "maximumResidualCodes": 1.5645,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 13.8846,
+          "narrowWeight": 0.0321,
+          "rootMeanSquareResidualCodes": 0.61,
+          "space": "srgbCode",
+          "transferGain": 5.18038,
+          "transferOffset": 0.0429,
+          "wideSigmaPixels": 12776.831
+        },
+        {
+          "bilinearCellPixels": 15.8022,
+          "bilinearWeight": 0.0066,
+          "maximumResidualCodes": 1.3488,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 17.8522,
+          "narrowWeight": 0.015,
+          "rootMeanSquareResidualCodes": 0.602,
+          "space": "srgbCode",
+          "transferGain": 7.78753,
+          "transferOffset": 0.044,
+          "wideSigmaPixels": 19725.0343,
+          "wideWeight": 0.9785
+        },
+        {
+          "maximumResidualCodes": 3.9963,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.7369,
+          "sigmaPixels": 29.1197,
+          "space": "linearLight",
+          "transferGain": 0.09151,
+          "transferOffset": 0.022
+        },
+        {
+          "bilinearCellPixels": 65.6819,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 17.0384,
+          "maximumResidualCodes": 3.8189,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.7821,
+          "space": "linearLight",
+          "transferGain": 0.09116,
+          "transferOffset": 0.0221
+        },
+        {
+          "maximumResidualCodes": 2.5692,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 14.2505,
+          "narrowWeight": 0.0511,
+          "rootMeanSquareResidualCodes": 0.4477,
+          "space": "linearLight",
+          "transferGain": 1.32973,
+          "transferOffset": 0.0055,
+          "wideSigmaPixels": 8730.9576
+        },
+        {
+          "bilinearCellPixels": 15.9209,
+          "bilinearWeight": 0.0075,
+          "maximumResidualCodes": 2.3124,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 18.0477,
+          "narrowWeight": 0.0185,
+          "rootMeanSquareResidualCodes": 0.4324,
+          "space": "linearLight",
+          "transferGain": 2.63156,
+          "transferOffset": 0.0057,
+          "wideSigmaPixels": 18038.5326,
+          "wideWeight": 0.974
+        }
+      ],
+      "measuredEndsCodes": [
+        42.0,
+        77.0
+      ],
+      "overlay": "regular",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "light",
+      "axis": "x",
+      "background": "kstep-x-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 6.9868,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.5212,
+          "sigmaPixels": 3.4185,
+          "space": "srgbCode",
+          "transferGain": 1.04658,
+          "transferOffset": 0.0707
+        },
+        {
+          "bilinearCellPixels": 1.6643,
+          "bilinearWeight": 0.2121,
+          "gaussianSigmaPixels": 4.1688,
+          "maximumResidualCodes": 1.1694,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.1161,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0706
+        },
+        {
+          "maximumResidualCodes": 1.2178,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7251,
+          "narrowWeight": 0.2174,
+          "rootMeanSquareResidualCodes": 0.1234,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0706,
+          "wideSigmaPixels": 4.1829
+        },
+        {
+          "bilinearCellPixels": 1.6643,
+          "bilinearWeight": 0.2121,
+          "maximumResidualCodes": 1.1694,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 4.1688,
+          "narrowWeight": 0.7879,
+          "rootMeanSquareResidualCodes": 0.1161,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0706,
+          "wideSigmaPixels": 3994.1402,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 25.1674,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.7628,
+          "sigmaPixels": 3.4598,
+          "space": "linearLight",
+          "transferGain": 1.29742,
+          "transferOffset": 0.0234
+        },
+        {
+          "bilinearCellPixels": 1.6515,
+          "bilinearWeight": 0.2053,
+          "gaussianSigmaPixels": 4.187,
+          "maximumResidualCodes": 18.585,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.6819,
+          "space": "linearLight",
+          "transferGain": 1.29786,
+          "transferOffset": 0.0233
+        },
+        {
+          "maximumResidualCodes": 18.8233,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7179,
+          "narrowWeight": 0.21,
+          "rootMeanSquareResidualCodes": 1.6824,
+          "space": "linearLight",
+          "transferGain": 1.29786,
+          "transferOffset": 0.0233,
+          "wideSigmaPixels": 4.1994
+        },
+        {
+          "bilinearCellPixels": 1.6515,
+          "bilinearWeight": 0.2053,
+          "maximumResidualCodes": 18.585,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 4.187,
+          "narrowWeight": 0.7947,
+          "rootMeanSquareResidualCodes": 1.6819,
+          "space": "linearLight",
+          "transferGain": 1.29786,
+          "transferOffset": 0.0233,
+          "wideSigmaPixels": 186.4225,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        85.0,
+        219.0
+      ],
+      "overlay": "clear",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "dark",
+      "axis": "x",
+      "background": "kstep-x-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 6.9868,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.5212,
+          "sigmaPixels": 3.4185,
+          "space": "srgbCode",
+          "transferGain": 1.04658,
+          "transferOffset": 0.0707
+        },
+        {
+          "bilinearCellPixels": 1.6643,
+          "bilinearWeight": 0.2121,
+          "gaussianSigmaPixels": 4.1688,
+          "maximumResidualCodes": 1.1694,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.1161,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0706
+        },
+        {
+          "maximumResidualCodes": 1.2178,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7251,
+          "narrowWeight": 0.2174,
+          "rootMeanSquareResidualCodes": 0.1234,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0706,
+          "wideSigmaPixels": 4.1829
+        },
+        {
+          "bilinearCellPixels": 1.6643,
+          "bilinearWeight": 0.2121,
+          "maximumResidualCodes": 1.1694,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 4.1688,
+          "narrowWeight": 0.7879,
+          "rootMeanSquareResidualCodes": 0.1161,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0706,
+          "wideSigmaPixels": 3994.1402,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 25.1674,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.7628,
+          "sigmaPixels": 3.4598,
+          "space": "linearLight",
+          "transferGain": 1.29742,
+          "transferOffset": 0.0234
+        },
+        {
+          "bilinearCellPixels": 1.6515,
+          "bilinearWeight": 0.2053,
+          "gaussianSigmaPixels": 4.187,
+          "maximumResidualCodes": 18.585,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.6819,
+          "space": "linearLight",
+          "transferGain": 1.29786,
+          "transferOffset": 0.0233
+        },
+        {
+          "maximumResidualCodes": 18.8233,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7179,
+          "narrowWeight": 0.21,
+          "rootMeanSquareResidualCodes": 1.6824,
+          "space": "linearLight",
+          "transferGain": 1.29786,
+          "transferOffset": 0.0233,
+          "wideSigmaPixels": 4.1994
+        },
+        {
+          "bilinearCellPixels": 1.6515,
+          "bilinearWeight": 0.2053,
+          "maximumResidualCodes": 18.585,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 4.187,
+          "narrowWeight": 0.7947,
+          "rootMeanSquareResidualCodes": 1.6819,
+          "space": "linearLight",
+          "transferGain": 1.29786,
+          "transferOffset": 0.0233,
+          "wideSigmaPixels": 186.4225,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        85.0,
+        219.0
+      ],
+      "overlay": "clear",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "light",
+      "axis": "y",
+      "background": "kstep-y-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5985
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.579,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5982
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0001,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.579,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        64.0,
+        192.0
+      ],
+      "overlay": "none",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "dark",
+      "axis": "y",
+      "background": "kstep-y-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5985
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.579,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5982
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0001,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.579,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        64.0,
+        192.0
+      ],
+      "overlay": "none",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "light",
+      "axis": "y",
+      "background": "kstep-y-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 2.1519,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.5192,
+          "sigmaPixels": 15.0633,
+          "space": "srgbCode",
+          "transferGain": 0.2674,
+          "transferOffset": 0.7183
+        },
+        {
+          "bilinearCellPixels": 30.3564,
+          "bilinearWeight": 0.8929,
+          "gaussianSigmaPixels": 134.5888,
+          "maximumResidualCodes": 1.8499,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.3479,
+          "space": "srgbCode",
+          "transferGain": 0.27439,
+          "transferOffset": 0.7148
+        },
+        {
+          "maximumResidualCodes": 1.9189,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 13.0594,
+          "narrowWeight": 0.8996,
+          "rootMeanSquareResidualCodes": 0.3341,
+          "space": "srgbCode",
+          "transferGain": 0.27484,
+          "transferOffset": 0.7146,
+          "wideSigmaPixels": 146.2821
+        },
+        {
+          "bilinearCellPixels": 12.9597,
+          "bilinearWeight": 0.1671,
+          "maximumResidualCodes": 1.5221,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 15.2569,
+          "narrowWeight": 0.7404,
+          "rootMeanSquareResidualCodes": 0.3193,
+          "space": "srgbCode",
+          "transferGain": 0.27562,
+          "transferOffset": 0.7142,
+          "wideSigmaPixels": 166.341,
+          "wideWeight": 0.0925
+        },
+        {
+          "maximumResidualCodes": 1.3411,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.4741,
+          "sigmaPixels": 14.9942,
+          "space": "linearLight",
+          "transferGain": 0.51984,
+          "transferOffset": 0.5525
+        },
+        {
+          "bilinearCellPixels": 30.2594,
+          "bilinearWeight": 0.8928,
+          "gaussianSigmaPixels": 142.4968,
+          "maximumResidualCodes": 1.0458,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.2868,
+          "space": "linearLight",
+          "transferGain": 0.53454,
+          "transferOffset": 0.5483
+        },
+        {
+          "maximumResidualCodes": 1.1126,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 13.0107,
+          "narrowWeight": 0.8988,
+          "rootMeanSquareResidualCodes": 0.2704,
+          "space": "linearLight",
+          "transferGain": 0.53554,
+          "transferOffset": 0.548,
+          "wideSigmaPixels": 155.046
+        },
+        {
+          "bilinearCellPixels": 13.128,
+          "bilinearWeight": 0.1781,
+          "maximumResidualCodes": 0.7115,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 15.3593,
+          "narrowWeight": 0.7279,
+          "rootMeanSquareResidualCodes": 0.2529,
+          "space": "linearLight",
+          "transferGain": 0.53748,
+          "transferOffset": 0.5474,
+          "wideSigmaPixels": 178.6913,
+          "wideWeight": 0.0939
+        }
+      ],
+      "measuredEndsCodes": [
+        200.0,
+        235.0
+      ],
+      "overlay": "regular",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "dark",
+      "axis": "y",
+      "background": "kstep-y-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 3.5111,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.7084,
+          "sigmaPixels": 31.5265,
+          "space": "srgbCode",
+          "transferGain": 0.23138,
+          "transferOffset": 0.1204
+        },
+        {
+          "bilinearCellPixels": 70.724,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 17.1046,
+          "maximumResidualCodes": 3.5765,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.7493,
+          "space": "srgbCode",
+          "transferGain": 0.23035,
+          "transferOffset": 0.1209
+        },
+        {
+          "maximumResidualCodes": 1.5605,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 14.0016,
+          "narrowWeight": 0.0319,
+          "rootMeanSquareResidualCodes": 0.6042,
+          "space": "srgbCode",
+          "transferGain": 5.21503,
+          "transferOffset": 0.043,
+          "wideSigmaPixels": 12876.0601
+        },
+        {
+          "bilinearCellPixels": 15.4335,
+          "bilinearWeight": 0.0063,
+          "maximumResidualCodes": 1.342,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 17.9888,
+          "narrowWeight": 0.0149,
+          "rootMeanSquareResidualCodes": 0.5953,
+          "space": "srgbCode",
+          "transferGain": 7.91077,
+          "transferOffset": 0.0441,
+          "wideSigmaPixels": 20069.9432,
+          "wideWeight": 0.9788
+        },
+        {
+          "maximumResidualCodes": 4.0151,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.7345,
+          "sigmaPixels": 29.3215,
+          "space": "linearLight",
+          "transferGain": 0.09154,
+          "transferOffset": 0.022
+        },
+        {
+          "bilinearCellPixels": 66.096,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 17.099,
+          "maximumResidualCodes": 3.8351,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.7796,
+          "space": "linearLight",
+          "transferGain": 0.09118,
+          "transferOffset": 0.0221
+        },
+        {
+          "maximumResidualCodes": 2.6278,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 14.3884,
+          "narrowWeight": 0.0497,
+          "rootMeanSquareResidualCodes": 0.4564,
+          "space": "linearLight",
+          "transferGain": 1.36533,
+          "transferOffset": 0.0055,
+          "wideSigmaPixels": 8980.4946
+        },
+        {
+          "bilinearCellPixels": 15.4881,
+          "bilinearWeight": 0.0072,
+          "maximumResidualCodes": 2.3539,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 18.2172,
+          "narrowWeight": 0.0184,
+          "rootMeanSquareResidualCodes": 0.4402,
+          "space": "linearLight",
+          "transferGain": 2.67488,
+          "transferOffset": 0.0057,
+          "wideSigmaPixels": 18359.7249,
+          "wideWeight": 0.9744
+        }
+      ],
+      "measuredEndsCodes": [
+        42.0,
+        77.0
+      ],
+      "overlay": "regular",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "light",
+      "axis": "y",
+      "background": "kstep-y-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 6.9536,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.5119,
+          "sigmaPixels": 3.4455,
+          "space": "srgbCode",
+          "transferGain": 1.0466,
+          "transferOffset": 0.0707
+        },
+        {
+          "bilinearCellPixels": 1.6427,
+          "bilinearWeight": 0.2052,
+          "gaussianSigmaPixels": 4.1696,
+          "maximumResidualCodes": 1.3365,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.1223,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0705
+        },
+        {
+          "maximumResidualCodes": 1.3897,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7136,
+          "narrowWeight": 0.2098,
+          "rootMeanSquareResidualCodes": 0.1293,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0705,
+          "wideSigmaPixels": 4.1817
+        },
+        {
+          "bilinearCellPixels": 1.6427,
+          "bilinearWeight": 0.2052,
+          "maximumResidualCodes": 1.3365,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 4.1696,
+          "narrowWeight": 0.7948,
+          "rootMeanSquareResidualCodes": 0.1223,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0705,
+          "wideSigmaPixels": 189.6155,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 25.4998,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.8049,
+          "sigmaPixels": 3.4966,
+          "space": "linearLight",
+          "transferGain": 1.29745,
+          "transferOffset": 0.0234
+        },
+        {
+          "bilinearCellPixels": 1.6256,
+          "bilinearWeight": 0.1963,
+          "gaussianSigmaPixels": 4.1902,
+          "maximumResidualCodes": 19.1366,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.7286,
+          "space": "linearLight",
+          "transferGain": 1.29787,
+          "transferOffset": 0.0233
+        },
+        {
+          "maximumResidualCodes": 19.3682,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7034,
+          "narrowWeight": 0.2002,
+          "rootMeanSquareResidualCodes": 1.7291,
+          "space": "linearLight",
+          "transferGain": 1.29787,
+          "transferOffset": 0.0233,
+          "wideSigmaPixels": 4.1999
+        },
+        {
+          "bilinearCellPixels": 1.6256,
+          "bilinearWeight": 0.1963,
+          "maximumResidualCodes": 19.1366,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 4.1902,
+          "narrowWeight": 0.8037,
+          "rootMeanSquareResidualCodes": 1.7286,
+          "space": "linearLight",
+          "transferGain": 1.29787,
+          "transferOffset": 0.0233,
+          "wideSigmaPixels": 404.6204,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        85.0,
+        219.0
+      ],
+      "overlay": "clear",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "dark",
+      "axis": "y",
+      "background": "kstep-y-064-192",
+      "fits": [
+        {
+          "maximumResidualCodes": 6.9536,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.5119,
+          "sigmaPixels": 3.4455,
+          "space": "srgbCode",
+          "transferGain": 1.0466,
+          "transferOffset": 0.0707
+        },
+        {
+          "bilinearCellPixels": 1.6427,
+          "bilinearWeight": 0.2052,
+          "gaussianSigmaPixels": 4.1696,
+          "maximumResidualCodes": 1.3365,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.1223,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0705
+        },
+        {
+          "maximumResidualCodes": 1.3897,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7136,
+          "narrowWeight": 0.2098,
+          "rootMeanSquareResidualCodes": 0.1293,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0705,
+          "wideSigmaPixels": 4.1817
+        },
+        {
+          "bilinearCellPixels": 1.6427,
+          "bilinearWeight": 0.2052,
+          "maximumResidualCodes": 1.3365,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 4.1696,
+          "narrowWeight": 0.7948,
+          "rootMeanSquareResidualCodes": 0.1223,
+          "space": "srgbCode",
+          "transferGain": 1.04695,
+          "transferOffset": 0.0705,
+          "wideSigmaPixels": 189.6155,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 25.4998,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.8049,
+          "sigmaPixels": 3.4966,
+          "space": "linearLight",
+          "transferGain": 1.29745,
+          "transferOffset": 0.0234
+        },
+        {
+          "bilinearCellPixels": 1.6256,
+          "bilinearWeight": 0.1963,
+          "gaussianSigmaPixels": 4.1902,
+          "maximumResidualCodes": 19.1366,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.7286,
+          "space": "linearLight",
+          "transferGain": 1.29787,
+          "transferOffset": 0.0233
+        },
+        {
+          "maximumResidualCodes": 19.3682,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7034,
+          "narrowWeight": 0.2002,
+          "rootMeanSquareResidualCodes": 1.7291,
+          "space": "linearLight",
+          "transferGain": 1.29787,
+          "transferOffset": 0.0233,
+          "wideSigmaPixels": 4.1999
+        },
+        {
+          "bilinearCellPixels": 1.6256,
+          "bilinearWeight": 0.1963,
+          "maximumResidualCodes": 19.1366,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 4.1902,
+          "narrowWeight": 0.8037,
+          "rootMeanSquareResidualCodes": 1.7286,
+          "space": "linearLight",
+          "transferGain": 1.29787,
+          "transferOffset": 0.0233,
+          "wideSigmaPixels": 404.6204,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        85.0,
+        219.0
+      ],
+      "overlay": "clear",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "light",
+      "axis": "x",
+      "background": "kstep-x-000-255",
+      "fits": [
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5993
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0001,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.5786,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0022,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0001,
+          "sigmaPixels": 0.1035,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0017,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0001,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5993
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0008,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.5786,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        0.0,
+        255.0
+      ],
+      "overlay": "none",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "dark",
+      "axis": "x",
+      "background": "kstep-x-000-255",
+      "fits": [
+        {
+          "maximumResidualCodes": 0.0002,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "sigmaPixels": 0.1035,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0001,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5993
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0001,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "srgbCode",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.5786,
+          "wideWeight": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0022,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 0.0001,
+          "sigmaPixels": 0.1035,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0
+        },
+        {
+          "bilinearCellPixels": 0.381,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 41.2414,
+          "maximumResidualCodes": 0.0,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": 0.0
+        },
+        {
+          "maximumResidualCodes": 0.0017,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.1024,
+          "narrowWeight": 1.0,
+          "rootMeanSquareResidualCodes": 0.0001,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 52.5993
+        },
+        {
+          "bilinearCellPixels": 0.4179,
+          "bilinearWeight": 1.0,
+          "maximumResidualCodes": 0.0008,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 1.2064,
+          "narrowWeight": 0.0,
+          "rootMeanSquareResidualCodes": 0.0,
+          "space": "linearLight",
+          "transferGain": 1.0,
+          "transferOffset": -0.0,
+          "wideSigmaPixels": 67.5786,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        0.0,
+        255.0
+      ],
+      "overlay": "none",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "light",
+      "axis": "x",
+      "background": "kstep-x-000-255",
+      "fits": [
+        {
+          "maximumResidualCodes": 6.4922,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.3222,
+          "sigmaPixels": 15.004,
+          "space": "srgbCode",
+          "transferGain": 0.25931,
+          "transferOffset": 0.7073
+        },
+        {
+          "bilinearCellPixels": 29.9848,
+          "bilinearWeight": 0.892,
+          "gaussianSigmaPixels": 137.7547,
+          "maximumResidualCodes": 5.7822,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.0967,
+          "space": "srgbCode",
+          "transferGain": 0.26634,
+          "transferOffset": 0.7037
+        },
+        {
+          "maximumResidualCodes": 5.9057,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 13.01,
+          "narrowWeight": 0.8994,
+          "rootMeanSquareResidualCodes": 1.0712,
+          "space": "srgbCode",
+          "transferGain": 0.26772,
+          "transferOffset": 0.7031,
+          "wideSigmaPixels": 165.7582
+        },
+        {
+          "bilinearCellPixels": 16.251,
+          "bilinearWeight": 0.3249,
+          "maximumResidualCodes": 5.4468,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 18.348,
+          "narrowWeight": 0.5589,
+          "rootMeanSquareResidualCodes": 1.0305,
+          "space": "srgbCode",
+          "transferGain": 0.2798,
+          "transferOffset": 0.698,
+          "wideSigmaPixels": 373.1321,
+          "wideWeight": 0.1162
+        },
+        {
+          "maximumResidualCodes": 3.5116,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.0554,
+          "sigmaPixels": 14.7496,
+          "space": "linearLight",
+          "transferGain": 0.46661,
+          "transferOffset": 0.4576
+        },
+        {
+          "bilinearCellPixels": 29.2253,
+          "bilinearWeight": 0.8814,
+          "gaussianSigmaPixels": 168.7519,
+          "maximumResidualCodes": 2.7939,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 0.9016,
+          "space": "linearLight",
+          "transferGain": 0.48478,
+          "transferOffset": 0.4485
+        },
+        {
+          "maximumResidualCodes": 2.8921,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 12.63,
+          "narrowWeight": 0.8842,
+          "rootMeanSquareResidualCodes": 0.8687,
+          "space": "linearLight",
+          "transferGain": 0.48817,
+          "transferOffset": 0.4468,
+          "wideSigmaPixels": 198.6241
+        },
+        {
+          "bilinearCellPixels": 16.072,
+          "bilinearWeight": 0.3207,
+          "maximumResidualCodes": 2.2613,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 18.3513,
+          "narrowWeight": 0.488,
+          "rootMeanSquareResidualCodes": 0.8172,
+          "space": "linearLight",
+          "transferGain": 0.54731,
+          "transferOffset": 0.4311,
+          "wideSigmaPixels": 628.7734,
+          "wideWeight": 0.1913
+        }
+      ],
+      "measuredEndsCodes": [
+        180.0,
+        248.667
+      ],
+      "overlay": "regular",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "dark",
+      "axis": "x",
+      "background": "kstep-x-000-255",
+      "fits": [
+        {
+          "maximumResidualCodes": 9.6448,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 4.1458,
+          "sigmaPixels": 37.5513,
+          "space": "srgbCode",
+          "transferGain": 0.23427,
+          "transferOffset": 0.1201
+        },
+        {
+          "bilinearCellPixels": 84.859,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 17.1194,
+          "maximumResidualCodes": 9.7919,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 4.2304,
+          "space": "srgbCode",
+          "transferGain": 0.23311,
+          "transferOffset": 0.1207
+        },
+        {
+          "maximumResidualCodes": 4.4416,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 13.5229,
+          "narrowWeight": 0.2497,
+          "rootMeanSquareResidualCodes": 2.2851,
+          "space": "srgbCode",
+          "transferGain": 0.63844,
+          "transferOffset": 0.0414,
+          "wideSigmaPixels": 1075.8773
+        },
+        {
+          "bilinearCellPixels": 18.0439,
+          "bilinearWeight": 0.0097,
+          "maximumResidualCodes": 4.471,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 19.9468,
+          "narrowWeight": 0.0124,
+          "rootMeanSquareResidualCodes": 2.2746,
+          "space": "srgbCode",
+          "transferGain": 7.32255,
+          "transferOffset": 0.0366,
+          "wideSigmaPixels": 16697.6019,
+          "wideWeight": 0.9779
+        },
+        {
+          "maximumResidualCodes": 10.4024,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 4.2947,
+          "sigmaPixels": 27.7876,
+          "space": "linearLight",
+          "transferGain": 0.08737,
+          "transferOffset": 0.0133
+        },
+        {
+          "bilinearCellPixels": 63.5244,
+          "bilinearWeight": 1.0,
+          "gaussianSigmaPixels": 17.075,
+          "maximumResidualCodes": 10.1478,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 4.4119,
+          "space": "linearLight",
+          "transferGain": 0.08711,
+          "transferOffset": 0.0134
+        },
+        {
+          "maximumResidualCodes": 8.4768,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 14.6229,
+          "narrowWeight": 0.5603,
+          "rootMeanSquareResidualCodes": 1.4261,
+          "space": "linearLight",
+          "transferGain": 0.11781,
+          "transferOffset": -0.0005,
+          "wideSigmaPixels": 366.3146
+        },
+        {
+          "bilinearCellPixels": 22.6766,
+          "bilinearWeight": 0.2463,
+          "maximumResidualCodes": 8.0076,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 23.7817,
+          "narrowWeight": 0.2175,
+          "rootMeanSquareResidualCodes": 1.4035,
+          "space": "linearLight",
+          "transferGain": 0.1464,
+          "transferOffset": -0.0056,
+          "wideSigmaPixels": 636.1299,
+          "wideWeight": 0.5362
+        }
+      ],
+      "measuredEndsCodes": [
+        20.992,
+        92.0
+      ],
+      "overlay": "regular",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "light",
+      "axis": "x",
+      "background": "kstep-x-000-255",
+      "fits": [
+        {
+          "maximumResidualCodes": 24.1053,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.9773,
+          "sigmaPixels": 2.7781,
+          "space": "srgbCode",
+          "transferGain": 0.9252,
+          "transferOffset": 0.0757
+        },
+        {
+          "bilinearCellPixels": 1.6951,
+          "bilinearWeight": 0.2302,
+          "gaussianSigmaPixels": 3.441,
+          "maximumResidualCodes": 15.9187,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.8224,
+          "space": "srgbCode",
+          "transferGain": 0.92549,
+          "transferOffset": 0.0755
+        },
+        {
+          "maximumResidualCodes": 16.0052,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7481,
+          "narrowWeight": 0.2395,
+          "rootMeanSquareResidualCodes": 1.8235,
+          "space": "srgbCode",
+          "transferGain": 0.92549,
+          "transferOffset": 0.0755,
+          "wideSigmaPixels": 3.4611
+        },
+        {
+          "bilinearCellPixels": 1.695,
+          "bilinearWeight": 0.2298,
+          "maximumResidualCodes": 15.9191,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 3.4409,
+          "narrowWeight": 0.7684,
+          "rootMeanSquareResidualCodes": 1.8224,
+          "space": "srgbCode",
+          "transferGain": 0.9271,
+          "transferOffset": 0.0755,
+          "wideSigmaPixels": 23010.139,
+          "wideWeight": 0.0018
+        },
+        {
+          "maximumResidualCodes": 46.083,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 3.5254,
+          "sigmaPixels": 2.2945,
+          "space": "linearLight",
+          "transferGain": 0.99342,
+          "transferOffset": 0.0054
+        },
+        {
+          "bilinearCellPixels": 1.5008,
+          "bilinearWeight": 0.1632,
+          "gaussianSigmaPixels": 2.6255,
+          "maximumResidualCodes": 41.3141,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 3.5164,
+          "space": "linearLight",
+          "transferGain": 0.99356,
+          "transferOffset": 0.0053
+        },
+        {
+          "maximumResidualCodes": 41.7309,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.6185,
+          "narrowWeight": 0.1597,
+          "rootMeanSquareResidualCodes": 3.5164,
+          "space": "linearLight",
+          "transferGain": 0.99356,
+          "transferOffset": 0.0053,
+          "wideSigmaPixels": 2.6161
+        },
+        {
+          "bilinearCellPixels": 5.1094,
+          "bilinearWeight": 0.9308,
+          "maximumResidualCodes": 46.6238,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 5.1232,
+          "narrowWeight": 0.0692,
+          "rootMeanSquareResidualCodes": 3.554,
+          "space": "linearLight",
+          "transferGain": 0.99353,
+          "transferOffset": 0.0053,
+          "wideSigmaPixels": 825.9805,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        19.0,
+        255.0
+      ],
+      "overlay": "clear",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    },
+    {
+      "appearance": "dark",
+      "axis": "x",
+      "background": "kstep-x-000-255",
+      "fits": [
+        {
+          "maximumResidualCodes": 24.1053,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 1.9773,
+          "sigmaPixels": 2.7781,
+          "space": "srgbCode",
+          "transferGain": 0.9252,
+          "transferOffset": 0.0757
+        },
+        {
+          "bilinearCellPixels": 1.6951,
+          "bilinearWeight": 0.2302,
+          "gaussianSigmaPixels": 3.441,
+          "maximumResidualCodes": 15.9187,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 1.8224,
+          "space": "srgbCode",
+          "transferGain": 0.92549,
+          "transferOffset": 0.0755
+        },
+        {
+          "maximumResidualCodes": 16.0052,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.7481,
+          "narrowWeight": 0.2395,
+          "rootMeanSquareResidualCodes": 1.8235,
+          "space": "srgbCode",
+          "transferGain": 0.92549,
+          "transferOffset": 0.0755,
+          "wideSigmaPixels": 3.4611
+        },
+        {
+          "bilinearCellPixels": 1.695,
+          "bilinearWeight": 0.2298,
+          "maximumResidualCodes": 15.9191,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 3.4409,
+          "narrowWeight": 0.7684,
+          "rootMeanSquareResidualCodes": 1.8224,
+          "space": "srgbCode",
+          "transferGain": 0.9271,
+          "transferOffset": 0.0755,
+          "wideSigmaPixels": 23010.139,
+          "wideWeight": 0.0018
+        },
+        {
+          "maximumResidualCodes": 46.083,
+          "model": "gaussian",
+          "rootMeanSquareResidualCodes": 3.5254,
+          "sigmaPixels": 2.2945,
+          "space": "linearLight",
+          "transferGain": 0.99342,
+          "transferOffset": 0.0054
+        },
+        {
+          "bilinearCellPixels": 1.5008,
+          "bilinearWeight": 0.1632,
+          "gaussianSigmaPixels": 2.6255,
+          "maximumResidualCodes": 41.3141,
+          "model": "bilinearPlusGaussian",
+          "rootMeanSquareResidualCodes": 3.5164,
+          "space": "linearLight",
+          "transferGain": 0.99356,
+          "transferOffset": 0.0053
+        },
+        {
+          "maximumResidualCodes": 41.7309,
+          "model": "twoGaussian",
+          "narrowSigmaPixels": 0.6185,
+          "narrowWeight": 0.1597,
+          "rootMeanSquareResidualCodes": 3.5164,
+          "space": "linearLight",
+          "transferGain": 0.99356,
+          "transferOffset": 0.0053,
+          "wideSigmaPixels": 2.6161
+        },
+        {
+          "bilinearCellPixels": 5.1094,
+          "bilinearWeight": 0.9308,
+          "maximumResidualCodes": 46.6238,
+          "model": "bilinearNarrowWide",
+          "narrowSigmaPixels": 5.1232,
+          "narrowWeight": 0.0692,
+          "rootMeanSquareResidualCodes": 3.554,
+          "space": "linearLight",
+          "transferGain": 0.99353,
+          "transferOffset": 0.0053,
+          "wideSigmaPixels": 825.9805,
+          "wideWeight": 0.0
+        }
+      ],
+      "measuredEndsCodes": [
+        19.0,
+        255.0
+      ],
+      "overlay": "clear",
+      "windowPixels": 700,
+      "windowStartPixels": 162
+    }
+  ],
+  "schemaVersion": 2
+}

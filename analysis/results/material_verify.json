@@ -1,0 +1,4328 @@
+{
+  "classification": "walle's material rendered and scored against the M1",
+  "osBuild": "25G76",
+  "records": [
+    {
+      "appearance": "light",
+      "apple": [
+        169.0,
+        68.0,
+        71.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.43,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        167.57,
+        67.72,
+        71.06
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        192.0,
+        79.0,
+        83.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.942,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        190.06,
+        78.64,
+        82.85
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        22.0,
+        159.0,
+        61.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 5.221,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        27.22,
+        159.04,
+        62.14
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        31.0,
+        181.0,
+        72.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 6.079,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        37.08,
+        179.83,
+        73.35
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        74.0,
+        74.0,
+        162.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.04,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        74.14,
+        75.04,
+        161.38
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        86.0,
+        86.0,
+        184.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.509,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        87.1,
+        86.59,
+        182.49
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        135.0,
+        135.0,
+        135.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.629,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        133.64,
+        133.91,
+        133.37
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        122.0,
+        122.0,
+        122.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.165,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        121.62,
+        123.16,
+        121.29
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        139.0,
+        97.0,
+        58.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 3.087,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        142.09,
+        96.31,
+        57.82
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        158.0,
+        111.0,
+        68.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 5.676,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        163.68,
+        110.18,
+        66.75
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        119.0,
+        35.0,
+        38.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 3.628,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        120.41,
+        38.63,
+        41.25
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        191.0,
+        80.0,
+        84.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 0.986,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        190.01,
+        79.43,
+        83.22
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        0.0,
+        112.0,
+        28.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 13.211,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        13.21,
+        116.5,
+        33.28
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        34.0,
+        181.0,
+        74.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 6.338,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        40.34,
+        179.9,
+        74.44
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        41.0,
+        41.0,
+        114.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 5.535,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        42.51,
+        46.54,
+        117.65
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        87.0,
+        87.0,
+        184.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.403,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        87.31,
+        86.96,
+        182.6
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        123.0,
+        123.0,
+        123.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.975,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        122.31,
+        121.03,
+        121.44
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        123.0,
+        123.0,
+        123.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.975,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        122.31,
+        121.03,
+        121.44
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        96.0,
+        64.0,
+        33.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 3.378,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        92.62,
+        63.63,
+        35.29
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        158.0,
+        111.0,
+        68.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 5.165,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        163.16,
+        110.46,
+        66.98
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        76.0,
+        76.0,
+        76.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.584,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        74.42,
+        74.84,
+        74.8
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        62.0,
+        62.0,
+        62.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.643,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        60.36,
+        62.29,
+        60.93
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        181.0,
+        181.0,
+        181.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.535,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        180.21,
+        179.77,
+        179.47
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        171.0,
+        171.0,
+        170.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.638,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        169.36,
+        170.65,
+        168.52
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        147.0,
+        77.0,
+        79.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 3.292,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        150.29,
+        77.16,
+        79.25
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        168.0,
+        89.0,
+        91.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 3.166,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        171.17,
+        88.99,
+        91.64
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        182.0,
+        38.0,
+        46.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 5.746,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        176.25,
+        39.66,
+        46.69
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        208.0,
+        44.0,
+        53.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 7.421,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        200.58,
+        46.83,
+        54.68
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        164.0,
+        119.0,
+        78.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.592,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        164.91,
+        117.41,
+        77.49
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        184.0,
+        136.0,
+        93.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.091,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        185.09,
+        135.27,
+        92.13
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        105.0,
+        62.0,
+        137.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 2.894,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        107.89,
+        61.7,
+        137.02
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        120.0,
+        73.0,
+        156.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 4.19,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        124.19,
+        71.6,
+        156.32
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        62.0,
+        62.0,
+        62.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.996,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        60.93,
+        60.0,
+        61.03
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        62.0,
+        62.0,
+        62.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.996,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        60.93,
+        60.0,
+        61.03
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        171.0,
+        171.0,
+        171.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.996,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        170.78,
+        169.0,
+        169.05
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        171.0,
+        171.0,
+        171.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.996,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        170.78,
+        169.0,
+        169.05
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        101.0,
+        47.0,
+        49.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 2.603,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        103.6,
+        47.71,
+        49.47
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        170.0,
+        89.0,
+        91.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 0.802,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        170.75,
+        89.45,
+        91.8
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        127.0,
+        15.0,
+        23.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.832,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        126.95,
+        16.83,
+        23.36
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        208.0,
+        45.0,
+        54.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 6.965,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        201.03,
+        48.21,
+        55.28
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        118.0,
+        77.0,
+        39.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 2.668,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        120.09,
+        74.33,
+        40.73
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        186.0,
+        136.0,
+        92.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 0.871,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        185.13,
+        135.54,
+        92.69
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        70.0,
+        36.0,
+        94.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 1.8,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        69.15,
+        37.63,
+        95.8
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        120.0,
+        73.0,
+        156.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 3.583,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        123.58,
+        71.97,
+        156.44
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        179.0,
+        179.0,
+        179.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 0.658,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        179.39,
+        178.34,
+        178.37
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        15.0,
+        15.0,
+        15.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 0.843,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        15.77,
+        15.84,
+        15.68
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        19.0,
+        19.0,
+        19.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 2.614,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        21.61,
+        19.76,
+        21.03
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        19.0,
+        19.0,
+        19.0
+      ],
+      "background": "gray-000",
+      "maximumDeltaCodes": 2.614,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        21.61,
+        19.76,
+        21.03
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        175.0,
+        72.0,
+        75.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 0.588,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        174.61,
+        72.05,
+        75.59
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        192.0,
+        82.0,
+        86.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.451,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        190.55,
+        81.9,
+        85.97
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        27.0,
+        165.0,
+        65.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 5.024,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        32.02,
+        165.56,
+        66.34
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        40.0,
+        182.0,
+        76.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 3.502,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        43.5,
+        180.44,
+        76.6
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        78.0,
+        78.0,
+        169.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.235,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        78.73,
+        79.23,
+        168.14
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        89.0,
+        89.0,
+        185.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.777,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        89.35,
+        88.89,
+        183.22
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        136.0,
+        136.0,
+        136.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 0.735,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        135.34,
+        135.79,
+        135.26
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        124.0,
+        124.0,
+        124.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 0.769,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        123.75,
+        124.77,
+        123.52
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        146.0,
+        101.0,
+        62.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 3.514,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        149.51,
+        101.33,
+        61.21
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        160.0,
+        113.0,
+        70.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 4.99,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        164.99,
+        112.49,
+        68.52
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        140.0,
+        48.0,
+        51.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 3.091,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        140.76,
+        51.09,
+        54.09
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        194.0,
+        90.0,
+        93.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.432,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        191.57,
+        88.7,
+        92.21
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        0.0,
+        131.0,
+        41.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 17.958,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        17.96,
+        134.63,
+        45.78
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        56.0,
+        184.0,
+        85.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.421,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        54.53,
+        181.58,
+        82.7
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        54.0,
+        54.0,
+        134.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 4.771,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        56.52,
+        58.77,
+        136.43
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        96.0,
+        96.0,
+        187.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.56,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        93.92,
+        93.44,
+        184.84
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        128.0,
+        128.0,
+        128.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.121,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        127.35,
+        125.88,
+        126.37
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        128.0,
+        128.0,
+        128.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.121,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        127.35,
+        125.88,
+        126.37
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        114.0,
+        77.0,
+        44.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.11,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        112.89,
+        77.63,
+        44.94
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        164.0,
+        116.0,
+        72.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 3.951,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        167.95,
+        117.32,
+        72.18
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        78.0,
+        78.0,
+        78.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.305,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        76.7,
+        77.32,
+        77.14
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        64.0,
+        64.0,
+        64.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 0.881,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        63.12,
+        64.34,
+        63.46
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        183.0,
+        183.0,
+        183.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.88,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        181.62,
+        181.4,
+        181.12
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        172.0,
+        172.0,
+        172.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.51,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        171.03,
+        171.87,
+        170.49
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        154.0,
+        81.0,
+        83.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 3.061,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        157.06,
+        81.54,
+        83.74
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        169.0,
+        92.0,
+        94.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.918,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        171.92,
+        91.62,
+        94.08
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        189.0,
+        41.0,
+        49.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 5.145,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        183.85,
+        43.24,
+        50.33
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        207.0,
+        50.0,
+        58.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 5.406,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        201.59,
+        51.09,
+        58.42
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        170.0,
+        124.0,
+        83.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.318,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        171.32,
+        123.63,
+        82.78
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        186.0,
+        138.0,
+        96.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 0.583,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        185.72,
+        137.95,
+        95.42
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        109.0,
+        66.0,
+        143.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 4.182,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        113.18,
+        65.28,
+        143.49
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        122.0,
+        75.0,
+        158.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 3.547,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        125.55,
+        73.55,
+        158.09
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        68.0,
+        68.0,
+        68.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.126,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        67.18,
+        65.87,
+        66.77
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        68.0,
+        68.0,
+        68.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.126,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        67.18,
+        65.87,
+        66.77
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        175.0,
+        175.0,
+        175.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.107,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        175.13,
+        172.89,
+        173.73
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        175.0,
+        175.0,
+        175.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.107,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        175.13,
+        172.89,
+        173.73
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        120.0,
+        60.0,
+        62.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 3.386,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        123.39,
+        60.34,
+        62.25
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        172.0,
+        97.0,
+        99.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.71,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        173.71,
+        96.97,
+        98.94
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        149.0,
+        25.0,
+        32.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.764,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        148.61,
+        26.76,
+        33.42
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        208.0,
+        58.0,
+        64.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 4.518,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        203.48,
+        59.69,
+        65.85
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        137.0,
+        94.0,
+        56.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.492,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        139.49,
+        92.65,
+        56.45
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        188.0,
+        143.0,
+        102.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 0.759,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        187.24,
+        143.43,
+        101.9
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        84.0,
+        47.0,
+        113.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 1.544,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        85.54,
+        48.07,
+        113.52
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        125.0,
+        77.0,
+        162.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 3.391,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        128.39,
+        77.54,
+        161.54
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        200.0,
+        200.0,
+        200.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.311,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        202.31,
+        201.56,
+        201.58
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        40.0,
+        40.0,
+        40.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 0.709,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        39.36,
+        39.4,
+        39.29
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        85.0,
+        85.0,
+        85.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.564,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        87.56,
+        86.14,
+        87.08
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        85.0,
+        85.0,
+        85.0
+      ],
+      "background": "gray-064",
+      "maximumDeltaCodes": 2.564,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        87.56,
+        86.14,
+        87.08
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        181.0,
+        76.0,
+        79.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.031,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        179.97,
+        75.53,
+        79.2
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        192.0,
+        86.0,
+        89.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.137,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        190.97,
+        84.86,
+        88.76
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        33.0,
+        171.0,
+        69.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 3.134,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        36.13,
+        170.57,
+        69.78
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        48.0,
+        182.0,
+        80.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.179,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        49.18,
+        181.02,
+        79.51
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        82.0,
+        82.0,
+        174.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 0.701,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        82.31,
+        82.52,
+        173.3
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        92.0,
+        92.0,
+        185.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.095,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        91.4,
+        90.98,
+        183.91
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        138.0,
+        138.0,
+        138.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.275,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        136.72,
+        137.32,
+        136.8
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        126.0,
+        126.0,
+        126.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 0.486,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        125.65,
+        126.22,
+        125.51
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        151.0,
+        105.0,
+        65.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 4.182,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        155.18,
+        105.26,
+        64.0
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        162.0,
+        114.0,
+        71.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 4.17,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        166.17,
+        114.59,
+        70.24
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        161.0,
+        62.0,
+        65.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.855,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        161.11,
+        63.58,
+        66.85
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        196.0,
+        99.0,
+        102.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 2.755,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        193.25,
+        97.97,
+        101.13
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        10.0,
+        151.0,
+        55.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 12.713,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        22.71,
+        152.87,
+        58.26
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        71.0,
+        185.0,
+        94.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 2.973,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        68.67,
+        183.26,
+        91.03
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        68.0,
+        68.0,
+        154.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 3.005,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        70.53,
+        71.01,
+        155.34
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        104.0,
+        104.0,
+        189.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 4.142,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        100.46,
+        99.86,
+        187.08
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        133.0,
+        132.0,
+        132.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.392,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        132.26,
+        130.61,
+        131.17
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        133.0,
+        132.0,
+        132.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.392,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        132.26,
+        130.61,
+        131.17
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        132.0,
+        91.0,
+        54.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.156,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        133.16,
+        91.63,
+        54.6
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        170.0,
+        121.0,
+        77.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 3.238,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        172.74,
+        124.24,
+        77.38
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        80.0,
+        80.0,
+        80.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.376,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        78.62,
+        79.39,
+        79.11
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        66.0,
+        66.0,
+        66.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 0.379,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        65.62,
+        66.33,
+        65.78
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        184.0,
+        184.0,
+        184.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.559,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        182.75,
+        182.7,
+        182.44
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        173.0,
+        173.0,
+        174.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.773,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        172.5,
+        172.97,
+        172.23
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        159.0,
+        85.0,
+        87.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 3.106,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        162.11,
+        85.08,
+        87.36
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        170.0,
+        94.0,
+        96.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 2.626,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        172.63,
+        93.98,
+        96.23
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        196.0,
+        44.0,
+        52.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 6.367,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        189.63,
+        46.34,
+        53.43
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        208.0,
+        54.0,
+        61.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 5.497,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        202.5,
+        54.98,
+        61.82
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        175.0,
+        129.0,
+        87.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.208,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        176.21,
+        128.31,
+        86.99
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        187.0,
+        140.0,
+        99.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 0.752,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        186.31,
+        140.28,
+        98.25
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        113.0,
+        69.0,
+        148.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 4.329,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        117.33,
+        68.27,
+        148.44
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        123.0,
+        76.0,
+        160.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 3.797,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        126.8,
+        75.39,
+        159.53
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        74.0,
+        74.0,
+        74.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 2.194,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        73.5,
+        71.81,
+        72.58
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        74.0,
+        74.0,
+        74.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 2.194,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        73.5,
+        71.81,
+        72.58
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        179.0,
+        180.0,
+        180.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 3.219,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        179.48,
+        176.78,
+        178.4
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        179.0,
+        180.0,
+        180.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 3.219,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        179.48,
+        176.78,
+        178.4
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        140.0,
+        72.0,
+        74.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 3.102,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        143.1,
+        72.96,
+        74.99
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        175.0,
+        106.0,
+        107.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.672,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        176.67,
+        104.56,
+        106.15
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        173.0,
+        34.0,
+        42.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 2.74,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        170.26,
+        36.68,
+        43.51
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        210.0,
+        70.0,
+        76.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 4.072,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        205.93,
+        71.14,
+        76.51
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        157.0,
+        112.0,
+        72.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.958,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        158.96,
+        110.95,
+        72.16
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        190.0,
+        149.0,
+        112.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 2.306,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        189.35,
+        151.31,
+        111.17
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        99.0,
+        58.0,
+        130.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 2.931,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        101.93,
+        58.51,
+        131.23
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        130.0,
+        82.0,
+        168.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 3.308,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        133.31,
+        83.04,
+        166.75
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        219.0,
+        219.0,
+        219.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 0.659,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        219.66,
+        219.13,
+        219.15
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        60.0,
+        60.0,
+        60.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 0.895,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        59.14,
+        59.15,
+        59.11
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        152.0,
+        152.0,
+        152.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.533,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        153.53,
+        152.55,
+        153.16
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        152.0,
+        152.0,
+        152.0
+      ],
+      "background": "gray-128",
+      "maximumDeltaCodes": 1.533,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        153.53,
+        152.55,
+        153.16
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        186.0,
+        79.0,
+        82.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 1.046,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        184.95,
+        78.96,
+        82.68
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        193.0,
+        89.0,
+        92.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 1.542,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        191.46,
+        87.93,
+        91.64
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        36.0,
+        176.0,
+        72.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 4.369,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        40.37,
+        175.25,
+        73.22
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        55.0,
+        183.0,
+        84.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 1.519,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        54.98,
+        181.68,
+        82.48
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        85.0,
+        85.0,
+        179.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.897,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        85.88,
+        85.82,
+        178.1
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        95.0,
+        95.0,
+        186.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 1.792,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        93.58,
+        93.21,
+        184.66
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        139.0,
+        139.0,
+        139.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.872,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        138.13,
+        138.86,
+        138.34
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        127.0,
+        127.0,
+        127.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.742,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        127.62,
+        127.74,
+        127.58
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        155.0,
+        109.0,
+        66.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 5.339,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        160.34,
+        109.02,
+        66.86
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        163.0,
+        116.0,
+        72.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 4.41,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        167.41,
+        116.78,
+        72.19
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        181.0,
+        76.0,
+        79.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.718,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        181.61,
+        76.06,
+        79.72
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        198.0,
+        108.0,
+        111.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 3.077,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        194.92,
+        107.32,
+        110.13
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        33.0,
+        171.0,
+        69.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 5.527,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        27.47,
+        171.01,
+        70.74
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        85.0,
+        188.0,
+        104.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 4.701,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        82.85,
+        184.94,
+        99.3
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        82.0,
+        82.0,
+        174.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 2.553,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        84.55,
+        83.25,
+        174.13
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        113.0,
+        113.0,
+        191.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 6.654,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        107.08,
+        106.35,
+        189.32
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        138.0,
+        138.0,
+        138.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 2.535,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        137.31,
+        135.47,
+        136.1
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        138.0,
+        138.0,
+        138.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 2.535,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        137.31,
+        135.47,
+        136.1
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        151.0,
+        105.0,
+        65.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 2.566,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        153.57,
+        105.63,
+        64.22
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        175.0,
+        126.0,
+        81.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 5.039,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        177.53,
+        131.04,
+        82.51
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        81.0,
+        81.0,
+        81.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.49,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        80.59,
+        81.49,
+        81.12
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        67.0,
+        67.0,
+        67.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 1.558,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        68.39,
+        68.56,
+        68.37
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        185.0,
+        185.0,
+        185.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 1.254,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        183.87,
+        183.99,
+        183.75
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        175.0,
+        175.0,
+        175.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 1.001,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        174.01,
+        174.12,
+        174.0
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        164.0,
+        88.0,
+        90.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 2.929,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        166.93,
+        88.54,
+        90.87
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        171.0,
+        96.0,
+        98.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 2.409,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        173.41,
+        96.4,
+        98.52
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        201.0,
+        47.0,
+        55.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 6.134,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        194.87,
+        49.58,
+        56.6
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        208.0,
+        56.0,
+        63.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 4.539,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        203.46,
+        59.01,
+        65.34
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        180.0,
+        133.0,
+        91.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.767,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        180.77,
+        132.79,
+        91.05
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        187.0,
+        142.0,
+        101.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.652,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        186.98,
+        142.65,
+        101.22
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        118.0,
+        71.0,
+        153.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 3.272,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        121.27,
+        71.3,
+        153.08
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        125.0,
+        77.0,
+        161.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 3.075,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        128.07,
+        77.43,
+        161.15
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        80.0,
+        80.0,
+        80.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 2.256,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        79.8,
+        77.74,
+        78.39
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        80.0,
+        80.0,
+        80.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 2.256,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        79.8,
+        77.74,
+        78.39
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        184.0,
+        184.0,
+        184.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 3.328,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        183.83,
+        180.67,
+        183.08
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        184.0,
+        184.0,
+        184.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 3.328,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        183.83,
+        180.67,
+        183.08
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        159.0,
+        85.0,
+        87.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 3.837,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        162.84,
+        85.59,
+        87.75
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        178.0,
+        113.0,
+        115.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 1.705,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        179.64,
+        112.11,
+        113.3
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        196.0,
+        44.0,
+        52.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 4.069,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        191.93,
+        46.62,
+        53.61
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        210.0,
+        82.0,
+        86.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 1.622,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        208.38,
+        82.6,
+        87.11
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        175.0,
+        129.0,
+        87.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 3.433,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        178.43,
+        129.16,
+        87.89
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        194.0,
+        156.0,
+        121.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 3.114,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        191.35,
+        159.11,
+        120.38
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        113.0,
+        69.0,
+        148.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 5.335,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        118.33,
+        68.94,
+        149.07
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        135.0,
+        86.0,
+        173.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 3.238,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        138.24,
+        88.61,
+        171.97
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        236.0,
+        236.0,
+        236.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.895,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        235.42,
+        235.11,
+        235.11
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        78.0,
+        78.0,
+        78.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.292,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        78.29,
+        78.27,
+        78.29
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        219.0,
+        219.0,
+        219.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.564,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        219.56,
+        219.01,
+        219.29
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        219.0,
+        219.0,
+        219.0
+      ],
+      "background": "gray-192",
+      "maximumDeltaCodes": 0.564,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        219.56,
+        219.01,
+        219.29
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        190.0,
+        81.0,
+        85.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.357,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        189.69,
+        82.36,
+        86.22
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        194.0,
+        91.0,
+        94.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.912,
+      "overlay": "sweepTintM0",
+      "tint": "#B25959",
+      "variant": "regular",
+      "walle": [
+        192.09,
+        91.11,
+        94.65
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        39.0,
+        180.0,
+        75.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 5.774,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        44.77,
+        179.7,
+        76.69
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        58.0,
+        184.0,
+        86.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 2.816,
+      "overlay": "sweepTintM1",
+      "tint": "#59B259",
+      "variant": "regular",
+      "walle": [
+        60.82,
+        182.42,
+        85.65
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        88.0,
+        88.0,
+        183.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.437,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        89.44,
+        89.13,
+        182.67
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        97.0,
+        97.0,
+        187.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.516,
+      "overlay": "sweepTintM2",
+      "tint": "#5959B2",
+      "variant": "regular",
+      "walle": [
+        95.88,
+        95.57,
+        185.48
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        140.0,
+        140.0,
+        140.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 0.441,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        139.59,
+        140.44,
+        139.93
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        128.0,
+        128.0,
+        128.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.611,
+      "overlay": "sweepTintM6",
+      "tint": "#808080",
+      "variant": "regular",
+      "walle": [
+        129.57,
+        129.29,
+        129.61
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        159.0,
+        112.0,
+        69.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 6.362,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        165.36,
+        112.64,
+        69.88
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        165.0,
+        117.0,
+        73.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 3.719,
+      "overlay": "sweepTintM7",
+      "tint": "#99734C",
+      "variant": "regular",
+      "walle": [
+        168.72,
+        119.07,
+        74.36
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        192.0,
+        82.0,
+        86.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 0.849,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        192.62,
+        82.85,
+        86.71
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        200.0,
+        114.0,
+        116.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 4.07,
+      "overlay": "clearTintM0",
+      "tint": "#B25959",
+      "variant": "clear",
+      "walle": [
+        195.93,
+        112.4,
+        115.01
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        40.0,
+        182.0,
+        76.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 9.869,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        30.13,
+        180.95,
+        77.6
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        93.0,
+        190.0,
+        110.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 6.111,
+      "overlay": "clearTintM1",
+      "tint": "#59B259",
+      "variant": "clear",
+      "walle": [
+        90.62,
+        185.95,
+        103.89
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        89.0,
+        89.0,
+        185.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 3.242,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        92.24,
+        89.98,
+        184.43
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        118.0,
+        118.0,
+        193.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 8.059,
+      "overlay": "clearTintM2",
+      "tint": "#5959B2",
+      "variant": "clear",
+      "walle": [
+        110.74,
+        109.94,
+        190.63
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        140.0,
+        140.0,
+        140.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.742,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        139.89,
+        138.26,
+        138.83
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        140.0,
+        140.0,
+        140.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.742,
+      "overlay": "clearTintM6",
+      "tint": "#808080",
+      "variant": "clear",
+      "walle": [
+        139.89,
+        138.26,
+        138.83
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        160.0,
+        113.0,
+        70.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 4.535,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        164.54,
+        113.25,
+        69.53
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        180.0,
+        129.0,
+        83.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 5.871,
+      "overlay": "clearTintM7",
+      "tint": "#99734C",
+      "variant": "clear",
+      "walle": [
+        180.21,
+        134.87,
+        85.41
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        82.0,
+        82.0,
+        82.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.776,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        82.75,
+        83.78,
+        83.32
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        69.0,
+        69.0,
+        69.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 2.35,
+      "overlay": "tintL25",
+      "tint": "#404040",
+      "variant": "regular",
+      "walle": [
+        71.35,
+        71.01,
+        71.18
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        186.0,
+        186.0,
+        186.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 0.97,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        185.03,
+        185.3,
+        185.07
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        176.0,
+        176.0,
+        176.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 0.657,
+      "overlay": "tintL70",
+      "tint": "#B2B2B2",
+      "variant": "regular",
+      "walle": [
+        175.58,
+        175.34,
+        175.82
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        168.0,
+        91.0,
+        93.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 3.524,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        171.52,
+        91.99,
+        94.37
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        172.0,
+        98.0,
+        100.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 2.275,
+      "overlay": "tintS50",
+      "tint": "#9F6060",
+      "variant": "regular",
+      "walle": [
+        174.28,
+        98.99,
+        100.95
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        206.0,
+        49.0,
+        57.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 6.062,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        199.94,
+        53.03,
+        59.95
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        208.0,
+        60.0,
+        67.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 3.525,
+      "overlay": "tintS100",
+      "tint": "#BF4040",
+      "variant": "regular",
+      "walle": [
+        204.47,
+        63.23,
+        69.07
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        184.0,
+        137.0,
+        95.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.105,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        185.11,
+        137.13,
+        95.04
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        188.0,
+        143.0,
+        105.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 2.071,
+      "overlay": "tintX03",
+      "tint": "#B28C66",
+      "variant": "regular",
+      "walle": [
+        187.72,
+        145.07,
+        104.28
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        121.0,
+        74.0,
+        157.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 4.101,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        125.1,
+        74.42,
+        157.52
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        126.0,
+        78.0,
+        163.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 3.485,
+      "overlay": "tintX07",
+      "tint": "#734C99",
+      "variant": "regular",
+      "walle": [
+        129.48,
+        79.66,
+        162.82
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        83.0,
+        83.0,
+        83.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.946,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        83.03,
+        81.05,
+        81.53
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        83.0,
+        83.0,
+        83.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.946,
+      "overlay": "clearTintL25",
+      "tint": "#404040",
+      "variant": "clear",
+      "walle": [
+        83.03,
+        81.05,
+        81.53
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        186.0,
+        186.0,
+        186.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 3.057,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        186.03,
+        182.94,
+        185.68
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        186.0,
+        186.0,
+        186.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 3.057,
+      "overlay": "clearTintL70",
+      "tint": "#B2B2B2",
+      "variant": "clear",
+      "walle": [
+        186.03,
+        182.94,
+        185.68
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        169.0,
+        92.0,
+        94.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 4.637,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        173.64,
+        92.53,
+        94.76
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        180.0,
+        117.0,
+        119.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.72,
+      "overlay": "clearTintS50",
+      "tint": "#9F6060",
+      "variant": "clear",
+      "walle": [
+        181.34,
+        116.28,
+        117.28
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        207.0,
+        50.0,
+        58.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 3.226,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        203.77,
+        52.06,
+        59.14
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        211.0,
+        87.0,
+        92.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 1.909,
+      "overlay": "clearTintS100",
+      "tint": "#BF4040",
+      "variant": "clear",
+      "walle": [
+        209.8,
+        88.91,
+        92.96
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        185.0,
+        138.0,
+        96.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 4.06,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        189.06,
+        139.16,
+        96.44
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        195.0,
+        159.0,
+        127.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 4.419,
+      "overlay": "clearTintX03",
+      "tint": "#B28C66",
+      "variant": "clear",
+      "walle": [
+        192.58,
+        163.42,
+        125.48
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        122.0,
+        75.0,
+        158.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 5.305,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        127.3,
+        74.7,
+        158.76
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        138.0,
+        88.0,
+        177.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 3.708,
+      "overlay": "clearTintX07",
+      "tint": "#734C99",
+      "variant": "clear",
+      "walle": [
+        140.99,
+        91.71,
+        174.89
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        250.0,
+        250.0,
+        250.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 0.249,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        250.25,
+        250.13,
+        250.13
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        94.0,
+        94.0,
+        94.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 2.762,
+      "overlay": "regular",
+      "tint": "none",
+      "variant": "regular",
+      "walle": [
+        96.73,
+        96.68,
+        96.76
+      ]
+    },
+    {
+      "appearance": "light",
+      "apple": [
+        255.0,
+        255.0,
+        255.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 0.127,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        254.87,
+        254.87,
+        254.87
+      ]
+    },
+    {
+      "appearance": "dark",
+      "apple": [
+        255.0,
+        255.0,
+        255.0
+      ],
+      "background": "gray-255",
+      "maximumDeltaCodes": 0.127,
+      "overlay": "clear",
+      "tint": "none",
+      "variant": "clear",
+      "walle": [
+        254.87,
+        254.87,
+        254.87
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "worstDeltaCodes": 17.958
+}
