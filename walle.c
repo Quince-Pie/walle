@@ -44,7 +44,6 @@
 #include <wayland-client.h>
 #include <xxhash.h>
 
-#include "parity/liquid_glass_pyramid.h"
 #include "parity/liquid_glass_reveal_mask_model.h"
 #include "protocols/wlr-layer-shell-unstable-v1.h"
 #include "shiro.h"
