@@ -282,7 +282,12 @@ float4 composeFragment(
         // Measured 26.6.1 regular: an affine colour matrix on the blurred
         // backdrop in sRGB space, still selected between the two measured
         // appearance poles by content luminance.
-        float3 washSrgb = linearToSrgb(wash);
+        // The transfer input is the measured-sigma blurred backdrop.  `wash`
+        // is a nine-tap spread at +-0.30/0.21 UV - hundreds of pixels - which
+        // is right for picking the appearance pole but destroys the detail the
+        // material is measured to transmit (MTF 0.50 at period 64, against
+        // 0.11 when the wash drove the transfer).
+        float3 washSrgb = linearToSrgb(blurredIncoming);
         float3 platterDark = materialTransfer(
             washSrgb, kRegularDarkFromR, kRegularDarkFromG,
             kRegularDarkFromB, kRegularDarkOffset);
