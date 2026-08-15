@@ -44,6 +44,7 @@
 #include <wayland-client.h>
 #include <xxhash.h>
 
+#include "parity/liquid_glass_pyramid.h"
 #include "parity/liquid_glass_reveal_mask_model.h"
 #include "protocols/wlr-layer-shell-unstable-v1.h"
 #include "shiro.h"
@@ -72,23 +73,39 @@
 
 #define WALLE_VERSION "0.0.1"
 
-/* Liquid Glass preprocess (vips): background mega-blur for the glass body.
- * Structured-light measurement of real macOS 26.4 glassEffect (calibration
- * captures, 3200x2000 @1x) bounds the interior fundamental transmission at
- * p=256 px to 0.011-0.027 -> gaussian sigma >= ~110 px at a 3774 px window
- * diagonal, identical across element sizes: sigma ~ 0.032 * diagonal, same
- * for both variants. The measured clear veil is an exact affine map with no
- * extra vibrancy (gray sweep fits to +-0.002), so saturation stays 1.0; the
- * knobs remain for future divergence (e.g. dark-appearance captures). */
-constexpr double GLASS_SIGMA_FRAC_CLEAR   = 0.032;
-constexpr double GLASS_SIGMA_FRAC_REGULAR = 0.032;
-constexpr double GLASS_SAT_CLEAR          = 1.0;
-constexpr double GLASS_SAT_REGULAR        = 1.0;
-constexpr int    GLASS_DOWN_FACTOR        = 8;
+/* Liquid Glass preprocess (parity): the backdrop is Apple's exact material
+ * pyramid (DOWNSAMPLE_4 producer + copy-base + AGX2 mip kernels transferred
+ * from hardware; parity/liquid_glass_pyramid.c).  The uploaded level is the
+ * one whose kernel support matches the measured material blur: structured-
+ * light measurement of real macOS 26.4 glassEffect (calibration captures,
+ * 3200x2000 @1x) bounds the interior fundamental transmission at p=256 px to
+ * 0.011-0.027 -> blur radius ~ 0.032 * window diagonal, identical across
+ * element sizes and variants.  Level N covers 2^(N+2) wallpaper pixels. */
+constexpr double GLASS_BLUR_FRAC = 0.032;
+
+[[nodiscard]]
+static uint32_t glass_backdrop_level_count(int width, int height)
+{
+    double radius = GLASS_BLUR_FRAC * hypot((double)width, (double)height);
+    long   level  = lround(log2(fmax(radius, 8.0)) - 2.0);
+    if (level < 1)
+        level = 1;
+    uint32_t count = (uint32_t)level + 1u;
+    if (count > WALLE_LG_MAX_PYRAMID_LEVELS)
+        count = WALLE_LG_MAX_PYRAMID_LEVELS;
+    /* Every level must stay non-empty for this wallpaper extent. */
+    uint32_t extent[2];
+    while (count > 2u
+           && !walle_lg_wallpaper_backdrop_level_extent(
+               (uint32_t)width, (uint32_t)height, count, count - 1u, extent)) {
+        --count;
+    }
+    return count;
+}
 
 /* Bump whenever the cached pixel pipeline changes shape (layout, band count,
  * preprocess constants). Hashed into every cache key. */
-constexpr uint32_t CACHE_SCHEMA_VERSION = 4;
+constexpr uint32_t CACHE_SCHEMA_VERSION = 5;
 
 constexpr float DEFAULT_TRANSITION_DUR = 0.6f;
 constexpr int   INOTIFY_BUF_LEN        = 4096;
@@ -1307,49 +1324,6 @@ static int write_pipeline_to_buffer_direct(VipsImage* in, void* dest, size_t len
     return 0;
 }
 
-[[nodiscard]]
-static VipsImage* apply_liquid_glass_effect_vips(VipsImage* input, double sigma, double saturation)
-{
-    VipsImage *curr = input, *temp = nullptr;
-    g_object_ref(curr);
-
-    if (vips_gaussblur(curr, &temp, sigma, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    if (vips_colourspace(curr, &temp, VIPS_INTERPRETATION_HSV, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    /* Vibrancy only. No baked-in tint: Apple's material "has no inherent
-     * color"; the legibility treatment happens adaptively in the shader. */
-    double m[]   = {1.0, saturation, 1.0, 1.0};
-    double o[]   = {0.0, 0.0, 0.0, 0.0};
-    int    bands = vips_image_get_bands(curr);
-    if (vips_linear(curr, &temp, m, o, bands, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    if (vips_colourspace(curr, &temp, VIPS_INTERPRETATION_sRGB, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    if (vips_cast(curr, &temp, VIPS_FORMAT_UCHAR, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    return curr;
-err:
-    if (curr)
-        g_object_unref(curr);
-    return nullptr;
-}
-
 /* -- Render Thread ------------------------------------------------------- */
 
 static void* render_thread_worker(void* arg)
@@ -1376,12 +1350,10 @@ static void* render_thread_worker(void* arg)
     int                  h       = output->job_h;
     enum glass_variant   variant = output->job_variant;
 
-    /* Per-variant material blur, relative to the output's own scale
-     * (sigma/diameter ratios measured off the HIG variant photos). */
-    bool   is_regular  = variant == GLASS_VARIANT_REGULAR;
-    double glass_sigma = hypot((double)w, (double)h)
-                         * (is_regular ? GLASS_SIGMA_FRAC_REGULAR : GLASS_SIGMA_FRAC_CLEAR);
-    double   glass_sat    = is_regular ? GLASS_SAT_REGULAR : GLASS_SAT_CLEAR;
+    /* Material backdrop level: Apple's exact pyramid, level chosen so the
+     * kernel support matches the measured material blur radius. */
+    uint32_t glass_levels = glass_backdrop_level_count(w, h);
+    uint32_t glass_level  = glass_levels - 1u;
     long     page_size    = sysconf(_SC_PAGESIZE);
     char*    cpath        = nullptr;
     char*    cdir         = nullptr;
@@ -1414,12 +1386,13 @@ static void* render_thread_worker(void* arg)
 
     size_t aligned_raw_sz = (raw_sz + (page_size - 1)) & ~(page_size - 1);
 
-    int gw = w / GLASS_DOWN_FACTOR;
-    if (gw < 1)
-        gw = 1;
-    int gh = h / GLASS_DOWN_FACTOR;
-    if (gh < 1)
-        gh = 1;
+    uint32_t glass_extent[2];
+    if (!walle_lg_wallpaper_backdrop_level_extent(
+            (uint32_t)w, (uint32_t)h, glass_levels, glass_level, glass_extent)) {
+        goto finalize;
+    }
+    int gw = (int)glass_extent[0];
+    int gh = (int)glass_extent[1];
 
     if (ckd_mul(&glass_sz, (size_t)gw * gh, bands))
         goto finalize;
@@ -1440,9 +1413,8 @@ static void* render_thread_worker(void* arg)
     XXH64_update(xxh, &w, sizeof(w));
     XXH64_update(xxh, &h, sizeof(h));
     XXH64_update(xxh, &variant, sizeof(variant));
-    XXH64_update(xxh, &glass_sigma, sizeof(glass_sigma));
-    XXH64_update(xxh, &GLASS_DOWN_FACTOR, sizeof(GLASS_DOWN_FACTOR));
-    XXH64_update(xxh, &glass_sat, sizeof(glass_sat));
+    XXH64_update(xxh, &glass_levels, sizeof(glass_levels));
+    XXH64_update(xxh, &glass_level, sizeof(glass_level));
     XXH64_update(xxh, &item->mode, sizeof(item->mode));
     if (item->mode == MODE_FILL) {
         XXH64_update(xxh, &item->crop_strategy, sizeof(item->crop_strategy));
@@ -1600,31 +1572,31 @@ static void* render_thread_worker(void* arg)
     if (write_pipeline_to_buffer_direct(img, map, raw_sz) != 0)
         goto vips_err;
 
-    /* Wrap mmap'd standard layer as source for glass. Single decode, not two. */
-    VipsImage* from_map = vips_image_new_from_memory(map, raw_sz, w, h, bands, VIPS_FORMAT_UCHAR);
-    if (!from_map)
-        goto vips_err;
-
-    double scale_x = (double)gw / (double)w;
-    double scale_y = (double)gh / (double)h;
-    if (vips_resize(from_map, &tmp, scale_x, "vscale", scale_y, nullptr)) {
-        g_object_unref(from_map);
+    /* Apple's exact material backdrop from the decoded standard layer.
+     * Single decode: the pyramid consumes the mmap'd RGBA rows directly. */
+    struct walle_lg_pyramid backdrop;
+    if (!walle_lg_build_wallpaper_backdrop(
+            map, (uint32_t)w, (uint32_t)h, glass_levels, &backdrop)) {
         goto vips_err;
     }
-    g_object_unref(from_map);
-    VipsImage* g_in = tmp;
-
-    VipsImage* g_out
-        = apply_liquid_glass_effect_vips(g_in, glass_sigma / GLASS_DOWN_FACTOR, glass_sat);
-    g_object_unref(g_in);
-    if (!g_out)
-        goto vips_err;
-
-    if (write_pipeline_to_buffer_direct(g_out, map + aligned_raw_sz, glass_sz) != 0) {
-        g_object_unref(g_out);
+    const struct walle_lg_pyramid_level* level = &backdrop.levels[glass_level];
+    if (level->width != (uint32_t)gw || level->height != (uint32_t)gh) {
+        walle_lg_destroy_pyramid(&backdrop);
         goto vips_err;
     }
-    g_object_unref(g_out);
+    /* Pyramid levels are BGRA8 rows bottom-up; the glass layer contract is
+     * RGBA8 rows top-down.  Both conversions are exact byte permutations. */
+    for (int y = 0; y < gh; ++y) {
+        const unsigned char* src = level->bgra8 + (size_t)(gh - 1 - y) * gw * 4u;
+        uint8_t*             dst = map + aligned_raw_sz + (size_t)y * gw * 4u;
+        for (int x = 0; x < gw; ++x) {
+            dst[4 * x + 0] = src[4 * x + 2];
+            dst[4 * x + 1] = src[4 * x + 1];
+            dst[4 * x + 2] = src[4 * x + 0];
+            dst[4 * x + 3] = src[4 * x + 3];
+        }
+    }
+    walle_lg_destroy_pyramid(&backdrop);
     g_object_unref(img);
     img = nullptr;
 

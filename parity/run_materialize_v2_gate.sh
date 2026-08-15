@@ -189,6 +189,11 @@ pyramid_sources=(
     parity/liquid_glass_materialize.c
     parity/liquid_glass_selected_region.c
     parity/liquid_glass_static_regular.c
+    parity/liquid_glass_transition_profile.c
+    parity/liquid_glass_transition_frame.c
+    parity/liquid_glass_resolved_color.c
+    parity/liquid_glass_raster.c
+    parity/liquid_glass_postguard.c
     parity/liquid_glass_pyramid.c
     parity/test_liquid_glass_pyramid.c
 )

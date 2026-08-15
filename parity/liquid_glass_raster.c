@@ -2408,32 +2408,6 @@ void walle_lg_raster_tables_destroy(struct walle_lg_raster_tables* tables)
  * gate plus the probe's hardware-word comparisons keep them honest.
  * ==========================================================================*/
 
-static bool wlg_quantize_half_up(struct dyadic value, unsigned precision_bits, struct dyadic* out)
-{
-    if (value.numerator == 0) {
-        *out = value;
-        return true;
-    }
-    bool     negative  = value.numerator < 0;
-    u128     magnitude = magnitude_i128(value.numerator);
-    unsigned length    = bit_length_u128(magnitude);
-    if (length > precision_bits) {
-        unsigned shift = length - precision_bits;
-        u128     half  = (u128)1 << (shift - 1);
-        magnitude      = (magnitude + half) >> shift;
-        if (bit_length_u128(magnitude) > precision_bits) {
-            magnitude >>= 1;
-            ++shift;
-        }
-        value.exponent += (int)shift;
-    }
-    i128 numerator = (i128)magnitude;
-    if (negative)
-        numerator = -numerator;
-    *out = (struct dyadic){.numerator = numerator, .exponent = value.exponent};
-    return true;
-}
-
 static int64_t wlg_triangle_determinant(const int32_t fixed[3][2])
 {
     return (int64_t)(fixed[1][0] - fixed[0][0]) * (fixed[2][1] - fixed[0][1])

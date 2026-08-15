@@ -479,6 +479,137 @@ static void producer_rows(void* opaque, uint32_t begin, uint32_t end)
     }
 }
 
+static void wallpaper_producer_pixel(const unsigned char*      wallpaper,
+                                     uint32_t                  width,
+                                     uint32_t                  height,
+                                     uint32_t                  producer_x,
+                                     uint32_t                  producer_y,
+                                     const struct half_tables* tables,
+                                     unsigned char             output[static 4])
+{
+    /* The DOWNSAMPLE_4 kernel of regular_producer_pixel with edge-clamped
+     * taps: full-frame backdrops admit wallpapers of any extent. */
+    static const uint8_t quadrant_x[] = {0, 2, 0, 2};
+    static const uint8_t quadrant_y[] = {2, 2, 0, 0};
+    half_bits            result[4]    = {};
+    for (size_t quadrant = 0; quadrant < 4; ++quadrant) {
+        uint32_t code_sum[4] = {};
+        for (uint32_t delta_y = 0; delta_y < 2; ++delta_y) {
+            for (uint32_t delta_x = 0; delta_x < 2; ++delta_x) {
+                int64_t source_x = 4 * (int64_t)producer_x + quadrant_x[quadrant] + delta_x;
+                int64_t bottom_left_y
+                    = 4 * (int64_t)producer_y + quadrant_y[quadrant] + delta_y;
+                int32_t clamped_x = clamp_coordinate(source_x, 0, (int32_t)width - 1);
+                int32_t clamped_y = clamp_coordinate(
+                    (int64_t)height - 1 - bottom_left_y, 0, (int32_t)height - 1);
+                const unsigned char* pixel
+                    = wallpaper + ((size_t)clamped_y * width + (size_t)clamped_x) * 4u;
+                code_sum[0] += pixel[2];
+                code_sum[1] += pixel[1];
+                code_sum[2] += pixel[0];
+                code_sum[3] += pixel[3];
+            }
+        }
+        for (size_t channel = 0; channel < 4; ++channel) {
+            half_bits sample = tables->four_code_sum[code_sum[channel]];
+            result[channel]  = half_fma(sample, quarter, result[channel]);
+        }
+    }
+    for (size_t channel = 0; channel < 4; ++channel) {
+        output[channel] = half_to_unorm8(result[channel]);
+    }
+}
+
+struct wallpaper_producer_rows_context
+{
+    const unsigned char*           wallpaper;
+    uint32_t                       width;
+    uint32_t                       height;
+    struct walle_lg_pyramid_level* producer;
+    const struct half_tables*      tables;
+};
+
+static void wallpaper_producer_rows(void* opaque, uint32_t begin, uint32_t end)
+{
+    const struct wallpaper_producer_rows_context* context = opaque;
+    for (uint32_t y = begin; y < end; ++y) {
+        for (uint32_t x = 0; x < context->producer->width; ++x) {
+            size_t offset = ((size_t)y * context->producer->width + x) * 4u;
+            wallpaper_producer_pixel(context->wallpaper,
+                                     context->width,
+                                     context->height,
+                                     x,
+                                     y,
+                                     context->tables,
+                                     context->producer->bgra8 + offset);
+        }
+    }
+}
+
+bool walle_lg_wallpaper_backdrop_level_extent(uint32_t width,
+                                              uint32_t height,
+                                              uint32_t level_count,
+                                              uint32_t level,
+                                              uint32_t extent[static 2])
+{
+    if (width == 0 || height == 0 || level_count < 1
+        || level_count > WALLE_LG_MAX_PYRAMID_LEVELS || level >= level_count) {
+        return false;
+    }
+    uint32_t alignment = UINT32_C(1) << (level_count - 1u);
+    uint32_t producer_width
+        = ((width + 3u) / 4u + alignment - 1u) & ~(alignment - 1u);
+    uint32_t producer_height
+        = ((height + 3u) / 4u + alignment - 1u) & ~(alignment - 1u);
+    extent[0] = producer_width >> level;
+    extent[1] = producer_height >> level;
+    return extent[0] != 0 && extent[1] != 0;
+}
+
+bool walle_lg_build_wallpaper_backdrop(const unsigned char*     wallpaper_rgba8,
+                                       uint32_t                 width,
+                                       uint32_t                 height,
+                                       uint32_t                 level_count,
+                                       struct walle_lg_pyramid* result)
+{
+    uint32_t base_extent[2];
+    if (wallpaper_rgba8 == nullptr || result == nullptr
+        || !walle_lg_wallpaper_backdrop_level_extent(
+            width, height, level_count, level_count - 1u, base_extent)
+        || !walle_lg_wallpaper_backdrop_level_extent(
+            width, height, level_count, 0, base_extent)) {
+        return false;
+    }
+
+    *result = (struct walle_lg_pyramid){};
+    struct half_tables tables;
+    initialize_half_tables(&tables);
+
+    if (!allocate_level(&result->levels[0], base_extent[0], base_extent[1])) {
+        return false;
+    }
+    result->level_count = 1;
+    struct wallpaper_producer_rows_context producer_context = {
+        .wallpaper = wallpaper_rgba8,
+        .width     = width,
+        .height    = height,
+        .producer  = &result->levels[0],
+        .tables    = &tables,
+    };
+    parallel_rows(result->levels[0].height, wallpaper_producer_rows, &producer_context);
+
+    while (result->level_count < level_count) {
+        uint32_t level = result->level_count;
+        if (!downsample_level(
+                &result->levels[level - 1u], &result->levels[level], level == 1u, &tables)) {
+            walle_lg_destroy_pyramid(result);
+            return false;
+        }
+        ++result->level_count;
+    }
+    return true;
+}
+
 bool walle_lg_build_static_regular_pyramid(const unsigned char* wallpaper_rgba8,
                                            size_t               wallpaper_byte_count,
                                            const struct walle_lg_static_regular_request* request,

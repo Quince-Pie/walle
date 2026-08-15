@@ -3757,3 +3757,35 @@ shader):
 expectations updated (candidate inventory c8595372..., count hash
 ea4c9120...). ***
 GATE ARC THIS SESSION: 91 -> 80 -> 70 -> 44 -> 21 -> 2 -> 0.
+
+## 2026-08-14 (later 139): walle.c GLASS PREPARATION MIGRATED TO PARITY
+
+The last approximate stage in walle.c's image preparation - the vips
+gaussian-blur + saturation glass backdrop (apply_liquid_glass_effect_vips,
+sigma ~ 0.032 * diagonal at 1/8 scale) - is replaced by Apple's exact
+material pyramid:
+- parity/liquid_glass_pyramid.c gains walle_lg_build_wallpaper_backdrop
+  (+ walle_lg_wallpaper_backdrop_level_extent): the DOWNSAMPLE_4
+  producer kernel and the copy-base/AGX2 mip kernels applied full-frame
+  with edge-clamped taps, so arbitrary wallpaper extents are admitted;
+  level N covers 2^(N+2) wallpaper pixels.  Levels remain BGRA8
+  bottom-up (the module's platter convention).
+- walle.c selects the level whose kernel support matches the measured
+  material blur radius (0.032 * diagonal; the constant now only picks
+  the level), builds the backdrop straight from the decoded RGBA map
+  (single decode preserved), and writes it out as RGBA8 top-down (exact
+  byte permutation).  CACHE_SCHEMA_VERSION 4 -> 5; the cache key hashes
+  the level pair instead of sigma/factor/saturation.  The vips glass
+  function and its knobs are deleted; Makefile links the pyramid TU
+  closure into the app.
+- Drive-by repairs: parity/run_materialize_v2_gate.sh's pyramid test
+  had unbuildable sources since the dynamic-backdrop feature (missing
+  raster/transition TUs) - fixed, and the dead wlg_quantize_half_up
+  removed from liquid_glass_raster.c (it broke -Werror there).
+VALIDATION: materialize gate green incl. static regular pyramid
+546000/546000 exact bytes (release + ASan/UBSan); dynamic backdrop gate
+green (mismatchedBytes=0); functional probes (constant wallpapers exact
+through every level, orientation, extent-helper agreement on odd
+extents); official reveal gate green: mismatchedPixels=0,
+exactPixelPercentage=100.0, composition SHAs unchanged on the gate's
+solid-color corpus.
