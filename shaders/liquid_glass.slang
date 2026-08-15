@@ -32,6 +32,7 @@ struct ComposePush
     // relying on scalar-versus-std430 member alignment.
     float4 timeline; // time, resolution.x, resolution.y, variant
     float4 geometry; // centerTopLeft.x, centerTopLeft.y, radius, appleBlend
+    float4 material; // appearance (<0 = derive from content), reserved x3
 };
 
 struct ComposeVertexOutput
@@ -43,11 +44,6 @@ struct ComposeVertexOutput
 static const float kFadeStart = 0.66;
 static const float kMaterialize = 0.12;
 
-static const float kVeilMix = 0.494;
-static const float kVeilAddLight = 0.267;
-static const float kVeilAddDark = 0.016;
-static const float kVeilSaturationLight = 1.102;
-static const float kVeilSaturationDark = 0.85;
 
 static const float kLensBandRadiusFraction = 0.44;
 static const float kLensBandDiagonalFraction = 0.033;
@@ -60,10 +56,6 @@ static const float kLensProfileKnee = 0.508;
 static const float kLensProfileRim = 0.52;
 static const float kLensDispersion = 0.030;
 
-static const float kPlatterLight = 0.980;
-static const float kPlatterDark = 0.078;
-static const float kWashLight = 0.18;
-static const float kWashDark = 0.28;
 
 static const float kRingRadiusFraction = 0.973;
 static const float kRingOffsetFraction = 0.021;
@@ -81,6 +73,46 @@ static const float kGlowIntensity = 0.20;
 static const float kDitherLsb = 1.0 / 255.0;
 static const float3 kLuma = float3(0.2126, 0.7152, 0.0722);
 static const float kHalfPi = 1.57079632679;
+
+// --- Measured Liquid Glass material, macOS 26.6.1 (25G76) -----------------
+// Re-measured on the target M1 with the capture harness; see
+// analysis/derive_reveal_tint_law.py and its result JSON.  The 26.4 (25E246)
+// law this shader previously carried no longer holds on that build: `regular`
+// stopped being an opaque platter (it now transmits ~28% light / ~31% dark)
+// and `clear` became appearance-independent while passing white through.
+//
+// The material is affine in sRGB CODE space applied to the mega-blurred
+// backdrop - fitting the gray ladder to 0.44 codes there versus ~26 in linear
+// light, so the sRGB-space application the 26.4 note recorded still stands.
+// Saturated primaries need the full 3x3: a per-channel diagonal misses by up
+// to 105 codes, the matrix below by 1.2-2.2 mean (3.4-9.5 max) over 17-21
+// unclipped backgrounds spanning grays, primaries and secondaries.
+//
+// Rows are the contribution of one INPUT channel to (R, G, B) out.
+static const float3 kClearFromR = float3( 0.9472,  0.0301,  0.0124);
+static const float3 kClearFromG = float3( 0.0800,  1.0066,  0.0478);
+static const float3 kClearFromB = float3(-0.0016, -0.0010,  0.9697);
+static const float3 kClearOffset = float3(22.49, 20.11, 21.50) / 255.0;
+
+static const float3 kRegularLightFromR = float3( 0.4942, -0.0616, -0.0488);
+static const float3 kRegularLightFromG = float3(-0.2100,  0.3697, -0.2347);
+static const float3 kRegularLightFromB = float3(-0.0052, -0.0224,  0.5685);
+static const float3 kRegularLightOffset = float3(183.03, 181.51, 181.69) / 255.0;
+
+static const float3 kRegularDarkFromR = float3( 0.6138, -0.1128, -0.1206);
+static const float3 kRegularDarkFromG = float3(-0.2501,  0.4764, -0.2892);
+static const float3 kRegularDarkFromB = float3(-0.0503, -0.0503,  0.7232);
+static const float3 kRegularDarkOffset = float3(18.43, 18.43, 18.43) / 255.0;
+
+float3 materialTransfer(float3 backdropSrgb, float3 fromR, float3 fromG,
+                        float3 fromB, float3 offset)
+{
+    return clamp(
+        backdropSrgb.r * fromR + backdropSrgb.g * fromG + backdropSrgb.b * fromB
+            + offset,
+        0.0,
+        1.0);
+}
 
 float linearToSrgb(float value)
 {
@@ -203,8 +235,14 @@ float4 composeFragment(
         + texGlassB.Sample(linearSampler, uv - e3).rgb
         + texGlassB.Sample(linearSampler, uv + e4).rgb
         + texGlassB.Sample(linearSampler, uv - e4).rgb) / 9.0;
+    // Apple selects the material's appearance pole from the SYSTEM
+    // appearance.  Use it when the desktop exposes one; otherwise fall back
+    // to the content-luminance stand-in.  Measured cost of guessing wrong:
+    // regular over black reads 179 (light) against 15 (dark).
     float washLuma = dot(wash, kLuma);
-    float lightness = smoothstep(0.04, 0.10, washLuma);
+    float lightness = push.material.x >= 0.0
+        ? push.material.x
+        : smoothstep(0.04, 0.10, washLuma);
 
     float shadowSdf = distance(
         fragmentPixels - float2(0.0, -shadowOffset),
@@ -224,14 +262,17 @@ float4 composeFragment(
     float3 glassColor;
     if (regular > 0.5)
     {
+        // Measured 26.6.1 regular: an affine colour matrix on the blurred
+        // backdrop in sRGB space, still selected between the two measured
+        // appearance poles by content luminance.
         float3 washSrgb = linearToSrgb(wash);
-        float washSrgbLuma = dot(washSrgb, kLuma);
-        float platter = lerp(kPlatterDark, kPlatterLight, lightness);
-        float washStrength = lerp(kWashDark, kWashLight, lightness);
-        float3 platterSrgb = clamp(
-            float3(platter) + (washSrgb - float3(washSrgbLuma)) * washStrength,
-            0.0,
-            1.0);
+        float3 platterDark = materialTransfer(
+            washSrgb, kRegularDarkFromR, kRegularDarkFromG,
+            kRegularDarkFromB, kRegularDarkOffset);
+        float3 platterLight = materialTransfer(
+            washSrgb, kRegularLightFromR, kRegularLightFromG,
+            kRegularLightFromB, kRegularLightOffset);
+        float3 platterSrgb = lerp(platterDark, platterLight, lightness);
         glassColor = lerp(blurredIncoming, srgbToLinear(platterSrgb), thickness);
     }
     else
@@ -258,13 +299,13 @@ float4 composeFragment(
             * exp(-max(bandPosition, 0.0)) * thickness * step(0.0, bandPosition);
         float3 pre = lerp(blurredIncoming, lensed, copyAlpha);
         float3 preSrgb = linearToSrgb(pre);
-        float preLuma = dot(preSrgb, kLuma);
-        float veilSaturation = lerp(kVeilSaturationDark, kVeilSaturationLight, lightness);
-        preSrgb = float3(preLuma)
-            + (preSrgb - float3(preLuma)) * lerp(1.0, veilSaturation, thickness);
-        float veilMix = lerp(1.0, kVeilMix, thickness);
-        float veilAdd = lerp(kVeilAddDark, kVeilAddLight, lightness) * thickness;
-        glassColor = srgbToLinear(clamp(preSrgb * veilMix + float3(veilAdd), 0.0, 1.0));
+        // Measured 26.6.1 clear: one colour matrix, IDENTICAL in both
+        // appearances (the gray ladder matches to the code across light and
+        // dark), so no appearance interpolation here.  `thickness` still
+        // ramps it in over the materialize window.
+        float3 veiled = materialTransfer(
+            preSrgb, kClearFromR, kClearFromG, kClearFromB, kClearOffset);
+        glassColor = srgbToLinear(lerp(preSrgb, veiled, thickness));
     }
 
     float2 ringCenter = centerPixels - float2(0.0, kRingOffsetFraction * radiusPixels);

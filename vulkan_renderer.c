@@ -164,12 +164,15 @@ struct walle_vk_compose_push
 {
     float timeline[4];
     float geometry[4];
+    /* appearance: <0 derive from content luminance, 0 dark, 1 light. */
+    float material[4];
 };
 
 static_assert(sizeof(struct walle_vk_mask_push) == 48);
-static_assert(sizeof(struct walle_vk_compose_push) == 32);
+static_assert(sizeof(struct walle_vk_compose_push) == 48);
 static_assert(offsetof(struct walle_vk_compose_push, timeline) == 0);
 static_assert(offsetof(struct walle_vk_compose_push, geometry) == 16);
+static_assert(offsetof(struct walle_vk_compose_push, material) == 32);
 
 struct walle_vk_renderer
 {
@@ -3160,6 +3163,7 @@ static bool record_frame(struct walle_vk_output*              output,
                      frame->center_top_left_y,
                      frame->radius,
                      frame->apple_reveal_blend ? 1.0f : 0.0f},
+        .material = {frame->appearance, 0.0f, 0.0f, 0.0f},
     };
     push_constants_14(command_buffer,
                       renderer->compose_pipeline_layout,

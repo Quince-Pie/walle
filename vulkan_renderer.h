@@ -35,6 +35,10 @@ struct walle_vk_frame
      * material.  Only the process-capture gate sets this; ordinary
      * transitions always keep the material. */
     bool                                        apple_reveal_blend;
+    /* Apple takes the system appearance as an input; walle falls back to the
+     * content-luminance stand-in when the desktop exposes no preference.
+     * <0 derive from content, 0 dark, 1 light. */
+    float                                       appearance;
 
     /* Optional diagnostic destination, tightly packed in top-left row order. */
     uint8_t* mask_readback;

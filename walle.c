@@ -154,6 +154,15 @@ enum transition_state : uint8_t
  * Clear is the zero value: a wallpaper is exactly the "media background"
  * the HIG prescribes the clear variant for ("components that float above
  * media backgrounds — such as photos and videos"). */
+/* Apple's material takes the system appearance as an input; AUTO keeps
+ * walle's content-luminance stand-in for desktops that expose none. */
+enum glass_appearance : uint8_t
+{
+    GLASS_APPEARANCE_AUTO = 0,
+    GLASS_APPEARANCE_DARK,
+    GLASS_APPEARANCE_LIGHT
+};
+
 enum glass_variant : uint8_t
 {
     GLASS_VARIANT_CLEAR = 0,
@@ -195,8 +204,9 @@ struct output_config
     bool               randomize;
     bool               transition_on;
     bool               gamemode;
-    enum glass_variant variant;
-    float              transition_duration;
+    enum glass_variant    variant;
+    enum glass_appearance appearance;
+    float                 transition_duration;
 };
 
 struct config_parse_ctx
@@ -276,6 +286,7 @@ struct wallpaper_output
     int                    timeout;
     bool                   gamemode_enabled;
     enum glass_variant     glass_variant;
+    enum glass_appearance  glass_appearance;
 
     bool pending_reload;
 
@@ -1853,6 +1864,10 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
              .first_boot        = first_boot,
              /* The gate scores Apple's measured blend; WALLE_COMPOSE_MATERIAL
               * captures the shipped Liquid Glass material instead. */
+             .appearance
+        = output->glass_appearance == GLASS_APPEARANCE_LIGHT   ? 1.0f
+          : output->glass_appearance == GLASS_APPEARANCE_DARK  ? 0.0f
+                                                               : -1.0f,
              .apple_reveal_blend
         = process_capture && getenv("WALLE_COMPOSE_MATERIAL") == nullptr,
              .mask_readback     = process_capture ? output->reveal_process_capture_pixels : nullptr,
@@ -2647,6 +2662,19 @@ static int config_handler(void* user, const char* section, const char* name, con
         oc->transition_on = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     } else if (strcasecmp(name, "transition_duration") == 0) {
         oc->transition_duration = parse_duration_setting(value);
+    } else if (strcasecmp(name, "appearance") == 0) {
+        if (strcasecmp(value, "light") == 0) {
+            oc->appearance = GLASS_APPEARANCE_LIGHT;
+        } else if (strcasecmp(value, "dark") == 0) {
+            oc->appearance = GLASS_APPEARANCE_DARK;
+        } else if (strcasecmp(value, "auto") == 0) {
+            oc->appearance = GLASS_APPEARANCE_AUTO;
+        } else {
+            fprintf(stderr,
+                    "[CONFIG] Unknown appearance '%s' (light|dark|auto); using auto\n",
+                    value);
+            oc->appearance = GLASS_APPEARANCE_AUTO;
+        }
     } else if (strcasecmp(name, "transition_variant") == 0) {
         if (strcasecmp(value, "regular") == 0) {
             oc->variant = GLASS_VARIANT_REGULAR;
@@ -2720,6 +2748,7 @@ static void apply_config_to_output(struct wallpaper_output* output, struct outpu
         output->render.flags &= ~F_TRANSITION_ON;
     output->transition_duration = config->transition_duration;
     output->glass_variant       = config->variant;
+    output->glass_appearance    = config->appearance;
 
     if (output->current_item_index >= output->num_items)
         output->current_item_index = 0;
@@ -3096,6 +3125,8 @@ static void initialize_output(struct wallpaper_output* output)
             output->render.flags |= F_TRANSITION_ON;
         output->transition_duration = config->transition_duration;
         output->glass_variant       = config->variant;
+        output->glass_appearance    = config->appearance;
+    output->glass_appearance    = config->appearance;
 
         if (state->reveal_process_capture) {
             output->timeout          = 0;
