@@ -4515,3 +4515,81 @@ antialiased pixels, which is the floor of searching a scalar progress on a grid
 
 The 65-state ladder is untouched: mismatchedPixels=0,
 composedMismatchedPixels=0, exactPixelPercentage=100.0.
+
+## 2026-08-15 (later 154): THE REFRACTION BAND IS ABSOLUTE
+
+later-151 measured the refraction on ONE element - the 500 pt circle - and
+expressed it as a fraction of the radius: a band of 0.081 R with 0.1587 R of
+displacement at the rim.  That was only ever true of that element.
+
+Measured now on circles of radius 128, 256 and 500 capture pixels, and binned
+by DISTANCE INSIDE THE RIM rather than by fraction of the radius, the three
+profiles are the same curve:
+
+    px inside the rim     40     30     20     15     10      6      3
+    R = 128             0.01   3.87  16.19  26.49  40.82  57.06  74.89
+    R = 256            -0.00   3.84  16.15  26.43  40.73  56.95  74.74
+    R = 500            -0.01   3.82  16.11  26.38  40.71  56.92  74.66
+
+Agreement to 0.2 px across a FOURFOLD range of element size.  The band is
+absolute, not proportional.  It is also the same for BOTH variants (clear and
+regular agree to 0.7 px) and BOTH appearances (clear's are identical to the
+code), so one profile covers everything.  A fourth capture of the 500 pt circle
+in a separate session reproduces the first to 0.01 px.
+
+    d(u) = 26.48219 * (35.5796 - u)^1.09134 / (u + 12.6207)
+
+in CAPTURE pixels at 2x, fitting to 1.9 px worst on a 94.8 px peak - most
+points inside 0.7.  The band is 35.6 capture px = 17.8 points.
+
+WHY THIS MATTERS MORE THAN THE FIRST MEASUREMENT.  walle's reveal grows to a
+radius of 2164 px.  Under the fraction-of-R form it would have applied a 175 px
+band displacing up to 344 px, where the truth is an 18 px band displacing 40.
+The fraction form was right only at the one size it was fitted on, and wrong by
+an order of magnitude everywhere walle actually uses it.
+
+The shader now takes the output's device-pixels-per-point through a fourth push
+constant lane, because this is the only quantity in the material that is
+absolute rather than expressed in the element's own pixels.
+
+VERIFIED by rendering walle over the same four-step gratings and decoding its
+displacement the same way: 0.1 px in the interior, within 3.5 px at the rim
+where the element boundary contaminates both measurements equally.
+
+## 2026-08-15 (later 155): THE COLOUR TRANSFER, AND AN EXPONENT THAT WAS NEVER REAL
+
+The untinted transfer was fitted from sixteen backgrounds, of which five were
+neutral and six clipped the material, and keeping it honest on the gray axis
+needed a four-to-one weighting on the neutral samples - a judgement, not a
+measurement.  A lattice of 64 flat colours spanning the cube now replaces it.
+
+FIRST, the capture path is better than it was assumed to be.  Of sixteen flat
+backgrounds, thirteen round-trip EXACTLY through the display and back; the
+three that do not are saturated green or zero blue, off by 2 to 3 code values.
+The lattice round-trips within ONE code value everywhere.  So the "2 to 4 code
+Color-LCD-to-sRGB noise floor" that earlier entries hedged against does not
+exist for these backgrounds - the measurements are limited by the model, not
+the capture.
+
+SECOND, the 0.795 exponent was an artefact.  Refitting the same power-space
+model on the lattice returns 1.195, not a refinement of 0.795 but a sign that
+the exponent was a property of the sparse background set rather than of the
+material.  A second-order polynomial - the three inputs, their squares and
+their three cross products - beats it everywhere on HELD-OUT backgrounds:
+
+                      affine        power        quadratic + cross
+    regular light   3.65 / 15.8   2.87 / 10.0   1.58 /  6.77
+    regular dark    2.08 /  8.89  1.94 /  9.40  0.90 /  5.43
+    clear           2.88 / 16.0   2.36 /  9.61  2.03 / 13.0
+
+and it needs no pow() in the shader.  It also removes the reason the neutral
+weighting existed: `regular` in light goes from 5.66 to 0.87 code values on the
+gray axis with no weighting at all.
+
+VERIFIED END TO END - walle rendered over the same backgrounds, 240 cases:
+
+    untinted   worst 2.76 -> 1.81 codes, median 0.87 -> 0.79
+    across the whole gray ladder, every point now inside 1.9 codes
+
+Both gates unchanged: the ladder at mismatchedPixels=0, the animating path at
+5 of 8 frames byte-exact.

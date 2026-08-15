@@ -2138,6 +2138,8 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
              .radius            = geometry.circle.radius,
              .first_boot        = first_boot,
              .appearance = glass_appearance_value(output),
+             .output_scale
+             = process_capture ? 1.0f : (float)(output->scale > 0 ? output->scale : 1),
              .tint = {output->glass_tint[0], output->glass_tint[1], output->glass_tint[2]},
              /* Apple's `identity` variant leaves content unaffected, which is
               * exactly the mask-weighted crossfade the hardware corpus

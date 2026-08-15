@@ -35,10 +35,13 @@ struct walle_vk_frame
      * material.  Only the process-capture gate sets this; ordinary
      * transitions always keep the material. */
     bool                                        apple_reveal_blend;
-    /* Apple takes the system appearance as an input; walle falls back to the
-     * content-luminance stand-in when the desktop exposes no preference.
-     * <0 derive from content, 0 dark, 1 light. */
+    /* Apple takes the system appearance as an input: 0 dark, 1 light. */
     float                                       appearance;
+    /* Device pixels per point.  The refraction band is an ABSOLUTE width -
+     * measured identical to 0.2 px across a fourfold range of element sizes -
+     * so the shader needs the scale to convert it, unlike everything else here
+     * which is already in the output's own pixels. */
+    float                                       output_scale;
     /* Glass.tint(Color?) in sRGB 0..1; negative red means untinted. */
     float                                       tint[3];
 

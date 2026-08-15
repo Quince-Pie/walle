@@ -3,128 +3,376 @@
   "records": [
     {
       "appearance": "light",
-      "backgroundCount": 9,
-      "exponent": 0.795,
+      "backgroundCount": 47,
+      "candidates": [
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 15.782,
+          "heldOutRootMeanSquareCodes": 3.645,
+          "inSampleRootMeanSquareCodes": 3.319,
+          "model": "affine"
+        },
+        {
+          "exponent": 1.195,
+          "heldOutMaximumCodes": 10.035,
+          "heldOutRootMeanSquareCodes": 2.868,
+          "inSampleRootMeanSquareCodes": 2.678,
+          "model": "power"
+        },
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 9.483,
+          "heldOutRootMeanSquareCodes": 2.033,
+          "inSampleRootMeanSquareCodes": 1.587,
+          "model": "quadratic"
+        },
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 6.77,
+          "heldOutRootMeanSquareCodes": 1.58,
+          "inSampleRootMeanSquareCodes": 1.059,
+          "model": "quadraticCross"
+        }
+      ],
+      "crossGreenBlue": [
+        -0.001211,
+        -0.036644,
+        -0.092906
+      ],
+      "crossRedBlue": [
+        -0.004656,
+        0.015923,
+        0.022178
+      ],
+      "crossRedGreen": [
+        -0.216848,
+        -0.026446,
+        0.027954
+      ],
+      "exponent": 1.0,
       "fromB": [
-        0.000245,
-        -0.010167,
-        0.421878
+        -0.021744,
+        -0.002841,
+        0.49587
       ],
       "fromG": [
-        -0.139542,
-        0.279094,
-        -0.157679
+        -0.116162,
+        0.382315,
+        -0.124854
       ],
       "fromR": [
-        0.367259,
-        -0.037843,
-        -0.033202
+        0.46538,
+        -0.034894,
+        -0.027658
       ],
-      "grayAxisMaximumResidualCodes": 2.686,
-      "grayAxisRootMeanSquareResidualCodes": 1.091,
-      "maximumResidualCodes": 7.692,
-      "neutralWeight": 4.0,
+      "grayAxisMaximumResidualCodes": 0.865,
+      "grayBackgroundCount": 21,
+      "heldOutMaximumCodes": 6.77,
+      "heldOutRootMeanSquareCodes": 1.58,
+      "maximumResidualCodes": 4.169,
+      "model": "quadraticCross",
       "offsetCodes": [
-        0.7572,
-        0.7537,
-        0.7538
+        0.704605,
+        0.70111,
+        0.702172
       ],
-      "rootMeanSquareResidualCodes": 2.238,
+      "rootMeanSquareResidualCodes": 1.059,
+      "squaredFromB": [
+        -0.006604,
+        -0.014148,
+        0.266783
+      ],
+      "squaredFromG": [
+        -0.106243,
+        0.040979,
+        -0.186549
+      ],
+      "squaredFromR": [
+        0.286781,
+        -0.043974,
+        -0.101342
+      ],
       "variant": "regular"
     },
     {
       "appearance": "dark",
-      "backgroundCount": 9,
-      "exponent": 0.795,
+      "backgroundCount": 61,
+      "candidates": [
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 8.89,
+          "heldOutRootMeanSquareCodes": 2.083,
+          "inSampleRootMeanSquareCodes": 1.974,
+          "model": "affine"
+        },
+        {
+          "exponent": 0.935,
+          "heldOutMaximumCodes": 9.403,
+          "heldOutRootMeanSquareCodes": 1.937,
+          "inSampleRootMeanSquareCodes": 1.839,
+          "model": "power"
+        },
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 9.133,
+          "heldOutRootMeanSquareCodes": 1.558,
+          "inSampleRootMeanSquareCodes": 1.331,
+          "model": "quadratic"
+        },
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 5.433,
+          "heldOutRootMeanSquareCodes": 0.899,
+          "inSampleRootMeanSquareCodes": 0.651,
+          "model": "quadraticCross"
+        }
+      ],
+      "crossGreenBlue": [
+        0.007286,
+        0.001431,
+        -0.086321
+      ],
+      "crossRedBlue": [
+        -0.008292,
+        0.006155,
+        -0.024619
+      ],
+      "crossRedGreen": [
+        0.090133,
+        0.119775,
+        0.114868
+      ],
+      "exponent": 1.0,
       "fromB": [
-        -0.037675,
-        -0.039938,
-        0.718134
+        -0.02442,
+        -0.02246,
+        0.745142
       ],
       "fromG": [
-        -0.231817,
-        0.516088,
-        -0.23415
+        -0.287997,
+        0.486079,
+        -0.281892
       ],
       "fromR": [
-        0.618041,
-        -0.12819,
-        -0.134818
+        0.703559,
+        -0.070139,
+        -0.084651
       ],
-      "grayAxisMaximumResidualCodes": 1.59,
-      "grayAxisRootMeanSquareResidualCodes": 1.056,
-      "maximumResidualCodes": 2.218,
-      "neutralWeight": 4.0,
+      "grayAxisMaximumResidualCodes": 1.138,
+      "grayBackgroundCount": 21,
+      "heldOutMaximumCodes": 5.433,
+      "heldOutRootMeanSquareCodes": 0.899,
+      "maximumResidualCodes": 2.542,
+      "model": "quadraticCross",
       "offsetCodes": [
-        0.1097,
-        0.1101,
-        0.1092
+        0.061131,
+        0.062481,
+        0.063287
       ],
-      "rootMeanSquareResidualCodes": 0.958,
+      "rootMeanSquareResidualCodes": 0.651,
+      "squaredFromB": [
+        -0.00111,
+        -0.004902,
+        -0.020486
+      ],
+      "squaredFromG": [
+        -0.060459,
+        -0.144177,
+        -0.021282
+      ],
+      "squaredFromR": [
+        -0.114327,
+        -0.068415,
+        -0.037344
+      ],
       "variant": "regular"
     },
     {
       "appearance": "light",
-      "backgroundCount": 10,
+      "backgroundCount": 85,
+      "candidates": [
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 16.045,
+          "heldOutRootMeanSquareCodes": 2.878,
+          "inSampleRootMeanSquareCodes": 2.664,
+          "model": "affine"
+        },
+        {
+          "exponent": 1.215,
+          "heldOutMaximumCodes": 9.608,
+          "heldOutRootMeanSquareCodes": 2.359,
+          "inSampleRootMeanSquareCodes": 2.205,
+          "model": "power"
+        },
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 15.551,
+          "heldOutRootMeanSquareCodes": 2.806,
+          "inSampleRootMeanSquareCodes": 2.393,
+          "model": "quadratic"
+        },
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 13.011,
+          "heldOutRootMeanSquareCodes": 2.029,
+          "inSampleRootMeanSquareCodes": 1.606,
+          "model": "quadraticCross"
+        }
+      ],
+      "crossGreenBlue": [
+        -0.006367,
+        0.004209,
+        -0.070617
+      ],
+      "crossRedBlue": [
+        0.015809,
+        -0.001541,
+        -0.012252
+      ],
+      "crossRedGreen": [
+        -0.12289,
+        -0.047372,
+        -0.004057
+      ],
       "exponent": 1.0,
       "fromB": [
-        -0.000109,
-        -0.000435,
-        0.96789
+        -0.00786,
+        -0.004038,
+        0.959215
       ],
       "fromG": [
-        0.081922,
-        1.007377,
-        0.053828
+        0.084459,
+        1.008434,
+        0.049655
       ],
       "fromR": [
-        0.94911,
-        0.030815,
-        0.010859
+        0.945563,
+        0.022597,
+        0.006442
       ],
-      "grayAxisMaximumResidualCodes": 2.71,
-      "grayAxisRootMeanSquareResidualCodes": 1.623,
-      "maximumResidualCodes": 9.818,
-      "neutralWeight": 4.0,
+      "grayAxisMaximumResidualCodes": 2.255,
+      "grayBackgroundCount": 19,
+      "heldOutMaximumCodes": 13.011,
+      "heldOutRootMeanSquareCodes": 2.029,
+      "maximumResidualCodes": 9.678,
+      "model": "quadraticCross",
       "offsetCodes": [
-        0.0851,
-        0.0778,
-        0.0828
+        0.081933,
+        0.076576,
+        0.081049
       ],
-      "rootMeanSquareResidualCodes": 4.213,
+      "rootMeanSquareResidualCodes": 1.606,
+      "squaredFromB": [
+        0.003286,
+        0.002676,
+        0.086957
+      ],
+      "squaredFromG": [
+        0.012798,
+        0.043518,
+        0.010532
+      ],
+      "squaredFromR": [
+        0.105149,
+        0.010492,
+        0.0081
+      ],
       "variant": "clear"
     },
     {
       "appearance": "dark",
-      "backgroundCount": 10,
+      "backgroundCount": 85,
+      "candidates": [
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 16.045,
+          "heldOutRootMeanSquareCodes": 2.878,
+          "inSampleRootMeanSquareCodes": 2.664,
+          "model": "affine"
+        },
+        {
+          "exponent": 1.215,
+          "heldOutMaximumCodes": 9.608,
+          "heldOutRootMeanSquareCodes": 2.359,
+          "inSampleRootMeanSquareCodes": 2.205,
+          "model": "power"
+        },
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 15.551,
+          "heldOutRootMeanSquareCodes": 2.806,
+          "inSampleRootMeanSquareCodes": 2.393,
+          "model": "quadratic"
+        },
+        {
+          "exponent": 1.0,
+          "heldOutMaximumCodes": 13.011,
+          "heldOutRootMeanSquareCodes": 2.029,
+          "inSampleRootMeanSquareCodes": 1.606,
+          "model": "quadraticCross"
+        }
+      ],
+      "crossGreenBlue": [
+        -0.006367,
+        0.004209,
+        -0.070617
+      ],
+      "crossRedBlue": [
+        0.015809,
+        -0.001541,
+        -0.012252
+      ],
+      "crossRedGreen": [
+        -0.12289,
+        -0.047372,
+        -0.004057
+      ],
       "exponent": 1.0,
       "fromB": [
-        -0.000109,
-        -0.000435,
-        0.96789
+        -0.00786,
+        -0.004038,
+        0.959215
       ],
       "fromG": [
-        0.081922,
-        1.007377,
-        0.053828
+        0.084459,
+        1.008434,
+        0.049655
       ],
       "fromR": [
-        0.94911,
-        0.030815,
-        0.010859
+        0.945563,
+        0.022597,
+        0.006442
       ],
-      "grayAxisMaximumResidualCodes": 2.71,
-      "grayAxisRootMeanSquareResidualCodes": 1.623,
-      "maximumResidualCodes": 9.818,
-      "neutralWeight": 4.0,
+      "grayAxisMaximumResidualCodes": 2.255,
+      "grayBackgroundCount": 19,
+      "heldOutMaximumCodes": 13.011,
+      "heldOutRootMeanSquareCodes": 2.029,
+      "maximumResidualCodes": 9.678,
+      "model": "quadraticCross",
       "offsetCodes": [
-        0.0851,
-        0.0778,
-        0.0828
+        0.081933,
+        0.076576,
+        0.081049
       ],
-      "rootMeanSquareResidualCodes": 4.213,
+      "rootMeanSquareResidualCodes": 1.606,
+      "squaredFromB": [
+        0.003286,
+        0.002676,
+        0.086957
+      ],
+      "squaredFromG": [
+        0.012798,
+        0.043518,
+        0.010532
+      ],
+      "squaredFromR": [
+        0.105149,
+        0.010492,
+        0.0081
+      ],
       "variant": "clear"
     }
   ],
-  "schemaVersion": 1
+  "schemaVersion": 2
 }

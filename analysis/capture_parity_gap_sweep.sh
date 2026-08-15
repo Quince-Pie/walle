@@ -119,6 +119,30 @@ splice(
     "                }\n",
     "background filter")
 
+# A lattice of FLAT colours spanning the cube.  The untinted transfer is fitted
+# from 16 backgrounds today, only 5 of them neutral and 6 saturated enough to
+# clip, and holding the fit honest on the gray axis needs a weighting - a
+# judgement rather than a measurement.  Four levels per channel is 64
+# backgrounds that span the cube evenly and clip far less, so the fit is
+# determined by data instead.  Flat is the point: over a flat field the blur is
+# the identity, so these constrain the transfer alone.
+splice(
+    "    // Qualitative continuity with the HIG example.\n",
+    "    // A flat lattice spanning the colour cube, for the material transfer.\n"
+    "    for red in [UInt8(32), UInt8(96), UInt8(160), UInt8(224)] {\n"
+    "        for green in [UInt8(32), UInt8(96), UInt8(160), UInt8(224)] {\n"
+    "            for blue in [UInt8(32), UInt8(96), UInt8(160), UInt8(224)] {\n"
+    "                list.append(flatBackground(\n"
+    "                    String(format: \"cube-%03d-%03d-%03d\", Int(red),\n"
+    "                           Int(green), Int(blue)),\n"
+    "                    .color, (red, green, blue)))\n"
+    "            }\n"
+    "        }\n"
+    "    }\n"
+    "\n"
+    "    // Qualitative continuity with the HIG example.\n",
+    "colour lattice")
+
 # --- 2. Step-edge backgrounds for the kernel -------------------------------
 # A step through the element centre puts half the disc on each level, so one
 # scanline is the edge spread function.  64/192 keeps both sides clear of the
@@ -146,6 +170,42 @@ splice(
     '\n'
     '    // Qualitative continuity with the HIG example.\n',
     "step backgrounds")
+
+# The refraction profile was decoded on ONE element - the 500 pt circle - and
+# only for `clear`, because only clear had all four grating phases captured.
+# The geometry sweep already iterates every scene the harness knows; adding the
+# gratings to the backgrounds it runs measures the band across sizes from 128 to
+# 4000 points, across rounded rects and capsules, and for BOTH variants, in a
+# single pass.
+splice(
+    '''            let geometryBackgrounds: Set<String> = [
+                "gray-128", "checker-0128", "uv-map", "radial-0128",
+            ]
+''',
+    '''            var geometryBackgrounds: Set<String> = [
+                "gray-128", "checker-0128", "uv-map", "radial-0128",
+            ]
+            if config.gratingGeometrySweep {
+                geometryBackgrounds.formUnion(
+                    backgrounds.lazy.map(\\.name).filter {
+                        $0.hasPrefix("sine-x-p")
+                    })
+            }
+''',
+    "grating geometry sweep")
+
+splice(
+    '    var baseSceneName = "circle-0500-center"\n',
+    '    var baseSceneName = "circle-0500-center"\n'
+    "    var gratingGeometrySweep = false\n",
+    "grating sweep field")
+
+splice(
+    '            case "--base-scene":\n',
+    '            case "--grating-geometry-sweep":\n'
+    '                c.gratingGeometrySweep = true\n'
+    '            case "--base-scene":\n',
+    "grating sweep parsing")
 
 # --- 3. Tint overlays -------------------------------------------------------
 # clearTint*: the same eight mid-intensity colours that solved regular, so the
@@ -193,6 +253,37 @@ extra = {
     "X10": (0.55, 0.35, 0.45), "X11": (0.35, 0.55, 0.45),
 }
 
+# Twenty-four more colours, a lattice through the mid-intensity region.  Held
+# out one tint at a time, the quadratic basis predicts an unseen tint to about
+# 5 code values rms from 29 chromatic samples; the basis has 10 terms, so the
+# fit is sample-limited and these are the samples.
+wide = {
+    "Y00": (0.30, 0.30, 0.45),
+    "Y01": (0.30, 0.30, 0.60),
+    "Y02": (0.30, 0.30, 0.75),
+    "Y03": (0.30, 0.45, 0.30),
+    "Y04": (0.30, 0.45, 0.45),
+    "Y05": (0.30, 0.45, 0.60),
+    "Y06": (0.30, 0.45, 0.75),
+    "Y07": (0.30, 0.60, 0.30),
+    "Y08": (0.30, 0.60, 0.45),
+    "Y09": (0.30, 0.60, 0.60),
+    "Y10": (0.30, 0.60, 0.75),
+    "Y11": (0.30, 0.75, 0.30),
+    "Y12": (0.30, 0.75, 0.45),
+    "Y13": (0.30, 0.75, 0.60),
+    "Y14": (0.30, 0.75, 0.75),
+    "Y15": (0.45, 0.30, 0.30),
+    "Y16": (0.45, 0.30, 0.45),
+    "Y17": (0.45, 0.30, 0.60),
+    "Y18": (0.45, 0.30, 0.75),
+    "Y19": (0.45, 0.45, 0.30),
+    "Y20": (0.45, 0.45, 0.60),
+    "Y21": (0.45, 0.45, 0.75),
+    "Y22": (0.45, 0.60, 0.30),
+    "Y23": (0.45, 0.60, 0.45),
+}
+
 families = {
     "clearMid": [(f"clearTint{k}", v, "clear") for k, v in mid.items()],
     "regularMid": [(f"sweepTint{k}", v, "regular") for k, v in mid.items()],
@@ -202,6 +293,14 @@ families = {
                     for k, v in {**lum, **sat}.items()],
     "regularExtra": [(f"tint{k}", v, "regular") for k, v in extra.items()],
     "clearExtra": [(f"clearTint{k}", v, "clear") for k, v in extra.items()],
+    "regularWide": [(f"tint{k}", v, "regular") for k, v in wide.items()],
+    "clearWide": [(f"clearTint{k}", v, "clear") for k, v in wide.items()],
+    # Apple's Glass exposes interactive(Bool) alongside tint(Color?).  Nothing
+    # has ever captured it, and walle does not model it - defensibly, since a
+    # wallpaper has nothing to interact with, but that is an assumption until
+    # a static element is measured both ways.
+    "interactive": [("interactiveRegular", None, "regular"),
+                    ("interactiveClear", None, "clear")],
 }
 selected = os.environ.get(
     "WALLE_TINT_CASES", "clearMid,regularMid,regularLadder").split(",")
@@ -225,8 +324,11 @@ splice(
 splice(
     "        case .clearTintedBlue: return .clear.tint(.blue)\n",
     "        case .clearTintedBlue: return .clear.tint(.blue)\n"
-    + "".join(f"        case .{n}: return .{base}.tint({colour(c)})\n"
-              for n, c, base in cases),
+    + "".join(
+        f"        case .{n}: return .{base}."
+        + (f"tint({colour(c)})" if c is not None else "interactive(true)")
+        + "\n"
+        for n, c, base in cases),
     "glass mapping")
 
 # Every captured background gets every tint, rather than the harness's own
@@ -300,6 +402,7 @@ for attempt in 1 2 3 4 5 6 7 8; do
         --out $remote/cap --width $width --height $height --suite static \
         --skip-exact-sweeps --background-prefix $prefixes \
         --base-scene $scene ${WALLE_TINT_ALL:+--tint-every-background} \
+        ${WALLE_GRATING_SWEEP:+--grating-geometry-sweep} \
         >$remote/run.log 2>$remote/run.err; \
       test -d $remote/cap/shots && \
       test \$(ls $remote/cap/shots | wc -l) -ge $minimum"

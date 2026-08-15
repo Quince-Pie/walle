@@ -164,15 +164,19 @@ struct walle_vk_compose_push
 {
     float timeline[4];
     float geometry[4];
-    /* appearance: <0 derive from content luminance, 0 dark, 1 light. */
+    /* appearance (0 dark, 1 light), then the tint in sRGB 0..1. */
     float material[4];
+    /* Device pixels per point, then three unused lanes kept so the C and
+     * Vulkan layouts stay identical without relying on member alignment. */
+    float scaling[4];
 };
 
 static_assert(sizeof(struct walle_vk_mask_push) == 48);
-static_assert(sizeof(struct walle_vk_compose_push) == 48);
+static_assert(sizeof(struct walle_vk_compose_push) == 64);
 static_assert(offsetof(struct walle_vk_compose_push, timeline) == 0);
 static_assert(offsetof(struct walle_vk_compose_push, geometry) == 16);
 static_assert(offsetof(struct walle_vk_compose_push, material) == 32);
+static_assert(offsetof(struct walle_vk_compose_push, scaling) == 48);
 
 struct walle_vk_renderer
 {
@@ -3164,6 +3168,8 @@ static bool record_frame(struct walle_vk_output*              output,
                      frame->radius,
                      frame->apple_reveal_blend ? 1.0f : 0.0f},
         .material = {frame->appearance, frame->tint[0], frame->tint[1], frame->tint[2]},
+        .scaling  = {frame->output_scale > 0.0f ? frame->output_scale : 1.0f,
+                     0.0f, 0.0f, 0.0f},
     };
     push_constants_14(command_buffer,
                       renderer->compose_pipeline_layout,

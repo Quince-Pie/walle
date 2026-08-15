@@ -34,19 +34,30 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-SHAPE = "circle-0500-center"
 PERIODS = (1024, 512, 256, 128, 64)
 CLIP_LOW, CLIP_HIGH = 0.5, 254.5
-# The element is a 500 pt circle at 2x backing scale.
-ELEMENT_RADIUS = 500.0
 ROW_HALF_BAND = 6
+# Scene name -> the element's half-width along the measured axis, in capture
+# pixels at 2x backing scale.  A grating in x reads the horizontal half-extent,
+# which for a circle is its radius and for a rect is half its width.
+SCENES = {
+    "circle-0128-center": 128.0,
+    "circle-0256-center": 256.0,
+    "circle-0500-center": 500.0,
+    "circle-1000-center": 1000.0,
+    "circle-1600-center": 1600.0,
+    "rect-1600x0900-r000": 1600.0,
+    "rect-1600x0900-r080": 1600.0,
+    "rect-1600x0900-r240": 1600.0,
+}
 
 type JsonObject = dict[str, object]
 
 
-def read_row(shots: Path, period: int, phase: int, overlay: str,
+def read_row(shots: Path, scene: str, period: int, phase: int, overlay: str,
              appearance: str) -> np.ndarray | None:
-    path = shots / f"sine-x-p{period:04d}-ph{phase}__{SHAPE}__{overlay}__{appearance}.png"
+    path = (shots
+            / f"sine-x-p{period:04d}-ph{phase}__{scene}__{overlay}__{appearance}.png")
     if not path.exists():
         return None
     pixels = np.asarray(Image.open(path).convert("RGB")).astype(float)
@@ -81,12 +92,13 @@ def local_phase(samples: list[np.ndarray]) -> np.ndarray:
     return phase
 
 
-def measure(shots: Path, overlay: str, appearance: str) -> JsonObject | None:
+def measure(shots: Path, scene: str, radius: float, overlay: str,
+            appearance: str) -> JsonObject | None:
     columns = None
     displacement = None
     used = []
     for period in PERIODS:
-        samples = [read_row(shots, period, phase, overlay, appearance)
+        samples = [read_row(shots, scene, period, phase, overlay, appearance)
                    for phase in range(4)]
         if any(sample is None for sample in samples):
             continue
@@ -95,12 +107,12 @@ def measure(shots: Path, overlay: str, appearance: str) -> JsonObject | None:
             columns = np.arange(len(phase))
             displacement = np.zeros(len(phase))
         centre = len(phase) / 2.0
-        radius = np.abs(columns - centre)
+        distance = np.abs(columns - centre)
         # Far from the rim the material displaces nothing, so the residual
         # there is the grating's own zero.
         expected = 2.0 * np.pi * columns / period
         residual = np.angle(np.exp(1j * (phase - expected)))
-        core = (radius < ELEMENT_RADIUS * 0.6) & np.isfinite(residual)
+        core = (distance < radius * 0.6) & np.isfinite(residual)
         if core.sum() < 64:
             continue
         zero = np.angle(np.exp(1j * residual[core]).mean())
@@ -117,27 +129,35 @@ def measure(shots: Path, overlay: str, appearance: str) -> JsonObject | None:
         return None
     centre = len(displacement) / 2.0
     signed = columns - centre
-    radius = np.abs(signed)
+    distance = np.abs(signed)
     # Positive radial displacement means the material sampled OUTWARD of the
     # pixel; negative means it reached inward, which magnifies the edge.
     radial = displacement * np.sign(signed)
+    # Binned by the FRACTION of the half-extent, so profiles from elements of
+    # different sizes are directly comparable.
     profile = []
-    for low in range(0, int(ELEMENT_RADIUS), 25):
-        band = (radius >= low) & (radius < low + 25) & np.isfinite(radial)
-        if band.sum() < 8:
-            continue
-        profile.append({
-            "radiusLow": low,
-            "radiusHigh": low + 25,
-            "radialDisplacementPixels": round(float(np.median(radial[band])), 3),
-            "spreadPixels": round(float(np.std(radial[band])), 3),
-            "sampleCount": int(band.sum()),
-        })
+    step = 0.01
+    fraction = 0.80
+    while fraction < 1.0:
+        band = ((distance >= radius * fraction)
+                & (distance < radius * (fraction + step))
+                & np.isfinite(radial))
+        if band.sum() >= 4:
+            profile.append({
+                "fractionLow": round(fraction, 4),
+                "displacementPixels": round(float(np.median(radial[band])), 3),
+                "displacementFraction": round(
+                    float(np.median(radial[band])) / radius, 6),
+                "spreadPixels": round(float(np.std(radial[band])), 3),
+                "sampleCount": int(band.sum()),
+            })
+        fraction += step
     return {
+        "scene": scene,
         "overlay": overlay,
         "appearance": appearance,
         "periodsUsed": used,
-        "elementRadiusPixels": ELEMENT_RADIUS,
+        "elementRadiusPixels": radius,
         "profile": profile,
     }
 
@@ -150,17 +170,18 @@ def main() -> int:
 
     records = [
         record
+        for scene, radius in SCENES.items()
         for overlay in ("clear", "regular")
         for appearance in ("light", "dark")
-        if (record := measure(arguments.shots, overlay, appearance)) is not None
+        if (record := measure(arguments.shots, scene, radius, overlay, appearance))
+        is not None
     ]
     for record in records:
-        print(f"  {record['overlay']:8s} {record['appearance']:5s} "
-              f"periods {record['periodsUsed']}")
-        for band in record["profile"]:
-            print(f"      r {band['radiusLow']:3d}..{band['radiusHigh']:3d}  "
-                  f"displacement {band['radialDisplacementPixels']:+8.3f} px  "
-                  f"spread {band['spreadPixels']:7.3f}")
+        tail = record["profile"][-6:]
+        print(f"  {record['scene']:22s} {record['overlay']:8s} "
+              f"{record['appearance']:5s} R={record['elementRadiusPixels']:6.0f}  "
+              + "  ".join(f"{b['fractionLow']:.2f}:{b['displacementFraction']:+.4f}R"
+                          for b in tail))
     if arguments.output is not None:
         arguments.output.write_text(
             json.dumps({"schemaVersion": 1, "osBuild": "25G76",

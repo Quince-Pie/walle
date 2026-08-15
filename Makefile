@@ -401,6 +401,8 @@ $(SPIRV_DIR)/composeFragment.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(
 		'OpMemberDecorate[[:space:]]+%ComposePush_std430[[:space:]]+1[[:space:]]+Offset[[:space:]]+16'
 	$(SPIRV_DIS) $@ -o - | grep -Eq \
 		'OpMemberDecorate[[:space:]]+%ComposePush_std430[[:space:]]+2[[:space:]]+Offset[[:space:]]+32'
+	$(SPIRV_DIS) $@ -o - | grep -Eq \
+		'OpMemberDecorate[[:space:]]+%ComposePush_std430[[:space:]]+3[[:space:]]+Offset[[:space:]]+48'
 
 # Cold-start correctness: on the first build no .d files exist yet, so objects
 # must explicitly depend on the generated protocol headers or a parallel build

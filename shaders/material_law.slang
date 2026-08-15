@@ -2,15 +2,14 @@
 //
 // Apple's Liquid Glass material, measured on macOS 26.6.1 (25G76).
 //
-// UNTINTED.  An affine 3x3 on the blurred backdrop.  `clear` works in sRGB CODE
-// space - its gray ladder is a straight line there to 0.27 code values - while
-// `regular` does not: its gray response bows above the chord by up to 4.4 code
-// values at mid-scale, in both appearances, which no affine map in sRGB can
-// produce.  It is affine in x**0.795, and ONE exponent covers both appearances.
-// What produces that exponent is not known; it is not linear light, not the
-// display's transfer, and not the capture path, which round-trips flat grays
-// exactly.  It is carried as a measured constant rather than left as four code
-// values of systematic error.
+// UNTINTED.  A SECOND-ORDER polynomial on the blurred backdrop, in sRGB code
+// space: the three inputs, their squares, their three cross products, and an
+// offset.  An affine 3x3 is not enough - `regular`'s gray response bows above
+// the chord by up to 4.4 code values at mid-scale - and the polynomial beats it
+// on held-out backgrounds everywhere, 3.65 to 1.58 code values rms for
+// `regular` in light.  It also retires an unexplained constant: the x**0.795
+// space the shader used to carry was an artefact of a sparse sixteen-background
+// fit, and refitting the same model on the colour lattice returns 1.195.
 //
 // TINTED.  The tint composites over the material's OWN OUTPUT, not over the raw
 // backdrop, and separates into luminance and chroma:
@@ -29,44 +28,69 @@ struct WalleMaterialTransfer
     float3 fromR;
     float3 fromG;
     float3 fromB;
+    float3 squaredFromR;
+    float3 squaredFromG;
+    float3 squaredFromB;
+    float3 crossRedGreen;
+    float3 crossRedBlue;
+    float3 crossGreenBlue;
     float3 offset;
-    float exponent;
 };
 
-// regular / light: 9 unclipped backgrounds, 2.238 rms / 7.692 max code values.
+// regular / light: 47 unclipped backgrounds, 1.059 rms / 4.169 max code values, 1.58 rms held out.
 static const WalleMaterialTransfer kMaterialRegularLight = {
-    float3( 0.36725900, -0.03784300, -0.03320200),
-    float3(-0.13954200,  0.27909400, -0.15767900),
-    float3( 0.00024500, -0.01016700,  0.42187800),
-    float3( 0.75720000,  0.75370000,  0.75380000),
-    0.795000,
+    float3( 0.46538000, -0.03489400, -0.02765800),
+    float3(-0.11616200,  0.38231500, -0.12485400),
+    float3(-0.02174400, -0.00284100,  0.49587000),
+    float3( 0.28678100, -0.04397400, -0.10134200),
+    float3(-0.10624300,  0.04097900, -0.18654900),
+    float3(-0.00660400, -0.01414800,  0.26678300),
+    float3(-0.21684800, -0.02644600,  0.02795400),
+    float3(-0.00465600,  0.01592300,  0.02217800),
+    float3(-0.00121100, -0.03664400, -0.09290600),
+    float3( 0.70460500,  0.70111000,  0.70217200),
 };
 
-// regular / dark: 9 unclipped backgrounds, 0.958 rms / 2.218 max code values.
+// regular / dark: 61 unclipped backgrounds, 0.651 rms / 2.542 max code values, 0.899 rms held out.
 static const WalleMaterialTransfer kMaterialRegularDark = {
-    float3( 0.61804100, -0.12819000, -0.13481800),
-    float3(-0.23181700,  0.51608800, -0.23415000),
-    float3(-0.03767500, -0.03993800,  0.71813400),
-    float3( 0.10970000,  0.11010000,  0.10920000),
-    0.795000,
+    float3( 0.70355900, -0.07013900, -0.08465100),
+    float3(-0.28799700,  0.48607900, -0.28189200),
+    float3(-0.02442000, -0.02246000,  0.74514200),
+    float3(-0.11432700, -0.06841500, -0.03734400),
+    float3(-0.06045900, -0.14417700, -0.02128200),
+    float3(-0.00111000, -0.00490200, -0.02048600),
+    float3( 0.09013300,  0.11977500,  0.11486800),
+    float3(-0.00829200,  0.00615500, -0.02461900),
+    float3( 0.00728600,  0.00143100, -0.08632100),
+    float3( 0.06113100,  0.06248100,  0.06328700),
 };
 
-// clear / light: 10 unclipped backgrounds, 4.213 rms / 9.818 max code values.
+// clear / light: 85 unclipped backgrounds, 1.606 rms / 9.678 max code values, 2.029 rms held out.
 static const WalleMaterialTransfer kMaterialClearLight = {
-    float3( 0.94911000,  0.03081500,  0.01085900),
-    float3( 0.08192200,  1.00737700,  0.05382800),
-    float3(-0.00010900, -0.00043500,  0.96789000),
-    float3( 0.08510000,  0.07780000,  0.08280000),
-    1.000000,
+    float3( 0.94556300,  0.02259700,  0.00644200),
+    float3( 0.08445900,  1.00843400,  0.04965500),
+    float3(-0.00786000, -0.00403800,  0.95921500),
+    float3( 0.10514900,  0.01049200,  0.00810000),
+    float3( 0.01279800,  0.04351800,  0.01053200),
+    float3( 0.00328600,  0.00267600,  0.08695700),
+    float3(-0.12289000, -0.04737200, -0.00405700),
+    float3( 0.01580900, -0.00154100, -0.01225200),
+    float3(-0.00636700,  0.00420900, -0.07061700),
+    float3( 0.08193300,  0.07657600,  0.08104900),
 };
 
-// clear / dark: 10 unclipped backgrounds, 4.213 rms / 9.818 max code values.
+// clear / dark: 85 unclipped backgrounds, 1.606 rms / 9.678 max code values, 2.029 rms held out.
 static const WalleMaterialTransfer kMaterialClearDark = {
-    float3( 0.94911000,  0.03081500,  0.01085900),
-    float3( 0.08192200,  1.00737700,  0.05382800),
-    float3(-0.00010900, -0.00043500,  0.96789000),
-    float3( 0.08510000,  0.07780000,  0.08280000),
-    1.000000,
+    float3( 0.94556300,  0.02259700,  0.00644200),
+    float3( 0.08445900,  1.00843400,  0.04965500),
+    float3(-0.00786000, -0.00403800,  0.95921500),
+    float3( 0.10514900,  0.01049200,  0.00810000),
+    float3( 0.01279800,  0.04351800,  0.01053200),
+    float3( 0.00328600,  0.00267600,  0.08695700),
+    float3(-0.12289000, -0.04737200, -0.00405700),
+    float3( 0.01580900, -0.00154100, -0.01225200),
+    float3(-0.00636700,  0.00420900, -0.07061700),
+    float3( 0.08193300,  0.07657600,  0.08104900),
 };
 
 // Basis, chromatic: [r, g, b, 1, rr, gg, bb, rg, rb, gb], the tint

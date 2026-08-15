@@ -32,7 +32,8 @@ struct ComposePush
     // relying on scalar-versus-std430 member alignment.
     float4 timeline; // time, resolution.x, resolution.y, variant
     float4 geometry; // centerTopLeft.x, centerTopLeft.y, radius, appleBlend
-    float4 material; // appearance (<0 = derive), tint rgb (<0 in y = untinted)
+    float4 material; // appearance (0 dark, 1 light), tint rgb (<0 in y = untinted)
+    float4 scaling;  // device pixels per point, then three unused lanes
 };
 
 struct ComposeVertexOutput
@@ -51,27 +52,31 @@ static const float kMaterializeEase = 2.36;
 // local phase of the backdrop at every pixel, and along the element's
 // horizontal diameter the grating's axis and the circle's radial direction
 // coincide, so the phase shift IS the radial displacement.  Precision 0.02 px,
-// unwrapped across periods 1024 down to 64, fitted only where the grating is
-// unclipped.  Measured profile, on the 500 pt circle at 2x (radius 500 px):
+// unwrapped across four periods, fitted only where the grating is unclipped.
 //
-//     r <= 460      0.00 px      r = 480..485   19.84
-//     r = 460..465  0.17         r = 485..490   31.54
-//     r = 465..470  1.88         r = 490..495   48.11
-//     r = 470..475  5.58         r = 495..500   74.66
-//     r = 475..480 11.43
+// The band is ABSOLUTE.  Measured on circles of radius 128, 256 and 500 capture
+// pixels, the profile against DISTANCE INSIDE THE RIM is the same curve to
+// within 0.2 px - a fourfold range of element size with no scaling at all - and
+// it is the same for both variants and both appearances.  An earlier reading
+// called it 0.081 R, which was only true of the one element it was measured on.
 //
-// which is a power law in the distance from the rim, to 8.5% worst relative
-// error, the worst bin being the outermost where the rim itself intrudes.
+//     px inside the rim    1      3      6     12     18     25     32    38
+//     displacement      94.8   74.8   57.0   34.4   19.9    8.8    2.5   0.2
+//
+// fitted to 1.9 px worst on a 94.8 px peak by
+//
+//     d(u) = A (W - u)^k / (u + c)          u, d in CAPTURE pixels at 2x
 //
 // walle's previous refraction was fitted from Human Interface Guidelines
-// photographs and was wrong three ways at once: three times too WIDE (0.25 R
-// against the measured 0.081 R, so it displaced content the hardware leaves
-// alone), peaked mid-band where the hardware's grows monotonically to the rim,
-// and displaced in the OPPOSITE direction - the hardware samples INWARD, which
-// is what stretches the interior out to meet the edge.
-static const float kLensBandRadiusFraction = 0.0810;
-static const float kLensRimDisplacementFraction = 0.1587;
-static const float kLensProfilePower = 2.3534;
+// photographs and was wrong four ways: three times too WIDE, scaled with the
+// element instead of being absolute, peaked mid-band where the hardware's grows
+// monotonically to the rim, and displaced OUTWARD where the hardware samples
+// inward - which is what stretches the interior out to meet the edge.
+static const float kLensCaptureScale = 2.0;
+static const float kLensBandCapturePixels = 35.5796;
+static const float kLensAmplitude = 26.48219;
+static const float kLensProfilePower = 1.09134;
+static const float kLensProfileOffset = 12.6207;
 // Measured ABSENT: red, green and blue displace identically to 0.002 px at
 // every radius, so the 3% per-channel spread walle used to carry - 2.2 px of
 // fringing at the rim - was invented.  Kept at zero rather than deleted so the
@@ -127,16 +132,28 @@ static const float kHalfPi = 1.57079632679;
 static const float kTintNeutralChroma = 0.5;
 
 
-// The material's colour transfer: an affine 3x3, applied in the space the
-// measurement says it lives in.  `clear` uses exponent 1, which makes both pow
-// calls the identity; `regular` uses the measured 0.795, without which its gray
-// response is 4 code values out at mid-scale in both appearances.
+// The material's colour transfer: a second-order polynomial in sRGB code
+// space.  An affine 3x3 is not enough - `regular`'s gray response bows above
+// the chord by 4.4 code values at mid-scale, in both appearances - and the
+// squared and cross terms beat it on held-out backgrounds everywhere.  They
+// also removed the need for the x**0.795 space this used to apply, which was
+// an artefact of fitting sixteen backgrounds rather than a property of the
+// material.
 float3 materialTransfer(float3 backdropSrgb, WalleMaterialTransfer transfer)
 {
-    float3 raised = pow(saturate(backdropSrgb), transfer.exponent);
-    float3 mixed = raised.r * transfer.fromR + raised.g * transfer.fromG
-        + raised.b * transfer.fromB + transfer.offset;
-    return saturate(pow(max(mixed, 0.0), 1.0 / transfer.exponent));
+    float3 unit = saturate(backdropSrgb);
+    float3 squared = unit * unit;
+    float3 mixed = unit.r * transfer.fromR
+        + unit.g * transfer.fromG
+        + unit.b * transfer.fromB
+        + squared.r * transfer.squaredFromR
+        + squared.g * transfer.squaredFromG
+        + squared.b * transfer.squaredFromB
+        + (unit.r * unit.g) * transfer.crossRedGreen
+        + (unit.r * unit.b) * transfer.crossRedBlue
+        + (unit.g * unit.b) * transfer.crossGreenBlue
+        + transfer.offset;
+    return saturate(mixed);
 }
 
 float linearToSrgb(float value)
@@ -376,9 +393,10 @@ float4 composeFragment(
     // 0.033 * diagonal - nearly twice as wide, and capped where the hardware
     // is not.  The displacement profile below is unchanged; only the band
     // width is corrected.
-    float lensBand = kLensBandRadiusFraction * radiusPixels;
-    float bandPosition = (radiusPixels - distancePixels) / max(lensBand, 1.0);
-    float bandUnit = clamp(bandPosition, 0.0, 1.0);
+    // Capture pixels per output pixel: the measurement is in 2x capture pixels
+    // and the output is `scale` device pixels per point.
+    float lensUnit = max(push.scaling.x, 1.0) / kLensCaptureScale;
+    float insideRim = (radiusPixels - distancePixels) / lensUnit;
 
     float3 glassColor;
     if (regular > 0.5)
@@ -399,12 +417,12 @@ float4 composeFragment(
     }
     else
     {
-        // bandPosition is 0 at the rim and 1 at the band's inner edge, so the
-        // measured profile is a power of its complement.  The displacement is
-        // INWARD, hence the negation.
-        float rimUnit = 1.0 - bandUnit;
-        float bend = kLensRimDisplacementFraction * radiusPixels
-            * pow(rimUnit, kLensProfilePower) * thickness * step(0.0, bandPosition);
+        // The measured profile, in capture pixels, converted back to the
+        // output's own.  The displacement is INWARD, hence the negation below.
+        float remaining = max(kLensBandCapturePixels - insideRim, 0.0);
+        float bend = lensUnit * kLensAmplitude * pow(remaining, kLensProfilePower)
+            / (insideRim + kLensProfileOffset)
+            * thickness * step(0.0, insideRim);
         float2 displacementUv = -float2(normalOut.x, -normalOut.y) * bend * pixelToUv;
 
         // The refraction displaces the backdrop the material samples, which is
