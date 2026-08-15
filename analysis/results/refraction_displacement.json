@@ -1,0 +1,160 @@
+{
+  "osBuild": "25G76",
+  "records": [
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 500.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        1024,
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "radialDisplacementPixels": 0.001,
+          "radiusHigh": 25,
+          "radiusLow": 0,
+          "sampleCount": 49,
+          "spreadPixels": 0.03
+        },
+        {
+          "radialDisplacementPixels": -0.003,
+          "radiusHigh": 50,
+          "radiusLow": 25,
+          "sampleCount": 50,
+          "spreadPixels": 0.032
+        },
+        {
+          "radialDisplacementPixels": -0.004,
+          "radiusHigh": 75,
+          "radiusLow": 50,
+          "sampleCount": 50,
+          "spreadPixels": 0.032
+        },
+        {
+          "radialDisplacementPixels": 0.003,
+          "radiusHigh": 100,
+          "radiusLow": 75,
+          "sampleCount": 50,
+          "spreadPixels": 0.024
+        },
+        {
+          "radialDisplacementPixels": -0.0,
+          "radiusHigh": 125,
+          "radiusLow": 100,
+          "sampleCount": 50,
+          "spreadPixels": 0.021
+        },
+        {
+          "radialDisplacementPixels": 0.0,
+          "radiusHigh": 150,
+          "radiusLow": 125,
+          "sampleCount": 50,
+          "spreadPixels": 0.022
+        },
+        {
+          "radialDisplacementPixels": 0.003,
+          "radiusHigh": 175,
+          "radiusLow": 150,
+          "sampleCount": 50,
+          "spreadPixels": 0.02
+        },
+        {
+          "radialDisplacementPixels": -0.003,
+          "radiusHigh": 200,
+          "radiusLow": 175,
+          "sampleCount": 50,
+          "spreadPixels": 0.021
+        },
+        {
+          "radialDisplacementPixels": 0.004,
+          "radiusHigh": 225,
+          "radiusLow": 200,
+          "sampleCount": 50,
+          "spreadPixels": 0.02
+        },
+        {
+          "radialDisplacementPixels": -0.0,
+          "radiusHigh": 250,
+          "radiusLow": 225,
+          "sampleCount": 50,
+          "spreadPixels": 0.02
+        },
+        {
+          "radialDisplacementPixels": -0.0,
+          "radiusHigh": 275,
+          "radiusLow": 250,
+          "sampleCount": 50,
+          "spreadPixels": 0.021
+        },
+        {
+          "radialDisplacementPixels": 0.001,
+          "radiusHigh": 300,
+          "radiusLow": 275,
+          "sampleCount": 50,
+          "spreadPixels": 0.019
+        },
+        {
+          "radialDisplacementPixels": -0.001,
+          "radiusHigh": 325,
+          "radiusLow": 300,
+          "sampleCount": 50,
+          "spreadPixels": 0.014
+        },
+        {
+          "radialDisplacementPixels": 0.001,
+          "radiusHigh": 350,
+          "radiusLow": 325,
+          "sampleCount": 50,
+          "spreadPixels": 0.025
+        },
+        {
+          "radialDisplacementPixels": -0.001,
+          "radiusHigh": 375,
+          "radiusLow": 350,
+          "sampleCount": 50,
+          "spreadPixels": 0.023
+        },
+        {
+          "radialDisplacementPixels": 0.001,
+          "radiusHigh": 400,
+          "radiusLow": 375,
+          "sampleCount": 50,
+          "spreadPixels": 0.021
+        },
+        {
+          "radialDisplacementPixels": -0.0,
+          "radiusHigh": 425,
+          "radiusLow": 400,
+          "sampleCount": 50,
+          "spreadPixels": 0.016
+        },
+        {
+          "radialDisplacementPixels": -0.005,
+          "radiusHigh": 450,
+          "radiusLow": 425,
+          "sampleCount": 50,
+          "spreadPixels": 0.016
+        },
+        {
+          "radialDisplacementPixels": 0.169,
+          "radiusHigh": 475,
+          "radiusLow": 450,
+          "sampleCount": 50,
+          "spreadPixels": 2.289
+        },
+        {
+          "radialDisplacementPixels": 31.541,
+          "radiusHigh": 500,
+          "radiusLow": 475,
+          "sampleCount": 50,
+          "spreadPixels": 23.948
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 1
+}

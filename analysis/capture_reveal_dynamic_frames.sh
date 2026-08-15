@@ -46,16 +46,22 @@ if [[ "${WALLE_BUILD_ONLY:-0}" == "1" ]]; then
     exit 0
 fi
 
-# 2048x2048 at 1x is the corpus geometry: the reveal origin is 0.25, 0.30 of
-# the frame, so the circle is centred at (512, 614.4) exactly as the ladder's.
+# 1024x1024 POINTS at 2x backing is the corpus geometry - 2048x2048 device
+# pixels, the reveal origin 0.25, 0.30 of the frame, the circle centred at
+# (512, 614.4).  --reveal-coverage-probe is what selects walle's two-wallpaper
+# oracle; without it the dynamic suite draws its own coded field and the frames
+# contain no reveal circle at all.  It also re-captures the 65-state ladder,
+# which is the point: the same run then carries both the sweep path and the
+# live path, so the two can be compared without crossing sessions.
 echo "capturing (requires the Mac unlocked and on the desktop)..."
 for attempt in 1 2 3 4 5 6 7 8; do
     echo "attempt $attempt"
     if ssh "$host" "cd $remote && rm -rf cap && mkdir -p cap && chmod 777 cap && \
       sudo -n launchctl asuser 501 sudo -n -u quince $remote/glasscap \
-        --out $remote/cap --width 2048 --height 2048 --suite dynamic \
-        --dynamic-modes wallpaper-reveal --dynamic-frames $frames \
-        --dynamic-duration $duration --transition-origin 0.25,0.30 \
+        --out $remote/cap --width 1024 --height 1024 --suite dynamic \
+        --dynamic-modes wallpaper-reveal --reveal-coverage-probe \
+        --dynamic-frames $frames --dynamic-duration $duration \
+        --transition-origin 0.25,0.30 \
         >$remote/run.log 2>$remote/run.err; \
       test -d $remote/cap/dynamic && \
       test \$(find $remote/cap/dynamic -name 'frame-*.png' | wc -l) -ge $frames"

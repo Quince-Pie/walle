@@ -46,16 +46,37 @@ static const float kFadeStart = 0.66;
 static const float kMaterializeEase = 2.36;
 
 
-// inputOuterRefractionHeight / R, measured 26.6.1 (0.125 * diameter).
-static const float kLensBandRadiusFraction = 0.25;
-static const float kLensMaximumRadiusFraction = 0.21;
-static const float kLensMaximumBandFraction = 1.09;
-static const float kLensCopyLight = 0.36;
-static const float kLensCopyDark = 0.19;
-static const float kLensProfilePower = 5.2;
-static const float kLensProfileKnee = 0.508;
-static const float kLensProfileRim = 0.52;
-static const float kLensDispersion = 0.030;
+// --- Measured refraction, macOS 26.6.1 ------------------------------------
+// Decoded by PHASE, not by eye: the rig's four-step sine gratings give the
+// local phase of the backdrop at every pixel, and along the element's
+// horizontal diameter the grating's axis and the circle's radial direction
+// coincide, so the phase shift IS the radial displacement.  Precision 0.02 px,
+// unwrapped across periods 1024 down to 64, fitted only where the grating is
+// unclipped.  Measured profile, on the 500 pt circle at 2x (radius 500 px):
+//
+//     r <= 460      0.00 px      r = 480..485   19.84
+//     r = 460..465  0.17         r = 485..490   31.54
+//     r = 465..470  1.88         r = 490..495   48.11
+//     r = 470..475  5.58         r = 495..500   74.66
+//     r = 475..480 11.43
+//
+// which is a power law in the distance from the rim, to 8.5% worst relative
+// error, the worst bin being the outermost where the rim itself intrudes.
+//
+// walle's previous refraction was fitted from Human Interface Guidelines
+// photographs and was wrong three ways at once: three times too WIDE (0.25 R
+// against the measured 0.081 R, so it displaced content the hardware leaves
+// alone), peaked mid-band where the hardware's grows monotonically to the rim,
+// and displaced in the OPPOSITE direction - the hardware samples INWARD, which
+// is what stretches the interior out to meet the edge.
+static const float kLensBandRadiusFraction = 0.0810;
+static const float kLensRimDisplacementFraction = 0.1587;
+static const float kLensProfilePower = 2.3534;
+// Measured ABSENT: red, green and blue displace identically to 0.002 px at
+// every radius, so the 3% per-channel spread walle used to carry - 2.2 px of
+// fringing at the rim - was invented.  Kept at zero rather than deleted so the
+// measurement stays auditable.
+static const float kLensDispersion = 0.0;
 
 
 // Measured on the target M1 from the materialize capture: the specular rim
@@ -378,27 +399,25 @@ float4 composeFragment(
     }
     else
     {
-        float profile = (1.0 - pow(bandUnit, kLensProfilePower))
-            * (kLensProfileRim + (1.0 - kLensProfileRim)
-                * sin(kHalfPi * min(bandUnit / kLensProfileKnee, 1.0)));
-        float maximumDisplacement = min(
-            kLensMaximumRadiusFraction * radiusPixels,
-            kLensMaximumBandFraction * lensBand);
-        float bend = maximumDisplacement * profile * thickness * step(0.0, bandPosition);
-        float2 displacementUv = float2(normalOut.x, -normalOut.y) * bend * pixelToUv;
+        // bandPosition is 0 at the rim and 1 at the band's inner edge, so the
+        // measured profile is a power of its complement.  The displacement is
+        // INWARD, hence the negation.
+        float rimUnit = 1.0 - bandUnit;
+        float bend = kLensRimDisplacementFraction * radiusPixels
+            * pow(rimUnit, kLensProfilePower) * thickness * step(0.0, bandPosition);
+        float2 displacementUv = -float2(normalOut.x, -normalOut.y) * bend * pixelToUv;
 
+        // The refraction displaces the backdrop the material samples, which is
+        // the measured blur - not the sharp source.  Outside the band the
+        // displacement is zero and this is exactly `blurredIncoming`, so the
+        // band needs no separate blend to fade into.
         float3 lensed;
-        lensed.x = texB.Sample(
-            linearSampler,
-            uv + displacementUv * (1.0 + kLensDispersion)).r;
-        lensed.y = texB.Sample(linearSampler, uv + displacementUv).g;
-        lensed.z = texB.Sample(
-            linearSampler,
-            uv + displacementUv * (1.0 - kLensDispersion)).b;
-
-        float copyAlpha = lerp(kLensCopyDark, kLensCopyLight, lightness)
-            * exp(-max(bandPosition, 0.0)) * thickness * step(0.0, bandPosition);
-        float3 pre = lerp(blurredIncoming, lensed, copyAlpha);
+        lensed.x = texGlassB.Sample(
+            linearSampler, uv + displacementUv * (1.0 + kLensDispersion)).r;
+        lensed.y = texGlassB.Sample(linearSampler, uv + displacementUv).g;
+        lensed.z = texGlassB.Sample(
+            linearSampler, uv + displacementUv * (1.0 - kLensDispersion)).b;
+        float3 pre = lerp(sharpIncoming, lensed, thickness);
         float3 preSrgb = linearToSrgb(pre);
         // Measured 26.6.1 clear: one colour matrix, IDENTICAL in both
         // appearances (the gray ladder matches to the code across light and

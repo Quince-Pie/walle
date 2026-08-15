@@ -4385,3 +4385,84 @@ Reveal gate unchanged: mismatchedPixels=0, composedMismatchedPixels=0.
 All shader constants are now GENERATED from the captures by
 analysis/generate_material_law_header.py, so the shader and the measurement
 cannot drift.
+
+## 2026-08-15 (later 151): THE REFRACTION, DECODED BY PHASE
+
+walle's refraction band had its WIDTH measured on this build - the outer
+0.25 R, from Apple's own inputOuterRefractionHeight - but its displacement
+PROFILE was never re-measured.  Its shape, peak amplitude and dispersion were
+fitted from Human Interface Guidelines photographs, and the shader said so.
+
+Measured now, by phase.  The rig's four-step sine gratings give the local phase
+of the backdrop at every pixel, and along the element's horizontal diameter the
+grating's axis and the circle's radial direction coincide, so the phase shift IS
+the radial displacement.  Precision 0.02 px, unwrapped across periods 1024 down
+to 64, fitted only from unclipped samples - which matters, because `clear`
+passes white through at 255 and the bright half of every grating pins.
+
+On the 500 pt circle at 2x (radius 500 px):
+
+    r <= 460      0.00 px       r = 480..485   19.84
+    r = 460..465  0.17          r = 485..490   31.54
+    r = 465..470  1.88          r = 490..495   48.11
+    r = 470..475  5.58          r = 495..500   74.66
+    r = 475..480 11.43
+
+a power law in the distance from the rim, to 8.5% worst relative error:
+
+    band  = outer 0.0810 R
+    d(r)  = 0.1587 R * ((r/R - 0.9190) / 0.0810)**2.3534,  sampled INWARD
+
+walle's refraction was wrong three ways at once:
+  * three times too WIDE - 0.25 R against 0.081 R, displacing content the
+    hardware leaves untouched;
+  * peaked mid-band, where the hardware's grows monotonically to the rim;
+  * displaced OUTWARD where the hardware samples inward.
+
+DISPERSION IS ABSENT.  Red, green and blue displace identically to 0.002 px at
+every radius.  walle carried a 3% per-channel spread - 2.2 px of colour
+fringing at the rim - which was invented.  Zeroed, not deleted.
+
+VERIFIED by rendering walle over the same four-step gratings and decoding its
+own displacement the same way: across the band, from 5 px to 200 px of
+displacement, walle now matches the measured law to within 5.7 px worst, about
+3%.  The residual is at the rim and at the band's inner edge, where the blur
+and the element boundary interfere with the phase.
+
+Reveal gate unchanged: mismatchedPixels=0, composedMismatchedPixels=0.
+
+## 2026-08-15 (later 152): THE LIVE REVEAL GEOMETRY, MEASURED
+
+later-148 diagnosed the off-ladder frame as a rigid 0.18 px translation and
+said one sample could not say what law produced it.  Thirty-three LIVE frames
+were captured (analysis/capture_reveal_dynamic_frames.sh - the coverage probe
+is what selects the two-wallpaper oracle; without it the dynamic suite draws
+its own coded field and there is no reveal circle at all), and sixteen carry a
+usable circle.  Their geometry, from the 50% coverage contour at 720 rays,
+fitting to 0.03 px rms with harmonic content below 0.008 px - so the shape is a
+CIRCLE, exactly:
+
+    centre_x = 512.000        the origin, exactly, to 0.004 px
+    centre_y = 614.0008 + 0.00022907 * radius     residual 0.0066 px max
+    radius   = CONTINUOUS - not one of the sixteen lands on the 0.5 grid
+
+over radii 29 to 1454, a fifty-fold range.  The law predicts the OLD corpus's
+off-ladder frame - a different capture session - at centre_y 614.334 against
+614.336 measured.  Two independent corpora, 0.002 px apart.
+
+And the ladder's grid is now proven unique rather than merely sufficient:
+
+    integer device pixels (what walle uses)   0 of 65 states differ
+    integer POINTS (2 device px)             58 of 65 differ
+    half device pixels                       52 of 65 differ
+
+So the two paths genuinely differ, which is what Core Animation does: an
+explicitly set progress goes through the model layer, which lays out and rounds
+its bounds to whole device pixels, while an animating layer's presentation
+values are interpolated without re-laying-out.  walle drives both from one code
+path and snaps in both, which is right for the sweeps the gate scores and wrong
+for the transition users see - by up to 0.33 px, the 3,838 mismatched pixels of
+later-141.
+
+What produces the 0.000229 slope is not known.  It is measured, it is a
+function of the radius alone, and it holds to 0.007 px across the animation.

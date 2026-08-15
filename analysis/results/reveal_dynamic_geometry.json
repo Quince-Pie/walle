@@ -1,0 +1,165 @@
+{
+  "records": [
+    {
+      "centerX": 511.4999,
+      "centerY": 613.5065,
+      "frame": "frame-0001.png",
+      "radius": 29.4695,
+      "radiusFraction": 0.01361741,
+      "rayCount": 360,
+      "residualMaxPixels": 0.06134,
+      "residualRmsPixels": 0.02675
+    },
+    {
+      "centerX": 511.5,
+      "centerY": 613.5363,
+      "frame": "frame-0002.png",
+      "radius": 160.1345,
+      "radiusFraction": 0.07399573,
+      "rayCount": 360,
+      "residualMaxPixels": 0.07387,
+      "residualRmsPixels": 0.0283
+    },
+    {
+      "centerX": 511.5,
+      "centerY": 613.5593,
+      "frame": "frame-0003.png",
+      "radius": 262.0483,
+      "radiusFraction": 0.12108856,
+      "rayCount": 360,
+      "residualMaxPixels": 0.07866,
+      "residualRmsPixels": 0.0276
+    },
+    {
+      "centerX": 511.5,
+      "centerY": 613.5851,
+      "frame": "frame-0004.png",
+      "radius": 378.3215,
+      "radiusFraction": 0.17481665,
+      "rayCount": 360,
+      "residualMaxPixels": 0.08454,
+      "residualRmsPixels": 0.03167
+    },
+    {
+      "centerX": 511.5,
+      "centerY": 613.6164,
+      "frame": "frame-0005.png",
+      "radius": 494.5804,
+      "radiusFraction": 0.22853813,
+      "rayCount": 360,
+      "residualMaxPixels": 0.08577,
+      "residualRmsPixels": 0.02908
+    },
+    {
+      "centerX": 511.4993,
+      "centerY": 613.6439,
+      "frame": "frame-0006.png",
+      "radius": 610.8914,
+      "radiusFraction": 0.28228369,
+      "rayCount": 278,
+      "residualMaxPixels": 0.07157,
+      "residualRmsPixels": 0.02638
+    },
+    {
+      "centerX": 511.4983,
+      "centerY": 613.6547,
+      "frame": "frame-0007.png",
+      "radius": 669.0896,
+      "radiusFraction": 0.3091762,
+      "rayCount": 228,
+      "residualMaxPixels": 0.08242,
+      "residualRmsPixels": 0.02718
+    },
+    {
+      "centerX": 511.5022,
+      "centerY": 613.69,
+      "frame": "frame-0008.png",
+      "radius": 814.7028,
+      "radiusFraction": 0.37646186,
+      "rayCount": 177,
+      "residualMaxPixels": 0.07868,
+      "residualRmsPixels": 0.03064
+    },
+    {
+      "centerX": 511.5068,
+      "centerY": 613.7197,
+      "frame": "frame-0009.png",
+      "radius": 930.8108,
+      "radiusFraction": 0.43011361,
+      "rayCount": 164,
+      "residualMaxPixels": 0.07996,
+      "residualRmsPixels": 0.03023
+    },
+    {
+      "centerX": 511.4958,
+      "centerY": 613.7274,
+      "frame": "frame-0010.png",
+      "radius": 1018.1182,
+      "radiusFraction": 0.47045704,
+      "rayCount": 157,
+      "residualMaxPixels": 0.08211,
+      "residualRmsPixels": 0.03047
+    },
+    {
+      "centerX": 511.5008,
+      "centerY": 613.7611,
+      "frame": "frame-0011.png",
+      "radius": 1134.6094,
+      "radiusFraction": 0.52428587,
+      "rayCount": 149,
+      "residualMaxPixels": 0.08399,
+      "residualRmsPixels": 0.03182
+    },
+    {
+      "centerX": 511.5117,
+      "centerY": 613.7812,
+      "frame": "frame-0012.png",
+      "radius": 1221.7301,
+      "radiusFraction": 0.56454302,
+      "rayCount": 144,
+      "residualMaxPixels": 0.08003,
+      "residualRmsPixels": 0.03138
+    },
+    {
+      "centerX": 511.4963,
+      "centerY": 613.813,
+      "frame": "frame-0013.png",
+      "radius": 1367.0915,
+      "radiusFraction": 0.63171233,
+      "rayCount": 138,
+      "residualMaxPixels": 0.0739,
+      "residualRmsPixels": 0.03264
+    },
+    {
+      "centerX": 511.4965,
+      "centerY": 613.8322,
+      "frame": "frame-0014.png",
+      "radius": 1454.3838,
+      "radiusFraction": 0.67204879,
+      "rayCount": 116,
+      "residualMaxPixels": 0.06824,
+      "residualRmsPixels": 0.02745
+    },
+    {
+      "centerX": 511.4647,
+      "centerY": 613.8468,
+      "frame": "frame-0015.png",
+      "radius": 1541.642,
+      "radiusFraction": 0.71236948,
+      "rayCount": 81,
+      "residualMaxPixels": 0.06327,
+      "residualRmsPixels": 0.02446
+    },
+    {
+      "centerX": 511.3575,
+      "centerY": 613.8086,
+      "frame": "frame-0016.png",
+      "radius": 1658.1224,
+      "radiusFraction": 0.76619331,
+      "rayCount": 37,
+      "residualMaxPixels": 0.03316,
+      "residualRmsPixels": 0.01624
+    }
+  ],
+  "schemaVersion": 1
+}
