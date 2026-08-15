@@ -4111,3 +4111,38 @@ shortly after real user input - which is why captures succeeded at idle
 Accessibility works; caffeinate wakes the display but does not grant focus.
 A watcher polling HIDIdleTime and firing the capture on the next user touch
 is the reliable workaround.
+
+## 2026-08-15 (later 146): TINT SHIPPED - the last subsystem
+
+The mid-intensity sweep captured (all eight tints solve in both
+appearances, against zero solvable in dark from the saturated set).  The
+law: the tint sets the base colour in LINEAR light,
+
+    base = M_tint @ linear(tintColour) + offset
+    out  = clamp(sRGB(base) + T_tint @ backdropSrgb)
+
+fitting dark to 5.63 codes, light to 19.9.  Light is not as well described
+by a linear map and the residual is structural, not clipping.  Combining
+the mid and saturated sets makes it WORSE (31-40 codes) because the
+saturated set's inputs are assumptions about SwiftUI's palette while the
+mid set's are exact; the mid-only fit is therefore the trustworthy one.
+
+Shipped as `tint = #RRGGBB | none` per output.  A zeroed config would read
+as "tinted black", so the default is explicitly {-1, 0, 0}.
+
+VERIFIED END TO END against the captures, rendering walle and comparing
+the element interior:
+    tint #808080  bg 0    apple [122 122 122]  walle [125.1 125.6 125.6]
+    tint #808080  bg 128  apple [126 126 126]  walle [130.3 129.4 129.3]
+    tint #B35959  bg 0    apple [192  79  83]  walle [191.2  78.0  82.9]
+    tint #B35959  bg 128  apple [192  86  89]  walle [196.4  82.0  86.9]
+worst 4.4 codes - the same order as every other subsystem, and at the
+capture path's own noise floor.  Untinted path unchanged (4.3 codes);
+reveal gate unchanged: mask and composed both 0.
+
+CAPTURE ACCESS: the failures were never a locked screen.  macOS
+focus-stealing prevention lets an SSH-launched app take key focus only
+shortly after real user input, and even then it is flaky - the successful
+run here was attempt 1 of a retry loop after several outright failures at
+the same idle time.  Retrying is the workaround; the preflight must not be
+patched out, since an inactive window renders the material differently.

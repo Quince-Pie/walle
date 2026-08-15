@@ -31,9 +31,22 @@ than dark because the blue channel saturates at 255 over bright backgrounds,
 which breaks linearity; the dark fit, where nothing clips in G, lands at
 0.57 code values.
 
-This derives the law for ONE tint colour (`.blue`).  Generalising to an
-arbitrary tint colour needs captures at more tint colours than the harness
-currently hardcodes (tintedBlue / tintedOrange / clearTintedBlue).
+SOLVED for an arbitrary tint colour (see analysis/capture_tint_colour_sweep.sh
+and artifacts-tint/mid).  The saturated system colours cannot constrain the
+fit - they pin whole channels at 0 or 255 regardless of backdrop - so the
+sweep uses eight MID-INTENSITY tints with every channel inside 0.25..0.75.
+With those, all eight solve in both appearances.  The tint sets the base
+colour in LINEAR light,
+
+    base = M_tint @ linear(tintColour) + offset
+
+fitting dark to 5.63 code values and light to 19.9.  Light is not as well
+described by a linear map; the residual is structural rather than clipping,
+since excluding near-clipped samples barely moves it.  Note that combining
+the mid-intensity and saturated sets makes the fit WORSE (31-40 codes),
+because the saturated set's input colours are assumptions about SwiftUI's
+system palette while the mid set's are exact - so the mid-only fit is the
+trustworthy one.
 
 LARGER FINDING - the untinted materials changed too.  The same sweep, read
 off the gray backgrounds (interior mean, all channels equal):

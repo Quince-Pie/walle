@@ -39,6 +39,8 @@ struct walle_vk_frame
      * content-luminance stand-in when the desktop exposes no preference.
      * <0 derive from content, 0 dark, 1 light. */
     float                                       appearance;
+    /* Glass.tint(Color?) in sRGB 0..1; negative red means untinted. */
+    float                                       tint[3];
 
     /* Optional diagnostic destination, tightly packed in top-left row order. */
     uint8_t* mask_readback;

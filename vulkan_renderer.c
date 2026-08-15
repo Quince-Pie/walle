@@ -3163,7 +3163,7 @@ static bool record_frame(struct walle_vk_output*              output,
                      frame->center_top_left_y,
                      frame->radius,
                      frame->apple_reveal_blend ? 1.0f : 0.0f},
-        .material = {frame->appearance, 0.0f, 0.0f, 0.0f},
+        .material = {frame->appearance, frame->tint[0], frame->tint[1], frame->tint[2]},
     };
     push_constants_14(command_buffer,
                       renderer->compose_pipeline_layout,

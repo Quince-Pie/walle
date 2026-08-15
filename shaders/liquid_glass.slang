@@ -32,7 +32,7 @@ struct ComposePush
     // relying on scalar-versus-std430 member alignment.
     float4 timeline; // time, resolution.x, resolution.y, variant
     float4 geometry; // centerTopLeft.x, centerTopLeft.y, radius, appleBlend
-    float4 material; // appearance (<0 = derive from content), reserved x3
+    float4 material; // appearance (<0 = derive), tint rgb (<0 in y = untinted)
 };
 
 struct ComposeVertexOutput
@@ -120,6 +120,38 @@ static const float3 kRegularDarkFromR = float3( 0.6138, -0.1128, -0.1206);
 static const float3 kRegularDarkFromG = float3(-0.2501,  0.4764, -0.2892);
 static const float3 kRegularDarkFromB = float3(-0.0503, -0.0503,  0.7232);
 static const float3 kRegularDarkOffset = float3(18.43, 18.43, 18.43) / 255.0;
+
+// --- Measured tint law, macOS 26.6.1 -------------------------------------
+// Apple's Glass exposes tint(Color?) on either base variant.  On 26.4 it
+// measured hue-free and was not modelled; on 26.6.1 it is strongly
+// hue-bearing.  Solved from eight MID-INTENSITY tints (every channel inside
+// 0.25..0.75, so nothing clips - the saturated system colours pin whole
+// channels and cannot constrain the fit) over six backgrounds.
+//
+//   base   = M_tint @ linear(tintColour) + offset      [LINEAR light]
+//   out    = clamp(sRGB(base) + T @ backdropSrgb)      [sRGB codes]
+//
+// Fit quality: dark 5.63 code values, light 19.9.  Light is not as well
+// described by a linear map and the residual is structural, not clipping -
+// excluding near-clipped samples barely moves it.  It is nonetheless
+// measured rather than invented, and far closer than omitting tint.
+static const float3 kTintBaseDarkFromR = float3( 1.2350, -0.0391, -0.0150);
+static const float3 kTintBaseDarkFromG = float3(-0.2352,  1.0513, -0.0823);
+static const float3 kTintBaseDarkFromB = float3(-0.0079,  0.0033,  1.0980);
+static const float3 kTintBaseDarkOffset = float3(-0.0080, -0.0112, -0.0081);
+
+static const float3 kTintBaseLightFromR = float3( 0.7808, -0.1201, -0.1065);
+static const float3 kTintBaseLightFromG = float3(-0.1655,  0.7099, -0.1396);
+static const float3 kTintBaseLightFromB = float3(-0.0714, -0.0693,  0.7594);
+static const float3 kTintBaseLightOffset = float3(0.0673, 0.0603, 0.0618);
+
+// Backdrop transmission through a tinted element, mean over the eight tints.
+static const float3 kTintTransDarkFromR = float3( 0.0726, -0.0066, -0.0135);
+static const float3 kTintTransDarkFromG = float3(-0.0220,  0.0380, -0.0380);
+static const float3 kTintTransDarkFromB = float3(-0.0102, -0.0027,  0.0801);
+static const float3 kTintTransLightFromR = float3(0.0524, 0.0048, 0.0008);
+static const float3 kTintTransLightFromG = float3(0.0129, 0.0563, 0.0157);
+static const float3 kTintTransLightFromB = float3(0.0009, -0.0016, 0.0424);
 
 float3 materialTransfer(float3 backdropSrgb, float3 fromR, float3 fromG,
                         float3 fromB, float3 offset)
@@ -307,7 +339,25 @@ float4 composeFragment(
     float bandUnit = clamp(bandPosition, 0.0, 1.0);
 
     float3 glassColor;
-    if (regular > 0.5)
+    if (push.material.y >= 0.0)
+    {
+        // Tinted: the tint sets the base colour, the backdrop still shows
+        // through at the measured (low) transmission.
+        float3 tintLinear = srgbToLinear(push.material.yzw);
+        float3 baseLinear = lightness >= 0.5
+            ? tintLinear.r * kTintBaseLightFromR + tintLinear.g * kTintBaseLightFromG
+                  + tintLinear.b * kTintBaseLightFromB + kTintBaseLightOffset
+            : tintLinear.r * kTintBaseDarkFromR + tintLinear.g * kTintBaseDarkFromG
+                  + tintLinear.b * kTintBaseDarkFromB + kTintBaseDarkOffset;
+        float3 backdropSrgb = linearToSrgb(blurredIncoming);
+        float3 tinted = lightness >= 0.5
+            ? materialTransfer(backdropSrgb, kTintTransLightFromR, kTintTransLightFromG,
+                               kTintTransLightFromB, linearToSrgb(saturate(baseLinear)))
+            : materialTransfer(backdropSrgb, kTintTransDarkFromR, kTintTransDarkFromG,
+                               kTintTransDarkFromB, linearToSrgb(saturate(baseLinear)));
+        glassColor = lerp(blurredIncoming, srgbToLinear(tinted), thickness);
+    }
+    else if (regular > 0.5)
     {
         // Measured 26.6.1 regular: an affine colour matrix on the blurred
         // backdrop in sRGB space, still selected between the two measured

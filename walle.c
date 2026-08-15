@@ -233,6 +233,8 @@ struct output_config
     bool               gamemode;
     enum glass_variant    variant;
     enum glass_appearance appearance;
+    /* Apple's Glass.tint(Color?): negative red means untinted. */
+    float                 tint[3];
     float                 transition_duration;
 };
 
@@ -314,6 +316,7 @@ struct wallpaper_output
     bool                   gamemode_enabled;
     enum glass_variant     glass_variant;
     enum glass_appearance  glass_appearance;
+    float                  glass_tint[3];
 
     bool pending_reload;
 
@@ -1950,6 +1953,7 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
              .radius            = geometry.circle.radius,
              .first_boot        = first_boot,
              .appearance = glass_appearance_value(output),
+             .tint = {output->glass_tint[0], output->glass_tint[1], output->glass_tint[2]},
              /* Apple's `identity` variant leaves content unaffected, which is
               * exactly the mask-weighted crossfade the hardware corpus
               * measures - so it shares the gate's composition path.  The gate
@@ -2679,8 +2683,12 @@ static struct output_config* get_or_create_config_in_list(struct wl_list* list, 
     auto new_oc = (struct output_config*)malloc(sizeof(struct output_config));
     if (!new_oc)
         return nullptr;
-    *new_oc = (struct output_config){
-        .transition_on = false, .gamemode = true, .transition_duration = DEFAULT_TRANSITION_DUR};
+    *new_oc = (struct output_config){.transition_on       = false,
+                                     .gamemode            = true,
+                                     .transition_duration = DEFAULT_TRANSITION_DUR,
+                                     /* Untinted: a zeroed tint would read as
+                                      * "tinted black", not "no tint". */
+                                     .tint                = {-1.0f, 0.0f, 0.0f}};
     new_oc->output_name = strdup(name);
     if (!new_oc->output_name) {
         free(new_oc);
@@ -2750,6 +2758,19 @@ static int config_handler(void* user, const char* section, const char* name, con
         oc->transition_on = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     } else if (strcasecmp(name, "transition_duration") == 0) {
         oc->transition_duration = parse_duration_setting(value);
+    } else if (strcasecmp(name, "tint") == 0) {
+        unsigned r, g, b;
+        if (strcasecmp(value, "none") == 0) {
+            oc->tint[0] = -1.0f;
+        } else if (sscanf(value, " #%2x%2x%2x", &r, &g, &b) == 3
+                   || sscanf(value, " %2x%2x%2x", &r, &g, &b) == 3) {
+            oc->tint[0] = (float)r / 255.0f;
+            oc->tint[1] = (float)g / 255.0f;
+            oc->tint[2] = (float)b / 255.0f;
+        } else {
+            fprintf(stderr, "[CONFIG] Unknown tint '%s' (#RRGGBB|none); using none\n", value);
+            oc->tint[0] = -1.0f;
+        }
     } else if (strcasecmp(name, "appearance") == 0) {
         if (strcasecmp(value, "light") == 0) {
             oc->appearance = GLASS_APPEARANCE_LIGHT;
@@ -2840,6 +2861,7 @@ static void apply_config_to_output(struct wallpaper_output* output, struct outpu
     output->transition_duration = config->transition_duration;
     output->glass_variant       = config->variant;
     output->glass_appearance    = config->appearance;
+    memcpy(output->glass_tint, config->tint, sizeof output->glass_tint);
 
     if (output->current_item_index >= output->num_items)
         output->current_item_index = 0;
@@ -3217,7 +3239,10 @@ static void initialize_output(struct wallpaper_output* output)
         output->transition_duration = config->transition_duration;
         output->glass_variant       = config->variant;
         output->glass_appearance    = config->appearance;
+        memcpy(output->glass_tint, config->tint, sizeof output->glass_tint);
+    memcpy(output->glass_tint, config->tint, sizeof output->glass_tint);
     output->glass_appearance    = config->appearance;
+    memcpy(output->glass_tint, config->tint, sizeof output->glass_tint);
 
         if (state->reveal_process_capture) {
             output->timeout          = 0;
