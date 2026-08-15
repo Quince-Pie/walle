@@ -163,10 +163,15 @@ enum glass_appearance : uint8_t
     GLASS_APPEARANCE_LIGHT
 };
 
+/* Apple's Glass exposes exactly three variants: `regular`, `clear`, and
+ * `identity` ("your content remains unaffected as if no glass effect was
+ * applied").  Identity therefore composes the reveal with no material at
+ * all - the plain mask-weighted crossfade the hardware corpus measures. */
 enum glass_variant : uint8_t
 {
     GLASS_VARIANT_CLEAR = 0,
-    GLASS_VARIANT_REGULAR
+    GLASS_VARIANT_REGULAR,
+    GLASS_VARIANT_IDENTITY
 };
 
 typedef enum : uint8_t
@@ -419,6 +424,8 @@ struct wallpaper_state
     char* config_filename;
 
     sd_bus*      bus;
+    /* Desktop appearance preference, refreshed with the bus connection. */
+    enum glass_appearance portal_appearance;
     sd_bus_slot* gamemode_slot;
     bool         gamemode_active;
 
@@ -1214,6 +1221,47 @@ static int on_gamemode_initial_state(sd_bus_message* m, void* userdata, sd_bus_e
     return 0;
 }
 
+/*
+ * xdg-desktop-portal Settings: org.freedesktop.appearance color-scheme is the
+ * desktop's equivalent of the macOS system appearance that Apple's material
+ * reads from the environment.  0 = no preference, 1 = prefer dark,
+ * 2 = prefer light.  Returns AUTO when the portal is absent or says nothing,
+ * so walle falls back to the content-luminance stand-in.
+ */
+[[nodiscard]]
+static enum glass_appearance portal_color_scheme(sd_bus* bus)
+{
+    if (bus == nullptr)
+        return GLASS_APPEARANCE_AUTO;
+    sd_bus_error   error   = SD_BUS_ERROR_NULL;
+    sd_bus_message* reply  = nullptr;
+    enum glass_appearance result = GLASS_APPEARANCE_AUTO;
+    if (sd_bus_call_method(bus,
+                           "org.freedesktop.portal.Desktop",
+                           "/org/freedesktop/portal/desktop",
+                           "org.freedesktop.portal.Settings",
+                           "ReadOne",
+                           &error,
+                           &reply,
+                           "ss",
+                           "org.freedesktop.appearance",
+                           "color-scheme")
+        >= 0) {
+        uint32_t scheme = 0;
+        if (sd_bus_message_enter_container(reply, 'v', "u") >= 0
+            && sd_bus_message_read(reply, "u", &scheme) >= 0) {
+            if (scheme == 1)
+                result = GLASS_APPEARANCE_DARK;
+            else if (scheme == 2)
+                result = GLASS_APPEARANCE_LIGHT;
+        }
+    }
+    sd_bus_error_free(&error);
+    if (reply)
+        sd_bus_message_unref(reply);
+    return result;
+}
+
 [[nodiscard]]
 static bool gamemode_init(struct wallpaper_state* state)
 {
@@ -1221,6 +1269,8 @@ static bool gamemode_init(struct wallpaper_state* state)
         fprintf(stderr, "[GAMEMODE] Failed to connect to session bus.\n");
         return false;
     }
+
+    state->portal_appearance = portal_color_scheme(state->bus);
 
     char match_rule[512];
     snprintf(match_rule,
@@ -1679,6 +1729,21 @@ finalize:
 
 /* -- Frame Loop ---------------------------------------------------------- */
 
+/* Resolve the appearance the shader should use: explicit config wins, then
+ * the desktop portal, then the content-luminance stand-in (-1). */
+[[nodiscard]]
+static float glass_appearance_value(const struct wallpaper_output* output)
+{
+    enum glass_appearance appearance = output->glass_appearance;
+    if (appearance == GLASS_APPEARANCE_AUTO && output->render.state != nullptr)
+        appearance = output->render.state->portal_appearance;
+    if (appearance == GLASS_APPEARANCE_LIGHT)
+        return 1.0f;
+    if (appearance == GLASS_APPEARANCE_DARK)
+        return 0.0f;
+    return -1.0f;
+}
+
 static void frame_callback_handler(void* data, struct wl_callback* callback, uint32_t time);
 static const struct wl_callback_listener frame_listener = {.done = frame_callback_handler};
 
@@ -1862,14 +1927,15 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
              .center_top_left_y = geometry.circle.center[1],
              .radius            = geometry.circle.radius,
              .first_boot        = first_boot,
-             /* The gate scores Apple's measured blend; WALLE_COMPOSE_MATERIAL
-              * captures the shipped Liquid Glass material instead. */
-             .appearance
-        = output->glass_appearance == GLASS_APPEARANCE_LIGHT   ? 1.0f
-          : output->glass_appearance == GLASS_APPEARANCE_DARK  ? 0.0f
-                                                               : -1.0f,
+             .appearance = glass_appearance_value(output),
+             /* Apple's `identity` variant leaves content unaffected, which is
+              * exactly the mask-weighted crossfade the hardware corpus
+              * measures - so it shares the gate's composition path.  The gate
+              * scores that path; WALLE_COMPOSE_MATERIAL captures the shipped
+              * Liquid Glass material instead, for visual inspection. */
              .apple_reveal_blend
-        = process_capture && getenv("WALLE_COMPOSE_MATERIAL") == nullptr,
+        = output->glass_variant == GLASS_VARIANT_IDENTITY
+          || (process_capture && getenv("WALLE_COMPOSE_MATERIAL") == nullptr),
              .mask_readback     = process_capture ? output->reveal_process_capture_pixels : nullptr,
              .mask_readback_size
         = process_capture ? (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT
@@ -2678,11 +2744,14 @@ static int config_handler(void* user, const char* section, const char* name, con
     } else if (strcasecmp(name, "transition_variant") == 0) {
         if (strcasecmp(value, "regular") == 0) {
             oc->variant = GLASS_VARIANT_REGULAR;
+        } else if (strcasecmp(value, "identity") == 0) {
+            oc->variant = GLASS_VARIANT_IDENTITY;
         } else if (strcasecmp(value, "clear") == 0) {
             oc->variant = GLASS_VARIANT_CLEAR;
         } else {
             fprintf(stderr,
-                    "[CONFIG] Unknown transition_variant '%s' (regular|clear); using clear\n",
+                    "[CONFIG] Unknown transition_variant '%s' (regular|clear|identity); "
+                    "using clear\n",
                     value);
             oc->variant = GLASS_VARIANT_CLEAR;
         }
