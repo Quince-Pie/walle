@@ -419,9 +419,15 @@ float4 composeFragment(
     {
         // The measured profile, in capture pixels, converted back to the
         // output's own.  The displacement is INWARD, hence the negation below.
-        float remaining = max(kLensBandCapturePixels - insideRim, 0.0);
+        //
+        // `inside` is clamped rather than merely gated: outside the element the
+        // raw value is negative, and it passes through -12.62 exactly, where
+        // the denominator is zero.  Multiplying that infinity by a zero gate
+        // gives a NaN, not a zero.
+        float inside = max(insideRim, 0.0);
+        float remaining = max(kLensBandCapturePixels - inside, 0.0);
         float bend = lensUnit * kLensAmplitude * pow(remaining, kLensProfilePower)
-            / (insideRim + kLensProfileOffset)
+            / (inside + kLensProfileOffset)
             * thickness * step(0.0, insideRim);
         float2 displacementUv = -float2(normalOut.x, -normalOut.y) * bend * pixelToUv;
 

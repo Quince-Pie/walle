@@ -10,14 +10,14 @@
         71.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.43,
+      "maximumDeltaCodes": 1.404,
       "overlay": "sweepTintM0",
       "tint": "#B25959",
       "variant": "regular",
       "walle": [
-        167.57,
-        67.72,
-        71.06
+        167.6,
+        67.74,
+        71.08
       ]
     },
     {
@@ -46,14 +46,14 @@
         61.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 5.221,
+      "maximumDeltaCodes": 5.238,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
       "walle": [
-        27.22,
-        159.04,
-        62.14
+        27.24,
+        159.06,
+        62.15
       ]
     },
     {
@@ -64,7 +64,7 @@
         72.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 6.079,
+      "maximumDeltaCodes": 6.082,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
@@ -82,14 +82,14 @@
         162.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.04,
+      "maximumDeltaCodes": 1.056,
       "overlay": "sweepTintM2",
       "tint": "#5959B2",
       "variant": "regular",
       "walle": [
-        74.14,
-        75.04,
-        161.38
+        74.16,
+        75.06,
+        161.4
       ]
     },
     {
@@ -106,7 +106,7 @@
       "variant": "regular",
       "walle": [
         87.1,
-        86.59,
+        86.6,
         182.49
       ]
     },
@@ -118,14 +118,14 @@
         135.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.629,
+      "maximumDeltaCodes": 1.494,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        133.64,
-        133.91,
-        133.37
+        133.51,
+        133.93,
+        133.63
       ]
     },
     {
@@ -136,14 +136,14 @@
         122.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.165,
+      "maximumDeltaCodes": 1.197,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        121.62,
-        123.16,
-        121.29
+        121.38,
+        123.2,
+        121.69
       ]
     },
     {
@@ -154,14 +154,14 @@
         58.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 3.087,
+      "maximumDeltaCodes": 3.115,
       "overlay": "sweepTintM7",
       "tint": "#99734C",
       "variant": "regular",
       "walle": [
-        142.09,
-        96.31,
-        57.82
+        142.11,
+        96.33,
+        57.83
       ]
     },
     {
@@ -190,14 +190,14 @@
         38.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 3.628,
+      "maximumDeltaCodes": 3.548,
       "overlay": "clearTintM0",
       "tint": "#B25959",
       "variant": "clear",
       "walle": [
-        120.41,
-        38.63,
-        41.25
+        120.28,
+        38.55,
+        41.17
       ]
     },
     {
@@ -208,14 +208,14 @@
         84.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 0.986,
+      "maximumDeltaCodes": 0.995,
       "overlay": "clearTintM0",
       "tint": "#B25959",
       "variant": "clear",
       "walle": [
-        190.01,
-        79.43,
-        83.22
+        190.0,
+        79.37,
+        83.16
       ]
     },
     {
@@ -226,14 +226,14 @@
         28.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 13.211,
+      "maximumDeltaCodes": 13.182,
       "overlay": "clearTintM1",
       "tint": "#59B259",
       "variant": "clear",
       "walle": [
-        13.21,
-        116.5,
-        33.28
+        13.18,
+        116.39,
+        33.2
       ]
     },
     {
@@ -244,14 +244,14 @@
         74.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 6.338,
+      "maximumDeltaCodes": 6.251,
       "overlay": "clearTintM1",
       "tint": "#59B259",
       "variant": "clear",
       "walle": [
-        40.34,
-        179.9,
-        74.44
+        40.25,
+        179.89,
+        74.38
       ]
     },
     {
@@ -262,14 +262,14 @@
         114.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 5.535,
+      "maximumDeltaCodes": 5.457,
       "overlay": "clearTintM2",
       "tint": "#5959B2",
       "variant": "clear",
       "walle": [
-        42.51,
-        46.54,
-        117.65
+        42.42,
+        46.46,
+        117.53
       ]
     },
     {
@@ -280,14 +280,14 @@
         184.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.403,
+      "maximumDeltaCodes": 1.416,
       "overlay": "clearTintM2",
       "tint": "#5959B2",
       "variant": "clear",
       "walle": [
-        87.31,
-        86.96,
-        182.6
+        87.27,
+        86.92,
+        182.58
       ]
     },
     {
@@ -298,14 +298,14 @@
         123.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.975,
+      "maximumDeltaCodes": 1.888,
       "overlay": "clearTintM6",
       "tint": "#808080",
       "variant": "clear",
       "walle": [
-        122.31,
-        121.03,
-        121.44
+        121.89,
+        121.11,
+        121.39
       ]
     },
     {
@@ -316,14 +316,14 @@
         123.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.975,
+      "maximumDeltaCodes": 1.888,
       "overlay": "clearTintM6",
       "tint": "#808080",
       "variant": "clear",
       "walle": [
-        122.31,
-        121.03,
-        121.44
+        121.89,
+        121.11,
+        121.39
       ]
     },
     {
@@ -334,14 +334,14 @@
         33.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 3.378,
+      "maximumDeltaCodes": 3.508,
       "overlay": "clearTintM7",
       "tint": "#99734C",
       "variant": "clear",
       "walle": [
-        92.62,
-        63.63,
-        35.29
+        92.49,
+        63.55,
+        35.23
       ]
     },
     {
@@ -352,14 +352,14 @@
         68.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 5.165,
+      "maximumDeltaCodes": 5.135,
       "overlay": "clearTintM7",
       "tint": "#99734C",
       "variant": "clear",
       "walle": [
-        163.16,
-        110.46,
-        66.98
+        163.13,
+        110.42,
+        66.95
       ]
     },
     {
@@ -370,14 +370,14 @@
         76.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.584,
+      "maximumDeltaCodes": 1.713,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        74.42,
-        74.84,
-        74.8
+        74.29,
+        74.86,
+        75.06
       ]
     },
     {
@@ -388,14 +388,14 @@
         62.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.643,
+      "maximumDeltaCodes": 1.884,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        60.36,
-        62.29,
-        60.93
+        60.12,
+        62.33,
+        61.33
       ]
     },
     {
@@ -406,14 +406,14 @@
         181.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.535,
+      "maximumDeltaCodes": 1.272,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        180.21,
-        179.77,
-        179.47
+        180.08,
+        179.79,
+        179.73
       ]
     },
     {
@@ -424,14 +424,14 @@
         170.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.638,
+      "maximumDeltaCodes": 1.879,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        169.36,
-        170.65,
-        168.52
+        169.12,
+        170.68,
+        168.92
       ]
     },
     {
@@ -442,14 +442,14 @@
         79.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 3.292,
+      "maximumDeltaCodes": 3.317,
       "overlay": "tintS50",
       "tint": "#9F6060",
       "variant": "regular",
       "walle": [
-        150.29,
-        77.16,
-        79.25
+        150.32,
+        77.17,
+        79.27
       ]
     },
     {
@@ -478,14 +478,14 @@
         46.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 5.746,
+      "maximumDeltaCodes": 5.717,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
-        176.25,
-        39.66,
-        46.69
+        176.28,
+        39.67,
+        46.7
       ]
     },
     {
@@ -496,14 +496,14 @@
         53.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 7.421,
+      "maximumDeltaCodes": 7.42,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
         200.58,
         46.83,
-        54.68
+        54.69
       ]
     },
     {
@@ -514,14 +514,14 @@
         78.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.592,
+      "maximumDeltaCodes": 1.569,
       "overlay": "tintX03",
       "tint": "#B28C66",
       "variant": "regular",
       "walle": [
-        164.91,
-        117.41,
-        77.49
+        164.93,
+        117.43,
+        77.51
       ]
     },
     {
@@ -539,7 +539,7 @@
       "walle": [
         185.09,
         135.27,
-        92.13
+        92.14
       ]
     },
     {
@@ -550,14 +550,14 @@
         137.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 2.894,
+      "maximumDeltaCodes": 2.914,
       "overlay": "tintX07",
       "tint": "#734C99",
       "variant": "regular",
       "walle": [
-        107.89,
-        61.7,
-        137.02
+        107.91,
+        61.71,
+        137.04
       ]
     },
     {
@@ -586,14 +586,14 @@
         62.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.996,
+      "maximumDeltaCodes": 1.916,
       "overlay": "clearTintL25",
       "tint": "#404040",
       "variant": "clear",
       "walle": [
-        60.93,
-        60.0,
-        61.03
+        60.51,
+        60.08,
+        60.97
       ]
     },
     {
@@ -604,14 +604,14 @@
         62.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.996,
+      "maximumDeltaCodes": 1.916,
       "overlay": "clearTintL25",
       "tint": "#404040",
       "variant": "clear",
       "walle": [
-        60.93,
-        60.0,
-        61.03
+        60.51,
+        60.08,
+        60.97
       ]
     },
     {
@@ -622,14 +622,14 @@
         171.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.996,
+      "maximumDeltaCodes": 1.997,
       "overlay": "clearTintL70",
       "tint": "#B2B2B2",
       "variant": "clear",
       "walle": [
-        170.78,
-        169.0,
-        169.05
+        170.38,
+        169.1,
+        169.0
       ]
     },
     {
@@ -640,14 +640,14 @@
         171.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.996,
+      "maximumDeltaCodes": 1.997,
       "overlay": "clearTintL70",
       "tint": "#B2B2B2",
       "variant": "clear",
       "walle": [
-        170.78,
-        169.0,
-        169.05
+        170.38,
+        169.1,
+        169.0
       ]
     },
     {
@@ -658,14 +658,14 @@
         49.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 2.603,
+      "maximumDeltaCodes": 2.476,
       "overlay": "clearTintS50",
       "tint": "#9F6060",
       "variant": "clear",
       "walle": [
-        103.6,
-        47.71,
-        49.47
+        103.48,
+        47.63,
+        49.39
       ]
     },
     {
@@ -676,14 +676,14 @@
         91.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 0.802,
+      "maximumDeltaCodes": 0.758,
       "overlay": "clearTintS50",
       "tint": "#9F6060",
       "variant": "clear",
       "walle": [
-        170.75,
-        89.45,
-        91.8
+        170.73,
+        89.41,
+        91.76
       ]
     },
     {
@@ -694,14 +694,14 @@
         23.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.832,
+      "maximumDeltaCodes": 1.77,
       "overlay": "clearTintS100",
       "tint": "#BF4040",
       "variant": "clear",
       "walle": [
-        126.95,
-        16.83,
-        23.36
+        126.81,
+        16.77,
+        23.3
       ]
     },
     {
@@ -712,14 +712,14 @@
         54.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 6.965,
+      "maximumDeltaCodes": 6.979,
       "overlay": "clearTintS100",
       "tint": "#BF4040",
       "variant": "clear",
       "walle": [
-        201.03,
-        48.21,
-        55.28
+        201.02,
+        48.14,
+        55.22
       ]
     },
     {
@@ -730,14 +730,14 @@
         39.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 2.668,
+      "maximumDeltaCodes": 2.784,
       "overlay": "clearTintX03",
       "tint": "#B28C66",
       "variant": "clear",
       "walle": [
-        120.09,
-        74.33,
-        40.73
+        119.96,
+        74.22,
+        40.63
       ]
     },
     {
@@ -748,14 +748,14 @@
         92.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 0.871,
+      "maximumDeltaCodes": 0.883,
       "overlay": "clearTintX03",
       "tint": "#B28C66",
       "variant": "clear",
       "walle": [
-        185.13,
-        135.54,
-        92.69
+        185.12,
+        135.49,
+        92.64
       ]
     },
     {
@@ -766,14 +766,14 @@
         94.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 1.8,
+      "maximumDeltaCodes": 1.694,
       "overlay": "clearTintX07",
       "tint": "#734C99",
       "variant": "clear",
       "walle": [
-        69.15,
-        37.63,
-        95.8
+        69.05,
+        37.56,
+        95.69
       ]
     },
     {
@@ -784,14 +784,14 @@
         156.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 3.583,
+      "maximumDeltaCodes": 3.553,
       "overlay": "clearTintX07",
       "tint": "#734C99",
       "variant": "clear",
       "walle": [
-        123.58,
-        71.97,
-        156.44
+        123.55,
+        71.94,
+        156.41
       ]
     },
     {
@@ -802,14 +802,14 @@
         179.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 0.658,
+      "maximumDeltaCodes": 0.554,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
-        179.39,
-        178.34,
-        178.37
+        179.34,
+        178.45,
+        178.72
       ]
     },
     {
@@ -820,14 +820,14 @@
         15.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 0.843,
+      "maximumDeltaCodes": 1.084,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
-        15.77,
-        15.84,
-        15.68
+        15.54,
+        15.88,
+        16.08
       ]
     },
     {
@@ -838,14 +838,14 @@
         19.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 2.614,
+      "maximumDeltaCodes": 1.806,
       "overlay": "clear",
       "tint": "none",
       "variant": "clear",
       "walle": [
-        21.61,
-        19.76,
-        21.03
+        20.81,
+        19.46,
+        20.58
       ]
     },
     {
@@ -856,14 +856,14 @@
         19.0
       ],
       "background": "gray-000",
-      "maximumDeltaCodes": 2.614,
+      "maximumDeltaCodes": 1.806,
       "overlay": "clear",
       "tint": "none",
       "variant": "clear",
       "walle": [
-        21.61,
-        19.76,
-        21.03
+        20.81,
+        19.46,
+        20.58
       ]
     },
     {
@@ -874,14 +874,14 @@
         75.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 0.588,
+      "maximumDeltaCodes": 1.077,
       "overlay": "sweepTintM0",
       "tint": "#B25959",
       "variant": "regular",
       "walle": [
-        174.61,
-        72.05,
-        75.59
+        173.92,
+        71.64,
+        75.16
       ]
     },
     {
@@ -892,14 +892,14 @@
         86.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.451,
+      "maximumDeltaCodes": 1.446,
       "overlay": "sweepTintM0",
       "tint": "#B25959",
       "variant": "regular",
       "walle": [
         190.55,
-        81.9,
-        85.97
+        81.94,
+        86.01
       ]
     },
     {
@@ -910,14 +910,14 @@
         65.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 5.024,
+      "maximumDeltaCodes": 4.593,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
       "walle": [
-        32.02,
-        165.56,
-        66.34
+        31.59,
+        164.92,
+        65.93
       ]
     },
     {
@@ -928,14 +928,14 @@
         76.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 3.502,
+      "maximumDeltaCodes": 3.576,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
       "walle": [
-        43.5,
+        43.58,
         180.44,
-        76.6
+        76.63
       ]
     },
     {
@@ -946,14 +946,14 @@
         169.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.235,
+      "maximumDeltaCodes": 1.518,
       "overlay": "sweepTintM2",
       "tint": "#5959B2",
       "variant": "regular",
       "walle": [
-        78.73,
-        79.23,
-        168.14
+        78.29,
+        78.83,
+        167.48
       ]
     },
     {
@@ -964,14 +964,14 @@
         185.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.777,
+      "maximumDeltaCodes": 1.769,
       "overlay": "sweepTintM2",
       "tint": "#5959B2",
       "variant": "regular",
       "walle": [
-        89.35,
-        88.89,
-        183.22
+        89.38,
+        88.92,
+        183.23
       ]
     },
     {
@@ -982,14 +982,14 @@
         136.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 0.735,
+      "maximumDeltaCodes": 1.415,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        135.34,
-        135.79,
-        135.26
+        134.59,
+        135.76,
+        135.41
       ]
     },
     {
@@ -1000,14 +1000,14 @@
         124.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 0.769,
+      "maximumDeltaCodes": 0.9,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        123.75,
-        124.77,
-        123.52
+        123.49,
+        124.9,
+        123.26
       ]
     },
     {
@@ -1018,14 +1018,14 @@
         62.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 3.514,
+      "maximumDeltaCodes": 2.791,
       "overlay": "sweepTintM7",
       "tint": "#99734C",
       "variant": "regular",
       "walle": [
-        149.51,
-        101.33,
-        61.21
+        148.79,
+        100.84,
+        60.89
       ]
     },
     {
@@ -1036,14 +1036,14 @@
         70.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 4.99,
+      "maximumDeltaCodes": 5.005,
       "overlay": "sweepTintM7",
       "tint": "#99734C",
       "variant": "regular",
       "walle": [
-        164.99,
-        112.49,
-        68.52
+        165.0,
+        112.51,
+        68.54
       ]
     },
     {
@@ -1054,14 +1054,14 @@
         51.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 3.091,
+      "maximumDeltaCodes": 2.918,
       "overlay": "clearTintM0",
       "tint": "#B25959",
       "variant": "clear",
       "walle": [
-        140.76,
-        51.09,
-        54.09
+        140.48,
+        50.92,
+        53.91
       ]
     },
     {
@@ -1072,14 +1072,14 @@
         93.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.432,
+      "maximumDeltaCodes": 2.453,
       "overlay": "clearTintM0",
       "tint": "#B25959",
       "variant": "clear",
       "walle": [
-        191.57,
-        88.7,
-        92.21
+        191.55,
+        88.57,
+        92.08
       ]
     },
     {
@@ -1090,14 +1090,14 @@
         41.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 17.958,
+      "maximumDeltaCodes": 17.894,
       "overlay": "clearTintM1",
       "tint": "#59B259",
       "variant": "clear",
       "walle": [
-        17.96,
-        134.63,
-        45.78
+        17.89,
+        134.38,
+        45.61
       ]
     },
     {
@@ -1108,14 +1108,14 @@
         85.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.421,
+      "maximumDeltaCodes": 2.442,
       "overlay": "clearTintM1",
       "tint": "#59B259",
       "variant": "clear",
       "walle": [
-        54.53,
-        181.58,
-        82.7
+        54.34,
+        181.56,
+        82.59
       ]
     },
     {
@@ -1126,14 +1126,14 @@
         134.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 4.771,
+      "maximumDeltaCodes": 4.602,
       "overlay": "clearTintM2",
       "tint": "#5959B2",
       "variant": "clear",
       "walle": [
-        56.52,
-        58.77,
-        136.43
+        56.33,
+        58.6,
+        136.17
       ]
     },
     {
@@ -1144,14 +1144,14 @@
         187.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.56,
+      "maximumDeltaCodes": 2.648,
       "overlay": "clearTintM2",
       "tint": "#5959B2",
       "variant": "clear",
       "walle": [
-        93.92,
-        93.44,
-        184.84
+        93.83,
+        93.35,
+        184.81
       ]
     },
     {
@@ -1162,14 +1162,14 @@
         128.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.121,
+      "maximumDeltaCodes": 2.06,
       "overlay": "clearTintM6",
       "tint": "#808080",
       "variant": "clear",
       "walle": [
-        127.35,
-        125.88,
-        126.37
+        126.96,
+        125.94,
+        125.98
       ]
     },
     {
@@ -1180,14 +1180,14 @@
         128.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.121,
+      "maximumDeltaCodes": 2.06,
       "overlay": "clearTintM6",
       "tint": "#808080",
       "variant": "clear",
       "walle": [
-        127.35,
-        125.88,
-        126.37
+        126.96,
+        125.94,
+        125.98
       ]
     },
     {
@@ -1198,14 +1198,14 @@
         44.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.11,
+      "maximumDeltaCodes": 1.393,
       "overlay": "clearTintM7",
       "tint": "#99734C",
       "variant": "clear",
       "walle": [
-        112.89,
-        77.63,
-        44.94
+        112.61,
+        77.44,
+        44.81
       ]
     },
     {
@@ -1216,14 +1216,14 @@
         72.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 3.951,
+      "maximumDeltaCodes": 3.887,
       "overlay": "clearTintM7",
       "tint": "#99734C",
       "variant": "clear",
       "walle": [
-        167.95,
-        117.32,
-        72.18
+        167.89,
+        117.22,
+        72.11
       ]
     },
     {
@@ -1234,14 +1234,14 @@
         78.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.305,
+      "maximumDeltaCodes": 2.11,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        76.7,
-        77.32,
-        77.14
+        75.89,
+        77.23,
+        77.24
       ]
     },
     {
@@ -1252,14 +1252,14 @@
         64.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 0.881,
+      "maximumDeltaCodes": 1.134,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        63.12,
-        64.34,
-        63.46
+        62.87,
+        64.46,
+        63.2
       ]
     },
     {
@@ -1270,14 +1270,14 @@
         183.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.88,
+      "maximumDeltaCodes": 2.11,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        181.62,
-        181.4,
-        181.12
+        180.89,
+        181.39,
+        181.28
       ]
     },
     {
@@ -1288,14 +1288,14 @@
         172.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.51,
+      "maximumDeltaCodes": 1.773,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        171.03,
-        171.87,
-        170.49
+        170.76,
+        172.0,
+        170.23
       ]
     },
     {
@@ -1306,14 +1306,14 @@
         83.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 3.061,
+      "maximumDeltaCodes": 2.404,
       "overlay": "tintS50",
       "tint": "#9F6060",
       "variant": "regular",
       "walle": [
-        157.06,
-        81.54,
-        83.74
+        156.4,
+        81.12,
+        83.31
       ]
     },
     {
@@ -1324,14 +1324,14 @@
         94.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.918,
+      "maximumDeltaCodes": 2.926,
       "overlay": "tintS50",
       "tint": "#9F6060",
       "variant": "regular",
       "walle": [
-        171.92,
-        91.62,
-        94.08
+        171.93,
+        91.65,
+        94.1
       ]
     },
     {
@@ -1342,14 +1342,14 @@
         49.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 5.145,
+      "maximumDeltaCodes": 5.885,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
-        183.85,
-        43.24,
-        50.33
+        183.11,
+        42.91,
+        49.99
       ]
     },
     {
@@ -1360,14 +1360,14 @@
         58.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 5.406,
+      "maximumDeltaCodes": 5.395,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
-        201.59,
-        51.09,
-        58.42
+        201.61,
+        51.14,
+        58.46
       ]
     },
     {
@@ -1378,14 +1378,14 @@
         83.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.318,
+      "maximumDeltaCodes": 0.978,
       "overlay": "tintX03",
       "tint": "#B28C66",
       "variant": "regular",
       "walle": [
-        171.32,
-        123.63,
-        82.78
+        170.69,
+        123.02,
+        82.27
       ]
     },
     {
@@ -1396,14 +1396,14 @@
         96.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 0.583,
+      "maximumDeltaCodes": 0.546,
       "overlay": "tintX03",
       "tint": "#B28C66",
       "variant": "regular",
       "walle": [
         185.72,
-        137.95,
-        95.42
+        137.98,
+        95.45
       ]
     },
     {
@@ -1414,14 +1414,14 @@
         143.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 4.182,
+      "maximumDeltaCodes": 3.663,
       "overlay": "tintX07",
       "tint": "#734C99",
       "variant": "regular",
       "walle": [
-        113.18,
-        65.28,
-        143.49
+        112.66,
+        64.94,
+        142.86
       ]
     },
     {
@@ -1432,14 +1432,14 @@
         158.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 3.547,
+      "maximumDeltaCodes": 3.562,
       "overlay": "tintX07",
       "tint": "#734C99",
       "variant": "regular",
       "walle": [
-        125.55,
-        73.55,
-        158.09
+        125.56,
+        73.57,
+        158.11
       ]
     },
     {
@@ -1450,14 +1450,14 @@
         68.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.126,
+      "maximumDeltaCodes": 2.08,
       "overlay": "clearTintL25",
       "tint": "#404040",
       "variant": "clear",
       "walle": [
-        67.18,
-        65.87,
-        66.77
+        66.78,
+        65.92,
+        66.37
       ]
     },
     {
@@ -1468,14 +1468,14 @@
         68.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.126,
+      "maximumDeltaCodes": 2.08,
       "overlay": "clearTintL25",
       "tint": "#404040",
       "variant": "clear",
       "walle": [
-        67.18,
-        65.87,
-        66.77
+        66.78,
+        65.92,
+        66.37
       ]
     },
     {
@@ -1486,14 +1486,14 @@
         175.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.107,
+      "maximumDeltaCodes": 2.033,
       "overlay": "clearTintL70",
       "tint": "#B2B2B2",
       "variant": "clear",
       "walle": [
-        175.13,
-        172.89,
-        173.73
+        174.76,
+        172.97,
+        173.34
       ]
     },
     {
@@ -1504,14 +1504,14 @@
         175.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.107,
+      "maximumDeltaCodes": 2.033,
       "overlay": "clearTintL70",
       "tint": "#B2B2B2",
       "variant": "clear",
       "walle": [
-        175.13,
-        172.89,
-        173.73
+        174.76,
+        172.97,
+        173.34
       ]
     },
     {
@@ -1522,14 +1522,14 @@
         62.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 3.386,
+      "maximumDeltaCodes": 3.109,
       "overlay": "clearTintS50",
       "tint": "#9F6060",
       "variant": "clear",
       "walle": [
-        123.39,
-        60.34,
-        62.25
+        123.11,
+        60.16,
+        62.07
       ]
     },
     {
@@ -1540,14 +1540,14 @@
         99.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.71,
+      "maximumDeltaCodes": 1.671,
       "overlay": "clearTintS50",
       "tint": "#9F6060",
       "variant": "clear",
       "walle": [
-        173.71,
-        96.97,
-        98.94
+        173.67,
+        96.87,
+        98.85
       ]
     },
     {
@@ -1558,14 +1558,14 @@
         32.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.764,
+      "maximumDeltaCodes": 1.627,
       "overlay": "clearTintS100",
       "tint": "#BF4040",
       "variant": "clear",
       "walle": [
-        148.61,
-        26.76,
-        33.42
+        148.3,
+        26.63,
+        33.29
       ]
     },
     {
@@ -1576,14 +1576,14 @@
         64.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 4.518,
+      "maximumDeltaCodes": 4.549,
       "overlay": "clearTintS100",
       "tint": "#BF4040",
       "variant": "clear",
       "walle": [
-        203.48,
-        59.69,
-        65.85
+        203.45,
+        59.53,
+        65.7
       ]
     },
     {
@@ -1594,14 +1594,14 @@
         56.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.492,
+      "maximumDeltaCodes": 2.221,
       "overlay": "clearTintX03",
       "tint": "#B28C66",
       "variant": "clear",
       "walle": [
-        139.49,
-        92.65,
-        56.45
+        139.22,
+        92.39,
+        56.24
       ]
     },
     {
@@ -1612,14 +1612,14 @@
         102.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 0.759,
+      "maximumDeltaCodes": 0.785,
       "overlay": "clearTintX03",
       "tint": "#B28C66",
       "variant": "clear",
       "walle": [
-        187.24,
-        143.43,
-        101.9
+        187.21,
+        143.32,
+        101.77
       ]
     },
     {
@@ -1630,14 +1630,14 @@
         113.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 1.544,
+      "maximumDeltaCodes": 1.316,
       "overlay": "clearTintX07",
       "tint": "#734C99",
       "variant": "clear",
       "walle": [
-        85.54,
-        48.07,
-        113.52
+        85.32,
+        47.93,
+        113.28
       ]
     },
     {
@@ -1648,14 +1648,14 @@
         162.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 3.391,
+      "maximumDeltaCodes": 3.333,
       "overlay": "clearTintX07",
       "tint": "#734C99",
       "variant": "clear",
       "walle": [
-        128.39,
-        77.54,
-        161.54
+        128.33,
+        77.46,
+        161.47
       ]
     },
     {
@@ -1666,14 +1666,14 @@
         200.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.311,
+      "maximumDeltaCodes": 0.58,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
-        202.31,
-        201.56,
-        201.58
+        199.47,
+        199.42,
+        199.62
       ]
     },
     {
@@ -1684,14 +1684,14 @@
         40.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 0.709,
+      "maximumDeltaCodes": 0.722,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
-        39.36,
-        39.4,
-        39.29
+        39.34,
+        39.77,
+        39.28
       ]
     },
     {
@@ -1702,14 +1702,14 @@
         85.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.564,
+      "maximumDeltaCodes": 1.32,
       "overlay": "clear",
       "tint": "none",
       "variant": "clear",
       "walle": [
-        87.56,
-        86.14,
-        87.08
+        86.32,
+        85.33,
+        85.83
       ]
     },
     {
@@ -1720,14 +1720,14 @@
         85.0
       ],
       "background": "gray-064",
-      "maximumDeltaCodes": 2.564,
+      "maximumDeltaCodes": 1.32,
       "overlay": "clear",
       "tint": "none",
       "variant": "clear",
       "walle": [
-        87.56,
-        86.14,
-        87.08
+        86.32,
+        85.33,
+        85.83
       ]
     },
     {
@@ -1738,14 +1738,14 @@
         79.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.031,
+      "maximumDeltaCodes": 1.272,
       "overlay": "sweepTintM0",
       "tint": "#B25959",
       "variant": "regular",
       "walle": [
-        179.97,
-        75.53,
-        79.2
+        179.73,
+        75.38,
+        79.04
       ]
     },
     {
@@ -1756,14 +1756,14 @@
         89.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.137,
+      "maximumDeltaCodes": 1.001,
       "overlay": "sweepTintM0",
       "tint": "#B25959",
       "variant": "regular",
       "walle": [
-        190.97,
-        84.86,
-        88.76
+        191.0,
+        85.09,
+        88.96
       ]
     },
     {
@@ -1774,14 +1774,14 @@
         69.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 3.134,
+      "maximumDeltaCodes": 2.979,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
       "walle": [
-        36.13,
-        170.57,
-        69.78
+        35.98,
+        170.34,
+        69.64
       ]
     },
     {
@@ -1792,14 +1792,14 @@
         80.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.179,
+      "maximumDeltaCodes": 1.608,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
       "walle": [
-        49.18,
-        181.02,
-        79.51
+        49.61,
+        181.06,
+        79.71
       ]
     },
     {
@@ -1810,14 +1810,14 @@
         174.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 0.701,
+      "maximumDeltaCodes": 0.935,
       "overlay": "sweepTintM2",
       "tint": "#5959B2",
       "variant": "regular",
       "walle": [
-        82.31,
-        82.52,
-        173.3
+        82.16,
+        82.38,
+        173.07
       ]
     },
     {
@@ -1828,14 +1828,14 @@
         185.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.095,
+      "maximumDeltaCodes": 1.047,
       "overlay": "sweepTintM2",
       "tint": "#5959B2",
       "variant": "regular",
       "walle": [
-        91.4,
-        90.98,
-        183.91
+        91.55,
+        91.14,
+        183.95
       ]
     },
     {
@@ -1846,14 +1846,14 @@
         138.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.275,
+      "maximumDeltaCodes": 2.002,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        136.72,
-        137.32,
-        136.8
+        136.0,
+        137.43,
+        137.03
       ]
     },
     {
@@ -1864,14 +1864,14 @@
         126.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 0.486,
+      "maximumDeltaCodes": 0.891,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        125.65,
-        126.22,
-        125.51
+        125.52,
+        126.47,
+        125.11
       ]
     },
     {
@@ -1882,14 +1882,14 @@
         65.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 4.182,
+      "maximumDeltaCodes": 3.926,
       "overlay": "sweepTintM7",
       "tint": "#99734C",
       "variant": "regular",
       "walle": [
-        155.18,
-        105.26,
-        64.0
+        154.93,
+        105.08,
+        63.89
       ]
     },
     {
@@ -1900,14 +1900,14 @@
         71.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 4.17,
+      "maximumDeltaCodes": 4.259,
       "overlay": "sweepTintM7",
       "tint": "#99734C",
       "variant": "regular",
       "walle": [
-        166.17,
-        114.59,
-        70.24
+        166.26,
+        114.75,
+        70.36
       ]
     },
     {
@@ -1918,14 +1918,14 @@
         65.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.855,
+      "maximumDeltaCodes": 1.652,
       "overlay": "clearTintM0",
       "tint": "#B25959",
       "variant": "clear",
       "walle": [
-        161.11,
-        63.58,
-        66.85
+        160.79,
+        63.39,
+        66.65
       ]
     },
     {
@@ -1936,14 +1936,14 @@
         102.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 2.755,
+      "maximumDeltaCodes": 2.777,
       "overlay": "clearTintM0",
       "tint": "#B25959",
       "variant": "clear",
       "walle": [
-        193.25,
-        97.97,
-        101.13
+        193.22,
+        97.83,
+        100.99
       ]
     },
     {
@@ -1954,14 +1954,14 @@
         55.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 12.713,
+      "maximumDeltaCodes": 12.641,
       "overlay": "clearTintM1",
       "tint": "#59B259",
       "variant": "clear",
       "walle": [
-        22.71,
-        152.87,
-        58.26
+        22.64,
+        152.59,
+        58.06
       ]
     },
     {
@@ -1972,14 +1972,14 @@
         94.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 2.973,
+      "maximumDeltaCodes": 3.103,
       "overlay": "clearTintM1",
       "tint": "#59B259",
       "variant": "clear",
       "walle": [
-        68.67,
-        183.26,
-        91.03
+        68.44,
+        183.24,
+        90.9
       ]
     },
     {
@@ -1990,14 +1990,14 @@
         154.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 3.005,
+      "maximumDeltaCodes": 2.811,
       "overlay": "clearTintM2",
       "tint": "#5959B2",
       "variant": "clear",
       "walle": [
-        70.53,
-        71.01,
-        155.34
+        70.31,
+        70.81,
+        155.04
       ]
     },
     {
@@ -2008,14 +2008,14 @@
         189.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 4.142,
+      "maximumDeltaCodes": 4.242,
       "overlay": "clearTintM2",
       "tint": "#5959B2",
       "variant": "clear",
       "walle": [
-        100.46,
-        99.86,
-        187.08
+        100.36,
+        99.76,
+        187.05
       ]
     },
     {
@@ -2026,14 +2026,14 @@
         132.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.392,
+      "maximumDeltaCodes": 1.318,
       "overlay": "clearTintM6",
       "tint": "#808080",
       "variant": "clear",
       "walle": [
-        132.26,
-        130.61,
-        131.17
+        131.82,
+        130.68,
+        130.7
       ]
     },
     {
@@ -2044,14 +2044,14 @@
         132.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.392,
+      "maximumDeltaCodes": 1.318,
       "overlay": "clearTintM6",
       "tint": "#808080",
       "variant": "clear",
       "walle": [
-        132.26,
-        130.61,
-        131.17
+        131.82,
+        130.68,
+        130.7
       ]
     },
     {
@@ -2062,14 +2062,14 @@
         54.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.156,
+      "maximumDeltaCodes": 0.831,
       "overlay": "clearTintM7",
       "tint": "#99734C",
       "variant": "clear",
       "walle": [
-        133.16,
-        91.63,
-        54.6
+        132.83,
+        91.4,
+        54.45
       ]
     },
     {
@@ -2080,14 +2080,14 @@
         77.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 3.238,
+      "maximumDeltaCodes": 3.13,
       "overlay": "clearTintM7",
       "tint": "#99734C",
       "variant": "clear",
       "walle": [
-        172.74,
-        124.24,
-        77.38
+        172.67,
+        124.13,
+        77.3
       ]
     },
     {
@@ -2098,14 +2098,14 @@
         80.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.376,
+      "maximumDeltaCodes": 2.119,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        78.62,
-        79.39,
-        79.11
+        77.88,
+        79.48,
+        79.33
       ]
     },
     {
@@ -2116,14 +2116,14 @@
         66.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 0.379,
+      "maximumDeltaCodes": 0.607,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        65.62,
-        66.33,
-        65.78
+        65.53,
+        66.6,
+        65.39
       ]
     },
     {
@@ -2134,14 +2134,14 @@
         184.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.559,
+      "maximumDeltaCodes": 1.969,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        182.75,
-        182.7,
-        182.44
+        182.03,
+        182.82,
+        182.68
       ]
     },
     {
@@ -2152,14 +2152,14 @@
         174.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.773,
+      "maximumDeltaCodes": 2.197,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        172.5,
-        172.97,
-        172.23
+        172.33,
+        173.19,
+        171.8
       ]
     },
     {
@@ -2170,14 +2170,14 @@
         87.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 3.106,
+      "maximumDeltaCodes": 2.874,
       "overlay": "tintS50",
       "tint": "#9F6060",
       "variant": "regular",
       "walle": [
-        162.11,
-        85.08,
-        87.36
+        161.87,
+        84.93,
+        87.2
       ]
     },
     {
@@ -2188,14 +2188,14 @@
         96.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 2.626,
+      "maximumDeltaCodes": 2.676,
       "overlay": "tintS50",
       "tint": "#9F6060",
       "variant": "regular",
       "walle": [
-        172.63,
-        93.98,
-        96.23
+        172.68,
+        94.16,
+        96.38
       ]
     },
     {
@@ -2206,14 +2206,14 @@
         52.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 6.367,
+      "maximumDeltaCodes": 6.628,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
-        189.63,
-        46.34,
-        53.43
+        189.37,
+        46.23,
+        53.31
       ]
     },
     {
@@ -2224,14 +2224,14 @@
         61.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 5.497,
+      "maximumDeltaCodes": 5.428,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
-        202.5,
-        54.98,
-        61.82
+        202.57,
+        55.26,
+        62.07
       ]
     },
     {
@@ -2242,14 +2242,14 @@
         87.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.208,
+      "maximumDeltaCodes": 0.987,
       "overlay": "tintX03",
       "tint": "#B28C66",
       "variant": "regular",
       "walle": [
-        176.21,
-        128.31,
-        86.99
+        175.99,
+        128.12,
+        86.81
       ]
     },
     {
@@ -2260,14 +2260,14 @@
         99.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 0.752,
+      "maximumDeltaCodes": 0.646,
       "overlay": "tintX03",
       "tint": "#B28C66",
       "variant": "regular",
       "walle": [
-        186.31,
-        140.28,
-        98.25
+        186.35,
+        140.46,
+        98.47
       ]
     },
     {
@@ -2278,14 +2278,14 @@
         148.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 4.329,
+      "maximumDeltaCodes": 4.147,
       "overlay": "tintX07",
       "tint": "#734C99",
       "variant": "regular",
       "walle": [
-        117.33,
-        68.27,
-        148.44
+        117.15,
+        68.15,
+        148.22
       ]
     },
     {
@@ -2296,14 +2296,14 @@
         160.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 3.797,
+      "maximumDeltaCodes": 3.887,
       "overlay": "tintX07",
       "tint": "#734C99",
       "variant": "regular",
       "walle": [
-        126.8,
-        75.39,
-        159.53
+        126.89,
+        75.52,
+        159.65
       ]
     },
     {
@@ -2314,14 +2314,14 @@
         74.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 2.194,
+      "maximumDeltaCodes": 2.137,
       "overlay": "clearTintL25",
       "tint": "#404040",
       "variant": "clear",
       "walle": [
-        73.5,
-        71.81,
-        72.58
+        73.03,
+        71.86,
+        72.09
       ]
     },
     {
@@ -2332,14 +2332,14 @@
         74.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 2.194,
+      "maximumDeltaCodes": 2.137,
       "overlay": "clearTintL25",
       "tint": "#404040",
       "variant": "clear",
       "walle": [
-        73.5,
-        71.81,
-        72.58
+        73.03,
+        71.86,
+        72.09
       ]
     },
     {
@@ -2350,14 +2350,14 @@
         180.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 3.219,
+      "maximumDeltaCodes": 3.13,
       "overlay": "clearTintL70",
       "tint": "#B2B2B2",
       "variant": "clear",
       "walle": [
-        179.48,
-        176.78,
-        178.4
+        179.04,
+        176.87,
+        177.94
       ]
     },
     {
@@ -2368,14 +2368,14 @@
         180.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 3.219,
+      "maximumDeltaCodes": 3.13,
       "overlay": "clearTintL70",
       "tint": "#B2B2B2",
       "variant": "clear",
       "walle": [
-        179.48,
-        176.78,
-        178.4
+        179.04,
+        176.87,
+        177.94
       ]
     },
     {
@@ -2386,14 +2386,14 @@
         74.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 3.102,
+      "maximumDeltaCodes": 2.786,
       "overlay": "clearTintS50",
       "tint": "#9F6060",
       "variant": "clear",
       "walle": [
-        143.1,
-        72.96,
-        74.99
+        142.79,
+        72.76,
+        74.79
       ]
     },
     {
@@ -2404,14 +2404,14 @@
         107.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.672,
+      "maximumDeltaCodes": 1.628,
       "overlay": "clearTintS50",
       "tint": "#9F6060",
       "variant": "clear",
       "walle": [
-        176.67,
-        104.56,
-        106.15
+        176.63,
+        104.44,
+        106.03
       ]
     },
     {
@@ -2422,14 +2422,14 @@
         42.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 2.74,
+      "maximumDeltaCodes": 3.088,
       "overlay": "clearTintS100",
       "tint": "#BF4040",
       "variant": "clear",
       "walle": [
-        170.26,
-        36.68,
-        43.51
+        169.91,
+        36.52,
+        43.35
       ]
     },
     {
@@ -2440,14 +2440,14 @@
         76.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 4.072,
+      "maximumDeltaCodes": 4.108,
       "overlay": "clearTintS100",
       "tint": "#BF4040",
       "variant": "clear",
       "walle": [
-        205.93,
-        71.14,
-        76.51
+        205.89,
+        70.96,
+        76.34
       ]
     },
     {
@@ -2458,14 +2458,14 @@
         72.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.958,
+      "maximumDeltaCodes": 1.687,
       "overlay": "clearTintX03",
       "tint": "#B28C66",
       "variant": "clear",
       "walle": [
-        158.96,
-        110.95,
-        72.16
+        158.69,
+        110.66,
+        71.91
       ]
     },
     {
@@ -2476,14 +2476,14 @@
         112.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 2.306,
+      "maximumDeltaCodes": 2.183,
       "overlay": "clearTintX03",
       "tint": "#B28C66",
       "variant": "clear",
       "walle": [
-        189.35,
-        151.31,
-        111.17
+        189.32,
+        151.18,
+        111.02
       ]
     },
     {
@@ -2494,14 +2494,14 @@
         130.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 2.931,
+      "maximumDeltaCodes": 2.671,
       "overlay": "clearTintX07",
       "tint": "#734C99",
       "variant": "clear",
       "walle": [
-        101.93,
-        58.51,
-        131.23
+        101.67,
+        58.35,
+        130.94
       ]
     },
     {
@@ -2512,14 +2512,14 @@
         168.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 3.308,
+      "maximumDeltaCodes": 3.233,
       "overlay": "clearTintX07",
       "tint": "#734C99",
       "variant": "clear",
       "walle": [
-        133.31,
-        83.04,
-        166.75
+        133.23,
+        82.95,
+        166.67
       ]
     },
     {
@@ -2530,14 +2530,14 @@
         219.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 0.659,
+      "maximumDeltaCodes": 0.805,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
-        219.66,
-        219.13,
-        219.15
+        218.2,
+        218.5,
+        218.64
       ]
     },
     {
@@ -2548,14 +2548,14 @@
         60.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 0.895,
+      "maximumDeltaCodes": 0.901,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
-        59.14,
-        59.15,
-        59.11
+        60.48,
+        60.9,
+        60.17
       ]
     },
     {
@@ -2566,14 +2566,14 @@
         152.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.533,
+      "maximumDeltaCodes": 0.375,
       "overlay": "clear",
       "tint": "none",
       "variant": "clear",
       "walle": [
-        153.53,
-        152.55,
-        153.16
+        152.1,
+        151.63,
+        151.7
       ]
     },
     {
@@ -2584,14 +2584,14 @@
         152.0
       ],
       "background": "gray-128",
-      "maximumDeltaCodes": 1.533,
+      "maximumDeltaCodes": 0.375,
       "overlay": "clear",
       "tint": "none",
       "variant": "clear",
       "walle": [
-        153.53,
-        152.55,
-        153.16
+        152.1,
+        151.63,
+        151.7
       ]
     },
     {
@@ -2602,14 +2602,14 @@
         82.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 1.046,
+      "maximumDeltaCodes": 0.972,
       "overlay": "sweepTintM0",
       "tint": "#B25959",
       "variant": "regular",
       "walle": [
-        184.95,
-        78.96,
-        82.68
+        185.03,
+        79.0,
+        82.72
       ]
     },
     {
@@ -2620,14 +2620,14 @@
         92.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 1.542,
+      "maximumDeltaCodes": 1.525,
       "overlay": "sweepTintM0",
       "tint": "#B25959",
       "variant": "regular",
       "walle": [
-        191.46,
-        87.93,
-        91.64
+        191.48,
+        88.05,
+        91.76
       ]
     },
     {
@@ -2638,14 +2638,14 @@
         72.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 4.369,
+      "maximumDeltaCodes": 4.413,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
       "walle": [
-        40.37,
-        175.25,
-        73.22
+        40.41,
+        175.31,
+        73.26
       ]
     },
     {
@@ -2656,14 +2656,14 @@
         84.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 1.519,
+      "maximumDeltaCodes": 1.4,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
       "walle": [
-        54.98,
-        181.68,
-        82.48
+        55.22,
+        181.7,
+        82.6
       ]
     },
     {
@@ -2674,14 +2674,14 @@
         179.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.897,
+      "maximumDeltaCodes": 0.925,
       "overlay": "sweepTintM2",
       "tint": "#5959B2",
       "variant": "regular",
       "walle": [
-        85.88,
-        85.82,
-        178.1
+        85.93,
+        85.86,
+        178.17
       ]
     },
     {
@@ -2692,14 +2692,14 @@
         186.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 1.792,
+      "maximumDeltaCodes": 1.708,
       "overlay": "sweepTintM2",
       "tint": "#5959B2",
       "variant": "regular",
       "walle": [
-        93.58,
-        93.21,
-        184.66
+        93.66,
+        93.29,
+        184.68
       ]
     },
     {
@@ -2710,14 +2710,14 @@
         139.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.872,
+      "maximumDeltaCodes": 1.225,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        138.13,
-        138.86,
-        138.34
+        137.77,
+        138.97,
+        138.54
       ]
     },
     {
@@ -2728,14 +2728,14 @@
         127.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.742,
+      "maximumDeltaCodes": 0.885,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        127.62,
-        127.74,
-        127.58
+        127.49,
+        127.89,
+        127.27
       ]
     },
     {
@@ -2746,14 +2746,14 @@
         66.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 5.339,
+      "maximumDeltaCodes": 5.416,
       "overlay": "sweepTintM7",
       "tint": "#99734C",
       "variant": "regular",
       "walle": [
-        160.34,
-        109.02,
-        66.86
+        160.42,
+        109.07,
+        66.89
       ]
     },
     {
@@ -2764,14 +2764,14 @@
         72.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 4.41,
+      "maximumDeltaCodes": 4.458,
       "overlay": "sweepTintM7",
       "tint": "#99734C",
       "variant": "regular",
       "walle": [
-        167.41,
-        116.78,
-        72.19
+        167.46,
+        116.87,
+        72.25
       ]
     },
     {
@@ -2782,14 +2782,14 @@
         79.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.718,
+      "maximumDeltaCodes": 0.571,
       "overlay": "clearTintM0",
       "tint": "#B25959",
       "variant": "clear",
       "walle": [
-        181.61,
-        76.06,
-        79.72
+        181.35,
+        75.9,
+        79.57
       ]
     },
     {
@@ -2800,14 +2800,14 @@
         111.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 3.077,
+      "maximumDeltaCodes": 3.094,
       "overlay": "clearTintM0",
       "tint": "#B25959",
       "variant": "clear",
       "walle": [
-        194.92,
-        107.32,
-        110.13
+        194.91,
+        107.2,
+        110.02
       ]
     },
     {
@@ -2818,14 +2818,14 @@
         69.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 5.527,
+      "maximumDeltaCodes": 5.584,
       "overlay": "clearTintM1",
       "tint": "#59B259",
       "variant": "clear",
       "walle": [
-        27.47,
-        171.01,
-        70.74
+        27.42,
+        170.79,
+        70.59
       ]
     },
     {
@@ -2836,14 +2836,14 @@
         104.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 4.701,
+      "maximumDeltaCodes": 4.801,
       "overlay": "clearTintM1",
       "tint": "#59B259",
       "variant": "clear",
       "walle": [
-        82.85,
-        184.94,
-        99.3
+        82.67,
+        184.92,
+        99.2
       ]
     },
     {
@@ -2854,14 +2854,14 @@
         174.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 2.553,
+      "maximumDeltaCodes": 2.38,
       "overlay": "clearTintM2",
       "tint": "#5959B2",
       "variant": "clear",
       "walle": [
-        84.55,
-        83.25,
-        174.13
+        84.38,
+        83.1,
+        173.9
       ]
     },
     {
@@ -2872,14 +2872,14 @@
         191.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 6.654,
+      "maximumDeltaCodes": 6.732,
       "overlay": "clearTintM2",
       "tint": "#5959B2",
       "variant": "clear",
       "walle": [
-        107.08,
-        106.35,
-        189.32
+        107.0,
+        106.27,
+        189.3
       ]
     },
     {
@@ -2890,14 +2890,14 @@
         138.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 2.535,
+      "maximumDeltaCodes": 2.408,
       "overlay": "clearTintM6",
       "tint": "#808080",
       "variant": "clear",
       "walle": [
-        137.31,
-        135.47,
-        136.1
+        136.71,
+        135.59,
+        135.81
       ]
     },
     {
@@ -2908,14 +2908,14 @@
         138.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 2.535,
+      "maximumDeltaCodes": 2.408,
       "overlay": "clearTintM6",
       "tint": "#808080",
       "variant": "clear",
       "walle": [
-        137.31,
-        135.47,
-        136.1
+        136.71,
+        135.59,
+        135.81
       ]
     },
     {
@@ -2926,14 +2926,14 @@
         65.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 2.566,
+      "maximumDeltaCodes": 2.313,
       "overlay": "clearTintM7",
       "tint": "#99734C",
       "variant": "clear",
       "walle": [
-        153.57,
-        105.63,
-        64.22
+        153.31,
+        105.46,
+        64.11
       ]
     },
     {
@@ -2944,14 +2944,14 @@
         81.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 5.039,
+      "maximumDeltaCodes": 4.955,
       "overlay": "clearTintM7",
       "tint": "#99734C",
       "variant": "clear",
       "walle": [
-        177.53,
-        131.04,
-        82.51
+        177.47,
+        130.95,
+        82.45
       ]
     },
     {
@@ -2962,14 +2962,14 @@
         81.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.49,
+      "maximumDeltaCodes": 0.744,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        80.59,
-        81.49,
-        81.12
+        80.26,
+        81.61,
+        81.32
       ]
     },
     {
@@ -2980,14 +2980,14 @@
         67.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 1.558,
+      "maximumDeltaCodes": 1.736,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        68.39,
-        68.56,
-        68.37
+        68.27,
+        68.74,
+        68.07
       ]
     },
     {
@@ -2998,14 +2998,14 @@
         185.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 1.254,
+      "maximumDeltaCodes": 1.481,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        183.87,
-        183.99,
-        183.75
+        183.52,
+        184.1,
+        183.94
       ]
     },
     {
@@ -3016,14 +3016,14 @@
         175.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 1.001,
+      "maximumDeltaCodes": 1.329,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        174.01,
-        174.12,
-        174.0
+        173.85,
+        174.27,
+        173.67
       ]
     },
     {
@@ -3034,14 +3034,14 @@
         90.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 2.929,
+      "maximumDeltaCodes": 3.0,
       "overlay": "tintS50",
       "tint": "#9F6060",
       "variant": "regular",
       "walle": [
-        166.93,
-        88.54,
-        90.87
+        167.0,
+        88.58,
+        90.92
       ]
     },
     {
@@ -3052,14 +3052,14 @@
         98.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 2.409,
+      "maximumDeltaCodes": 2.436,
       "overlay": "tintS50",
       "tint": "#9F6060",
       "variant": "regular",
       "walle": [
-        173.41,
-        96.4,
-        98.52
+        173.44,
+        96.49,
+        98.61
       ]
     },
     {
@@ -3070,14 +3070,14 @@
         55.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 6.134,
+      "maximumDeltaCodes": 6.055,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
-        194.87,
-        49.58,
-        56.6
+        194.94,
+        49.61,
+        56.64
       ]
     },
     {
@@ -3088,14 +3088,14 @@
         63.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 4.539,
+      "maximumDeltaCodes": 4.502,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
-        203.46,
-        59.01,
-        65.34
+        203.5,
+        59.16,
+        65.47
       ]
     },
     {
@@ -3106,14 +3106,14 @@
         91.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.767,
+      "maximumDeltaCodes": 0.833,
       "overlay": "tintX03",
       "tint": "#B28C66",
       "variant": "regular",
       "walle": [
-        180.77,
-        132.79,
-        91.05
+        180.83,
+        132.86,
+        91.1
       ]
     },
     {
@@ -3124,14 +3124,14 @@
         101.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.652,
+      "maximumDeltaCodes": 0.752,
       "overlay": "tintX03",
       "tint": "#B28C66",
       "variant": "regular",
       "walle": [
-        186.98,
-        142.65,
-        101.22
+        187.0,
+        142.75,
+        101.34
       ]
     },
     {
@@ -3142,14 +3142,14 @@
         153.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 3.272,
+      "maximumDeltaCodes": 3.327,
       "overlay": "tintX07",
       "tint": "#734C99",
       "variant": "regular",
       "walle": [
-        121.27,
-        71.3,
-        153.08
+        121.33,
+        71.34,
+        153.15
       ]
     },
     {
@@ -3160,14 +3160,14 @@
         161.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 3.075,
+      "maximumDeltaCodes": 3.118,
       "overlay": "tintX07",
       "tint": "#734C99",
       "variant": "regular",
       "walle": [
-        128.07,
-        77.43,
-        161.15
+        128.12,
+        77.49,
+        161.21
       ]
     },
     {
@@ -3178,14 +3178,14 @@
         80.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 2.256,
+      "maximumDeltaCodes": 2.144,
       "overlay": "clearTintL25",
       "tint": "#404040",
       "variant": "clear",
       "walle": [
-        79.8,
-        77.74,
-        78.39
+        79.21,
+        77.86,
+        78.08
       ]
     },
     {
@@ -3196,14 +3196,14 @@
         80.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 2.256,
+      "maximumDeltaCodes": 2.144,
       "overlay": "clearTintL25",
       "tint": "#404040",
       "variant": "clear",
       "walle": [
-        79.8,
-        77.74,
-        78.39
+        79.21,
+        77.86,
+        78.08
       ]
     },
     {
@@ -3214,14 +3214,14 @@
         184.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 3.328,
+      "maximumDeltaCodes": 3.189,
       "overlay": "clearTintL70",
       "tint": "#B2B2B2",
       "variant": "clear",
       "walle": [
-        183.83,
-        180.67,
-        183.08
+        183.24,
+        180.81,
+        182.79
       ]
     },
     {
@@ -3232,14 +3232,14 @@
         184.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 3.328,
+      "maximumDeltaCodes": 3.189,
       "overlay": "clearTintL70",
       "tint": "#B2B2B2",
       "variant": "clear",
       "walle": [
-        183.83,
-        180.67,
-        183.08
+        183.24,
+        180.81,
+        182.79
       ]
     },
     {
@@ -3250,14 +3250,14 @@
         87.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 3.837,
+      "maximumDeltaCodes": 3.593,
       "overlay": "clearTintS50",
       "tint": "#9F6060",
       "variant": "clear",
       "walle": [
-        162.84,
-        85.59,
-        87.75
+        162.59,
+        85.44,
+        87.6
       ]
     },
     {
@@ -3268,14 +3268,14 @@
         115.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 1.705,
+      "maximumDeltaCodes": 1.792,
       "overlay": "clearTintS50",
       "tint": "#9F6060",
       "variant": "clear",
       "walle": [
-        179.64,
-        112.11,
-        113.3
+        179.6,
+        112.02,
+        113.21
       ]
     },
     {
@@ -3286,14 +3286,14 @@
         52.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 4.069,
+      "maximumDeltaCodes": 4.338,
       "overlay": "clearTintS100",
       "tint": "#BF4040",
       "variant": "clear",
       "walle": [
-        191.93,
-        46.62,
-        53.61
+        191.66,
+        46.5,
+        53.49
       ]
     },
     {
@@ -3304,14 +3304,14 @@
         86.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 1.622,
+      "maximumDeltaCodes": 1.65,
       "overlay": "clearTintS100",
       "tint": "#BF4040",
       "variant": "clear",
       "walle": [
-        208.38,
-        82.6,
-        87.11
+        208.35,
+        82.46,
+        86.98
       ]
     },
     {
@@ -3322,14 +3322,14 @@
         87.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 3.433,
+      "maximumDeltaCodes": 3.192,
       "overlay": "clearTintX03",
       "tint": "#B28C66",
       "variant": "clear",
       "walle": [
-        178.43,
-        129.16,
-        87.89
+        178.19,
+        128.93,
+        87.69
       ]
     },
     {
@@ -3340,14 +3340,14 @@
         121.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 3.114,
+      "maximumDeltaCodes": 3.03,
       "overlay": "clearTintX03",
       "tint": "#B28C66",
       "variant": "clear",
       "walle": [
-        191.35,
-        159.11,
-        120.38
+        191.33,
+        159.03,
+        120.27
       ]
     },
     {
@@ -3358,14 +3358,14 @@
         148.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 5.335,
+      "maximumDeltaCodes": 5.132,
       "overlay": "clearTintX07",
       "tint": "#734C99",
       "variant": "clear",
       "walle": [
-        118.33,
-        68.94,
-        149.07
+        118.13,
+        68.82,
+        148.85
       ]
     },
     {
@@ -3376,14 +3376,14 @@
         173.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 3.238,
+      "maximumDeltaCodes": 3.179,
       "overlay": "clearTintX07",
       "tint": "#734C99",
       "variant": "clear",
       "walle": [
-        138.24,
-        88.61,
-        171.97
+        138.18,
+        88.54,
+        171.91
       ]
     },
     {
@@ -3394,14 +3394,14 @@
         236.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.895,
+      "maximumDeltaCodes": 0.707,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
-        235.42,
-        235.11,
-        235.11
+        235.29,
+        235.44,
+        235.54
       ]
     },
     {
@@ -3412,14 +3412,14 @@
         78.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.292,
+      "maximumDeltaCodes": 1.258,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
-        78.29,
-        78.27,
-        78.29
+        78.95,
+        79.26,
+        78.77
       ]
     },
     {
@@ -3430,14 +3430,14 @@
         219.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.564,
+      "maximumDeltaCodes": 0.8,
       "overlay": "clear",
       "tint": "none",
       "variant": "clear",
       "walle": [
-        219.56,
-        219.01,
-        219.29
+        218.2,
+        218.37,
+        218.23
       ]
     },
     {
@@ -3448,14 +3448,14 @@
         219.0
       ],
       "background": "gray-192",
-      "maximumDeltaCodes": 0.564,
+      "maximumDeltaCodes": 0.8,
       "overlay": "clear",
       "tint": "none",
       "variant": "clear",
       "walle": [
-        219.56,
-        219.01,
-        219.29
+        218.2,
+        218.37,
+        218.23
       ]
     },
     {
@@ -3466,14 +3466,14 @@
         85.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 1.357,
+      "maximumDeltaCodes": 1.394,
       "overlay": "sweepTintM0",
       "tint": "#B25959",
       "variant": "regular",
       "walle": [
-        189.69,
-        82.36,
-        86.22
+        189.75,
+        82.39,
+        86.26
       ]
     },
     {
@@ -3484,14 +3484,14 @@
         94.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 1.912,
+      "maximumDeltaCodes": 1.956,
       "overlay": "sweepTintM0",
       "tint": "#B25959",
       "variant": "regular",
       "walle": [
-        192.09,
-        91.11,
-        94.65
+        192.04,
+        90.81,
+        94.36
       ]
     },
     {
@@ -3502,14 +3502,14 @@
         75.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 5.774,
+      "maximumDeltaCodes": 5.811,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
       "walle": [
-        44.77,
-        179.7,
-        76.69
+        44.81,
+        179.75,
+        76.73
       ]
     },
     {
@@ -3520,14 +3520,14 @@
         86.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 2.816,
+      "maximumDeltaCodes": 2.244,
       "overlay": "sweepTintM1",
       "tint": "#59B259",
       "variant": "regular",
       "walle": [
-        60.82,
-        182.42,
-        85.65
+        60.24,
+        182.37,
+        85.35
       ]
     },
     {
@@ -3538,14 +3538,14 @@
         183.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 1.437,
+      "maximumDeltaCodes": 1.476,
       "overlay": "sweepTintM2",
       "tint": "#5959B2",
       "variant": "regular",
       "walle": [
-        89.44,
-        89.13,
-        182.67
+        89.48,
+        89.17,
+        182.73
       ]
     },
     {
@@ -3556,14 +3556,14 @@
         187.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 1.516,
+      "maximumDeltaCodes": 1.635,
       "overlay": "sweepTintM2",
       "tint": "#5959B2",
       "variant": "regular",
       "walle": [
-        95.88,
-        95.57,
-        185.48
+        95.69,
+        95.37,
+        185.42
       ]
     },
     {
@@ -3574,13 +3574,13 @@
         140.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 0.441,
+      "maximumDeltaCodes": 0.375,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        139.59,
-        140.44,
+        139.89,
+        140.37,
         139.93
       ]
     },
@@ -3592,14 +3592,14 @@
         128.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 1.611,
+      "maximumDeltaCodes": 1.567,
       "overlay": "sweepTintM6",
       "tint": "#808080",
       "variant": "regular",
       "walle": [
-        129.57,
-        129.29,
-        129.61
+        129.26,
+        129.16,
+        129.57
       ]
     },
     {
@@ -3610,14 +3610,14 @@
         69.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 6.362,
+      "maximumDeltaCodes": 6.427,
       "overlay": "sweepTintM7",
       "tint": "#99734C",
       "variant": "regular",
       "walle": [
-        165.36,
-        112.64,
-        69.88
+        165.43,
+        112.68,
+        69.91
       ]
     },
     {
@@ -3628,14 +3628,14 @@
         73.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 3.719,
+      "maximumDeltaCodes": 3.598,
       "overlay": "sweepTintM7",
       "tint": "#99734C",
       "variant": "regular",
       "walle": [
-        168.72,
-        119.07,
-        74.36
+        168.6,
+        118.85,
+        74.2
       ]
     },
     {
@@ -3826,13 +3826,13 @@
         82.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 1.776,
+      "maximumDeltaCodes": 1.715,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        82.75,
-        83.78,
+        83.05,
+        83.72,
         83.32
       ]
     },
@@ -3844,14 +3844,14 @@
         69.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 2.35,
+      "maximumDeltaCodes": 2.112,
       "overlay": "tintL25",
       "tint": "#404040",
       "variant": "regular",
       "walle": [
-        71.35,
-        71.01,
-        71.18
+        71.0,
+        70.85,
+        71.11
       ]
     },
     {
@@ -3862,14 +3862,14 @@
         186.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 0.97,
+      "maximumDeltaCodes": 0.937,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        185.03,
-        185.3,
-        185.07
+        185.33,
+        185.23,
+        185.06
       ]
     },
     {
@@ -3880,14 +3880,14 @@
         176.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 0.657,
+      "maximumDeltaCodes": 0.754,
       "overlay": "tintL70",
       "tint": "#B2B2B2",
       "variant": "regular",
       "walle": [
-        175.58,
-        175.34,
-        175.82
+        175.31,
+        175.25,
+        175.8
       ]
     },
     {
@@ -3898,14 +3898,14 @@
         93.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 3.524,
+      "maximumDeltaCodes": 3.584,
       "overlay": "tintS50",
       "tint": "#9F6060",
       "variant": "regular",
       "walle": [
-        171.52,
-        91.99,
-        94.37
+        171.58,
+        92.03,
+        94.41
       ]
     },
     {
@@ -3916,14 +3916,14 @@
         100.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 2.275,
+      "maximumDeltaCodes": 2.207,
       "overlay": "tintS50",
       "tint": "#9F6060",
       "variant": "regular",
       "walle": [
-        174.28,
-        98.99,
-        100.95
+        174.21,
+        98.75,
+        100.73
       ]
     },
     {
@@ -3934,14 +3934,14 @@
         57.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 6.062,
+      "maximumDeltaCodes": 5.994,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
-        199.94,
-        53.03,
-        59.95
+        200.01,
+        53.06,
+        59.98
       ]
     },
     {
@@ -3952,14 +3952,14 @@
         67.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 3.525,
+      "maximumDeltaCodes": 3.619,
       "overlay": "tintS100",
       "tint": "#BF4040",
       "variant": "regular",
       "walle": [
-        204.47,
-        63.23,
-        69.07
+        204.38,
+        62.85,
+        68.74
       ]
     },
     {
@@ -3970,14 +3970,14 @@
         95.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 1.105,
+      "maximumDeltaCodes": 1.163,
       "overlay": "tintX03",
       "tint": "#B28C66",
       "variant": "regular",
       "walle": [
-        185.11,
-        137.13,
-        95.04
+        185.16,
+        137.18,
+        95.09
       ]
     },
     {
@@ -3988,14 +3988,14 @@
         105.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 2.071,
+      "maximumDeltaCodes": 1.822,
       "overlay": "tintX03",
       "tint": "#B28C66",
       "variant": "regular",
       "walle": [
-        187.72,
-        145.07,
-        104.28
+        187.66,
+        144.82,
+        103.97
       ]
     },
     {
@@ -4006,14 +4006,14 @@
         157.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 4.101,
+      "maximumDeltaCodes": 4.147,
       "overlay": "tintX07",
       "tint": "#734C99",
       "variant": "regular",
       "walle": [
-        125.1,
-        74.42,
-        157.52
+        125.15,
+        74.45,
+        157.58
       ]
     },
     {
@@ -4024,14 +4024,14 @@
         163.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 3.485,
+      "maximumDeltaCodes": 3.361,
       "overlay": "tintX07",
       "tint": "#734C99",
       "variant": "regular",
       "walle": [
-        129.48,
-        79.66,
-        162.82
+        129.36,
+        79.49,
+        162.66
       ]
     },
     {
@@ -4258,14 +4258,14 @@
         250.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 0.249,
+      "maximumDeltaCodes": 0.74,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
+        250.74,
         250.25,
-        250.13,
-        250.13
+        250.32
       ]
     },
     {
@@ -4276,14 +4276,14 @@
         94.0
       ],
       "background": "gray-255",
-      "maximumDeltaCodes": 2.762,
+      "maximumDeltaCodes": 0.78,
       "overlay": "regular",
       "tint": "none",
       "variant": "regular",
       "walle": [
-        96.73,
-        96.68,
-        96.76
+        94.48,
+        94.56,
+        94.78
       ]
     },
     {
@@ -4324,5 +4324,5 @@
     }
   ],
   "schemaVersion": 1,
-  "worstDeltaCodes": 17.958
+  "worstDeltaCodes": 17.894
 }

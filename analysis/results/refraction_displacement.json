@@ -3,10 +3,9 @@
   "records": [
     {
       "appearance": "light",
-      "elementRadiusPixels": 500.0,
+      "elementRadiusPixels": 128.0,
       "overlay": "clear",
       "periodsUsed": [
-        1024,
         512,
         256,
         128,
@@ -14,146 +13,6661 @@
       ],
       "profile": [
         {
-          "radialDisplacementPixels": 0.001,
-          "radiusHigh": 25,
-          "radiusLow": 0,
-          "sampleCount": 49,
-          "spreadPixels": 0.03
+          "displacementPixels": 95.116,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.003,
-          "radiusHigh": 50,
-          "radiusLow": 25,
-          "sampleCount": 50,
-          "spreadPixels": 0.032
+          "displacementPixels": 83.269,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.004,
-          "radiusHigh": 75,
-          "radiusLow": 50,
-          "sampleCount": 50,
-          "spreadPixels": 0.032
+          "displacementPixels": 74.887,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": 0.003,
-          "radiusHigh": 100,
-          "radiusLow": 75,
-          "sampleCount": 50,
-          "spreadPixels": 0.024
+          "displacementPixels": 68.087,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.0,
-          "radiusHigh": 125,
-          "radiusLow": 100,
-          "sampleCount": 50,
-          "spreadPixels": 0.021
+          "displacementPixels": 62.247,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": 0.0,
-          "radiusHigh": 150,
-          "radiusLow": 125,
-          "sampleCount": 50,
-          "spreadPixels": 0.022
+          "displacementPixels": 57.064,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": 0.003,
-          "radiusHigh": 175,
-          "radiusLow": 150,
-          "sampleCount": 50,
-          "spreadPixels": 0.02
+          "displacementPixels": 52.432,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.003,
-          "radiusHigh": 200,
-          "radiusLow": 175,
-          "sampleCount": 50,
-          "spreadPixels": 0.021
+          "displacementPixels": 48.212,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": 0.004,
-          "radiusHigh": 225,
-          "radiusLow": 200,
-          "sampleCount": 50,
-          "spreadPixels": 0.02
+          "displacementPixels": 44.377,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.0,
-          "radiusHigh": 250,
-          "radiusLow": 225,
-          "sampleCount": 50,
-          "spreadPixels": 0.02
+          "displacementPixels": 40.817,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.0,
-          "radiusHigh": 275,
-          "radiusLow": 250,
-          "sampleCount": 50,
-          "spreadPixels": 0.021
+          "displacementPixels": 37.515,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": 0.001,
-          "radiusHigh": 300,
-          "radiusLow": 275,
-          "sampleCount": 50,
-          "spreadPixels": 0.019
+          "displacementPixels": 34.472,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.001,
-          "radiusHigh": 325,
-          "radiusLow": 300,
-          "sampleCount": 50,
-          "spreadPixels": 0.014
+          "displacementPixels": 31.621,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": 0.001,
-          "radiusHigh": 350,
-          "radiusLow": 325,
-          "sampleCount": 50,
-          "spreadPixels": 0.025
+          "displacementPixels": 28.961,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.001,
-          "radiusHigh": 375,
-          "radiusLow": 350,
-          "sampleCount": 50,
-          "spreadPixels": 0.023
+          "displacementPixels": 26.475,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": 0.001,
-          "radiusHigh": 400,
-          "radiusLow": 375,
-          "sampleCount": 50,
-          "spreadPixels": 0.021
+          "displacementPixels": 24.142,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.0,
-          "radiusHigh": 425,
-          "radiusLow": 400,
-          "sampleCount": 50,
-          "spreadPixels": 0.016
+          "displacementPixels": 21.961,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": -0.005,
-          "radiusHigh": 450,
-          "radiusLow": 425,
-          "sampleCount": 50,
-          "spreadPixels": 0.016
+          "displacementPixels": 19.901,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": 0.169,
-          "radiusHigh": 475,
-          "radiusLow": 450,
-          "sampleCount": 50,
-          "spreadPixels": 2.289
+          "displacementPixels": 17.996,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
         },
         {
-          "radialDisplacementPixels": 31.541,
-          "radiusHigh": 500,
-          "radiusLow": 475,
-          "sampleCount": 50,
-          "spreadPixels": 23.948
+          "displacementPixels": 16.194,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.513,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.948,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.481,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.11,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.834,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.676,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.597,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.588,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.683,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.872,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.138,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.487,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.9,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.427,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.996,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.657,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.381,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.164,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.051,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.006,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.011,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.012,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.017,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.004,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
         }
-      ]
+      ],
+      "scene": "circle-0128-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 128.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 95.121,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.441,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.887,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 68.087,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.247,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.064,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.432,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.212,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.377,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.817,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.515,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.472,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.621,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.961,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.475,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.142,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.961,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.901,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.996,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.194,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.513,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.948,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.481,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.11,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.834,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.676,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.597,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.588,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.683,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.872,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.138,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.487,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.9,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.427,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.996,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.657,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.381,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.164,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.051,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.006,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.011,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.012,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.017,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.004,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0128-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 128.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 92.717,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.988,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 75.236,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 68.261,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.394,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.075,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.275,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.084,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.18,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.663,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.336,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.207,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.328,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.761,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.384,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 23.986,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.774,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.799,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.871,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.113,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.458,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.961,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.497,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.134,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.942,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.732,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.666,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.699,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.798,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.901,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.217,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.499,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.868,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.447,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.946,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.613,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.141,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.06,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.08,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.016,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.064,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.011,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.136,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.28,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.274,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0128-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 128.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 92.702,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 85.181,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 76.968,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 69.809,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 63.214,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.104,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 51.651,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 46.991,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 42.929,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 39.267,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 35.928,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 32.843,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 30.154,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 27.667,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 25.35,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 22.999,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 20.963,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 18.988,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.297,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.593,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.05,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.602,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.168,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.852,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.552,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.564,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.491,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.47,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.534,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.701,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.854,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.346,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.486,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.949,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.508,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.091,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.259,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.585,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.729,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.782,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.9,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.784,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.836,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.91,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -1.069,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0128-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 256.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.741,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.083,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.728,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.93,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.099,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.949,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.319,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.134,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.293,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.746,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.444,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.395,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.554,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.896,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.407,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.089,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.893,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.853,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.945,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.148,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.484,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.899,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.444,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.074,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.807,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.643,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.544,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.56,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.656,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.84,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.096,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.447,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.884,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.408,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.002,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.621,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.376,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.174,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.039,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.01,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.015,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 256.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.717,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.283,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.728,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.93,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.099,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.949,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.319,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.134,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.293,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.746,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.444,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.395,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.554,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.896,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.407,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.089,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.893,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.853,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.945,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.148,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.484,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.899,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.444,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.074,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.807,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.643,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.544,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.56,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.656,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.84,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.096,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.447,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.884,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.408,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.002,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.621,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.376,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.174,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.039,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.01,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.015,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 256.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 95.247,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.544,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 75.056,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 68.474,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.803,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.579,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.816,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.584,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.595,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.939,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.421,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.001,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.157,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.414,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 25.877,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 23.54,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.392,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.283,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.401,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.758,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.025,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.48,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.021,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.695,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.363,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.192,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.125,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.125,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.256,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.478,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.791,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.124,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.441,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.968,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.629,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.205,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.012,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.399,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.53,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.4,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.344,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.371,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.264,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.374,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.456,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 256.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 90.185,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 82.318,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 76.331,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 71.326,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 66.782,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.09,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.275,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.491,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 47.044,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 41.52,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 35.822,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.134,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 27.514,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.372,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.853,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.345,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.288,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.463,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 13.538,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.01,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.526,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.052,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.695,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.27,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.234,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.976,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.976,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.08,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.08,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.244,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.448,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.971,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -1.646,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.0,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.529,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.911,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.36,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.639,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.637,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.817,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.481,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.362,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.256,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.094,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.749,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 256.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.741,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.083,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.728,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.93,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.099,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.949,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.319,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.134,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.293,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.746,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.444,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.395,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.554,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.896,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.407,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.089,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.893,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.853,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.945,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.148,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.484,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.899,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.444,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.074,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.807,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.643,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.544,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.56,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.656,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.84,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.096,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.447,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.884,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.408,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.002,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.621,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.376,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.174,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.039,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.01,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.015,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 256.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.717,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.283,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.728,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.93,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.099,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.949,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.319,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.134,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.293,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.746,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.444,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.395,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.554,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.896,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.407,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.089,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.893,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.853,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.945,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.148,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.484,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.899,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.444,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.074,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.807,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.643,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.544,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.56,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.656,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.84,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.096,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.447,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.884,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.408,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.002,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.621,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.376,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.174,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.039,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.01,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.015,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 256.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 95.247,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.544,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 75.056,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 68.474,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.803,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.579,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.816,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.584,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.595,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.939,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.421,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.001,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.157,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.414,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 25.877,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 23.54,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.392,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.283,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.401,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.758,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.025,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.48,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.021,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.695,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.363,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.192,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.125,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.125,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.256,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.478,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.791,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.124,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.441,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.968,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.629,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.205,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.012,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.399,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.53,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.4,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.344,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.371,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.264,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.374,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.456,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 256.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 90.185,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 82.318,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 76.331,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 71.326,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 66.782,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.09,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.275,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.491,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 47.044,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 41.52,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 35.822,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.134,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 27.514,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.372,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.853,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.345,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.288,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.463,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 13.538,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.01,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.526,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.052,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.695,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.27,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.234,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.976,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.976,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.08,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.08,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.244,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.448,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.971,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -1.646,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.0,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.529,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.911,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.36,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.639,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.637,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.817,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.481,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.362,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.256,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.094,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.749,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 256.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.741,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.083,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.728,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.93,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.099,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.949,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.319,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.134,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.293,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.746,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.444,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.395,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.554,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.896,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.407,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.089,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.893,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.853,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.945,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.148,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.484,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.899,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.444,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.074,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.807,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.643,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.544,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.56,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.656,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.84,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.096,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.447,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.884,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.408,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.002,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.621,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.376,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.174,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.039,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.01,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.015,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 256.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.717,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.283,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.728,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.93,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.099,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.949,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.319,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.134,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.293,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.746,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.444,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.395,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.554,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.896,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.407,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.089,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.893,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.853,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.945,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.148,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.484,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.899,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.444,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.074,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.807,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.643,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.544,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.56,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.656,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.84,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.096,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.447,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.884,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.408,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.002,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.621,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.376,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.174,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.039,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.01,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.015,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 256.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 95.247,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.544,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 75.056,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 68.474,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.803,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.579,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.816,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.584,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.595,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.939,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.421,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.001,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.157,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.414,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 25.877,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 23.54,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.392,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.283,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.401,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.758,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.025,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.48,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.021,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.695,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.363,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.192,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.125,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.125,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.256,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.478,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.791,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.124,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.441,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.968,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.629,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.205,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.012,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.399,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.53,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.4,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.344,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.371,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.264,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.374,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.456,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 256.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 90.185,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 82.318,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 76.331,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 71.326,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 66.782,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.09,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.275,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.491,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 47.044,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 41.52,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 35.822,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.134,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 27.514,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.372,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.853,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.345,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.288,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.463,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 13.538,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.01,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.526,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.052,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.695,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.27,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.234,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.976,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.976,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.08,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.08,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.244,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.448,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.971,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -1.646,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.0,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.529,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.911,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.36,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.639,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.637,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.817,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.481,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.362,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.256,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.094,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.749,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 500.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.47,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 82.964,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.648,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.892,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.06,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.909,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.31,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.12,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.281,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.71,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.416,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.396,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.533,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.885,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.383,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.048,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.887,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.829,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.914,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.114,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.438,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.883,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.408,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.064,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.767,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.623,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.555,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.582,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.643,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.819,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.112,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.453,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.877,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.391,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.96,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.623,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.366,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.169,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.058,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.003,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.02,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.002,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.03,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.03,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0500-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 500.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 93.838,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 82.693,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.648,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.892,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.06,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.909,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.31,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.12,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.281,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.71,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.416,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.396,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.533,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.885,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.383,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.048,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.887,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.829,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.914,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.114,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.438,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.883,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.408,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.064,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.767,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.623,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.555,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.582,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.643,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.819,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.112,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.453,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.877,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.391,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.96,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.623,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.366,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.169,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.058,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.003,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.02,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.002,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.03,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.03,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0500-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 500.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 93.569,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.325,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 75.039,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 68.064,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 61.847,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.5,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 51.688,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 47.586,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 43.764,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.047,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 36.904,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 33.976,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.282,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.608,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.284,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.07,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.939,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.885,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 18.05,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.211,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.579,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.966,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.429,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.152,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.906,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.709,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.691,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.682,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.682,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.892,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.134,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.514,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.943,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.468,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.0,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.75,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.422,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.318,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.148,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.021,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.078,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.099,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.276,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.23,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.172,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0500-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 500.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 96.02,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 87.427,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 79.29,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 69.505,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 59.314,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.26,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 47.497,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 43.607,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.424,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.348,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.517,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 32.046,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 29.774,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 27.405,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 25.476,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 23.613,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.786,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.988,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 18.252,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.758,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.255,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 13.748,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.367,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.118,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.869,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.746,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.746,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.708,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.708,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.838,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.091,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.24,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.739,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.138,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.435,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.041,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.682,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.341,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.042,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.36,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.704,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.946,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -1.16,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -1.341,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -1.477,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0500-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 256.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.741,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.083,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.728,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.93,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.099,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.949,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.319,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.134,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.293,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.746,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.444,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.395,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.554,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.896,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.407,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.089,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.893,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.853,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.945,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.148,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.484,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.899,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.444,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.074,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.807,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.643,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.544,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.56,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.656,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.84,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.096,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.447,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.884,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.408,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.002,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.621,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.376,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.174,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.039,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.01,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.015,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 256.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.717,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.283,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.728,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.93,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.099,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.949,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.319,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.134,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.293,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.746,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.444,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.395,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.554,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.896,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.407,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.089,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.893,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.853,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.945,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.148,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.484,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.899,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.444,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.074,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.807,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.643,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.544,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.56,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.656,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.84,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.096,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.447,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.884,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.408,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.002,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.621,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.376,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.174,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.039,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.005,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.01,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.0,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.015,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.007,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 256.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 95.247,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 83.544,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 75.056,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 68.474,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.803,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.579,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.816,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.584,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.595,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.939,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.421,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.001,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.157,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.414,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 25.877,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 23.54,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.392,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.283,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.401,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.758,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.025,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.48,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.021,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.695,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.363,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.192,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.125,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.125,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.256,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.478,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.791,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.124,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.441,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.968,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.629,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.205,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.012,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.399,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.53,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.4,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.344,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.371,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.264,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.374,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.456,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 256.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        256,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 90.185,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 82.318,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 76.331,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 71.326,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 66.782,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.09,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.275,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.491,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 47.044,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 41.52,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 35.822,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.134,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 27.514,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.372,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.853,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.345,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.288,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.463,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 13.538,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.01,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.526,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.052,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.695,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.27,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.234,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.976,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.976,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.08,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.08,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.244,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.448,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.971,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -1.646,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.0,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.529,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.911,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.36,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.639,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.637,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.817,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.481,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.362,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.256,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -3.094,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -2.749,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-0256-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 1000.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.348,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 82.882,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.65,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.855,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.022,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.882,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.249,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.069,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.229,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.686,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.404,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.357,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.532,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.887,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.4,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.04,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.859,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.798,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.88,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.081,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.428,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.83,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.403,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.042,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.766,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.628,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.566,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.573,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.678,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.829,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.117,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.453,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.892,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.414,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.959,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.629,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.346,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.154,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.051,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.007,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.003,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.023,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.014,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.003,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.02,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-1000-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 1000.0,
+      "overlay": "clear",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 94.6,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 82.775,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 74.65,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 67.855,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 62.022,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.882,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.249,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.069,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.229,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 40.686,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.404,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.357,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 31.532,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.887,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 26.4,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.04,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.859,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.798,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.88,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.081,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.428,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.83,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.403,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.042,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.766,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.628,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.566,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.573,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.678,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.829,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.117,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.453,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.892,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.414,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.959,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.629,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.346,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.154,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.051,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.007,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.003,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.023,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.014,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.003,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": -0.02,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-1000-center"
+    },
+    {
+      "appearance": "light",
+      "elementRadiusPixels": 1000.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 98.593,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 82.428,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 73.455,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 66.595,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 60.918,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 56.191,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 52.022,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.189,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 44.498,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 41.379,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 38.385,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 35.378,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 32.634,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 30.23,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 27.747,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 25.358,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 23.013,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 20.773,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 18.973,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.126,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.45,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 13.862,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.432,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.014,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.859,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.7,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.581,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.7,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.7,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.795,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 4.166,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 3.498,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.936,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 2.373,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.864,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.576,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.245,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.284,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.224,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.123,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.228,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.174,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.197,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 1.086,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 0.961,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-1000-center"
+    },
+    {
+      "appearance": "dark",
+      "elementRadiusPixels": 1000.0,
+      "overlay": "regular",
+      "periodsUsed": [
+        512,
+        256,
+        128,
+        64
+      ],
+      "profile": [
+        {
+          "displacementPixels": 53.368,
+          "pixelsInsideRim": 1,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 188.798,
+          "pixelsInsideRim": 2,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 63.872,
+          "pixelsInsideRim": 3,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 60.418,
+          "pixelsInsideRim": 4,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 57.053,
+          "pixelsInsideRim": 5,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 53.937,
+          "pixelsInsideRim": 6,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 51.124,
+          "pixelsInsideRim": 7,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 48.485,
+          "pixelsInsideRim": 8,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 46.164,
+          "pixelsInsideRim": 9,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 43.832,
+          "pixelsInsideRim": 10,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 41.639,
+          "pixelsInsideRim": 11,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 39.659,
+          "pixelsInsideRim": 12,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 37.648,
+          "pixelsInsideRim": 13,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 35.847,
+          "pixelsInsideRim": 14,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 34.063,
+          "pixelsInsideRim": 15,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 32.256,
+          "pixelsInsideRim": 16,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 30.565,
+          "pixelsInsideRim": 17,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 28.82,
+          "pixelsInsideRim": 18,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 27.283,
+          "pixelsInsideRim": 19,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 25.65,
+          "pixelsInsideRim": 20,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 24.179,
+          "pixelsInsideRim": 21,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 23.109,
+          "pixelsInsideRim": 22,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 21.813,
+          "pixelsInsideRim": 23,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 20.443,
+          "pixelsInsideRim": 24,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 19.319,
+          "pixelsInsideRim": 25,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 18.234,
+          "pixelsInsideRim": 26,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 17.234,
+          "pixelsInsideRim": 27,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 16.234,
+          "pixelsInsideRim": 28,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 15.234,
+          "pixelsInsideRim": 29,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 14.357,
+          "pixelsInsideRim": 30,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 13.168,
+          "pixelsInsideRim": 31,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 12.361,
+          "pixelsInsideRim": 32,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 11.674,
+          "pixelsInsideRim": 33,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 10.675,
+          "pixelsInsideRim": 34,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.707,
+          "pixelsInsideRim": 35,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 9.356,
+          "pixelsInsideRim": 36,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.957,
+          "pixelsInsideRim": 37,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.555,
+          "pixelsInsideRim": 38,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 8.18,
+          "pixelsInsideRim": 39,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.609,
+          "pixelsInsideRim": 40,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 7.318,
+          "pixelsInsideRim": 41,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.829,
+          "pixelsInsideRim": 42,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 6.262,
+          "pixelsInsideRim": 43,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.704,
+          "pixelsInsideRim": 44,
+          "sampleCount": 2
+        },
+        {
+          "displacementPixels": 5.403,
+          "pixelsInsideRim": 45,
+          "sampleCount": 2
+        }
+      ],
+      "scene": "circle-1000-center"
     }
   ],
   "schemaVersion": 1

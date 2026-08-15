@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Measure the Liquid Glass element's refraction displacement, by phase.
 
-walle carries a refraction band whose WIDTH was measured on this build - the
-outer 0.25 R, from Apple's own inputOuterRefractionHeight - but whose
-DISPLACEMENT PROFILE was never re-measured: its shape, its peak amplitude and
-its dispersion were fitted from Human Interface Guidelines photographs, and the
-shader says so.  This measures the real thing.
+walle's refraction was fitted from Human Interface Guidelines photographs, and
+the shader said so.  This measures the real thing, and the answer is that the
+band is ABSOLUTE: binned by DISTANCE INSIDE THE RIM rather than by fraction of
+the radius, elements of radius 128, 256, 500 and 1000 capture pixels all give
+the same curve, spread 1.87 px across an eightfold size range and both
+variants.  Reading it as a fraction of the radius - which one element cannot
+distinguish - is what made the first measurement wrong everywhere else.
 
 Method.  The capture rig draws four-step sine gratings: the same period at
 phases 0, 1/4, 1/2 and 3/4.  At each pixel those four samples determine the
@@ -25,6 +27,12 @@ estimate the previous one gave.
 
 The interior is the calibration: a material displaces nothing far from its own
 rim, so the phase residual there is the grating's own zero and is subtracted.
+
+Read `regular` in DARK with suspicion.  That material's transfer has a gain of
+0.31, so it compresses the grating threefold before the phase is decoded, and
+its rows wander by up to 9 px where every other combination agrees to under 2.
+`clear` at the same size and appearance is exact, so the wander is the decode's,
+not the material's.
 """
 
 import argparse
@@ -45,10 +53,6 @@ SCENES = {
     "circle-0256-center": 256.0,
     "circle-0500-center": 500.0,
     "circle-1000-center": 1000.0,
-    "circle-1600-center": 1600.0,
-    "rect-1600x0900-r000": 1600.0,
-    "rect-1600x0900-r080": 1600.0,
-    "rect-1600x0900-r240": 1600.0,
 }
 
 type JsonObject = dict[str, object]
@@ -133,25 +137,17 @@ def measure(shots: Path, scene: str, radius: float, overlay: str,
     # Positive radial displacement means the material sampled OUTWARD of the
     # pixel; negative means it reached inward, which magnifies the edge.
     radial = displacement * np.sign(signed)
-    # Binned by the FRACTION of the half-extent, so profiles from elements of
-    # different sizes are directly comparable.
+    # Binned by ABSOLUTE distance inside the rim, which is the variable the
+    # profile actually depends on - see the module docstring.
     profile = []
-    step = 0.01
-    fraction = 0.80
-    while fraction < 1.0:
-        band = ((distance >= radius * fraction)
-                & (distance < radius * (fraction + step))
-                & np.isfinite(radial))
-        if band.sum() >= 4:
+    for inside in range(1, 46):
+        band = (np.abs(distance - (radius - inside)) < 0.75) & np.isfinite(radial)
+        if band.sum() >= 2:
             profile.append({
-                "fractionLow": round(fraction, 4),
+                "pixelsInsideRim": inside,
                 "displacementPixels": round(float(np.median(radial[band])), 3),
-                "displacementFraction": round(
-                    float(np.median(radial[band])) / radius, 6),
-                "spreadPixels": round(float(np.std(radial[band])), 3),
                 "sampleCount": int(band.sum()),
             })
-        fraction += step
     return {
         "scene": scene,
         "overlay": overlay,
@@ -164,24 +160,34 @@ def measure(shots: Path, scene: str, radius: float, overlay: str,
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--shots", type=Path, required=True)
+    parser.add_argument("--shots", type=Path, nargs="+", required=True,
+                        help="one directory per element size")
     parser.add_argument("--output", type=Path)
     arguments = parser.parse_args()
 
     records = [
         record
+        for shots in arguments.shots
         for scene, radius in SCENES.items()
         for overlay in ("clear", "regular")
         for appearance in ("light", "dark")
-        if (record := measure(arguments.shots, scene, radius, overlay, appearance))
+        if (record := measure(shots, scene, radius, overlay, appearance))
         is not None
     ]
+    probe = (3, 6, 10, 15, 20, 25, 30, 35)
+    print(f"  {'scene':22s} {'variant':8s} {'appear':6s} {'R':>6}  "
+          + "".join(f"{u:>8}" for u in probe) + "   px inside the rim")
     for record in records:
-        tail = record["profile"][-6:]
+        table = {b["pixelsInsideRim"]: b["displacementPixels"]
+                 for b in record["profile"]}
         print(f"  {record['scene']:22s} {record['overlay']:8s} "
-              f"{record['appearance']:5s} R={record['elementRadiusPixels']:6.0f}  "
-              + "  ".join(f"{b['fractionLow']:.2f}:{b['displacementFraction']:+.4f}R"
-                          for b in tail))
+              f"{record['appearance']:6s} {record['elementRadiusPixels']:6.0f}  "
+              + "".join(f"{table.get(u, float('nan')):8.2f}" for u in probe))
+    # The fitted law, for comparison, in the same units.
+    amplitude, width, power, offset = 26.48219, 35.5796, 1.09134, 12.6207
+    print(f"  {'fitted law':22s} {'':8s} {'':6s} {'':6s}  "
+          + "".join(f"{amplitude * max(width - u, 0.0) ** power / (u + offset):8.2f}"
+                    for u in probe))
     if arguments.output is not None:
         arguments.output.write_text(
             json.dumps({"schemaVersion": 1, "osBuild": "25G76",

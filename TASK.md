@@ -4531,7 +4531,10 @@ profiles are the same curve:
     R = 256            -0.00   3.84  16.15  26.43  40.73  56.95  74.74
     R = 500            -0.01   3.82  16.11  26.38  40.71  56.92  74.66
 
-Agreement to 0.2 px across a FOURFOLD range of element size.  The band is
+and adding a fourth size, R = 1000, holds the same curve: across all four
+sizes and BOTH variants the spread is 1.87 px and the worst deviation from the
+fitted model is 2.47 px, on a 75 px peak.  An EIGHTFOLD range of element size
+with no scaling at all.  The band is
 absolute, not proportional.  It is also the same for BOTH variants (clear and
 regular agree to 0.7 px) and BOTH appearances (clear's are identical to the
 code), so one profile covers everything.  A fourth capture of the 500 pt circle
