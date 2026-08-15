@@ -305,8 +305,56 @@ stable. The exact Apple renderer therefore selects core only inside its gated
 path; the existing protected GLES shader and VRAM optimization remain
 unchanged.
 
-Live transition state and physical Retina transfer remain separate formal
-boundaries. The scoped results are
-`analysis/walle_owned_static_gl_gate_result.json`,
+The scoped results are `analysis/walle_owned_static_gl_gate_result.json`,
 `analysis/walle_owned_wayland_static_gl_gate_result.json`, and
 `analysis/walle_process_static_gl_gate_result.json`.
+
+## Wallpaper reveal: what is proven, and what is not
+
+The paragraphs above predate the reveal work and describe the OpenGL
+diagnostic path. The Vulkan wallpaper reveal is now established separately,
+and this section is the current statement of record.
+
+**Established.** `analysis/run_walle_reveal_process_capture_gate.sh` runs the
+actual Walle executable against a real `zwlr_layer_shell_v1` surface and
+scores its readback against Apple's 65-frame hardware corpus:
+
+- reveal mask: `mismatchedPixels=0`, 65/65 frames byte-exact;
+- composed presentation: `composedMismatchedPixels=0`, 65/65 frames
+  byte-exact on all four channels;
+- both material-variant configurations compose identical bytes, because
+  Apple renders exactly one wallpaper reveal.
+
+The composition law is a mask-weighted code-value blend,
+`round((mask * incoming + (255 - mask) * current) / 255)` per channel, with
+no veil, platter, lens, ring, glow, shadow, or dither. That is not a fitted
+approximation: any such term would have broken the byte equality measured
+across 273 million reference pixels. The blend numerator is never a rounding
+tie, so the result is bit-deterministic through float arithmetic.
+
+**Conditions.** Those results hold at the corpus conditions: 2048x2048,
+centre (512, 614.4), maximum radius 2164.104505809273, the k/64 progress
+ladder, opaque black revealing opaque white, regular material, dark
+appearance.
+
+**Not proven.** Four boundaries lie outside those conditions and are measured
+rather than assumed (TASK.md later-141):
+
+- *continuous progress* - the single off-ladder hardware frame is matched to
+  0.092% of pixels (3,838 of 4,177,920), all inside the antialiased boundary
+  ring, maximum delta 25/255. Its geometry sits off the integer-bounds grid
+  that walle's circle law snaps to, and the 65-state ladder is exact
+  *because* of that snapping. `analysis/run_walle_reveal_offgrid_gate.sh`
+  records the bound; it is a measurement, not a parity gate;
+- *colour content* - the in-repo colour-field corpus saved through a lossy
+  Color LCD to sRGB conversion (its endpoints differ from the regenerated
+  sources by 2 to 4 code values), so it cannot byte-prove the blend at
+  interior codes. Saturated regions verify 99.99133% exact;
+  `analysis/verify_reveal_colored_blend_corpus.py` reports the split;
+- *appearance and material variant* - the corpus is regular/dark only;
+- *other geometries* - the hardware-measured plane tables are keyed to the
+  corpus radius words, so other resolutions and centres fall back to the
+  computed setup chain, which has known rare one-ulp misses.
+
+Physical presentation (display hardware transfer) remains outside any
+software gate.
