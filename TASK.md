@@ -3989,3 +3989,52 @@ STILL OPEN: the five-tap blur ladder; the ring/glow/shadow dynamic layer
 shipped variant.  All numbers above come from a 500 pt circle at 2x on one
 machine - the laws should be geometry-independent but that is re-verified
 only for the scaling table.
+
+## 2026-08-15 (later 143): the dynamic layer is PARAMETERISED but not RENDERABLE
+
+Searched the prior lg-test research before assuming new captures were
+needed.  The dynamic filter inputs are already fully recovered
+(lg-test/README.md ~4942, Analysis/dynamic_background_filter_law_result.json):
+46 of 47 numeric inputs have exact binary32 predictions over 128 states,
+5,888 field-state components matching, with only inputClamp unrecovered.
+With k the remaining/visible fraction and D the diameter:
+
+    G = k * (D + 16 * (1 - k))
+    inputBlurDistance0         = -G/2
+    inputOuterRefractionAmount =  G/5
+    inputOuterRefractionHeight =  G/8
+    inputShadowHeight          = 2G/5
+    w = f32(k * f32mix(0.2, 0.5, k))
+    inputBlurOpacity1/2 = w ; inputBlurOpacity3/4 = 2w
+    inputMaxHeadroom = f32mix(1.2, 9999, k)
+
+This session's independent probe of walle_lg_transition_numeric_inputs
+reproduces those exactly (D=463: 92.6, 57.875, 185.2, -231.5), which is a
+clean cross-check of both.
+
+WHAT IS STILL MISSING is the RENDERING semantics: what a unit of "amount"
+or "height" does to pixels.  The prior research says so itself - "it does
+not authorize a Walle shader change" - and its deepest LLDB decode reaches
+only the filter's bounds arithmetic (r = max(2b, g), e = 2.8r, constants
+-2.8 and 5.6 loaded exactly), not the per-pixel law.
+
+So the dynamic layer cannot be ported from the fixtures alone, and the gap
+is not one this session overlooked.  Closing it needs ONE of:
+  (a) a dynamic materialize capture, measuring a MOVING element's pixels
+      directly (the static captures provably cannot see this layer - the
+      26.4 note records ring/glow/shadow as absent when settled, and this
+      session's phase decode measured refraction at <=1.3 px settled
+      against walle's 105 px lens);
+  (b) LLDB or a Metal frame capture on the live filter to recover the
+      per-pixel law.
+Both require the Mac unlocked with an active, key window.  The capture
+harness gates on exactly that, and the gate must NOT be patched out:
+macOS renders materials differently in an inactive window, so bypassing it
+yields silently wrong data.
+
+TINT is blocked the same way and for a sharper reason: the law is
+underdetermined from the two colours the harness hardcodes.  Fitting
+base = a*tint + b per channel over blue and orange yields a NEGATIVE green
+slope (-0.37), which is unphysical.  analysis/capture_tint_colour_sweep.sh
+adds eight spanning colours; its patched harness is verified to compile,
+vtool and codesign on the target Mac (WALLE_BUILD_ONLY=1).
