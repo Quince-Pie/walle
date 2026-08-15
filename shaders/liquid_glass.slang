@@ -58,18 +58,34 @@ static const float kLensProfileRim = 0.52;
 static const float kLensDispersion = 0.030;
 
 
-static const float kRingRadiusFraction = 0.973;
+// Measured on the target M1 from the materialize capture: the specular rim
+// sits in the outermost ~10 px of a 1000 px radius element, i.e. ~0.995 R,
+// not the 0.973 R fitted from HIG photos.
+static const float kRingRadiusFraction = 0.995;
 static const float kRingOffsetFraction = 0.021;
 static const float kRingEdgeWidthFraction = 0.007;
 static const float kRingTopWidthFraction = 0.020;
-static const float kRingUpGain = 0.20;
-static const float kRingDownGain = 0.13;
-static const float kRingBaseGain = 0.04;
+// The rim measures +7 sRGB codes over the interior, about 0.032 in linear
+// light at these levels.  walle's HIG-fitted lobes average roughly 0.13
+// azimuthally, so they are scaled to the measured amplitude.  The
+// measurement is an azimuthal mean, so the lobe SHAPE is retained and only
+// its magnitude is corrected.
+static const float kRingGainScale = 0.25;
+static const float kRingUpGain = 0.20 * kRingGainScale;
+static const float kRingDownGain = 0.13 * kRingGainScale;
+static const float kRingBaseGain = 0.04 * kRingGainScale;
 static const float kShadowOffsetFraction = 0.012;
 static const float kShadowPenumbraFraction = 0.035;
 static const float kShadowMinimumPenumbra = 10.0;
-static const float kShadowBase = 0.16;
-static const float kGlowIntensity = 0.20;
+// Measured ABSENT on 26.6.1.  Across the whole materialize timeline the
+// element interior is flat to within 0.4 codes from centre to rim (no
+// glow), and the exterior band just outside the rim reads +0.5 codes
+// against a background that never darkens (no contact shadow).  Both were
+// fitted from HIG photos rather than measured.  The code paths are kept so
+// the measurement stays auditable and either can be restored if a future
+// build reintroduces them.
+static const float kShadowBase = 0.0;
+static const float kGlowIntensity = 0.0;
 
 static const float kDitherLsb = 1.0 / 255.0;
 static const float3 kLuma = float3(0.2126, 0.7152, 0.0722);
@@ -210,7 +226,12 @@ float4 composeFragment(
     //
     // walle's `time` is a linear clock, so the ease belongs here.
     float tFade = saturate((time - kFadeStart) / (1.0 - kFadeStart));
-    float thickness = pow(saturate(time), kMaterializeEase) * (1.0 - tFade);
+    // The ease spans the MATERIALIZE WINDOW, not the whole timeline: Apple's
+    // clock runs 0..1 across its materialize, whereas walle materializes over
+    // [0, kFadeStart) and then fades.  Easing over the full timeline instead
+    // caps the material at 0.37 thickness before the fade begins.
+    float thickness = pow(saturate(time / kFadeStart), kMaterializeEase)
+                      * (1.0 - tFade);
 
     // Express the material in the original bottom-left pixel coordinates while
     // Vulkan resources and mask storage remain naturally top-left.
