@@ -6,8 +6,8 @@ task_root=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
 walle_binary=${1:-"$task_root/build/bin/release/walle"}
 labwc_binary=${LABWC:-/run/current-system/sw/bin/labwc}
 scorer="$task_root/analysis/score_reveal_vulkan_capture.py"
-expected_candidate_inventory=3b734e72696d0f26ad018af74c6d4f5e8b36f8ca592b7aff3908b8b1eba8193c
-expected_count_hash=5a0bc88cde747ee8e57f0445074342147a234d953911366a5ad3c92a2dd510a0
+expected_candidate_inventory=c8595372d35fa810ba26ca6e488db021bbbd0bbc7b022113f9e3f4361b519b28
+expected_count_hash=ea4c91200f58c4c8c87b660a619cb6872bab21ae74072da6f22f007e51543468
 cli_device_selector=${WALLE_VK_CLI_SELECTOR:-}
 expected_device_type=${WALLE_EXPECTED_VK_DEVICE_TYPE:-}
 capture_width=2048
@@ -149,7 +149,7 @@ clear_composition="$capture_directory/composition-state-0032.bgra"
 
 python3 "$scorer" "$capture_directory" \
     --output "$gate_root/vulkan-score.json" \
-    --expect-mismatches 70 \
+    --expect-mismatches 0 \
     --expect-candidate-inventory "$expected_candidate_inventory" \
     --expect-count-hash "$expected_count_hash" \
     >"$gate_root/vulkan-score.stdout"
@@ -182,7 +182,7 @@ regular_composition="$regular_capture_directory/composition-state-0032.bgra"
     || fail 'regular composition readback has the wrong byte count'
 python3 "$scorer" "$regular_capture_directory" \
     --output "$gate_root/vulkan-regular-score.json" \
-    --expect-mismatches 70 \
+    --expect-mismatches 0 \
     --expect-candidate-inventory "$expected_candidate_inventory" \
     --expect-count-hash "$expected_count_hash" \
     >"$gate_root/vulkan-regular-score.stdout"
@@ -241,8 +241,8 @@ printf '%s\n' \
     'actualProcessStates=65' \
     'ordinaryCompositionPresents=65' \
     'frameCallbacks=64' \
-    'mismatchedPixels=91' \
-    'exactPixelPercentage=99.99996662139893' \
+    'mismatchedPixels=0' \
+    'exactPixelPercentage=100.0' \
     "actualProcessCandidateInventorySha256=$expected_candidate_inventory"
 printf '%s\n' \
     'materialVariantCompositionReadbackVerified=true' \

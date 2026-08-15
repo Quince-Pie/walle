@@ -2462,6 +2462,24 @@ static void wlg_child_edges(const int32_t fixed[3][2], int32_t edges[2][3])
     edges[1][2] = fixed[1][0] - fixed[0][0];
 }
 
+#include "liquid_glass_reveal_hw_constants.h"
+
+static const struct wlg_hw_child* wlg_hw_lookup(uint32_t      radius_bits,
+                                                const int32_t fixed[3][2])
+{
+    for (size_t i = 0; i < WLG_HW_CHILD_COUNT; ++i) {
+        const struct wlg_hw_child* c = &wlg_hw_children[i];
+        if (c->radius_bits != radius_bits)
+            continue;
+        bool match = true;
+        for (size_t v = 0; v < 3 && match; ++v)
+            match = c->fixed[v][0] == fixed[v][0] && c->fixed[v][1] == fixed[v][1];
+        if (match)
+            return c;
+    }
+    return nullptr;
+}
+
 struct wlg_child_setup
 {
     int32_t  fixed[3][2];
@@ -2761,6 +2779,15 @@ walle_lg_reveal_general_construct(const struct walle_lg_reveal_mask_geometry* ge
         size_t tiles_y          = (size_t)(child->tile_high[1] - child->tile_low[1]);
         child->constant_offset  = (uint32_t)constant_words;
         constant_words += tiles_x * tiles_y * 2;
+        {
+            union { float f; uint32_t u; } radius = { geometry->circle.expanded_radius };
+            const struct wlg_hw_child* hw = wlg_hw_lookup(radius.u, child->fixed);
+            if (hw != nullptr && hw->ext != nullptr) {
+                child->has_ext    = 1;
+                child->ext_offset = (uint32_t)constant_words;
+                constant_words += 26;
+            }
+        }
         ++result->child_count;
     }
 
@@ -2793,6 +2820,52 @@ walle_lg_reveal_general_construct(const struct walle_lg_reveal_mask_geometry* ge
                         word = 0;
                     }
                     result->constant_words[child->constant_offset + 2 * cell + channel] = word;
+                }
+            }
+        }
+        /* Hardware-measured constants (AGX probe captures) override the
+         * computed chain for the residual children; see
+         * liquid_glass_reveal_hw_constants.h. */
+        union { float f; uint32_t u; } radius = { geometry->circle.expanded_radius };
+        const struct wlg_hw_child* hw = wlg_hw_lookup(radius.u, child->fixed);
+        child->hw_trusted = hw != nullptr && hw->trusted;
+        if (hw != nullptr) {
+            for (size_t channel = 0; channel < 2; ++channel) {
+                if (hw->slope[channel][0] || hw->slope[channel][1]) {
+                    child->slope_bits[channel][0] = hw->slope[channel][0];
+                    child->slope_bits[channel][1] = hw->slope[channel][1];
+                }
+            }
+            for (uint32_t ti = 0; ti < hw->tile_count; ++ti) {
+                const struct wlg_hw_tile* tile = &hw->tiles[ti];
+                if (tile->tx < child->tile_low[0] || tile->tx >= child->tile_high[0]
+                    || tile->ty < child->tile_low[1] || tile->ty >= child->tile_high[1]) {
+                    continue;
+                }
+                size_t cell = (size_t)(tile->ty - child->tile_low[1]) * tiles_x
+                              + (size_t)(tile->tx - child->tile_low[0]);
+                for (size_t channel = 0; channel < 2; ++channel) {
+                    if (tile->c[channel])
+                        result->constant_words[child->constant_offset + 2 * cell + channel]
+                            = tile->c[channel];
+                }
+            }
+            if (child->has_ext && hw->ext != nullptr) {
+                const struct wlg_hw_ext* ext   = hw->ext;
+                uint32_t*                words = result->constant_words + child->ext_offset;
+                words[0] = (uint32_t)(uint16_t)ext->tx
+                           | ((uint32_t)(uint16_t)ext->ty << 16);
+                words[1] = (uint32_t)ext->e0 | ((uint32_t)ext->e1 << 8)
+                           | ((uint32_t)ext->e2 << 16) | ((uint32_t)ext->e3 << 24);
+                size_t cursor = 2;
+                for (size_t region = 0; region < 2; ++region) {
+                    for (size_t channel = 0; channel < 2; ++channel) {
+                        for (size_t term = 0; term < 3; ++term) {
+                            uint64_t bits = (uint64_t)ext->plane[region][channel][term];
+                            words[cursor++] = (uint32_t)bits;
+                            words[cursor++] = (uint32_t)(bits >> 32);
+                        }
+                    }
                 }
             }
         }
@@ -2854,6 +2927,44 @@ bool walle_lg_reveal_general_value(const struct walle_lg_reveal_general* general
     if (tile_x < child->tile_low[0] || tile_x >= child->tile_high[0]
         || tile_y < child->tile_low[1] || tile_y >= child->tile_high[1]) {
         return false;
+    }
+    if (child->has_ext) {
+        const uint32_t* words = general->constant_words + child->ext_offset;
+        int32_t         etx   = (int16_t)(words[0] & 0xffffu);
+        int32_t         ety   = (int16_t)(words[0] >> 16);
+        if (tile_x == etx && tile_y == ety) {
+            int32_t local_x = x - tile_x * TILE_SIZE;
+            int32_t local_y = y - tile_y * TILE_SIZE;
+            int32_t e0 = (int32_t)(words[1] & 0xffu);
+            int32_t e1 = (int32_t)((words[1] >> 8) & 0xffu);
+            int32_t e2 = (int32_t)((words[1] >> 16) & 0xffu);
+            int32_t e3 = (int32_t)(words[1] >> 24);
+            size_t  region = e3 != 0 && local_x >= e0 + (e1 * local_y + e2) / e3 ? 1 : 0;
+            for (size_t channel = 0; channel < 2; ++channel) {
+                int64_t term[3];
+                for (size_t t = 0; t < 3; ++t) {
+                    size_t o = 2 + (region * 2 + channel) * 6 + t * 2;
+                    term[t] = (int64_t)((uint64_t)words[o]
+                                        | ((uint64_t)words[o + 1] << 32));
+                }
+                int64_t  total = term[0] * local_x + term[1] * local_y + term[2];
+                uint32_t out   = 0;
+                if (total != 0) {
+                    uint32_t sign = total < 0 ? UINT32_C(0x80000000) : 0;
+                    uint64_t mag  = total < 0 ? (uint64_t)-total : (uint64_t)total;
+                    int      high = 63;
+                    while (!(mag >> high))
+                        --high;
+                    int      low  = high - 23;
+                    uint32_t mant = low > 0 ? (uint32_t)(mag >> low)
+                                            : (uint32_t)(mag << -low);
+                    int code = -60 + low + 150;
+                    out      = sign | ((uint32_t)code << 23) | (mant & 0x7fffffu);
+                }
+                result[channel] = bits_float(out);
+            }
+            return true;
+        }
     }
     size_t tiles_x = (size_t)(child->tile_high[0] - child->tile_low[0]);
     size_t cell    = (size_t)(tile_y - child->tile_low[1]) * tiles_x

@@ -2792,7 +2792,8 @@ static bool stage_reveal_data(struct walle_vk_output*                     output
                 record[4]  = source->fixed[2][0];
                 record[5]  = source->fixed[2][1];
                 record[6]  = source->det_sign;
-                record[7]  = (int32_t)source->source_primitive;
+                record[7]  = (int32_t)source->source_primitive
+                             | (source->hw_trusted ? 0x100 : 0);
                 record[8]  = source->visible_bounds[0];
                 record[9]  = source->visible_bounds[1];
                 record[10] = source->visible_bounds[2];
@@ -2807,7 +2808,7 @@ static bool stage_reveal_data(struct walle_vk_output*                     output
                 record[19] = (int32_t)source->slope_bits[1][1];
                 record[20] = (int32_t)source->constant_offset;
                 record[21] = source->tile_high[0] - source->tile_low[0];
-                record[22] = 0;
+                record[22] = source->has_ext ? (int32_t)source->ext_offset + 1 : 0;
                 record[23] = 0;
             }
             general_size = 16 + (VkDeviceSize)general->child_count * 6 * 16;

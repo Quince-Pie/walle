@@ -418,7 +418,11 @@ int generalChildAt(int2 coordinate, uint childCount, int expectedSource)
     // own rasterizer triple, so foreign children must not hijack the sample).
     for (int child = int(childCount) - 1; child >= 0; --child)
     {
-        if (generalRecord(uint(child), 1).w != expectedSource)
+        int sourceWord = generalRecord(uint(child), 1).w;
+        // Bit 8 marks a hardware-measured (AGX-captured) plane: it is the
+        // fragment's true rasterizer triple even when walle's owner
+        // emulation disagrees with the hardware rasterizer at the edge.
+        if ((sourceWord & 0x100) == 0 && (sourceWord & 0xff) != expectedSource)
             continue;
         if (generalContains(uint(child), coordinate))
             return child;
@@ -527,6 +531,32 @@ uint generalTowardZeroWord(uint3 total, int gridExponent)
     return (signBit << 31u) | (uint(exponentCode) << 23u) | (mantissa & 0x7fffffu);
 }
 
+// Hardware-measured internal-precision plane for one tile (AGX ITER):
+// value = (a*lx + b*ly + c) * 2^-60 exported RTZ24; region 1 applies where
+// lx >= e0 + (e1*ly + e2)/e3 (the hardware sub-primitive split).
+uint generalExtWord(uint base, uint region, uint channel, int localX, int localY)
+{
+    uint o = base + 2u + (region * 2u + channel) * 6u;
+    int64_t a = int64_t((uint64_t(generalConstants[o + 1u]) << 32u)
+                        | uint64_t(generalConstants[o]));
+    int64_t b = int64_t((uint64_t(generalConstants[o + 3u]) << 32u)
+                        | uint64_t(generalConstants[o + 2u]));
+    int64_t c = int64_t((uint64_t(generalConstants[o + 5u]) << 32u)
+                        | uint64_t(generalConstants[o + 4u]));
+    int64_t total = a * localX + b * localY + c;
+    if (total == 0)
+        return 0u;
+    uint sign = total < 0 ? 0x80000000u : 0u;
+    uint64_t mag = uint64_t(total < 0 ? -total : total);
+    uint hiWord = uint(mag >> 32u);
+    int high = hiWord != 0u ? 32 + int(firstbithigh(hiWord))
+                            : int(firstbithigh(uint(mag)));
+    int low = high - 23;
+    uint mant = low > 0 ? uint(mag >> uint(low)) : uint(mag << uint(-low));
+    int code = -60 + low + 150;
+    return sign | (uint(code) << 23u) | (mant & 0x7fffffu);
+}
+
 float2 generalValue(uint child, int2 coordinate)
 {
     int4 q3 = generalRecord(child, 3);
@@ -534,6 +564,31 @@ float2 generalValue(uint child, int2 coordinate)
     int4 q5 = generalRecord(child, 5);
     int tileX = coordinate.x >> 5;
     int tileY = coordinate.y >> 5;
+    if (q5.z != 0)
+    {
+        uint base = uint(q5.z - 1);
+        uint tileWord = generalConstants[base];
+        int extX = int(tileWord & 0xffffu);
+        if (extX >= 0x8000) extX -= 0x10000;
+        int extY = int(tileWord >> 16u);
+        if (extY >= 0x8000) extY -= 0x10000;
+        if (tileX == extX && tileY == extY)
+        {
+            int localX = coordinate.x - (tileX << 5);
+            int localY = coordinate.y - (tileY << 5);
+            uint edges = generalConstants[base + 1u];
+            int e0 = int(edges & 0xffu);
+            int e1 = int((edges >> 8u) & 0xffu);
+            int e2 = int((edges >> 16u) & 0xffu);
+            int e3 = int(edges >> 24u);
+            uint region = (e3 != 0 && localX >= e0 + (e1 * localY + e2) / e3)
+                              ? 1u : 0u;
+            float2 extResult;
+            extResult[0] = asfloat(generalExtWord(base, region, 0u, localX, localY));
+            extResult[1] = asfloat(generalExtWord(base, region, 1u, localX, localY));
+            return extResult;
+        }
+    }
     int tilesX = q3.z - q3.x;
     int cell = (tileY - q3.y) * tilesX + (tileX - q3.x);
     int localX = coordinate.x - (tileX << 5);

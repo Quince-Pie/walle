@@ -207,6 +207,13 @@ struct walle_lg_reveal_general_child
     uint32_t slope_bits[2][2];
     uint32_t constant_offset;
     uint8_t  source_primitive;
+    /* Child carries AGX-measured plane words; the shader may use it even
+     * when the pixel's rasterizer owner primitive differs. */
+    uint8_t  hw_trusted;
+    /* Hardware-measured internal-precision plane for one tile, serialized
+     * into constant_words at ext_offset (26 words); see wlg_hw_ext. */
+    uint8_t  has_ext;
+    uint32_t ext_offset;
 };
 
 struct walle_lg_reveal_general

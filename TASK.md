@@ -3672,3 +3672,88 @@ NEXT-WINDOW EXECUTION ORDER:
    banked later-127/129).
 GATE ARC THIS SESSION: 91 -> 80 -> 70, all official-gate green,
 zero regressions at each step.
+
+## 2026-08-14 (later 135): PER-PIXEL REFERENCE ORACLE - assignment beats heuristics
+
+Slope-identity pairing regressed 44->70 (facet planes within a state
+are near-coplanar: word distances 1-2 ulps, value distances ~1.6e-7,
+so no metric disambiguates).  Pivot: analysis/reveal_pixel_plane_oracle.py
+replicates the ENTIRE shader downstream (generalValue 96-bit RTZ,
+appleLength + fast-sqrt nibble table, feather, alpha, f16, A2 band,
+roundR8Even) in Python and, for every residual pixel, evaluates EVERY
+captured Apple plane -> byte vs reference byte.  RESULT: 42/44
+residual pixels are exactly reproduced by ONE captured plane each;
+the two failures (40:1847:402, 41:1897:606) matched no plane.
+Ownership probe (walle_lg_reveal_general_contains at each pixel):
+every residual pixel has exactly ONE containing walle child; the
+needed plane is the pixel's Apple facet (facets span multiple walle
+children: (42,o2) covers walle c2 AND c3, etc.).
+
+## 2026-08-14 (later 136): trusted bypass + radius keying (44 -> 2)
+
+Two shader/port mechanisms completed the 42:
+1. TRUSTED BYPASS: for filter-class pixels the C-side injected values
+   were already exact but the shader's expectedSource filter rejected
+   the child (walle's rasterizer-owner emulation disagrees with the
+   hardware rasterizer at facet edges).  New bit 8 in generalData
+   record[7]: hw-measured sliver children may own a contained pixel
+   regardless of expectedSource.  Blanket trust broke states 60-64
+   (2271 px/frame each): the saturated states share IDENTICAL child
+   vertices, so the vertex-keyed lookup hijacked their giant corner
+   child with s58's planes.  Fixes: (a) per-entry trusted flag,
+   granted only to oracle-proven sliver children; (b) the lookup key
+   now includes the state's expanded_radius word (radius_bits) -
+   verts alone are NOT state-unique.
+2. Oracle-driven assignment table (12 side-aware primaries + 8
+   oracle extensions incl. (42,c2)<-o2, (42,c6)<-o6).
+Official-style scorer: 44 -> 2 (states 39/42/44/45/47/58/35/60 all
+ZERO; 63/65 frames exact).
+
+## 2026-08-14 (later 137): the last two pixels are SUB-ULP INTERNAL PLANES
+
+For (40,1847,402) and (41,1897,606) no captured 24-bit plane word
+reproduces the reference (partner-RNE, plane mixes, presentation
+secondary all ruled out; a2-tri23-full capture 66abd7ba... proved NO
+transfer deficit at either tile while reproducing s42's row-0 band).
+Per-pixel hardware value captures (special-value-plan-v2 da20f972...,
+tile-value-plan-v1 67cfae9c..., via rvp/reveal-agx-residual-value-probe):
+- hw center values at the special pixels are +1 ulp above the
+  affine-RTZ of the captured tile constants; full-tile maps show the
+  deviation is STRUCTURED: isolated +1 columns (period ~5) in s40 and
+  a diagonal region tracking the triangle edge in s41.
+- CONCLUSION: the AGX ITER evaluates each pixel from an INTERNAL
+  plane with sub-ulp precision beyond the exported 24-bit words; the
+  exported per-tile C words are its RTZ24 samples.
+- LP-fitting an internal affine plane against all 1024 center words
+  per tile/channel: s40 tile (57,12) is ONE plane (1024/1024 both
+  channels); s41 tile (59,18) is TWO planes split EXACTLY along the
+  hardware sub-primitive edge, whose staircase obeys
+  sliver iff lx >= 2 + (3*ly + 9)/13   (Bresenham crossings at
+  ly = {2,6,10} mod 13; slope 3/13 = the o2 edge slope) - 0/352
+  classification errors.
+- LANE SEMANTICS: production lane values = the ITER center value AT
+  EACH LANE'S OWN COORDINATE (proven: center-record triples give byte
+  189/248 = reference for both pixels; FFMA-offset triples do not for
+  s41).  This is exactly the shader's existing per-coordinate
+  generalValue structure.
+
+## 2026-08-14 (later 138): EXTENDED-PLANE PORT -> GATE 0 (FULL PARITY)
+
+Port (parity/liquid_glass_reveal_hw_constants.h + raster + renderer +
+shader):
+- struct wlg_hw_ext { tx, ty, e0..e3, int64 plane[2][2][3] }: value =
+  (a*lx + b*ly + c) * 2^-60, RTZ24; region 1 where
+  lx >= e0 + (e1*ly + e2)/e3.  Quantized int64 planes re-verified
+  against every captured center word (1024+1024, 185+185, 167+167
+  exact).  Attached to (40,c2),(40,c3),(41,c2),(41,c3); (41,c2) is a
+  new ext-only entry (no slope/tile override) and needs trusted=1
+  (its pixel arrives via the rasterizer-owner fallback otherwise).
+- construct serializes ext into constant_words (26 words) and the
+  renderer passes offset+1 in record[22]; generalValue (CPU + shader)
+  evaluates the int64 plane and RTZ24s it when the coordinate's tile
+  matches.
+*** OFFICIAL GATE: mismatchedPixels=0, exactPixelPercentage=100.0,
+65/65 frames byte-exact, both clear and regular material variants,
+expectations updated (candidate inventory c8595372..., count hash
+ea4c9120...). ***
+GATE ARC THIS SESSION: 91 -> 80 -> 70 -> 44 -> 21 -> 2 -> 0.
