@@ -1,0 +1,158 @@
+{
+  "antialiasedRing": {
+    "mismatched": 32909,
+    "pixels": 38978
+  },
+  "captureColourTransformIsLossy": true,
+  "captureTransformError": {
+    "incomingMaximumCodeDelta": 4,
+    "outgoingMaximumCodeDelta": 2
+  },
+  "classification": "colour-field reveal corpus evidence for the code-value blend law",
+  "formalParityEstablished": false,
+  "frames": [
+    {
+      "maskState": 0,
+      "maximumCodeDelta": 0,
+      "progress": 0.0,
+      "ringMismatched": 0,
+      "saturatedMismatched": 0,
+      "step": 0
+    },
+    {
+      "maskState": 4,
+      "maximumCodeDelta": 8,
+      "progress": 0.0625,
+      "ringMismatched": 939,
+      "saturatedMismatched": 0,
+      "step": 1
+    },
+    {
+      "maskState": 8,
+      "maximumCodeDelta": 7,
+      "progress": 0.125,
+      "ringMismatched": 1810,
+      "saturatedMismatched": 0,
+      "step": 2
+    },
+    {
+      "maskState": 12,
+      "maximumCodeDelta": 13,
+      "progress": 0.1875,
+      "ringMismatched": 2684,
+      "saturatedMismatched": 0,
+      "step": 3
+    },
+    {
+      "maskState": 16,
+      "maximumCodeDelta": 19,
+      "progress": 0.25,
+      "ringMismatched": 3200,
+      "saturatedMismatched": 0,
+      "step": 4
+    },
+    {
+      "maskState": 20,
+      "maximumCodeDelta": 15,
+      "progress": 0.3125,
+      "ringMismatched": 2926,
+      "saturatedMismatched": 1,
+      "step": 5
+    },
+    {
+      "maskState": 24,
+      "maximumCodeDelta": 9,
+      "progress": 0.375,
+      "ringMismatched": 2704,
+      "saturatedMismatched": 0,
+      "step": 6
+    },
+    {
+      "maskState": 28,
+      "maximumCodeDelta": 9,
+      "progress": 0.4375,
+      "ringMismatched": 2861,
+      "saturatedMismatched": 0,
+      "step": 7
+    },
+    {
+      "maskState": 32,
+      "maximumCodeDelta": 7,
+      "progress": 0.5,
+      "ringMismatched": 2907,
+      "saturatedMismatched": 0,
+      "step": 8
+    },
+    {
+      "maskState": 36,
+      "maximumCodeDelta": 11,
+      "progress": 0.5625,
+      "ringMismatched": 3233,
+      "saturatedMismatched": 4,
+      "step": 9
+    },
+    {
+      "maskState": 40,
+      "maximumCodeDelta": 15,
+      "progress": 0.625,
+      "ringMismatched": 3491,
+      "saturatedMismatched": 0,
+      "step": 10
+    },
+    {
+      "maskState": 44,
+      "maximumCodeDelta": 24,
+      "progress": 0.6875,
+      "ringMismatched": 2954,
+      "saturatedMismatched": 6172,
+      "step": 11
+    },
+    {
+      "maskState": 48,
+      "maximumCodeDelta": 10,
+      "progress": 0.75,
+      "ringMismatched": 1575,
+      "saturatedMismatched": 0,
+      "step": 12
+    },
+    {
+      "maskState": 52,
+      "maximumCodeDelta": 4,
+      "progress": 0.8125,
+      "ringMismatched": 881,
+      "saturatedMismatched": 0,
+      "step": 13
+    },
+    {
+      "maskState": 56,
+      "maximumCodeDelta": 5,
+      "progress": 0.875,
+      "ringMismatched": 556,
+      "saturatedMismatched": 2,
+      "step": 14
+    },
+    {
+      "maskState": 60,
+      "maximumCodeDelta": 4,
+      "progress": 0.9375,
+      "ringMismatched": 188,
+      "saturatedMismatched": 0,
+      "step": 15
+    },
+    {
+      "maskState": 64,
+      "maximumCodeDelta": 0,
+      "progress": 1.0,
+      "ringMismatched": 0,
+      "saturatedMismatched": 0,
+      "step": 16
+    }
+  ],
+  "maximumCodeDelta": 24,
+  "saturated": {
+    "exactPercentage": 99.9913294461075,
+    "mismatched": 6179,
+    "pixels": 71264190
+  },
+  "schemaVersion": 1
+}

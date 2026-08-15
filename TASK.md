@@ -3833,3 +3833,74 @@ entire transition.  Physical-presentation (display hardware transfer)
 remains the only unmeasured boundary.  The glass backdrop textures are
 no longer sampled by the composition (parity backdrop data retained for
 future material UI); upload-path cleanup is optional follow-up.
+
+## 2026-08-14 (later 141): THE REMAINING BOUNDARIES, MEASURED (not closed)
+
+Composed parity (later-140) is established at the corpus conditions:
+65-state k/64 ladder, 2048x2048, center (512, 614.4), radius 2164.1045,
+opaque black -> opaque white, regular/dark.  Four boundaries lie outside
+those conditions.  This entry measures them instead of assuming them.
+
+1. CONTINUOUS PROGRESS (analysis/run_walle_reveal_offgrid_gate.sh,
+   analysis/score_reveal_offgrid_frame.py; NOT a parity gate).
+   The dynamic sequence of the coverage capture holds one frame off the
+   k/64 ladder.  Findings:
+   - manifest presentationProgress (0.4853515625) is the sequence clock,
+     NOT the radius fraction: the frame's geometry lies between ladder
+     states 43 and 44 (measured outer radius 1455.46 vs 1454.55/1487.92).
+   - dynamic frame-0000 is byte-identical to ladder state 0 below the
+     documented 8-row clock-probe band, so the two sequences share a
+     coordinate system and the band is the only excluded region.
+   - Circle fits from the 50% alpha contour, calibrated against a
+     known-exact control (ladder 43): the hardware frame sits at
+     center_y ~ 614.34, radius ~ 1455.05.  walle's law snaps the circle
+     to integer layer bounds, so it can only emit center_y in {614.0,
+     614.5} and radius in 0.5 steps - the live geometry is OFF that grid.
+   - Best reachable geometry (radius 1455.0, center_y 614.5, progress
+     0.67237975): 3,838 of 4,177,920 scored pixels differ (0.092%), ALL
+     inside the antialiased boundary ring (radius 1453.59..1455.46),
+     max delta 25/255; interior and exterior are exact.
+   - An unsnapped-geometry experiment was implemented and REVERTED: the
+     vertex quads are built from circle->bounds, so overriding
+     center/radius alone does not produce continuous geometry, and the
+     test was inconclusive rather than a fix.  No unproven mode is left
+     in the parity model.
+   STATUS: quantified, NOT closed.  Closing it means either a hardware
+   capture campaign on the live path or reworking the geometry
+   construction off integer bounds - the latter must not disturb the
+   65-state ladder, which is exact BECAUSE of that snapping.
+
+2. COLOURED CONTENT (analysis/verify_reveal_colored_blend_corpus.py,
+   analysis/reveal_colored_blend_corpus_result.json).
+   The d67fb35 capture ran the same reveal over two procedurally
+   generated colour fields (17 steps, progress k/16 = ladder state 4k).
+   Regenerating those fields from the capture tool's closed-form
+   generators reproduces the endpoint frames only to within 2-4 code
+   values: that capture saved through a Color LCD -> sRGB conversion, so
+   its bytes are not the renderer's output and it CANNOT byte-prove the
+   blend.  Scored anyway, predicting from the captured endpoints:
+   - saturated regions (mask 0 or 255, pure copy): 71,264,190 px,
+     6,179 mismatched -> 99.99133% exact;
+   - antialiased ring (the only region that actually blends): 38,978 px,
+     32,909 mismatched, max delta 24 - as expected, since a per-channel
+     colour transform does not commute with blending.
+   STATUS: strong supporting evidence, NOT proof.  A definitive test
+   needs a colour capture whose pipeline matches the black/white one.
+
+3. APPEARANCE / VARIANT: the corpus is regular/dark only.  walle asserts
+   and the gate enforces clear == regular == reference; light appearance
+   is unverified.  No evidence suggests the wallpaper blend depends on
+   either, but no hardware frame proves it.
+
+4. OTHER GEOMETRIES: the hw-constants table, trusted slivers, extended
+   internal planes and the A2 band are keyed to the corpus radius words.
+   Other resolutions/centres fall back to the computed chain, which has
+   known rare 1-ulp misses - that is why the tables exist.
+
+TOOLING ADDED: --reveal-mask-process-capture-progress <v[,v...]> renders
+one captured state per explicit progress value (used for all of the above
+searches); the capture markers now report the progress law and the
+composed state count.  The reproduction path for boundaries 2-4 exists
+in-repo: lg-test/Analysis/run_walle_reveal_coverage_corpus_local_macos_26_6_1.sh
+drives lg-test/Sources/GlassCapture with --width/--height/
+--transition-origin/--reveal-coverage-probe on the M1.

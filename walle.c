@@ -384,6 +384,16 @@ struct wallpaper_state
     bool                      globals_ready;
 
     bool     reveal_process_capture;
+    /* --reveal-mask-process-capture-progress: capture one state at this exact
+     * progress instead of the 65-state k/64 ladder, so hardware samples that
+     * fall between ladder states can be scored. */
+    bool     reveal_process_capture_single;
+    /* Explicit progress ladder (comma-separated on the command line): one
+     * captured state per value, in order. */
+    float*   reveal_process_capture_progress_values;
+    uint32_t reveal_process_capture_progress_count;
+    /* argv-owned; echoed verbatim so the marker states the exact request. */
+    const char* reveal_process_capture_progress_text;
     bool     reveal_process_capture_output_claimed;
     bool     reveal_process_capture_complete;
     int      reveal_process_capture_status;
@@ -1799,7 +1809,12 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
     float elapsed = (float)(now_ns - output->render.anim_start_ns) * 1e-9f;
     float progress;
     bool  finished;
-    if (process_capture) {
+    if (process_capture && state->reveal_process_capture_single) {
+        progress = state->reveal_process_capture_progress_values
+                       [output->reveal_process_capture_state];
+        finished = output->reveal_process_capture_state
+                   == state->reveal_process_capture_progress_count - 1u;
+    } else if (process_capture) {
         progress = (float)output->reveal_process_capture_state
                    / (float)(REVEAL_PROCESS_CAPTURE_STATE_COUNT - 1);
         finished = output->reveal_process_capture_state == REVEAL_PROCESS_CAPTURE_STATE_COUNT - 1;
@@ -1924,6 +1939,15 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
     if (process_capture && finished) {
         state->reveal_process_capture_status   = 0;
         state->reveal_process_capture_complete = true;
+        char progress_law[96];
+        if (state->reveal_process_capture_single) {
+            snprintf(progress_law,
+                     sizeof progress_law,
+                     "explicit=%s",
+                     state->reveal_process_capture_progress_text);
+        } else {
+            snprintf(progress_law, sizeof progress_law, "state/64");
+        }
         printf(
             "walleExecutableProcessRendered=true\n"
             "walleLayerShellSurfaceRendered=true\n"
@@ -1933,14 +1957,20 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
             "revealMaskProcessCaptureCallbacks=%u\n"
             "revealMaskProcessCaptureDimensions=2048x2048\n"
             "revealMaskProcessCaptureCenterTopLeft=512.0,614.4\n"
-            "revealMaskProcessCaptureProgress=state/64\n"
+            "revealMaskProcessCaptureProgress=%s\n"
             "revealMaskProcessCaptureFormat=R8-top-left-row-major\n"
-            "compositionProcessCaptureState=32\n"
+            "compositionProcessCaptureStates=%u\n"
             "compositionProcessCaptureFormat=BGRA8-top-left-row-major\n"
             "revealMaskProcessCaptureComplete=true\n",
-            REVEAL_PROCESS_CAPTURE_STATE_COUNT,
+            state->reveal_process_capture_single
+                ? state->reveal_process_capture_progress_count
+                : REVEAL_PROCESS_CAPTURE_STATE_COUNT,
             state->reveal_process_capture_swap_count,
-            state->reveal_process_capture_callback_count);
+            state->reveal_process_capture_callback_count,
+            progress_law,
+            state->reveal_process_capture_single
+                ? state->reveal_process_capture_progress_count
+                : REVEAL_PROCESS_CAPTURE_STATE_COUNT);
         fflush(stdout);
     }
 #if defined(WALLE_TRACY)
@@ -3296,7 +3326,11 @@ static void print_usage(const char* argv0)
         "\n"
         "Reveal-mask process diagnostic:\n"
         "      --reveal-mask-process-capture <empty-directory>\n"
-        "          write state-0000.r8..state-0064.r8 (2048x2048, top-left), then exit\n"
+        "          write state-0000.r8..state-0064.r8 and composition-state-NNNN.bgra\n"
+        "          (2048x2048, top-left), then exit\n"
+        "      --reveal-mask-process-capture-progress <v[,v...]>\n"
+        "          capture one state per explicit progress value in [0,1] instead\n"
+        "          of the 65-state ladder\n"
         "\n"
         "Renderer: Vulkan 1.4, offline Slang/SPIR-V 1.6 (no fallback).\n",
         argv0);
@@ -3365,6 +3399,7 @@ int main(int argc, char* argv[])
     enum
     {
         OPT_REVEAL_MASK_PROCESS_CAPTURE = 256,
+        OPT_REVEAL_MASK_PROCESS_CAPTURE_PROGRESS,
         OPT_VULKAN_DEVICE,
     };
     static const struct option LONG_OPTS[] = {
@@ -3376,9 +3411,14 @@ int main(int argc, char* argv[])
          required_argument,
          nullptr,
          OPT_REVEAL_MASK_PROCESS_CAPTURE},
+        {"reveal-mask-process-capture-progress",
+         required_argument,
+         nullptr,
+         OPT_REVEAL_MASK_PROCESS_CAPTURE_PROGRESS},
         {},
     };
     const char* reveal_process_capture_directory = nullptr;
+    const char* reveal_process_capture_progress  = nullptr;
     const char* vulkan_device_selector           = getenv("WALLE_VK_DEVICE");
     bool        vulkan_device_selector_locked = vulkan_device_selector && *vulkan_device_selector;
     for (int opt; (opt = getopt_long(argc, argv, "c:hV", LONG_OPTS, nullptr)) != -1;) {
@@ -3398,6 +3438,9 @@ int main(int argc, char* argv[])
                 break;
             case OPT_REVEAL_MASK_PROCESS_CAPTURE:
                 reveal_process_capture_directory = optarg;
+                break;
+            case OPT_REVEAL_MASK_PROCESS_CAPTURE_PROGRESS:
+                reveal_process_capture_progress = optarg;
                 break;
             default:
                 print_usage(argv[0]);
@@ -3421,8 +3464,48 @@ int main(int argc, char* argv[])
     }
     signal(SIGPIPE, SIG_IGN);
 
+    if (reveal_process_capture_progress != nullptr && reveal_process_capture_directory == nullptr) {
+        fprintf(stderr,
+                "--reveal-mask-process-capture-progress requires "
+                "--reveal-mask-process-capture\n");
+        return 1;
+    }
+    float*   reveal_capture_progress_values = nullptr;
+    uint32_t reveal_capture_progress_count  = 0;
+    if (reveal_process_capture_progress != nullptr) {
+        for (const char* cursor = reveal_process_capture_progress;; ) {
+            char*  end   = nullptr;
+            double value = strtod(cursor, &end);
+            if (end == cursor || !(value >= 0.0) || !(value <= 1.0)
+                || (*end != '\0' && *end != ',')) {
+                fprintf(stderr,
+                        "Invalid capture progress '%s': expected comma-separated "
+                        "values in [0, 1]\n",
+                        reveal_process_capture_progress);
+                free(reveal_capture_progress_values);
+                return 1;
+            }
+            float* grown = realloc(reveal_capture_progress_values,
+                                   (reveal_capture_progress_count + 1u) * sizeof(float));
+            if (grown == nullptr) {
+                free(reveal_capture_progress_values);
+                fprintf(stderr, "Out of memory parsing capture progress list\n");
+                return 1;
+            }
+            reveal_capture_progress_values                                 = grown;
+            reveal_capture_progress_values[reveal_capture_progress_count++] = (float)value;
+            if (*end == '\0')
+                break;
+            cursor = end + 1;
+        }
+    }
+
     struct wallpaper_state state = {
         .reveal_process_capture              = reveal_process_capture_directory != nullptr,
+        .reveal_process_capture_single       = reveal_process_capture_progress != nullptr,
+        .reveal_process_capture_progress_values = reveal_capture_progress_values,
+        .reveal_process_capture_progress_count  = reveal_capture_progress_count,
+        .reveal_process_capture_progress_text   = reveal_process_capture_progress,
         .reveal_process_capture_directory_fd = -1,
         .signal_fd                           = -1,
         .inotify_fd                          = -1,

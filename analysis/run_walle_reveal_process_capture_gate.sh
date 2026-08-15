@@ -109,7 +109,7 @@ for marker in \
     revealMaskProcessCaptureCenterTopLeft=512.0,614.4 \
     revealMaskProcessCaptureProgress=state/64 \
     revealMaskProcessCaptureFormat=R8-top-left-row-major \
-    compositionProcessCaptureState=32 \
+    compositionProcessCaptureStates=65 \
     compositionProcessCaptureFormat=BGRA8-top-left-row-major \
     revealMaskProcessCaptureComplete=true; do
     grep -Fxq "$marker" "$gate_root/walle.log" || fail "missing marker: $marker"
