@@ -194,8 +194,14 @@ float4 composeFragment(
     float2 centerTopLeft = push.geometry.xy;
     float radiusPixels = push.geometry.z;
 
-    float tFade = smoothstep(kFadeStart, 1.0, time);
-    float thickness = smoothstep(0.0, kMaterialize, time) * (1.0 - tFade);
+    // Apple's materialize timeline is EXACTLY linear: inputFaceOpacity
+    // equals the visible fraction to the bit, across both materials and both
+    // appearances (deviation 0 over 33 sampled states).  walle previously
+    // eased both ends with smoothstep, which is the wrong shape; the ramps
+    // below are linear to match, keeping walle's two-phase structure of a
+    // materialize window followed by a fade to the revealed wallpaper.
+    float tFade = saturate((time - kFadeStart) / (1.0 - kFadeStart));
+    float thickness = saturate(time / kMaterialize) * (1.0 - tFade);
 
     // Express the material in the original bottom-left pixel coordinates while
     // Vulkan resources and mask storage remain naturally top-left.
@@ -224,7 +230,14 @@ float4 composeFragment(
     float2 e2 = float2(0.0, 0.30);
     float2 e3 = float2(0.21, 0.21);
     float2 e4 = float2(0.21, -0.21);
-    float3 blurredIncoming = texGlassB.Sample(linearSampler, uv).rgb;
+    // The measured blur radius ramps linearly with materialize progress
+    // (BLUR_RADIUS reads 0.5 at visible_fraction 0.5 and 1.0 at 1.0, with
+    // regular's maximum exactly 4x clear's).  walle holds a single
+    // pre-blurred backdrop, so approximate the ramp by opening from the
+    // sharp source to it as the material thickens.
+    float3 sharpIncoming = texB.Sample(linearSampler, uv).rgb;
+    float3 blurredIncoming = lerp(
+        sharpIncoming, texGlassB.Sample(linearSampler, uv).rgb, thickness);
     float3 wash = (
         blurredIncoming
         + texGlassB.Sample(linearSampler, uv + e1).rgb
