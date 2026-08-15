@@ -4076,3 +4076,38 @@ analysis/capture_tint_colour_sweep.sh - the same mechanism, more colours.
 Tint is therefore NOT yet shipped as a config option: half a law is not
 parity, and inventing the dark half would repeat the error this session
 already made once.
+
+## 2026-08-15 (later 145): dark tint - three offline shortcuts ruled out
+
+The dark tint law is the last unmeasured piece.  Before assuming another
+capture was needed, three ways to close it with data in hand were tried and
+all fail:
+
+1. Fit base = a*tint + b from the two hardcoded colours: gives a NEGATIVE
+   green slope (-0.37).  Unphysical.
+2. Eight saturated system colours: dark has only three unclipped samples in
+   R, one short of the four a 4-parameter fit needs.
+3. Assume tint changes only the BASE and reuses the material's own
+   transmission (physically motivated - transmission ought to be a property
+   of the material, not the tint).  REFUTED: tinted transmission differs
+   from untinted regular by up to 0.73, larger than the coefficients
+   themselves.
+4. Add uv-map as a seventh sample (valid because the transfer is linear, so
+   the mean output corresponds to the mean input).  Helps the neutral tints
+   - Gray, White and Magenta become solvable in dark - but the saturated
+   ones still have ZERO unclipped samples in whole channels: Red pins R at
+   255 for every background, so no background variation can recover it.
+
+The blocker is therefore the tint colours themselves, not the backgrounds.
+analysis/capture_tint_colour_sweep.sh now sweeps eight MID-INTENSITY tints
+(every channel inside roughly 0.25..0.75) which cannot pin, and its patched
+harness builds and signs on the target Mac.
+
+CAPTURE ACCESS, correctly diagnosed at last: the Mac is not locked and not
+asleep.  The harness fails its active/key-window preflight because macOS
+focus-stealing prevention only lets an SSH-launched app take key focus
+shortly after real user input - which is why captures succeeded at idle
+214 s and fail at 2000 s+.  System Events reports Finder frontmost and
+Accessibility works; caffeinate wakes the display but does not grant focus.
+A watcher polling HIDIdleTime and firing the capture on the next user touch
+is the reliable workaround.

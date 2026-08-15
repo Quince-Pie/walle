@@ -37,11 +37,20 @@ s = open(src).read()
 # Eight tints spanning the colour space, all at full opacity: the harness's
 # own note records that a half-opacity tint "pre-multiplies to near-neutral
 # and measured as a plain gray platter", so partial alpha would waste samples.
-cases = ["Red", "Green", "Blue2", "Cyan", "Magenta", "Yellow", "White", "Gray"]
+# Mid-intensity tints.  The SwiftUI system colours are too saturated: their
+# rendered bases pin at 0 or 255, leaving too few unclipped samples to solve
+# the dark law (only three in R).  These keep every channel inside roughly
+# 0.25..0.75 so nothing clips, while still spanning hue.
+cases = ["M0", "M1", "M2", "M3", "M4", "M5", "M6", "M7"]
 colours = {
-    "Red": ".red", "Green": ".green", "Blue2": ".blue", "Cyan": ".cyan",
-    "Magenta": ".purple", "Yellow": ".yellow", "White": ".white",
-    "Gray": ".gray",
+    "M0": "Color(.sRGB, red: 0.70, green: 0.35, blue: 0.35)",
+    "M1": "Color(.sRGB, red: 0.35, green: 0.70, blue: 0.35)",
+    "M2": "Color(.sRGB, red: 0.35, green: 0.35, blue: 0.70)",
+    "M3": "Color(.sRGB, red: 0.65, green: 0.65, blue: 0.30)",
+    "M4": "Color(.sRGB, red: 0.30, green: 0.65, blue: 0.65)",
+    "M5": "Color(.sRGB, red: 0.65, green: 0.30, blue: 0.65)",
+    "M6": "Color(.sRGB, red: 0.50, green: 0.50, blue: 0.50)",
+    "M7": "Color(.sRGB, red: 0.60, green: 0.45, blue: 0.30)",
 }
 
 old_enum = ("    case none, regular, clear, tintedBlue, tintedOrange, "
