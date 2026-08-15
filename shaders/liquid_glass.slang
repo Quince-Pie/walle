@@ -45,8 +45,8 @@ static const float kFadeStart = 0.66;
 static const float kMaterialize = 0.12;
 
 
-static const float kLensBandRadiusFraction = 0.44;
-static const float kLensBandDiagonalFraction = 0.033;
+// inputOuterRefractionHeight / R, measured 26.6.1 (0.125 * diameter).
+static const float kLensBandRadiusFraction = 0.25;
 static const float kLensMaximumRadiusFraction = 0.21;
 static const float kLensMaximumBandFraction = 1.09;
 static const float kLensCopyLight = 0.36;
@@ -224,7 +224,7 @@ float4 composeFragment(
 
     float2 uv = input.uv;
     float2 pixelToUv = 1.0 / resolution;
-    float diagonal = length(resolution);
+
 
     float2 e1 = float2(0.30, 0.0);
     float2 e2 = float2(0.0, 0.30);
@@ -266,9 +266,13 @@ float4 composeFragment(
     float shadowAlpha = penumbra * kShadowBase * shadowAdaptation
         * regular * (1.0 - lightness) * (1.0 - mask) * thickness;
 
-    float lensBand = min(
-        kLensBandRadiusFraction * radiusPixels,
-        kLensBandDiagonalFraction * diagonal);
+    // Measured on 26.6.1: inputOuterRefractionHeight is exactly 0.125 of the
+    // element diameter (0.25 R) at every size probed from 455 to 4328, with
+    // no dependence on the window diagonal.  walle used 0.44 R capped by
+    // 0.033 * diagonal - nearly twice as wide, and capped where the hardware
+    // is not.  The displacement profile below is unchanged; only the band
+    // width is corrected.
+    float lensBand = kLensBandRadiusFraction * radiusPixels;
     float bandPosition = (radiusPixels - distancePixels) / max(lensBand, 1.0);
     float bandUnit = clamp(bandPosition, 0.0, 1.0);
 

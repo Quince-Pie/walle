@@ -3904,3 +3904,88 @@ composed state count.  The reproduction path for boundaries 2-4 exists
 in-repo: lg-test/Analysis/run_walle_reveal_coverage_corpus_local_macos_26_6_1.sh
 drives lg-test/Sources/GlassCapture with --width/--height/
 --transition-origin/--reveal-coverage-probe on the M1.
+
+## 2026-08-15 (later 142): THE MATERIAL WAS MEASURED AGAINST THE WRONG OS
+
+walle's Liquid Glass constants came from macOS 26.4 (25E246).  The target
+M1 runs 26.6.1 (25G76).  Re-running the same capture harness on it shows
+Apple changed the material substantially, so most of the shipped material
+was stale rather than wrong-by-construction.  Everything below is measured
+on the target machine; see analysis/derive_reveal_tint_law.py and the
+captures in artifacts-tint/.
+
+STATIC COLOUR LAW (was: platter 0.980/0.078 opaque + 0.494 veil)
+- The law is affine in sRGB CODE space on the mega-blurred backdrop: the
+  gray ladder fits there to 0.44 codes versus ~26 in linear light.
+- Saturated primaries need the full 3x3 - a per-channel diagonal misses by
+  up to 105 codes.  Matrices solved over 17-21 unclipped backgrounds,
+  mean residual 1.2-2.2 codes.
+- regular is NO LONGER OPAQUE: 179/219/250 (light) and 15/60/94 (dark)
+  over bg 0/128/255, i.e. ~28% / ~31% transmission where 26.4 recorded
+  "transmission MTF 0.0000".
+- clear is now APPEARANCE-INDEPENDENT: 19/152/255 in both, and passes
+  white at 255 where the 26.4 veil maps it to 0.761.
+- Ported; walle now measures 182.0/218.3/254.3 and 21.4/153.2/254.9
+  against Apple - worst case 4.3 codes, at the capture path's own
+  Color-LCD-to-sRGB noise floor.
+
+BLUR (was: sigma = 0.032 * window diagonal, i.e. 93 px at 2048^2)
+- Measured from the rig's sine gratings, periods 32..1024 at 2x, interior
+  modulation over background modulation divided by the DC transfer:
+      period    32    64   128   256   512  1024
+      regular 0.14  0.50  0.76  0.86  0.88  0.99
+      clear   0.78  0.90  0.93  0.94  0.94  0.93
+- Best-fit sigma 13.0 px (regular) and 4.1 px (clear): walle was blurring
+  7-34x too hard, and at p=256 predicted 0.02 transmission against 0.86.
+- The radius is ABSOLUTE (not a window fraction) and per-variant.
+- INDEPENDENT CORROBORATION: the transition fixtures give BLUR_RADIUS
+  maxima of 4 (regular) and 1 (clear) - exactly the 4:1 ratio, from a
+  completely separate measurement path.
+- Residual is structural: per-period sigma climbs with period, so the
+  kernel has heavier tails than a Gaussian.  The five-tap
+  BLUR_DISTANCE/BLUR_OPACITY ladder is the real shape; the Gaussian
+  shipped here is a stopgap.
+
+TIMING (was: smoothstep ramps)
+- inputFaceOpacity is EXACTLY linear in the visible fraction: deviation 0
+  over 33 states, both materials, both appearances.  Ported.
+- BLUR_RADIUS ramps linearly with progress too (0.5 at f=0.5).  walle held
+  one fixed pre-blurred backdrop; it now opens from sharp toward blurred
+  as the material thickens.
+
+GEOMETRY SCALING (measured across diameters 455..4328)
+      OUTER_REFRACTION_AMOUNT  0.2   * D  = 0.4  R
+      OUTER_REFRACTION_HEIGHT  0.125 * D  = 0.25 R
+      SHADOW_HEIGHT            0.4   * D  = 0.8  R
+      INNER_REFRACTION_AMOUNT  -60        (absolute)
+      INNER_REFRACTION_HEIGHT   20        (absolute)
+      SHADOW_AMOUNT             75        (absolute)
+- Ported the band width: walle used min(0.44 R, 0.033 * diagonal), nearly
+  twice Apple's 0.25 R and capped where the hardware is not.
+- NOT yet ported: the displacement magnitude (0.4 R), the inner refraction
+  band (absolute 20 pt), and the shadow height (0.8 R vs walle's 0.035 R
+  penumbra).  "amount" and "height" are CAFilter parameters whose exact
+  rendering semantics are unverified - adopting the scaling laws is safe,
+  adopting the magnitudes needs the semantics pinned first.
+
+TAXONOMY (Apple docs: developer.apple.com/documentation/swiftui/glass)
+- Glass has THREE variants - regular, clear, identity ("content remains
+  unaffected") - plus tint(Color?) and interactive(Bool).  walle modelled
+  two.  identity added, and it is parity-exact by construction: it routes
+  to the mask-weighted crossfade the corpus validates byte-exactly.
+- .tint() is NO LONGER HUE-FREE.  26.4 measured blue and orange identical,
+  which is why tint was never modelled; on 26.6.1 they differ across
+  787,030 px (the whole element).  Tint is a flat base colour plus low
+  luma-weighted transmission; the 3x3 and base solve to 0.57 codes (dark).
+  NOT yet a config option, and generalising past blue/orange needs the
+  harness's hardcoded colour list extended.
+- APPEARANCE is an input to Apple's material, not a content property.
+  walle inferred it from backdrop luminance, worth 160 codes of error over
+  a black wallpaper.  `appearance = light|dark|auto` added, with auto
+  reading org.freedesktop.appearance color-scheme from xdg-desktop-portal.
+
+STILL OPEN: the five-tap blur ladder; the ring/glow/shadow dynamic layer
+(SHADOW_* and BLEED_* sit measured and unread in the fixtures); tint as a
+shipped variant.  All numbers above come from a 500 pt circle at 2x on one
+machine - the laws should be geometry-independent but that is re-verified
+only for the scaling table.
