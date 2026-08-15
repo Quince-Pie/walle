@@ -73,20 +73,53 @@
 
 #define WALLE_VERSION "0.0.1"
 
+/* Apple's Glass exposes exactly three variants: `regular`, `clear`, and
+ * `identity` ("your content remains unaffected as if no glass effect was
+ * applied").  Identity therefore composes the reveal with no material at
+ * all - the plain mask-weighted crossfade the hardware corpus measures. */
+enum glass_variant : uint8_t
+{
+    GLASS_VARIANT_CLEAR = 0,
+    GLASS_VARIANT_REGULAR,
+    GLASS_VARIANT_IDENTITY
+};
+
 /* Liquid Glass preprocess (parity): the backdrop is Apple's exact material
  * pyramid (DOWNSAMPLE_4 producer + copy-base + AGX2 mip kernels transferred
  * from hardware; parity/liquid_glass_pyramid.c).  The uploaded level is the
- * one whose kernel support matches the measured material blur: structured-
- * light measurement of real macOS 26.4 glassEffect (calibration captures,
- * 3200x2000 @1x) bounds the interior fundamental transmission at p=256 px to
- * 0.011-0.027 -> blur radius ~ 0.032 * window diagonal, identical across
- * element sizes and variants.  Level N covers 2^(N+2) wallpaper pixels. */
-constexpr double GLASS_BLUR_FRAC = 0.032;
+ * one whose kernel support matches the measured material blur.
+ *
+ * The blur was re-measured on macOS 26.6.1 (25G76) from the capture rig's
+ * horizontal sine gratings, periods 32..1024 px at 2x backing scale, by
+ * dividing the interior modulation by the background modulation and then by
+ * the material's own DC transfer.  Best-fit Gaussian sigma:
+ *
+ *     regular  13.0 px   (max MTF error 0.103)
+ *     clear     4.1 px   (max MTF error 0.066)
+ *
+ * The residual error is structural, not noise: sigma implied per period
+ * climbs with period, so the kernel has heavier tails than a Gaussian -
+ * consistent with the five-tap BLUR_DISTANCE/BLUR_OPACITY ladder the
+ * measured transition law carries.
+ *
+ * This supersedes the 26.4 figure this file used to carry (transmission
+ * 0.011-0.027 at p=256 -> sigma ~ 0.032 * window diagonal).  That is 93 px
+ * at 2048x2048 and 141 px at 4K: seven to thirty-four times too much blur
+ * for this build.  Note the measured radius is ABSOLUTE, not a fraction of
+ * the window, and is quoted in capture pixels at 2x scale.
+ * Level N covers 2^(N+2) wallpaper pixels. */
+constexpr double GLASS_BLUR_SIGMA_REGULAR_PX = 13.0;
+constexpr double GLASS_BLUR_SIGMA_CLEAR_PX   = 4.1;
+constexpr double GLASS_CAPTURE_SCALE         = 2.0;
 
 [[nodiscard]]
-static uint32_t glass_backdrop_level_count(int width, int height)
+static uint32_t glass_backdrop_level_count(int width, int height, enum glass_variant variant)
 {
-    double radius = GLASS_BLUR_FRAC * hypot((double)width, (double)height);
+    (void)width;
+    (void)height;
+    double radius = (variant == GLASS_VARIANT_REGULAR ? GLASS_BLUR_SIGMA_REGULAR_PX
+                                                      : GLASS_BLUR_SIGMA_CLEAR_PX)
+                    / GLASS_CAPTURE_SCALE;
     long   level  = lround(log2(fmax(radius, 8.0)) - 2.0);
     if (level < 1)
         level = 1;
@@ -161,17 +194,6 @@ enum glass_appearance : uint8_t
     GLASS_APPEARANCE_AUTO = 0,
     GLASS_APPEARANCE_DARK,
     GLASS_APPEARANCE_LIGHT
-};
-
-/* Apple's Glass exposes exactly three variants: `regular`, `clear`, and
- * `identity` ("your content remains unaffected as if no glass effect was
- * applied").  Identity therefore composes the reveal with no material at
- * all - the plain mask-weighted crossfade the hardware corpus measures. */
-enum glass_variant : uint8_t
-{
-    GLASS_VARIANT_CLEAR = 0,
-    GLASS_VARIANT_REGULAR,
-    GLASS_VARIANT_IDENTITY
 };
 
 typedef enum : uint8_t
@@ -1422,7 +1444,7 @@ static void* render_thread_worker(void* arg)
 
     /* Material backdrop level: Apple's exact pyramid, level chosen so the
      * kernel support matches the measured material blur radius. */
-    uint32_t glass_levels = glass_backdrop_level_count(w, h);
+    uint32_t glass_levels = glass_backdrop_level_count(w, h, variant);
     uint32_t glass_level  = glass_levels - 1u;
     long     page_size    = sysconf(_SC_PAGESIZE);
     char*    cpath        = nullptr;
