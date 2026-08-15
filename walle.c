@@ -113,7 +113,6 @@ constexpr int   INOTIFY_BUF_LEN        = 4096;
 constexpr uint32_t  REVEAL_PROCESS_CAPTURE_WIDTH       = 2048;
 constexpr uint32_t  REVEAL_PROCESS_CAPTURE_HEIGHT      = 2048;
 constexpr uint32_t  REVEAL_PROCESS_CAPTURE_STATE_COUNT = 65;
-constexpr uint32_t  REVEAL_PROCESS_COMPOSITION_STATE   = 32;
 static const double REVEAL_PROCESS_CAPTURE_CENTER_X    = 512.0;
 static const double REVEAL_PROCESS_CAPTURE_CENTER_Y    = 614.4;
 constexpr double    REVEAL_RADIUS_MARGIN               = 1.03;
@@ -1729,9 +1728,13 @@ static bool write_reveal_process_capture(struct wallpaper_output* output)
 [[nodiscard]]
 static bool write_reveal_process_composition(struct wallpaper_output* output)
 {
-    static const char       name[] = "composition-state-0032.bgra";
-    struct wallpaper_state* state  = output->render.state;
-    int                     fd     = openat(state->reveal_process_capture_directory_fd,
+    char                    name[40];
+    struct wallpaper_state* state = output->render.state;
+    snprintf(name,
+             sizeof name,
+             "composition-state-%04u.bgra",
+             output->reveal_process_capture_state);
+    int fd = openat(state->reveal_process_capture_directory_fd,
                     name,
                     O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC | O_NOFOLLOW,
                     S_IRUSR | S_IWUSR);
@@ -1838,13 +1841,9 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
         = process_capture ? (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT
                                : 0,
              .composition_readback
-        = process_capture
-                  && output->reveal_process_capture_state == REVEAL_PROCESS_COMPOSITION_STATE
-                   ? output->reveal_process_composition_pixels
-                   : nullptr,
+        = process_capture ? output->reveal_process_composition_pixels : nullptr,
              .composition_readback_size
         = process_capture
-                  && output->reveal_process_capture_state == REVEAL_PROCESS_COMPOSITION_STATE
                    ? (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT * 4
                    : 0,
     };
@@ -1888,9 +1887,8 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
 #endif
             return RENDER_FRAME_FAILED;
         }
-        if (output->reveal_process_capture_state == REVEAL_PROCESS_COMPOSITION_STATE
-            && !write_reveal_process_composition(output)) {
-            stop_failed_transition(output, "could not create composition-state-0032.bgra");
+        if (!write_reveal_process_composition(output)) {
+            stop_failed_transition(output, "could not create the composition state file");
 #if defined(WALLE_TRACY)
             TracyCZoneEnd(tracy_transition_frame);
 #endif

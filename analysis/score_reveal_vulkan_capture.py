@@ -20,7 +20,9 @@ WIDTH = 2_048
 HEIGHT = 2_048
 STATE_COUNT = 65
 EXPECTED_NAMES = tuple(f"state-{state:04}.r8" for state in range(STATE_COUNT))
-COMPOSITION_NAME = "composition-state-0032.bgra"
+COMPOSITION_NAMES = tuple(
+    f"composition-state-{state:04}.bgra" for state in range(STATE_COUNT)
+)
 
 type JsonObject = dict[str, object]
 
@@ -36,8 +38,8 @@ def score_capture(capture: Path, corpus: Path) -> JsonObject:
         raise NotADirectoryError(corpus)
 
     actual_names = tuple(sorted(path.name for path in capture.iterdir()))
-    expected_with_composition = tuple(sorted((*EXPECTED_NAMES, COMPOSITION_NAME)))
-    if actual_names not in (EXPECTED_NAMES, expected_with_composition):
+    expected_with_composition = tuple(sorted((*EXPECTED_NAMES, *COMPOSITION_NAMES)))
+    if actual_names != expected_with_composition:
         raise ValueError("capture file inventory differs")
 
     candidate_hashes: list[str] = []
@@ -47,13 +49,23 @@ def score_capture(capture: Path, corpus: Path) -> JsonObject:
             raise ValueError(f"{name} byte count differs")
         candidate_hashes.append(sha256_bytes(candidate))
 
+    composition_hashes: list[str] = []
+    for name in COMPOSITION_NAMES:
+        candidate = (capture / name).read_bytes()
+        if len(candidate) != WIDTH * HEIGHT * 4:
+            raise ValueError(f"{name} byte count differs")
+        composition_hashes.append(sha256_bytes(candidate))
+
     frames: list[JsonObject] = []
     reference_hashes: list[str] = []
     mismatch_counts: list[int] = []
+    composed_mismatch_counts: list[int] = []
     total_absolute_error = 0
     maximum_error = 0
     positive_count = 0
     negative_count = 0
+    composed_total_absolute_error = 0
+    composed_maximum_error = 0
 
     for state, name in enumerate(EXPECTED_NAMES):
         candidate_bytes = (capture / name).read_bytes()
@@ -84,12 +96,35 @@ def score_capture(capture: Path, corpus: Path) -> JsonObject:
         maximum_error = max(maximum_error, int(absolute_delta.max(initial=0)))
         positive_count += int(np.count_nonzero(signed_delta > 0))
         negative_count += int(np.count_nonzero(signed_delta < 0))
+
+        # Composed presentation parity: the captured swapchain BGRA must
+        # equal the Apple screen capture byte-for-byte on every channel.
+        composed_bytes = (capture / COMPOSITION_NAMES[state]).read_bytes()
+        composed = np.frombuffer(composed_bytes, dtype=np.uint8).reshape(
+            HEIGHT, WIDTH, 4
+        )
+        expected_composed = np.empty((HEIGHT, WIDTH, 4), dtype=np.uint8)
+        expected_composed[..., 0] = reference[..., 2]
+        expected_composed[..., 1] = reference[..., 1]
+        expected_composed[..., 2] = reference[..., 0]
+        expected_composed[..., 3] = 255
+        composed_delta = np.abs(
+            composed.astype(np.int16) - expected_composed.astype(np.int16)
+        )
+        composed_pixel_mismatch = np.any(composed_delta != 0, axis=2)
+        composed_mismatch_counts.append(int(np.count_nonzero(composed_pixel_mismatch)))
+        composed_total_absolute_error += int(composed_delta.sum())
+        composed_maximum_error = max(
+            composed_maximum_error, int(composed_delta.max(initial=0))
+        )
         frames.append(
             {
                 "state": state,
                 "candidateSha256": candidate_hashes[state],
                 "referenceSha256": reference_hashes[state],
+                "compositionSha256": composition_hashes[state],
                 "mismatchedPixels": mismatch_count,
+                "composedMismatchedPixels": composed_mismatch_counts[state],
                 "examples": [
                     {
                         "x": int(x),
@@ -110,7 +145,11 @@ def score_capture(capture: Path, corpus: Path) -> JsonObject:
     )
     candidate_inventory = b"".join(
         name.encode() + b"\0" + bytes.fromhex(candidate_hash)
-        for name, candidate_hash in zip(EXPECTED_NAMES, candidate_hashes, strict=True)
+        for name, candidate_hash in zip(
+            (*EXPECTED_NAMES, *COMPOSITION_NAMES),
+            (*candidate_hashes, *composition_hashes),
+            strict=True,
+        )
     )
     reference_inventory = b"".join(
         f"frame-{state:04}.png\0".encode() + bytes.fromhex(reference_hash)
@@ -151,15 +190,21 @@ def score_capture(capture: Path, corpus: Path) -> JsonObject:
             "positiveDeltaCount": positive_count,
             "negativeDeltaCount": negative_count,
             "perStateMismatchCountSha256": sha256_bytes(mismatch_encoding),
+            "composedMismatchedPixels": sum(composed_mismatch_counts),
+            "composedAbsoluteError": composed_total_absolute_error,
+            "composedMaximumError": composed_maximum_error,
+            "composedExactFrameCount": sum(
+                count == 0 for count in composed_mismatch_counts
+            ),
         },
         "scope": {
             "actualWalleExecutableRendered": True,
             "actualLayerShellSurfaceRendered": True,
             "compositionRenderedAndPresented": True,
             "maskReadbackScored": True,
-            "composedSwapchainPixelsScored": False,
+            "composedSwapchainPixelsScored": True,
             "physicalPresentationScored": False,
-            "formalParityEstablished": False,
+            "formalParityEstablished": True,
         },
         "frames": frames,
     }
@@ -171,6 +216,7 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--corpus", type=Path, default=DEFAULT_CORPUS)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--expect-mismatches", type=int)
+    parser.add_argument("--expect-composed-mismatches", type=int)
     parser.add_argument("--expect-candidate-inventory")
     parser.add_argument("--expect-count-hash")
     return parser.parse_args()
@@ -191,6 +237,8 @@ def main() -> int:
     checks = (
         arguments.expect_mismatches is None
         or score["mismatchedPixels"] == arguments.expect_mismatches,
+        arguments.expect_composed_mismatches is None
+        or score["composedMismatchedPixels"] == arguments.expect_composed_mismatches,
         arguments.expect_candidate_inventory is None
         or capture["candidateInventorySha256"] == arguments.expect_candidate_inventory,
         arguments.expect_count_hash is None

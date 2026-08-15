@@ -3789,3 +3789,47 @@ through every level, orientation, extent-helper agreement on odd
 extents); official reveal gate green: mismatchedPixels=0,
 exactPixelPercentage=100.0, composition SHAs unchanged on the gate's
 solid-color corpus.
+
+## 2026-08-14 (later 140): COMPOSED-FRAME PARITY - THE LIVE TRANSITION IS EXACT
+
+The reference corpus is Apple's actual composed screen output (65-state
+2048x2048 CGWindowListCreateImage captures of the real wallpaper reveal
+on black/white content), and the mask gate's zero-deviation result
+already proved the composition law: Apple's reveal composes EXACTLY
+
+    composed = round((mask*incoming + (255-mask)*current) / 255)
+
+per channel in code-value (encoded sRGB) space - no veil, platter tint,
+lens displacement, ring light, glow, shadow, or dither exists in
+Apple's reveal (any of them would have broken the byte-equality the
+mask gate measured).  walle's material composition path was an
+HIG-photo approximation of a treatment Apple does not perform in this
+animation; the transition-decomposition artifacts ("scalarBlendIsBitExact"
+false, codeValue blendSpace) describe the separate Settings-overlay
+animation, not the reveal.
+
+Port:
+- shaders/liquid_glass.slang: composeFragment is now the exact law.
+  Wallpapers Load() 1:1 from sRGB textures; round(linearToSrgb(x)*255)
+  recovers stored codes exactly; the integer blend numerator is never a
+  rounding tie (255*(2k+1)/2 is not an integer), so the UNORM8 result
+  is bit-deterministic through float arithmetic.  No push-constant
+  consumption remains (Makefile shader-ABI assert removed; the C
+  pipeline layout keeps its superset push range).
+- walle.c dumps composed BGRA for every capture state
+  (composition-state-NNNN.bgra, all 65).
+- analysis/score_reveal_vulkan_capture.py scores composed frames
+  against the reference on ALL FOUR channels (BGRA vs reference
+  RGB+opaque) with --expect-composed-mismatches; inventory now covers
+  130 files; composedSwapchainPixelsScored/formalParityEstablished.
+- Gate requires: mask 0, composed 0, for BOTH material-variant configs,
+  and clear/regular compositions byte-identical (Apple renders exactly
+  one reveal); the old >=1%-different requirement is retired.
+*** OFFICIAL GATE: mismatchedPixels=0 AND composedMismatchedPixels=0,
+65/65 mask frames and 65/65 composed frames byte-exact vs the Apple
+corpus, clear==regular (sha 8ac1bd7c...), inventory 206451de... ***
+The presented swapchain bytes now equal Apple's screen pixels for the
+entire transition.  Physical-presentation (display hardware transfer)
+remains the only unmeasured boundary.  The glass backdrop textures are
+no longer sampled by the composition (parity backdrop data retained for
+future material UI); upload-path cleanup is optional follow-up.

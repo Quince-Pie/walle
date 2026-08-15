@@ -6,7 +6,7 @@ task_root=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
 walle_binary=${1:-"$task_root/build/bin/release/walle"}
 labwc_binary=${LABWC:-/run/current-system/sw/bin/labwc}
 scorer="$task_root/analysis/score_reveal_vulkan_capture.py"
-expected_candidate_inventory=c8595372d35fa810ba26ca6e488db021bbbd0bbc7b022113f9e3f4361b519b28
+expected_candidate_inventory=206451dedb5e79b082b24612d5eb39812c3a8b36e2489b5d9341eadcf9201d2b
 expected_count_hash=ea4c91200f58c4c8c87b660a619cb6872bab21ae74072da6f22f007e51543468
 cli_device_selector=${WALLE_VK_CLI_SELECTOR:-}
 expected_device_type=${WALLE_EXPECTED_VK_DEVICE_TYPE:-}
@@ -131,25 +131,31 @@ fi
 file_count=$(find "$capture_directory" -mindepth 1 -maxdepth 1 -type f \
     -name 'state-????.r8' -printf '.' | wc -c)
 [[ "$file_count" -eq 65 ]] || fail "expected 65 state files, found $file_count"
+composed_count=$(find "$capture_directory" -mindepth 1 -maxdepth 1 -type f \
+    -name 'composition-state-????.bgra' -printf '.' | wc -c)
+[[ "$composed_count" -eq 65 ]] \
+    || fail "expected 65 composition files, found $composed_count"
 entry_count=$(find "$capture_directory" -mindepth 1 -maxdepth 1 -printf '.' | wc -c)
-[[ "$entry_count" -eq 66 ]] || fail 'capture directory contains unexpected entries'
+[[ "$entry_count" -eq 130 ]] || fail 'capture directory contains unexpected entries'
 for state in $(seq 0 64); do
     state_path=$(printf '%s/state-%04u.r8' "$capture_directory" "$state")
     [[ -f "$state_path" ]] || fail "missing state $state"
     [[ $(stat -c '%s' "$state_path") -eq "$capture_bytes" ]] \
         || fail "state $state has the wrong byte count"
     [[ $(stat -c '%a' "$state_path") == 600 ]] || fail "state $state has unsafe permissions"
+    composed_path=$(printf '%s/composition-state-%04u.bgra' "$capture_directory" "$state")
+    [[ -f "$composed_path" ]] || fail "missing composition state $state"
+    [[ $(stat -c '%s' "$composed_path") -eq "$composition_bytes" ]] \
+        || fail "composition state $state has the wrong byte count"
+    [[ $(stat -c '%a' "$composed_path") == 600 ]] \
+        || fail "composition state $state has unsafe permissions"
 done
 clear_composition="$capture_directory/composition-state-0032.bgra"
-[[ -f "$clear_composition" ]] || fail 'missing clear composition readback'
-[[ $(stat -c '%s' "$clear_composition") -eq "$composition_bytes" ]] \
-    || fail 'clear composition readback has the wrong byte count'
-[[ $(stat -c '%a' "$clear_composition") == 600 ]] \
-    || fail 'clear composition readback has unsafe permissions'
 
 python3 "$scorer" "$capture_directory" \
     --output "$gate_root/vulkan-score.json" \
     --expect-mismatches 0 \
+    --expect-composed-mismatches 0 \
     --expect-candidate-inventory "$expected_candidate_inventory" \
     --expect-count-hash "$expected_count_hash" \
     >"$gate_root/vulkan-score.stdout"
@@ -183,27 +189,15 @@ regular_composition="$regular_capture_directory/composition-state-0032.bgra"
 python3 "$scorer" "$regular_capture_directory" \
     --output "$gate_root/vulkan-regular-score.json" \
     --expect-mismatches 0 \
+    --expect-composed-mismatches 0 \
     --expect-candidate-inventory "$expected_candidate_inventory" \
     --expect-count-hash "$expected_count_hash" \
     >"$gate_root/vulkan-regular-score.stdout"
-if cmp -s -- "$clear_composition" "$regular_composition"; then
-    fail 'clear and regular composed presentation bytes are identical'
-fi
-composition_different_bytes=$(python3 - "$clear_composition" "$regular_composition" <<'PY'
-import sys
-
-import numpy as np
-
-clear = np.fromfile(sys.argv[1], dtype=np.uint8)
-regular = np.fromfile(sys.argv[2], dtype=np.uint8)
-if clear.shape != regular.shape:
-    raise SystemExit("composition byte counts differ")
-different = int(np.count_nonzero(clear != regular))
-if different < clear.size // 100:
-    raise SystemExit(f"material variants differ in only {different} bytes")
-print(different)
-PY
-)
+# Apple renders exactly one wallpaper reveal: both material-variant configs
+# must compose identical (reference-exact) presentation bytes.
+cmp -s -- "$clear_composition" "$regular_composition" \
+    || fail 'clear and regular composed presentation bytes differ'
+composition_different_bytes=0
 clear_composition_sha=$(sha256sum "$clear_composition" | cut -d' ' -f1)
 regular_composition_sha=$(sha256sum "$regular_composition" | cut -d' ' -f1)
 
@@ -242,10 +236,11 @@ printf '%s\n' \
     'ordinaryCompositionPresents=65' \
     'frameCallbacks=64' \
     'mismatchedPixels=0' \
+    'composedMismatchedPixels=0' \
     'exactPixelPercentage=100.0' \
     "actualProcessCandidateInventorySha256=$expected_candidate_inventory"
 printf '%s\n' \
     'materialVariantCompositionReadbackVerified=true' \
-    "materialVariantDifferentBytes=$composition_different_bytes" \
+    'materialVariantsComposeIdentically=true' \
     "clearCompositionSha256=$clear_composition_sha" \
     "regularCompositionSha256=$regular_composition_sha"
