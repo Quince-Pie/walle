@@ -318,9 +318,15 @@ int ownerCode(int2 coordinate, uint slotCount)
 float2 ownerCoordinates(int2 coordinate, int slot, int primitive, uint packedWidth)
 {
     int start = ownerControl(slot).x;
+    int offsetX = coordinate.x - start;
+    int offsetY = coordinate.y - start;
     uint row = uint(slot * 2 + primitive);
-    uint2 xAxis = axisTable[row * packedWidth + uint(coordinate.x - start)];
-    uint2 yAxis = axisTable[row * packedWidth + uint(coordinate.y - start)];
+    uint2 xAxis = (offsetX >= 0 && uint(offsetX) < packedWidth)
+        ? axisTable[row * packedWidth + uint(offsetX)]
+        : uint2(0u);
+    uint2 yAxis = (offsetY >= 0 && uint(offsetY) < packedWidth)
+        ? axisTable[row * packedWidth + uint(offsetY)]
+        : uint2(0u);
     return float2(asfloat(xAxis.x), asfloat(yAxis.y));
 }
 
