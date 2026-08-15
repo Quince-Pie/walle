@@ -1,0 +1,74 @@
+{
+  "byteExactFrames": 5,
+  "classification": "walle's animating reveal against the M1's live frames",
+  "frameCount": 8,
+  "osBuild": "25G76",
+  "records": [
+    {
+      "expectedMismatchedPixels": 125,
+      "frame": 1,
+      "maximumDelta": 1,
+      "mismatchedPixels": 125,
+      "progress": 0.0136210684,
+      "scoredPixels": 4177920
+    },
+    {
+      "expectedMismatchedPixels": 0,
+      "frame": 2,
+      "maximumDelta": 0,
+      "mismatchedPixels": 0,
+      "progress": 0.074000507,
+      "scoredPixels": 4177920
+    },
+    {
+      "expectedMismatchedPixels": 0,
+      "frame": 4,
+      "maximumDelta": 0,
+      "mismatchedPixels": 0,
+      "progress": 0.174824492,
+      "scoredPixels": 4177920
+    },
+    {
+      "expectedMismatchedPixels": 0,
+      "frame": 6,
+      "maximumDelta": 0,
+      "mismatchedPixels": 0,
+      "progress": 0.28229632,
+      "scoredPixels": 4177920
+    },
+    {
+      "expectedMismatchedPixels": 0,
+      "frame": 8,
+      "maximumDelta": 0,
+      "mismatchedPixels": 0,
+      "progress": 0.376478837,
+      "scoredPixels": 4177920
+    },
+    {
+      "expectedMismatchedPixels": 0,
+      "frame": 10,
+      "maximumDelta": 0,
+      "mismatchedPixels": 0,
+      "progress": 0.4704757597,
+      "scoredPixels": 4177920
+    },
+    {
+      "expectedMismatchedPixels": 35,
+      "frame": 12,
+      "maximumDelta": 1,
+      "mismatchedPixels": 35,
+      "progress": 0.5645734865,
+      "scoredPixels": 4177920
+    },
+    {
+      "expectedMismatchedPixels": 7,
+      "frame": 14,
+      "maximumDelta": 1,
+      "mismatchedPixels": 7,
+      "progress": 0.6720809384,
+      "scoredPixels": 4177920
+    }
+  ],
+  "schemaVersion": 1,
+  "worstMismatchedPixels": 125
+}

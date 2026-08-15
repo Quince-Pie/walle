@@ -140,6 +140,23 @@ circle_distance(const uint8_t* table, size_t table_byte_count, float x, float y,
     return walle_lg_reveal_mask_apple_fast_sqrt(table, table_byte_count, squared, result);
 }
 
+/* The circle's bounds, rounded to whole pixels the way the hardware does.
+ *
+ * This is the whole geometry law for an explicitly set progress, and it is
+ * proven unique rather than merely sufficient: rounding to integer POINTS
+ * instead changes 58 of the 65 byte-exact ladder states and rounding to half
+ * pixels changes 52, while this changes none.
+ */
+static bool snapped_bounds(const struct walle_lg_reveal_mask_request* request,
+                           double                                     radius,
+                           int32_t                                    bounds[static 4])
+{
+    return rounded_bound(rounded_subtract_double(request->center_x, radius), &bounds[0])
+           && rounded_bound(rounded_subtract_double(request->center_y, radius), &bounds[1])
+           && rounded_bound(rounded_add_double(request->center_x, radius), &bounds[2])
+           && rounded_bound(rounded_add_double(request->center_y, radius), &bounds[3]);
+}
+
 bool walle_lg_reveal_mask_circle_construct(const struct walle_lg_reveal_mask_request* request,
                                            struct walle_lg_reveal_mask_circle*        result)
 {
@@ -154,19 +171,82 @@ bool walle_lg_reveal_mask_circle_construct(const struct walle_lg_reveal_mask_req
 
     struct walle_lg_reveal_mask_circle circle = {};
     circle.unsnapped_radius = rounded_multiply_double(request->maximum_radius, request->progress);
-    if (!rounded_bound(rounded_subtract_double(request->center_x, circle.unsnapped_radius),
-                       &circle.bounds[0])
-        || !rounded_bound(rounded_subtract_double(request->center_y, circle.unsnapped_radius),
-                          &circle.bounds[1])
-        || !rounded_bound(rounded_add_double(request->center_x, circle.unsnapped_radius),
-                          &circle.bounds[2])
-        || !rounded_bound(rounded_add_double(request->center_y, circle.unsnapped_radius),
-                          &circle.bounds[3])) {
-        return false;
+
+    /* An ANIMATING reveal does not round.  Measured on 16 live frames spanning
+     * radii 29 to 1454, its circle is the linear interpolation between the two
+     * ROUNDED endpoint rects - which is what Core Animation does: an
+     * explicitly set progress goes through the model layer, which lays out and
+     * rounds its bounds, while an animating layer's presentation values are
+     * interpolated without re-laying-out.  The model reproduces those frames to
+     * 0.008 px where rounding is out by up to 0.49, and it predicts an
+     * off-ladder frame from an entirely separate capture session to 0.002 px.
+     *
+     * It costs nothing in generality: both endpoints come from the same
+     * rounding law, at progress 0 and 1, so any origin, radius or frame size
+     * follows. */
+    if (request->presentation_geometry) {
+        int32_t start[4];
+        int32_t end[4];
+        if (!snapped_bounds(request, 0.0, start)
+            || !snapped_bounds(request, request->maximum_radius, end)) {
+            return false;
+        }
+        double interpolated[4];
+        for (size_t edge = 0; edge < 4; ++edge) {
+            interpolated[edge]
+                = (double)start[edge]
+                  + ((double)end[edge] - (double)start[edge]) * request->progress;
+        }
+        double width  = interpolated[2] - interpolated[0];
+        double height = interpolated[3] - interpolated[1];
+        if (width <= 0.0 || height <= 0.0) {
+            circle.center[0] = (float)request->center_x;
+            circle.center[1] = (float)request->center_y;
+            circle.empty     = true;
+            *result          = circle;
+            return true;
+        }
+        double radius = (width < height ? width : height) * 0.5;
+        circle.extent[0]         = width;
+        circle.extent[1]         = height;
+        circle.center[0]         = (float)((interpolated[0] + interpolated[2]) * 0.5);
+        circle.center[1]         = (float)((interpolated[1] + interpolated[3]) * 0.5);
+        circle.radius            = (float)radius;
+        circle.expanded_radius   = (float)(radius + 1.0);
+        circle.normalized_extent = (float)((radius + 1.0) / radius);
+        /* The scissor must be whole pixels, so it takes the smallest rect that
+         * contains the continuous one rather than the rounded one. */
+        circle.bounds[0] = (int32_t)floor(interpolated[0]);
+        circle.bounds[1] = (int32_t)floor(interpolated[1]);
+        circle.bounds[2] = (int32_t)ceil(interpolated[2]);
+        circle.bounds[3] = (int32_t)ceil(interpolated[3]);
+        int32_t left     = circle.bounds[0] < 0 ? 0 : circle.bounds[0];
+        int32_t top      = circle.bounds[1] < 0 ? 0 : circle.bounds[1];
+        int32_t right    = circle.bounds[2] > (int32_t)request->target_width
+                               ? (int32_t)request->target_width
+                               : circle.bounds[2];
+        int32_t bottom   = circle.bounds[3] > (int32_t)request->target_height
+                               ? (int32_t)request->target_height
+                               : circle.bounds[3];
+        if (right <= left || bottom <= top) {
+            circle.empty = true;
+        } else {
+            circle.scissor[0] = left;
+            circle.scissor[1] = top;
+            circle.scissor[2] = right - left;
+            circle.scissor[3] = bottom - top;
+        }
+        *result = circle;
+        return true;
     }
 
-    int64_t width  = (int64_t)circle.bounds[2] - circle.bounds[0];
-    int64_t height = (int64_t)circle.bounds[3] - circle.bounds[1];
+    if (!snapped_bounds(request, circle.unsnapped_radius, circle.bounds))
+        return false;
+
+    int64_t width    = (int64_t)circle.bounds[2] - circle.bounds[0];
+    int64_t height   = (int64_t)circle.bounds[3] - circle.bounds[1];
+    circle.extent[0] = (double)width;
+    circle.extent[1] = (double)height;
     if (width <= 0 || height <= 0) {
         circle.center[0] = (float)request->center_x;
         circle.center[1] = (float)request->center_y;
@@ -347,9 +427,7 @@ bool walle_lg_reveal_mask_geometry_construct(const struct walle_lg_reveal_mask_r
         return true;
     }
 
-    int64_t width  = (int64_t)geometry.circle.bounds[2] - geometry.circle.bounds[0];
-    int64_t height = (int64_t)geometry.circle.bounds[3] - geometry.circle.bounds[1];
-    if (width == height)
+    if (geometry.circle.extent[0] == geometry.circle.extent[1])
         construct_compact_geometry(request, &geometry);
     else
         construct_border_geometry(request, &geometry);

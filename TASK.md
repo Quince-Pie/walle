@@ -4466,3 +4466,52 @@ later-141.
 
 What produces the 0.000229 slope is not known.  It is measured, it is a
 function of the radius alone, and it holds to 0.007 px across the animation.
+
+## 2026-08-15 (later 153): THE OFF-LADDER RESIDUAL IS CLOSED
+
+later-141 measured it, later-148 diagnosed it, later-152 found the law.  It is
+now implemented and gated.
+
+THE LAW.  An ANIMATING reveal's circle is the linear interpolation between the
+two ROUNDED endpoint rects - the rect at progress 0 and the rect at progress 1,
+both produced by the same rounding law the ladder proves.  Nothing new is
+assumed: the endpoints come from walle's own snapping, so any origin, radius or
+frame size follows without a fitted constant.
+
+    presentation:  rect(p) = lerp(round(rect(0)), round(rect(1)), p)
+    explicit:      rect(p) = round(rect(p))
+
+walle now takes the first for the live transition and the second for the
+process capture, which is exactly Core Animation's model-versus-presentation
+layer split.
+
+ONE TRAP, and it cost a whole wrong first result.  The geometry family is
+chosen by whether the rect is square, and the scissor has to be widened to
+whole pixels - which turned a 2910.10 x 2910.77 rect into a 2912 x 2912 one and
+sent it down the COMPACT path instead of the border path, rendering 6,092
+mismatched pixels at delta 242, worse than the rounding it replaced.  The
+circle now carries its pre-widened extents and the family follows those.
+
+RESULT, on the frame later-141 measured:
+
+    rounded geometry        3,838 mismatched   maxDelta 25
+    presentation geometry      23 mismatched   maxDelta  1
+
+and across eight of the newly captured live frames, scored by the new
+`make reveal-presentation-gate`:
+
+    frame  1   125 mismatched   maxDelta 1     (radius 29 px - its whole edge)
+    frame  2     0              BYTE-EXACT
+    frame  4     0              BYTE-EXACT
+    frame  6     0              BYTE-EXACT
+    frame  8     0              BYTE-EXACT
+    frame 10     0              BYTE-EXACT
+    frame 12    35 mismatched   maxDelta 1
+    frame 14     7 mismatched   maxDelta 1
+
+Five of eight byte-exact; the rest differ by one code value on a handful of
+antialiased pixels, which is the floor of searching a scalar progress on a grid
+- the animation's own progress is some other float.
+
+The 65-state ladder is untouched: mismatchedPixels=0,
+composedMismatchedPixels=0, exactPixelPercentage=100.0.

@@ -325,7 +325,8 @@ OBJECTS ::= $(ALL_SOURCES:%.c=$(OBJ_DIR)/%.c.o)
 DEPS    ::= $(OBJECTS:.o=.d)
 
 .PHONY: all activate clean fuzz reveal-best-known-corpus-gate \
-	reveal-best-known-process-gate reveal-mask-model-gate reveal-raster-gate
+	reveal-best-known-process-gate reveal-mask-model-gate reveal-raster-gate \
+	reveal-presentation-gate
 
 all: $(TARGET) activate
 
@@ -345,6 +346,14 @@ reveal-best-known-corpus-gate: reveal-best-known-process-gate
 reveal-best-known-process-gate: $(TARGET) \
 		analysis/run_walle_reveal_process_capture_gate.sh
 	bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
+
+# The ANIMATING path, which the ladder does not score: an explicitly set
+# progress rounds its bounds, an animating one interpolates between the two
+# rounded endpoints.  Needs the live-frame corpus from
+# analysis/capture_reveal_dynamic_frames.sh.
+reveal-presentation-gate: $(TARGET) \
+		analysis/run_walle_reveal_presentation_gate.sh
+	bash analysis/run_walle_reveal_presentation_gate.sh $(TARGET)
 
 # --- Linking Rule ---
 $(TARGET): $(OBJECTS) | $(PROFILE_BIN_DIR)

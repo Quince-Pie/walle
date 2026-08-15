@@ -476,6 +476,11 @@ struct wallpaper_state
     uint32_t reveal_process_capture_progress_count;
     /* argv-owned; echoed verbatim so the marker states the exact request. */
     const char* reveal_process_capture_progress_text;
+    /* --reveal-mask-process-capture-presentation: capture with the ANIMATING
+     * geometry rather than the rounded one, so the live path can be scored
+     * against the hardware's live frames.  The default is off, because the
+     * 65-state ladder is the rounded path and is byte-exact BECAUSE of it. */
+    bool     reveal_process_capture_presentation;
     bool     reveal_process_capture_output_claimed;
     bool     reveal_process_capture_complete;
     int      reveal_process_capture_status;
@@ -2109,6 +2114,12 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
          .center_y       = process_capture ? REVEAL_PROCESS_CAPTURE_CENTER_Y : output->t_center_y,
          .maximum_radius = output->reveal_maximum_radius,
          .progress       = progress,
+         /* The live transition is an ANIMATION, so its circle interpolates
+          * between the two rounded endpoint rects; the process capture drives
+          * an explicit progress, which is the rounded rect at that progress and
+          * is what the byte-exact ladder scores. */
+         .presentation_geometry
+         = !process_capture || state->reveal_process_capture_presentation,
     };
     if (!walle_lg_reveal_mask_geometry_construct(&request, &geometry)) {
         stop_failed_transition(output, "public reveal geometry construction failed");
@@ -3659,6 +3670,8 @@ static void print_usage(const char* argv0)
         "      --reveal-mask-process-capture-progress <v[,v...]>\n"
         "          capture one state per explicit progress value in [0,1] instead\n"
         "          of the 65-state ladder\n"
+        "      --reveal-mask-process-capture-presentation\n"
+        "          capture with the animating geometry instead of the rounded one\n"
         "\n"
         "Renderer: Vulkan 1.4, offline Slang/SPIR-V 1.6 (no fallback).\n",
         argv0);
@@ -3728,6 +3741,7 @@ int main(int argc, char* argv[])
     {
         OPT_REVEAL_MASK_PROCESS_CAPTURE = 256,
         OPT_REVEAL_MASK_PROCESS_CAPTURE_PROGRESS,
+        OPT_REVEAL_MASK_PROCESS_CAPTURE_PRESENTATION,
         OPT_VULKAN_DEVICE,
     };
     static const struct option LONG_OPTS[] = {
@@ -3743,9 +3757,14 @@ int main(int argc, char* argv[])
          required_argument,
          nullptr,
          OPT_REVEAL_MASK_PROCESS_CAPTURE_PROGRESS},
+        {"reveal-mask-process-capture-presentation",
+         no_argument,
+         nullptr,
+         OPT_REVEAL_MASK_PROCESS_CAPTURE_PRESENTATION},
         {},
     };
-    const char* reveal_process_capture_directory = nullptr;
+    const char* reveal_process_capture_directory  = nullptr;
+    bool        reveal_process_capture_presentation = false;
     const char* reveal_process_capture_progress  = nullptr;
     const char* vulkan_device_selector           = getenv("WALLE_VK_DEVICE");
     bool        vulkan_device_selector_locked = vulkan_device_selector && *vulkan_device_selector;
@@ -3766,6 +3785,9 @@ int main(int argc, char* argv[])
                 break;
             case OPT_REVEAL_MASK_PROCESS_CAPTURE:
                 reveal_process_capture_directory = optarg;
+                break;
+            case OPT_REVEAL_MASK_PROCESS_CAPTURE_PRESENTATION:
+                reveal_process_capture_presentation = true;
                 break;
             case OPT_REVEAL_MASK_PROCESS_CAPTURE_PROGRESS:
                 reveal_process_capture_progress = optarg;
@@ -3830,6 +3852,7 @@ int main(int argc, char* argv[])
 
     struct wallpaper_state state = {
         .reveal_process_capture              = reveal_process_capture_directory != nullptr,
+        .reveal_process_capture_presentation = reveal_process_capture_presentation,
         .reveal_process_capture_single       = reveal_process_capture_progress != nullptr,
         .reveal_process_capture_progress_values = reveal_capture_progress_values,
         .reveal_process_capture_progress_count  = reveal_capture_progress_count,

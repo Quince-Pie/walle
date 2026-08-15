@@ -36,11 +36,23 @@ struct walle_lg_reveal_mask_request
     double   center_y;
     double   maximum_radius;
     double   progress;
+    /* An ANIMATING reveal, whose circle is the interpolation between the two
+     * rounded endpoint rects rather than the rounded rect at this progress.
+     * Set for the live transition and CLEAR for an explicitly set progress -
+     * the byte-exact ladder is the latter, and rounding is what makes it
+     * exact.  See walle_lg_reveal_mask_circle_construct(). */
+    bool     presentation_geometry;
 };
 
 struct walle_lg_reveal_mask_circle
 {
     double unsnapped_radius;
+    /* The circle's rect before it is widened to whole pixels.  For a rounded
+     * circle this is the rounded rect itself; for an animating one it is the
+     * interpolated rect, whose extents choose the geometry family and must not
+     * be read off the scissor - widening a 2910.10 x 2910.77 rect makes it
+     * square, and a square rect takes the other family. */
+    double extent[2];
     float  center[2];
     float  radius;
     float  expanded_radius;
