@@ -4900,3 +4900,50 @@ walle draws circles and nothing else, so neither result changes what ships.
 
 Provenance: artifacts-shapes, 528 shots,
 sha256 12c6ee7870669a6e36af27b029fc1a1a1a3168129303d6311b4e234e6b296027.
+
+## 2026-08-15 (later 169): WALLE MID-MATERIALIZE, AND A KERNEL TWO INSTRUMENTS DISAGREE ABOUT
+
+Rendering walle at the hardware's own clock values and scoring frame against
+frame - the crossfade law verified rather than merely fitted:
+
+    clear   light  rms 0.6 to 1.5,  worst 4 to 5 code values, every clock
+    clear   dark   rms 0.6 to 1.4,  worst 4 to 5
+    regular light  rms 1.1 to 11.4, worst 36 at clock 0.55
+    regular dark   rms 1.1 to  7.6, worst 22
+
+So the crossfade and the per-variant ease are right - `clear` is exact through
+the whole animation - and `regular` is not.  Its error does not sit anywhere in
+particular: mapped over the frame it is between -6 and +8 everywhere, and
+sorted by the LOCAL BACKDROP LEVEL it runs -4.7 where the backdrop is dark and
++8.3 where it is bright.  That is a contrast error, not a placement one.
+
+It is not walle's.  Forward-modelling the same law in Python - the same
+kernel, the same transfer, the same replicated padding - reproduces walle's
+render to 0.57 rms and 2.4 max, and lands the same 7.7 rms from the hardware.
+The implementation is faithful and the KERNEL is wrong.
+
+THE TWO INSTRUMENTS DISAGREE.  Refitting a two-Gaussian kernel on the coded
+field halves the error there, and breaks the step edge by as much:
+
+                      step edge      coded field
+    step-edge fit     1.879 rms      7.702 rms
+    coded-field fit   7.903          4.377
+
+`clear` has no such conflict - 0.777 / 1.534 with the shipped kernel, and its
+refit changes nothing - so the instruments and the transfer are both sound.
+What fails is the two-layer FAMILY for `regular`.
+
+Why they pull apart is worth stating, because it says what each instrument is
+good for.  The coded field is SMOOTH - its content is at periods of a hundred
+pixels and up, and its high frequencies are quantisation noise, which is why an
+MTF read off it climbs past 2.5 and means nothing.  A narrow layer therefore
+passes the field through almost unchanged and a wide one averages it to the
+frame mean, so what the field measures is almost purely the near/far WEIGHT.  A
+step edge measures the kernel's integral, which pins the near layer's shape and
+says little about how much weight sits far out.  Two measurements of one weight
+that disagree mean the kernel holds more structure than two layers can.
+
+Fitting three layers against both instruments at once is what decides it: if
+three satisfy both, the two-layer model was too coarse; if nothing does, the
+mechanism is not a convolution at all - a mip cascade is not shift-invariant -
+and that is a different kind of answer.

@@ -896,7 +896,7 @@
       "background": "dynamic-coded-field",
       "delaySeconds": 0.065,
       "delayedExponent": 1.66,
-      "delayedMaximumOfAlpha": 0.01204,
+      "delayedMaximumOfAlpha": 0.01205,
       "delayedRootMeanSquareOfAlpha": 0.00611,
       "exponent": 1.9118,
       "frameCount": 61,
@@ -956,14 +956,14 @@
         {
           "alpha": 0.01754,
           "clock": 0.123047,
-          "crossfadeResidualCodes": 0.5476,
+          "crossfadeResidualCodes": 0.5475,
           "crossfadeWorstCodes": 3.526,
           "seconds": 0.114756
         },
         {
           "alpha": 0.01754,
           "clock": 0.131836,
-          "crossfadeResidualCodes": 0.5476,
+          "crossfadeResidualCodes": 0.5475,
           "crossfadeWorstCodes": 3.526,
           "seconds": 0.12641
         },
@@ -977,7 +977,7 @@
         {
           "alpha": 0.03214,
           "clock": 0.165039,
-          "crossfadeResidualCodes": 0.5764,
+          "crossfadeResidualCodes": 0.5763,
           "crossfadeWorstCodes": 4.164,
           "seconds": 0.163179
         },
@@ -985,343 +985,343 @@
           "alpha": 0.03496,
           "clock": 0.181641,
           "crossfadeResidualCodes": 0.5805,
-          "crossfadeWorstCodes": 4.237,
+          "crossfadeWorstCodes": 4.126,
           "seconds": 0.173
         },
         {
           "alpha": 0.04195,
           "clock": 0.198242,
-          "crossfadeResidualCodes": 0.5899,
-          "crossfadeWorstCodes": 5.217,
+          "crossfadeResidualCodes": 0.5898,
+          "crossfadeWorstCodes": 3.741,
           "seconds": 0.192215
         },
         {
           "alpha": 0.04973,
           "clock": 0.214844,
-          "crossfadeResidualCodes": 0.6015,
-          "crossfadeWorstCodes": 6.183,
+          "crossfadeResidualCodes": 0.6014,
+          "crossfadeWorstCodes": 4.508,
           "seconds": 0.206908
         },
         {
           "alpha": 0.05815,
           "clock": 0.231445,
-          "crossfadeResidualCodes": 0.6192,
-          "crossfadeWorstCodes": 6.722,
+          "crossfadeResidualCodes": 0.6191,
+          "crossfadeWorstCodes": 4.488,
           "seconds": 0.223176
         },
         {
           "alpha": 0.06689,
           "clock": 0.248047,
-          "crossfadeResidualCodes": 0.6387,
-          "crossfadeWorstCodes": 8.281,
+          "crossfadeResidualCodes": 0.6385,
+          "crossfadeWorstCodes": 4.194,
           "seconds": 0.239555
         },
         {
           "alpha": 0.08189,
           "clock": 0.273438,
-          "crossfadeResidualCodes": 0.6696,
-          "crossfadeWorstCodes": 9.241,
+          "crossfadeResidualCodes": 0.6693,
+          "crossfadeWorstCodes": 4.379,
           "seconds": 0.264718
         },
         {
           "alpha": 0.09211,
           "clock": 0.28125,
-          "crossfadeResidualCodes": 0.6956,
-          "crossfadeWorstCodes": 10.711,
+          "crossfadeResidualCodes": 0.6952,
+          "crossfadeWorstCodes": 4.697,
           "seconds": 0.280129
         },
         {
           "alpha": 0.10322,
           "clock": 0.297852,
-          "crossfadeResidualCodes": 0.7253,
-          "crossfadeWorstCodes": 11.606,
+          "crossfadeResidualCodes": 0.7249,
+          "crossfadeWorstCodes": 4.594,
           "seconds": 0.297257
         },
         {
           "alpha": 0.12046,
           "clock": 0.323242,
-          "crossfadeResidualCodes": 0.769,
-          "crossfadeWorstCodes": 13.709,
+          "crossfadeResidualCodes": 0.7684,
+          "crossfadeWorstCodes": 5.989,
           "seconds": 0.317072
         },
         {
           "alpha": 0.12688,
           "clock": 0.331055,
-          "crossfadeResidualCodes": 0.7887,
-          "crossfadeWorstCodes": 14.12,
+          "crossfadeResidualCodes": 0.7881,
+          "crossfadeWorstCodes": 5.559,
           "seconds": 0.323486
         },
         {
           "alpha": 0.13279,
           "clock": 0.347656,
-          "crossfadeResidualCodes": 0.8001,
-          "crossfadeWorstCodes": 15.498,
+          "crossfadeResidualCodes": 0.7994,
+          "crossfadeWorstCodes": 5.751,
           "seconds": 0.340341
         },
         {
           "alpha": 0.15302,
           "clock": 0.373047,
-          "crossfadeResidualCodes": 0.8568,
-          "crossfadeWorstCodes": 17.487,
+          "crossfadeResidualCodes": 0.8561,
+          "crossfadeWorstCodes": 6.103,
           "seconds": 0.366988
         },
         {
           "alpha": 0.16054,
           "clock": 0.381836,
-          "crossfadeResidualCodes": 0.872,
-          "crossfadeWorstCodes": 18.275,
+          "crossfadeResidualCodes": 0.8712,
+          "crossfadeWorstCodes": 5.987,
           "seconds": 0.373685
         },
         {
-          "alpha": 0.17433,
+          "alpha": 0.17434,
           "clock": 0.398438,
-          "crossfadeResidualCodes": 0.9131,
-          "crossfadeWorstCodes": 19.983,
+          "crossfadeResidualCodes": 0.9121,
+          "crossfadeWorstCodes": 6.55,
           "seconds": 0.389597
         },
         {
           "alpha": 0.19604,
           "clock": 0.415039,
-          "crossfadeResidualCodes": 0.9696,
-          "crossfadeWorstCodes": 22.155,
+          "crossfadeResidualCodes": 0.9685,
+          "crossfadeWorstCodes": 7.099,
           "seconds": 0.411332
         },
         {
           "alpha": 0.20426,
           "clock": 0.431641,
-          "crossfadeResidualCodes": 0.9917,
-          "crossfadeWorstCodes": 23.073,
+          "crossfadeResidualCodes": 0.9905,
+          "crossfadeWorstCodes": 6.893,
           "seconds": 0.423264
         },
         {
-          "alpha": 0.22752,
+          "alpha": 0.22753,
           "clock": 0.448242,
-          "crossfadeResidualCodes": 1.0539,
-          "crossfadeWorstCodes": 25.879,
+          "crossfadeResidualCodes": 1.0525,
+          "crossfadeWorstCodes": 7.444,
           "seconds": 0.447193
         },
         {
           "alpha": 0.24437,
           "clock": 0.464844,
-          "crossfadeResidualCodes": 1.0925,
-          "crossfadeWorstCodes": 27.64,
+          "crossfadeResidualCodes": 1.0909,
+          "crossfadeWorstCodes": 7.646,
           "seconds": 0.462561
         },
         {
           "alpha": 0.26112,
           "clock": 0.481445,
-          "crossfadeResidualCodes": 1.1391,
-          "crossfadeWorstCodes": 29.45,
+          "crossfadeResidualCodes": 1.1374,
+          "crossfadeWorstCodes": 8.211,
           "seconds": 0.475916
         },
         {
           "alpha": 0.27058,
           "clock": 0.498047,
-          "crossfadeResidualCodes": 1.1597,
-          "crossfadeWorstCodes": 30.776,
+          "crossfadeResidualCodes": 1.1579,
+          "crossfadeWorstCodes": 7.694,
           "seconds": 0.490085
         },
         {
           "alpha": 0.29708,
           "clock": 0.514648,
-          "crossfadeResidualCodes": 1.2257,
-          "crossfadeWorstCodes": 33.419,
+          "crossfadeResidualCodes": 1.2236,
+          "crossfadeWorstCodes": 8.494,
           "seconds": 0.512659
         },
         {
           "alpha": 0.31547,
           "clock": 0.53125,
-          "crossfadeResidualCodes": 1.2639,
-          "crossfadeWorstCodes": 35.19,
+          "crossfadeResidualCodes": 1.2617,
+          "crossfadeWorstCodes": 8.798,
           "seconds": 0.525548
         },
         {
           "alpha": 0.3348,
           "clock": 0.547852,
-          "crossfadeResidualCodes": 1.2896,
-          "crossfadeWorstCodes": 37.757,
+          "crossfadeResidualCodes": 1.2871,
+          "crossfadeWorstCodes": 9.286,
           "seconds": 0.546607
         },
         {
           "alpha": 0.34499,
           "clock": 0.564453,
-          "crossfadeResidualCodes": 1.3003,
-          "crossfadeWorstCodes": 38.734,
+          "crossfadeResidualCodes": 1.2977,
+          "crossfadeWorstCodes": 9.375,
           "seconds": 0.556193
         },
         {
           "alpha": 0.36504,
           "clock": 0.581055,
-          "crossfadeResidualCodes": 1.3324,
-          "crossfadeWorstCodes": 40.998,
+          "crossfadeResidualCodes": 1.3295,
+          "crossfadeWorstCodes": 9.319,
           "seconds": 0.572793
         },
         {
           "alpha": 0.39546,
           "clock": 0.597656,
-          "crossfadeResidualCodes": 1.3752,
-          "crossfadeWorstCodes": 44.518,
+          "crossfadeResidualCodes": 1.3719,
+          "crossfadeWorstCodes": 8.786,
           "seconds": 0.595403
         },
         {
           "alpha": 0.41671,
           "clock": 0.615234,
-          "crossfadeResidualCodes": 1.3921,
-          "crossfadeWorstCodes": 46.253,
+          "crossfadeResidualCodes": 1.3887,
+          "crossfadeWorstCodes": 8.997,
           "seconds": 0.609076
         },
         {
-          "alpha": 0.42772,
+          "alpha": 0.42773,
           "clock": 0.631836,
-          "crossfadeResidualCodes": 1.4105,
-          "crossfadeWorstCodes": 47.947,
+          "crossfadeResidualCodes": 1.4068,
+          "crossfadeWorstCodes": 9.313,
           "seconds": 0.623628
         },
         {
-          "alpha": 0.46018,
+          "alpha": 0.46019,
           "clock": 0.65625,
-          "crossfadeResidualCodes": 1.4268,
-          "crossfadeWorstCodes": 51.531,
+          "crossfadeResidualCodes": 1.4226,
+          "crossfadeWorstCodes": 9.035,
           "seconds": 0.647595
         },
         {
-          "alpha": 0.48259,
+          "alpha": 0.4826,
           "clock": 0.672852,
-          "crossfadeResidualCodes": 1.4445,
-          "crossfadeWorstCodes": 53.921,
+          "crossfadeResidualCodes": 1.44,
+          "crossfadeWorstCodes": 10.453,
           "seconds": 0.665088
         },
         {
           "alpha": 0.49476,
           "clock": 0.681641,
-          "crossfadeResidualCodes": 1.4523,
-          "crossfadeWorstCodes": 55.17,
+          "crossfadeResidualCodes": 1.4475,
+          "crossfadeWorstCodes": 9.641,
           "seconds": 0.672634
         },
         {
           "alpha": 0.51768,
           "clock": 0.698242,
-          "crossfadeResidualCodes": 1.4548,
-          "crossfadeWorstCodes": 57.614,
+          "crossfadeResidualCodes": 1.4495,
+          "crossfadeWorstCodes": 9.058,
           "seconds": 0.689364
         },
         {
           "alpha": 0.55287,
           "clock": 0.722656,
-          "crossfadeResidualCodes": 1.4638,
-          "crossfadeWorstCodes": 61.384,
+          "crossfadeResidualCodes": 1.4579,
+          "crossfadeWorstCodes": 9.178,
           "seconds": 0.714964
         },
         {
           "alpha": 0.56512,
           "clock": 0.731445,
-          "crossfadeResidualCodes": 1.4605,
-          "crossfadeWorstCodes": 62.602,
+          "crossfadeResidualCodes": 1.4543,
+          "crossfadeWorstCodes": 9.307,
           "seconds": 0.722596
         },
         {
           "alpha": 0.58973,
           "clock": 0.748047,
-          "crossfadeResidualCodes": 1.4554,
-          "crossfadeWorstCodes": 64.922,
+          "crossfadeResidualCodes": 1.4486,
+          "crossfadeWorstCodes": 9.257,
           "seconds": 0.739228
         },
         {
           "alpha": 0.62716,
           "clock": 0.764648,
-          "crossfadeResidualCodes": 1.4314,
-          "crossfadeWorstCodes": 69.884,
+          "crossfadeResidualCodes": 1.4236,
+          "crossfadeWorstCodes": 9.879,
           "seconds": 0.763479
         },
         {
           "alpha": 0.65217,
           "clock": 0.78125,
-          "crossfadeResidualCodes": 1.4186,
-          "crossfadeWorstCodes": 71.435,
+          "crossfadeResidualCodes": 1.4101,
+          "crossfadeWorstCodes": 9.174,
           "seconds": 0.778443
         },
         {
           "alpha": 0.67792,
           "clock": 0.797852,
-          "crossfadeResidualCodes": 1.3863,
-          "crossfadeWorstCodes": 74.743,
+          "crossfadeResidualCodes": 1.377,
+          "crossfadeWorstCodes": 9.68,
           "seconds": 0.795031
         },
         {
           "alpha": 0.70374,
           "clock": 0.814453,
-          "crossfadeResidualCodes": 1.3491,
-          "crossfadeWorstCodes": 77.558,
+          "crossfadeResidualCodes": 1.3387,
+          "crossfadeWorstCodes": 9.183,
           "seconds": 0.81175
         },
         {
           "alpha": 0.73019,
           "clock": 0.831055,
-          "crossfadeResidualCodes": 1.311,
-          "crossfadeWorstCodes": 80.383,
+          "crossfadeResidualCodes": 1.2996,
+          "crossfadeWorstCodes": 8.728,
           "seconds": 0.828701
         },
         {
-          "alpha": 0.7564,
+          "alpha": 0.75641,
           "clock": 0.847656,
-          "crossfadeResidualCodes": 1.2645,
-          "crossfadeWorstCodes": 82.897,
+          "crossfadeResidualCodes": 1.2517,
+          "crossfadeWorstCodes": 8.616,
           "seconds": 0.845406
         },
         {
-          "alpha": 0.78306,
+          "alpha": 0.78307,
           "clock": 0.865234,
-          "crossfadeResidualCodes": 1.1929,
-          "crossfadeWorstCodes": 85.767,
+          "crossfadeResidualCodes": 1.1784,
+          "crossfadeWorstCodes": 8.148,
           "seconds": 0.861835
         },
         {
           "alpha": 0.80966,
           "clock": 0.881836,
-          "crossfadeResidualCodes": 1.1376,
-          "crossfadeWorstCodes": 88.437,
+          "crossfadeResidualCodes": 1.1214,
+          "crossfadeWorstCodes": 8.659,
           "seconds": 0.878493
         },
         {
           "alpha": 0.83654,
           "clock": 0.898438,
-          "crossfadeResidualCodes": 1.0518,
-          "crossfadeWorstCodes": 91.211,
+          "crossfadeResidualCodes": 1.0331,
+          "crossfadeWorstCodes": 6.99,
           "seconds": 0.892799
         },
         {
-          "alpha": 0.86354,
+          "alpha": 0.86355,
           "clock": 0.915039,
-          "crossfadeResidualCodes": 0.9724,
-          "crossfadeWorstCodes": 94.676,
+          "crossfadeResidualCodes": 0.9507,
+          "crossfadeWorstCodes": 6.46,
           "seconds": 0.908692
         },
         {
           "alpha": 0.8772,
           "clock": 0.931641,
-          "crossfadeResidualCodes": 0.9364,
-          "crossfadeWorstCodes": 96.386,
+          "crossfadeResidualCodes": 0.9131,
+          "crossfadeWorstCodes": 5.754,
           "seconds": 0.923685
         },
         {
-          "alpha": 0.90423,
+          "alpha": 0.90424,
           "clock": 0.948242,
-          "crossfadeResidualCodes": 0.8512,
-          "crossfadeWorstCodes": 99.062,
+          "crossfadeResidualCodes": 0.8237,
+          "crossfadeWorstCodes": 5.554,
           "seconds": 0.939467
         },
         {
-          "alpha": 0.94611,
+          "alpha": 0.94612,
           "clock": 0.972656,
-          "crossfadeResidualCodes": 0.7266,
-          "crossfadeWorstCodes": 103.659,
+          "crossfadeResidualCodes": 0.6913,
+          "crossfadeWorstCodes": 4.287,
           "seconds": 0.965074
         },
         {
           "alpha": 0.97295,
           "clock": 0.981445,
-          "crossfadeResidualCodes": 0.6573,
-          "crossfadeWorstCodes": 107.133,
+          "crossfadeResidualCodes": 0.6153,
+          "crossfadeWorstCodes": 3.866,
           "seconds": 0.980428
         },
         {
@@ -1332,20 +1332,20 @@
           "seconds": 0.997325
         }
       ],
-      "usablePixels": 2971459,
-      "worstCrossfadeResidualCodes": 1.4638
+      "usablePixels": 2971411,
+      "worstCrossfadeResidualCodes": 1.4579
     },
     {
       "appearance": "dark",
       "background": "dynamic-coded-field",
       "delaySeconds": 0.115,
       "delayedExponent": 1.96,
-      "delayedMaximumOfAlpha": 0.01226,
-      "delayedRootMeanSquareOfAlpha": 0.0048,
-      "exponent": 2.456,
+      "delayedMaximumOfAlpha": 0.01241,
+      "delayedRootMeanSquareOfAlpha": 0.00474,
+      "exponent": 2.4551,
       "frameCount": 61,
       "id": "materialize__clear__dark",
-      "maximumResidualOfAlpha": 0.03525,
+      "maximumResidualOfAlpha": 0.03559,
       "overlay": "clear",
       "samples": [
         {
@@ -1426,346 +1426,346 @@
           "seconds": 0.154034
         },
         {
-          "alpha": 0.00271,
+          "alpha": 0.00272,
           "clock": 0.179688,
           "crossfadeResidualCodes": 0.4325,
-          "crossfadeWorstCodes": 3.919,
+          "crossfadeWorstCodes": 3.918,
           "seconds": 0.170777
         },
         {
-          "alpha": 0.00564,
+          "alpha": 0.00565,
           "clock": 0.196289,
           "crossfadeResidualCodes": 0.5273,
           "crossfadeWorstCodes": 3.842,
           "seconds": 0.190597
         },
         {
-          "alpha": 0.01001,
+          "alpha": 0.01002,
           "clock": 0.212891,
           "crossfadeResidualCodes": 0.6262,
           "crossfadeWorstCodes": 3.75,
           "seconds": 0.207576
         },
         {
-          "alpha": 0.01734,
+          "alpha": 0.01735,
           "clock": 0.229492,
-          "crossfadeResidualCodes": 0.7347,
+          "crossfadeResidualCodes": 0.7346,
           "crossfadeWorstCodes": 3.549,
           "seconds": 0.221631
         },
         {
-          "alpha": 0.0267,
+          "alpha": 0.02672,
           "clock": 0.254883,
-          "crossfadeResidualCodes": 0.783,
+          "crossfadeResidualCodes": 0.7829,
           "crossfadeWorstCodes": 3.332,
           "seconds": 0.245647
         },
         {
-          "alpha": 0.0348,
+          "alpha": 0.03483,
           "clock": 0.271484,
-          "crossfadeResidualCodes": 0.6645,
-          "crossfadeWorstCodes": 4.991,
+          "crossfadeResidualCodes": 0.6641,
+          "crossfadeWorstCodes": 4.99,
           "seconds": 0.262949
         },
         {
-          "alpha": 0.0424,
+          "alpha": 0.04243,
           "clock": 0.288086,
-          "crossfadeResidualCodes": 0.5174,
-          "crossfadeWorstCodes": 3.94,
+          "crossfadeResidualCodes": 0.5167,
+          "crossfadeWorstCodes": 3.939,
           "seconds": 0.279982
         },
         {
-          "alpha": 0.04622,
+          "alpha": 0.04625,
           "clock": 0.304688,
-          "crossfadeResidualCodes": 0.5701,
-          "crossfadeWorstCodes": 4.038,
+          "crossfadeResidualCodes": 0.5694,
+          "crossfadeWorstCodes": 3.797,
           "seconds": 0.296028
         },
         {
-          "alpha": 0.05508,
+          "alpha": 0.05512,
           "clock": 0.3125,
-          "crossfadeResidualCodes": 0.7281,
-          "crossfadeWorstCodes": 4.839,
+          "crossfadeResidualCodes": 0.7273,
+          "crossfadeWorstCodes": 3.622,
           "seconds": 0.311944
         },
         {
-          "alpha": 0.06195,
+          "alpha": 0.06199,
           "clock": 0.329102,
-          "crossfadeResidualCodes": 0.7961,
-          "crossfadeWorstCodes": 5.504,
+          "crossfadeResidualCodes": 0.7952,
+          "crossfadeWorstCodes": 4.326,
           "seconds": 0.320636
         },
         {
-          "alpha": 0.0749,
+          "alpha": 0.07496,
           "clock": 0.34668,
-          "crossfadeResidualCodes": 0.7127,
-          "crossfadeWorstCodes": 6.165,
+          "crossfadeResidualCodes": 0.7112,
+          "crossfadeWorstCodes": 3.126,
           "seconds": 0.337322
         },
         {
-          "alpha": 0.08668,
+          "alpha": 0.08675,
           "clock": 0.371094,
-          "crossfadeResidualCodes": 0.5877,
-          "crossfadeWorstCodes": 7.448,
+          "crossfadeResidualCodes": 0.5851,
+          "crossfadeWorstCodes": 4.571,
           "seconds": 0.362954
         },
         {
-          "alpha": 0.09012,
+          "alpha": 0.09019,
           "clock": 0.379883,
-          "crossfadeResidualCodes": 0.6541,
-          "crossfadeWorstCodes": 7.823,
+          "crossfadeResidualCodes": 0.6516,
+          "crossfadeWorstCodes": 4.475,
           "seconds": 0.37066
         },
         {
-          "alpha": 0.11359,
+          "alpha": 0.11367,
           "clock": 0.396484,
-          "crossfadeResidualCodes": 0.7844,
-          "crossfadeWorstCodes": 9.927,
+          "crossfadeResidualCodes": 0.7812,
+          "crossfadeWorstCodes": 3.817,
           "seconds": 0.395564
         },
         {
-          "alpha": 0.11973,
+          "alpha": 0.11982,
           "clock": 0.413086,
-          "crossfadeResidualCodes": 0.6832,
-          "crossfadeWorstCodes": 10.05,
+          "crossfadeResidualCodes": 0.6789,
+          "crossfadeWorstCodes": 5.005,
           "seconds": 0.403971
         },
         {
-          "alpha": 0.13599,
+          "alpha": 0.13609,
           "clock": 0.4375,
-          "crossfadeResidualCodes": 0.7209,
-          "crossfadeWorstCodes": 11.822,
+          "crossfadeResidualCodes": 0.7155,
+          "crossfadeWorstCodes": 4.19,
           "seconds": 0.429213
         },
         {
-          "alpha": 0.14226,
+          "alpha": 0.14236,
           "clock": 0.446289,
-          "crossfadeResidualCodes": 0.8144,
-          "crossfadeWorstCodes": 12.364,
+          "crossfadeResidualCodes": 0.8093,
+          "crossfadeWorstCodes": 4.014,
           "seconds": 0.437733
         },
         {
-          "alpha": 0.16205,
+          "alpha": 0.16217,
           "clock": 0.462891,
-          "crossfadeResidualCodes": 0.6839,
-          "crossfadeWorstCodes": 13.663,
+          "crossfadeResidualCodes": 0.6761,
+          "crossfadeWorstCodes": 4.135,
           "seconds": 0.453994
         },
         {
-          "alpha": 0.1814,
+          "alpha": 0.18153,
           "clock": 0.479492,
-          "crossfadeResidualCodes": 0.794,
-          "crossfadeWorstCodes": 15.591,
+          "crossfadeResidualCodes": 0.7856,
+          "crossfadeWorstCodes": 4.28,
           "seconds": 0.477202
         },
         {
-          "alpha": 0.20404,
+          "alpha": 0.20419,
           "clock": 0.496094,
-          "crossfadeResidualCodes": 0.696,
-          "crossfadeWorstCodes": 17.424,
+          "crossfadeResidualCodes": 0.684,
+          "crossfadeWorstCodes": 3.895,
           "seconds": 0.490387
         },
         {
-          "alpha": 0.20697,
+          "alpha": 0.20713,
           "clock": 0.512695,
-          "crossfadeResidualCodes": 0.6392,
-          "crossfadeWorstCodes": 17.56,
+          "crossfadeResidualCodes": 0.6255,
+          "crossfadeWorstCodes": 4.2,
           "seconds": 0.504594
         },
         {
-          "alpha": 0.22169,
+          "alpha": 0.22185,
           "clock": 0.529297,
-          "crossfadeResidualCodes": 0.7852,
-          "crossfadeWorstCodes": 19.164,
+          "crossfadeResidualCodes": 0.7721,
+          "crossfadeWorstCodes": 4.232,
           "seconds": 0.520833
         },
         {
-          "alpha": 0.25289,
+          "alpha": 0.25308,
           "clock": 0.545898,
-          "crossfadeResidualCodes": 0.677,
-          "crossfadeWorstCodes": 21.566,
+          "crossfadeResidualCodes": 0.6575,
+          "crossfadeWorstCodes": 3.914,
           "seconds": 0.545578
         },
         {
-          "alpha": 0.27341,
+          "alpha": 0.27362,
           "clock": 0.5625,
-          "crossfadeResidualCodes": 0.7896,
-          "crossfadeWorstCodes": 23.529,
+          "crossfadeResidualCodes": 0.7698,
+          "crossfadeWorstCodes": 4.339,
           "seconds": 0.562109
         },
         {
-          "alpha": 0.292,
+          "alpha": 0.29222,
           "clock": 0.579102,
-          "crossfadeResidualCodes": 0.6864,
-          "crossfadeWorstCodes": 24.828,
+          "crossfadeResidualCodes": 0.6606,
+          "crossfadeWorstCodes": 3.695,
           "seconds": 0.578755
         },
         {
-          "alpha": 0.29967,
+          "alpha": 0.2999,
           "clock": 0.59668,
-          "crossfadeResidualCodes": 0.7544,
-          "crossfadeWorstCodes": 25.665,
+          "crossfadeResidualCodes": 0.7297,
+          "crossfadeWorstCodes": 4.603,
           "seconds": 0.587458
         },
         {
-          "alpha": 0.33333,
+          "alpha": 0.33357,
           "clock": 0.613281,
-          "crossfadeResidualCodes": 0.711,
-          "crossfadeWorstCodes": 28.333,
+          "crossfadeResidualCodes": 0.6787,
+          "crossfadeWorstCodes": 4.327,
           "seconds": 0.612177
         },
         {
-          "alpha": 0.34153,
+          "alpha": 0.34178,
           "clock": 0.629883,
-          "crossfadeResidualCodes": 0.7793,
-          "crossfadeWorstCodes": 29.227,
+          "crossfadeResidualCodes": 0.748,
+          "crossfadeWorstCodes": 4.43,
           "seconds": 0.620633
         },
         {
-          "alpha": 0.3681,
+          "alpha": 0.36838,
           "clock": 0.646484,
-          "crossfadeResidualCodes": 0.6978,
-          "crossfadeWorstCodes": 31.755,
+          "crossfadeResidualCodes": 0.6557,
+          "crossfadeWorstCodes": 4.422,
           "seconds": 0.637271
         },
         {
-          "alpha": 0.40596,
+          "alpha": 0.40627,
           "clock": 0.670898,
-          "crossfadeResidualCodes": 0.7178,
-          "crossfadeWorstCodes": 35.25,
+          "crossfadeResidualCodes": 0.6686,
+          "crossfadeWorstCodes": 4.437,
           "seconds": 0.662687
         },
         {
-          "alpha": 0.42683,
+          "alpha": 0.42715,
           "clock": 0.6875,
-          "crossfadeResidualCodes": 0.7726,
-          "crossfadeWorstCodes": 37.244,
+          "crossfadeResidualCodes": 0.7218,
+          "crossfadeWorstCodes": 4.321,
           "seconds": 0.679722
         },
         {
-          "alpha": 0.45149,
+          "alpha": 0.45183,
           "clock": 0.704102,
-          "crossfadeResidualCodes": 0.7109,
-          "crossfadeWorstCodes": 39.213,
+          "crossfadeResidualCodes": 0.6484,
+          "crossfadeWorstCodes": 4.252,
           "seconds": 0.695916
         },
         {
-          "alpha": 0.47695,
+          "alpha": 0.47731,
           "clock": 0.72168,
-          "crossfadeResidualCodes": 0.7617,
-          "crossfadeWorstCodes": 41.557,
+          "crossfadeResidualCodes": 0.697,
+          "crossfadeWorstCodes": 4.067,
           "seconds": 0.712693
         },
         {
-          "alpha": 0.49743,
+          "alpha": 0.4978,
           "clock": 0.738281,
-          "crossfadeResidualCodes": 0.758,
-          "crossfadeWorstCodes": 43.22,
+          "crossfadeResidualCodes": 0.6868,
+          "crossfadeWorstCodes": 4.555,
           "seconds": 0.728975
         },
         {
-          "alpha": 0.52408,
+          "alpha": 0.52447,
           "clock": 0.754883,
-          "crossfadeResidualCodes": 0.7532,
-          "crossfadeWorstCodes": 45.6,
+          "crossfadeResidualCodes": 0.6725,
+          "crossfadeWorstCodes": 4.315,
           "seconds": 0.746178
         },
         {
-          "alpha": 0.55276,
+          "alpha": 0.55318,
           "clock": 0.771484,
-          "crossfadeResidualCodes": 0.76,
-          "crossfadeWorstCodes": 47.698,
+          "crossfadeResidualCodes": 0.6707,
+          "crossfadeWorstCodes": 4.171,
           "seconds": 0.763364
         },
         {
-          "alpha": 0.579,
+          "alpha": 0.57943,
           "clock": 0.788086,
-          "crossfadeResidualCodes": 0.7765,
-          "crossfadeWorstCodes": 50.111,
+          "crossfadeResidualCodes": 0.682,
+          "crossfadeWorstCodes": 4.196,
           "seconds": 0.779036
         },
         {
-          "alpha": 0.60608,
+          "alpha": 0.60654,
           "clock": 0.795898,
-          "crossfadeResidualCodes": 0.773,
-          "crossfadeWorstCodes": 52.457,
+          "crossfadeResidualCodes": 0.6676,
+          "crossfadeWorstCodes": 3.837,
           "seconds": 0.795412
         },
         {
-          "alpha": 0.62495,
+          "alpha": 0.62542,
           "clock": 0.8125,
-          "crossfadeResidualCodes": 0.7764,
-          "crossfadeWorstCodes": 54.119,
+          "crossfadeResidualCodes": 0.6644,
+          "crossfadeWorstCodes": 3.739,
           "seconds": 0.803939
         },
         {
-          "alpha": 0.6548,
+          "alpha": 0.6553,
           "clock": 0.829102,
-          "crossfadeResidualCodes": 0.7942,
-          "crossfadeWorstCodes": 56.719,
+          "crossfadeResidualCodes": 0.6714,
+          "crossfadeWorstCodes": 3.962,
           "seconds": 0.820659
         },
         {
-          "alpha": 0.69874,
+          "alpha": 0.69927,
           "clock": 0.854492,
-          "crossfadeResidualCodes": 0.82,
-          "crossfadeWorstCodes": 60.464,
+          "crossfadeResidualCodes": 0.6842,
+          "crossfadeWorstCodes": 3.819,
           "seconds": 0.846333
         },
         {
-          "alpha": 0.71493,
+          "alpha": 0.71547,
           "clock": 0.863281,
-          "crossfadeResidualCodes": 0.7678,
-          "crossfadeWorstCodes": 62.212,
+          "crossfadeResidualCodes": 0.6136,
+          "crossfadeWorstCodes": 3.967,
           "seconds": 0.853988
         },
         {
-          "alpha": 0.74953,
+          "alpha": 0.75009,
           "clock": 0.879883,
-          "crossfadeResidualCodes": 0.7859,
-          "crossfadeWorstCodes": 65.699,
+          "crossfadeResidualCodes": 0.619,
+          "crossfadeWorstCodes": 3.498,
           "seconds": 0.870599
         },
         {
-          "alpha": 0.77827,
+          "alpha": 0.77885,
           "clock": 0.896484,
-          "crossfadeResidualCodes": 0.8475,
-          "crossfadeWorstCodes": 67.831,
+          "crossfadeResidualCodes": 0.6819,
+          "crossfadeWorstCodes": 3.529,
           "seconds": 0.887285
         },
         {
-          "alpha": 0.81094,
+          "alpha": 0.81155,
           "clock": 0.913086,
-          "crossfadeResidualCodes": 0.863,
-          "crossfadeWorstCodes": 70.582,
+          "crossfadeResidualCodes": 0.6861,
+          "crossfadeWorstCodes": 3.277,
           "seconds": 0.904156
         },
         {
-          "alpha": 0.84123,
+          "alpha": 0.84186,
           "clock": 0.929688,
-          "crossfadeResidualCodes": 0.8309,
-          "crossfadeWorstCodes": 73.694,
+          "crossfadeResidualCodes": 0.6285,
+          "crossfadeWorstCodes": 4.112,
           "seconds": 0.921028
         },
         {
-          "alpha": 0.89418,
+          "alpha": 0.89485,
           "clock": 0.954102,
-          "crossfadeResidualCodes": 0.9026,
-          "crossfadeWorstCodes": 77.571,
+          "crossfadeResidualCodes": 0.6925,
+          "crossfadeWorstCodes": 3.734,
           "seconds": 0.945683
         },
         {
-          "alpha": 0.93038,
+          "alpha": 0.93108,
           "clock": 0.97168,
-          "crossfadeResidualCodes": 0.9133,
-          "crossfadeWorstCodes": 81.411,
+          "crossfadeResidualCodes": 0.6871,
+          "crossfadeWorstCodes": 3.792,
           "seconds": 0.962337
         },
         {
-          "alpha": 0.96318,
+          "alpha": 0.96391,
           "clock": 0.979492,
-          "crossfadeResidualCodes": 0.8804,
-          "crossfadeWorstCodes": 83.987,
+          "crossfadeResidualCodes": 0.625,
+          "crossfadeWorstCodes": 3.938,
           "seconds": 0.978753
         },
         {
@@ -1776,8 +1776,8 @@
           "seconds": 0.987457
         }
       ],
-      "usablePixels": 251674,
-      "worstCrossfadeResidualCodes": 0.9133
+      "usablePixels": 251650,
+      "worstCrossfadeResidualCodes": 0.8093
     }
   ],
   "schemaVersion": 1,
@@ -1786,7 +1786,7 @@
       "delay": 0.1075,
       "exponent": 2.0,
       "maximumOfAlpha": 0.02391,
-      "rootMeanSquareOfAlpha": 0.0068,
+      "rootMeanSquareOfAlpha": 0.00682,
       "sampleCount": 122,
       "sequenceCount": 2
     },

@@ -1,0 +1,63 @@
+{
+  "classification": "blur kernel from the coded field",
+  "osBuild": "25G76",
+  "records": [
+    {
+      "appearance": "light",
+      "narrowSigmaPixels": 11.3,
+      "rootMeanSquareCodes": 4.377,
+      "searchPixels": 40000,
+      "searchRootMeanSquareCodes": 4.396,
+      "shippedNarrowSigma": 14.188,
+      "shippedRootMeanSquareCodes": 7.702,
+      "shippedWeight": 0.8846,
+      "shippedWideSigma": 329.807,
+      "variant": "regular",
+      "weight": 0.576,
+      "wideSigmaPixels": 659.0
+    },
+    {
+      "appearance": "light",
+      "narrowSigmaPixels": 1.05,
+      "rootMeanSquareCodes": 1.529,
+      "searchPixels": 40000,
+      "searchRootMeanSquareCodes": 1.531,
+      "shippedNarrowSigma": 0.7251,
+      "shippedRootMeanSquareCodes": 1.534,
+      "shippedWeight": 0.2174,
+      "shippedWideSigma": 4.1829,
+      "variant": "clear",
+      "weight": 0.259,
+      "wideSigmaPixels": 5.5
+    },
+    {
+      "appearance": "dark",
+      "narrowSigmaPixels": 9.2,
+      "rootMeanSquareCodes": 3.134,
+      "searchPixels": 40000,
+      "searchRootMeanSquareCodes": 3.132,
+      "shippedNarrowSigma": 14.188,
+      "shippedRootMeanSquareCodes": 4.573,
+      "shippedWeight": 0.5164,
+      "shippedWideSigma": 329.807,
+      "variant": "regular",
+      "weight": 0.625,
+      "wideSigmaPixels": 233.0
+    },
+    {
+      "appearance": "dark",
+      "narrowSigmaPixels": 0.7,
+      "rootMeanSquareCodes": 1.906,
+      "searchPixels": 40000,
+      "searchRootMeanSquareCodes": 1.907,
+      "shippedNarrowSigma": 0.7251,
+      "shippedRootMeanSquareCodes": 1.913,
+      "shippedWeight": 0.2174,
+      "shippedWideSigma": 4.1829,
+      "variant": "clear",
+      "weight": 0.183,
+      "wideSigmaPixels": 5.5
+    }
+  ],
+  "schemaVersion": 1
+}

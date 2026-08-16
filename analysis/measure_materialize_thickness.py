@@ -57,7 +57,15 @@ def measure(root: Path, sequence: JsonObject) -> JsonObject | None:
     backdrop = read(root, frames[0])
     final = read(root, frames[-1])
     span = final - backdrop
-    usable = ((np.abs(span) > MINIMUM_SPAN)
+    # The rig renders a raster CLOCK into every frame - that is how a
+    # transition nobody can step gets timed - and the manifest says where.  It
+    # is the harness, not the material, and it changes every frame, so it has
+    # to come out before anything is fitted.
+    keep = np.ones(backdrop.shape[:2], bool)
+    for region in sequence.get("analysisExclusionPixels") or []:
+        keep[int(region["y"]):int(region["y"]) + int(region["height"]),
+             int(region["x"]):int(region["x"]) + int(region["width"])] = False
+    usable = (keep[:, :, None] & (np.abs(span) > MINIMUM_SPAN)
               & (backdrop > CLIP_LOW) & (backdrop < CLIP_HIGH)
               & (final > CLIP_LOW) & (final < CLIP_HIGH))
     if usable.sum() < 1000:
