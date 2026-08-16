@@ -319,32 +319,30 @@ static bool dyadic_toward_zero_float_bits(struct dyadic value, uint32_t* result)
     return true;
 }
 
-static int64_t floor_div_power_two(i128 numerator, unsigned shift)
+static i128 floor_div_power_two(i128 numerator, unsigned shift)
 {
     if (shift == 0)
-        return (int64_t)numerator;
+        return numerator;
     if (numerator >= 0)
-        return (int64_t)(numerator >> shift);
+        return numerator >> shift;
     u128 magnitude = magnitude_i128(numerator);
-    return -(int64_t)((magnitude + (((u128)1 << shift) - 1)) >> shift);
+    return -(i128)((magnitude + (((u128)1 << shift) - 1)) >> shift);
 }
 
-static bool dyadic_floor_ratio_power_two(struct dyadic value, int step_exponent, int64_t* result)
+static bool dyadic_floor_ratio_power_two(struct dyadic value, int step_exponent, i128* result)
 {
     int shift = step_exponent - value.exponent;
     if (shift >= 0) {
-        if (shift >= 127)
-            return false;
+        if (shift >= 127) {
+            /* |numerator| <= 2^127 <= 2^shift, so the ratio is in [-1, 1)
+             * and its floor collapses without any wide shift. */
+            *result = value.numerator < 0 ? -1 : 0;
+            return true;
+        }
         *result = floor_div_power_two(value.numerator, (unsigned)shift);
         return true;
     }
-    i128 shifted;
-    if (!shift_left_i128(value.numerator, (unsigned)-shift, &shifted) || shifted < INT64_MIN
-        || shifted > INT64_MAX) {
-        return false;
-    }
-    *result = (int64_t)shifted;
-    return true;
+    return shift_left_i128(value.numerator, (unsigned)-shift, result);
 }
 
 static uint64_t
@@ -961,7 +959,7 @@ static bool center_pair_bits(int32_t       local_pixel,
     struct dyadic exact;
     if (!dyadic_add(constant, product, &exact))
         return false;
-    int64_t index;
+    i128 index;
     if (!dyadic_floor_ratio_power_two(exact, step_exponent, &index))
         return false;
     struct dyadic left = {.numerator = index, .exponent = step_exponent};
