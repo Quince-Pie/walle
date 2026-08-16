@@ -1,0 +1,55 @@
+{
+  "classification": "blur weights, luma and chroma",
+  "osBuild": "25G76",
+  "records": [
+    {
+      "appearance": "light",
+      "chromaWeight": 0.543,
+      "lumaWeight": 0.893,
+      "maximumCodes": 10.925,
+      "narrowSigmaPixels": 14.188,
+      "rootMeanSquareCodes": 1.838,
+      "singleWeight": 0.8846,
+      "singleWeightRootMeanSquareCodes": 8.066,
+      "variant": "regular",
+      "wideSigmaPixels": 329.807
+    },
+    {
+      "appearance": "dark",
+      "chromaWeight": 0.617,
+      "lumaWeight": 0.562,
+      "maximumCodes": 7.779,
+      "narrowSigmaPixels": 14.188,
+      "rootMeanSquareCodes": 1.176,
+      "singleWeight": 0.5164,
+      "singleWeightRootMeanSquareCodes": 2.615,
+      "variant": "regular",
+      "wideSigmaPixels": 329.807
+    },
+    {
+      "appearance": "light",
+      "chromaWeight": 0.083,
+      "lumaWeight": 0.217,
+      "maximumCodes": 3.077,
+      "narrowSigmaPixels": 0.7251,
+      "rootMeanSquareCodes": 0.578,
+      "singleWeight": 0.2174,
+      "singleWeightRootMeanSquareCodes": 0.58,
+      "variant": "clear",
+      "wideSigmaPixels": 4.1829
+    },
+    {
+      "appearance": "dark",
+      "chromaWeight": 0.083,
+      "lumaWeight": 0.217,
+      "maximumCodes": 3.077,
+      "narrowSigmaPixels": 0.7251,
+      "rootMeanSquareCodes": 0.578,
+      "singleWeight": 0.2174,
+      "singleWeightRootMeanSquareCodes": 0.58,
+      "variant": "clear",
+      "wideSigmaPixels": 4.1829
+    }
+  ],
+  "schemaVersion": 1
+}

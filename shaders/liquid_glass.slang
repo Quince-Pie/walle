@@ -377,7 +377,14 @@ float4 composeFragment(
     WalleMaterialize arrival = kMaterializeClear;
     if (regular > 0.5)
         arrival = kMaterializeRegular;
-    float clock = saturate(time / kFadeStart);
+    // `end` past one means Apple's transition outlives the window the rig
+    // clocked, so the curve is played over walle's OWN materialize window
+    // rather than cut off where the rig stopped watching: the shape - the
+    // delay and the exponent - is what was measured, and the material has to
+    // arrive by the time the window ends.  Cutting it off instead leaves the
+    // wallpaper permanently 3.5% short of its material for `regular` and 7.2%
+    // for `clear`, which the flat-background check catches at once.
+    float clock = saturate(time / kFadeStart) * arrival.end;
     float thickness = pow(
         saturate((clock - arrival.delay) / (arrival.end - arrival.delay)),
         arrival.exponent) * (1.0 - tFade);

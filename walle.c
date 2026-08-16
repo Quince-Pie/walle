@@ -99,6 +99,25 @@ enum glass_variant : uint8_t
  *   regular  w      * gauss(14.188)  + (1 - w) * gauss(329.807)
  *            w = 0.8846 light, 0.5164 dark
  *
+ * and the mixture is DIFFERENT FOR CHROMA.  This is the one thing every gray
+ * instrument in the corpus is blind to, and it hid for a long time behind
+ * that.  A step edge and a sine grating carry no chroma at all, so they
+ * measure the luma weight and nothing else - which is why they agree with each
+ * other, with three element geometries, and with the numbers above.  The coded
+ * field carries MORE chroma than luma, 36 code values against 29, and it reads
+ * 0.54 where they read 0.90.  Splitting its residual by component settles it:
+ * luma alone wants 0.85 and scores 1.15, chroma alone wants 0.55 and scores
+ * 7.91 against the shipped weight.
+ *
+ *   regular light   wLuma 0.893  wChroma 0.543   8.07 -> 1.84 rms
+ *   regular dark    wLuma 0.562  wChroma 0.617   2.62 -> 1.18
+ *   clear  (both)   wLuma 0.217  wChroma 0.083   0.58 -> 0.58
+ *
+ * The fitted LUMA weight is the shipped weight - to three decimals for `clear`
+ * and to 0.008 for `regular` in light - so the gray measurements were right
+ * about what they could see.  `clear` is the control and behaves like one: its
+ * radii are 0.73 and 4.18 px, so there is almost nothing to tell apart.
+ *
  * fitting to 0.12 rms / 1.2 max code values (clear) and 0.35 / 1.8 light,
  * 0.72 / 2.6 dark (regular).  The blur happens in sRGB CODE space: fitting
  * clear in linear light instead costs 1.68 rms against 0.12, and the material
@@ -141,6 +160,10 @@ constexpr double GLASS_BLUR_REGULAR_SIGMA          = 14.188;
 constexpr double GLASS_BLUR_REGULAR_WIDE_SIGMA     = 329.807;
 constexpr double GLASS_BLUR_REGULAR_WEIGHT_LIGHT   = 0.8846;
 constexpr double GLASS_BLUR_REGULAR_WEIGHT_DARK    = 0.5164;
+/* The chroma mixture, from the one backdrop that carries chroma. */
+constexpr double GLASS_BLUR_CLEAR_CHROMA_WEIGHT    = 0.0880;
+constexpr double GLASS_BLUR_REGULAR_CHROMA_LIGHT   = 0.5420;
+constexpr double GLASS_BLUR_REGULAR_CHROMA_DARK    = 0.6120;
 
 /* The three weights and two radii the composite blur needs, resolved for one
  * variant, appearance and output scale. */
@@ -151,6 +174,10 @@ struct glass_blur_recipe
     double narrow_sigma;
     double wide_weight;
     double wide_sigma;
+    /* The same two radii, mixed differently for the backdrop's CHROMA - see
+     * the note above.  Equal to narrow_weight leaves the blur colour-blind,
+     * which is what it used to be. */
+    double narrow_chroma_weight;
 };
 
 [[nodiscard]]
@@ -164,17 +191,23 @@ static struct glass_blur_recipe glass_blur_for(enum glass_variant variant,
                         + ((double)lightness
                            * (GLASS_BLUR_REGULAR_WEIGHT_LIGHT
                               - GLASS_BLUR_REGULAR_WEIGHT_DARK));
+        double chroma = GLASS_BLUR_REGULAR_CHROMA_DARK
+                        + ((double)lightness
+                           * (GLASS_BLUR_REGULAR_CHROMA_LIGHT
+                              - GLASS_BLUR_REGULAR_CHROMA_DARK));
         return (struct glass_blur_recipe){
-            .sharp_weight  = 0.0,
-            .narrow_weight = narrow,
+            .sharp_weight        = 0.0,
+            .narrow_weight       = narrow,
+            .narrow_chroma_weight = chroma,
             .narrow_sigma  = GLASS_BLUR_REGULAR_SIGMA * points,
             .wide_weight   = 1.0 - narrow,
             .wide_sigma    = GLASS_BLUR_REGULAR_WIDE_SIGMA * points,
         };
     }
     return (struct glass_blur_recipe){
-        .sharp_weight  = 0.0,
-        .narrow_weight = GLASS_BLUR_CLEAR_NARROW_WEIGHT,
+        .sharp_weight         = 0.0,
+        .narrow_weight        = GLASS_BLUR_CLEAR_NARROW_WEIGHT,
+        .narrow_chroma_weight = GLASS_BLUR_CLEAR_CHROMA_WEIGHT,
         .narrow_sigma  = GLASS_BLUR_CLEAR_NARROW_SIGMA * points,
         .wide_weight   = 1.0 - GLASS_BLUR_CLEAR_NARROW_WEIGHT,
         .wide_sigma    = GLASS_BLUR_CLEAR_WIDE_SIGMA * points,
@@ -183,7 +216,7 @@ static struct glass_blur_recipe glass_blur_for(enum glass_variant variant,
 
 /* Bump whenever the cached pixel pipeline changes shape (layout, band count,
  * preprocess constants). Hashed into every cache key. */
-constexpr uint32_t CACHE_SCHEMA_VERSION = 7;
+constexpr uint32_t CACHE_SCHEMA_VERSION = 8;
 
 constexpr float DEFAULT_TRANSITION_DUR = 0.6f;
 constexpr int   INOTIFY_BUF_LEN        = 4096;
@@ -1470,7 +1503,8 @@ static VipsImage* glass_blur_image(VipsImage* source, const struct glass_blur_re
     if (vips_cast(source, &value, VIPS_FORMAT_FLOAT, nullptr))
         return nullptr;
 
-    VipsImage* total = nullptr;
+    VipsImage* total     = nullptr;
+    VipsImage* layers[2] = {nullptr, nullptr};
     if (recipe->sharp_weight > 0.0) {
         if (vips_linear1(value, &total, recipe->sharp_weight, 0.0, nullptr)) {
             g_object_unref(value);
@@ -1550,27 +1584,113 @@ static VipsImage* glass_blur_image(VipsImage* source, const struct glass_blur_re
             cropped = expanded;
         }
 
-        VipsImage* scaled = nullptr;
-        failure           = vips_linear1(cropped, &scaled, weights[index], 0.0, nullptr);
-        g_object_unref(cropped);
-        if (failure)
-            goto failed;
+        layers[index] = cropped;
+    }
+    g_object_unref(value);
 
+    /* Mix at the CHROMA weight, then add back what luma wants differently.
+     *
+     *   out = wC*near + (1-wC)*far + (wL - wC) * luma(near - far)
+     *
+     * which is the two-subspace mixture rearranged so that only one extra
+     * single-band image is ever built.  Where the two weights are equal - and
+     * for `clear`, where they nearly are - the correction is nothing. */
+    for (int index = 0; index < 2; ++index) {
+        if (layers[index] == nullptr)
+            continue;
+        double weight = index == 0 ? recipe->narrow_chroma_weight
+                                   : 1.0 - recipe->narrow_chroma_weight;
+        VipsImage* scaled = nullptr;
+        if (vips_linear1(layers[index], &scaled, weight, 0.0, nullptr))
+            goto failed;
         if (total == nullptr) {
             total = scaled;
             continue;
         }
         VipsImage* summed = nullptr;
-        failure           = vips_add(total, scaled, &summed, nullptr);
+        int failure = vips_add(total, scaled, &summed, nullptr);
         g_object_unref(scaled);
         if (failure)
             goto failed;
         g_object_unref(total);
         total = summed;
     }
-    g_object_unref(value);
     if (total == nullptr)
-        return nullptr;
+        goto failed;
+
+    double lift = recipe->narrow_weight - recipe->narrow_chroma_weight;
+    if (layers[0] != nullptr && layers[1] != nullptr && fabs(lift) > 1e-9) {
+        VipsImage* difference = nullptr;
+        if (vips_subtract(layers[0], layers[1], &difference, nullptr))
+            goto failed;
+
+        /* luma(near - far), built band by band rather than by a recombination
+         * matrix.  The backdrop carries alpha, so the matrix has to be square
+         * and its orientation matters; spelling the sum out cannot be wrong
+         * about either, and the check that it is right is that a GRAY backdrop
+         * must come out exactly where it did before - there, luma(D) is D and
+         * the whole correction collapses back into the single-weight mix. */
+        static const double kLuma[3] = {0.2126, 0.7152, 0.0722};
+        VipsImage*          band     = nullptr;
+        int                 failure  = 0;
+        for (int channel = 0; channel < 3 && !failure; ++channel) {
+            VipsImage* extracted = nullptr;
+            if (vips_extract_band(difference, &extracted, channel, nullptr)) {
+                failure = 1;
+                break;
+            }
+            VipsImage* weighted = nullptr;
+            failure = vips_linear1(extracted, &weighted, kLuma[channel], 0.0,
+                                   nullptr);
+            g_object_unref(extracted);
+            if (failure)
+                break;
+            if (band == nullptr) {
+                band = weighted;
+                continue;
+            }
+            VipsImage* added = nullptr;
+            failure          = vips_add(band, weighted, &added, nullptr);
+            g_object_unref(weighted);
+            if (failure)
+                break;
+            g_object_unref(band);
+            band = added;
+        }
+        g_object_unref(difference);
+        if (failure || band == nullptr) {
+            if (band != nullptr)
+                g_object_unref(band);
+            goto failed;
+        }
+
+        /* One band per band of the mix, so nothing has to broadcast. */
+        VipsImage* wide = nullptr;
+        {
+            VipsImage* copies[4] = {band, band, band, band};
+            failure = vips_bandjoin(copies, &wide, total->Bands, nullptr);
+        }
+        g_object_unref(band);
+        if (failure)
+            goto failed;
+
+        VipsImage* correction = nullptr;
+        failure = vips_linear1(wide, &correction, lift, 0.0, nullptr);
+        g_object_unref(wide);
+        if (failure)
+            goto failed;
+
+        VipsImage* summed = nullptr;
+        failure           = vips_add(total, correction, &summed, nullptr);
+        g_object_unref(correction);
+        if (failure)
+            goto failed;
+        g_object_unref(total);
+        total = summed;
+    }
+    for (int index = 0; index < 2; ++index)
+        if (layers[index] != nullptr)
+            g_object_unref(layers[index]);
 
     /* One rounding, at the end.  vips_cast to uchar rounds to nearest and
      * clamps, which is what the captured 8-bit output does. */
@@ -1583,7 +1703,11 @@ static VipsImage* glass_blur_image(VipsImage* source, const struct glass_blur_re
     return result;
 
 failed:
-    g_object_unref(value);
+    fprintf(stderr, "[GLASS] blur failed: %s\n", vips_error_buffer());
+    vips_error_clear();
+    for (int index = 0; index < 2; ++index)
+        if (layers[index] != nullptr)
+            g_object_unref(layers[index]);
     if (total != nullptr)
         g_object_unref(total);
     return nullptr;

@@ -177,6 +177,21 @@ splice(
     "    for radius in [0.0, 80.0, 240.0] {\n",
     "small edged shapes")
 
+# The dynamic suite's coded field, offered to the STATIC suite as well.
+#
+# It is the only backdrop in the corpus with real content at the scales the
+# blur's near/far weight controls - its local variation about a 129 px mean is
+# 8.1 code values, where uv-map's is 0.23 - and it is the one instrument that
+# disagrees with the shipped weight.  It has only ever been captured through
+# the dynamic path, so "the material differs" and "the capture paths differ"
+# cannot be separated.  Captured statically at the same geometry, they can.
+splice(
+    "    // Qualitative continuity with the HIG example.\n",
+    "    list.append(dynamicBackground())\n"
+    "\n"
+    "    // Qualitative continuity with the HIG example.\n",
+    "coded field in the static suite")
+
 # --- 2. Step-edge backgrounds for the kernel -------------------------------
 # A step through the element centre puts half the disc on each level, so one
 # scanline is the edge spread function.  64/192 keeps both sides clear of the

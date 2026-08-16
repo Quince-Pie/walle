@@ -289,6 +289,54 @@
       "scoredColumns": 1000,
       "variant": "clear",
       "worstColumn": 999
+    },
+    {
+      "appearance": "light",
+      "background": "dynamic-coded-field",
+      "coreMaximumCodes": 9.625,
+      "maximumCodes": 9.625,
+      "rimMaximumCodes": 0.0,
+      "rootMeanSquareCodes": 2.336,
+      "scene": "circle-1000-center",
+      "scoredColumns": 1024,
+      "variant": "regular",
+      "worstColumn": 428
+    },
+    {
+      "appearance": "dark",
+      "background": "dynamic-coded-field",
+      "coreMaximumCodes": 4.75,
+      "maximumCodes": 4.75,
+      "rimMaximumCodes": 0.0,
+      "rootMeanSquareCodes": 1.449,
+      "scene": "circle-1000-center",
+      "scoredColumns": 1024,
+      "variant": "regular",
+      "worstColumn": 402
+    },
+    {
+      "appearance": "light",
+      "background": "dynamic-coded-field",
+      "coreMaximumCodes": 2.062,
+      "maximumCodes": 2.062,
+      "rimMaximumCodes": 0.0,
+      "rootMeanSquareCodes": 0.647,
+      "scene": "circle-1000-center",
+      "scoredColumns": 1024,
+      "variant": "clear",
+      "worstColumn": 699
+    },
+    {
+      "appearance": "dark",
+      "background": "dynamic-coded-field",
+      "coreMaximumCodes": 2.062,
+      "maximumCodes": 2.062,
+      "rimMaximumCodes": 0.0,
+      "rootMeanSquareCodes": 0.647,
+      "scene": "circle-1000-center",
+      "scoredColumns": 1024,
+      "variant": "clear",
+      "worstColumn": 699
     }
   ],
   "schemaVersion": 1,

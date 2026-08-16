@@ -37,6 +37,14 @@ RENDER = ROOT / "analysis/render_walle_over_background.sh"
 CAPTURE_EXTENT = 2048
 # walle's own materialize window: `time` runs 0..kFadeStart across it.
 FADE_START = 0.66
+# Apple's transition outlives the window the rig clocked - `end` is 1.02 to
+# 1.035 - so walle plays the measured curve over its OWN materialize window and
+# arrives by the end of it.  Comparing walle at its clock against the hardware
+# at the RIG's clock therefore compares two different instants; the rig's clock
+# has to be divided by `end` to name the same one.
+MATERIALIZE = json.loads(
+    (ROOT / "analysis/results/materialize_thickness.json").read_text(
+        encoding="utf-8"))["variants"]
 # Frames within this of a clock the harness already sampled, to keep the
 # rendering count down while still covering the curve.
 PROBE_CLOCKS = (0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1.0)
@@ -67,6 +75,11 @@ def canvas(field: np.ndarray, path: Path) -> tuple[int, int]:
     return top, left
 
 
+def walle_clock(variant: str, clock: float) -> float:
+    """The rig's clock, expressed on walle's own materialize window."""
+    return clock / float(MATERIALIZE[variant]["endClock"])
+
+
 def render(background: Path, variant: str, appearance: str, clock: float,
            work: Path) -> np.ndarray:
     out = work / f"walle-{background.stem}-{variant}-{appearance}-{clock:.4f}.bgra"
@@ -76,7 +89,8 @@ def render(background: Path, variant: str, appearance: str, clock: float,
     # Progress 1 puts the whole frame inside the element; the material's own
     # clock is the thing being swept.
     environment["PROGRESS"] = "1.0"
-    environment["MATERIAL_PROGRESS"] = f"{clock * FADE_START:.6f}"
+    environment["MATERIAL_PROGRESS"] = (
+        f"{walle_clock(variant, clock) * FADE_START:.6f}")
     environment["BACKING_SCALE"] = "2"
     subprocess.run([str(RENDER), str(background), str(out), variant],
                    check=True, env=environment,

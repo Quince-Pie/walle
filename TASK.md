@@ -5075,3 +5075,96 @@ a difference between the rig's two capture paths at matched geometry, and that
 is a statement about the harness until something separates it further.  The
 kernel stays as fitted; shipping the coded field's weight would break three
 instruments to satisfy one.
+
+## 2026-08-16 (later 173): THE BLUR TREATS CHROMA DIFFERENTLY FROM LUMA
+
+This is the answer, and it is why one instrument disagreed with three others
+for so long while every explanation for the disagreement failed.
+
+`regular`'s near/far weight reads 0.90 on every GRAY instrument in the corpus -
+step edges at three geometries, sine gratings at four periods and two element
+sizes - and 0.54 on the coded field.  Capture path, element size, frame size,
+padding rule, layer count, mixing order, anisotropy and a free affine were each
+tested and each ruled out.  Splitting the coded field's own residual by
+component does it in one line:
+
+    component      weight it wants    rms at the shipped 0.8846
+    luma only          0.850                1.153
+    chroma only        0.550                7.909
+
+Fitting both weights together, and note what the luma one lands on:
+
+    regular light   wLuma 0.893  wChroma 0.543   8.066 -> 1.838 rms
+    regular dark    wLuma 0.562  wChroma 0.617   2.615 -> 1.176
+    clear  (both)   wLuma 0.217  wChroma 0.083   0.580 -> 0.578
+
+The shipped weights were 0.8846, 0.5164 and 0.2174.  The luma weight IS the
+shipped weight - to three decimal places for `clear` and to 0.008 for `regular`
+in light - so every gray measurement in this repo was right about the thing it
+could see, and blind to the thing it could not.
+
+WHY EVERY OTHER INSTRUMENT MISSED IT.  A step edge and a sine grating are gray:
+their chroma is exactly zero, so the chroma weight multiplies nothing and they
+measure the luma weight alone.  The coded field carries MORE chroma than luma -
+36 code values against 29 - so it reads mostly the chroma weight.  uv-map
+carries neither at the scales that matter, its local variation about a 129 px
+mean being 0.23 code values, so its apparent opinion was noise and briefly
+looked like corroboration.
+
+`clear` is the control and behaves like one: its two radii are 0.73 and 4.18
+px, so there is almost nothing to tell apart, and splitting the weights changes
+its residual from 0.580 to 0.578.
+
+THE MODEL.  One linear operator, two mixtures:
+
+    blurred = wLuma * near(L) + (1 - wLuma) * far(L)
+            + wChroma * near(C) + (1 - wChroma) * far(C)
+
+which rearranges to the existing mixture at the CHROMA weight plus a correction
+of (wLuma - wChroma) times the luma difference of the two blurs - one extra
+single-band image in the CPU path, and nothing at all in the shader.
+
+## 2026-08-16 (later 174): THE CHROMA SPLIT, SHIPPED - and a regression it caught
+
+walle's blur now mixes its two radii differently for luma and for chroma:
+
+    blurred = wLuma * near(L) + (1 - wLuma) * far(L)
+            + wChroma * near(C) + (1 - wChroma) * far(C)
+
+    regular light   wLuma 0.8846 (unchanged)   wChroma 0.542
+    regular dark    wLuma 0.5164 (unchanged)   wChroma 0.612
+    clear   both    wLuma 0.2174 (unchanged)   wChroma 0.088
+
+The luma weights are exactly what was already shipped, because the gray
+instruments that measured them were right; only the chroma mixture is new.
+Rendered through walle's own pipeline over the one backdrop that carries
+chroma:
+
+    regular light   8.07 rms  ->  2.34 rms / 9.6 max
+    regular dark    2.62      ->  1.45     / 4.8
+    clear   both    0.58      ->  0.65     / 2.1
+
+and every gray backdrop is unchanged to the code value - 27.06 worst over the
+same 24 scanlines as before - which is the check that matters, because on gray
+the correction has to vanish identically.
+
+THREE MISTAKES ON THE WAY, all worth keeping.
+
+The first was a REGRESSION, and the flat backgrounds caught it in one run.  The
+materialize `end` measured past one, and shipping the curve cut off at clock
+one left the material permanently 3.5% short for `regular` and 7.2% for `clear`
+- a wallpaper that never finishes materializing.  The measurement was right;
+what was wrong was reading it as "stop here" rather than "this is how long it
+takes".  The curve now plays over walle's own materialize window and arrives at
+the end of it, and every gray reading returned to its previous value exactly.
+
+The second was the correction not vanishing on gray, which it must, because
+luma(D) IS D there.  A recombination matrix has to be square when the backdrop
+carries alpha, and its orientation is easy to get backwards; the correction is
+built from explicit band arithmetic now, where neither can be wrong.
+
+The third was geometric, and it is the same trap this repo has fallen into
+before: walle's element is centred at (512, 614.4), NOT at the middle of its
+canvas.  A backdrop centred on the canvas and compared across its own width
+reads pixels outside the element - it scored 152 code values until the element
+was made to cover the canvas, after which the same law scored 2.34.
