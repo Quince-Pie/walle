@@ -95,14 +95,23 @@ enum glass_variant : uint8_t
  *
  * The kernels, in CAPTURE pixels at 2x backing scale:
  *
- *   clear    0.1889 * sharp        + 0.8111 * gauss(sigma 4.1727)
- *   regular  w      * gauss(14.188) + (1 - w) * gauss(329.807)
+ *   clear    0.2174 * gauss(0.7251) + 0.7826 * gauss(4.1829)
+ *   regular  w      * gauss(14.188)  + (1 - w) * gauss(329.807)
  *            w = 0.8846 light, 0.5164 dark
  *
- * fitting to 0.06 rms / 1.3 max code values (clear) and 0.35 / 1.8 light,
+ * fitting to 0.12 rms / 1.2 max code values (clear) and 0.35 / 1.8 light,
  * 0.72 / 2.6 dark (regular).  The blur happens in sRGB CODE space: fitting
- * clear in linear light instead costs 0.92 rms against 0.06, and the material
+ * clear in linear light instead costs 1.68 rms against 0.12, and the material
  * colour matrices were already measured in that same space.
+ *
+ * clear's NARROW layer is a Gaussian and not a copy of the source.  It used to
+ * ship as a copy - a delta - and that is the one place a step edge could tell:
+ * a hard edge splits between the two pixels that straddle it, and a delta puts
+ * 14 code values on the wrong side of the split.  The derivation had always
+ * said otherwise (bilinear reconstruction over a 1.66 px cell, or the same
+ * curve as a 0.725 px Gaussian, both at 0.12 rms against a delta's 1.39), and
+ * the 500 px circle's own step edge - a second, independent capture - refits it
+ * to 0.733.  Correcting it takes that edge from 14.05 to 2.80 code values.
  *
  * Three things this corrects, all confirmed end to end by rendering walle over
  * the same step and measuring it the same way:
@@ -125,8 +134,9 @@ enum glass_variant : uint8_t
  * build.  The radii are ABSOLUTE, not a fraction of the window. */
 constexpr double GLASS_CAPTURE_SCALE = 2.0;
 /* Capture pixels; divided by GLASS_CAPTURE_SCALE to reach wallpaper points. */
-constexpr double GLASS_BLUR_CLEAR_SHARP_WEIGHT     = 0.1889;
-constexpr double GLASS_BLUR_CLEAR_SIGMA            = 4.1727;
+constexpr double GLASS_BLUR_CLEAR_NARROW_WEIGHT    = 0.2174;
+constexpr double GLASS_BLUR_CLEAR_NARROW_SIGMA     = 0.7251;
+constexpr double GLASS_BLUR_CLEAR_WIDE_SIGMA       = 4.1829;
 constexpr double GLASS_BLUR_REGULAR_SIGMA          = 14.188;
 constexpr double GLASS_BLUR_REGULAR_WIDE_SIGMA     = 329.807;
 constexpr double GLASS_BLUR_REGULAR_WEIGHT_LIGHT   = 0.8846;
@@ -163,17 +173,17 @@ static struct glass_blur_recipe glass_blur_for(enum glass_variant variant,
         };
     }
     return (struct glass_blur_recipe){
-        .sharp_weight  = GLASS_BLUR_CLEAR_SHARP_WEIGHT,
-        .narrow_weight = 1.0 - GLASS_BLUR_CLEAR_SHARP_WEIGHT,
-        .narrow_sigma  = GLASS_BLUR_CLEAR_SIGMA * points,
-        .wide_weight   = 0.0,
-        .wide_sigma    = 0.0,
+        .sharp_weight  = 0.0,
+        .narrow_weight = GLASS_BLUR_CLEAR_NARROW_WEIGHT,
+        .narrow_sigma  = GLASS_BLUR_CLEAR_NARROW_SIGMA * points,
+        .wide_weight   = 1.0 - GLASS_BLUR_CLEAR_NARROW_WEIGHT,
+        .wide_sigma    = GLASS_BLUR_CLEAR_WIDE_SIGMA * points,
     };
 }
 
 /* Bump whenever the cached pixel pipeline changes shape (layout, band count,
  * preprocess constants). Hashed into every cache key. */
-constexpr uint32_t CACHE_SCHEMA_VERSION = 6;
+constexpr uint32_t CACHE_SCHEMA_VERSION = 7;
 
 constexpr float DEFAULT_TRANSITION_DUR = 0.6f;
 constexpr int   INOTIFY_BUF_LEN        = 4096;

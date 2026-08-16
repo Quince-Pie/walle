@@ -11,7 +11,10 @@ space, at the wrong scale, or in the wrong order against the refraction.
 
 A step edge through the element's centre is the whole edge-spread function on
 one scanline, and the rim half of that scanline is where the refraction lives,
-so one background exercises all three stages at once.
+so one background exercises all three stages at once.  Flat backdrops are read
+the same way and on the same scanline, which is the cleanest look at the EDGE:
+the body is a constant there, so every code value that is not that constant
+belongs to the rim or to the shadow outside it.
 
 The two geometries LINE UP EXACTLY, which is what makes this a pixel comparison
 rather than a resampling:
@@ -56,13 +59,25 @@ FULL_THICKNESS_PROGRESS = 0.66
 # capture pixels at 2x backing scale.
 SCENES = {"circle-0500-center": (1024, 500.0)}
 ROW_HALF_BAND = 8
-STEPS = {"kstep-x-064-192": (64, 192), "kstep-x-000-255": (0, 255)}
+# name -> the two levels the backdrop takes left and right of the element's
+# centre.  Equal levels make it flat, which is the cleanest read of the RIM:
+# the body is a constant, so every code value that is not that constant belongs
+# to the edge.
+BACKDROPS = {
+    "kstep-x-064-192": (64, 192),
+    "kstep-x-000-255": (0, 255),
+    "gray-000": (0, 0),
+    "gray-128": (128, 128),
+    "gray-192": (192, 192),
+    "gray-255": (255, 255),
+}
 
 type JsonObject = dict[str, object]
 
 
 def step_background(path: Path, low: int, high: int) -> None:
-    """walle's backdrop: the same step, with its edge on the element's centre."""
+    """walle's backdrop: the same backdrop, with any step on the element's
+    centre."""
     pixels = np.full((CAPTURE_EXTENT, CAPTURE_EXTENT, 3), high, dtype=np.uint8)
     pixels[:, :int(CENTER_X)] = low
     Image.fromarray(pixels, "RGB").save(path)
@@ -70,7 +85,7 @@ def step_background(path: Path, low: int, high: int) -> None:
 
 def render(background: Path, variant: str, appearance: str, radius: float,
            work: Path) -> np.ndarray:
-    out = work / f"walle-{variant}-{appearance}.bgra"
+    out = work / f"walle-{background.stem}-{variant}-{appearance}.bgra"
     environment = dict(os.environ)
     environment["APPEARANCE"] = appearance
     environment["TINT"] = "none"
@@ -101,13 +116,14 @@ def band(pixels: np.ndarray, centre: float, left: int, right: int
     return strip.mean(axis=0)
 
 
-def compare(shots: Path, scene: str, background: str, variant: str,
+def compare(shots: list[Path], scene: str, background: str, variant: str,
             appearance: str, work: Path) -> JsonObject | None:
-    capture = shots / f"{background}__{scene}__{variant}__{appearance}.png"
-    if not capture.exists():
+    name = f"{background}__{scene}__{variant}__{appearance}.png"
+    capture = next((d / name for d in shots if (d / name).exists()), None)
+    if capture is None:
         return None
     extent, radius = SCENES[scene]
-    low, high = STEPS[background]
+    low, high = BACKDROPS[background]
     source = work / f"{background}.png"
     if not source.exists():
         step_background(source, low, high)
@@ -145,7 +161,8 @@ def compare(shots: Path, scene: str, background: str, variant: str,
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--shots", type=Path, required=True)
+    parser.add_argument("--shots", type=Path, nargs="+", required=True,
+                        help="capture directories, searched in order")
     parser.add_argument("--output", type=Path)
     arguments = parser.parse_args()
 
@@ -154,7 +171,7 @@ def main() -> int:
         records = [
             record
             for scene in SCENES
-            for background in STEPS
+            for background in BACKDROPS
             for variant in ("regular", "clear")
             for appearance in ("light", "dark")
             if (record := compare(arguments.shots, scene, background, variant,

@@ -4739,3 +4739,164 @@ Provenance: artifacts-cube2, 2058 shots,
 sha256 3dc9f1344f5167e0177f1025608493f787facaf0156e520b51564058de939475.
 The 48 backgrounds the two lattices share are byte-identical across the two
 capture sessions.
+
+## 2026-08-15 (later 163): THE EDGE WAS GUESSED, AND IT IS THE LARGEST ERROR LEFT
+
+Rendering walle back over a step edge - the first end-to-end check that a flat
+background could not do - agreed to 1.7 code values through the element's body
+and then missed by 151 at its boundary.  Two whole layers were wrong there.
+
+THE RIM.  Apple draws a bright band 2.2 px inside the boundary: +22 code values
+over the interior for `regular` in light, +130 for `clear` over black.  walle
+carried a ring fitted from Human Interface Guidelines photographs - a
+directional specular lobe with up, down and base gains, an offset centre and a
+width proportional to the radius - whose gains were small enough to render
+nothing.  The model is wrong in kind, not only in scale: across twelve sectors
+and 1677 frames the measured rim varies by a MEDIAN 2.7% of its own excess and
+8.3% at the 95th percentile.  There is no lobe.  There is no light direction.
+
+What there is:
+
+  * a profile that is ABSOLUTE, like the refraction's - the same 2.2 px depth
+    at radius 128, 256 and 500, peaking 0.6 to 0.8 px inside the boundary;
+  * an amplitude that saturates by a 256 px radius (R=256 and R=500 agree to
+    0.25 code values) and is 0.65 to 0.75 of that at R=128, a regime walle only
+    ever renders at a material thickness under 0.02, so at most 0.1 code values
+    of the difference can reach a frame;
+  * a colour that is its own transfer of the backdrop, fitted like the
+    material's, at 1.7 to 3.7 code values rms;
+  * its own TINT law.  A tinted rim is nothing like the interior's tint applied
+    to an untinted rim - that misses by ninety code values - so the rim is
+    fitted with derive_tint_law.py --region rim and carries its own regimes.
+
+THE SHADOW.  `regular` darkens the backdrop outside itself, reaching about 80
+capture pixels: -4.3% in light, -7.6% in dark, and in sRGB CODE space it is
+affine - out = 0.954 * backdrop + 0.76 at its darkest, fitted to 0.2-0.6 rms.
+`clear` casts none, to under half a code value, and its fitted law comes out as
+the identity on its own.
+
+walle's shadow had been switched off - kShadowBase = 0 - after a materialize
+capture read the band just outside the rim as +0.5 code values.  That capture
+was `clear`, which is exactly the variant that has no shadow.
+
+## 2026-08-15 (later 164): TWENTY-ONE NEUTRAL TINTS
+
+The neutral tint regime had seven samples supporting two fitted functions, and
+gamma made it three.  Fourteen more levels take held-out error to:
+
+    regular light  2.06   regular dark  2.03
+    clear   light  3.50   clear   dark  3.36
+
+from 2.28/2.21/3.72/3.61 with seven, and the chosen basis order rises with the
+samples - quartic in the tint's level for `regular` in light.
+
+## 2026-08-15 (later 165): clear's SHARP LAYER WAS NEVER SHARP
+
+The step-edge check missed by 14 code values at the one pixel pair straddling a
+hard edge, and forward-modelling the same kernel in Python reproduced the miss
+exactly - so walle implements what it was given, and what it was given is
+wrong.  clear ships `0.1889 * sharp + 0.8111 * gauss(4.1727)`, where `sharp` is
+a copy of the source: a delta.  The derivation had always said otherwise.  Its
+own best model for clear is bilinear reconstruction over a 1.66 px cell plus a
+4.17 px Gaussian, at 0.12 rms against a delta's 1.39, and the same curve as two
+Gaussians is 0.2174 * gauss(0.7251) + 0.7826 * gauss(4.1829).  The delta was
+introduced between the derivation and walle.c.
+
+A second, independent capture agrees: refitting on the 500 px circle's own step
+edge - a different element, a different frame size, a different session -
+returns sigma 0.733 against the rect's 0.725.  Correcting it takes that edge
+from 14.05 to 2.80 code values.
+
+`regular` has no such error.  Refitting it on the circle moves nothing (1.795
+to 1.770 rms in light, 3.550 to 3.538 in dark), and its wide layer is not even
+identifiable there - a 330 px sigma in a 1024 px frame refits anywhere between
+94 and 220 with no change in error, which is why the wide layer belongs to the
+full-frame capture and stays as fitted.
+
+## 2026-08-15 (later 166): THE MATERIALIZE IS A CROSSFADE, AND ITS CURVE IS PER VARIANT
+
+61 frames of each of the four materials, against the rig's own raster clock.
+Two findings, both against what walle carried.
+
+IT IS A CROSSFADE.  Fitting ONE alpha per frame over every usable pixel leaves
+0.76 to 1.46 code values unexplained across the whole animation.  That is the
+discriminator, not a detail: if the blur radius ramped with thickness, a pixel
+in fine detail would reach the material sooner than one on a plateau and a
+single alpha could not fit both.  None of the four shows it.  So
+
+    out(k) = lerp(sharp backdrop, finished material, k)
+
+and walle's nested form - ramping the blur into the transfer's input, then
+lerping the transfer's output against that same ramped input - is a different
+function of k with the same endpoints.  Thickness now applies once, at the end,
+and the blur, the refraction and the rim inside it are all at full strength.
+
+THE CURVE IS NOT ONE EXPONENT.  Fitted jointly over both appearances:
+
+    clear     delay 0.1075   exponent 2.000    rms 0.0068 / max 0.0239
+    regular   delay 0.0675   exponent 1.680    rms 0.0074 / max 0.0154
+
+against a bare power's 0.014 to 0.017 rms.  The shipped 2.36 came from twelve
+frames of `clear` in light with no delay term; `clear` refits to exactly 2 once
+the delay is there, and `regular` is nothing like either.
+
+Provenance: artifacts-materialize, 244 frames,
+sha256 8a7ff51ed703b9520a93c11ac02bfe264e6783bf30ddd2f222f441f2475c334d.
+
+## 2026-08-15 (later 167): THE EDGE, SHIPPED - and a basis that was being truncated
+
+The rim, the shadow and the materialize crossfade all landed together, and the
+step-edge check went from 151 code values at the boundary to 27:
+
+    background       variant  appear    rms     max     rim    core
+    kstep-x-064-192  regular  light   0.553   9.500   9.500   1.688
+    kstep-x-064-192  clear    light   0.527  11.125  11.125   2.688
+    gray-192         regular  light   0.232   2.625   2.625   0.562
+    gray-192         clear    light   0.367   2.500   2.500   0.875
+    ... 24 scanlines, worst 27.06
+
+The worst cases left are `clear` over gray-255 and the 0-255 step, which is
+exactly where its rim CLIPS in the captures and the transfer therefore has no
+data.  The flat-background check is unmoved by any of it - untinted median 0.59
+and worst 3.74 code values - because the interior disc it reads never touches
+the rim.
+
+ONE BUG WORTH RECORDING.  The first build of this rendered 225 code values of
+error in `clear`'s GREEN channel at the rim, and the cause was not the law: the
+generated header sized its shared polynomial basis from the MATERIAL transfer's
+order alone, and `clear`'s rim came out an order higher.  Its leading 56 of 84
+coefficients were emitted and the rest dropped.  A truncated polynomial is not
+a worse fit, it is a different function - the green row read 20 where the
+measurement is 246.  The width is now the maximum over every law that shares
+the basis, and emitting a law wider than the basis is a hard error rather than
+a silent truncation.
+
+A range guard was tried first, on the theory that the fit was extrapolating
+into the clipped corner, and it was WRONG: `regular` in dark reaches -80 code
+values over the cube at ORDER ONE, because its measured range starts at 1 and
+the fit extrapolates below zero wherever the material would clamp.  Rejecting
+that would have thrown away every polynomial and left an affine-in-x**g model
+at 2.3 rms against 0.48.  The guard is gone; cross-validation already rejected
+the one order that genuinely blew up.
+
+## 2026-08-15 (later 168): THE RIM DOES NOT SEE A STRAIGHT EDGE EITHER
+
+The corpus could not test this - its rectangles are 1600 by 900 POINTS in a 512
+point window, so they cover the frame and their boundary has never been in
+shot.  Three small shapes now fit inside it: a sharp-cornered rectangle, a
+rounded one, and a capsule.
+
+On a STRAIGHT edge - zero curvature, the furthest thing from a circle there is -
+the rim is the same curve, to between 0.14 and 4.42 code values across all four
+materials.  Taken with the refraction's own curvature term (0.19 px at its
+worst), both of the element's edge laws are functions of depth alone.
+
+At a rounded CORNER the measured curve is broader than the circle's, by 10 to
+47 code values, and this is recorded as an open discrepancy rather than a law:
+a 90 degree arc of radius 120 px yields about seventy pixels per depth band
+against a circle's several thousand, and the corner's own radius sits in the
+attenuated regime where the amplitude is already 0.65 to 0.75 of saturation.
+walle draws circles and nothing else, so neither result changes what ships.
+
+Provenance: artifacts-shapes, 528 shots,
+sha256 12c6ee7870669a6e36af27b029fc1a1a1a3168129303d6311b4e234e6b296027.

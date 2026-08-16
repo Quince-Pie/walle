@@ -153,6 +153,30 @@ splice(
     "    // Qualitative continuity with the HIG example.\n",
     "colour lattice")
 
+# Small shapes whose EDGE is inside the frame.  Every rim and refraction
+# measurement so far is on a circle, and the corpus's own rectangles are 1600 by
+# 900 POINTS in a 512 point window - they cover the frame completely, so their
+# boundary is off-screen and they say nothing about a straight edge or a corner.
+# These three do: a sharp-cornered rectangle for zero curvature, a rounded one
+# for a known corner, and a capsule whose ends curve harder than any circle in
+# the corpus.
+splice(
+    "    for radius in [0.0, 80.0, 240.0] {\n",
+    "    for (name, w, h, r, kind) in [\n"
+    "        (\"rect-0300x0200-r000\", 300.0, 200.0, 0.0, GlassShapeKind.roundedRect),\n"
+    "        (\"rect-0300x0200-r060\", 300.0, 200.0, 60.0, GlassShapeKind.roundedRect),\n"
+    "        (\"capsule-0300x0120\", 300.0, 120.0, 60.0, GlassShapeKind.capsule),\n"
+    "    ] {\n"
+    "        scenes.append(SceneSpec(\n"
+    "            name: name,\n"
+    "            shapes: [GlassShapeSpec(\n"
+    "                id: \"shape\", kind: kind, centerX: cx, centerY: cy,\n"
+    "                width: w, height: h, cornerRadius: r)],\n"
+    "            containerSpacing: 0))\n"
+    "    }\n"
+    "    for radius in [0.0, 80.0, 240.0] {\n",
+    "small edged shapes")
+
 # --- 2. Step-edge backgrounds for the kernel -------------------------------
 # A step through the element centre puts half the disc on each level, so one
 # scanline is the edge spread function.  64/192 keeps both sides clear of the

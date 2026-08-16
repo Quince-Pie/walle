@@ -326,12 +326,34 @@ DEPS    ::= $(OBJECTS:.o=.d)
 
 .PHONY: all activate clean fuzz reveal-best-known-corpus-gate \
 	reveal-best-known-process-gate reveal-mask-model-gate reveal-raster-gate \
-	reveal-presentation-gate
+	reveal-presentation-gate material-law
 
 all: $(TARGET) activate
 
 activate: $(TARGET) | $(BIN_DIR)
 	ln -sfn $(PROFILE)/walle $(ACTIVE_TARGET)
+
+# Regenerate shaders/material_law.slang from the fitted results.  It takes
+# four of them now and a stale one is silent, so this names them in one place
+# rather than leaving the invocation to memory.
+MATERIAL_LAW_INPUTS = \
+	analysis/results/material_matrices.json \
+	analysis/results/tint_law.json \
+	analysis/results/tint_law_rim.json \
+	analysis/results/rim_light.json \
+	analysis/results/materialize_thickness.json
+
+material-law: shaders/material_law.slang
+
+shaders/material_law.slang: analysis/generate_material_law_header.py \
+		$(MATERIAL_LAW_INPUTS)
+	python3 analysis/generate_material_law_header.py \
+		--material analysis/results/material_matrices.json \
+		--tint analysis/results/tint_law.json \
+		--rim-tint analysis/results/tint_law_rim.json \
+		--edge analysis/results/rim_light.json \
+		--materialize analysis/results/materialize_thickness.json \
+		--output $@
 
 reveal-mask-model-gate:
 	./parity/run_liquid_glass_reveal_mask_model_gate.sh

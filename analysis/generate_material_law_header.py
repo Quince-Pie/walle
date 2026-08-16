@@ -67,6 +67,10 @@ def exponents(order: int) -> list[tuple[int, int, int]]:
     ]
 
 
+def term_count(order: int) -> int:
+    return len(exponents(order))
+
+
 def product(triple: tuple[int, int, int], variable: str) -> str:
     factors = [f"{variable}.{axis}"
                for axis, power in zip("rgb", triple)
@@ -83,8 +87,7 @@ def emit_basis(name: str, triples: list[tuple[int, int, int]]) -> list[str]:
     return lines
 
 
-def emit_material(records) -> list[str]:
-    order = max(record["order"] for record in records)
+def emit_material(records, order: int) -> list[str]:
     triples = exponents(order)
     lines = [
         f"// Order {order} in the backdrop, {len(triples)} terms, evaluated by",
@@ -108,6 +111,10 @@ def emit_material(records) -> list[str]:
         lines.append(f"static const WalleMaterialTransfer {name} = {{")
         lines.append("    {")
         coefficients = record["coefficients"]
+        if len(coefficients) > len(triples):
+            raise SystemExit(
+                f"{name} has {len(coefficients)} terms, wider than the emitted"
+                f" {len(triples)}: truncating would change the law")
         for index in range(len(triples)):
             row = (coefficients[index] if index < len(coefficients)
                    else [0.0, 0.0, 0.0])
@@ -118,13 +125,50 @@ def emit_material(records) -> list[str]:
     return lines
 
 
-def emit_tint(report) -> list[str]:
-    entries = [
-        (variant, appearance, entry)
-        for variant, appearances in sorted(report["variants"].items())
-        for appearance, entry in sorted(appearances.items())
+def tint_entries(report):
+    """Every fitted regime, with any missing appearance standing in.
+
+    One regime is missing and the reason is physical: `clear`'s rim in DARK is
+    bright enough to clip over all but five of the sixteen tint backgrounds,
+    and five collinear substrates cannot separate a luminance response from a
+    chroma one.  Rather than invent it, the other appearance's law stands in -
+    which is the nearest measurement there is, and `clear`'s untinted transfer
+    is appearance-independent to the code value, so the two are not far apart.
+    The header says so at the constant.
+    """
+    fitted = {
+        (variant, appearance): entry
+        for variant, appearances in report["variants"].items()
+        for appearance, entry in appearances.items()
         if entry.get("regimes", {}).get("chromatic") is not None
-    ]
+    }
+    entries = []
+    for variant in sorted({v for v, _ in fitted}):
+        for appearance in ("dark", "light"):
+            entry = fitted.get((variant, appearance))
+            other = "light" if appearance == "dark" else "dark"
+            if entry is None:
+                entry = fitted.get((variant, other))
+                if entry is None:
+                    continue
+                entry = {**entry, "standsInFor": appearance,
+                         "measuredAppearance": other}
+            entries.append((variant, appearance, entry))
+    return entries
+
+
+def emit_tint(reports: dict[str, object]) -> list[str]:
+    """One struct wide enough for every region, then each region's constants.
+
+    The element's body and its RIM take the same law with different numbers -
+    a tinted rim is nothing like the tint applied to an untinted one, missing
+    it by ninety code values - so the rim is fitted separately and emitted
+    under its own prefix.
+    """
+    everything = [(prefix, *row)
+                  for prefix, report in reports.items()
+                  for row in tint_entries(report)]
+    entries = [(v, a, e) for _, v, a, e in everything]
     order = max(entry["regimes"]["chromatic"]["order"]
                 for _, _, entry in entries)
     triples = exponents(order)
@@ -165,10 +209,10 @@ def emit_tint(report) -> list[str]:
           for power in range(neutral_width)],
         "}\n",
     ]
-    for variant, appearance, entry in entries:
+    for prefix, variant, appearance, entry in everything:
         regimes = entry["regimes"]
         chromatic, neutral = regimes["chromatic"], regimes.get("neutral")
-        name = f"kTint{variant.capitalize()}{appearance.capitalize()}"
+        name = f"{prefix}{variant.capitalize()}{appearance.capitalize()}"
         lines.append(
             f"// {variant} / {appearance}: {chromatic['tintCount']} chromatic"
             f" at order {chromatic['order']}"
@@ -179,7 +223,11 @@ def emit_tint(report) -> list[str]:
                ", NEUTRAL NOT CAPTURED - the chromatic law stands in")
             + f"; fit {entry['rootMeanSquareResidualCodes']} rms /"
             f" {entry['maximumResidualCodes']} max code values,"
-            f" {entry['heldOutRootMeanSquareCodes']} rms held out.")
+            f" {entry['heldOutRootMeanSquareCodes']} rms held out."
+            + (f"  NOT MEASURED in {entry['standsInFor']} - the "
+               f"{entry['measuredAppearance']} law stands in, see"
+               " analysis/generate_material_law_header.py."
+               if "standsInFor" in entry else ""))
         lines.append(f"static const WalleTintRegime {name} = {{")
         # Each regime's own width, so a lower-order fit is read from the front
         # of its rows and padded to the emitted width with zeros.  The pinned
@@ -218,16 +266,149 @@ def emit_tint(report) -> list[str]:
     return lines
 
 
+def transfer_width(material, edge) -> int:
+    """One basis for the material, the rim and the shadow - so it has to be
+    wide enough for the widest of them.
+
+    Sizing it from the material alone TRUNCATED the others, and a truncated
+    polynomial is not a worse fit but a different function: `clear`'s rim came
+    out at order six, its leading 56 of 84 coefficients were emitted, and the
+    green row then read 20 code values where the measurement is 246.
+    """
+    orders = [record["order"] for record in material["records"]]
+    for entry in edge["materials"].values():
+        for key in ("rimTransfer", "shadowTransfer"):
+            if entry.get(key):
+                orders.append(entry[key]["order"])
+    return max(orders)
+
+
+def emit_edge(report, order: int) -> list[str]:
+    """The rim inside the element's boundary, and the shadow outside it.
+
+    Both are colour laws in the same basis as the material's transfer, each
+    weighted by a measured profile of depth.  Padding to the transfer's width
+    keeps one basis function for all three.
+    """
+    materials = report["materials"]
+
+    def depths(key: str) -> list[float]:
+        # `clear` casts no shadow, so its shadow shape has no samples and no
+        # depth axis; the axis is the same for every material that does have
+        # one, so the first that carries it speaks for all.
+        for entry in materials.values():
+            if entry[key].get("depthPixels"):
+                return entry[key]["depthPixels"]
+        raise SystemExit(f"no material carries a {key} depth axis")
+
+    rim_depths = depths("rimShape")
+    shadow_depths = depths("shadowShape")
+    lines = [
+        f"// The rim is {rim_depths[0]} to {rim_depths[-1]} px inside the",
+        "// boundary and ISOTROPIC - across twelve sectors and 1677 frames it",
+        "// varies by a median 2.7% of its own excess, so there is no lobe and",
+        "// no light direction.  Both profiles are one at the depth their",
+        "// colour law was fitted at.",
+        f"static const int kRimProfileCount = {len(rim_depths)};",
+        f"static const float kRimProfileStart = {rim_depths[0]};",
+        f"static const float kRimProfileStep = "
+        f"{round(rim_depths[1] - rim_depths[0], 4)};",
+        f"static const int kShadowProfileCount = {len(shadow_depths)};",
+        "static const float kShadowDepthPixels[kShadowProfileCount] = {",
+        "    " + ", ".join(f"{d:.1f}" for d in shadow_depths) + "};\n",
+        "struct WalleEdge\n{",
+        f"    float3 rim[{term_count(order)}];",
+        f"    float3 shadow[{term_count(order)}];",
+        f"    float rimWeight[{len(rim_depths)}];",
+        f"    float shadowWeight[{len(shadow_depths)}];",
+        "};\n",
+    ]
+    for key, entry in sorted(materials.items()):
+        variant, appearance = key.split("/")
+        name = f"kEdge{variant.capitalize()}{appearance.capitalize()}"
+        rim, shadow = entry["rimTransfer"], entry["shadowTransfer"]
+        lines.append(
+            f"// {variant} / {appearance}: rim order "
+            + (f"{rim['order']} from {rim['backgroundCount']} backgrounds, "
+               f"{rim['rootMeanSquareResidualCodes']} rms / "
+               f"{rim['heldOutRootMeanSquareCodes']} held out"
+               if rim else "NOT FITTED")
+            + "; shadow order "
+            + (f"{shadow['order']}, {shadow['rootMeanSquareResidualCodes']} rms"
+               if shadow else "NOT FITTED") + ".")
+        lines.append(f"static const WalleEdge {name} = {{")
+        for source in (rim, shadow):
+            lines.append("    {")
+            coefficients = source["coefficients"] if source else []
+            if len(coefficients) > term_count(order):
+                raise SystemExit(
+                    f"{name} has {len(coefficients)} terms, wider than the"
+                    f" emitted {term_count(order)}")
+            for index in range(term_count(order)):
+                row = (coefficients[index] if index < len(coefficients)
+                       else [0.0, 0.0, 0.0])
+                lines.append("        float3("
+                             + ", ".join(f"{v: .8f}" for v in row) + "),")
+            lines.append("    },")
+        for shape_key, axis in (("rimShape", rim_depths),
+                                ("shadowShape", shadow_depths)):
+            weight = entry[shape_key].get("weight") or [0.0] * len(axis)
+            lines.append("    {" + ", ".join(f"{v: .6f}" for v in weight)
+                         + "},")
+        lines.append("};\n")
+    return lines
+
+
+def emit_materialize(report) -> list[str]:
+    """How the material arrives: a CROSSFADE, on a delayed power curve.
+
+    Measured over 61 frames per material against the rig's own raster clock.
+    One alpha per frame explains the whole frame to 1.5 code values, which is
+    what a crossfade means and what a ramping blur radius would not give - a
+    pixel in fine detail would reach the material sooner than one on a plateau.
+    The curve wants a DELAY before it starts: adding one takes the fit from 1.6
+    percent of full scale to 0.7, which is the crossfade's own floor.
+    """
+    lines = [
+        "// alpha = clamp((clock - delay) / (1 - delay)) ** exponent, and the",
+        "// material is lerp(sharp backdrop, finished material, alpha).",
+        "struct WalleMaterialize\n{",
+        "    float delay;",
+        "    float exponent;",
+        "};\n",
+    ]
+    for variant, entry in sorted(report["variants"].items()):
+        lines.append(
+            f"// {variant}: {entry['sequenceCount']} sequences, "
+            f"{entry['sampleCount']} frames, {entry['rootMeanSquareOfAlpha']} "
+            f"rms / {entry['maximumOfAlpha']} max of full scale.")
+        lines.append(
+            f"static const WalleMaterialize kMaterialize{variant.capitalize()}"
+            f" = {{ {entry['delay']: .6f}, {entry['exponent']: .6f} }};\n")
+    return lines
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--material", type=Path, required=True)
     parser.add_argument("--tint", type=Path, required=True)
+    parser.add_argument("--rim-tint", type=Path, required=True)
+    parser.add_argument("--edge", type=Path, required=True)
+    parser.add_argument("--materialize", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     arguments = parser.parse_args()
 
     material = json.loads(arguments.material.read_text(encoding="utf-8"))
     tint = json.loads(arguments.tint.read_text(encoding="utf-8"))
-    lines = [BANNER, *emit_material(material["records"]), *emit_tint(tint)]
+    rim_tint = json.loads(arguments.rim_tint.read_text(encoding="utf-8"))
+    edge = json.loads(arguments.edge.read_text(encoding="utf-8"))
+    materialize = json.loads(
+        arguments.materialize.read_text(encoding="utf-8"))
+    transfer_order = transfer_width(material, edge)
+    lines = [BANNER, *emit_material(material["records"], transfer_order),
+             *emit_edge(edge, transfer_order),
+             *emit_tint({"kTint": tint, "kRimTint": rim_tint}),
+             *emit_materialize(materialize)]
     arguments.output.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"wrote {arguments.output}")
     return 0

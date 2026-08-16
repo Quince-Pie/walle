@@ -77,6 +77,13 @@ BACKGROUNDS = (
     "yellow-128", "orange", "violet", "red-255", "green-255", "blue-255",
 )
 INTERIOR_RADIUS = 400
+# The element's own radius in SHAPE, and where inside it the rim peaks - see
+# analysis/measure_rim_light.py.  Sampling there instead of the interior fits
+# the same law for the RIM, which needs its own: a tinted rim is nothing like
+# the tint law applied to an untinted one, missing it by ninety code values,
+# because the rim is a separate layer that the tint filters separately.
+ELEMENT_RADIUS = 500.0
+RIM_DEPTH = 0.8
 CLIP_LOW, CLIP_HIGH = 0.5, 254.5
 LUMA = np.array([0.2126, 0.7152, 0.0722])
 
@@ -149,14 +156,20 @@ WIDE = {
 type JsonObject = dict[str, object]
 
 
+# Set once from --region: "interior" reads the disc, "rim" the bright band.
+REGION = "interior"
+
+
 def interior(path: Path) -> np.ndarray | None:
     if not path.exists():
         return None
     pixels = np.asarray(Image.open(path).convert("RGB")).astype(float)
     height, width, _ = pixels.shape
     y, x = np.mgrid[0:height, 0:width]
-    inside = ((x - width // 2) ** 2 + (y - height // 2) ** 2) < INTERIOR_RADIUS**2
-    return pixels[inside].mean(axis=0)
+    distance = np.hypot(x + 0.5 - width / 2.0, y + 0.5 - height / 2.0)
+    picked = (np.abs(distance - (ELEMENT_RADIUS - RIM_DEPTH)) < 0.1
+              if REGION == "rim" else distance < INTERIOR_RADIUS)
+    return pixels[picked].mean(axis=0) if picked.sum() >= 8 else None
 
 
 def substrate_table(shots: Path, variant: str, appearance: str
@@ -345,7 +358,12 @@ def main() -> int:
     # 8-bit tint can carry (0.845, for a one-code difference) is equivalent.
     parser.add_argument("--neutral-chroma", type=float, default=0.5,
                         help="chroma magnitude below which a tint is neutral")
+    parser.add_argument("--region", choices=("interior", "rim"),
+                        default="interior",
+                        help="fit the tint over the element's body or its rim")
     arguments = parser.parse_args()
+    global REGION
+    REGION = arguments.region
 
     colours = {**MID, **LUMINANCE, **SATURATION, **FINE, **EXTRA, **WIDE}
     ladders = {**LUMINANCE, **SATURATION, **FINE, **EXTRA, **WIDE}
@@ -359,6 +377,7 @@ def main() -> int:
     report: JsonObject = {
         "schemaVersion": 2,
         "classification": "Apple Liquid Glass tint law, both variants",
+        "region": arguments.region,
         "osBuild": "25G76",
         "model": ("out = base(tint) + beta(tint) * lumaOf(untinted)"
                   " + gamma(tint) * chromaOf(untinted)"),

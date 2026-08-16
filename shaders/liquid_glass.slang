@@ -5,8 +5,8 @@
 // Two composition paths share this shader:
 //
 //   * the Liquid Glass material (DEFAULT, what users see) - the blurred
-//     backdrop, veil/platter, lens refraction, ring light, glow and contact
-//     shadow, all driven by the reveal mask;
+//     backdrop, veil/platter, lens refraction, the rim inside the boundary and
+//     the shadow outside it, all driven by the reveal mask;
 //   * Apple's measured reveal blend, selected by push.geometry.w != 0 and
 //     used only by the process-capture gate.  The hardware corpus composes
 //     exactly round((mask*incoming + (255-mask)*current) / 255) per channel
@@ -15,9 +15,10 @@
 //
 // Scope of the corpus evidence: it reveals opaque white over opaque black.
 // Uniform sources cannot see a blur or a lens displacement, so its
-// byte-exactness constrains the value-changing terms (veil, tint, ring,
-// glow, shadow, dither); the colour-field corpus is what bears on the
-// spatial ones.
+// byte-exactness constrains the value-changing terms (veil, tint, rim, shadow,
+// dither); the colour-field corpus is what bears on the spatial ones, and the
+// step-edge check (analysis/verify_structured_background.py) is what scores
+// them end to end.
 
 [[vk::binding(0, 0)]] Texture2D<float4> texA;
 [[vk::binding(1, 0)]] Texture2D<float4> texGlassA;
@@ -43,8 +44,9 @@ struct ComposeVertexOutput
 };
 
 static const float kFadeStart = 0.66;
-// Measured exponent of the materialize ease, k = clock^n (residual 0.018).
-static const float kMaterializeEase = 2.36;
+// The materialize ease itself is measured per variant and lives in
+// material_law.slang: it is a delayed power, not a bare one, and `clear` and
+// `regular` do not share it.
 
 
 // --- Measured refraction, macOS 26.6.1 ------------------------------------
@@ -84,34 +86,16 @@ static const float kLensProfileOffset = 12.6207;
 static const float kLensDispersion = 0.0;
 
 
-// Measured on the target M1 from the materialize capture: the specular rim
-// sits in the outermost ~10 px of a 1000 px radius element, i.e. ~0.995 R,
-// not the 0.973 R fitted from HIG photos.
-static const float kRingRadiusFraction = 0.995;
-static const float kRingOffsetFraction = 0.021;
-static const float kRingEdgeWidthFraction = 0.007;
-static const float kRingTopWidthFraction = 0.020;
-// The rim measures +7 sRGB codes over the interior, about 0.032 in linear
-// light at these levels.  walle's HIG-fitted lobes average roughly 0.13
-// azimuthally, so they are scaled to the measured amplitude.  The
-// measurement is an azimuthal mean, so the lobe SHAPE is retained and only
-// its magnitude is corrected.
-static const float kRingGainScale = 0.25;
-static const float kRingUpGain = 0.20 * kRingGainScale;
-static const float kRingDownGain = 0.13 * kRingGainScale;
-static const float kRingBaseGain = 0.04 * kRingGainScale;
-static const float kShadowOffsetFraction = 0.012;
-static const float kShadowPenumbraFraction = 0.035;
-static const float kShadowMinimumPenumbra = 10.0;
-// Measured ABSENT on 26.6.1.  Across the whole materialize timeline the
-// element interior is flat to within 0.4 codes from centre to rim (no
-// glow), and the exterior band just outside the rim reads +0.5 codes
-// against a background that never darkens (no contact shadow).  Both were
-// fitted from HIG photos rather than measured.  The code paths are kept so
-// the measurement stays auditable and either can be restored if a future
-// build reintroduces them.
-static const float kShadowBase = 0.0;
-static const float kGlowIntensity = 0.0;
+// The specular ring, the glow and the contact shadow that used to sit here
+// were all fitted from Human Interface Guidelines photographs, and all three
+// are gone.  The ring's directional lobes describe an angular structure the
+// hardware does not have - measured across twelve sectors and 1677 frames, the
+// rim varies by a median 2.7% of its own excess - and the glow and the shadow
+// had been zeroed after a materialize capture read them as absent.  Rendering
+// walle back against a step edge is what showed the shadow is NOT absent: it
+// is a 4.3% darkening in light and 7.6% in dark, reaching 80 capture pixels.
+// The rim and the shadow are now measured laws in material_law.slang; see
+// analysis/measure_rim_light.py.
 
 static const float kDitherLsb = 1.0 / 255.0;
 static const float3 kLuma = float3(0.2126, 0.7152, 0.0722);
@@ -149,6 +133,61 @@ float3 materialTransfer(float3 backdropSrgb, WalleMaterialTransfer transfer)
     for (int index = 0; index < kTransferTermCount; ++index)
         mixed += transfer.terms[index] * terms[index];
     return saturate(mixed);
+}
+
+// The element's EDGE, measured rather than modelled.
+//
+// walle used to carry a directional specular ring - an up lobe, a down lobe, a
+// base gain and an offset centre, all fitted from Human Interface Guidelines
+// photographs - and a shadow whose base had been zeroed.  Rendering both back
+// against a capture is what retired them: Apple's rim is ISOTROPIC to a median
+// 2.7% of its own excess across twelve sectors and 1677 frames, so there is no
+// lobe to describe, and `regular` casts a real shadow that reaches 80 px.
+//
+// Both are now the same shape as everything else here: a colour law on the
+// backdrop, weighted by a measured profile of depth.
+float3 edgeTransfer(float3 backdropSrgb, float3 terms[kTransferTermCount])
+{
+    float basis[kTransferTermCount];
+    walleTransferBasis(saturate(backdropSrgb), basis);
+    float3 mixed = float3(0.0);
+    for (int index = 0; index < kTransferTermCount; ++index)
+        mixed += terms[index] * basis[index];
+    return saturate(mixed);
+}
+
+// depth is measured INSIDE the boundary, in capture pixels at 2x.
+float rimWeight(float depth, WalleEdge edge)
+{
+    if (depth < 0.0)
+        return 0.0;
+    float position = (depth - kRimProfileStart) / kRimProfileStep;
+    if (position <= 0.0)
+        return edge.rimWeight[0];
+    int index = int(floor(position));
+    if (index >= kRimProfileCount - 1)
+        return 0.0;
+    return lerp(edge.rimWeight[index], edge.rimWeight[index + 1],
+                position - float(index));
+}
+
+// depth is measured OUTSIDE the boundary, in capture pixels at 2x.  The
+// samples are not evenly spaced - the shadow is read densely where it changes
+// and sparsely where it trails off - so this walks them.
+float shadowWeight(float depth, WalleEdge edge)
+{
+    if (depth <= kShadowDepthPixels[0])
+        return edge.shadowWeight[0];
+    for (int index = 0; index < kShadowProfileCount - 1; ++index)
+    {
+        if (depth < kShadowDepthPixels[index + 1])
+        {
+            float span = kShadowDepthPixels[index + 1] - kShadowDepthPixels[index];
+            return lerp(edge.shadowWeight[index], edge.shadowWeight[index + 1],
+                        (depth - kShadowDepthPixels[index]) / span);
+        }
+    }
+    return 0.0;
 }
 
 float linearToSrgb(float value)
@@ -312,18 +351,22 @@ float4 composeFragment(
     float2 centerTopLeft = push.geometry.xy;
     float radiusPixels = push.geometry.z;
 
-    // Two separate laws, both measured, and they compose:
+    // How the material ARRIVES, measured across 61 frames of each of the four
+    // materials against the rig's own raster clock.
     //
-    //   inputFaceOpacity == the visible fraction k, EXACTLY (deviation 0 over
-    //   33 states, both materials, both appearances) - so the material's
-    //   presence is linear in k;
+    // It is a CROSSFADE.  One alpha per frame explains the whole frame to 1.5
+    // code values - and that is the discriminator, because a ramping blur
+    // radius could not: over a structured backdrop a pixel in fine detail
+    // would reach the material sooner than one on a plateau, and none do.
+    // So thickness is applied ONCE, at the end, between the sharp backdrop and
+    // the finished material.  It used to be threaded through the blur, the
+    // refraction and the transfer separately, which is a different function of
+    // k with the same endpoints.
     //
-    //   k itself is a strongly eased function of the animation clock.
-    //   Decoding the rendered pixels of Apple's materialize capture (12
-    //   frames, clear/light, coded-field backdrop) gives k = clock^2.36 with
-    //   a maximum residual of 0.018 of full scale.  Linear-in-clock misses by
-    //   0.32 and walle's original smoothstep(0, 0.12) by 0.36 - it was the
-    //   worst of every candidate tried.
+    // The curve is a delayed power, and the delay is not decoration: with one
+    // the fit is 0.7% of full scale, without it 1.6%.  Both constants are per
+    // VARIANT, which the old single exponent could not be - `clear` eases on
+    // clock squared and `regular` on clock^1.68.
     //
     // walle's `time` is a linear clock, so the ease belongs here.
     float tFade = saturate((time - kFadeStart) / (1.0 - kFadeStart));
@@ -331,8 +374,13 @@ float4 composeFragment(
     // clock runs 0..1 across its materialize, whereas walle materializes over
     // [0, kFadeStart) and then fades.  Easing over the full timeline instead
     // caps the material at 0.37 thickness before the fade begins.
-    float thickness = pow(saturate(time / kFadeStart), kMaterializeEase)
-                      * (1.0 - tFade);
+    WalleMaterialize arrival = kMaterializeClear;
+    if (regular > 0.5)
+        arrival = kMaterializeRegular;
+    float clock = saturate(time / kFadeStart);
+    float thickness = pow(
+        saturate((clock - arrival.delay) / (1.0 - arrival.delay)),
+        arrival.exponent) * (1.0 - tFade);
 
     // Express the material in the original bottom-left pixel coordinates while
     // Vulkan resources and mask storage remain naturally top-left.
@@ -347,10 +395,12 @@ float4 composeFragment(
     float2 normalOut = distancePixels > 0.5 ? delta / distancePixels : float2(0.0, 1.0);
     float mask = float(revealMask.Load(int3(int2(fragmentTopLeft), 0))) / 255.0;
 
-    float shadowOffset = kShadowOffsetFraction * radiusPixels;
-    float shadowPenumbra = max(kShadowPenumbraFraction * radiusPixels, kShadowMinimumPenumbra);
+    // The measured shadow reaches kShadowDepthPixels[last] CAPTURE pixels
+    // beyond the boundary, and nothing past that is touched.
+    float lensUnit = max(push.scaling.x, 1.0) / kLensCaptureScale;
+    float shadowReachPixels = kShadowDepthPixels[kShadowProfileCount - 1] * lensUnit;
 
-    if (mask <= 0.0 && sdf > shadowOffset + shadowPenumbra + 8.0)
+    if (mask <= 0.0 && sdf > shadowReachPixels + 2.0)
         return float4(linearToSrgb(texA.Sample(linearSampler, input.uv).rgb), 1.0);
 
     float2 uv = input.uv;
@@ -362,9 +412,11 @@ float4 composeFragment(
     // regular's maximum exactly 4x clear's).  texGlassB already carries the
     // fully materialized backdrop at the measured radii, so the ramp is the
     // opening from the sharp source to it as the material thickens.
+    // At FULL radius: under a crossfade the material's own backdrop is the
+    // finished blur, and `thickness` blends the finished material against the
+    // sharp source once, at the end.
     float3 sharpIncoming = texB.Sample(linearSampler, uv).rgb;
-    float3 blurredIncoming = lerp(
-        sharpIncoming, texGlassB.Sample(linearSampler, uv).rgb, thickness);
+    float3 blurredIncoming = texGlassB.Sample(linearSampler, uv).rgb;
     // Apple selects the material's appearance pole from the SYSTEM
     // appearance, and so does walle: config, then the desktop portal, then
     // dark.  The nine-tap content-luminance wash that used to stand in for it
@@ -376,15 +428,6 @@ float4 composeFragment(
     // pole wrong: regular over black reads 179 (light) against 15 (dark).
     float lightness = saturate(push.material.x);
 
-    float shadowSdf = distance(
-        fragmentPixels - float2(0.0, -shadowOffset),
-        centerPixels) - radiusPixels;
-    float penumbra = 1.0 - smoothstep(0.0, shadowPenumbra, shadowSdf);
-    float backgroundLuma = dot(texGlassA.Sample(linearSampler, input.uv).rgb, kLuma);
-    float shadowAdaptation = lerp(1.25, 0.60, smoothstep(0.03, 0.35, backgroundLuma));
-    float shadowAlpha = penumbra * kShadowBase * shadowAdaptation
-        * regular * (1.0 - lightness) * (1.0 - mask) * thickness;
-
     // Measured on 26.6.1: inputOuterRefractionHeight is exactly 0.125 of the
     // element diameter (0.25 R) at every size probed from 455 to 4328, with
     // no dependence on the window diagonal.  walle used 0.44 R capped by
@@ -392,9 +435,23 @@ float4 composeFragment(
     // is not.  The displacement profile below is unchanged; only the band
     // width is corrected.
     // Capture pixels per output pixel: the measurement is in 2x capture pixels
-    // and the output is `scale` device pixels per point.
-    float lensUnit = max(push.scaling.x, 1.0) / kLensCaptureScale;
+    // and the output is `scale` device pixels per point.  lensUnit is computed
+    // with the early-out above, which needs the shadow's reach in the same
+    // units.
     float insideRim = (radiusPixels - distancePixels) / lensUnit;
+
+    // The edge's own laws, for this variant.  `clear` casts no shadow and its
+    // fitted law is the identity, so the branch is only about which numbers
+    // are read, not about which code runs.
+    WalleEdge edgeDark = kEdgeClearDark;
+    WalleEdge edgeLight = kEdgeClearLight;
+    if (regular > 0.5)
+    {
+        edgeDark = kEdgeRegularDark;
+        edgeLight = kEdgeRegularLight;
+    }
+    float rimBlend = lerp(rimWeight(insideRim, edgeDark),
+                          rimWeight(insideRim, edgeLight), lightness);
 
     float3 glassColor;
     if (regular > 0.5)
@@ -411,7 +468,15 @@ float4 composeFragment(
         float3 platterSrgb = lerp(platterDark, platterLight, lightness);
         platterSrgb = applyTint(platterSrgb, push.material.yzw, lightness,
                                 kTintRegularDark, kTintRegularLight);
-        glassColor = lerp(blurredIncoming, srgbToLinear(platterSrgb), thickness);
+        // The rim is a separate layer with its own colour law AND its own tint
+        // law: a tinted rim is nothing like the interior's tint applied to an
+        // untinted one, missing it by ninety code values.
+        float3 rimSrgb = lerp(edgeTransfer(washSrgb, edgeDark.rim),
+                              edgeTransfer(washSrgb, edgeLight.rim), lightness);
+        rimSrgb = applyTint(rimSrgb, push.material.yzw, lightness,
+                            kRimTintRegularDark, kRimTintRegularLight);
+        platterSrgb = lerp(platterSrgb, rimSrgb, rimBlend);
+        glassColor = srgbToLinear(platterSrgb);
     }
     else
     {
@@ -426,7 +491,7 @@ float4 composeFragment(
         float remaining = max(kLensBandCapturePixels - inside, 0.0);
         float bend = lensUnit * kLensAmplitude * pow(remaining, kLensProfilePower)
             / (inside + kLensProfileOffset)
-            * thickness * step(0.0, insideRim);
+            * step(0.0, insideRim);
         float2 displacementUv = -float2(normalOut.x, -normalOut.y) * bend * pixelToUv;
 
         // The refraction displaces the backdrop the material samples, which is
@@ -439,46 +504,40 @@ float4 composeFragment(
         lensed.y = texGlassB.Sample(linearSampler, uv + displacementUv).g;
         lensed.z = texGlassB.Sample(
             linearSampler, uv + displacementUv * (1.0 - kLensDispersion)).b;
-        float3 pre = lerp(sharpIncoming, lensed, thickness);
-        float3 preSrgb = linearToSrgb(pre);
+        float3 preSrgb = linearToSrgb(lensed);
         // Measured 26.6.1 clear: one colour matrix, IDENTICAL in both
         // appearances (the gray ladder matches to the code across light and
-        // dark), so no appearance interpolation here.  `thickness` still
-        // ramps it in over the materialize window.
+        // dark), so no appearance interpolation here.
         float3 veiled = materialTransfer(preSrgb, kMaterialClearDark);
         veiled = applyTint(veiled, push.material.yzw, lightness,
                            kTintClearDark, kTintClearLight);
-        glassColor = srgbToLinear(lerp(preSrgb, veiled, thickness));
+        // `clear`'s rim reaches 130 code values above its interior over black,
+        // the largest edge either variant carries.
+        float3 rimSrgb = lerp(edgeTransfer(preSrgb, edgeDark.rim),
+                              edgeTransfer(preSrgb, edgeLight.rim), lightness);
+        rimSrgb = applyTint(rimSrgb, push.material.yzw, lightness,
+                            kRimTintClearDark, kRimTintClearLight);
+        veiled = lerp(veiled, rimSrgb, rimBlend);
+        glassColor = srgbToLinear(veiled);
     }
 
-    float2 ringCenter = centerPixels - float2(0.0, kRingOffsetFraction * radiusPixels);
-    float2 ringDelta = fragmentPixels - ringCenter;
-    float ringDistance = length(ringDelta);
-    float2 ringNormal = ringDistance > 0.5 ? ringDelta / ringDistance : float2(0.0, 1.0);
-    float ringSdf = ringDistance - kRingRadiusFraction * radiusPixels;
-    float edgeWidth = clamp(kRingEdgeWidthFraction * radiusPixels, 1.25, 5.0);
-    float topWidth = clamp(kRingTopWidthFraction * radiusPixels, 3.0, 24.0);
-    float ringWidth = lerp(edgeWidth, topWidth, smoothstep(0.0, 1.0, max(ringNormal.y, 0.0)));
-    float ringProfile = exp(-(ringSdf * ringSdf) / (ringWidth * ringWidth));
-
-    float angle = radians(125.0) - radians(30.0) * time;
-    float2 light = float2(cos(angle), sin(angle));
-    float normalDot = dot(ringNormal, light);
-    float lobes = kRingBaseGain
-        + kRingUpGain * pow(max(normalDot, 0.0), 1.6)
-        + kRingDownGain * pow(max(-normalDot, 0.0), 2.0);
-    float3 ringLight = float3(ringProfile * lobes * thickness * mask);
-
-    float glowTime = thickness * (1.0 - smoothstep(0.18, 0.55, time));
-    float glow = exp(
-        -(distancePixels * distancePixels)
-        / max(radiusPixels * radiusPixels * 0.45, 1.0));
-    glassColor += float3(glow * glowTime * kGlowIntensity * lerp(0.5, 1.0, regular));
-
+    // The crossfade, applied once: sharp backdrop to finished material.
+    glassColor = lerp(sharpIncoming, glassColor, thickness);
     float3 incoming = texB.Sample(linearSampler, input.uv).rgb;
-    float3 insideColor = lerp(glassColor + ringLight, incoming, tFade);
+    float3 insideColor = lerp(glassColor, incoming, tFade);
     float3 background = texA.Sample(linearSampler, input.uv).rgb;
-    float3 shadowedBackground = background * (1.0 - shadowAlpha);
+    // The measured shadow: a colour law on the raw backdrop, weighted by depth
+    // outside the boundary and by how far the material has materialized.
+    // `clear` casts none, and its fitted law is the identity, so this costs it
+    // nothing but the evaluation.
+    float3 backgroundSrgb = linearToSrgb(background);
+    float3 shadowSrgb = lerp(
+        edgeTransfer(backgroundSrgb, edgeDark.shadow),
+        edgeTransfer(backgroundSrgb, edgeLight.shadow), lightness);
+    float shadowBlend = lerp(shadowWeight(-insideRim, edgeDark),
+                             shadowWeight(-insideRim, edgeLight), lightness);
+    float3 shadowedBackground = srgbToLinear(lerp(
+        backgroundSrgb, shadowSrgb, shadowBlend * thickness));
     float3 result = lerp(shadowedBackground, insideColor, mask);
 
     float3 encoded = linearToSrgb(clamp(result, 0.0, 1.0));
