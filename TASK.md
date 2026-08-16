@@ -5168,3 +5168,38 @@ before: walle's element is centred at (512, 614.4), NOT at the middle of its
 canvas.  A backdrop centred on the canvas and compared across its own width
 reads pixels outside the element - it scored 152 code values until the element
 was made to cover the canvas, after which the same law scored 2.34.
+
+## 2026-08-16 (later 175): THE CROSSFADE IS IN CODE SPACE TOO
+
+The materialize matched at both ENDS and drifted by up to 36 code values in
+between, which is the signature of the right curve applied in the wrong space.
+Measuring walle's own effective thickness against the hardware's says it
+outright:
+
+    clock   walle   hardware   drift
+    0.25    0.102     0.056    +0.047
+    0.55    0.428     0.303    +0.126
+    0.85    0.807     0.723    +0.084
+
+The shipped constants were not the problem: the formula gives 0.061, 0.316 and
+0.717 at those clocks, which is the hardware's curve almost exactly.  walle was
+evaluating the lerp on LINEAR values and encoding afterwards, and a linear-light
+fade runs ahead of a code-space one by exactly that much.
+
+It should have been code space from the start, and the measurement said so:
+alpha was measured as the code-space ratio (frame - backdrop) / (settled -
+backdrop), and one alpha per frame explains a whole frame to 1.5 code values
+THERE.  The transfer, the blur and the tint were all measured in sRGB code
+space as well; the crossfade was the only stage anywhere else.
+
+    materialize, worst over every clock and material:  38  ->  14 code values
+
+    regular light   rms 1.14 to 11.06  ->  0.81 to 2.41
+    regular dark    rms 1.10 to  9.74  ->  0.85 to 1.90
+    clear   both    rms 0.62 to  1.20  ->  unchanged
+
+`clear` hid it: its two endpoints sit close together, so the space the fade
+happens in barely matters, and it read 3 to 5 code values throughout either way.
+
+Nothing at full thickness moves - lerp(a, b, 1) is b in any space - so the step
+edges, the flat backgrounds and both reveal gates are untouched by this.

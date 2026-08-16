@@ -528,8 +528,15 @@ float4 composeFragment(
         glassColor = srgbToLinear(veiled);
     }
 
-    // The crossfade, applied once: sharp backdrop to finished material.
-    glassColor = lerp(sharpIncoming, glassColor, thickness);
+    // The crossfade, applied once: sharp backdrop to finished material, in
+    // sRGB CODE space.  That is where it was measured - alpha is the code-space
+    // ratio (frame - backdrop) / (settled - backdrop), and one alpha per frame
+    // explains the whole frame to 1.5 code values there - and it is the space
+    // the transfer, the blur and the tint were all measured in too.  Fading in
+    // linear light instead runs AHEAD of the hardware by up to 0.13 of full
+    // scale mid-animation, which is 36 code values over a structured backdrop.
+    glassColor = srgbToLinear(lerp(linearToSrgb(sharpIncoming),
+                                   linearToSrgb(glassColor), thickness));
     float3 incoming = texB.Sample(linearSampler, input.uv).rgb;
     float3 insideColor = lerp(glassColor, incoming, tFade);
     float3 background = texA.Sample(linearSampler, input.uv).rgb;
