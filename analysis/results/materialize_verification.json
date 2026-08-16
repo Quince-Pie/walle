@@ -9,70 +9,70 @@
           "frame": 9,
           "maximumCodes": 6.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.102
+          "rootMeanSquareCodes": 1.052
         },
         {
           "clock": 0.250977,
           "frame": 15,
-          "maximumCodes": 18.0,
+          "maximumCodes": 17.0,
           "medianAbsoluteCodes": 3.0,
-          "rootMeanSquareCodes": 4.374
+          "rootMeanSquareCodes": 3.97
         },
         {
           "clock": 0.350586,
           "frame": 21,
-          "maximumCodes": 26.0,
-          "medianAbsoluteCodes": 5.0,
-          "rootMeanSquareCodes": 6.853
+          "maximumCodes": 25.0,
+          "medianAbsoluteCodes": 4.0,
+          "rootMeanSquareCodes": 6.122
         },
         {
           "clock": 0.451172,
           "frame": 27,
-          "maximumCodes": 32.0,
-          "medianAbsoluteCodes": 7.0,
-          "rootMeanSquareCodes": 9.199
+          "maximumCodes": 30.0,
+          "medianAbsoluteCodes": 6.0,
+          "rootMeanSquareCodes": 8.159
         },
         {
           "clock": 0.550781,
           "frame": 33,
-          "maximumCodes": 36.0,
-          "medianAbsoluteCodes": 9.0,
-          "rootMeanSquareCodes": 11.153
+          "maximumCodes": 34.0,
+          "medianAbsoluteCodes": 7.0,
+          "rootMeanSquareCodes": 9.839
         },
         {
           "clock": 0.651367,
           "frame": 39,
-          "maximumCodes": 35.0,
-          "medianAbsoluteCodes": 9.0,
-          "rootMeanSquareCodes": 11.4
+          "maximumCodes": 32.0,
+          "medianAbsoluteCodes": 8.0,
+          "rootMeanSquareCodes": 9.866
         },
         {
           "clock": 0.750977,
           "frame": 45,
-          "maximumCodes": 30.0,
-          "medianAbsoluteCodes": 9.0,
-          "rootMeanSquareCodes": 10.528
+          "maximumCodes": 28.0,
+          "medianAbsoluteCodes": 7.0,
+          "rootMeanSquareCodes": 8.854
         },
         {
           "clock": 0.850586,
           "frame": 51,
           "maximumCodes": 22.0,
-          "medianAbsoluteCodes": 7.0,
-          "rootMeanSquareCodes": 7.876
+          "medianAbsoluteCodes": 5.0,
+          "rootMeanSquareCodes": 6.439
         },
         {
           "clock": 0.951172,
           "frame": 57,
-          "maximumCodes": 26.0,
-          "medianAbsoluteCodes": 6.0,
-          "rootMeanSquareCodes": 7.654
+          "maximumCodes": 28.0,
+          "medianAbsoluteCodes": 5.0,
+          "rootMeanSquareCodes": 6.675
         },
         {
           "clock": 1.0,
           "frame": 60,
-          "maximumCodes": 30.0,
-          "medianAbsoluteCodes": 5.0,
-          "rootMeanSquareCodes": 7.648
+          "maximumCodes": 32.0,
+          "medianAbsoluteCodes": 4.0,
+          "rootMeanSquareCodes": 7.339
         }
       ],
       "id": "materialize__regular__light"
@@ -91,7 +91,7 @@
           "frame": 15,
           "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 0.822
+          "rootMeanSquareCodes": 0.826
         },
         {
           "clock": 0.355469,
@@ -105,49 +105,49 @@
           "frame": 27,
           "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 0.914
+          "rootMeanSquareCodes": 0.855
         },
         {
           "clock": 0.555664,
           "frame": 33,
           "maximumCodes": 4.0,
-          "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 0.946
+          "medianAbsoluteCodes": 0.0,
+          "rootMeanSquareCodes": 0.797
         },
         {
           "clock": 0.647461,
           "frame": 39,
           "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.152
+          "rootMeanSquareCodes": 0.868
         },
         {
           "clock": 0.74707,
           "frame": 45,
-          "maximumCodes": 4.0,
-          "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.116
+          "maximumCodes": 3.0,
+          "medianAbsoluteCodes": 0.0,
+          "rootMeanSquareCodes": 0.761
         },
         {
           "clock": 0.847656,
           "frame": 51,
-          "maximumCodes": 5.0,
+          "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.456
+          "rootMeanSquareCodes": 0.8
         },
         {
           "clock": 0.956055,
           "frame": 57,
-          "maximumCodes": 5.0,
+          "maximumCodes": 3.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.471
+          "rootMeanSquareCodes": 0.798
         },
         {
           "clock": 1.0,
           "frame": 60,
-          "maximumCodes": 5.0,
+          "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.182
+          "rootMeanSquareCodes": 1.089
         }
       ],
       "id": "materialize__clear__light"
@@ -159,70 +159,70 @@
           "frame": 9,
           "maximumCodes": 5.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.073
+          "rootMeanSquareCodes": 1.095
         },
         {
           "clock": 0.248047,
           "frame": 15,
           "maximumCodes": 6.0,
-          "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.781
+          "medianAbsoluteCodes": 2.0,
+          "rootMeanSquareCodes": 1.922
         },
         {
           "clock": 0.347656,
           "frame": 21,
           "maximumCodes": 9.0,
           "medianAbsoluteCodes": 3.0,
-          "rootMeanSquareCodes": 2.892
+          "rootMeanSquareCodes": 3.211
         },
         {
           "clock": 0.448242,
           "frame": 27,
-          "maximumCodes": 12.0,
-          "medianAbsoluteCodes": 4.0,
-          "rootMeanSquareCodes": 4.836
+          "maximumCodes": 13.0,
+          "medianAbsoluteCodes": 5.0,
+          "rootMeanSquareCodes": 5.389
         },
         {
           "clock": 0.547852,
           "frame": 33,
-          "maximumCodes": 16.0,
-          "medianAbsoluteCodes": 6.0,
-          "rootMeanSquareCodes": 6.45
+          "maximumCodes": 17.0,
+          "medianAbsoluteCodes": 7.0,
+          "rootMeanSquareCodes": 7.283
         },
         {
           "clock": 0.65625,
           "frame": 39,
-          "maximumCodes": 19.0,
-          "medianAbsoluteCodes": 6.0,
-          "rootMeanSquareCodes": 7.137
+          "maximumCodes": 20.0,
+          "medianAbsoluteCodes": 8.0,
+          "rootMeanSquareCodes": 8.345
         },
         {
           "clock": 0.748047,
           "frame": 45,
-          "maximumCodes": 21.0,
-          "medianAbsoluteCodes": 7.0,
-          "rootMeanSquareCodes": 7.64
+          "maximumCodes": 22.0,
+          "medianAbsoluteCodes": 8.0,
+          "rootMeanSquareCodes": 9.271
         },
         {
           "clock": 0.847656,
           "frame": 51,
-          "maximumCodes": 22.0,
-          "medianAbsoluteCodes": 6.0,
-          "rootMeanSquareCodes": 7.537
+          "maximumCodes": 23.0,
+          "medianAbsoluteCodes": 9.0,
+          "rootMeanSquareCodes": 9.819
         },
         {
           "clock": 0.948242,
           "frame": 57,
-          "maximumCodes": 16.0,
-          "medianAbsoluteCodes": 2.0,
-          "rootMeanSquareCodes": 3.006
+          "maximumCodes": 19.0,
+          "medianAbsoluteCodes": 4.0,
+          "rootMeanSquareCodes": 5.388
         },
         {
           "clock": 0.998047,
           "frame": 60,
-          "maximumCodes": 14.0,
-          "medianAbsoluteCodes": 3.0,
-          "rootMeanSquareCodes": 4.301
+          "maximumCodes": 16.0,
+          "medianAbsoluteCodes": 2.0,
+          "rootMeanSquareCodes": 2.972
         }
       ],
       "id": "materialize__regular__dark"
@@ -234,75 +234,75 @@
           "frame": 9,
           "maximumCodes": 4.0,
           "medianAbsoluteCodes": 0.0,
-          "rootMeanSquareCodes": 0.632
+          "rootMeanSquareCodes": 0.631
         },
         {
           "clock": 0.254883,
           "frame": 15,
           "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 0.823
+          "rootMeanSquareCodes": 0.821
         },
         {
           "clock": 0.34668,
           "frame": 21,
           "maximumCodes": 4.0,
           "medianAbsoluteCodes": 0.0,
-          "rootMeanSquareCodes": 0.8
+          "rootMeanSquareCodes": 0.791
         },
         {
           "clock": 0.446289,
           "frame": 27,
           "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 0.907
+          "rootMeanSquareCodes": 0.838
         },
         {
           "clock": 0.545898,
           "frame": 33,
           "maximumCodes": 4.0,
           "medianAbsoluteCodes": 0.0,
-          "rootMeanSquareCodes": 0.796
+          "rootMeanSquareCodes": 0.727
         },
         {
           "clock": 0.646484,
           "frame": 39,
-          "maximumCodes": 5.0,
+          "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.126
+          "rootMeanSquareCodes": 0.853
         },
         {
           "clock": 0.754883,
           "frame": 45,
-          "maximumCodes": 5.0,
+          "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.353
+          "rootMeanSquareCodes": 0.863
         },
         {
           "clock": 0.854492,
           "frame": 51,
-          "maximumCodes": 5.0,
-          "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.397
+          "maximumCodes": 4.0,
+          "medianAbsoluteCodes": 0.0,
+          "rootMeanSquareCodes": 0.781
         },
         {
           "clock": 0.954102,
           "frame": 57,
-          "maximumCodes": 5.0,
+          "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.395
+          "rootMeanSquareCodes": 0.817
         },
         {
           "clock": 0.996094,
           "frame": 60,
-          "maximumCodes": 5.0,
+          "maximumCodes": 4.0,
           "medianAbsoluteCodes": 1.0,
-          "rootMeanSquareCodes": 1.338
+          "rootMeanSquareCodes": 0.943
         }
       ],
       "id": "materialize__clear__dark"
     }
   ],
   "schemaVersion": 1,
-  "worstCodes": 36.0
+  "worstCodes": 34.0
 }

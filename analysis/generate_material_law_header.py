@@ -370,10 +370,18 @@ def emit_materialize(report) -> list[str]:
     percent of full scale to 0.7, which is the crossfade's own floor.
     """
     lines = [
-        "// alpha = clamp((clock - delay) / (1 - delay)) ** exponent, and the",
+        "// alpha = clamp((clock - delay) / (end - delay)) ** exponent, and the",
         "// material is lerp(sharp backdrop, finished material, alpha).",
+        "//",
+        "// `end` is past one, by two to three and a half percent: measured",
+        "// against the SETTLED material rather than the animation's last",
+        "// frame, the curve has not finished when the rig's clock does.  It is",
+        "// a small number that matters - forcing a curve that ends at clock one",
+        "// onto data that has not takes the fit from 0.005 of full scale to",
+        "// 0.020 and collapses the delay to zero.",
         "struct WalleMaterialize\n{",
         "    float delay;",
+        "    float end;",
         "    float exponent;",
         "};\n",
     ]
@@ -384,7 +392,8 @@ def emit_materialize(report) -> list[str]:
             f"rms / {entry['maximumOfAlpha']} max of full scale.")
         lines.append(
             f"static const WalleMaterialize kMaterialize{variant.capitalize()}"
-            f" = {{ {entry['delay']: .6f}, {entry['exponent']: .6f} }};\n")
+            f" = {{ {entry['delay']: .6f}, {entry['endClock']: .6f},"
+            f" {entry['exponent']: .6f} }};\n")
     return lines
 
 

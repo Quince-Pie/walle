@@ -4947,3 +4947,48 @@ Fitting three layers against both instruments at once is what decides it: if
 three satisfy both, the two-layer model was too coarse; if nothing does, the
 mechanism is not a convolution at all - a mip cascade is not shift-invariant -
 and that is a different kind of answer.
+
+## 2026-08-15 (later 170): THE LAST FRAME IS NOT THE SETTLED MATERIAL
+
+Every fit against the materialize corpus took its last animation frame as the
+finished material.  It is not: the rig captures a post-settle frame after each
+sequence, and for `regular` in light the two differ by 4.08 code values rms.
+
+Scoring the shipped kernel against the settled frame instead:
+
+                        last frame      post-settle
+    clear   light       1.534 rms       0.580
+    clear   dark        1.913           0.580
+    regular dark        4.568           2.615
+    regular light       7.702           8.075
+
+`clear` lands at 0.580 - the same figure the flat backgrounds report, so its
+kernel is exact over structured content too - and the remaining problem is
+`regular`, and mostly `regular` in LIGHT.
+
+The thickness curve needed a third parameter for the same reason.  Measured
+against the settled material the curve has not finished when the rig's clock
+does - alpha is 0.81 at clock 0.9 - because Apple's transition outlives the
+window the rig animates over.  Forcing a curve that ends at clock one onto data
+that has not finished there collapses the delay to zero and takes the fit from
+0.005 of full scale to 0.020.  With an `end` past one:
+
+    clear     delay 0.1250   end 1.0350   exponent 1.900   rms 0.00473
+    regular   delay 0.0650   end 1.0200   exponent 1.700   rms 0.00724
+
+END TO END, walle rendered at the hardware's own clock values:
+
+    clear   light   rms 0.62 to 1.09,  worst 3 to 5 code values, every clock
+    clear   dark    rms 0.63 to 0.94,  worst 4
+    regular light   rms 1.05 to 9.87,  worst 34
+    regular dark    rms 1.09 to 9.82,  worst 23
+
+`clear`'s materialize is finished.  `regular`'s is the kernel, and nothing else.
+
+Two other things this cost, both worth remembering.  Caching a full 2048x2048
+blur per candidate sigma is 100 MB a time and it OOM-killed the machine; the
+search only ever scores a fixed subsample and mixing is linear, so caching the
+SAMPLED pixels is the same arithmetic at a thousandth of the memory.  And
+`pkill -f <pattern>` matches the shell running it whenever the pattern appears
+anywhere in the command line - it killed three of these runs, including one
+that had already finished the work.

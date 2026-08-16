@@ -50,12 +50,25 @@ def read(root: Path, entry: JsonObject) -> np.ndarray:
         Image.open(root / str(entry["file"])).convert("RGB")).astype(float)
 
 
+def settled(root: Path, sequence: JsonObject) -> np.ndarray:
+    """The material after the animation has finished.
+
+    The last ANIMATION frame is not it - for `regular` in light the two differ
+    by 4.1 code values rms - and taking it as alpha = 1 would scale every alpha
+    in the sequence by however short of finished that frame was.
+    """
+    post = root / "dynamic" / str(sequence["id"]) / "post-settle.png"
+    if post.exists():
+        return np.asarray(Image.open(post).convert("RGB")).astype(float)
+    return read(root, sequence["frames"][-1])
+
+
 def measure(root: Path, sequence: JsonObject) -> JsonObject | None:
     frames = sequence["frames"]
     if len(frames) < 8:
         return None
     backdrop = read(root, frames[0])
-    final = read(root, frames[-1])
+    final = settled(root, sequence)
     span = final - backdrop
     # The rig renders a raster CLOCK into every frame - that is how a
     # transition nobody can step gets timed - and the manifest says where.  It
@@ -112,16 +125,27 @@ def measure(root: Path, sequence: JsonObject) -> JsonObject | None:
                           for s in middle])
         residual = round(float(np.abs(error).max()), 5)
 
+    # Three numbers, and the third is not optional.  Measured against the
+    # SETTLED material the curve does not reach one by the time the rig's clock
+    # does - alpha is 0.81 at clock 0.9 - because Apple's transition outlives
+    # the window the rig animates over.  Forcing a curve that ends at clock one
+    # onto data that has not finished there distorts the whole shape: the fit
+    # goes from 0.012 of full scale to 0.044 and the delay collapses to zero.
     clock = np.array([s["clock"] for s in samples])
     alpha = np.array([s["alpha"] for s in samples])
     delayed = None
     for guess_delay in np.arange(0.0, 0.351, 0.005):
-        for guess_power in np.arange(1.0, 5.001, 0.02):
-            eased = np.clip((clock - guess_delay) / (1.0 - guess_delay),
-                            0.0, 1.0) ** guess_power
-            value = float(np.sqrt(((eased - alpha) ** 2).mean()))
-            if delayed is None or value < delayed[0]:
-                delayed = (value, guess_delay, guess_power, eased)
+        for guess_end in np.arange(1.0, 1.801, 0.01):
+            span = guess_end - guess_delay
+            if span <= 0.05:
+                continue
+            base = np.clip((clock - guess_delay) / span, 0.0, 1.0)
+            for guess_power in np.arange(1.0, 5.001, 0.02):
+                eased = base ** guess_power
+                value = float(np.sqrt(((eased - alpha) ** 2).mean()))
+                if delayed is None or value < delayed[0]:
+                    delayed = (value, guess_delay, guess_power, eased,
+                               guess_end)
     return {
         "id": sequence["id"],
         "overlay": sequence["overlay"],
@@ -132,6 +156,7 @@ def measure(root: Path, sequence: JsonObject) -> JsonObject | None:
         "exponent": round(exponent, 4) if exponent is not None else None,
         "maximumResidualOfAlpha": residual,
         "delaySeconds": round(delayed[1], 4),
+        "endClock": round(delayed[4], 4),
         "delayedExponent": round(delayed[2], 4),
         "delayedRootMeanSquareOfAlpha": round(delayed[0], 5),
         "delayedMaximumOfAlpha": round(
@@ -195,23 +220,28 @@ def main() -> int:
         alpha = np.concatenate([[s["alpha"] for s in r["samples"]]
                                 for r in picked])
         best = None
-        for delay in np.arange(0.0, 0.351, 0.0025):
-            for power in np.arange(1.0, 5.001, 0.01):
-                eased = np.clip((clock - delay) / (1.0 - delay),
-                                0.0, 1.0) ** power
-                value = float(np.sqrt(((eased - alpha) ** 2).mean()))
-                if best is None or value < best[0]:
-                    best = (value, delay, power, eased)
+        for delay in np.arange(0.0, 0.351, 0.005):
+            for end in np.arange(1.0, 1.801, 0.005):
+                span = end - delay
+                if span <= 0.05:
+                    continue
+                base = np.clip((clock - delay) / span, 0.0, 1.0)
+                for power in np.arange(1.0, 5.001, 0.02):
+                    eased = base ** power
+                    value = float(np.sqrt(((eased - alpha) ** 2).mean()))
+                    if best is None or value < best[0]:
+                        best = (value, delay, power, eased, end)
         variants[variant] = {
             "sequenceCount": len(picked),
             "sampleCount": int(len(clock)),
             "delay": round(best[1], 4),
+            "endClock": round(best[4], 4),
             "exponent": round(best[2], 4),
             "rootMeanSquareOfAlpha": round(best[0], 5),
             "maximumOfAlpha": round(float(np.abs(best[3] - alpha).max()), 5),
         }
-        print(f"  joint {variant:8s} delay {best[1]:.4f} exponent "
-              f"{best[2]:.3f}   rms {best[0]:.5f} max "
+        print(f"  joint {variant:8s} delay {best[1]:.4f} end {best[4]:.4f} "
+              f"exponent {best[2]:.3f}   rms {best[0]:.5f} max "
               f"{np.abs(best[3] - alpha).max():.5f} of full scale")
 
     if arguments.output is not None:

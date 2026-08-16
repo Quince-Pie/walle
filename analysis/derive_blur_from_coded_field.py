@@ -78,6 +78,21 @@ class Field:
         return out[PAD:PAD + self.shape[0], PAD:PAD + self.shape[1]]
 
 
+def settled_frame(corpus: Path, sequence) -> Path:
+    """The frame after the animation has finished, if the rig captured one.
+
+    The last ANIMATION frame is not the settled material - for `regular` in
+    light the two differ by 4.1 code values rms - so fitting against it charges
+    the kernel for the tail of a transition.  Against the settled frame the
+    shipped kernel drops from 1.53 to 0.58 for `clear`, which is the same 0.58
+    the flat backgrounds already report, and from 4.57 to 2.62 for `regular` in
+    dark.  It is what says the remaining problem is `regular` in LIGHT alone.
+    """
+    post = corpus / "dynamic" / str(sequence["id"]) / "post-settle.png"
+    return (post if post.exists()
+            else corpus / str(sequence["frames"][-1]["file"]))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--corpus", type=Path, required=True)
@@ -107,17 +122,9 @@ def main() -> int:
             Image.open(arguments.corpus / str(frames[0]["file"]))
             .convert("RGB")).astype(float)
         measured = np.asarray(
-            Image.open(arguments.corpus / str(frames[-1]["file"]))
+            Image.open(settled_frame(arguments.corpus, sequence))
             .convert("RGB")).astype(float)[arguments.rows:]
         field = Field(backdrop)
-        cache: dict[float, np.ndarray] = {}
-
-        def blurred(sigma: float) -> np.ndarray:
-            key = round(sigma, 4)
-            if key not in cache:
-                cache[key] = field.blurred(key)
-            return cache[key]
-
         rows = slice(arguments.rows, None)
         generator = np.random.default_rng(SEED)
         count = measured.shape[0] * measured.shape[1]
@@ -125,18 +132,27 @@ def main() -> int:
                                   replace=False)
         target = measured.reshape(-1, 3)[picked]
 
-        def mix(weight: float, narrow: float, wide: float) -> np.ndarray:
-            weight = float(np.clip(weight, 0.0, 1.0))
-            return (weight * blurred(max(narrow, 0.05))
-                    + (1.0 - weight) * blurred(max(wide, 0.05)))
+        # Only the sampled pixels are kept per sigma.  Mixing layers is linear,
+        # so a layer's whole contribution to the score lives at those pixels,
+        # and caching the full frame instead is 100 MB a sigma.
+        cache: dict[float, np.ndarray] = {}
+
+        def sampled(sigma: float) -> np.ndarray:
+            key = round(max(sigma, 0.05), 4)
+            if key not in cache:
+                cache[key] = field.blurred(key)[rows].reshape(-1, 3)[picked]
+            return cache[key]
 
         def score(weight: float, narrow: float, wide: float) -> float:
-            sampled = mix(weight, narrow, wide)[rows].reshape(-1, 3)[picked]
-            return float(np.sqrt(((transfer(sampled) - target)**2).mean()))
+            weight = float(np.clip(weight, 0.0, 1.0))
+            mixed = weight * sampled(narrow) + (1.0 - weight) * sampled(wide)
+            return float(np.sqrt(((transfer(mixed) - target)**2).mean()))
 
         def score_all(weight: float, narrow: float, wide: float) -> float:
-            error = transfer(mix(weight, narrow, wide)[rows]) - measured
-            return float(np.sqrt((error**2).mean()))
+            weight = float(np.clip(weight, 0.0, 1.0))
+            mixed = (weight * field.blurred(max(narrow, 0.05))
+                     + (1.0 - weight) * field.blurred(max(wide, 0.05)))
+            return float(np.sqrt(((transfer(mixed[rows]) - measured)**2).mean()))
 
         shipped = ({"regular": (0.8846 if appearance == "light" else 0.5164,
                                 14.188, 329.807),

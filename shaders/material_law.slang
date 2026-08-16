@@ -1548,17 +1548,25 @@ static const WalleTintRegime kRimTintRegularLight = {
     },
 };
 
-// alpha = clamp((clock - delay) / (1 - delay)) ** exponent, and the
+// alpha = clamp((clock - delay) / (end - delay)) ** exponent, and the
 // material is lerp(sharp backdrop, finished material, alpha).
+//
+// `end` is past one, by two to three and a half percent: measured
+// against the SETTLED material rather than the animation's last
+// frame, the curve has not finished when the rig's clock does.  It is
+// a small number that matters - forcing a curve that ends at clock one
+// onto data that has not takes the fit from 0.005 of full scale to
+// 0.020 and collapses the delay to zero.
 struct WalleMaterialize
 {
     float delay;
+    float end;
     float exponent;
 };
 
-// clear: 2 sequences, 122 frames, 0.0068 rms / 0.02391 max of full scale.
-static const WalleMaterialize kMaterializeClear = {  0.107500,  2.000000 };
+// clear: 2 sequences, 122 frames, 0.00473 rms / 0.01611 max of full scale.
+static const WalleMaterialize kMaterializeClear = {  0.125000,  1.035000,  1.900000 };
 
-// regular: 2 sequences, 122 frames, 0.00741 rms / 0.01543 max of full scale.
-static const WalleMaterialize kMaterializeRegular = {  0.067500,  1.680000 };
+// regular: 2 sequences, 122 frames, 0.00724 rms / 0.01493 max of full scale.
+static const WalleMaterialize kMaterializeRegular = {  0.065000,  1.020000,  1.700000 };
 

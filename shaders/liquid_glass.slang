@@ -363,10 +363,10 @@ float4 composeFragment(
     // refraction and the transfer separately, which is a different function of
     // k with the same endpoints.
     //
-    // The curve is a delayed power, and the delay is not decoration: with one
-    // the fit is 0.7% of full scale, without it 1.6%.  Both constants are per
-    // VARIANT, which the old single exponent could not be - `clear` eases on
-    // clock squared and `regular` on clock^1.68.
+    // The curve is a delayed power that does not finish when the clock does,
+    // and neither part is decoration: with the delay and the overrun the fit
+    // is 0.5% of full scale, with a bare power 3.7%.  All three constants are
+    // per VARIANT, which the old single exponent could not be.
     //
     // walle's `time` is a linear clock, so the ease belongs here.
     float tFade = saturate((time - kFadeStart) / (1.0 - kFadeStart));
@@ -379,7 +379,7 @@ float4 composeFragment(
         arrival = kMaterializeRegular;
     float clock = saturate(time / kFadeStart);
     float thickness = pow(
-        saturate((clock - arrival.delay) / (1.0 - arrival.delay)),
+        saturate((clock - arrival.delay) / (arrival.end - arrival.delay)),
         arrival.exponent) * (1.0 - tFade);
 
     // Express the material in the original bottom-left pixel coordinates while

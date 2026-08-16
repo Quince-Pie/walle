@@ -101,6 +101,21 @@ def load_steps(variant: str, appearance: str):
     return out
 
 
+def settled_frame(corpus: Path, sequence) -> Path:
+    """The frame after the animation has finished, if the rig captured one.
+
+    The last ANIMATION frame is not the settled material - for `regular` in
+    light the two differ by 4.1 code values rms - so fitting against it charges
+    the kernel for the tail of a transition.  Against the settled frame the
+    shipped kernel drops from 1.53 to 0.58 for `clear`, which is the same 0.58
+    the flat backgrounds already report, and from 4.57 to 2.62 for `regular` in
+    dark.  It is what says the remaining problem is `regular` in LIGHT alone.
+    """
+    post = corpus / "dynamic" / str(sequence["id"]) / "post-settle.png"
+    return (post if post.exists()
+            else corpus / str(sequence["frames"][-1]["file"]))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--corpus", type=Path, required=True)
@@ -136,17 +151,9 @@ def main() -> int:
             arguments.corpus / str(frames[0]["file"])).convert("RGB")
         ).astype(float)
         measured = np.asarray(Image.open(
-            arguments.corpus / str(frames[-1]["file"])).convert("RGB")
+            settled_frame(arguments.corpus, sequence)).convert("RGB")
         ).astype(float)[arguments.rows:]
         field = Field(backdrop)
-        cache: dict[float, np.ndarray] = {}
-
-        def blurred(sigma):
-            key = round(float(sigma), 3)
-            if key not in cache:
-                cache[key] = field.blurred(max(key, 0.05))
-            return cache[key]
-
         rows = slice(arguments.rows, None)
         generator = np.random.default_rng(SEED)
         total = measured.shape[0] * measured.shape[1]
@@ -154,10 +161,21 @@ def main() -> int:
                                   replace=False)
         target = measured.reshape(-1, 3)[picked]
 
+        # Only the sampled pixels are kept per sigma.  Mixing layers is linear,
+        # so a layer's whole contribution to the score lives at those pixels,
+        # and caching the full frame instead is 100 MB a sigma.
+        cache: dict[float, np.ndarray] = {}
+
+        def sampled(sigma):
+            key = round(float(sigma), 3)
+            if key not in cache:
+                blurred = field.blurred(max(key, 0.05))
+                cache[key] = blurred[rows].reshape(-1, 3)[picked]
+            return cache[key]
+
         def field_score(layers) -> float:
-            mixed = sum(w * blurred(s) for w, s in layers)
-            sampled = mixed[rows].reshape(-1, 3)[picked]
-            return float(np.sqrt(((transfer(sampled) - target)**2).mean()))
+            mixed = sum(w * sampled(s) for w, s in layers)
+            return float(np.sqrt(((transfer(mixed) - target)**2).mean()))
 
         def step_score(layers) -> float:
             errors = []
