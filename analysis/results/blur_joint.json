@@ -1,0 +1,95 @@
+{
+  "classification": "blur kernel, both instruments",
+  "osBuild": "25G76",
+  "records": [
+    {
+      "appearance": "light",
+      "layers": [
+        {
+          "sigmaPixels": 10.698,
+          "weight": 0.5906
+        },
+        {
+          "sigmaPixels": 20.4519,
+          "weight": 0.1155
+        },
+        {
+          "sigmaPixels": 148.6701,
+          "weight": 0.2939
+        }
+      ],
+      "threeLayerFieldCodes": 5.842,
+      "threeLayerStepCodes": 3.217,
+      "twoLayerFieldCodes": 8.114,
+      "twoLayerStepCodes": 1.88,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "layers": [
+        {
+          "sigmaPixels": 0.687,
+          "weight": 0.1768
+        },
+        {
+          "sigmaPixels": 3.8383,
+          "weight": 0.3044
+        },
+        {
+          "sigmaPixels": 4.5407,
+          "weight": 0.5187
+        }
+      ],
+      "threeLayerFieldCodes": 0.581,
+      "threeLayerStepCodes": 0.588,
+      "twoLayerFieldCodes": 0.583,
+      "twoLayerStepCodes": 0.983,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "layers": [
+        {
+          "sigmaPixels": 11.1788,
+          "weight": 0.35
+        },
+        {
+          "sigmaPixels": 18.5904,
+          "weight": 0.2449
+        },
+        {
+          "sigmaPixels": 428.3605,
+          "weight": 0.4051
+        }
+      ],
+      "threeLayerFieldCodes": 1.476,
+      "threeLayerStepCodes": 3.878,
+      "twoLayerFieldCodes": 2.613,
+      "twoLayerStepCodes": 3.552,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "layers": [
+        {
+          "sigmaPixels": 0.687,
+          "weight": 0.1768
+        },
+        {
+          "sigmaPixels": 3.8383,
+          "weight": 0.3044
+        },
+        {
+          "sigmaPixels": 4.5407,
+          "weight": 0.5187
+        }
+      ],
+      "threeLayerFieldCodes": 0.581,
+      "threeLayerStepCodes": 0.588,
+      "twoLayerFieldCodes": 0.583,
+      "twoLayerStepCodes": 0.983,
+      "variant": "clear"
+    }
+  ],
+  "schemaVersion": 1
+}

@@ -4992,3 +4992,86 @@ SAMPLED pixels is the same arithmetic at a thousandth of the memory.  And
 `pkill -f <pattern>` matches the shell running it whenever the pattern appears
 anywhere in the command line - it killed three of these runs, including one
 that had already finished the work.
+
+## 2026-08-15 (later 171): regular's WEIGHT - what it is not
+
+The two instruments disagree about one number: how much of `regular`'s blur is
+the near layer.  The step edge says 0.88 in light, the coded field says 0.54,
+and the difference is the whole of an 8.1 code value residual.  Six explanations
+have been tested and none of them is it.
+
+  * NOT the implementation.  Forward-modelling the same law in Python
+    reproduces walle's render to 0.57 rms.
+  * NOT the reference frame.  Fixed - see the entry above - and it took `clear`
+    from 1.53 to 0.58 while leaving `regular` in light at 8.1.
+  * NOT the padding rule.  Replicate, mirror, frame-mean and even black all
+    land within 7.4 to 7.8 rms.  A third of a 330 px kernel sits outside a 1024
+    px frame, so this had to be checked, and it does not matter.
+  * NOT the wide layer's FORM.  Replacing it with the frame's own mean - the
+    limit of a very wide blur - scores 4.97 against a fitted Gaussian's 4.40,
+    and both still break the step edge.
+  * NOT a third layer.  Fitted against both instruments at once it reaches
+    5.84 on the field and 3.22 on the step, against two layers' 8.11 and 1.88.
+    It trades one instrument for the other rather than satisfying both.
+  * NOT the order of mixing and transferring.  `w*T(near) + (1-w)*T(far)`
+    instead of `T(w*near + (1-w)*far)` moves the field from 8.075 to 7.896.
+  * NOT a gain and an offset.  With a free per-channel affine the field still
+    prefers 0.55 and the step edge 0.80, so the disagreement survives any error
+    in the transfer's overall level.
+
+What a free affine DOES absorb is most of the residual's size - 8.08 to 3.21,
+at gain 0.638 and offset +81 - which says the error is a contrast error, the
+signature of a weight, and not a kernel SHAPE error.  `clear`'s same affine is
+gain 0.997 and offset +0.29: its transfer and kernel are both exact.
+
+ONE CELL OF THE DESIGN IS MISSING, and it is the obvious one in hindsight.  The
+corpus's two step edges vary element size and frame size TOGETHER - a 500 px
+circle in a 1024 px frame, and a frame-filling rectangle in a 6400 px one - and
+they agree with each other on the weight (0.905 and 0.900 in light, 0.520 and
+0.510 in dark).  That rules out neither cause alone.  The coded field's element
+is frame-filling in a 1024 px frame, which is the combination nobody has ever
+captured, and it is now capturing.
+
+## 2026-08-15 (later 172): THE KERNEL IS NOT WRONG - the two capture paths disagree
+
+Correcting the previous entry.  `regular`'s kernel was called wrong on the
+strength of ONE instrument.  Three others, measured since, agree with what is
+shipped, and the outlier turns out to be the rig's dynamic path rather than the
+material.
+
+STEP EDGES, at three geometries that separate element size from frame size -
+the missing cell of that 2x2 is now captured:
+
+    500 px circle in a 1024 px frame     w = 0.905 light, 0.520 dark
+    frame-filling rect in 6400 px        w = 0.900,       0.510
+    frame-filling circle in 1024 px      w = 0.905,       0.515
+
+All three, against the shipped 0.8846 / 0.5164.  Geometry does not move it.
+
+SINE GRATINGS, one frequency at a time at full contrast, forward-modelled
+through the measured transfer so nothing is linearised - the instrument this
+question needed all along:
+
+    regular light   period  64 128 256 512 -> w = 1.000 0.950 0.910 0.900
+    regular dark                          -> w = 0.775 0.570 0.550 0.500
+
+against 0.8846 and 0.5164, at two element sizes that agree with each other.
+
+uv-map SAYS NOTHING, and that is worth recording because it looked like it did.
+Its local variation about a 129 px mean is 0.23 code values - it is a linear
+ramp, with no content at the scales the weight controls - so its apparent
+preference for 0.64 is noise, and its 2.0 rms residual is the transfer's own.
+The coded field's local variation is 8.08, which is why it is sensitive.
+
+THE ONE OUTLIER is the coded field, at w = 0.54 and 8.1 rms.  Its element is
+1000 px in radius in a 1024 px frame, which is exactly `circle-1000-center`'s
+geometry, and the gratings on that same geometry read 0.90 to 0.96.  Same
+element, same frame, same material, same backdrop scales - and the STATIC suite
+says 0.90 while the DYNAMIC suite's settled element says 0.54.
+
+So walle's kernel is not known to be wrong.  It matches every static
+measurement of it, and walle renders a settled element.  What is unexplained is
+a difference between the rig's two capture paths at matched geometry, and that
+is a statement about the harness until something separates it further.  The
+kernel stays as fitted; shipping the coded field's weight would break three
+instruments to satisfy one.

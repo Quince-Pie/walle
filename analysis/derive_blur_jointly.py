@@ -166,10 +166,19 @@ def main() -> int:
         # and caching the full frame instead is 100 MB a sigma.
         cache: dict[float, np.ndarray] = {}
 
+        # Quantised, because a fresh sigma costs a 3072-square transform and a
+        # random search hands out three of them per candidate - which is a
+        # cache that never hits and hours of FFT.  A twentieth of a pixel near
+        # in and two pixels far out is finer than either instrument resolves.
+        def quantise(sigma: float) -> float:
+            sigma = max(float(sigma), 0.05)
+            step = 0.05 if sigma < 4.0 else (0.5 if sigma < 40.0 else 2.0)
+            return round(round(sigma / step) * step, 3)
+
         def sampled(sigma):
-            key = round(float(sigma), 3)
+            key = quantise(sigma)
             if key not in cache:
-                blurred = field.blurred(max(key, 0.05))
+                blurred = field.blurred(key)
                 cache[key] = blurred[rows].reshape(-1, 3)[picked]
             return cache[key]
 
@@ -177,10 +186,13 @@ def main() -> int:
             mixed = sum(w * sampled(s) for w, s in layers)
             return float(np.sqrt(((transfer(mixed) - target)**2).mean()))
 
+        # The step edge is scored on the SAME quantised sigmas, so the two
+        # instruments always describe one kernel rather than two near ones.
+
         def step_score(layers) -> float:
             errors = []
             for low, high, profile in steps:
-                fraction = sum(w * phi(STEP_CENTRES / max(s, 1e-6))
+                fraction = sum(w * phi(STEP_CENTRES / quantise(s))
                                for w, s in layers)
                 errors.append(transfer(low + (high - low) * fraction)[:, 0]
                               - profile[STEP_WINDOW])
