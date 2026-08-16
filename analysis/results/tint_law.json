@@ -1,0 +1,4737 @@
+{
+  "classification": "Apple Liquid Glass tint law, both variants",
+  "model": "out = base(tint) + beta(tint) * lumaOf(untinted) + gamma(tint) * chromaOf(untinted)",
+  "osBuild": "25G76",
+  "schemaVersion": 2,
+  "variants": {
+    "clear": {
+      "dark": {
+        "heldOutMaximumCodes": 22.238,
+        "heldOutRootMeanSquareCodes": 3.539,
+        "maximumResidualCodes": 15.837,
+        "perTint": {
+          "L10": {
+            "base": [
+              23.2656,
+              23.2265,
+              26.7305
+            ],
+            "beta": [
+              0.098684,
+              0.090352,
+              0.074893
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.93879,
+            "maximumResidualCodes": 6.16
+          },
+          "L25": {
+            "base": [
+              58.4445,
+              57.1212,
+              58.7876
+            ],
+            "beta": [
+              0.096572,
+              0.095836,
+              0.089731
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.98252,
+            "maximumResidualCodes": 6.002
+          },
+          "L40": {
+            "base": [
+              95.696,
+              95.2654,
+              96.4698
+            ],
+            "beta": [
+              0.082694,
+              0.076556,
+              0.072486
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.97492,
+            "maximumResidualCodes": 6.065
+          },
+          "L55": {
+            "base": [
+              131.9144,
+              132.5945,
+              130.7321
+            ],
+            "beta": [
+              0.06959,
+              0.0635,
+              0.073987
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.98725,
+            "maximumResidualCodes": 4.916
+          },
+          "L70": {
+            "base": [
+              169.2275,
+              168.6524,
+              167.047
+            ],
+            "beta": [
+              0.063781,
+              0.061669,
+              0.073272
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.94958,
+            "maximumResidualCodes": 4.544
+          },
+          "L85": {
+            "base": [
+              205.3665,
+              205.6879,
+              203.4322
+            ],
+            "beta": [
+              0.060025,
+              0.052236,
+              0.065461
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.92418,
+            "maximumResidualCodes": 3.633
+          },
+          "M0": {
+            "base": [
+              190.6824,
+              77.8984,
+              81.6178
+            ],
+            "beta": [
+              0.035798,
+              0.141416,
+              0.136302
+            ],
+            "chromaMagnitude": 75.22,
+            "gamma": -0.00124,
+            "maximumResidualCodes": 1.188
+          },
+          "M1": {
+            "base": [
+              32.6248,
+              180.5671,
+              71.8969
+            ],
+            "beta": [
+              0.253036,
+              0.033902,
+              0.148429
+            ],
+            "chromaMagnitude": 93.78,
+            "gamma": -0.00635,
+            "maximumResidualCodes": 3.433
+          },
+          "M2": {
+            "base": [
+              84.8562,
+              84.7643,
+              183.7326
+            ],
+            "beta": [
+              0.129026,
+              0.129882,
+              0.035297
+            ],
+            "chromaMagnitude": 83.31,
+            "gamma": -0.00191,
+            "maximumResidualCodes": 0.78
+          },
+          "M3": {
+            "base": [
+              163.3238,
+              163.1858,
+              55.4409
+            ],
+            "beta": [
+              0.067067,
+              0.068352,
+              0.103458
+            ],
+            "chromaMagnitude": 83.31,
+            "gamma": -0.00286,
+            "maximumResidualCodes": 0.982
+          },
+          "M4": {
+            "base": [
+              8.7746,
+              165.8886,
+              164.3333
+            ],
+            "beta": [
+              0.209937,
+              0.070307,
+              0.066937
+            ],
+            "chromaMagnitude": 75.22,
+            "gamma": -0.00219,
+            "maximumResidualCodes": 3.763
+          },
+          "M5": {
+            "base": [
+              176.219,
+              66.3949,
+              168.215
+            ],
+            "beta": [
+              0.068038,
+              0.095973,
+              0.068081
+            ],
+            "chromaMagnitude": 93.78,
+            "gamma": 0.00027,
+            "maximumResidualCodes": 1.091
+          },
+          "M6": {
+            "base": [
+              118.487,
+              120.9334,
+              118.8704
+            ],
+            "beta": [
+              0.080113,
+              0.063334,
+              0.071552
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 1.01774,
+            "maximumResidualCodes": 6.214
+          },
+          "M7": {
+            "base": [
+              157.0453,
+              109.9588,
+              67.0472
+            ],
+            "beta": [
+              0.08458,
+              0.074578,
+              0.064791
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": 0.00076,
+            "maximumResidualCodes": 0.875
+          },
+          "N0": {
+            "base": [
+              124.8988,
+              124.3881,
+              124.4606
+            ],
+            "beta": [
+              0.083101,
+              0.082186,
+              0.081489
+            ],
+            "chromaMagnitude": 0.64,
+            "gamma": -0.00116,
+            "maximumResidualCodes": 0.804
+          },
+          "N1": {
+            "base": [
+              125.8897,
+              123.8471,
+              123.9026
+            ],
+            "beta": [
+              0.083186,
+              0.083582,
+              0.083049
+            ],
+            "chromaMagnitude": 1.61,
+            "gamma": -0.00088,
+            "maximumResidualCodes": 0.782
+          },
+          "N2": {
+            "base": [
+              128.0514,
+              123.1767,
+              123.1427
+            ],
+            "beta": [
+              0.082546,
+              0.085277,
+              0.085604
+            ],
+            "chromaMagnitude": 3.22,
+            "gamma": 0.00054,
+            "maximumResidualCodes": 0.715
+          },
+          "N3": {
+            "base": [
+              131.5329,
+              121.8105,
+              121.9119
+            ],
+            "beta": [
+              0.075851,
+              0.087895,
+              0.08692
+            ],
+            "chromaMagnitude": 6.45,
+            "gamma": -0.00162,
+            "maximumResidualCodes": 0.773
+          },
+          "N4": {
+            "base": [
+              137.7705,
+              118.0549,
+              119.1641
+            ],
+            "beta": [
+              0.079437,
+              0.092398,
+              0.09135
+            ],
+            "chromaMagnitude": 12.9,
+            "gamma": -0.00174,
+            "maximumResidualCodes": 0.924
+          },
+          "N5": {
+            "base": [
+              151.553,
+              111.8549,
+              112.5658
+            ],
+            "beta": [
+              0.064764,
+              0.108226,
+              0.103193
+            ],
+            "chromaMagnitude": 25.79,
+            "gamma": -0.0011,
+            "maximumResidualCodes": 1.372
+          },
+          "S100": {
+            "base": [
+              207.2176,
+              42.8126,
+              51.4654
+            ],
+            "beta": [
+              0.014697,
+              0.181815,
+              0.160559
+            ],
+            "chromaMagnitude": 107.46,
+            "gamma": -0.00185,
+            "maximumResidualCodes": 1.49
+          },
+          "S25": {
+            "base": [
+              147.4638,
+              106.32,
+              107.5525
+            ],
+            "beta": [
+              0.064634,
+              0.101657,
+              0.094412
+            ],
+            "chromaMagnitude": 26.87,
+            "gamma": 2e-05,
+            "maximumResidualCodes": 0.961
+          },
+          "S50": {
+            "base": [
+              168.872,
+              87.0928,
+              89.2031
+            ],
+            "beta": [
+              0.041846,
+              0.123667,
+              0.118654
+            ],
+            "chromaMagnitude": 53.73,
+            "gamma": -0.00179,
+            "maximumResidualCodes": 1.176
+          },
+          "S75": {
+            "base": [
+              187.9432,
+              67.0548,
+              71.5049
+            ],
+            "beta": [
+              0.02931,
+              0.143808,
+              0.134475
+            ],
+            "chromaMagnitude": 80.6,
+            "gamma": -0.00344,
+            "maximumResidualCodes": 1.355
+          },
+          "X00": {
+            "base": [
+              159.9211,
+              95.0577,
+              125.3514
+            ],
+            "beta": [
+              0.054126,
+              0.111191,
+              0.084507
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": 0.0026,
+            "maximumResidualCodes": 1.529
+          },
+          "X01": {
+            "base": [
+              80.558,
+              152.7802,
+              122.2183
+            ],
+            "beta": [
+              0.128959,
+              0.060521,
+              0.086835
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": 0.00044,
+            "maximumResidualCodes": 2.017
+          },
+          "X02": {
+            "base": [
+              129.6585,
+              97.2995,
+              154.7844
+            ],
+            "beta": [
+              0.080476,
+              0.104837,
+              0.054525
+            ],
+            "chromaMagnitude": 45.9,
+            "gamma": 0.00161,
+            "maximumResidualCodes": 1.081
+          },
+          "X03": {
+            "base": [
+              184.5696,
+              134.4449,
+              90.8033
+            ],
+            "beta": [
+              0.041859,
+              0.097445,
+              0.14139
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00125,
+            "maximumResidualCodes": 1.49
+          },
+          "X04": {
+            "base": [
+              85.2968,
+              137.6882,
+              181.1836
+            ],
+            "beta": [
+              0.148379,
+              0.094054,
+              0.041703
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00078,
+            "maximumResidualCodes": 1.116
+          },
+          "X05": {
+            "base": [
+              125.2816,
+              177.9218,
+              85.8861
+            ],
+            "beta": [
+              0.109933,
+              0.049233,
+              0.152417
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": 0.00067,
+            "maximumResidualCodes": 1.045
+          },
+          "X06": {
+            "base": [
+              62.0344,
+              112.9164,
+              154.1721
+            ],
+            "beta": [
+              0.060025,
+              0.074977,
+              0.083364
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00211,
+            "maximumResidualCodes": 1.136
+          },
+          "X07": {
+            "base": [
+              118.9765,
+              72.0711,
+              155.1123
+            ],
+            "beta": [
+              0.074416,
+              0.064557,
+              0.083942
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": -0.00087,
+            "maximumResidualCodes": 0.75
+          },
+          "X08": {
+            "base": [
+              196.6657,
+              145.6807,
+              147.0689
+            ],
+            "beta": [
+              0.065639,
+              0.14752,
+              0.141734
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.0017,
+            "maximumResidualCodes": 1.331
+          },
+          "X09": {
+            "base": [
+              49.0423,
+              100.7781,
+              100.759
+            ],
+            "beta": [
+              0.042097,
+              0.06054,
+              0.060723
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": 0.0003,
+            "maximumResidualCodes": 0.935
+          },
+          "X10": {
+            "base": [
+              146.0813,
+              84.0912,
+              112.9236
+            ],
+            "beta": [
+              0.084229,
+              0.064367,
+              0.074916
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": 0.0005,
+            "maximumResidualCodes": 1.48
+          },
+          "X11": {
+            "base": [
+              69.429,
+              139.3884,
+              110.002
+            ],
+            "beta": [
+              0.062036,
+              0.082183,
+              0.074157
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.00114,
+            "maximumResidualCodes": 0.796
+          },
+          "Y00": {
+            "base": [
+              74.3578,
+              74.337,
+              115.2489
+            ],
+            "beta": [
+              0.058769,
+              0.058964,
+              0.067753
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": -0.00043,
+            "maximumResidualCodes": 0.608
+          },
+          "Y01": {
+            "base": [
+              74.1299,
+              74.0635,
+              155.137
+            ],
+            "beta": [
+              0.064009,
+              0.064628,
+              0.083703
+            ],
+            "chromaMagnitude": 71.41,
+            "gamma": -0.00138,
+            "maximumResidualCodes": 0.728
+          },
+          "Y02": {
+            "base": [
+              71.493,
+              71.4854,
+              197.3796
+            ],
+            "beta": [
+              0.144448,
+              0.144518,
+              0.026903
+            ],
+            "chromaMagnitude": 107.11,
+            "gamma": -0.00016,
+            "maximumResidualCodes": 0.962
+          },
+          "Y03": {
+            "base": [
+              62.4073,
+              113.1766,
+              70.5109
+            ],
+            "beta": [
+              0.053398,
+              0.068439,
+              0.057284
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": -0.00349,
+            "maximumResidualCodes": 1.1
+          },
+          "Y04": {
+            "base": [
+              62.3783,
+              113.1894,
+              113.3539
+            ],
+            "beta": [
+              0.053668,
+              0.068318,
+              0.066738
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00262,
+            "maximumResidualCodes": 1.03
+          },
+          "Y05": {
+            "base": [
+              62.0344,
+              112.9164,
+              154.1721
+            ],
+            "beta": [
+              0.060025,
+              0.074977,
+              0.083364
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00211,
+            "maximumResidualCodes": 1.136
+          },
+          "Y06": {
+            "base": [
+              58.0658,
+              112.2421,
+              196.3964
+            ],
+            "beta": [
+              0.166451,
+              0.104411,
+              0.024748
+            ],
+            "chromaMagnitude": 86.81,
+            "gamma": 0.00087,
+            "maximumResidualCodes": 1.638
+          },
+          "Y07": {
+            "base": [
+              33.2467,
+              152.0552,
+              63.1346
+            ],
+            "beta": [
+              0.075703,
+              0.08449,
+              0.063946
+            ],
+            "chromaMagnitude": 80.38,
+            "gamma": -0.00106,
+            "maximumResidualCodes": 1.681
+          },
+          "Y08": {
+            "base": [
+              33.2623,
+              152.0483,
+              109.0207
+            ],
+            "beta": [
+              0.075558,
+              0.084555,
+              0.073977
+            ],
+            "chromaMagnitude": 63.52,
+            "gamma": -0.00152,
+            "maximumResidualCodes": 1.685
+          },
+          "Y09": {
+            "base": [
+              33.2875,
+              152.0371,
+              151.1801
+            ],
+            "beta": [
+              0.075325,
+              0.08466,
+              0.083287
+            ],
+            "chromaMagnitude": 64.48,
+            "gamma": -0.00228,
+            "maximumResidualCodes": 1.69
+          },
+          "Y10": {
+            "base": [
+              27.939,
+              152.8217,
+              193.9892
+            ],
+            "beta": [
+              0.252704,
+              0.066062,
+              0.031719
+            ],
+            "chromaMagnitude": 82.64,
+            "gamma": 0.00305,
+            "maximumResidualCodes": 2.88
+          },
+          "Y11": {
+            "base": [
+              -47.2019,
+              193.1332,
+              48.0243
+            ],
+            "beta": [
+              0.48239,
+              0.030325,
+              0.195558
+            ],
+            "chromaMagnitude": 120.58,
+            "gamma": -0.00016,
+            "maximumResidualCodes": 7.64
+          },
+          "Y12": {
+            "base": [
+              -46.8089,
+              193.173,
+              101.9955
+            ],
+            "beta": [
+              0.48037,
+              0.029952,
+              0.12066
+            ],
+            "chromaMagnitude": 101.3,
+            "gamma": 0.00253,
+            "maximumResidualCodes": 7.579
+          },
+          "Y13": {
+            "base": [
+              -47.0239,
+              193.1512,
+              148.0842
+            ],
+            "beta": [
+              0.481475,
+              0.030156,
+              0.071344
+            ],
+            "chromaMagnitude": 92.37,
+            "gamma": 0.00106,
+            "maximumResidualCodes": 7.613
+          },
+          "Y14": {
+            "base": [
+              -46.5657,
+              193.1976,
+              190.9343
+            ],
+            "beta": [
+              0.479121,
+              0.02972,
+              0.032249
+            ],
+            "chromaMagnitude": 96.72,
+            "gamma": 0.0042,
+            "maximumResidualCodes": 7.541
+          },
+          "Y15": {
+            "base": [
+              119.2642,
+              72.3274,
+              73.3951
+            ],
+            "beta": [
+              0.06762,
+              0.059053,
+              0.058403
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00108,
+            "maximumResidualCodes": 0.628
+          },
+          "Y16": {
+            "base": [
+              119.2351,
+              72.3403,
+              114.2382
+            ],
+            "beta": [
+              0.067889,
+              0.058933,
+              0.067857
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": -0.00021,
+            "maximumResidualCodes": 0.61
+          },
+          "Y17": {
+            "base": [
+              118.9765,
+              72.0711,
+              155.1123
+            ],
+            "beta": [
+              0.074416,
+              0.064557,
+              0.083942
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": -0.00087,
+            "maximumResidualCodes": 0.75
+          },
+          "Y18": {
+            "base": [
+              118.4265,
+              69.5041,
+              197.3633
+            ],
+            "beta": [
+              0.097614,
+              0.144343,
+              0.024084
+            ],
+            "chromaMagnitude": 102.06,
+            "gamma": 0.0011,
+            "maximumResidualCodes": 0.936
+          },
+          "Y19": {
+            "base": [
+              112.2693,
+              112.2099,
+              69.4025
+            ],
+            "beta": [
+              0.067572,
+              0.068125,
+              0.058332
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": -0.00123,
+            "maximumResidualCodes": 0.663
+          },
+          "Y20": {
+            "base": [
+              111.267,
+              111.2125,
+              153.8309
+            ],
+            "beta": [
+              0.104182,
+              0.104689,
+              0.065961
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": -0.00113,
+            "maximumResidualCodes": 0.726
+          },
+          "Y21": {
+            "base": [
+              109.5799,
+              109.629,
+              194.933
+            ],
+            "beta": [
+              0.14752,
+              0.147062,
+              0.049106
+            ],
+            "chromaMagnitude": 71.41,
+            "gamma": 0.00102,
+            "maximumResidualCodes": 0.887
+          },
+          "Y22": {
+            "base": [
+              101.1636,
+              151.0793,
+              62.0563
+            ],
+            "beta": [
+              0.06957,
+              0.084263,
+              0.064703
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": 0.00057,
+            "maximumResidualCodes": 0.954
+          },
+          "Y23": {
+            "base": [
+              99.6279,
+              151.7652,
+              107.0324
+            ],
+            "beta": [
+              0.120383,
+              0.066594,
+              0.11143
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": -0.00078,
+            "maximumResidualCodes": 0.703
+          }
+        },
+        "regimes": {
+          "chromatic": {
+            "candidates": [
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 44.259,
+                "heldOutRootMeanSquareCodes": 5.962,
+                "order": 1,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 40.654,
+                "heldOutRootMeanSquareCodes": 5.932,
+                "order": 1,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 26.897,
+                "heldOutRootMeanSquareCodes": 3.686,
+                "order": 2,
+                "termCount": 10
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 22.238,
+                "heldOutRootMeanSquareCodes": 3.624,
+                "order": 2,
+                "termCount": 10
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 47.992,
+                "heldOutRootMeanSquareCodes": 3.962,
+                "order": 3,
+                "termCount": 20
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 48.008,
+                "heldOutRootMeanSquareCodes": 3.866,
+                "order": 3,
+                "termCount": 20
+              }
+            ],
+            "coefficients": [
+              [
+                -16.36985674,
+                15.03110923,
+                33.46472049,
+                291.63179351,
+                1.91003327,
+                -32.87153306,
+                -283.35757552,
+                -33.6335093,
+                323.21736866,
+                -91.86980247,
+                0.08169353,
+                -0.40802677,
+                -0.7087111,
+                0.79275684,
+                0.54387441,
+                0.06325332,
+                1.20888548,
+                -0.02488749,
+                -0.50638543,
+                -0.64949695,
+                0.15369779,
+                -0.10529208,
+                -0.74730192,
+                0.10236921,
+                -0.01046612,
+                0.16826058,
+                0.88396852,
+                0.13498154,
+                -0.2492271,
+                -0.06908569
+              ],
+              [
+                1.68813825,
+                7.61908321,
+                228.92488723,
+                0.80115018,
+                -18.42036176,
+                9.51109121,
+                15.11032848,
+                11.62223689,
+                48.81525398,
+                -48.41604839,
+                -0.07814746,
+                -0.14401608,
+                0.89862712,
+                -0.19709616,
+                0.40706485,
+                -0.31643363,
+                -0.6821401,
+                -0.10416542,
+                -0.34011832,
+                0.55404621,
+                -0.01443379,
+                0.0050068,
+                0.03577236,
+                0.02770418,
+                -0.01933984,
+                -0.00133741,
+                -0.01865192,
+                0.05334784,
+                -0.06966869,
+                -0.01159275
+              ],
+              [
+                1.02277787,
+                262.6552443,
+                -24.34348995,
+                3.09751236,
+                -22.86864049,
+                83.29869385,
+                -50.10736117,
+                19.14260823,
+                12.51858491,
+                -29.56385732,
+                -0.09247567,
+                0.85321785,
+                0.00813823,
+                -0.25788866,
+                -0.6342839,
+                -0.46688122,
+                0.40077665,
+                -0.17232493,
+                -0.2306081,
+                0.58754527,
+                0.00193148,
+                -0.02426045,
+                0.01238165,
+                -0.00367736,
+                0.01100682,
+                0.01720398,
+                -0.02284496,
+                0.021143,
+                0.00344523,
+                -0.00927842
+              ]
+            ],
+            "gammaFitted": true,
+            "maximumResidualCodes": 15.837,
+            "order": 2,
+            "rootMeanSquareResidualCodes": 2.704,
+            "termCount": 10,
+            "tintCount": 53
+          },
+          "neutral": {
+            "candidates": [
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 8.553,
+                "heldOutRootMeanSquareCodes": 2.917,
+                "order": 1,
+                "termCount": 2
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 10.582,
+                "heldOutRootMeanSquareCodes": 2.882,
+                "order": 1,
+                "termCount": 2
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 7.714,
+                "heldOutRootMeanSquareCodes": 2.862,
+                "order": 2,
+                "termCount": 3
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 10.132,
+                "heldOutRootMeanSquareCodes": 2.721,
+                "order": 2,
+                "termCount": 3
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 11.278,
+                "heldOutRootMeanSquareCodes": 3.522,
+                "order": 3,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 17.807,
+                "heldOutRootMeanSquareCodes": 4.118,
+                "order": 3,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 14.913,
+                "heldOutRootMeanSquareCodes": 4.92,
+                "order": 4,
+                "termCount": 5
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 24.451,
+                "heldOutRootMeanSquareCodes": 5.784,
+                "order": 4,
+                "termCount": 5
+              }
+            ],
+            "coefficients": [
+              [
+                1.24442736,
+                230.51449111,
+                12.24177057,
+                0.10038067,
+                -0.04975174,
+                0.00071176,
+                0.85918585,
+                0.51810169,
+                -0.50767984
+              ],
+              [
+                -2.22644165,
+                240.41207387,
+                3.23886782,
+                0.10836954,
+                -0.06513377,
+                0.01651745,
+                0.84231822,
+                0.41504124,
+                -0.51789672
+              ],
+              [
+                -1.14083973,
+                236.52006651,
+                5.57092933,
+                0.10231771,
+                -0.05379411,
+                0.01274915,
+                0.96504789,
+                0.28358612,
+                -0.38360251
+              ]
+            ],
+            "gammaFitted": true,
+            "maximumResidualCodes": 7.206,
+            "order": 2,
+            "rootMeanSquareResidualCodes": 2.165,
+            "termCount": 3,
+            "tintCount": 7
+          }
+        },
+        "rootMeanSquareResidualCodes": 2.653
+      },
+      "light": {
+        "heldOutMaximumCodes": 26.71,
+        "heldOutRootMeanSquareCodes": 3.706,
+        "maximumResidualCodes": 8.466,
+        "perTint": {
+          "L10": {
+            "base": [
+              23.2656,
+              23.2265,
+              26.7305
+            ],
+            "beta": [
+              0.098684,
+              0.090352,
+              0.074893
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.93879,
+            "maximumResidualCodes": 6.16
+          },
+          "L25": {
+            "base": [
+              58.4445,
+              57.1212,
+              58.7876
+            ],
+            "beta": [
+              0.096572,
+              0.095836,
+              0.089731
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.98252,
+            "maximumResidualCodes": 6.002
+          },
+          "L40": {
+            "base": [
+              95.696,
+              95.2654,
+              96.4698
+            ],
+            "beta": [
+              0.082694,
+              0.076556,
+              0.072486
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.97492,
+            "maximumResidualCodes": 6.065
+          },
+          "L55": {
+            "base": [
+              131.9144,
+              132.5945,
+              130.7321
+            ],
+            "beta": [
+              0.06959,
+              0.0635,
+              0.073987
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.98725,
+            "maximumResidualCodes": 4.916
+          },
+          "L70": {
+            "base": [
+              169.2275,
+              168.6524,
+              167.047
+            ],
+            "beta": [
+              0.063781,
+              0.061669,
+              0.073272
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.94958,
+            "maximumResidualCodes": 4.544
+          },
+          "L85": {
+            "base": [
+              205.3665,
+              205.6879,
+              203.4322
+            ],
+            "beta": [
+              0.060025,
+              0.052236,
+              0.065461
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.92418,
+            "maximumResidualCodes": 3.633
+          },
+          "M0": {
+            "base": [
+              114.7225,
+              31.5854,
+              34.622
+            ],
+            "beta": [
+              0.307329,
+              0.204837,
+              0.204485
+            ],
+            "chromaMagnitude": 75.22,
+            "gamma": -0.00058,
+            "maximumResidualCodes": 1.562
+          },
+          "M1": {
+            "base": [
+              -35.5493,
+              107.3548,
+              24.8338
+            ],
+            "beta": [
+              0.311943,
+              0.293118,
+              0.204415
+            ],
+            "chromaMagnitude": 93.78,
+            "gamma": -0.00498,
+            "maximumResidualCodes": 2.06
+          },
+          "M2": {
+            "base": [
+              37.6752,
+              37.5581,
+              109.9034
+            ],
+            "beta": [
+              0.204003,
+              0.205094,
+              0.295665
+            ],
+            "chromaMagnitude": 83.31,
+            "gamma": -0.00243,
+            "maximumResidualCodes": 1.742
+          },
+          "M3": {
+            "base": [
+              94.6609,
+              94.7022,
+              19.8962
+            ],
+            "beta": [
+              0.283187,
+              0.282802,
+              0.155282
+            ],
+            "chromaMagnitude": 83.31,
+            "gamma": 0.00086,
+            "maximumResidualCodes": 1.499
+          },
+          "M4": {
+            "base": [
+              0.0002,
+              96.641,
+              95.8472
+            ],
+            "beta": [
+              0.036529,
+              0.283378,
+              0.281397
+            ],
+            "chromaMagnitude": 75.22,
+            "gamma": -0.00329,
+            "maximumResidualCodes": 1.493
+          },
+          "M5": {
+            "base": [
+              103.3083,
+              29.4335,
+              97.8564
+            ],
+            "beta": [
+              0.298666,
+              0.156862,
+              0.287261
+            ],
+            "chromaMagnitude": 93.78,
+            "gamma": -0.00531,
+            "maximumResidualCodes": 1.551
+          },
+          "M6": {
+            "base": [
+              118.487,
+              120.9334,
+              118.8704
+            ],
+            "beta": [
+              0.080113,
+              0.063334,
+              0.071552
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 1.01774,
+            "maximumResidualCodes": 6.214
+          },
+          "M7": {
+            "base": [
+              91.6812,
+              60.3415,
+              30.6375
+            ],
+            "beta": [
+              0.272155,
+              0.205265,
+              0.156875
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00142,
+            "maximumResidualCodes": 1.581
+          },
+          "N0": {
+            "base": [
+              68.2516,
+              67.8678,
+              67.9009
+            ],
+            "beta": [
+              0.238808,
+              0.234677,
+              0.23436
+            ],
+            "chromaMagnitude": 0.64,
+            "gamma": -0.00053,
+            "maximumResidualCodes": 1.126
+          },
+          "N1": {
+            "base": [
+              69.3506,
+              67.7762,
+              67.7822
+            ],
+            "beta": [
+              0.233864,
+              0.233608,
+              0.233551
+            ],
+            "chromaMagnitude": 1.61,
+            "gamma": -0.0001,
+            "maximumResidualCodes": 1.606
+          },
+          "N2": {
+            "base": [
+              71.1504,
+              67.2836,
+              67.3575
+            ],
+            "beta": [
+              0.236856,
+              0.233528,
+              0.232818
+            ],
+            "chromaMagnitude": 3.22,
+            "gamma": -0.00118,
+            "maximumResidualCodes": 1.394
+          },
+          "N3": {
+            "base": [
+              72.0853,
+              66.3058,
+              66.375
+            ],
+            "beta": [
+              0.246397,
+              0.23232,
+              0.231655
+            ],
+            "chromaMagnitude": 6.45,
+            "gamma": -0.0011,
+            "maximumResidualCodes": 1.335
+          },
+          "N4": {
+            "base": [
+              76.8173,
+              63.3144,
+              64.2251
+            ],
+            "beta": [
+              0.255006,
+              0.230248,
+              0.230184
+            ],
+            "chromaMagnitude": 12.9,
+            "gamma": -0.00236,
+            "maximumResidualCodes": 1.493
+          },
+          "N5": {
+            "base": [
+              86.4432,
+              58.7544,
+              58.6904
+            ],
+            "beta": [
+              0.267614,
+              0.225894,
+              0.227565
+            ],
+            "chromaMagnitude": 25.79,
+            "gamma": -0.00275,
+            "maximumResidualCodes": 1.623
+          },
+          "S100": {
+            "base": [
+              121.4057,
+              12.2442,
+              20.2856
+            ],
+            "beta": [
+              0.343137,
+              0.146886,
+              0.144546
+            ],
+            "chromaMagnitude": 107.46,
+            "gamma": -0.00265,
+            "maximumResidualCodes": 1.642
+          },
+          "S25": {
+            "base": [
+              82.8326,
+              56.7455,
+              57.4082
+            ],
+            "beta": [
+              0.263729,
+              0.211161,
+              0.207593
+            ],
+            "chromaMagnitude": 26.87,
+            "gamma": -0.00106,
+            "maximumResidualCodes": 1.842
+          },
+          "S50": {
+            "base": [
+              96.8619,
+              44.3618,
+              46.2401
+            ],
+            "beta": [
+              0.288115,
+              0.185305,
+              0.185499
+            ],
+            "chromaMagnitude": 53.73,
+            "gamma": 0.0012,
+            "maximumResidualCodes": 1.729
+          },
+          "S75": {
+            "base": [
+              108.8839,
+              30.0439,
+              33.0703
+            ],
+            "beta": [
+              0.318593,
+              0.166679,
+              0.172366
+            ],
+            "chromaMagnitude": 80.6,
+            "gamma": -0.00081,
+            "maximumResidualCodes": 1.287
+          },
+          "X00": {
+            "base": [
+              91.5831,
+              49.1741,
+              69.4757
+            ],
+            "beta": [
+              0.275129,
+              0.199989,
+              0.232654
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.00267,
+            "maximumResidualCodes": 1.458
+          },
+          "X01": {
+            "base": [
+              38.4924,
+              86.3638,
+              67.4642
+            ],
+            "beta": [
+              0.185995,
+              0.270316,
+              0.226812
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.0006,
+            "maximumResidualCodes": 1.743
+          },
+          "X02": {
+            "base": [
+              71.5477,
+              49.9425,
+              88.101
+            ],
+            "beta": [
+              0.240861,
+              0.203271,
+              0.268988
+            ],
+            "chromaMagnitude": 45.9,
+            "gamma": -0.00234,
+            "maximumResidualCodes": 1.899
+          },
+          "X03": {
+            "base": [
+              113.8829,
+              73.0418,
+              36.0812
+            ],
+            "beta": [
+              0.285082,
+              0.258631,
+              0.236588
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00572,
+            "maximumResidualCodes": 1.576
+          },
+          "X04": {
+            "base": [
+              30.3585,
+              76.0952,
+              110.7903
+            ],
+            "beta": [
+              0.237783,
+              0.258128,
+              0.281947
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.0021,
+            "maximumResidualCodes": 2.163
+          },
+          "X05": {
+            "base": [
+              65.1353,
+              108.9014,
+              30.44
+            ],
+            "beta": [
+              0.256792,
+              0.279825,
+              0.240907
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": -0.00166,
+            "maximumResidualCodes": 1.606
+          },
+          "X06": {
+            "base": [
+              26.402,
+              62.698,
+              89.5372
+            ],
+            "beta": [
+              0.15032,
+              0.20965,
+              0.265656
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00155,
+            "maximumResidualCodes": 1.585
+          },
+          "X07": {
+            "base": [
+              66.531,
+              33.5431,
+              90.1118
+            ],
+            "beta": [
+              0.215308,
+              0.163712,
+              0.267889
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": -0.00199,
+            "maximumResidualCodes": 1.602
+          },
+          "X08": {
+            "base": [
+              131.8495,
+              58.4307,
+              60.4
+            ],
+            "beta": [
+              0.263599,
+              0.366548,
+              0.363935
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00286,
+            "maximumResidualCodes": 2.041
+          },
+          "X09": {
+            "base": [
+              22.5182,
+              58.2722,
+              56.7199
+            ],
+            "beta": [
+              0.108493,
+              0.177319,
+              0.18368
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": 0.00503,
+            "maximumResidualCodes": 0.865
+          },
+          "X10": {
+            "base": [
+              84.6983,
+              42.1413,
+              62.898
+            ],
+            "beta": [
+              0.250277,
+              0.174595,
+              0.207722
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.00369,
+            "maximumResidualCodes": 1.527
+          },
+          "X11": {
+            "base": [
+              31.3123,
+              79.5873,
+              60.8012
+            ],
+            "beta": [
+              0.159192,
+              0.245329,
+              0.202761
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.00513,
+            "maximumResidualCodes": 1.451
+          },
+          "Y00": {
+            "base": [
+              38.4551,
+              38.3432,
+              65.9436
+            ],
+            "beta": [
+              0.149812,
+              0.150854,
+              0.20429
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": -0.00232,
+            "maximumResidualCodes": 1.88
+          },
+          "Y01": {
+            "base": [
+              35.6109,
+              35.5556,
+              90.2815
+            ],
+            "beta": [
+              0.16308,
+              0.163595,
+              0.269168
+            ],
+            "chromaMagnitude": 71.41,
+            "gamma": -0.00115,
+            "maximumResidualCodes": 1.398
+          },
+          "Y02": {
+            "base": [
+              28.1481,
+              28.0261,
+              120.3743
+            ],
+            "beta": [
+              0.191418,
+              0.192554,
+              0.306831
+            ],
+            "chromaMagnitude": 107.11,
+            "gamma": -0.00253,
+            "maximumResidualCodes": 1.625
+          },
+          "Y03": {
+            "base": [
+              29.7014,
+              65.0385,
+              35.7526
+            ],
+            "beta": [
+              0.134513,
+              0.200346,
+              0.142888
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": -0.00197,
+            "maximumResidualCodes": 1.283
+          },
+          "Y04": {
+            "base": [
+              29.7003,
+              65.039,
+              64.439
+            ],
+            "beta": [
+              0.134524,
+              0.200341,
+              0.201365
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00193,
+            "maximumResidualCodes": 1.816
+          },
+          "Y05": {
+            "base": [
+              26.402,
+              62.698,
+              89.5372
+            ],
+            "beta": [
+              0.15032,
+              0.20965,
+              0.265656
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00155,
+            "maximumResidualCodes": 1.585
+          },
+          "Y06": {
+            "base": [
+              16.2825,
+              58.3673,
+              119.7132
+            ],
+            "beta": [
+              0.191031,
+              0.225785,
+              0.305434
+            ],
+            "chromaMagnitude": 86.81,
+            "gamma": -0.00029,
+            "maximumResidualCodes": 2.068
+          },
+          "Y07": {
+            "base": [
+              -1.4501,
+              89.1108,
+              27.1156
+            ],
+            "beta": [
+              0.15726,
+              0.261948,
+              0.155094
+            ],
+            "chromaMagnitude": 80.38,
+            "gamma": 0.00043,
+            "maximumResidualCodes": 1.473
+          },
+          "Y08": {
+            "base": [
+              -1.2734,
+              89.0545,
+              60.1174
+            ],
+            "beta": [
+              0.155738,
+              0.262477,
+              0.200605
+            ],
+            "chromaMagnitude": 63.52,
+            "gamma": -0.00338,
+            "maximumResidualCodes": 1.588
+          },
+          "Y09": {
+            "base": [
+              -1.333,
+              89.0735,
+              88.2052
+            ],
+            "beta": [
+              0.156252,
+              0.262299,
+              0.261034
+            ],
+            "chromaMagnitude": 64.48,
+            "gamma": -0.0021,
+            "maximumResidualCodes": 1.549
+          },
+          "Y10": {
+            "base": [
+              -35.6226,
+              87.9033,
+              118.7142
+            ],
+            "beta": [
+              0.293591,
+              0.267899,
+              0.300554
+            ],
+            "chromaMagnitude": 82.64,
+            "gamma": -0.00729,
+            "maximumResidualCodes": 2.462
+          },
+          "Y11": {
+            "base": [
+              0.0,
+              117.242,
+              -1.3034
+            ],
+            "beta": [
+              -0.0,
+              0.306086,
+              0.23563
+            ],
+            "chromaMagnitude": 120.58,
+            "gamma": -0.00685,
+            "maximumResidualCodes": 2.58
+          },
+          "Y12": {
+            "base": [
+              0.0,
+              117.2796,
+              49.5781
+            ],
+            "beta": [
+              -0.0,
+              0.305732,
+              0.223748
+            ],
+            "chromaMagnitude": 101.3,
+            "gamma": -0.0043,
+            "maximumResidualCodes": 2.207
+          },
+          "Y13": {
+            "base": [
+              0.0,
+              117.3543,
+              83.9751
+            ],
+            "beta": [
+              -0.0,
+              0.30503,
+              0.267234
+            ],
+            "chromaMagnitude": 92.37,
+            "gamma": 0.00075,
+            "maximumResidualCodes": 2.054
+          },
+          "Y14": {
+            "base": [
+              0.0,
+              117.2883,
+              116.7557
+            ],
+            "beta": [
+              -0.0,
+              0.305651,
+              0.296151
+            ],
+            "chromaMagnitude": 96.72,
+            "gamma": -0.00372,
+            "maximumResidualCodes": 2.189
+          },
+          "Y15": {
+            "base": [
+              68.5112,
+              36.6588,
+              37.4618
+            ],
+            "beta": [
+              0.208577,
+              0.148726,
+              0.149716
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00176,
+            "maximumResidualCodes": 1.591
+          },
+          "Y16": {
+            "base": [
+              68.5343,
+              36.6486,
+              66.185
+            ],
+            "beta": [
+              0.208363,
+              0.148822,
+              0.198938
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": -0.00245,
+            "maximumResidualCodes": 1.647
+          },
+          "Y17": {
+            "base": [
+              66.531,
+              33.5431,
+              90.1118
+            ],
+            "beta": [
+              0.215308,
+              0.163712,
+              0.267889
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": -0.00199,
+            "maximumResidualCodes": 1.602
+          },
+          "Y18": {
+            "base": [
+              62.3492,
+              25.9698,
+              120.6476
+            ],
+            "beta": [
+              0.23104,
+              0.193083,
+              0.302192
+            ],
+            "chromaMagnitude": 102.06,
+            "gamma": -0.00634,
+            "maximumResidualCodes": 1.7
+          },
+          "Y19": {
+            "base": [
+              64.1273,
+              64.0412,
+              34.6987
+            ],
+            "beta": [
+              0.199519,
+              0.200321,
+              0.144407
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": -0.00179,
+            "maximumResidualCodes": 1.459
+          },
+          "Y20": {
+            "base": [
+              57.3937,
+              57.3617,
+              88.1641
+            ],
+            "beta": [
+              0.225539,
+              0.225836,
+              0.272302
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": -0.00066,
+            "maximumResidualCodes": 1.791
+          },
+          "Y21": {
+            "base": [
+              40.163,
+              40.1026,
+              128.3183
+            ],
+            "beta": [
+              0.294087,
+              0.29465,
+              0.272762
+            ],
+            "chromaMagnitude": 71.41,
+            "gamma": -0.00125,
+            "maximumResidualCodes": 1.615
+          },
+          "Y22": {
+            "base": [
+              54.1257,
+              88.0911,
+              26.7744
+            ],
+            "beta": [
+              0.194573,
+              0.262132,
+              0.148593
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": -0.0009,
+            "maximumResidualCodes": 1.636
+          },
+          "Y23": {
+            "base": [
+              48.7338,
+              86.9218,
+              54.9432
+            ],
+            "beta": [
+              0.213386,
+              0.267726,
+              0.218178
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": -0.00604,
+            "maximumResidualCodes": 1.533
+          }
+        },
+        "regimes": {
+          "chromatic": {
+            "candidates": [
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 37.897,
+                "heldOutRootMeanSquareCodes": 5.493,
+                "order": 1,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 38.118,
+                "heldOutRootMeanSquareCodes": 5.504,
+                "order": 1,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 24.024,
+                "heldOutRootMeanSquareCodes": 4.111,
+                "order": 2,
+                "termCount": 10
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 24.811,
+                "heldOutRootMeanSquareCodes": 4.133,
+                "order": 2,
+                "termCount": 10
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 26.71,
+                "heldOutRootMeanSquareCodes": 3.808,
+                "order": 3,
+                "termCount": 20
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 29.603,
+                "heldOutRootMeanSquareCodes": 3.853,
+                "order": 3,
+                "termCount": 20
+              }
+            ],
+            "coefficients": [
+              [
+                -306.61057532,
+                199.07946142,
+                860.24130521,
+                1122.37259582,
+                100.18053732,
+                -694.74256071,
+                -1229.40023522,
+                -239.41559497,
+                -735.57438375,
+                -1581.52597923,
+                -82.07792399,
+                -167.52095867,
+                1043.8221555,
+                -187.19450351,
+                -68.78537749,
+                -295.70702051,
+                1716.62646713,
+                466.46896733,
+                -398.34490402,
+                1010.03881384,
+                0.97480139,
+                -0.42272512,
+                -3.5234272,
+                -2.3317163,
+                -1.03174471,
+                3.70403339,
+                4.43931232,
+                0.19524385,
+                3.04785651,
+                4.69474139,
+                0.82987734,
+                -0.05109371,
+                -4.71384257,
+                -0.89226809,
+                0.38339558,
+                1.24716409,
+                -2.31364245,
+                -1.17570214,
+                -1.6200864,
+                -2.56001247
+              ],
+              [
+                150.51575872,
+                -524.8643862,
+                80.31177606,
+                -482.20156602,
+                651.28965465,
+                310.31022578,
+                -88.87049897,
+                807.1381622,
+                196.8364854,
+                573.71635918,
+                -318.94901388,
+                -10.55867042,
+                -12.10296486,
+                19.24648489,
+                -560.8750024,
+                -713.51330034,
+                291.03076873,
+                -1.65102706,
+                -180.40955658,
+                -368.04860651,
+                -0.57789026,
+                2.08878681,
+                0.63162153,
+                1.80056098,
+                -2.61279349,
+                -1.37170618,
+                0.53223467,
+                -2.9214255,
+                -0.54517586,
+                -2.36891792,
+                1.29132117,
+                0.12135577,
+                0.10434345,
+                -0.11833676,
+                2.05818213,
+                2.7918076,
+                -1.60525624,
+                -0.11565234,
+                1.08957842,
+                1.39211502
+              ],
+              [
+                -17.52115372,
+                527.38903173,
+                -139.42248079,
+                -186.6804008,
+                -722.46363662,
+                186.94726325,
+                83.14575876,
+                -359.84916333,
+                307.76647748,
+                495.07830239,
+                368.78122778,
+                -190.54373213,
+                295.92548183,
+                -199.12911926,
+                689.70605293,
+                -410.11589112,
+                -114.8412614,
+                -146.49386679,
+                -48.71677226,
+                -343.45644955,
+                0.17739272,
+                -1.33605534,
+                0.29361791,
+                0.55186542,
+                3.08108454,
+                0.13543214,
+                -0.60360577,
+                1.64991159,
+                -0.75932619,
+                -1.98238175,
+                -1.45233238,
+                0.07029206,
+                -1.02555217,
+                0.91703418,
+                -2.87510112,
+                1.45025319,
+                0.14073152,
+                0.66267519,
+                0.116178,
+                1.37066939
+              ]
+            ],
+            "gammaFitted": false,
+            "maximumResidualCodes": 8.466,
+            "order": 3,
+            "rootMeanSquareResidualCodes": 1.588,
+            "termCount": 20,
+            "tintCount": 53
+          },
+          "neutral": {
+            "candidates": [
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 8.553,
+                "heldOutRootMeanSquareCodes": 2.917,
+                "order": 1,
+                "termCount": 2
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 10.582,
+                "heldOutRootMeanSquareCodes": 2.882,
+                "order": 1,
+                "termCount": 2
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 7.714,
+                "heldOutRootMeanSquareCodes": 2.862,
+                "order": 2,
+                "termCount": 3
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 10.132,
+                "heldOutRootMeanSquareCodes": 2.721,
+                "order": 2,
+                "termCount": 3
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 11.278,
+                "heldOutRootMeanSquareCodes": 3.522,
+                "order": 3,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 17.807,
+                "heldOutRootMeanSquareCodes": 4.118,
+                "order": 3,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 14.913,
+                "heldOutRootMeanSquareCodes": 4.92,
+                "order": 4,
+                "termCount": 5
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 24.451,
+                "heldOutRootMeanSquareCodes": 5.784,
+                "order": 4,
+                "termCount": 5
+              }
+            ],
+            "coefficients": [
+              [
+                1.24442736,
+                230.51449111,
+                12.24177057,
+                0.10038067,
+                -0.04975174,
+                0.00071176,
+                0.85918585,
+                0.51810169,
+                -0.50767984
+              ],
+              [
+                -2.22644165,
+                240.41207387,
+                3.23886782,
+                0.10836954,
+                -0.06513377,
+                0.01651745,
+                0.84231822,
+                0.41504124,
+                -0.51789672
+              ],
+              [
+                -1.14083973,
+                236.52006651,
+                5.57092933,
+                0.10231771,
+                -0.05379411,
+                0.01274915,
+                0.96504789,
+                0.28358612,
+                -0.38360251
+              ]
+            ],
+            "gammaFitted": true,
+            "maximumResidualCodes": 7.206,
+            "order": 2,
+            "rootMeanSquareResidualCodes": 2.165,
+            "termCount": 3,
+            "tintCount": 7
+          }
+        },
+        "rootMeanSquareResidualCodes": 1.661
+      }
+    },
+    "regular": {
+      "dark": {
+        "heldOutMaximumCodes": 19.145,
+        "heldOutRootMeanSquareCodes": 2.184,
+        "maximumResidualCodes": 11.416,
+        "perTint": {
+          "L10": {
+            "base": [
+              22.1068,
+              24.4031,
+              25.3969
+            ],
+            "beta": [
+              0.120663,
+              0.093458,
+              0.079081
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.97604,
+            "maximumResidualCodes": 4.77
+          },
+          "L25": {
+            "base": [
+              58.4706,
+              60.2959,
+              59.4078
+            ],
+            "beta": [
+              0.112182,
+              0.090501,
+              0.099976
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 1.00103,
+            "maximumResidualCodes": 4.505
+          },
+          "L40": {
+            "base": [
+              96.1474,
+              97.1229,
+              96.1719
+            ],
+            "beta": [
+              0.086669,
+              0.07523,
+              0.084901
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.98072,
+            "maximumResidualCodes": 4.121
+          },
+          "L55": {
+            "base": [
+              132.6945,
+              133.8716,
+              132.8152
+            ],
+            "beta": [
+              0.08003,
+              0.066285,
+              0.076946
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.98579,
+            "maximumResidualCodes": 4.164
+          },
+          "L70": {
+            "base": [
+              169.6746,
+              169.9915,
+              167.5103
+            ],
+            "beta": [
+              0.065177,
+              0.06133,
+              0.095246
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.95887,
+            "maximumResidualCodes": 1.92
+          },
+          "L85": {
+            "base": [
+              206.1062,
+              206.6807,
+              205.0188
+            ],
+            "beta": [
+              0.050522,
+              0.043661,
+              0.064006
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.96616,
+            "maximumResidualCodes": 1.536
+          },
+          "M0": {
+            "base": [
+              190.5466,
+              76.9792,
+              81.5309
+            ],
+            "beta": [
+              0.032481,
+              0.150109,
+              0.13138
+            ],
+            "chromaMagnitude": 75.22,
+            "gamma": -0.00222,
+            "maximumResidualCodes": 1.041
+          },
+          "M1": {
+            "base": [
+              27.9145,
+              180.4038,
+              69.3778
+            ],
+            "beta": [
+              0.332123,
+              0.034885,
+              0.180008
+            ],
+            "chromaMagnitude": 93.78,
+            "gamma": 0.01329,
+            "maximumResidualCodes": 3.177
+          },
+          "M2": {
+            "base": [
+              84.322,
+              84.3892,
+              183.0778
+            ],
+            "beta": [
+              0.133972,
+              0.133184,
+              0.038892
+            ],
+            "chromaMagnitude": 83.31,
+            "gamma": 0.00165,
+            "maximumResidualCodes": 1.031
+          },
+          "M3": {
+            "base": [
+              163.0629,
+              163.0841,
+              54.5219
+            ],
+            "beta": [
+              0.069405,
+              0.069156,
+              0.113527
+            ],
+            "chromaMagnitude": 83.31,
+            "gamma": 0.00052,
+            "maximumResidualCodes": 1.225
+          },
+          "M4": {
+            "base": [
+              1.1521,
+              165.8603,
+              162.9647
+            ],
+            "beta": [
+              0.326036,
+              0.071704,
+              0.083295
+            ],
+            "chromaMagnitude": 75.22,
+            "gamma": 0.01477,
+            "maximumResidualCodes": 5.043
+          },
+          "M5": {
+            "base": [
+              176.0577,
+              66.2114,
+              168.0217
+            ],
+            "beta": [
+              0.069464,
+              0.092493,
+              0.06994
+            ],
+            "chromaMagnitude": 93.78,
+            "gamma": 0.00072,
+            "maximumResidualCodes": 0.611
+          },
+          "M6": {
+            "base": [
+              120.4496,
+              121.9044,
+              120.5491
+            ],
+            "beta": [
+              0.083096,
+              0.065568,
+              0.079979
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.98612,
+            "maximumResidualCodes": 4.342
+          },
+          "M7": {
+            "base": [
+              156.8921,
+              109.9795,
+              67.1792
+            ],
+            "beta": [
+              0.083634,
+              0.074461,
+              0.062827
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": 0.00163,
+            "maximumResidualCodes": 0.726
+          },
+          "N0": {
+            "base": [
+              124.9141,
+              124.3163,
+              124.2472
+            ],
+            "beta": [
+              0.08338,
+              0.08212,
+              0.082986
+            ],
+            "chromaMagnitude": 0.64,
+            "gamma": 0.00076,
+            "maximumResidualCodes": 0.802
+          },
+          "N1": {
+            "base": [
+              125.9348,
+              123.9455,
+              123.8748
+            ],
+            "beta": [
+              0.074989,
+              0.083011,
+              0.083898
+            ],
+            "chromaMagnitude": 1.61,
+            "gamma": 0.00078,
+            "maximumResidualCodes": 0.817
+          },
+          "N2": {
+            "base": [
+              127.9141,
+              123.3163,
+              123.2472
+            ],
+            "beta": [
+              0.08338,
+              0.08212,
+              0.082986
+            ],
+            "chromaMagnitude": 3.22,
+            "gamma": 0.00076,
+            "maximumResidualCodes": 0.802
+          },
+          "N3": {
+            "base": [
+              131.4153,
+              121.9758,
+              121.7245
+            ],
+            "beta": [
+              0.078778,
+              0.082645,
+              0.085797
+            ],
+            "chromaMagnitude": 6.45,
+            "gamma": 0.00278,
+            "maximumResidualCodes": 1.183
+          },
+          "N4": {
+            "base": [
+              137.7176,
+              118.2053,
+              119.2029
+            ],
+            "beta": [
+              0.077736,
+              0.089884,
+              0.089914
+            ],
+            "chromaMagnitude": 12.9,
+            "gamma": 3e-05,
+            "maximumResidualCodes": 0.667
+          },
+          "N5": {
+            "base": [
+              151.2043,
+              112.004,
+              113.0596
+            ],
+            "beta": [
+              0.071977,
+              0.107523,
+              0.094658
+            ],
+            "chromaMagnitude": 25.79,
+            "gamma": -0.0016,
+            "maximumResidualCodes": 1.416
+          },
+          "S100": {
+            "base": [
+              207.6659,
+              41.7655,
+              52.1631
+            ],
+            "beta": [
+              0.002835,
+              0.193437,
+              0.151057
+            ],
+            "chromaMagnitude": 107.46,
+            "gamma": -0.00907,
+            "maximumResidualCodes": 1.471
+          },
+          "S25": {
+            "base": [
+              147.0753,
+              105.9689,
+              107.2305
+            ],
+            "beta": [
+              0.064132,
+              0.10067,
+              0.092246
+            ],
+            "chromaMagnitude": 26.87,
+            "gamma": -0.0004,
+            "maximumResidualCodes": 0.821
+          },
+          "S50": {
+            "base": [
+              167.8218,
+              87.558,
+              89.7634
+            ],
+            "beta": [
+              0.041769,
+              0.110073,
+              0.107496
+            ],
+            "chromaMagnitude": 53.73,
+            "gamma": -0.00227,
+            "maximumResidualCodes": 1.189
+          },
+          "S75": {
+            "base": [
+              188.3551,
+              66.8255,
+              71.8014
+            ],
+            "beta": [
+              0.024579,
+              0.140182,
+              0.129533
+            ],
+            "chromaMagnitude": 80.6,
+            "gamma": -0.00454,
+            "maximumResidualCodes": 1.035
+          },
+          "X00": {
+            "base": [
+              160.4233,
+              95.1247,
+              125.8021
+            ],
+            "beta": [
+              0.045585,
+              0.102118,
+              0.076669
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.00111,
+            "maximumResidualCodes": 1.021
+          },
+          "X01": {
+            "base": [
+              79.7793,
+              153.1695,
+              122.7182
+            ],
+            "beta": [
+              0.136812,
+              0.053883,
+              0.077729
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": 0.0,
+            "maximumResidualCodes": 0.978
+          },
+          "X02": {
+            "base": [
+              129.7493,
+              97.1231,
+              155.4862
+            ],
+            "beta": [
+              0.077371,
+              0.102137,
+              0.044758
+            ],
+            "chromaMagnitude": 45.9,
+            "gamma": -0.00121,
+            "maximumResidualCodes": 1.023
+          },
+          "X03": {
+            "base": [
+              183.6888,
+              135.0197,
+              90.9093
+            ],
+            "beta": [
+              0.047337,
+              0.086102,
+              0.14031
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00158,
+            "maximumResidualCodes": 0.909
+          },
+          "X04": {
+            "base": [
+              84.5522,
+              138.051,
+              180.9588
+            ],
+            "beta": [
+              0.15783,
+              0.085723,
+              0.034785
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": 0.00049,
+            "maximumResidualCodes": 0.954
+          },
+          "X05": {
+            "base": [
+              125.659,
+              177.6709,
+              85.3278
+            ],
+            "beta": [
+              0.099726,
+              0.047531,
+              0.159435
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": 0.00148,
+            "maximumResidualCodes": 0.924
+          },
+          "X06": {
+            "base": [
+              62.6182,
+              112.9727,
+              153.8445
+            ],
+            "beta": [
+              0.048151,
+              0.074542,
+              0.084281
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": 0.00118,
+            "maximumResidualCodes": 0.785
+          },
+          "X07": {
+            "base": [
+              118.9243,
+              72.3197,
+              154.8439
+            ],
+            "beta": [
+              0.07511,
+              0.061062,
+              0.084288
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": 0.00119,
+            "maximumResidualCodes": 0.785
+          },
+          "X08": {
+            "base": [
+              195.5818,
+              145.8848,
+              146.9415
+            ],
+            "beta": [
+              0.078524,
+              0.139465,
+              0.138755
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00063,
+            "maximumResidualCodes": 0.91
+          },
+          "X09": {
+            "base": [
+              49.37,
+              101.2367,
+              101.5597
+            ],
+            "beta": [
+              0.037085,
+              0.049031,
+              0.04498
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00357,
+            "maximumResidualCodes": 0.987
+          },
+          "X10": {
+            "base": [
+              145.9365,
+              83.9873,
+              112.7185
+            ],
+            "beta": [
+              0.087374,
+              0.064015,
+              0.077744
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": 0.00314,
+            "maximumResidualCodes": 1.247
+          },
+          "X11": {
+            "base": [
+              69.2007,
+              139.3208,
+              109.8753
+            ],
+            "beta": [
+              0.060712,
+              0.082066,
+              0.075763
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": 0.00106,
+            "maximumResidualCodes": 0.889
+          },
+          "Y00": {
+            "base": [
+              74.2787,
+              74.3152,
+              115.0086
+            ],
+            "beta": [
+              0.061545,
+              0.061116,
+              0.070106
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": 0.0009,
+            "maximumResidualCodes": 0.479
+          },
+          "Y01": {
+            "base": [
+              74.2708,
+              74.3199,
+              154.843
+            ],
+            "beta": [
+              0.061635,
+              0.06106,
+              0.0843
+            ],
+            "chromaMagnitude": 71.41,
+            "gamma": 0.0012,
+            "maximumResidualCodes": 0.785
+          },
+          "Y02": {
+            "base": [
+              71.2075,
+              71.2909,
+              197.2691
+            ],
+            "beta": [
+              0.144455,
+              0.143477,
+              0.026134
+            ],
+            "chromaMagnitude": 107.11,
+            "gamma": 0.00205,
+            "maximumResidualCodes": 0.86
+          },
+          "Y03": {
+            "base": [
+              62.5168,
+              113.0823,
+              70.2715
+            ],
+            "beta": [
+              0.053427,
+              0.069178,
+              0.061661
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": 0.0004,
+            "maximumResidualCodes": 0.539
+          },
+          "Y04": {
+            "base": [
+              62.507,
+              113.0881,
+              113.0171
+            ],
+            "beta": [
+              0.053541,
+              0.069107,
+              0.069997
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": 0.00078,
+            "maximumResidualCodes": 0.54
+          },
+          "Y05": {
+            "base": [
+              62.6182,
+              112.9727,
+              153.8445
+            ],
+            "beta": [
+              0.048151,
+              0.074542,
+              0.084281
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": 0.00118,
+            "maximumResidualCodes": 0.785
+          },
+          "Y06": {
+            "base": [
+              57.9425,
+              111.8981,
+              196.2025
+            ],
+            "beta": [
+              0.166249,
+              0.105566,
+              0.026976
+            ],
+            "chromaMagnitude": 86.81,
+            "gamma": 0.00293,
+            "maximumResidualCodes": 1.342
+          },
+          "Y07": {
+            "base": [
+              34.1393,
+              151.9085,
+              63.4262
+            ],
+            "beta": [
+              0.068271,
+              0.083459,
+              0.059706
+            ],
+            "chromaMagnitude": 80.38,
+            "gamma": -0.00166,
+            "maximumResidualCodes": 1.13
+          },
+          "Y08": {
+            "base": [
+              34.1302,
+              151.9139,
+              109.0526
+            ],
+            "beta": [
+              0.068376,
+              0.083394,
+              0.073522
+            ],
+            "chromaMagnitude": 63.52,
+            "gamma": -0.0013,
+            "maximumResidualCodes": 1.135
+          },
+          "Y09": {
+            "base": [
+              34.1216,
+              151.919,
+              151.0062
+            ],
+            "beta": [
+              0.068474,
+              0.083332,
+              0.082237
+            ],
+            "chromaMagnitude": 64.48,
+            "gamma": -0.00097,
+            "maximumResidualCodes": 1.139
+          },
+          "Y10": {
+            "base": [
+              24.3892,
+              152.8184,
+              193.8989
+            ],
+            "beta": [
+              0.307052,
+              0.063427,
+              0.030812
+            ],
+            "chromaMagnitude": 82.64,
+            "gamma": 0.00697,
+            "maximumResidualCodes": 1.995
+          },
+          "Y11": {
+            "base": [
+              0.0,
+              193.4032,
+              46.9052
+            ],
+            "beta": [
+              -0.0,
+              0.024429,
+              0.213883
+            ],
+            "chromaMagnitude": 120.58,
+            "gamma": -0.00133,
+            "maximumResidualCodes": 1.364
+          },
+          "Y12": {
+            "base": [
+              0.0,
+              193.3821,
+              101.8317
+            ],
+            "beta": [
+              -0.0,
+              0.024683,
+              0.119402
+            ],
+            "chromaMagnitude": 101.3,
+            "gamma": -0.00271,
+            "maximumResidualCodes": 0.623
+          },
+          "Y13": {
+            "base": [
+              0.0,
+              193.4149,
+              147.7372
+            ],
+            "beta": [
+              -0.0,
+              0.024288,
+              0.07774
+            ],
+            "chromaMagnitude": 92.37,
+            "gamma": -0.00055,
+            "maximumResidualCodes": 1.185
+          },
+          "Y14": {
+            "base": [
+              0.0,
+              193.4285,
+              191.3975
+            ],
+            "beta": [
+              -0.0,
+              0.024123,
+              0.024512
+            ],
+            "chromaMagnitude": 96.72,
+            "gamma": 0.00034,
+            "maximumResidualCodes": 0.393
+          },
+          "Y15": {
+            "base": [
+              119.0616,
+              72.3103,
+              73.2586
+            ],
+            "beta": [
+              0.06942,
+              0.061176,
+              0.061824
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": 0.00057,
+            "maximumResidualCodes": 0.495
+          },
+          "Y16": {
+            "base": [
+              119.0518,
+              72.3161,
+              114.0042
+            ],
+            "beta": [
+              0.069533,
+              0.061105,
+              0.070161
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": 0.00096,
+            "maximumResidualCodes": 0.479
+          },
+          "Y17": {
+            "base": [
+              118.9243,
+              72.3197,
+              154.8439
+            ],
+            "beta": [
+              0.07511,
+              0.061062,
+              0.084288
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": 0.00119,
+            "maximumResidualCodes": 0.785
+          },
+          "Y18": {
+            "base": [
+              118.042,
+              69.2818,
+              197.3144
+            ],
+            "beta": [
+              0.09856,
+              0.143587,
+              0.025562
+            ],
+            "chromaMagnitude": 102.06,
+            "gamma": 0.00145,
+            "maximumResidualCodes": 0.85
+          },
+          "Y19": {
+            "base": [
+              112.063,
+              112.084,
+              69.2628
+            ],
+            "beta": [
+              0.069403,
+              0.069157,
+              0.061771
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": 0.00052,
+            "maximumResidualCodes": 0.493
+          },
+          "Y20": {
+            "base": [
+              110.8121,
+              110.8782,
+              153.5905
+            ],
+            "beta": [
+              0.106582,
+              0.105807,
+              0.066248
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": 0.00162,
+            "maximumResidualCodes": 0.646
+          },
+          "Y21": {
+            "base": [
+              109.256,
+              109.4376,
+              195.543
+            ],
+            "beta": [
+              0.147822,
+              0.145691,
+              0.033433
+            ],
+            "chromaMagnitude": 71.41,
+            "gamma": 0.00446,
+            "maximumResidualCodes": 1.197
+          },
+          "Y22": {
+            "base": [
+              100.9524,
+              150.935,
+              62.2947
+            ],
+            "beta": [
+              0.074786,
+              0.083138,
+              0.061367
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": 9e-05,
+            "maximumResidualCodes": 0.806
+          },
+          "Y23": {
+            "base": [
+              99.298,
+              151.7376,
+              106.5039
+            ],
+            "beta": [
+              0.118751,
+              0.064402,
+              0.115644
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": 0.00165,
+            "maximumResidualCodes": 1.079
+          }
+        },
+        "regimes": {
+          "chromatic": {
+            "candidates": [
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 42.047,
+                "heldOutRootMeanSquareCodes": 5.153,
+                "order": 1,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 41.688,
+                "heldOutRootMeanSquareCodes": 5.15,
+                "order": 1,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 27.138,
+                "heldOutRootMeanSquareCodes": 3.036,
+                "order": 2,
+                "termCount": 10
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 26.718,
+                "heldOutRootMeanSquareCodes": 3.031,
+                "order": 2,
+                "termCount": 10
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 19.145,
+                "heldOutRootMeanSquareCodes": 2.283,
+                "order": 3,
+                "termCount": 20
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 18.717,
+                "heldOutRootMeanSquareCodes": 2.285,
+                "order": 3,
+                "termCount": 20
+              }
+            ],
+            "coefficients": [
+              [
+                -161.71947724,
+                405.93878758,
+                150.23713502,
+                693.91557401,
+                -615.27903297,
+                -19.04741958,
+                -148.26129526,
+                -299.12622166,
+                -374.75631519,
+                -501.01236724,
+                328.59882692,
+                52.24275487,
+                -169.35045932,
+                -504.02359974,
+                74.06621708,
+                90.40691117,
+                1482.11218217,
+                210.60114119,
+                -759.92840205,
+                412.58623219,
+                0.52265967,
+                -1.21645608,
+                -0.61460326,
+                -0.39842762,
+                0.08834295,
+                -0.18780265,
+                -7.4494574,
+                3.19057723,
+                15.23113682,
+                -7.55573711,
+                0.55952204,
+                2.07754727,
+                0.13189191,
+                9.98637144,
+                -2.12451677,
+                -2.64765415,
+                -11.951039,
+                0.0889298,
+                -3.52288589,
+                6.03385477
+              ],
+              [
+                12.76822913,
+                -0.6735306,
+                176.90243502,
+                -14.01122604,
+                -30.29338232,
+                55.41919081,
+                58.79410835,
+                44.95650465,
+                160.84753407,
+                -91.63257751,
+                -2.23654563,
+                58.08214884,
+                -46.95634989,
+                19.76638211,
+                -29.95805642,
+                -157.77246605,
+                -134.17725814,
+                61.97986335,
+                86.17444062,
+                -6.23094943,
+                -0.42187404,
+                0.79729319,
+                1.31413068,
+                0.72431853,
+                -0.70078045,
+                -1.17879439,
+                -0.53409127,
+                -1.39047909,
+                -1.82675468,
+                0.09656041,
+                0.9890878,
+                -1.52592084,
+                1.12065141,
+                -0.48153436,
+                0.75217713,
+                3.48500374,
+                0.13886591,
+                -1.04638052,
+                -0.13401722,
+                0.48714189
+              ],
+              [
+                0.44871078,
+                256.64679623,
+                14.0319132,
+                -21.76097185,
+                -67.33719625,
+                164.861909,
+                -157.9749063,
+                6.32609936,
+                43.24039855,
+                9.95626284,
+                100.74572048,
+                -247.32566358,
+                220.29708729,
+                -11.25338196,
+                32.98143113,
+                -107.31801881,
+                6.05010557,
+                39.31526305,
+                3.19543252,
+                -36.01818809,
+                -0.05135607,
+                -0.28344302,
+                -0.18982189,
+                0.90654896,
+                0.32647101,
+                0.99887328,
+                -0.28123829,
+                1.86210421,
+                -0.34490597,
+                -2.80722601,
+                -0.4212364,
+                1.01692183,
+                -3.04290126,
+                1.45122781,
+                -2.2166288,
+                1.17186803,
+                0.55050756,
+                -0.47235704,
+                -0.84428881,
+                2.63041999
+              ]
+            ],
+            "gammaFitted": false,
+            "maximumResidualCodes": 11.416,
+            "order": 3,
+            "rootMeanSquareResidualCodes": 1.037,
+            "termCount": 20,
+            "tintCount": 53
+          },
+          "neutral": {
+            "candidates": [
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 6.016,
+                "heldOutRootMeanSquareCodes": 1.459,
+                "order": 1,
+                "termCount": 2
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 5.646,
+                "heldOutRootMeanSquareCodes": 1.162,
+                "order": 1,
+                "termCount": 2
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 6.031,
+                "heldOutRootMeanSquareCodes": 1.507,
+                "order": 2,
+                "termCount": 3
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 4.769,
+                "heldOutRootMeanSquareCodes": 1.119,
+                "order": 2,
+                "termCount": 3
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 4.793,
+                "heldOutRootMeanSquareCodes": 1.637,
+                "order": 3,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 5.645,
+                "heldOutRootMeanSquareCodes": 1.36,
+                "order": 3,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 13.224,
+                "heldOutRootMeanSquareCodes": 2.544,
+                "order": 4,
+                "termCount": 5
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 49.0,
+                "heldOutRootMeanSquareCodes": 5.281,
+                "order": 4,
+                "termCount": 5
+              }
+            ],
+            "coefficients": [
+              [
+                -0.59713937,
+                243.97660986,
+                -1.04693041,
+                0.10666596,
+                -0.06254793,
+                -0.00045681,
+                0.88417275,
+                0.25207489,
+                -0.20513851
+              ],
+              [
+                0.89912911,
+                239.1130484,
+                2.44856017,
+                0.08746181,
+                -0.00069275,
+                -0.04475948,
+                1.11356067,
+                -0.4719166,
+                0.27989697
+              ],
+              [
+                -1.49045093,
+                240.21369633,
+                2.72985035,
+                0.11582198,
+                -0.01777602,
+                -0.04080556,
+                0.99106261,
+                0.14948225,
+                -0.22525508
+              ]
+            ],
+            "gammaFitted": true,
+            "maximumResidualCodes": 4.695,
+            "order": 2,
+            "rootMeanSquareResidualCodes": 1.012,
+            "termCount": 3,
+            "tintCount": 7
+          }
+        },
+        "rootMeanSquareResidualCodes": 1.034
+      },
+      "light": {
+        "heldOutMaximumCodes": 19.824,
+        "heldOutRootMeanSquareCodes": 2.194,
+        "maximumResidualCodes": 14.134,
+        "perTint": {
+          "L10": {
+            "base": [
+              21.1836,
+              16.3642,
+              23.4105
+            ],
+            "beta": [
+              0.108114,
+              0.126966,
+              0.098554
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 0.97094,
+            "maximumResidualCodes": 3.222
+          },
+          "L25": {
+            "base": [
+              44.4284,
+              61.7516,
+              49.5187
+            ],
+            "beta": [
+              0.144316,
+              0.076509,
+              0.129571
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 1.15806,
+            "maximumResidualCodes": 10.226
+          },
+          "L40": {
+            "base": [
+              91.2333,
+              96.4036,
+              92.0181
+            ],
+            "beta": [
+              0.100783,
+              0.079637,
+              0.09858
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 1.0523,
+            "maximumResidualCodes": 2.529
+          },
+          "L55": {
+            "base": [
+              130.536,
+              132.7003,
+              131.2923
+            ],
+            "beta": [
+              0.080449,
+              0.071761,
+              0.078636
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 1.02047,
+            "maximumResidualCodes": 2.575
+          },
+          "L70": {
+            "base": [
+              167.3929,
+              167.7021,
+              167.0382
+            ],
+            "beta": [
+              0.072782,
+              0.071752,
+              0.075661
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 1.02057,
+            "maximumResidualCodes": 2.33
+          },
+          "L85": {
+            "base": [
+              203.6997,
+              205.733,
+              204.6347
+            ],
+            "beta": [
+              0.065817,
+              0.056557,
+              0.062163
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 1.01324,
+            "maximumResidualCodes": 2.025
+          },
+          "M0": {
+            "base": [
+              115.1919,
+              34.6899,
+              35.9101
+            ],
+            "beta": [
+              0.300812,
+              0.186561,
+              0.195747
+            ],
+            "chromaMagnitude": 75.22,
+            "gamma": -0.00538,
+            "maximumResidualCodes": 1.067
+          },
+          "M1": {
+            "base": [
+              -20.0862,
+              104.5172,
+              25.5479
+            ],
+            "beta": [
+              0.237615,
+              0.303038,
+              0.197638
+            ],
+            "chromaMagnitude": 93.78,
+            "gamma": 0.00116,
+            "maximumResidualCodes": 1.384
+          },
+          "M2": {
+            "base": [
+              38.8164,
+              38.5244,
+              110.2844
+            ],
+            "beta": [
+              0.196242,
+              0.197759,
+              0.292007
+            ],
+            "chromaMagnitude": 83.31,
+            "gamma": -0.00489,
+            "maximumResidualCodes": 0.802
+          },
+          "M3": {
+            "base": [
+              94.3276,
+              94.4008,
+              20.1895
+            ],
+            "beta": [
+              0.279984,
+              0.279604,
+              0.150842
+            ],
+            "chromaMagnitude": 83.31,
+            "gamma": 0.00123,
+            "maximumResidualCodes": 0.979
+          },
+          "M4": {
+            "base": [
+              -41.4018,
+              96.482,
+              95.0605
+            ],
+            "beta": [
+              0.218732,
+              0.279181,
+              0.28138
+            ],
+            "chromaMagnitude": 75.22,
+            "gamma": 0.00575,
+            "maximumResidualCodes": 3.286
+          },
+          "M5": {
+            "base": [
+              103.2439,
+              30.4469,
+              95.3077
+            ],
+            "beta": [
+              0.295371,
+              0.152247,
+              0.295032
+            ],
+            "chromaMagnitude": 93.78,
+            "gamma": -0.00466,
+            "maximumResidualCodes": 0.896
+          },
+          "M6": {
+            "base": [
+              117.8321,
+              120.9851,
+              118.0412
+            ],
+            "beta": [
+              0.086649,
+              0.073426,
+              0.086475
+            ],
+            "chromaMagnitude": 0.0,
+            "gamma": 1.03429,
+            "maximumResidualCodes": 2.241
+          },
+          "M7": {
+            "base": [
+              89.2671,
+              58.4339,
+              33.0555
+            ],
+            "beta": [
+              0.280168,
+              0.214331,
+              0.14299
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00355,
+            "maximumResidualCodes": 1.272
+          },
+          "N0": {
+            "base": [
+              66.7957,
+              65.9508,
+              65.9618
+            ],
+            "beta": [
+              0.24179,
+              0.241589,
+              0.241531
+            ],
+            "chromaMagnitude": 0.64,
+            "gamma": -0.00015,
+            "maximumResidualCodes": 0.773
+          },
+          "N1": {
+            "base": [
+              70.2907,
+              67.222,
+              67.4368
+            ],
+            "beta": [
+              0.230026,
+              0.234086,
+              0.232965
+            ],
+            "chromaMagnitude": 1.61,
+            "gamma": -0.00293,
+            "maximumResidualCodes": 0.716
+          },
+          "N2": {
+            "base": [
+              69.7957,
+              64.9508,
+              64.9618
+            ],
+            "beta": [
+              0.24179,
+              0.241589,
+              0.241531
+            ],
+            "chromaMagnitude": 3.22,
+            "gamma": -0.00015,
+            "maximumResidualCodes": 0.773
+          },
+          "N3": {
+            "base": [
+              75.0738,
+              63.681,
+              64.1236
+            ],
+            "beta": [
+              0.229415,
+              0.242387,
+              0.240078
+            ],
+            "chromaMagnitude": 6.45,
+            "gamma": -0.00603,
+            "maximumResidualCodes": 0.904
+          },
+          "N4": {
+            "base": [
+              79.1189,
+              63.9765,
+              65.2677
+            ],
+            "beta": [
+              0.240715,
+              0.224822,
+              0.223303
+            ],
+            "chromaMagnitude": 12.9,
+            "gamma": -0.00397,
+            "maximumResidualCodes": 0.572
+          },
+          "N5": {
+            "base": [
+              82.6674,
+              61.6166,
+              59.8176
+            ],
+            "beta": [
+              0.281838,
+              0.211433,
+              0.221115
+            ],
+            "chromaMagnitude": 25.79,
+            "gamma": -0.00835,
+            "maximumResidualCodes": 1.184
+          },
+          "S100": {
+            "base": [
+              121.2457,
+              10.3306,
+              18.5726
+            ],
+            "beta": [
+              0.338657,
+              0.154866,
+              0.153603
+            ],
+            "chromaMagnitude": 107.46,
+            "gamma": -0.0033,
+            "maximumResidualCodes": 0.588
+          },
+          "S25": {
+            "base": [
+              79.4372,
+              58.1439,
+              56.3467
+            ],
+            "beta": [
+              0.276791,
+              0.201605,
+              0.212557
+            ],
+            "chromaMagnitude": 26.87,
+            "gamma": -0.00225,
+            "maximumResidualCodes": 1.097
+          },
+          "S50": {
+            "base": [
+              96.5507,
+              41.5791,
+              43.7149
+            ],
+            "beta": [
+              0.287214,
+              0.197475,
+              0.196766
+            ],
+            "chromaMagnitude": 53.73,
+            "gamma": -0.00185,
+            "maximumResidualCodes": 1.089
+          },
+          "S75": {
+            "base": [
+              107.4477,
+              30.4724,
+              32.5344
+            ],
+            "beta": [
+              0.321578,
+              0.162529,
+              0.172067
+            ],
+            "chromaMagnitude": 80.6,
+            "gamma": -0.00195,
+            "maximumResidualCodes": 1.142
+          },
+          "X00": {
+            "base": [
+              89.651,
+              48.5166,
+              70.1905
+            ],
+            "beta": [
+              0.284063,
+              0.1978,
+              0.227795
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.00533,
+            "maximumResidualCodes": 0.861
+          },
+          "X01": {
+            "base": [
+              41.2978,
+              86.6655,
+              67.18
+            ],
+            "beta": [
+              0.169999,
+              0.269037,
+              0.22785
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.00514,
+            "maximumResidualCodes": 0.982
+          },
+          "X02": {
+            "base": [
+              70.9074,
+              50.4801,
+              84.8363
+            ],
+            "beta": [
+              0.242157,
+              0.19799,
+              0.28309
+            ],
+            "chromaMagnitude": 45.9,
+            "gamma": -0.00736,
+            "maximumResidualCodes": 0.861
+          },
+          "X03": {
+            "base": [
+              114.4146,
+              73.8266,
+              36.4162
+            ],
+            "beta": [
+              0.278454,
+              0.252098,
+              0.233073
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00256,
+            "maximumResidualCodes": 0.701
+          },
+          "X04": {
+            "base": [
+              29.2971,
+              76.8331,
+              107.242
+            ],
+            "beta": [
+              0.24148,
+              0.252064,
+              0.296455
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.0022,
+            "maximumResidualCodes": 1.181
+          },
+          "X05": {
+            "base": [
+              69.5593,
+              108.194,
+              31.6259
+            ],
+            "beta": [
+              0.232864,
+              0.279601,
+              0.231978
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": -0.00634,
+            "maximumResidualCodes": 0.96
+          },
+          "X06": {
+            "base": [
+              24.4719,
+              61.4364,
+              86.5218
+            ],
+            "beta": [
+              0.157228,
+              0.214318,
+              0.275819
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00341,
+            "maximumResidualCodes": 1.082
+          },
+          "X07": {
+            "base": [
+              63.2602,
+              33.3973,
+              86.2066
+            ],
+            "beta": [
+              0.230185,
+              0.161841,
+              0.282547
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": -0.0022,
+            "maximumResidualCodes": 0.686
+          },
+          "X08": {
+            "base": [
+              130.9604,
+              60.0437,
+              61.5079
+            ],
+            "beta": [
+              0.266431,
+              0.356414,
+              0.353992
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00633,
+            "maximumResidualCodes": 1.293
+          },
+          "X09": {
+            "base": [
+              22.7926,
+              57.8998,
+              56.7439
+            ],
+            "beta": [
+              0.107391,
+              0.177153,
+              0.182194
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": 0.00358,
+            "maximumResidualCodes": 1.183
+          },
+          "X10": {
+            "base": [
+              86.3532,
+              42.2267,
+              61.7094
+            ],
+            "beta": [
+              0.243268,
+              0.172039,
+              0.212894
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.00382,
+            "maximumResidualCodes": 0.83
+          },
+          "X11": {
+            "base": [
+              32.7411,
+              79.1433,
+              58.7934
+            ],
+            "beta": [
+              0.150712,
+              0.24751,
+              0.212455
+            ],
+            "chromaMagnitude": 42.35,
+            "gamma": -0.00534,
+            "maximumResidualCodes": 1.026
+          },
+          "Y00": {
+            "base": [
+              36.2835,
+              36.2176,
+              65.6044
+            ],
+            "beta": [
+              0.159204,
+              0.159546,
+              0.205126
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": -0.0011,
+            "maximumResidualCodes": 0.527
+          },
+          "Y01": {
+            "base": [
+              35.6313,
+              35.3529,
+              90.6724
+            ],
+            "beta": [
+              0.160625,
+              0.162072,
+              0.265172
+            ],
+            "chromaMagnitude": 71.41,
+            "gamma": -0.00467,
+            "maximumResidualCodes": 0.731
+          },
+          "Y02": {
+            "base": [
+              26.7466,
+              26.5545,
+              117.7206
+            ],
+            "beta": [
+              0.196604,
+              0.197603,
+              0.31868
+            ],
+            "chromaMagnitude": 107.11,
+            "gamma": -0.00322,
+            "maximumResidualCodes": 0.764
+          },
+          "Y03": {
+            "base": [
+              26.5806,
+              63.4565,
+              32.5045
+            ],
+            "beta": [
+              0.148869,
+              0.205896,
+              0.158048
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": -0.00482,
+            "maximumResidualCodes": 0.772
+          },
+          "Y04": {
+            "base": [
+              26.468,
+              63.5051,
+              63.6607
+            ],
+            "beta": [
+              0.149454,
+              0.205644,
+              0.204832
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00212,
+            "maximumResidualCodes": 0.78
+          },
+          "Y05": {
+            "base": [
+              24.4719,
+              61.4364,
+              86.5218
+            ],
+            "beta": [
+              0.157228,
+              0.214318,
+              0.275819
+            ],
+            "chromaMagnitude": 54.89,
+            "gamma": -0.00341,
+            "maximumResidualCodes": 1.082
+          },
+          "Y06": {
+            "base": [
+              14.8584,
+              56.1685,
+              114.8236
+            ],
+            "beta": [
+              0.196023,
+              0.234365,
+              0.326459
+            ],
+            "chromaMagnitude": 86.81,
+            "gamma": -0.0059,
+            "maximumResidualCodes": 0.964
+          },
+          "Y07": {
+            "base": [
+              2.5141,
+              87.3545,
+              29.0422
+            ],
+            "beta": [
+              0.133575,
+              0.26683,
+              0.143059
+            ],
+            "chromaMagnitude": 80.38,
+            "gamma": -0.00331,
+            "maximumResidualCodes": 1.426
+          },
+          "Y08": {
+            "base": [
+              2.7035,
+              87.2728,
+              57.9324
+            ],
+            "beta": [
+              0.13259,
+              0.267256,
+              0.211729
+            ],
+            "chromaMagnitude": 63.52,
+            "gamma": -0.00785,
+            "maximumResidualCodes": 1.437
+          },
+          "Y09": {
+            "base": [
+              2.6924,
+              87.2776,
+              86.834
+            ],
+            "beta": [
+              0.132648,
+              0.267231,
+              0.264328
+            ],
+            "chromaMagnitude": 64.48,
+            "gamma": -0.00759,
+            "maximumResidualCodes": 1.436
+          },
+          "Y10": {
+            "base": [
+              -25.5494,
+              86.476,
+              116.8228
+            ],
+            "beta": [
+              0.24753,
+              0.270423,
+              0.309361
+            ],
+            "chromaMagnitude": 82.64,
+            "gamma": -0.0025,
+            "maximumResidualCodes": 1.873
+          },
+          "Y11": {
+            "base": [
+              0.0,
+              115.7601,
+              4.1424
+            ],
+            "beta": [
+              -0.0,
+              0.309689,
+              0.200151
+            ],
+            "chromaMagnitude": 120.58,
+            "gamma": 0.00421,
+            "maximumResidualCodes": 1.024
+          },
+          "Y12": {
+            "base": [
+              0.0,
+              115.6315,
+              48.6857
+            ],
+            "beta": [
+              -0.0,
+              0.310358,
+              0.226585
+            ],
+            "chromaMagnitude": 101.3,
+            "gamma": -0.00294,
+            "maximumResidualCodes": 1.16
+          },
+          "Y13": {
+            "base": [
+              0.0,
+              115.6241,
+              82.7066
+            ],
+            "beta": [
+              -0.0,
+              0.310397,
+              0.26922
+            ],
+            "chromaMagnitude": 92.37,
+            "gamma": -0.00335,
+            "maximumResidualCodes": 0.612
+          },
+          "Y14": {
+            "base": [
+              0.0,
+              115.6597,
+              113.7607
+            ],
+            "beta": [
+              -0.0,
+              0.310212,
+              0.309684
+            ],
+            "chromaMagnitude": 96.72,
+            "gamma": -0.00138,
+            "maximumResidualCodes": 0.596
+          },
+          "Y15": {
+            "base": [
+              66.5111,
+              34.2164,
+              35.3021
+            ],
+            "beta": [
+              0.215476,
+              0.159552,
+              0.159105
+            ],
+            "chromaMagnitude": 32.24,
+            "gamma": -0.00117,
+            "maximumResidualCodes": 0.7
+          },
+          "Y16": {
+            "base": [
+              66.3985,
+              34.265,
+              64.4584
+            ],
+            "beta": [
+              0.216061,
+              0.159299,
+              0.205888
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": 0.00153,
+            "maximumResidualCodes": 0.716
+          },
+          "Y17": {
+            "base": [
+              63.2602,
+              33.3973,
+              86.2066
+            ],
+            "beta": [
+              0.230185,
+              0.161841,
+              0.282547
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": -0.0022,
+            "maximumResidualCodes": 0.686
+          },
+          "Y18": {
+            "base": [
+              59.2415,
+              24.5918,
+              115.4188
+            ],
+            "beta": [
+              0.243848,
+              0.197408,
+              0.326413
+            ],
+            "chromaMagnitude": 102.06,
+            "gamma": -0.00114,
+            "maximumResidualCodes": 0.903
+          },
+          "Y19": {
+            "base": [
+              62.6618,
+              62.4921,
+              33.5371
+            ],
+            "beta": [
+              0.204829,
+              0.205711,
+              0.149091
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": -0.00284,
+            "maximumResidualCodes": 0.776
+          },
+          "Y20": {
+            "base": [
+              55.4472,
+              55.2002,
+              87.7501
+            ],
+            "beta": [
+              0.232916,
+              0.2342,
+              0.268993
+            ],
+            "chromaMagnitude": 35.7,
+            "gamma": -0.00414,
+            "maximumResidualCodes": 0.738
+          },
+          "Y21": {
+            "base": [
+              39.3946,
+              39.002,
+              127.6613
+            ],
+            "beta": [
+              0.295665,
+              0.297707,
+              0.271944
+            ],
+            "chromaMagnitude": 71.41,
+            "gamma": -0.00658,
+            "maximumResidualCodes": 1.018
+          },
+          "Y22": {
+            "base": [
+              52.6947,
+              86.4561,
+              27.9665
+            ],
+            "beta": [
+              0.200092,
+              0.266302,
+              0.143059
+            ],
+            "chromaMagnitude": 68.85,
+            "gamma": 0.00234,
+            "maximumResidualCodes": 1.144
+          },
+          "Y23": {
+            "base": [
+              44.3885,
+              85.4718,
+              51.4259
+            ],
+            "beta": [
+              0.233221,
+              0.270445,
+              0.233022
+            ],
+            "chromaMagnitude": 40.19,
+            "gamma": -0.00273,
+            "maximumResidualCodes": 0.832
+          }
+        },
+        "regimes": {
+          "chromatic": {
+            "candidates": [
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 38.203,
+                "heldOutRootMeanSquareCodes": 5.27,
+                "order": 1,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 38.531,
+                "heldOutRootMeanSquareCodes": 5.268,
+                "order": 1,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 23.651,
+                "heldOutRootMeanSquareCodes": 3.069,
+                "order": 2,
+                "termCount": 10
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 23.986,
+                "heldOutRootMeanSquareCodes": 3.066,
+                "order": 2,
+                "termCount": 10
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 16.71,
+                "heldOutRootMeanSquareCodes": 2.158,
+                "order": 3,
+                "termCount": 20
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 17.326,
+                "heldOutRootMeanSquareCodes": 2.162,
+                "order": 3,
+                "termCount": 20
+              }
+            ],
+            "coefficients": [
+              [
+                -202.68670593,
+                -22.38987217,
+                531.75274882,
+                914.6927441,
+                345.00466184,
+                -98.26109699,
+                -570.4112997,
+                -259.55054885,
+                -1126.41332573,
+                -957.01795156,
+                -149.2764455,
+                -550.55776856,
+                654.38829001,
+                -608.01412847,
+                -86.54426813,
+                -88.18450915,
+                1945.05407886,
+                425.40317379,
+                -301.78526007,
+                572.61983226,
+                0.18396126,
+                1.78969284,
+                -1.64293633,
+                -0.83205074,
+                -4.09729127,
+                -0.04441965,
+                0.88673461,
+                0.09140441,
+                5.18799338,
+                0.60359097,
+                2.10134216,
+                2.99025478,
+                -3.27881737,
+                1.63587491,
+                0.30327044,
+                0.45661826,
+                -3.54410355,
+                -0.65989889,
+                -2.41345068,
+                0.28572409
+              ],
+              [
+                169.21665173,
+                -614.30843868,
+                106.64449963,
+                -569.49605697,
+                763.90250551,
+                285.06699507,
+                -175.97109167,
+                1052.27461598,
+                326.92491088,
+                554.23408847,
+                -374.400407,
+                8.85915234,
+                16.09271839,
+                69.71378232,
+                -683.97965755,
+                -790.31144582,
+                262.86169758,
+                -92.52454361,
+                -250.37290752,
+                -285.3545581,
+                -0.71645616,
+                2.63676069,
+                0.54604453,
+                2.38475838,
+                -3.31664801,
+                -1.19460833,
+                0.79240094,
+                -4.36533542,
+                -1.06328469,
+                -2.54979894,
+                1.63414488,
+                -0.01114413,
+                -0.02813642,
+                -0.25559552,
+                2.80720255,
+                3.11987529,
+                -1.49677265,
+                0.47169883,
+                1.3528363,
+                1.1543784
+              ],
+              [
+                30.89202459,
+                644.9865666,
+                -361.16709185,
+                -407.86028921,
+                -778.97391267,
+                13.88052786,
+                435.92022216,
+                -625.17120104,
+                742.4094962,
+                862.52966313,
+                320.26518294,
+                -8.00334851,
+                206.45856601,
+                -301.79913829,
+                825.66263255,
+                -250.75925124,
+                -474.64792333,
+                -73.55122462,
+                -203.93156521,
+                -553.35858937,
+                -0.09839785,
+                -1.65115919,
+                1.39813298,
+                1.61444581,
+                2.94019899,
+                0.8195392,
+                -2.28713644,
+                2.80057627,
+                -2.90011069,
+                -3.65515129,
+                -0.95074225,
+                -0.86727849,
+                -0.39934366,
+                1.31505147,
+                -3.45798612,
+                0.78330043,
+                1.93003552,
+                0.31445572,
+                0.81380342,
+                2.32242807
+              ]
+            ],
+            "gammaFitted": false,
+            "maximumResidualCodes": 9.952,
+            "order": 3,
+            "rootMeanSquareResidualCodes": 1.02,
+            "termCount": 20,
+            "tintCount": 53
+          },
+          "neutral": {
+            "candidates": [
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 21.893,
+                "heldOutRootMeanSquareCodes": 2.659,
+                "order": 1,
+                "termCount": 2
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 19.824,
+                "heldOutRootMeanSquareCodes": 2.452,
+                "order": 1,
+                "termCount": 2
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 21.895,
+                "heldOutRootMeanSquareCodes": 3.022,
+                "order": 2,
+                "termCount": 3
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 21.201,
+                "heldOutRootMeanSquareCodes": 3.028,
+                "order": 2,
+                "termCount": 3
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 21.488,
+                "heldOutRootMeanSquareCodes": 3.635,
+                "order": 3,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 27.359,
+                "heldOutRootMeanSquareCodes": 4.701,
+                "order": 3,
+                "termCount": 4
+              },
+              {
+                "gammaFitted": false,
+                "heldOutMaximumCodes": 21.281,
+                "heldOutRootMeanSquareCodes": 5.603,
+                "order": 4,
+                "termCount": 5
+              },
+              {
+                "gammaFitted": true,
+                "heldOutMaximumCodes": 52.762,
+                "heldOutRootMeanSquareCodes": 7.448,
+                "order": 4,
+                "termCount": 5
+              }
+            ],
+            "coefficients": [
+              [
+                -17.35102424,
+                263.14783794,
+                0.16641683,
+                -0.13023723,
+                1.16498864,
+                -0.18405263
+              ],
+              [
+                -5.39525268,
+                247.46541564,
+                0.12045775,
+                -0.06939909,
+                0.98832777,
+                -0.06768925
+              ],
+              [
+                -8.09810362,
+                250.9509766,
+                0.13028402,
+                -0.08281433,
+                1.07804487,
+                -0.08522191
+              ]
+            ],
+            "gammaFitted": true,
+            "maximumResidualCodes": 14.134,
+            "order": 1,
+            "rootMeanSquareResidualCodes": 1.939,
+            "termCount": 2,
+            "tintCount": 7
+          }
+        },
+        "rootMeanSquareResidualCodes": 1.164
+      }
+    }
+  }
+}

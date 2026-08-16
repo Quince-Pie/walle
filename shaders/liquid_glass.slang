@@ -132,27 +132,22 @@ static const float kHalfPi = 1.57079632679;
 static const float kTintNeutralChroma = 0.5;
 
 
-// The material's colour transfer: a second-order polynomial in sRGB code
-// space.  An affine 3x3 is not enough - `regular`'s gray response bows above
-// the chord by 4.4 code values at mid-scale, in both appearances - and the
-// squared and cross terms beat it on held-out backgrounds everywhere.  They
-// also removed the need for the x**0.795 space this used to apply, which was
-// an artefact of fitting sixteen backgrounds rather than a property of the
+// The material's colour transfer: a polynomial in sRGB code space, whose order
+// each material chose by cross-validation and whose terms the generated header
+// pads to one width.  An affine 3x3 is not enough - `regular`'s gray response
+// bows above the chord by 4.4 code values at mid-scale, in both appearances -
+// and the higher terms beat it on held-out backgrounds everywhere.  They also
+// removed the need for the x**0.795 space this used to apply, which was an
+// artefact of fitting sixteen backgrounds rather than a property of the
 // material.
 float3 materialTransfer(float3 backdropSrgb, WalleMaterialTransfer transfer)
 {
-    float3 unit = saturate(backdropSrgb);
-    float3 squared = unit * unit;
-    float3 mixed = unit.r * transfer.fromR
-        + unit.g * transfer.fromG
-        + unit.b * transfer.fromB
-        + squared.r * transfer.squaredFromR
-        + squared.g * transfer.squaredFromG
-        + squared.b * transfer.squaredFromB
-        + (unit.r * unit.g) * transfer.crossRedGreen
-        + (unit.r * unit.b) * transfer.crossRedBlue
-        + (unit.g * unit.b) * transfer.crossGreenBlue
-        + transfer.offset;
+    float terms[kTransferTermCount];
+    walleTransferBasis(saturate(backdropSrgb), terms);
+
+    float3 mixed = float3(0.0);
+    for (int index = 0; index < kTransferTermCount; ++index)
+        mixed += transfer.terms[index] * terms[index];
     return saturate(mixed);
 }
 
@@ -192,12 +187,13 @@ float3 srgbToLinear(float3 value)
 // in, so the only conversion is the one at the end.
 //
 // The tint's two functions are expanded in a basis of its own colour: a
-// quadratic in all three components when the tint is chromatic, and a quadratic
-// in its single level when it is gray.  An affine basis is not enough - held
-// out one tint at a time it scores 6.43 code values rms against the quadratic's
-// 4.88 - because a strongly chromatic tint drives the base NEGATIVE in the
-// channel opposite its hue, and a plane through the rest of the colour cube
-// cannot reach that.
+// polynomial in all three components when the tint is chromatic, and a
+// quadratic in its single level when it is gray.  An affine basis is not
+// enough - held out one tint at a time it scores 5.27 code values rms against
+// a quadratic's 3.07 - because a strongly chromatic tint drives the base
+// NEGATIVE in the channel opposite its hue, and a plane through the rest of the
+// colour cube cannot reach that.  How far past affine is measured per material,
+// and the generated header pads the chosen orders to one width.
 float3 applyTint(float3 substrateSrgb, float3 tint, float lightness,
                  WalleTintRegime dark, WalleTintRegime light)
 {
@@ -210,28 +206,20 @@ float3 applyTint(float3 substrateSrgb, float3 tint, float lightness,
     bool neutral = length(unit * 255.0 - level * 255.0) < kTintNeutralChroma
         && haveNeutral;
 
-    float terms[10];
+    float terms[kTintChromaticTermCount];
     int width;
     if (neutral)
     {
-        terms[0] = level;
-        terms[1] = level * level;
-        terms[2] = 1.0;
-        width = 3;
+        float neutralTerms[kTintNeutralTermCount];
+        walleTintNeutralBasis(level, neutralTerms);
+        for (int term = 0; term < kTintNeutralTermCount; ++term)
+            terms[term] = neutralTerms[term];
+        width = kTintNeutralTermCount;
     }
     else
     {
-        terms[0] = unit.r;
-        terms[1] = unit.g;
-        terms[2] = unit.b;
-        terms[3] = 1.0;
-        terms[4] = unit.r * unit.r;
-        terms[5] = unit.g * unit.g;
-        terms[6] = unit.b * unit.b;
-        terms[7] = unit.r * unit.g;
-        terms[8] = unit.r * unit.b;
-        terms[9] = unit.g * unit.b;
-        width = 10;
+        walleTintBasis(unit, terms);
+        width = kTintChromaticTermCount;
     }
 
     float3 substrateCodes = substrateSrgb * 255.0;
@@ -240,6 +228,12 @@ float3 applyTint(float3 substrateSrgb, float3 tint, float lightness,
 
     float3 base = float3(0.0);
     float3 beta = float3(0.0);
+    // gamma: how much of the substrate's own chroma survives.  A neutral tint
+    // lets the backdrop's colour through and a chromatic one replaces it, with
+    // nothing measured in between - but "through" is not exactly one, and
+    // against a substrate whose chroma runs to 54 code values the difference
+    // is worth nine of them, so it is carried as a fitted function too.
+    float3 gamma = float3(0.0);
     for (int channel = 0; channel < 3; ++channel)
     {
         for (int term = 0; term < width; ++term)
@@ -249,19 +243,23 @@ float3 applyTint(float3 substrateSrgb, float3 tint, float lightness,
                 ? lerp(dark.neutralBase[index], light.neutralBase[index], lightness)
                 : lerp(dark.chromaticBase[index], light.chromaticBase[index],
                        lightness);
-            float g = neutral
+            float e = neutral
                 ? lerp(dark.neutralBeta[index], light.neutralBeta[index], lightness)
                 : lerp(dark.chromaticBeta[index], light.chromaticBeta[index],
                        lightness);
+            float c = neutral
+                ? lerp(dark.neutralGamma[index], light.neutralGamma[index],
+                       lightness)
+                : lerp(dark.chromaticGamma[index], light.chromaticGamma[index],
+                       lightness);
             base[channel] += b * terms[term];
-            beta[channel] += g * terms[term];
+            beta[channel] += e * terms[term];
+            gamma[channel] += c * terms[term];
         }
     }
 
-    // gamma: a neutral tint lets the backdrop's colour through untouched, a
-    // chromatic one replaces it.  Measured with nothing in between.
-    float3 chroma = neutral ? substrateChroma : float3(0.0);
-    return saturate((base + beta * substrateLuma + chroma) / 255.0);
+    return saturate(
+        (base + beta * substrateLuma + gamma * substrateChroma) / 255.0);
 }
 
 float hash12(float2 value)

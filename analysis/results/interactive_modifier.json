@@ -1,0 +1,842 @@
+{
+  "byteIdenticalPairs": 64,
+  "osBuild": "25G76",
+  "pairCount": 64,
+  "records": [
+    {
+      "appearance": "light",
+      "background": "blue-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "blue-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "cyan-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-000",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-064",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-192",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "green-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "green-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "magenta-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "orange",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "red-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "red-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "violet",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "yellow-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "blue-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "blue-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "cyan-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-000",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-064",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-192",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "green-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "green-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "magenta-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "orange",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "red-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "red-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "violet",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "dark",
+      "background": "yellow-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "regular"
+    },
+    {
+      "appearance": "light",
+      "background": "blue-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "blue-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "cyan-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-000",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-064",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-192",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "gray-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "green-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "green-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "magenta-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "orange",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "red-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "red-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "violet",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "light",
+      "background": "yellow-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "blue-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "blue-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "cyan-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-000",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-064",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-192",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "gray-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "green-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "green-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "magenta-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "orange",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "red-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "red-255",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "violet",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    },
+    {
+      "appearance": "dark",
+      "background": "yellow-128",
+      "differingPixels": 0,
+      "interiorMeanDelta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumAbsoluteDelta": 0,
+      "totalPixels": 1048576,
+      "variant": "clear"
+    }
+  ],
+  "schemaVersion": 1,
+  "verdict": "inert at rest - byte-identical in every pair",
+  "worstAbsoluteDelta": 0
+}

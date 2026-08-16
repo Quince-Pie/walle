@@ -4596,3 +4596,146 @@ VERIFIED END TO END - walle rendered over the same backgrounds, 240 cases:
 
 Both gates unchanged: the ladder at mismatchedPixels=0, the animating path at
 5 of 8 frames byte-exact.
+
+## 2026-08-15 (later 156): RULED OUT - the tint base is not the material's own transfer
+
+A tempting reduction: if `base(tint)` were just the untinted material's transfer
+applied to the tint COLOUR, the tint law would need no fitted map at all.  It is
+not.  Comparing the per-tint base against materialTransfer(tint) over 36 tints:
+
+    regular light   mean -145 codes, spread 30, worst 217
+    regular dark    mean  +60,        spread 25, worst 122
+    clear   light   mean  -74,        spread 24, worst 153
+    clear   dark    mean  -30,        spread 10, worst  95
+
+Not an offset, not a scale - the spread is as large as anything it would
+explain.  The fitted quadratic in the tint colour stands as the best available
+description.
+
+## 2026-08-15 (later 157): `.interactive(true)` IS INERT - measured, not assumed
+
+walle never modelled Apple's `interactive(Bool)` modifier.  Defensible - a
+wallpaper has nothing to interact with - but an assumption about a shipped
+modifier is a parity gap until something measures it.  The rig now captures
+`.regular` and `.regular.interactive(true)` over the same backgrounds in the
+same run, so the two frames differ in nothing but the modifier:
+
+    16 backgrounds x 2 variants x 2 appearances = 64 pairs
+    byte-identical: 64/64,  differing pixels 0,  max delta 0
+
+Not "identical in the interior" - identical everywhere, rim and all.  Omitting
+it is now a measurement (analysis/measure_interactive_modifier.py,
+analysis/results/interactive_modifier.json).
+
+## 2026-08-15 (later 158): THE LATTICE MISSED THE FACES OF THE CUBE
+
+Verifying end to end over 396 cases instead of the usual 30 exposed an UNTINTED
+error the small case set never saw: `clear` over cyan-128 reads 41 in red where
+walle renders 31.2.  Nine and eight tenths code values, on an untinted element.
+
+The cause is the corpus, not the model.  The first colour lattice sampled
+32/96/160/224 per channel - every one of its 64 points is INTERIOR to the cube.
+The only samples on a face were the seven named saturated colours, and least
+squares let 64 interior points outvote 7 face points.  The polynomial CAN
+represent what the faces do - green bleeds +22 into red at red=0 and +1 at
+red=128, which is exactly an r*g cross term - it simply was not asked to.
+
+Two changes.  The lattice levels are now a capture-time choice
+(WALLE_CUBE_LEVELS), and a second lattice at 0/32/64/96/128/192/255 interleaves
+with the first.  And the fit no longer hardcodes its model: trivariate
+polynomials of order 1 through 4 are cross-validated per variant and appearance,
+in the same total-degree basis the shader now evaluates.
+
+Also measured, and worth recording because it rules out the obvious theory:
+the transfer is NOT a linear-light operation.  Compositing usually is, so the
+natural story is that the material blends in linear light and the sRGB curve is
+what bends the response.  Fitting the same polynomials on linearised inputs and
+outputs is worse at every order:
+
+                        sRGB code      linear light   (held-out rms)
+    clear               1.34            2.24
+    regular light       1.58            5.23
+    regular dark        0.90           13.85
+
+sRGB code space is where this material works.
+
+## 2026-08-15 (later 159): THE TINT BASIS ORDER IS NOW MEASURED TOO
+
+The tint law's in-sample error was never the problem; predicting a tint NOBODY
+CAPTURED was, and that is what the shader is asked to do.  Held out one tint at
+a time, from 29 chromatic tints against a quadratic basis:
+
+    regular light  4.59 rms / 33.5 max      regular dark  4.40 / 37.6
+    clear   light  5.23     / 31.5          clear   dark  4.47 / 31.0
+
+Twenty-four more mid-intensity colours (53 chromatic tints in all) and a basis
+order chosen by that same held-out score - cubic for three of the four
+materials, quadratic for `clear` in dark - give:
+
+    regular light  2.28 / 21.9              regular dark  2.21 / 19.1
+    clear   light  3.72 / 26.7              clear   dark  3.61 / 26.9
+
+Halved for `regular`.  The generated header pads every chosen order out to the
+widest one, which is exact because the basis is ordered by total degree, so the
+shader evaluates one fixed-width polynomial with no branch.
+
+## 2026-08-15 (later 160): THE REFRACTION BAND DOES NOT SEE CURVATURE
+
+Every refraction measurement is on a circle, and walle draws rounded rectangles
+too, whose straight sides are the zero-curvature limit.  That was an
+extrapolation.  It is now a fit: with the profile free per distance bin and one
+shared coefficient,
+
+    displacement(u, R) = profile(u) * (1 + c / R)
+
+over four radii from 128 to 1000 capture pixels, both variants, both
+appearances, 945 bins:
+
+    c = +0.2586 px
+    worst correction, at the SMALLEST element:  0.19 px
+    rms without the term 0.3376 px  ->  with it 0.3356 px
+
+The curvature term buys two thousandths of a pixel and its largest effect
+anywhere is smaller than the measurement's own scatter.  1/R varies eightfold
+across this family, so a real curvature dependence could not hide in it.  The
+band is a function of distance inside the rim and nothing else, and a straight
+edge is inside the measured range rather than beyond it.
+
+## 2026-08-15 (later 161): gamma WAS PINNED, AND PINNING COST NINE CODE VALUES
+
+The tint law reads gamma - how much of the substrate's own chroma survives - as
+one for every neutral tint and zero for every chromatic one, so it was PINNED
+there.  The per-tint fits scatter 0.96 to 1.16, and gamma multiplies a chroma
+that runs to 54 code values on a saturated substrate, so pinning is worth up to
+nine code values of error.  That is exactly what the end-to-end check found:
+the worst tinted case was a NEUTRAL tint over cyan, at 18.4.
+
+gamma is now a third fitted function of the tint on the same basis, chosen by
+held-out error like the order.  It won in three of the four neutral regimes and
+in one chromatic one; where pinning won, the pinned value is written into the
+basis's constant term rather than branched on, so the shader keeps one path.
+
+## 2026-08-15 (later 162): THE FACE-REACHING LATTICE, AND AN ORDER THAT TURNS OVER
+
+The second lattice landed - 216 backgrounds at 0/32/64/96/128/192/255 per
+channel, interleaving with the first - and the fit's background count went from
+47/61/85 to 195/247/293.  Refitting with orders one through six:
+
+                    before (order 2)      after
+    regular light   1.580 / 6.770       0.685 / 2.966   order 4
+    regular dark    0.899 / 5.433       0.741 / 5.477   order 5
+    clear           2.029 / 13.011      0.805 / 3.982   order 5
+
+held-out rms and max code values.  Held-out rms is now under one code value for
+every material and the worst held-out miss anywhere is 5.5.
+
+The order ladder TURNS OVER, which is the point of running it past where it
+wins: order 6 is worse than order 5 for all four materials (1.17 against 0.70
+for regular in light) even though its in-sample error is lower.  The chosen
+order is interior to the range tested, so it is a measurement and not the edge
+of the ladder.
+
+Provenance: artifacts-cube2, 2058 shots,
+sha256 3dc9f1344f5167e0177f1025608493f787facaf0156e520b51564058de939475.
+The 48 backgrounds the two lattices share are byte-identical across the two
+capture sessions.

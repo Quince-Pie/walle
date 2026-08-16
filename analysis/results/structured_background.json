@@ -1,0 +1,104 @@
+{
+  "classification": "walle over a step edge, end to end",
+  "osBuild": "25G76",
+  "records": [
+    {
+      "appearance": "light",
+      "background": "kstep-x-064-192",
+      "coreMaximumCodes": 1.688,
+      "maximumCodes": 40.438,
+      "rimMaximumCodes": 40.438,
+      "rootMeanSquareCodes": 1.647,
+      "scene": "circle-0500-center",
+      "scoredColumns": 1000,
+      "variant": "regular",
+      "worstColumn": 0
+    },
+    {
+      "appearance": "dark",
+      "background": "kstep-x-064-192",
+      "coreMaximumCodes": 3.0,
+      "maximumCodes": 50.312,
+      "rimMaximumCodes": 50.312,
+      "rootMeanSquareCodes": 2.613,
+      "scene": "circle-0500-center",
+      "scoredColumns": 1000,
+      "variant": "regular",
+      "worstColumn": 999
+    },
+    {
+      "appearance": "light",
+      "background": "kstep-x-064-192",
+      "coreMaximumCodes": 7.812,
+      "maximumCodes": 116.625,
+      "rimMaximumCodes": 116.625,
+      "rootMeanSquareCodes": 4.392,
+      "scene": "circle-0500-center",
+      "scoredColumns": 1000,
+      "variant": "clear",
+      "worstColumn": 0
+    },
+    {
+      "appearance": "dark",
+      "background": "kstep-x-064-192",
+      "coreMaximumCodes": 7.812,
+      "maximumCodes": 52.125,
+      "rimMaximumCodes": 52.125,
+      "rootMeanSquareCodes": 2.235,
+      "scene": "circle-0500-center",
+      "scoredColumns": 1000,
+      "variant": "clear",
+      "worstColumn": 0
+    },
+    {
+      "appearance": "light",
+      "background": "kstep-x-000-255",
+      "coreMaximumCodes": 4.25,
+      "maximumCodes": 53.938,
+      "rimMaximumCodes": 53.938,
+      "rootMeanSquareCodes": 2.499,
+      "scene": "circle-0500-center",
+      "scoredColumns": 1000,
+      "variant": "regular",
+      "worstColumn": 0
+    },
+    {
+      "appearance": "dark",
+      "background": "kstep-x-000-255",
+      "coreMaximumCodes": 7.125,
+      "maximumCodes": 55.125,
+      "rimMaximumCodes": 55.125,
+      "rootMeanSquareCodes": 4.381,
+      "scene": "circle-0500-center",
+      "scoredColumns": 1000,
+      "variant": "regular",
+      "worstColumn": 999
+    },
+    {
+      "appearance": "light",
+      "background": "kstep-x-000-255",
+      "coreMaximumCodes": 14.688,
+      "maximumCodes": 151.062,
+      "rimMaximumCodes": 151.062,
+      "rootMeanSquareCodes": 5.582,
+      "scene": "circle-0500-center",
+      "scoredColumns": 1000,
+      "variant": "clear",
+      "worstColumn": 0
+    },
+    {
+      "appearance": "dark",
+      "background": "kstep-x-000-255",
+      "coreMaximumCodes": 14.688,
+      "maximumCodes": 23.0,
+      "rimMaximumCodes": 23.0,
+      "rootMeanSquareCodes": 1.618,
+      "scene": "circle-0500-center",
+      "scoredColumns": 1000,
+      "variant": "clear",
+      "worstColumn": 2
+    }
+  ],
+  "schemaVersion": 1,
+  "worstCodes": 151.062
+}

@@ -480,6 +480,19 @@ struct wallpaper_state
      * against the hardware's live frames.  The default is off, because the
      * 65-state ladder is the rounded path and is byte-exact BECAUSE of it. */
     bool     reveal_process_capture_presentation;
+    /* --reveal-mask-process-capture-material-progress: drive the MATERIAL's
+     * clock from a separate value, leaving the geometry on the reveal
+     * progress.  One number normally does both, which ties the element's
+     * radius to how thick the material is, and the capture rig's own elements
+     * are fully materialized at radii the tied mapping cannot reach.  Negative
+     * means tied, which is the default and what every gate uses. */
+    float    reveal_process_capture_material_progress;
+    /* --reveal-mask-process-capture-backing-scale: how many DEVICE PIXELS the
+     * capture has per point.  The capture is always 2048x2048 device pixels;
+     * this says what those pixels mean, and the material's radii are absolute
+     * in device pixels at a 2x backing scale - which is the scale the whole
+     * corpus was captured at.  Default 1, which is what every gate uses. */
+    int32_t  reveal_process_capture_backing_scale;
     bool     reveal_process_capture_output_claimed;
     bool     reveal_process_capture_complete;
     int      reveal_process_capture_status;
@@ -2129,9 +2142,15 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
     }
 
     bool                  first_boot = !(output->render.flags & F_BOOT_COMPLETE);
+    /* The material's clock, which is the reveal progress unless the capture
+      * asked to drive it separately - see the field's comment. */
+    float material_progress
+        = process_capture && state->reveal_process_capture_material_progress >= 0.0f
+              ? state->reveal_process_capture_material_progress
+              : progress;
     struct walle_vk_frame frame      = {
              .geometry          = &geometry,
-             .progress          = progress,
+             .progress          = material_progress,
              .variant           = output->glass_variant == GLASS_VARIANT_REGULAR ? 1.0f : 0.0f,
              .center_top_left_x = geometry.circle.center[0],
              .center_top_left_y = geometry.circle.center[1],
@@ -2139,7 +2158,9 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
              .first_boot        = first_boot,
              .appearance = glass_appearance_value(output),
              .output_scale
-             = process_capture ? 1.0f : (float)(output->scale > 0 ? output->scale : 1),
+             = process_capture
+                   ? (float)state->reveal_process_capture_backing_scale
+                   : (float)(output->scale > 0 ? output->scale : 1),
              .tint = {output->glass_tint[0], output->glass_tint[1], output->glass_tint[2]},
              /* Apple's `identity` variant leaves content unaffected, which is
               * exactly the mask-weighted crossfade the hardware corpus
@@ -2578,7 +2599,9 @@ static void launch_async_render(struct wallpaper_output* o)
     o->job_h         = o->render.height;
     o->job_variant   = o->glass_variant;
     o->job_lightness = glass_appearance_value(o);
-    o->job_scale     = o->scale > 0 ? o->scale : 1;
+    o->job_scale     = o->render.state->reveal_process_capture
+                           ? o->render.state->reveal_process_capture_backing_scale
+                           : (o->scale > 0 ? o->scale : 1);
     if (pthread_create(&o->render_thread, nullptr, render_thread_worker, o) == 0) {
         o->render.flags |= F_THREAD_ACTIVE;
     } else if (o->reveal_process_capture_owned) {
@@ -3673,6 +3696,13 @@ static void print_usage(const char* argv0)
         "          of the 65-state ladder\n"
         "      --reveal-mask-process-capture-presentation\n"
         "          capture with the animating geometry instead of the rounded one\n"
+        "      --reveal-mask-process-capture-material-progress <v>\n"
+        "          drive the material's clock from <v> while the geometry stays on\n"
+        "          the reveal progress, so a fully materialized element can be\n"
+        "          captured at any radius\n"
+        "      --reveal-mask-process-capture-backing-scale <1..4>\n"
+        "          device pixels per point for the 2048x2048 capture; the\n"
+        "          material's radii are absolute at the corpus's 2x scale\n"
         "\n"
         "Renderer: Vulkan 1.4, offline Slang/SPIR-V 1.6 (no fallback).\n",
         argv0);
@@ -3743,6 +3773,8 @@ int main(int argc, char* argv[])
         OPT_REVEAL_MASK_PROCESS_CAPTURE = 256,
         OPT_REVEAL_MASK_PROCESS_CAPTURE_PROGRESS,
         OPT_REVEAL_MASK_PROCESS_CAPTURE_PRESENTATION,
+        OPT_REVEAL_MASK_PROCESS_CAPTURE_MATERIAL_PROGRESS,
+        OPT_REVEAL_MASK_PROCESS_CAPTURE_BACKING_SCALE,
         OPT_VULKAN_DEVICE,
     };
     static const struct option LONG_OPTS[] = {
@@ -3762,11 +3794,22 @@ int main(int argc, char* argv[])
          no_argument,
          nullptr,
          OPT_REVEAL_MASK_PROCESS_CAPTURE_PRESENTATION},
+        {"reveal-mask-process-capture-material-progress",
+         required_argument,
+         nullptr,
+         OPT_REVEAL_MASK_PROCESS_CAPTURE_MATERIAL_PROGRESS},
+        {"reveal-mask-process-capture-backing-scale",
+         required_argument,
+         nullptr,
+         OPT_REVEAL_MASK_PROCESS_CAPTURE_BACKING_SCALE},
         {},
     };
     const char* reveal_process_capture_directory  = nullptr;
     bool        reveal_process_capture_presentation = false;
     const char* reveal_process_capture_progress  = nullptr;
+    /* Negative means the material's clock stays tied to the reveal progress. */
+    float reveal_process_capture_material_progress = -1.0f;
+    int32_t reveal_process_capture_backing_scale = 1;
     const char* vulkan_device_selector           = getenv("WALLE_VK_DEVICE");
     bool        vulkan_device_selector_locked = vulkan_device_selector && *vulkan_device_selector;
     for (int opt; (opt = getopt_long(argc, argv, "c:hV", LONG_OPTS, nullptr)) != -1;) {
@@ -3793,6 +3836,32 @@ int main(int argc, char* argv[])
             case OPT_REVEAL_MASK_PROCESS_CAPTURE_PROGRESS:
                 reveal_process_capture_progress = optarg;
                 break;
+            case OPT_REVEAL_MASK_PROCESS_CAPTURE_MATERIAL_PROGRESS: {
+                char* end = nullptr;
+                double value = strtod(optarg, &end);
+                if (end == optarg || *end != '\0' || !(value >= 0.0 && value <= 1.0)) {
+                    fprintf(stderr,
+                            "--reveal-mask-process-capture-material-progress "
+                            "requires a value in [0,1], got \"%s\"\n",
+                            optarg);
+                    return 1;
+                }
+                reveal_process_capture_material_progress = (float)value;
+                break;
+            }
+            case OPT_REVEAL_MASK_PROCESS_CAPTURE_BACKING_SCALE: {
+                char* end = nullptr;
+                long value = strtol(optarg, &end, 10);
+                if (end == optarg || *end != '\0' || value < 1 || value > 4) {
+                    fprintf(stderr,
+                            "--reveal-mask-process-capture-backing-scale "
+                            "requires an integer in [1,4], got \"%s\"\n",
+                            optarg);
+                    return 1;
+                }
+                reveal_process_capture_backing_scale = (int32_t)value;
+                break;
+            }
             default:
                 print_usage(argv[0]);
                 return 1;
@@ -3854,6 +3923,9 @@ int main(int argc, char* argv[])
     struct wallpaper_state state = {
         .reveal_process_capture              = reveal_process_capture_directory != nullptr,
         .reveal_process_capture_presentation = reveal_process_capture_presentation,
+        .reveal_process_capture_material_progress
+        = reveal_process_capture_material_progress,
+        .reveal_process_capture_backing_scale = reveal_process_capture_backing_scale,
         .reveal_process_capture_single       = reveal_process_capture_progress != nullptr,
         .reveal_process_capture_progress_values = reveal_capture_progress_values,
         .reveal_process_capture_progress_count  = reveal_capture_progress_count,

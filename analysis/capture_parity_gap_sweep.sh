@@ -46,6 +46,7 @@ trap 'rm -rf -- "$work"' EXIT
 patched="$work/main.swift"
 
 python3 - "$source_swift" "$patched" <<'PY'
+import os
 import sys
 
 src, dst = sys.argv[1], sys.argv[2]
@@ -126,12 +127,21 @@ splice(
 # backgrounds that span the cube evenly and clip far less, so the fit is
 # determined by data instead.  Flat is the point: over a flat field the blur is
 # the identity, so these constrain the transfer alone.
+#
+# WALLE_CUBE_LEVELS chooses the levels.  The default 32/96/160/224 is INTERIOR:
+# it never touches a face of the cube, and a fit dominated by 64 interior points
+# misses the faces by up to 9.7 code values - `clear` over cyan reads 41 in red
+# where the interior fit says 31.  Re-running with levels that include 0 and 255
+# adds the faces; the two lattices interleave, so their union is a finer grid
+# than either.
+cube_levels = os.environ.get("WALLE_CUBE_LEVELS", "32,96,160,224")
+cube_list = ", ".join(f"UInt8({int(v)})" for v in cube_levels.split(","))
 splice(
     "    // Qualitative continuity with the HIG example.\n",
     "    // A flat lattice spanning the colour cube, for the material transfer.\n"
-    "    for red in [UInt8(32), UInt8(96), UInt8(160), UInt8(224)] {\n"
-    "        for green in [UInt8(32), UInt8(96), UInt8(160), UInt8(224)] {\n"
-    "            for blue in [UInt8(32), UInt8(96), UInt8(160), UInt8(224)] {\n"
+    f"    for red in [{cube_list}] {{\n"
+    f"        for green in [{cube_list}] {{\n"
+    f"            for blue in [{cube_list}] {{\n"
     "                list.append(flatBackground(\n"
     "                    String(format: \"cube-%03d-%03d-%03d\", Int(red),\n"
     "                           Int(green), Int(blue)),\n"
@@ -222,6 +232,14 @@ mid = {
 }
 lum = {f"L{int(v * 100):02d}": (v, v, v)
        for v in (0.10, 0.25, 0.40, 0.55, 0.70, 0.85)}
+# Fourteen more levels on the same axis.  A neutral tint takes a THIRD fitted
+# function - how much of the substrate's chroma survives - and seven samples
+# barely support the two it had, which is why a neutral tint over cyan was the
+# worst tinted case in the end-to-end check.  0.50 is missing on purpose: it is
+# already captured as M6.
+lum_extra = {f"L{int(v * 100):02d}": (v, v, v)
+             for v in (0.00, 0.05, 0.15, 0.20, 0.30, 0.35, 0.45,
+                       0.60, 0.65, 0.75, 0.80, 0.90, 0.95, 1.00)}
 sat = {f"S{int(k * 100):02d}": (0.5 + 0.25 * k, 0.5 - 0.25 * k, 0.5 - 0.25 * k)
        for k in (0.25, 0.50, 0.75, 1.00)}
 # The backdrop's CHROMA passes through a neutral tint essentially untouched
@@ -236,8 +254,8 @@ fine = {f"N{index:d}": (0.5 + d, 0.5 - d / 2, 0.5 - d / 2)
 sat |= fine
 
 # Which tint families to add, so a follow-up run can capture only what is
-# missing instead of re-shooting a corpus that already exists.
-import os
+# missing instead of re-shooting a corpus that already exists: see
+# WALLE_TINT_CASES below.
 
 # Twelve more colours spanning hue, saturation and level, all mid-intensity so
 # nothing clips.  The chromatic branch of the tint law sits at 6 code values
@@ -295,6 +313,8 @@ families = {
     "clearExtra": [(f"clearTint{k}", v, "clear") for k, v in extra.items()],
     "regularWide": [(f"tint{k}", v, "regular") for k, v in wide.items()],
     "clearWide": [(f"clearTint{k}", v, "clear") for k, v in wide.items()],
+    "regularNeutral": [(f"tint{k}", v, "regular") for k, v in lum_extra.items()],
+    "clearNeutral": [(f"clearTint{k}", v, "clear") for k, v in lum_extra.items()],
     # Apple's Glass exposes interactive(Bool) alongside tint(Color?).  Nothing
     # has ever captured it, and walle does not model it - defensibly, since a
     # wallpaper has nothing to interact with, but that is an assumption until

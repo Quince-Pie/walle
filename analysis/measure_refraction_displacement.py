@@ -158,6 +158,71 @@ def measure(shots: Path, scene: str, radius: float, overlay: str,
     }
 
 
+def curvature_term(records: list[JsonObject]) -> JsonObject | None:
+    """Is the band a function of distance alone, or does the rim's CURVATURE
+    enter it?
+
+    This matters because every element measured here is a circle, and walle
+    draws rounded rectangles too, whose straight sides are the zero-curvature
+    limit.  Rather than assume the law carries over, fit one:
+
+        displacement(u, R) = profile(u) * (1 + c / R)
+
+    with `profile` free per distance bin and `c` shared.  A rim's curvature is
+    1/R, so `c` is the whole curvature dependence in one number, in pixels.
+    Over an eightfold range of R the term is well conditioned: if curvature
+    mattered, c/R would differ by eight between the smallest and largest
+    element and the fit would find it.
+
+    `regular` in dark is excluded - its 0.31 transfer gain compresses the
+    grating threefold before the phase is decoded and its rows wander by up to
+    9 px where every other combination agrees to under 2.
+    """
+    rows = [
+        (band["pixelsInsideRim"], record["elementRadiusPixels"],
+         band["displacementPixels"])
+        for record in records
+        if not (record["overlay"] == "regular" and record["appearance"] == "dark")
+        for band in record["profile"]
+    ]
+    bins = sorted({u for u, _, _ in rows})
+    index = {u: position for position, u in enumerate(bins)}
+    if len(bins) < 8 or len({r for _, r, _ in rows}) < 3:
+        return None
+
+    # Alternate between the per-bin profile and the shared c: with either held
+    # the other is a linear least squares, and this is a two-parameter problem
+    # in disguise, so it converges in a handful of passes.
+    profile = np.zeros(len(bins))
+    scale = 0.0
+    for _ in range(64):
+        weight = np.array([1.0 + scale / radius for _, radius, _ in rows])
+        for position, u in enumerate(bins):
+            picked = [(w, d) for (bu, _, d), w in zip(rows, weight) if bu == u]
+            top = sum(w * d for w, d in picked)
+            bottom = sum(w * w for w, _ in picked)
+            profile[position] = top / bottom if bottom > 0 else 0.0
+        top = sum(profile[index[u]] * (d - profile[index[u]]) / radius
+                  for u, radius, d in rows)
+        bottom = sum((profile[index[u]] / radius) ** 2 for u, radius, _ in rows)
+        scale = top / bottom if bottom > 0 else 0.0
+
+    residual = np.array([
+        profile[index[u]] * (1.0 + scale / radius) - d for u, radius, d in rows
+    ])
+    flat = np.array([profile[index[u]] - d for u, radius, d in rows])
+    smallest = min(radius for _, radius, _ in rows)
+    return {
+        "curvaturePixels": round(float(scale), 4),
+        "worstCurvatureCorrectionPixels": round(
+            float(np.abs(profile).max() * abs(scale) / smallest), 4),
+        "rootMeanSquareWithCurvature": round(
+            float(np.sqrt((residual**2).mean())), 4),
+        "rootMeanSquareWithout": round(float(np.sqrt((flat**2).mean())), 4),
+        "sampleCount": len(rows),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--shots", type=Path, nargs="+", required=True,
@@ -165,15 +230,22 @@ def main() -> int:
     parser.add_argument("--output", type=Path)
     arguments = parser.parse_args()
 
-    records = [
-        record
-        for shots in arguments.shots
-        for scene, radius in SCENES.items()
-        for overlay in ("clear", "regular")
-        for appearance in ("light", "dark")
-        if (record := measure(shots, scene, radius, overlay, appearance))
-        is not None
-    ]
+    # One record per (scene, overlay, appearance): the capture directories are
+    # named for the run that produced them rather than for the element, so
+    # several of them carry the same scene and a plain product would weight
+    # that scene once per directory.
+    seen: dict[tuple[str, str, str], JsonObject] = {}
+    for shots in arguments.shots:
+        for scene, radius in SCENES.items():
+            for overlay in ("clear", "regular"):
+                for appearance in ("light", "dark"):
+                    key = (scene, overlay, appearance)
+                    if key in seen:
+                        continue
+                    record = measure(shots, scene, radius, overlay, appearance)
+                    if record is not None:
+                        seen[key] = record
+    records = [seen[key] for key in sorted(seen)]
     probe = (3, 6, 10, 15, 20, 25, 30, 35)
     print(f"  {'scene':22s} {'variant':8s} {'appear':6s} {'R':>6}  "
           + "".join(f"{u:>8}" for u in probe) + "   px inside the rim")
@@ -188,9 +260,20 @@ def main() -> int:
     print(f"  {'fitted law':22s} {'':8s} {'':6s} {'':6s}  "
           + "".join(f"{amplitude * max(width - u, 0.0) ** power / (u + offset):8.2f}"
                     for u in probe))
+
+    curvature = curvature_term(records)
+    if curvature is not None:
+        print(f"\n  curvature term c = {curvature['curvaturePixels']:+.4f} px"
+              f"  (displacement scales by 1 + c/R)")
+        print(f"  worst correction at the smallest element: "
+              f"{curvature['worstCurvatureCorrectionPixels']:.4f} px"
+              f"   rms {curvature['rootMeanSquareWithout']:.4f} -> "
+              f"{curvature['rootMeanSquareWithCurvature']:.4f} px over "
+              f"{curvature['sampleCount']} bins")
     if arguments.output is not None:
         arguments.output.write_text(
-            json.dumps({"schemaVersion": 1, "osBuild": "25G76",
+            json.dumps({"schemaVersion": 2, "osBuild": "25G76",
+                        "curvature": curvature,
                         "records": records}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8")
     return 0

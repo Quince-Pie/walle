@@ -1,4 +1,11 @@
 {
+  "curvature": {
+    "curvaturePixels": 0.2586,
+    "rootMeanSquareWithCurvature": 0.3356,
+    "rootMeanSquareWithout": 0.3376,
+    "sampleCount": 945,
+    "worstCurvatureCorrectionPixels": 0.1914
+  },
   "osBuild": "25G76",
   "records": [
     {
@@ -6670,5 +6677,5 @@
       "scene": "circle-1000-center"
     }
   ],
-  "schemaVersion": 1
+  "schemaVersion": 2
 }
