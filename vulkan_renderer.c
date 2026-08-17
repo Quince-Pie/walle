@@ -3,13 +3,11 @@
 #include "vulkan_renderer.h"
 
 #include <assert.h>
-#include <dlfcn.h>
 #include <drm_fourcc.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <inttypes.h>
 #include <limits.h>
-#include <link.h>
 #include <math.h>
 #include <stdarg.h>
 #include <stdckdint.h>
@@ -1999,50 +1997,6 @@ bool walle_vk_renderer_linux_dmabuf_ready(const struct walle_vk_renderer* render
     return renderer && renderer->dmabuf.ready && !renderer->dmabuf.failed;
 }
 
-struct walle_module_cursor
-{
-    size_t target;
-    size_t index;
-    bool   found;
-    char   path[PATH_MAX];
-};
-
-static int walle_module_visit(struct dl_phdr_info* info, size_t size, void* data)
-{
-    (void)size;
-    struct walle_module_cursor* cursor = data;
-    if (!info->dlpi_name || info->dlpi_name[0] != '/')
-        return 0;
-    if (cursor->index++ != cursor->target)
-        return 0;
-    size_t length = strlen(info->dlpi_name);
-    if (length < sizeof cursor->path) {
-        memcpy(cursor->path, info->dlpi_name, length + 1);
-        cursor->found = true;
-    }
-    return 1;
-}
-
-/* Mesa ICDs pin immortal per-process state (cpu-detect and disk-cache worker
- * singletons rooted in their .bss). The loader dlcloses driver libraries
- * inside vkDestroyInstance, unmapping those roots and turning live driver
- * state into unreachable garbage that leak checkers report as walle's leak.
- * Promote every loaded module to RTLD_NODELETE first, so the loader's
- * dlclose drops its reference without unmapping. One module is fetched per
- * dl_iterate_phdr pass so no dl-internal lock is held across the dlopen;
- * RTLD_NOLOAD promotes flags without loading anything new. */
-static void retain_loaded_modules(void)
-{
-    for (size_t target = 0;; ++target) {
-        struct walle_module_cursor cursor = {.target = target};
-        dl_iterate_phdr(walle_module_visit, &cursor);
-        if (cursor.index <= target)
-            break;
-        if (cursor.found)
-            dlopen(cursor.path, RTLD_LAZY | RTLD_NOLOAD | RTLD_NODELETE);
-    }
-}
-
 void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
 {
     if (!renderer)
@@ -2077,10 +2031,8 @@ void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
     dmabuf_feedback_reset_table(&renderer->dmabuf);
     free(renderer->dmabuf.candidates);
     destroy_debug_messenger(renderer);
-    if (renderer->instance) {
-        retain_loaded_modules();
+    if (renderer->instance)
         vkDestroyInstance(renderer->instance, nullptr);
-    }
     free(renderer->device_selector);
     free(renderer);
 }

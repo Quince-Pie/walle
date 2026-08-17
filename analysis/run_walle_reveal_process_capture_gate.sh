@@ -83,6 +83,14 @@ declare -a walle_environment=(
     "XDG_RUNTIME_DIR=$runtime_directory"
     "WAYLAND_DISPLAY=$wayland_display"
     WALLE_VULKAN_VALIDATION=1
+    # The loader dlcloses the ICDs during vkDestroyInstance, unmapping the
+    # .bss that roots Mesa's immortal per-process state; a leak checker then
+    # reports that still-reachable state as an unattributable leak (every
+    # Vulkan program does this, walle included). Khronos documents this
+    # switch for exactly that case. It must be in the environment because the
+    # loader latches it in its own initialization. Leak detection stays fully
+    # armed, so a genuine walle leak still fails this gate.
+    VK_LOADER_DISABLE_DYNAMIC_LIBRARY_UNLOADING=1
 )
 declare -a walle_arguments=()
 if [[ -n "$cli_device_selector" ]]; then
