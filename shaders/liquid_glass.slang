@@ -81,7 +81,12 @@ struct ComposeVertexOutput
 // cluster-contaminated fit - its early-cluster mean is 0.6908.  Both
 // variants share one start.  Scoring against any single capture still
 // inherits that run's draw; the exponent awaits a cluster-aligned refit.
-static const float2 kDematerializeClear   = float2(0.6908, 1.720);
+// Exponents refit on cluster-ALIGNED curves (each sequence shifted to its
+// own measured start, 372 pooled points across six capture runs): clear's
+// 1.720 was fit on the same contaminated mix as its start and is really
+// 2.075 (aligned |resid| 0.051 -> 0.017); regular's 1.585 is confirmed
+// within noise and stands.
+static const float2 kDematerializeClear   = float2(0.6908, 2.075);
 static const float2 kDematerializeRegular = float2(0.6910, 1.585);
 
 
