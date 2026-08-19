@@ -68,6 +68,26 @@
                 __func__ __VA_OPT__(, ) __VA_ARGS__)
 #endif
 
+static uint64_t trace_now_ns(void)
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)ts.tv_sec * UINT64_C(1'000'000'000) + (uint64_t)ts.tv_nsec;
+}
+
+/* Anything on the main thread that eats more than 50 ms is a presentation
+ * stall the user can see; say so, with the culprit named. */
+static void warn_slow(const char* what, const char* who, uint64_t start_ns)
+{
+    uint64_t took = trace_now_ns() - start_ns;
+    if (took > UINT64_C(50'000'000))
+        fprintf(stderr,
+                "[SLOW] %s (%s) blocked the main thread for %.1f ms\n",
+                what,
+                who ? who : "-",
+                (double)took / 1e6);
+}
+
 /* -- Constants ----------------------------------------------------------- */
 
 #define WALLE_VERSION "0.0.1"
@@ -384,6 +404,7 @@ struct render_result
      * closed exactly once. */
     int                std_fd;   /* -1 = none */
     int                glass_fd; /* may equal std_fd; -1 = none */
+    uint64_t           done_ns;  /* CLOCK_MONOTONIC at worker completion */
     bool               success;
     struct image_layer standard;
     struct image_layer glass;
@@ -1997,6 +2018,9 @@ static void* render_thread_worker(void* arg)
 
     struct render_result result  = {.success = false, .std_fd = -1, .glass_fd = -1};
     auto                 item    = &output->items[output->current_item_index];
+    uint64_t             t_begin = trace_now_ns();
+    uint64_t             t_std = 0, t_glass = 0;
+    bool                 std_hit = false, glass_hit = false;
     int                  w       = output->job_w;
     int                  h       = output->job_h;
     enum glass_variant   variant = output->job_variant;
@@ -2123,6 +2147,8 @@ static void* render_thread_worker(void* arg)
             }
         }
     }
+    std_hit   = fd >= 0;
+    glass_hit = glass_fd >= 0;
     if (fd >= 0 && (!need_glass || glass_fd >= 0))
         goto publish_result; /* full hit: no decode, no blur */
 
@@ -2270,6 +2296,7 @@ static void* render_thread_worker(void* arg)
     }
 
 bake_glass:
+    t_std = trace_now_ns();
     if (need_glass && glass_fd < 0) {
         /* The measured backdrop, built from the standard bytes just written
          * (or mapped straight from a cached standard entry): the wallpaper is
@@ -2321,6 +2348,7 @@ bake_glass:
         }
     }
 
+    t_glass = trace_now_ns();
     if (map) {
         munmap(map, raw_sz);
         map = nullptr;
@@ -2370,6 +2398,25 @@ finalize:
     int vips_allocs
         = vips_tracked_get_allocs();
 
+    result.done_ns = trace_now_ns();
+    {
+        double total_ms = (double)(result.done_ns - t_begin) / 1e6;
+        if (total_ms > 250.0) {
+            double std_ms   = t_std ? (double)(t_std - t_begin) / 1e6 : 0.0;
+            double glass_ms = (t_glass && t_std) ? (double)(t_glass - t_std) / 1e6 : 0.0;
+            fprintf(stderr,
+                    "[BAKE] %s '%s' variant=%d std=%s glass=%s took %.0f ms"
+                    " (standard %.0f, glass %.0f)\n",
+                    output->name ? output->name : "-",
+                    item->filename,
+                    (int)variant,
+                    std_hit ? "hit" : "bake",
+                    !need_glass ? "none" : (glass_hit ? "hit" : "bake"),
+                    total_ms,
+                    std_ms,
+                    glass_ms);
+        }
+    }
     output->async_result = result;
     uint64_t sig         = 1;
     if (write(output->event_fd, &sig, sizeof(sig)) != sizeof(sig)) {
@@ -2795,26 +2842,6 @@ static void transition_sync_start_held(struct wallpaper_state* state)
     }
 }
 
-static uint64_t trace_now_ns(void)
-{
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    return (uint64_t)ts.tv_sec * UINT64_C(1'000'000'000) + (uint64_t)ts.tv_nsec;
-}
-
-/* Anything on the main thread that eats more than 50 ms is a presentation
- * stall the user can see; say so, with the culprit named. */
-static void warn_slow(const char* what, const char* who, uint64_t start_ns)
-{
-    uint64_t took = trace_now_ns() - start_ns;
-    if (took > UINT64_C(50'000'000))
-        fprintf(stderr,
-                "[SLOW] %s (%s) blocked the main thread for %.1f ms\n",
-                what,
-                who ? who : "-",
-                (double)took / 1e6);
-}
-
 /* One call per main-loop turn, after all event handlers. */
 static void transition_sync_flush_starts(struct wallpaper_state* state)
 {
@@ -2930,6 +2957,8 @@ static void finalize_render(struct wallpaper_output* output)
 
     struct render_result res = output->async_result;
     output->async_result     = (struct render_result){.std_fd = -1, .glass_fd = -1};
+    if (res.done_ns)
+        warn_slow("render completion dispatch", output->name, res.done_ns);
 
     if (output->render.flags & F_DEAD) {
         transition_sync_unmark(state, output);
