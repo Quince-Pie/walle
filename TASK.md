@@ -5712,3 +5712,38 @@ grid in sub-pixel increments over flat and gradient backgrounds), the
 same class that fitted the rim in the first place, now read at the
 final two pixels.  The field measurement stands as the acceptance
 target: mean deficit +7 (light) / +5 (dark) over depth [0.75, 2.25).
+
+## 2026-08-19 (later 184): THE SHADOW'S CONSTANT, ITS COLOUR, AND TWO CLEAN FLOORS
+
+THE SIZE MATRIX RAN (from here, over SSH): glasscap at 01421a3 builds
+and captures via `sudo launchctl asuser 501 sudo -u quince`, windows
+512 and 2048 pt, wallpaper-transition sweeps, minimal dynamics.  Sets:
+M1 ~/lgcap-size-{512,2048}, local /tmp/lgcap-size-*.  With lgcap-2048
+and lgcap-m1 that is four windows, 512..3200 pt, radii 137..4305 px.
+
+APPLE'S TOTAL SHADOW IS A CONSTANT.  Measured walle-free (sweep frame
+against the outgoing reference, far-field normalized, empirical rim):
+regular/dark 4.2% +-0.3 of background over the first 25 px, regular/
+light 3.6% +-0.6, dense across states - invariant in radius, window
+size and content.  Session 183's window-scaling hypothesis dissolves:
+it compared Apple-total against Apple-minus-walle.  The HIG's "deeper
+shadow for larger glass" is NOT observed in this context - one more
+absolute law, like the refraction band.
+
+BUT IT IS NOT GRAY.  Per channel, Apple dims blue hardest (light at
+p=0.75: R +2.0, G +4.6, B +4.7; dark similar ordering) - the fitted
+shadow colour matrix is the right mechanism class, and a neutral
+multiply is not: A/B'd anyway (alpha 4.5/3.8% on the shipped depth
+profile) - score-neutral everywhere (sweeps 1.47 -> 1.46, dynamics
+2.17 flat, regular edge 10.14 -> 9.95), and DISCARDED for losing the
+channel structure.  walle's measured band alpha decays with R where
+Apple's holds flat; part is anchor drift between the quiet-ring and
+the mask radius in the instrument itself.  NEXT: mask-anchored profile
+bands on both sides (the ladder gives exact mask radii), then decide
+whether the colour matrix needs an amplitude term.
+
+TWO FLOORS, QUANTIFIED (settled interiors, spatial decomposition):
+white/pixel-independent rms 0.48-0.52 on every case - the dither and
+capture quantization floor - against correlated structure of 0.21
+(clear: AT the floor, only a half-code constant left) and 0.86-1.00
+(regular: the last real material unknown at settled state).
