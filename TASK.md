@@ -5852,3 +5852,130 @@ must live at PER-PIXEL positions set by the rasterized boundary - the
 mask's own AA values, not the analytic circle.  The edge instrument
 should therefore read (and the eventual law should key on) the R8
 boundary values; that is the complete handoff.
+
+## Session 188 (2026-08-19): the AA boundary law ships, the exit exponent
+closes, the accessibility renditions get measured, and the archive goes
+off-site
+
+THE R8-KEYED INSTRUMENT FOUND THE WHOLE DEFICIT IN ONE PIXEL CLASS.
+Session 187's handoff said the law must key on the rasterized mask's
+own AA values; it did not need a new capture — the corpus masks
+already carry those values.  Keying the edge analysis on erosion rows
+of the corpus-exact R8 mask (interior / AA boundary 0<m<255 / exterior
+as three pixel classes) shows the interior rows CLEAN and the entire
+last-pixel deficit concentrated in the single AA boundary class.  Two
+mechanisms, shipped together (c902a6f):
+
+  1. the final mask blend composes in sRGB CODE SPACE — the very law
+     the corpus proved byte-exact for the reveal blend, now applied to
+     the material composite at the boundary pixel:
+         encoded = lerp(srgb(shadowed_bg), srgb(inside), mask)
+  2. a coverage highlight on the boundary pixel, maximal at half
+     coverage:  encoded += (A/255)·4m(1−m)·thickness with
+         A = lerp(19.17, 31.0, lightness)   regular
+         A = lerp(25.13, 28.7, lightness)   clear
+
+Step 1 alone WORSENS the edge (as the four falsifications predicted —
+any depth-keyed or space-only correction fails); the pair is green
+everywhere, with the natural-content sets as a true holdout (constants
+fitted on coded content only): coded edge clear 2.83→2.48, regular
+10.40→10.02; natural edge clear 2.45→2.04, regular 3.95→3.54;
+full-frame 1.47→1.46 (coded) and 0.96→0.95 (natural).  The reveal
+gate is untouched at 100.0% — 4m(1−m) is zero at m∈{0,255} and the
+code-space blend equals the old path there.  Receipts:
+analysis/results/m1-transition-25G76-aa-hump-{coded,natural}-sweep.json.
+
+CLEAR'S EXIT EXPONENT, REFIT ON CLUSTER-ALIGNED CURVES (52f16ce).
+With the 0.691/0.732 lottery known, the ten exit curves realign on
+their own starts before fitting: clear's exponent is 2.075 (was 1.720
+against the contaminated average; max |residual| on the early-cluster
+curves 0.051→0.017), regular's 1.585 confirmed cluster-clean.
+kDematerializeClear = (0.6908, 2.075).
+
+THE ARCHIVE IS OFF-SITE.  Three GitHub branches now hold the ground
+truth: archive/liquid-glass-reveal-coverage-01421a3-v1 (the corpus
+bytes + provenance), archive/lgcap-2048 (the canonical scoring set),
+archive/lgcap-natural-1024 (the holdout set).  Mechanics for the next
+person: a single ~1.36GB pack is remote-rejected with no reason text
+("! [remote rejected] ... (failed)"), twice reproduced; the fix is
+stacked commits pushed one at a time (three ≈450MB packs; the final
+chunked tree is bit-identical to the original single commit —
+verified with git diff before push).
+
+REDUCE TRANSPARENCY, CAPTURED AND CHARACTERIZED.  Rig flag
+--expect-reduce-transparency (lg-test ddae253) inverts the preflight;
+the capture ran under a trap-guarded toggle of
+com.apple.universalaccess reduceTransparency with the restore verified
+in the log ("RESTORED reduceTransparency=0") — the set is
+lgcap-reduce-transparency-1024 (M1 home; manifest records
+reduceTransparency=true, natural backgrounds, same geometry).  Paired
+against lgcap-natural-1024 (identical backgrounds byte-for-byte, mean
+|Δref|=0.000), the macOS 26.6.1 accessibility rendition is:
+
+  regular → an OPAQUE NEAR-NEUTRAL PLATE.  Absolute luma 242.3 (light)
+    / 19.9 (dark), per-channel spread <0.5 on a background whose own
+    spread is 1.2 — favors a constant system color, and local
+    derivation is excluded outright (plate std 0.2–0.3 over a backdrop
+    varying ±36: transmission <1%).  Light snaps to its plate from
+    ladder state 1; dark holds its level immediately but carries
+    residual structure ≤12 codes rms mid-ladder that decays to 0.2 by
+    state 14 — a slow content-purge, not a level ramp.  The rim, lens
+    band and refraction are REMOVED (profiles run flat to the edge).
+    The outer shadow SURVIVES but re-weighted: dark ≈0.43×, light
+    ≈1.34× of the normal material's (sector-restricted state-8 read).
+  clear → EXTREME BLUR UNDER A FLAT SCRIM.  Gaussian-equivalent
+    σ≈500 capture px (corr caps at 0.55–0.58 — the kernel is not
+    cleanly Gaussian at this window; slope ≈0.9), scrim absolute ≈67.5
+    (dark) / ≈129 (light), and the two appearances differ by a
+    CONSTANT +61.5 codes at every ladder state — the appearance-blind
+    clear core survives accessibility mode; only the scrim level is
+    appearance-dependent.  No rim, no lens, and still exactly zero
+    shadow.
+  the reveal machinery is SHARED: RT edge positions equal the normal
+    mask's within 2px at every probed state, 10–90 width 4px — RT
+    swaps the material compose only, the mask/AA pipeline is common.
+
+  Geometry note that bit three probes in a row: the natural-set reveal
+  origin is (0.25, 0.30) of the 2048px window, so the disc meets the
+  left window edge by ~state 4 and swallows the window by ~state 9 —
+  late-state "edges" are the window corner, and only sector-restricted
+  mid-ladder states (5–8, sectors toward +x/+y) give true edge reads.
+
+  NO walle RT mode ships from this: constant-vs-wallpaper-derived
+  plate color is undecidable on a near-neutral background (both forms
+  agree there), and this project does not ship unmeasured guesses.
+  The deciding experiment (a saturated-background RT session) is in
+  TODO.md's user-gated section.
+
+AGX RECON CORRECTION (nothing run, nothing touched): the campaign dir
+holds ~90 experiments; the single-clip-ruler *-plan-v1 dirs are empty
+plan dirs — the actual ruler captures are scr-capture through
+scr5c-capture (v5c IS captured, correcting session 187's note), and
+v6/v7 dirs with their plan generators already exist.  The law remains
+the user's live campaign and the one flag between "100.0% with
+hardware-measured constants" and "100.0% from public inputs".
+
+INCREASE CONTRAST, CAPTURED AND CHARACTERIZED (same session).  Rig
+flag --expect-increase-contrast added symmetric to the RT flag
+(lg-test 0c52b25); guarded toggle of com.apple.universalaccess
+increaseContrast with restore verified ("RESTORED increaseContrast=0");
+set lgcap-increase-contrast-1024 (manifest increaseContrast=true,
+preflight clean).  Against the paired normal set:
+
+  the HIG's "contrasting border" is REAL and measured: regular gains a
+    ~2–4px border ring at the mask edge — BRIGHT +86 codes in dark
+    appearance, DARK −111 codes in light appearance (sector-restricted
+    state-8 profiles).  Clear gets NO border.
+  interiors move toward the poles, not to plates: regular/light
+    237.6/std 1.5 (nearly the RT plate but not it — RT reads 242.3/0.3),
+    regular/dark 44.3/3.5 (vs normal 59.6/7.5 — darker, flatter, still
+    translucent), clear dims uniformly ≈−43 codes with transmission
+    ×0.67 (std 39.6→26.5) and stays EXACTLY appearance-blind (dark and
+    light interiors byte-close: 107.4 both, pair Δ 42.94/42.87 vs the
+    same normal frames).
+
+Instruments committed: analysis/measure_rt_rendition_interiors.py,
+analysis/measure_rt_rendition_ramp_edges.py,
+analysis/measure_ic_rendition.py (numpy+PIL only, run against any
+paired glasscap sets).  Durable copies of both accessibility sets:
+M1 home + /home/quince/walle-archives + GitHub archive branches.
