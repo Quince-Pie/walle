@@ -5649,3 +5649,41 @@ to R=136 px (clear interior 1.87 at p=1/16 vs 1.20 at p=7/8).  The rim's
 one remaining sharp row: at d in [-2,-1) walle is 13-15 code values
 below Apple on both variants - the edge falloff's last pixel, refit
 territory for the controlled captures.
+
+## 2026-08-19 (later 183): THREE INSTRUMENT VERDICTS, ONE CORRECTION
+
+CHROMA SURVIVES THE SPACE CHANGE.  Regressing the panel-bake sweep
+residuals against the panel-space mixture Jacobian asks for wChroma
++0.017 light / +0.028 dark with under 10% residual reduction - below
+the shipping bar.  The weights fit under the sRGB assumption carry
+over; the panel fix itself removed most of the channel constants
+(regular/light k from [-2.4,+0.4,-1.2] to [-0.7,+0.2,-0.7]).
+
+THE SHADOW IS PRESENT, NOT ABSENT - a correction to what session 182
+recorded.  The shader ships measured shadowWeight tables (regular
+populated to 96 px, clear all-zero, matching its pipeline).  What the
+sweeps measure is an AMPLITUDE gap: Apple darker than walle by 1.2-1.4
+codes just outside the rim on the 1024-pt window.  A second instrument
+- the full-display 3200x2000-pt captures, measured directly against
+the reference wallpaper with far-field normalization, no walle in the
+loop - reads a stronger shadow still: 4.0-5.5% of background at the
+rim, decaying to zero by ~90 px, R-invariant from 1433 to 4304 px,
+clear exactly zero.  The two instruments disagree by roughly the
+window-size ratio (3.5x vs 3.125x), which smells like the
+composition-size normalization the profile geometry already uses.
+NEXT INSTRUMENT: one capture matrix - windows 512/1024/2048/3200 pt
+at fixed relative progress, regular/dark - decides the scaling law
+before any refit.
+
+THE RIM PROFILE IS EXONERATED.  The remaining edge deficit is
+localized: peak position, peak amplitude, and exterior all match
+within +-1.2 codes; walle reads 10-14 codes dark only at depth 0.5-2.5
+px inside the boundary, both variants, both appearances.  A
+single-parameter depth-rescale of rimWeight was A/B'd in BOTH
+directions (s = 0.7, 0.85, 1.15, 1.3, 1.45; fit set light sweeps):
+every candidate worsens clear (2.83 -> 3.3-4.6 edge mean) and none
+improves regular (10.2 flat to +0.5).  The shipped profile shape is a
+genuine optimum of its family; the mechanism is in the rim colour
+transfer (order-4, 3.7/6.1 held-out rms) or the boundary-depth origin
+against the rasterized mask edge.  That is edge-instrument territory:
+a phase-offset ladder of the boundary within the pixel grid.
