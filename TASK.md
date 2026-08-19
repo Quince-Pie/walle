@@ -5779,3 +5779,42 @@ main-gate-asan-fix; the restored corpus pushed as
 archive/liquid-glass-reveal-coverage-01421a3-v1 (GitHub now holds the
 ground-truth bytes, not only the pins); the rig has no custom
 background flag, so the second-content set needs a probe change.
+
+## 2026-08-19 (later 186): THE CONTENT HOLDOUT - the laws hold, and a hidden clock falls out
+
+THE INSTRUMENT: a natural-statistics background pair (channel-
+correlated, red 1/f spectrum, slowly varying colour cast, hard oblique
+edges - everything the coded fields deliberately are not), shipped on
+lg-test branch rig-natural-backgrounds (e2347ee) behind
+--natural-backgrounds, captured as lgcap-natural-1024 and scored
+end-to-end against the shipped binary.  Nothing was fitted to it.
+
+SETTLED: THE MEASURED MATERIAL GENERALIZES.  All 68 unseen-content
+sweep states read 0.96 full-frame mean - BETTER than the 1.46 on the
+content every law was fitted against.  Regular's interiors read
+1.47/2.05 (light/dark) against 3.4-3.8 on the coded field, its edge
+band 3.95/5.34 against 10.1: most of what looked like regular's
+"content-coupled structure" and much of the rim band was the coded
+field's own statistics stressing the chroma path, not a material
+error.  The 528-grid, the coded sweeps and now natural content agree:
+the settled material is right to about a code.
+
+ANIMATED: THE EXIT HAS ITS OWN CLOCK.  The natural run's worst frames
+(12-17 codes, all at p 0.73-0.83 with the radius saturated and agreeing)
+are the dematerialize: the interior alpha read shows Apple's exit on
+this run beginning ~3 frames later and descending on the same shape,
+while GEOMETRY ran on time (radius offsets +0.1..+0.8 frames).  The
+same read on the coded run shows walle tracking Apple to 0.03 - the
+shipped curve is that run's schedule.  So the exit is a separately
+scheduled animation with run-to-run start jitter, and no fixed f(t)
+can match every run: fitting walle to one run inherits that run's
+draw.  A four-repeat capture (lgcap-exitjitter-1..4) is measuring the
+start distribution; the anchor choice - fixed f(t) at the median, or
+cover-time plus median delay - follows from its spread.
+
+ALSO: live-transition standing gate shipped and passing (three
+geometries incl. 181's, zero aborts); capture sets copied out of
+volatile /private/tmp into home on both machines plus
+/home/quince/walle-archives; the AGX ruler pickles are transient
+session state on no reachable disk - the divider law remains with the
+active probe campaign.

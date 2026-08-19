@@ -32,14 +32,27 @@ code values against the M1 captures.
       10-14 codes dark at depth 0.5-2.5; falsified for field surgery three
       ways in 183b). Acceptance: mean deficit +7 light / +5 dark removed
       without regressing the 128-background edge fit.
-- [ ] Regular's settled-interior correlated structure (~1.0 code rms): hunt
-      with the second-content set plus the coded field; candidate mechanisms
-      after panel-space: transfer/blur interplay on structured content,
-      capture-side processing.
-- [ ] Second-content probe change: add a natural-image (or third
-      procedural) Background family to GlassCapture and capture one set —
-      the decorrelation instrument for regular's ~1-code interior structure
-      and the rim's angular reading.
+- [x] Regular's settled-interior correlated structure — the natural-content
+      holdout answered it: settled interiors read 1.47/2.05 (regular
+      light/dark) and 1.15 (clear) on unseen content against 3.4-3.8 on the
+      coded field, with the whole settled sweep at 0.96 full-frame mean.
+      The ~1-code "structure" was largely the coded field's own statistics
+      (channel-independent high-chroma checks); the measured laws
+      generalize. Remaining on the coded field only, tracked under the edge
+      instrument.
+- [x] Second-content probe change — shipped as lg-test branch
+      `rig-natural-backgrounds` (e2347ee): a channel-correlated,
+      red-spectrum, hard-edged natural-statistics pair behind
+      `--natural-backgrounds`. Captured: `lgcap-natural-1024` (M1 home +
+      /tmp + walle-archives), scored end-to-end.
+
+- [ ] Exit scheduling jitter: the natural holdout exposed that the
+      dematerialize is a separately scheduled animation - geometry ran on
+      time (+0.1..+0.8 frames) while Apple's exit ran ~3 frames late
+      relative to the coded run's schedule, costing up to 17 codes on
+      high-contrast mid-exit frames. A four-repeat capture instrument is
+      measuring the exit-start distribution; the law's anchor (fixed f(t)
+      vs cover+median-delay) follows from it.
 
 ## The long game
 
