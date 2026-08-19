@@ -585,6 +585,16 @@ float4 composeFragment(
         edgeTransfer(backgroundSrgb, edgeLight.shadow), lightness);
     float shadowBlend = lerp(shadowWeight(-insideRim, edgeDark),
                              shadowWeight(-insideRim, edgeLight), lightness);
+    // Amplitude term, measured mask-anchored on the wallpaper sweeps: with
+    // both sides profiled in bands at the exact ladder radii, walle's shadow
+    // is flat per band (+-0.1 across eleven states - the earlier "decay" was
+    // the quiet-ring anchor drifting) and Apple's is flat too, but larger by
+    // a ratio that is uniform across the whole penumbra: 1.44/1.46/1.50/1.25
+    // (light, bands 0-10/10-25/25-50/50-90) and 1.19/1.23/1.29/1.31 (dark).
+    // The colour matrix and the depth profile are right; only the gain is
+    // low - the flat-background edge fit under-reads the amplitude on real
+    // content.  One factor per appearance, nothing else touched.
+    shadowBlend *= lerp(1.25, 1.46, lightness);
     float3 shadowedBackground = srgbToLinear(lerp(
         backgroundSrgb, shadowSrgb, shadowBlend * thickness));
     float3 result = lerp(shadowedBackground, insideColor, mask);

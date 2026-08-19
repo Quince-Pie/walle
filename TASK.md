@@ -5747,3 +5747,35 @@ white/pixel-independent rms 0.48-0.52 on every case - the dither and
 capture quantization floor - against correlated structure of 0.21
 (clear: AT the floor, only a half-code constant left) and 0.86-1.00
 (regular: the last real material unknown at settled state).
+
+## 2026-08-19 (later 185): THE SHADOW'S AMPLITUDE, MASK-ANCHORED AND SHIPPED
+
+The instrument fix from 184 ran: both sides profiled in bands anchored
+at the EXACT ladder radii.  walle's "decay with R" vanishes - its
+bands are flat to +-0.1 across eleven states; it was the quiet-ring
+anchor drifting, never the shadow.  Apple's bands are flat too, and
+the deficit collapses to ONE uniform amplitude ratio per appearance,
+constant across the whole penumbra:
+
+    band px      0-10   10-25   25-50   50-90
+    light ratio  1.44    1.46    1.50    1.25
+    dark  ratio  1.19    1.23    1.29    1.31
+
+The colour matrix and the depth profile were right all along; the
+flat-background edge fit under-reads only the gain on real content.
+Shipped as one factor per appearance - shadowBlend *= lerp(1.25, 1.46,
+lightness) - and verified mask-anchored on the new renders:
+
+    light residual per band  -0.06  +0.02  +0.06  -0.03
+    dark  residual per band  -0.38  -0.07  +0.09  +0.03
+
+The dark band-0 overshoot is the mid-ratio compromise; a per-band term
+is available if it ever matters.  Diluted whole-frame scores are
+unmoved (the annulus is small); dynamics unregressed (outside 3.14 ->
+3.09); clear untouched (zero tables); the reveal gate stays 100.0%.
+
+ALSO DONE from TODO.md: main's gate repair pushed as
+main-gate-asan-fix; the restored corpus pushed as
+archive/liquid-glass-reveal-coverage-01421a3-v1 (GitHub now holds the
+ground-truth bytes, not only the pins); the rig has no custom
+background flag, so the second-content set needs a probe change.
