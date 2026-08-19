@@ -61,6 +61,26 @@ alignas(4) static const uint8_t WALLE_VK_COMPOSE_FRAGMENT_SPIRV[] = {
 #embed "build/shaders/composeFragment.spv" if_empty(0)
 };
 
+alignas(4) static const uint8_t WALLE_VK_BAKE_VERTEX_SPIRV[] = {
+#embed "build/shaders/bakeVertex.spv" if_empty(0)
+};
+
+alignas(4) static const uint8_t WALLE_VK_BAKE_CONVERT_SPIRV[] = {
+#embed "build/shaders/bakeConvertForward.spv" if_empty(0)
+};
+
+alignas(4) static const uint8_t WALLE_VK_BAKE_BLUR_SPIRV[] = {
+#embed "build/shaders/bakeBlur.spv" if_empty(0)
+};
+
+alignas(4) static const uint8_t WALLE_VK_BAKE_DOWN_SPIRV[] = {
+#embed "build/shaders/bakeDownsample8.spv" if_empty(0)
+};
+
+alignas(4) static const uint8_t WALLE_VK_BAKE_MIX_SPIRV[] = {
+#embed "build/shaders/bakeMixFinal.spv" if_empty(0)
+};
+
 static const uint8_t WALLE_VK_REVEAL_RASTER_P25[] = {
 #embed "parity/raster_p25_selector_ceil_bits.bin" limit(2097152) if_empty(0)
 };
@@ -197,6 +217,12 @@ struct walle_vk_renderer
 
     VkDescriptorSetLayout mask_set_layout;
     VkDescriptorSetLayout compose_set_layout;
+    VkDescriptorSetLayout bake_set_layout;
+    VkPipelineLayout      bake_pipeline_layout;
+    VkPipeline            bake_convert_pipeline;
+    VkPipeline            bake_blur_pipeline;
+    VkPipeline            bake_down_pipeline;
+    VkPipeline            bake_mix_pipeline;
     VkPipelineLayout      mask_pipeline_layout;
     VkPipelineLayout      compose_pipeline_layout;
     VkPipeline            mask_pipeline;
@@ -1540,6 +1566,9 @@ static bool create_pipeline_layouts(struct walle_vk_renderer* renderer)
         "vkCreatePipelineLayout(compose)");
 }
 
+static bool create_bake_resources(struct walle_vk_renderer* renderer);
+static void set_full_viewport(VkCommandBuffer command_buffer, VkExtent2D extent);
+
 static bool create_graphics_pipeline(struct walle_vk_renderer* renderer,
                                      const uint8_t*            vertex_bytes,
                                      size_t                    vertex_byte_count,
@@ -1944,7 +1973,8 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
     }
 
     if (!create_descriptor_layouts(renderer) || !create_pipeline_layouts(renderer)
-        || !create_pipelines(renderer) || !create_global_resources(renderer))
+        || !create_pipelines(renderer) || !create_bake_resources(renderer)
+        || !create_global_resources(renderer))
         return false;
     renderer->device_ready = true;
     fprintf(stderr,
@@ -2027,6 +2057,18 @@ void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
             vkDestroyPipeline(renderer->device, renderer->mask_pipeline, nullptr);
         if (renderer->compose_pipeline)
             vkDestroyPipeline(renderer->device, renderer->compose_pipeline, nullptr);
+        if (renderer->bake_convert_pipeline)
+            vkDestroyPipeline(renderer->device, renderer->bake_convert_pipeline, nullptr);
+        if (renderer->bake_blur_pipeline)
+            vkDestroyPipeline(renderer->device, renderer->bake_blur_pipeline, nullptr);
+        if (renderer->bake_down_pipeline)
+            vkDestroyPipeline(renderer->device, renderer->bake_down_pipeline, nullptr);
+        if (renderer->bake_mix_pipeline)
+            vkDestroyPipeline(renderer->device, renderer->bake_mix_pipeline, nullptr);
+        if (renderer->bake_pipeline_layout)
+            vkDestroyPipelineLayout(renderer->device, renderer->bake_pipeline_layout, nullptr);
+        if (renderer->bake_set_layout)
+            vkDestroyDescriptorSetLayout(renderer->device, renderer->bake_set_layout, nullptr);
         if (renderer->mask_pipeline_layout)
             vkDestroyPipelineLayout(renderer->device, renderer->mask_pipeline_layout, nullptr);
         if (renderer->compose_pipeline_layout)
@@ -2194,25 +2236,378 @@ static bool layer_valid(const struct walle_vk_renderer*    renderer,
            && !ckd_mul(&byte_count, pixel_count, 4u) && layer->size == byte_count;
 }
 
+/* -- GPU glass bake -------------------------------------------------------
+ * The measured backdrop mixture, rendered where Apple renders theirs.  Six
+ * fullscreen fragment passes at upload time: forward code-space conversion,
+ * separable narrow Gaussian, 8x downsample + separable wide Gaussian on the
+ * reduced grid, and a mix pass that bilinearly upsamples, applies the
+ * luma/chroma mixture law, and converts back through the sRGB attachment's
+ * hardware encode.  ~15 ms where the CPU bake needed hundreds; the referee
+ * for equivalence is the measured-law score gate, not byte identity. */
+
+static bool create_bake_resources(struct walle_vk_renderer* renderer)
+{
+    VkDescriptorSetLayoutBinding bindings[3] = {
+        {.binding         = 0,
+         .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+         .descriptorCount = 1,
+         .stageFlags      = VK_SHADER_STAGE_FRAGMENT_BIT},
+        {.binding         = 1,
+         .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+         .descriptorCount = 1,
+         .stageFlags      = VK_SHADER_STAGE_FRAGMENT_BIT},
+        {.binding         = 2,
+         .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLER,
+         .descriptorCount = 1,
+         .stageFlags      = VK_SHADER_STAGE_FRAGMENT_BIT},
+    };
+    VkDescriptorSetLayoutCreateInfo layout_info = {
+        .sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+        .bindingCount = 3,
+        .pBindings    = bindings,
+    };
+    if (!vk_check(vkCreateDescriptorSetLayout(
+                      renderer->device, &layout_info, nullptr, &renderer->bake_set_layout),
+                  "vkCreateDescriptorSetLayout(bake)"))
+        return false;
+
+    VkPushConstantRange push_range = {
+        .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
+        .offset     = 0,
+        .size       = 5 * 16,
+    };
+    VkPipelineLayoutCreateInfo pl_info = {
+        .sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+        .setLayoutCount         = 1,
+        .pSetLayouts            = &renderer->bake_set_layout,
+        .pushConstantRangeCount = 1,
+        .pPushConstantRanges    = &push_range,
+    };
+    if (!vk_check(vkCreatePipelineLayout(
+                      renderer->device, &pl_info, nullptr, &renderer->bake_pipeline_layout),
+                  "vkCreatePipelineLayout(bake)"))
+        return false;
+
+    return create_graphics_pipeline(renderer,
+                                    WALLE_VK_BAKE_VERTEX_SPIRV,
+                                    sizeof WALLE_VK_BAKE_VERTEX_SPIRV,
+                                    "bakeVertex",
+                                    WALLE_VK_BAKE_CONVERT_SPIRV,
+                                    sizeof WALLE_VK_BAKE_CONVERT_SPIRV,
+                                    "bakeConvertForward",
+                                    renderer->bake_pipeline_layout,
+                                    VK_FORMAT_R32G32B32A32_SFLOAT,
+                                    false,
+                                    &renderer->bake_convert_pipeline)
+           && create_graphics_pipeline(renderer,
+                                       WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       sizeof WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       "bakeVertex",
+                                       WALLE_VK_BAKE_BLUR_SPIRV,
+                                       sizeof WALLE_VK_BAKE_BLUR_SPIRV,
+                                       "bakeBlur",
+                                       renderer->bake_pipeline_layout,
+                                       VK_FORMAT_R32G32B32A32_SFLOAT,
+                                       false,
+                                       &renderer->bake_blur_pipeline)
+           && create_graphics_pipeline(renderer,
+                                       WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       sizeof WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       "bakeVertex",
+                                       WALLE_VK_BAKE_DOWN_SPIRV,
+                                       sizeof WALLE_VK_BAKE_DOWN_SPIRV,
+                                       "bakeDownsample8",
+                                       renderer->bake_pipeline_layout,
+                                       VK_FORMAT_R32G32B32A32_SFLOAT,
+                                       false,
+                                       &renderer->bake_down_pipeline)
+           && create_graphics_pipeline(renderer,
+                                       WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       sizeof WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       "bakeVertex",
+                                       WALLE_VK_BAKE_MIX_SPIRV,
+                                       sizeof WALLE_VK_BAKE_MIX_SPIRV,
+                                       "bakeMixFinal",
+                                       renderer->bake_pipeline_layout,
+                                       WALLE_VK_WALLPAPER_FORMAT,
+                                       false,
+                                       &renderer->bake_mix_pipeline);
+}
+
+struct bake_push
+{
+    float mat_row0[4];
+    float mat_row1[4];
+    float mat_row2[4];
+    float blur[4]; /* sigma, radius, horizontal, panel_space */
+    float mix[4];  /* wLuma, wChroma, 1/out_w, 1/out_h */
+};
+
+static void bake_push_matrix(struct bake_push* push, const float m[9])
+{
+    for (int i = 0; i < 3; i++) {
+        push->mat_row0[i] = m[0 + i];
+        push->mat_row1[i] = m[3 + i];
+        push->mat_row2[i] = m[6 + i];
+    }
+}
+
+/* One fullscreen pass: barrier target to color-attachment, render, barrier
+ * to shader-read. */
+static void bake_pass(VkCommandBuffer               cmd,
+                      struct walle_vk_renderer*     renderer,
+                      VkPipeline                    pipeline,
+                      VkDescriptorSet               set,
+                      const struct bake_push*       push,
+                      const struct walle_vk_image*  target)
+{
+    image_barrier(cmd,
+                  target->handle,
+                  VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+                  VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                  VK_IMAGE_LAYOUT_UNDEFINED,
+                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+    VkRenderingAttachmentInfo color = {
+        .sType       = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
+        .imageView   = target->view,
+        .imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+        .loadOp      = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+        .storeOp     = VK_ATTACHMENT_STORE_OP_STORE,
+    };
+    VkRenderingInfo rendering = {
+        .sType                = VK_STRUCTURE_TYPE_RENDERING_INFO,
+        .renderArea           = {.extent = {target->width, target->height}},
+        .layerCount           = 1,
+        .colorAttachmentCount = 1,
+        .pColorAttachments    = &color,
+    };
+    vkCmdBeginRendering(cmd, &rendering);
+    VkExtent2D extent = {target->width, target->height};
+    set_full_viewport(cmd, extent);
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+    vkCmdBindDescriptorSets(cmd,
+                            VK_PIPELINE_BIND_POINT_GRAPHICS,
+                            renderer->bake_pipeline_layout,
+                            0,
+                            1,
+                            &set,
+                            0,
+                            nullptr);
+    vkCmdPushConstants(cmd,
+                       renderer->bake_pipeline_layout,
+                       VK_SHADER_STAGE_FRAGMENT_BIT,
+                       0,
+                       sizeof *push,
+                       push);
+    vkCmdDraw(cmd, 3, 1, 0, 0);
+    vkCmdEndRendering(cmd);
+    image_barrier(cmd,
+                  target->handle,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                  VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+                  VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                  VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+}
+
+static float bake_kernel_radius(float sigma)
+{
+    /* vips min_ampl 0.001: taps where exp(-r^2 / 2 sigma^2) >= 0.001 */
+    return ceilf(sigma * 3.7169221888f);
+}
+
+struct bake_transients
+{
+    struct walle_vk_image full_a;
+    struct walle_vk_image full_b;
+    struct walle_vk_image low_a;
+    struct walle_vk_image low_b;
+    VkDescriptorPool      pool;
+};
+
+static void destroy_bake_transients(VkDevice device, struct bake_transients* t)
+{
+    destroy_image(device, &t->full_a);
+    destroy_image(device, &t->full_b);
+    destroy_image(device, &t->low_a);
+    destroy_image(device, &t->low_b);
+    if (t->pool)
+        vkDestroyDescriptorPool(device, t->pool, nullptr);
+    t->pool = VK_NULL_HANDLE;
+}
+
+static VkDescriptorSet bake_set(struct walle_vk_renderer* renderer,
+                                struct bake_transients*   t,
+                                VkImageView               a,
+                                VkImageView               b)
+{
+    VkDescriptorSetAllocateInfo alloc = {
+        .sType              = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+        .descriptorPool     = t->pool,
+        .descriptorSetCount = 1,
+        .pSetLayouts        = &renderer->bake_set_layout,
+    };
+    VkDescriptorSet set = VK_NULL_HANDLE;
+    if (!vk_check(vkAllocateDescriptorSets(renderer->device, &alloc, &set),
+                  "vkAllocateDescriptorSets(bake)"))
+        return VK_NULL_HANDLE;
+    VkDescriptorImageInfo image_a = {
+        .imageView   = a,
+        .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+    };
+    VkDescriptorImageInfo image_b = {
+        .imageView   = b,
+        .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+    };
+    VkDescriptorImageInfo sampler = {.sampler = renderer->linear_sampler};
+    VkWriteDescriptorSet  writes[3] = {
+        {.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+          .dstSet          = set,
+          .dstBinding      = 0,
+          .descriptorCount = 1,
+          .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+          .pImageInfo      = &image_a},
+        {.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+          .dstSet          = set,
+          .dstBinding      = 1,
+          .descriptorCount = 1,
+          .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+          .pImageInfo      = &image_b},
+        {.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+          .dstSet          = set,
+          .dstBinding      = 2,
+          .descriptorCount = 1,
+          .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLER,
+          .pImageInfo      = &sampler},
+    };
+    vkUpdateDescriptorSets(renderer->device, 3, writes, 0, nullptr);
+    return set;
+}
+
+[[nodiscard]]
+static bool record_glass_bake(struct walle_vk_renderer*         renderer,
+                              VkCommandBuffer                   cmd,
+                              const struct walle_vk_image*      standard,
+                              const struct walle_vk_image*      glass,
+                              const struct walle_vk_glass_bake* bake,
+                              struct bake_transients*           t)
+{
+    uint32_t w    = standard->width;
+    uint32_t h    = standard->height;
+    uint32_t low_w = (w + 7) / 8;
+    uint32_t low_h = (h + 7) / 8;
+    VkImageUsageFlags usage
+        = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    if (!create_image(renderer, w, h, VK_FORMAT_R32G32B32A32_SFLOAT, usage, &t->full_a)
+        || !create_image(renderer, w, h, VK_FORMAT_R32G32B32A32_SFLOAT, usage, &t->full_b)
+        || !create_image(renderer, low_w, low_h, VK_FORMAT_R32G32B32A32_SFLOAT, usage, &t->low_a)
+        || !create_image(renderer, low_w, low_h, VK_FORMAT_R32G32B32A32_SFLOAT, usage, &t->low_b))
+        return false;
+    VkDescriptorPoolSize sizes[2] = {
+        {.type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, .descriptorCount = 12},
+        {.type = VK_DESCRIPTOR_TYPE_SAMPLER, .descriptorCount = 6},
+    };
+    VkDescriptorPoolCreateInfo pool_info = {
+        .sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+        .maxSets       = 6,
+        .poolSizeCount = 2,
+        .pPoolSizes    = sizes,
+    };
+    if (!vk_check(vkCreateDescriptorPool(renderer->device, &pool_info, nullptr, &t->pool),
+                  "vkCreateDescriptorPool(bake)"))
+        return false;
+
+    struct bake_push push = {};
+    push.blur[3]          = bake->panel_space ? 1.0f : 0.0f;
+    push.mix[2]           = 1.0f / (float)w;
+    push.mix[3]           = 1.0f / (float)h;
+
+    /* 1: forward conversion (standard -> panel code space, full_a) */
+    bake_push_matrix(&push, bake->to_panel);
+    VkDescriptorSet set = bake_set(renderer, t, standard->view, standard->view);
+    if (set == VK_NULL_HANDLE)
+        return false;
+    bake_pass(cmd, renderer, renderer->bake_convert_pipeline, set, &push, &t->full_a);
+
+    /* 2/3: narrow blur H (full_a -> full_b), V (full_b -> full_a).  After
+     * this full_a holds the NEAR layer. */
+    push.blur[0] = bake->narrow_sigma;
+    push.blur[1] = bake_kernel_radius(bake->narrow_sigma);
+    push.blur[2] = 1.0f;
+    set          = bake_set(renderer, t, t->full_a.view, t->full_a.view);
+    if (set == VK_NULL_HANDLE)
+        return false;
+    /* the downsample needs the CONVERTED field, not the blurred one: run it
+     * FIRST, off full_a, into low_a */
+    {
+        struct bake_push down = push;
+        down.mix[2]           = 1.0f / (float)w;
+        down.mix[3]           = 1.0f / (float)h;
+        bake_pass(cmd, renderer, renderer->bake_down_pipeline, set, &down, &t->low_a);
+    }
+    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_b);
+    push.blur[2] = 0.0f;
+    push.mix[2]  = 1.0f / (float)w;
+    push.mix[3]  = 1.0f / (float)h;
+    set          = bake_set(renderer, t, t->full_b.view, t->full_b.view);
+    if (set == VK_NULL_HANDLE)
+        return false;
+    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_a);
+
+    /* 4/5: wide blur on the reduced grid (low_a -> low_b -> low_a) */
+    push.blur[0] = bake->wide_sigma / 8.0f;
+    push.blur[1] = bake_kernel_radius(push.blur[0]);
+    push.blur[2] = 1.0f;
+    push.mix[2]  = 1.0f / (float)t->low_a.width;
+    push.mix[3]  = 1.0f / (float)t->low_a.height;
+    set          = bake_set(renderer, t, t->low_a.view, t->low_a.view);
+    if (set == VK_NULL_HANDLE)
+        return false;
+    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->low_b);
+    push.blur[2] = 0.0f;
+    set          = bake_set(renderer, t, t->low_b.view, t->low_b.view);
+    if (set == VK_NULL_HANDLE)
+        return false;
+    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->low_a);
+
+    /* 6: mixture + back conversion into the sRGB glass image */
+    bake_push_matrix(&push, bake->from_panel);
+    push.mix[0] = bake->narrow_weight;
+    push.mix[1] = bake->narrow_chroma_weight;
+    set         = bake_set(renderer, t, t->full_a.view, t->low_a.view);
+    if (set == VK_NULL_HANDLE)
+        return false;
+    bake_pass(cmd, renderer, renderer->bake_mix_pipeline, set, &push, glass);
+    return true;
+}
+
 static bool upload_texture_pair(struct walle_vk_output*            output,
                                 int                                standard_fd,
                                 const struct walle_vk_image_layer* standard,
                                 int                                glass_fd,
                                 const struct walle_vk_image_layer* glass,
+                                const struct walle_vk_glass_bake*  bake,
                                 struct walle_vk_texture_pair*      result)
 {
     struct walle_vk_renderer* renderer = output->renderer;
-    if (standard_fd < 0 || glass_fd < 0 || !layer_valid(renderer, standard)
+    if (standard_fd < 0 || (glass_fd < 0 && bake == nullptr) || !layer_valid(renderer, standard)
         || !layer_valid(renderer, glass)
         || standard->width != (int32_t)output->extent.width
         || standard->height != (int32_t)output->extent.height)
         return false;
-    VkDeviceSize total_size;
-    if (ckd_add(&total_size, (VkDeviceSize)standard->size, (VkDeviceSize)glass->size))
+    VkDeviceSize total_size = (VkDeviceSize)standard->size;
+    if (bake == nullptr
+        && ckd_add(&total_size, (VkDeviceSize)standard->size, (VkDeviceSize)glass->size))
         return false;
     struct walle_vk_texture_pair pair    = {};
     struct walle_vk_buffer       staging = {};
+    struct bake_transients       transients = {};
     VkImageUsageFlags image_usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+    VkImageUsageFlags glass_usage
+        = bake ? (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) : image_usage;
     bool              success     = create_image(renderer,
                                 (uint32_t)standard->width,
                                 (uint32_t)standard->height,
@@ -2223,7 +2618,7 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
                                    (uint32_t)glass->width,
                                    (uint32_t)glass->height,
                                    WALLE_VK_WALLPAPER_FORMAT,
-                                   image_usage,
+                                   glass_usage,
                                    &pair.glass)
                    && create_buffer(renderer,
                                     total_size,
@@ -2234,10 +2629,11 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
                                     true,
                                     &staging);
     if (success) {
-        success
-            = read_layer_exact(standard_fd, standard, staging.memory.mapped)
-              && read_layer_exact(glass_fd, glass, (uint8_t*)staging.memory.mapped + standard->size)
-              && begin_upload(renderer);
+        success = read_layer_exact(standard_fd, standard, staging.memory.mapped)
+                  && (bake != nullptr
+                      || read_layer_exact(
+                          glass_fd, glass, (uint8_t*)staging.memory.mapped + standard->size))
+                  && begin_upload(renderer);
     }
     if (success) {
         image_barrier(renderer->upload_command_buffer,
@@ -2248,14 +2644,15 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
                       VK_ACCESS_2_TRANSFER_WRITE_BIT,
                       VK_IMAGE_LAYOUT_UNDEFINED,
                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        image_barrier(renderer->upload_command_buffer,
-                      pair.glass.handle,
-                      VK_PIPELINE_STAGE_2_NONE,
-                      VK_ACCESS_2_NONE,
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_WRITE_BIT,
-                      VK_IMAGE_LAYOUT_UNDEFINED,
-                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        if (bake == nullptr)
+            image_barrier(renderer->upload_command_buffer,
+                          pair.glass.handle,
+                          VK_PIPELINE_STAGE_2_NONE,
+                          VK_ACCESS_2_NONE,
+                          VK_PIPELINE_STAGE_2_COPY_BIT,
+                          VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                          VK_IMAGE_LAYOUT_UNDEFINED,
+                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
         VkBufferImageCopy copies[2] = {
             {
                 .bufferOffset = 0,
@@ -2288,12 +2685,13 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
                                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                1,
                                &copies[0]);
-        vkCmdCopyBufferToImage(renderer->upload_command_buffer,
-                               staging.handle,
-                               pair.glass.handle,
-                               VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                               1,
-                               &copies[1]);
+        if (bake == nullptr)
+            vkCmdCopyBufferToImage(renderer->upload_command_buffer,
+                                   staging.handle,
+                                   pair.glass.handle,
+                                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                   1,
+                                   &copies[1]);
         image_barrier(renderer->upload_command_buffer,
                       pair.standard.handle,
                       VK_PIPELINE_STAGE_2_COPY_BIT,
@@ -2302,17 +2700,24 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
                       VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                       VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
-        image_barrier(renderer->upload_command_buffer,
-                      pair.glass.handle,
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_WRITE_BIT,
-                      VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
-                      VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
-                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                      VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
-        success = end_upload(renderer);
+        if (bake == nullptr) {
+            image_barrier(renderer->upload_command_buffer,
+                          pair.glass.handle,
+                          VK_PIPELINE_STAGE_2_COPY_BIT,
+                          VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                          VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+                          VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                          VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+        } else {
+            success = record_glass_bake(
+                renderer, renderer->upload_command_buffer, &pair.standard, &pair.glass, bake,
+                &transients);
+        }
+        success = success && end_upload(renderer);
     }
     destroy_buffer(renderer->device, &staging);
+    destroy_bake_transients(renderer->device, &transients);
     if (!success) {
         destroy_texture_pair(renderer->device, &pair);
         return false;
@@ -2325,12 +2730,13 @@ bool walle_vk_output_upload(struct walle_vk_output*            output,
                             int                                standard_fd,
                             const struct walle_vk_image_layer* standard,
                             int                                glass_fd,
-                            const struct walle_vk_image_layer* glass)
+                            const struct walle_vk_image_layer* glass,
+                            const struct walle_vk_glass_bake*  bake)
 {
     if (!output || output->renderer->fatal)
         return false;
     struct walle_vk_texture_pair pair = {};
-    if (!upload_texture_pair(output, standard_fd, standard, glass_fd, glass, &pair))
+    if (!upload_texture_pair(output, standard_fd, standard, glass_fd, glass, bake, &pair))
         return false;
     if (!vk_check(
             vkWaitForFences(output->renderer->device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX),
@@ -2357,7 +2763,7 @@ bool walle_vk_output_restore_current(struct walle_vk_output*            output,
     if (output->current.standard.handle || output->current.glass.handle)
         return false;
     struct walle_vk_texture_pair pair = {};
-    if (!upload_texture_pair(output, standard_fd, standard, glass_fd, glass, &pair))
+    if (!upload_texture_pair(output, standard_fd, standard, glass_fd, glass, nullptr, &pair))
         return false;
     output->current                   = pair;
     output->compose_descriptors_ready = false;

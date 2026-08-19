@@ -50,7 +50,10 @@ APP_SOURCES ::= walle.c shiro.c vulkan_renderer.c \
 	parity/liquid_glass_resolved_color.c
 
 SPIRV_TARGETS ::= $(SPIRV_DIR)/maskVertex.spv $(SPIRV_DIR)/maskFragment.spv \
-	$(SPIRV_DIR)/composeVertex.spv $(SPIRV_DIR)/composeFragment.spv
+	$(SPIRV_DIR)/composeVertex.spv $(SPIRV_DIR)/composeFragment.spv \
+	$(SPIRV_DIR)/bakeVertex.spv $(SPIRV_DIR)/bakeConvertForward.spv \
+	$(SPIRV_DIR)/bakeBlur.spv $(SPIRV_DIR)/bakeDownsample8.spv \
+	$(SPIRV_DIR)/bakeMixFinal.spv
 SPIRV_DEPS ::= $(SPIRV_TARGETS:%=%.d)
 
 # 3. Toolchain and C23 Compliance Flags
@@ -415,6 +418,31 @@ $(SPIRV_DIR)/maskFragment.spv: $(SHADER_DIR)/reveal_mask.slang Makefile | $(SPIR
 $(SPIRV_DIR)/composeVertex.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(SPIRV_DIR)
 	@echo "[SLANG] $@"
 	$(SLANGC) $< -entry composeVertex -stage vertex $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
+
+$(SPIRV_DIR)/bakeVertex.spv: $(SHADER_DIR)/glass_bake.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry bakeVertex -stage vertex $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
+
+$(SPIRV_DIR)/bakeConvertForward.spv: $(SHADER_DIR)/glass_bake.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry bakeConvertForward -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
+
+$(SPIRV_DIR)/bakeBlur.spv: $(SHADER_DIR)/glass_bake.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry bakeBlur -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
+
+$(SPIRV_DIR)/bakeDownsample8.spv: $(SHADER_DIR)/glass_bake.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry bakeDownsample8 -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
+
+$(SPIRV_DIR)/bakeMixFinal.spv: $(SHADER_DIR)/glass_bake.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry bakeMixFinal -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
 	$(SPIRV_VAL) --target-env vulkan1.4 $@
 
 $(SPIRV_DIR)/composeFragment.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(SPIRV_DIR)

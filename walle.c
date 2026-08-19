@@ -234,6 +234,20 @@ static struct glass_blur_recipe glass_blur_for(enum glass_variant variant,
     };
 }
 
+/* The glass layer is baked on the GPU at upload time (six fragment passes,
+ * ~15 ms) unless WALLE_GLASS_BAKE=cpu selects the vips replay path - the A/B
+ * referee for the GPU implementation, judged by the measured-law score gates
+ * rather than byte identity. */
+static int glass_bake_on_gpu(void)
+{
+    static int cached = -1;
+    if (cached < 0) {
+        const char* mode = getenv("WALLE_GLASS_BAKE");
+        cached           = mode == nullptr || strcmp(mode, "cpu") != 0;
+    }
+    return cached;
+}
+
 /* Bump whenever the cached pixel pipeline changes shape (layout, band count,
  * preprocess constants). Hashed into every cache key. */
 constexpr uint32_t CACHE_SCHEMA_VERSION = 10;
@@ -1639,6 +1653,32 @@ static const double kGlassFromPanelLinear[9] = {
     -0.0196507, -0.0786527, 1.0978707,
 };
 
+/* Fill the GPU bake descriptor for one output's variant/appearance/scale.
+ * Returns false for identity (no material: the upload copies the standard
+ * bytes) and for the WALLE_GLASS_BAKE=cpu replay. */
+[[nodiscard]]
+static bool glass_bake_descriptor(enum glass_variant          variant,
+                                  float                       lightness,
+                                  int32_t                     scale,
+                                  struct walle_vk_glass_bake* out)
+{
+    if (variant == GLASS_VARIANT_IDENTITY || !glass_bake_on_gpu())
+        return false;
+    struct glass_blur_recipe recipe = glass_blur_for(variant, lightness, scale);
+    *out = (struct walle_vk_glass_bake){
+        .narrow_sigma         = (float)recipe.narrow_sigma,
+        .wide_sigma           = (float)recipe.wide_sigma,
+        .narrow_weight        = (float)recipe.narrow_weight,
+        .narrow_chroma_weight = (float)recipe.narrow_chroma_weight,
+        .panel_space          = glass_blur_space_panel() != 0,
+    };
+    for (int i = 0; i < 9; ++i) {
+        out->to_panel[i]   = (float)kGlassToPanelLinear[i];
+        out->from_panel[i] = (float)kGlassFromPanelLinear[i];
+    }
+    return true;
+}
+
 /* Convert a float RGBA image between code spaces that share the sRGB transfer
  * curve: decode the piecewise EOTF on the 0..255 code scale, apply the 3x3 in
  * linear light (alpha untouched), clamp the tiny out-of-gamut negatives, and
@@ -2120,7 +2160,7 @@ static void* render_thread_worker(void* arg)
      * at full resolution because clear's mixture carries 19% of the sharp
      * image, which a reduced level cannot represent.  Identity never samples
      * it, so identity aliases the standard layer and skips the bake. */
-    bool                     need_glass = variant != GLASS_VARIANT_IDENTITY;
+    bool need_glass = variant != GLASS_VARIANT_IDENTITY && !glass_bake_on_gpu();
     struct glass_blur_recipe blur
         = glass_blur_for(variant, output->job_lightness, output->job_scale);
     char*      cpath              = nullptr; /* standard entry */
@@ -3149,10 +3189,22 @@ static void finalize_render(struct wallpaper_output* output)
                                                       &current_glass);
         warn_slow("current-wallpaper restore", output->name, t_restore);
     }
+    struct walle_vk_glass_bake bake;
+    bool                       gpu_bake = glass_bake_descriptor(
+        output->glass_variant,
+        glass_appearance_value(output),
+        output->reveal_process_capture_owned
+            ? state->reveal_process_capture_backing_scale
+            : (output->scale > 0 ? output->scale : 1),
+        &bake);
     uint64_t t_upload  = trace_now_ns();
     bool     uploaded = restored && output->render.vk_output
-                    && walle_vk_output_upload(
-                        output->render.vk_output, res.std_fd, &standard, res.glass_fd, &glass);
+                    && walle_vk_output_upload(output->render.vk_output,
+                                              res.std_fd,
+                                              &standard,
+                                              res.glass_fd,
+                                              &glass,
+                                              gpu_bake ? &bake : nullptr);
     warn_slow("wallpaper upload", output->name, t_upload);
 
     if (!uploaded) {

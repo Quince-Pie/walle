@@ -6135,3 +6135,40 @@ campaign (the user's own, rulers through v7) continues on those
 residuals; nothing for an agent session to run against it.
 
 Every checkbox in TODO.md is now [x].
+
+## Session 192 (2026-08-19): the bake moves to the GPU
+
+The user's challenge - "apple can do it so efficiently but we need 4
+workers?" - was the correct indictment of the architecture, not the
+implementation.  Apple's material is a GPU compositor effect; walle
+computed it with vips on the CPU and cached the result, and every
+optimization before this one polished the wrong side of the bus.
+
+The glass layer is now baked on the GPU at upload time: six fragment
+passes (forward code-space conversion off the sRGB texture's hardware
+decode, separable narrow Gaussian, 8x downsample, separable wide
+Gaussian on the reduced grid, and a mix pass that bilinearly upsamples,
+applies the luma/chroma mixture law, and converts back through the sRGB
+attachment's hardware encode).  Kernel weights follow vips's discrete
+mask and min_ampl truncation; edges clamp like EXTEND_COPY.  The CPU
+path remains behind WALLE_GLASS_BAKE=cpu as the replay referee.
+
+THE GPU BAKE SCORES CLOSER TO APPLE THAN THE CPU BAKE DID:
+    coded sweep   1.46 -> 1.43 full, 2.29 -> 2.23 inside, 4.13 -> 4.04
+    natural       0.95 -> 0.93 full, 1.45 -> 1.41 inside, 1.95 -> 1.90
+which is the expected sign: Apple's own implementation is GPU bilinear
+chains and hardware sRGB curves, and matching the mechanism moved the
+numbers toward the hardware on BOTH content classes.  The cpu replay
+reproduces its old scores digit-for-digit (plumbing regression-free);
+the reveal gate is untouched at 100.0% (identity never bakes).
+
+The user-visible outcome: variant flips present at +0.10 s and touches
+at +0.04-0.05 s in the harness - a variant change is now
+indistinguishable from a warm rotation, with no cold-bake case left.
+The glass side of the disk cache is dead weight under the default path
+(workers bake nothing; standard entries remain the only cache), which
+retroactively answers the cache-design question: content-addressing
+survives, the glass entries did not need to exist.
+
+Receipts: m1-transition-25G76-gpu-bake-{sweep,natural}.json; live gate
+pass; shaders/glass_bake.slang.

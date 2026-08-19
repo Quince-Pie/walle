@@ -89,12 +89,28 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
 [[nodiscard]]
 bool walle_vk_output_resize(struct walle_vk_output* output, uint32_t width, uint32_t height);
 
+/* The measured backdrop mixture, computed on the GPU at upload time.  All
+ * sigmas are in OUTPUT pixels; matrices are row-major colorant transforms.
+ * Pass nullptr to copy the glass bytes from glass_fd instead (identity, and
+ * the WALLE_GLASS_BAKE=cpu replay path). */
+struct walle_vk_glass_bake
+{
+    float narrow_sigma;
+    float wide_sigma;
+    float narrow_weight;
+    float narrow_chroma_weight;
+    float to_panel[9];
+    float from_panel[9];
+    bool  panel_space;
+};
+
 [[nodiscard]]
 bool walle_vk_output_upload(struct walle_vk_output*            output,
                             int                                standard_fd,
                             const struct walle_vk_image_layer* standard,
                             int                                glass_fd,
-                            const struct walle_vk_image_layer* glass);
+                            const struct walle_vk_image_layer* glass,
+                            const struct walle_vk_glass_bake*  bake);
 
 [[nodiscard]]
 bool walle_vk_output_restore_current(struct walle_vk_output*            output,
