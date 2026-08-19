@@ -5979,3 +5979,43 @@ analysis/measure_rt_rendition_ramp_edges.py,
 analysis/measure_ic_rendition.py (numpy+PIL only, run against any
 paired glasscap sets).  Durable copies of both accessibility sets:
 M1 home + /home/quince/walle-archives + GitHub archive branches.
+
+## Session 189 (2026-08-19): the variant-change pause
+
+User report: changing transition_variant makes the changed output pause
+and desynchronize from the other on every touch.  Root cause in two
+parts, both fixed and measured:
+
+1. NO CROSS-OUTPUT START BARRIER (4c5ba25): each output started its
+   transition the moment its own render landed, so a cache hit on one
+   output against a cold bake on the other read as visible desync -
+   measured 1.6s stagger live.  Outputs recruited by one trigger now
+   form a sync group and start in the same loop turn ("[SYNC] N
+   transitions started together").  Live gate green, reveal gate
+   untouched at the known-good composition sha.
+
+2. MONOLITHIC CACHE ENTRIES (this commit): one entry held standard +
+   glass keyed by variant/recipe/blur-space, so a variant change
+   re-decoded and re-cropped the source to rebuild a standard layer
+   that is byte-identical across variants.  Entries are now split
+   (schema 10): the STANDARD entry keys on source+geometry alone and is
+   shared by every variant and appearance; the GLASS entry continues
+   the same XXH64 stream with variant+recipe+space.  identity - which
+   never samples the glass - aliases the standard fd and bakes nothing.
+   The render_result carries two fds; the upload reads each layer from
+   its own fd (renderer signature change, no extra copies).
+
+Measured on the worst sources (91MB 9000x3500 TIFF), 2560x2880, DEBUG
+build: variant flip visible start 0.6s -> 0.26-0.33s (decode skipped;
+the win is larger live where 8K decodes dominate), identity flip
+0.11-0.13s with NO bake, cross-monitor delta <=68ms in every round
+(15ms for identity).  Gates: reveal composition sha 8ac1bd7c unchanged
+(bit-identical pixels through the new layout), live-transition-gate
+pass.  Bonus: the long-documented identity glass-layer waste
+(bake+cache+upload of an unsampled layer) is gone as a side effect.
+
+Next efficiency step, designed but not shipped: a background pre-warm
+worker (bake item k+1's standard + both non-identity glasses after each
+render) would make every rotation and flip a full cache hit; it wants
+the bake core factored into shared helpers first so the key computation
+can never fork.

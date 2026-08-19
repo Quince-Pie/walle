@@ -2195,13 +2195,15 @@ static bool layer_valid(const struct walle_vk_renderer*    renderer,
 }
 
 static bool upload_texture_pair(struct walle_vk_output*            output,
-                                int                                fd,
+                                int                                standard_fd,
                                 const struct walle_vk_image_layer* standard,
+                                int                                glass_fd,
                                 const struct walle_vk_image_layer* glass,
                                 struct walle_vk_texture_pair*      result)
 {
     struct walle_vk_renderer* renderer = output->renderer;
-    if (fd < 0 || !layer_valid(renderer, standard) || !layer_valid(renderer, glass)
+    if (standard_fd < 0 || glass_fd < 0 || !layer_valid(renderer, standard)
+        || !layer_valid(renderer, glass)
         || standard->width != (int32_t)output->extent.width
         || standard->height != (int32_t)output->extent.height)
         return false;
@@ -2232,9 +2234,10 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
                                     true,
                                     &staging);
     if (success) {
-        success = read_layer_exact(fd, standard, staging.memory.mapped)
-                  && read_layer_exact(fd, glass, (uint8_t*)staging.memory.mapped + standard->size)
-                  && begin_upload(renderer);
+        success
+            = read_layer_exact(standard_fd, standard, staging.memory.mapped)
+              && read_layer_exact(glass_fd, glass, (uint8_t*)staging.memory.mapped + standard->size)
+              && begin_upload(renderer);
     }
     if (success) {
         image_barrier(renderer->upload_command_buffer,
@@ -2319,14 +2322,15 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
 }
 
 bool walle_vk_output_upload(struct walle_vk_output*            output,
-                            int                                fd,
+                            int                                standard_fd,
                             const struct walle_vk_image_layer* standard,
+                            int                                glass_fd,
                             const struct walle_vk_image_layer* glass)
 {
     if (!output || output->renderer->fatal)
         return false;
     struct walle_vk_texture_pair pair = {};
-    if (!upload_texture_pair(output, fd, standard, glass, &pair))
+    if (!upload_texture_pair(output, standard_fd, standard, glass_fd, glass, &pair))
         return false;
     if (!vk_check(
             vkWaitForFences(output->renderer->device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX),
@@ -2341,8 +2345,9 @@ bool walle_vk_output_upload(struct walle_vk_output*            output,
 }
 
 bool walle_vk_output_restore_current(struct walle_vk_output*            output,
-                                     int                                fd,
+                                     int                                standard_fd,
                                      const struct walle_vk_image_layer* standard,
+                                     int                                glass_fd,
                                      const struct walle_vk_image_layer* glass)
 {
     if (!output || output->renderer->fatal)
@@ -2352,7 +2357,7 @@ bool walle_vk_output_restore_current(struct walle_vk_output*            output,
     if (output->current.standard.handle || output->current.glass.handle)
         return false;
     struct walle_vk_texture_pair pair = {};
-    if (!upload_texture_pair(output, fd, standard, glass, &pair))
+    if (!upload_texture_pair(output, standard_fd, standard, glass_fd, glass, &pair))
         return false;
     output->current                   = pair;
     output->compose_descriptors_ready = false;

@@ -91,14 +91,16 @@ bool walle_vk_output_resize(struct walle_vk_output* output, uint32_t width, uint
 
 [[nodiscard]]
 bool walle_vk_output_upload(struct walle_vk_output*            output,
-                            int                                fd,
+                            int                                standard_fd,
                             const struct walle_vk_image_layer* standard,
+                            int                                glass_fd,
                             const struct walle_vk_image_layer* glass);
 
 [[nodiscard]]
 bool walle_vk_output_restore_current(struct walle_vk_output*            output,
-                                     int                                fd,
+                                     int                                standard_fd,
                                      const struct walle_vk_image_layer* standard,
+                                     int                                glass_fd,
                                      const struct walle_vk_image_layer* glass);
 
 [[nodiscard]]

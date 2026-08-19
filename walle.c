@@ -216,7 +216,7 @@ static struct glass_blur_recipe glass_blur_for(enum glass_variant variant,
 
 /* Bump whenever the cached pixel pipeline changes shape (layout, band count,
  * preprocess constants). Hashed into every cache key. */
-constexpr uint32_t CACHE_SCHEMA_VERSION = 9;
+constexpr uint32_t CACHE_SCHEMA_VERSION = 10;
 
 constexpr float DEFAULT_TRANSITION_DUR = 0.6f;
 constexpr int   INOTIFY_BUF_LEN        = 4096;
@@ -377,7 +377,13 @@ struct image_layer
  * texture storage, PBO sizing, and row alignment uniform. */
 struct render_result
 {
-    int                fd; /* one fd for both layers; -1 = none */
+    /* Split cache entries: the standard layer is variant-independent, the
+     * glass layer keys on variant/recipe/blur-space.  For identity - which
+     * never samples the glass - glass_fd aliases std_fd, so a variant flip
+     * to or from identity costs no bake at all.  glass_fd == std_fd must be
+     * closed exactly once. */
+    int                std_fd;   /* -1 = none */
+    int                glass_fd; /* may equal std_fd; -1 = none */
     bool               success;
     struct image_layer standard;
     struct image_layer glass;
@@ -639,9 +645,11 @@ static void                  launch_cache_maintenance_service(void);
 
 static void release_render_result(struct render_result* result)
 {
-    if (result->fd >= 0)
-        close(result->fd);
-    *result = (struct render_result){.fd = -1};
+    if (result->glass_fd >= 0 && result->glass_fd != result->std_fd)
+        close(result->glass_fd);
+    if (result->std_fd >= 0)
+        close(result->std_fd);
+    *result = (struct render_result){.std_fd = -1, .glass_fd = -1};
 }
 
 /* Applied when an output's section disappears on hot reload: empties the
@@ -1985,7 +1993,7 @@ static void* render_thread_worker(void* arg)
     assert(sigismember(&sigcur, SIGINT) && sigismember(&sigcur, SIGTERM));
 #endif
 
-    struct render_result result  = {.success = false, .fd = -1};
+    struct render_result result  = {.success = false, .std_fd = -1, .glass_fd = -1};
     auto                 item    = &output->items[output->current_item_index];
     int                  w       = output->job_w;
     int                  h       = output->job_h;
@@ -1993,15 +2001,22 @@ static void* render_thread_worker(void* arg)
 
     /* The backdrop the material samples, at the measured radii.  It is stored
      * at full resolution because clear's mixture carries 19% of the sharp
-     * image, which a reduced level cannot represent. */
+     * image, which a reduced level cannot represent.  Identity never samples
+     * it, so identity aliases the standard layer and skips the bake. */
+    bool                     need_glass = variant != GLASS_VARIANT_IDENTITY;
     struct glass_blur_recipe blur
         = glass_blur_for(variant, output->job_lightness, output->job_scale);
-    long     page_size    = sysconf(_SC_PAGESIZE);
-    char*    cpath        = nullptr;
-    char*    cdir         = nullptr;
-    int      fd           = -1;
-    bool     cache_backed = false;
-    uint8_t* map          = nullptr;
+    char*      cpath              = nullptr; /* standard entry */
+    char*      glass_cpath        = nullptr; /* glass entry */
+    char*      cdir               = nullptr;
+    char*      glass_cdir         = nullptr;
+    int        fd                 = -1; /* standard entry fd */
+    int        glass_fd           = -1;
+    bool       cache_backed       = false;
+    bool       glass_cache_backed = false;
+    uint8_t*   map                = nullptr; /* standard pixels */
+    uint8_t*   glass_map          = nullptr;
+    VipsImage *img = nullptr, *tmp = nullptr;
 
     /* Always decode to RGBA: one band count keeps texture storage, PBO sizing,
      * and row alignment uniform for every image and output. */
@@ -2022,72 +2037,102 @@ static void* render_thread_worker(void* arg)
     }
     g_object_unref(header);
 
-    size_t raw_sz, glass_sz, total_sz;
+    size_t raw_sz, glass_sz;
     if (ckd_mul(&raw_sz, (size_t)w * h, bands))
         goto finalize;
-
-    size_t aligned_raw_sz = (raw_sz + (page_size - 1)) & ~(page_size - 1);
-
-    int gw = w;
-    int gh = h;
-
-    if (ckd_mul(&glass_sz, (size_t)gw * gh, bands))
-        goto finalize;
-    if (ckd_add(&total_sz, aligned_raw_sz, glass_sz))
-        goto finalize;
+    glass_sz = raw_sz;
 
     struct stat st;
     if (stat(item->filename, &st))
         goto finalize;
-    XXH64_state_t* xxh = XXH64_createState();
-    if (!xxh)
-        goto finalize;
-    XXH64_reset(xxh, 0);
-    XXH64_update(xxh, &CACHE_SCHEMA_VERSION, sizeof(CACHE_SCHEMA_VERSION));
-    XXH64_update(xxh, item->filename, strlen(item->filename));
-    XXH64_update(xxh, &st.st_mtim, sizeof(st.st_mtim));
-    XXH64_update(xxh, &st.st_size, sizeof(st.st_size));
-    XXH64_update(xxh, &w, sizeof(w));
-    XXH64_update(xxh, &h, sizeof(h));
-    XXH64_update(xxh, &variant, sizeof(variant));
-    /* The whole recipe, because the appearance moves the blend weights and a
-     * cached entry built for the other appearance is a different image. */
-    XXH64_update(xxh, &blur, sizeof(blur));
-    /* The blur space is part of the pixel pipeline: a panel-code-space bake
-     * and an sRGB replay must never share a cache entry. */
-    {
-        int blur_space_panel = glass_blur_space_panel();
-        XXH64_update(xxh, &blur_space_panel, sizeof(blur_space_panel));
-    }
-    XXH64_update(xxh, &item->mode, sizeof(item->mode));
-    if (item->mode == MODE_FILL) {
-        XXH64_update(xxh, &item->crop_strategy, sizeof(item->crop_strategy));
-    }
-    uint64_t hash = XXH64_digest(xxh);
-    XXH64_freeState(xxh);
 
-    cpath = get_cache_filename(hash, &cdir);
+    /* Two content-addressed entries per item.  The STANDARD entry keys on the
+     * source and geometry alone, so every variant and appearance shares one
+     * decode+crop.  The GLASS entry continues the same hash stream with the
+     * variant, the recipe, and the blur space.  A variant change therefore
+     * re-bakes at most the glass - never the decode, the crop, or the
+     * standard bytes - and identity re-bakes nothing. */
+    uint64_t std_hash, glass_hash = 0;
+    {
+        XXH64_state_t* xxh = XXH64_createState();
+        if (!xxh)
+            goto finalize;
+        uint8_t kind = 0;
+        XXH64_reset(xxh, 0);
+        XXH64_update(xxh, &CACHE_SCHEMA_VERSION, sizeof(CACHE_SCHEMA_VERSION));
+        XXH64_update(xxh, &kind, sizeof kind);
+        XXH64_update(xxh, item->filename, strlen(item->filename));
+        XXH64_update(xxh, &st.st_mtim, sizeof(st.st_mtim));
+        XXH64_update(xxh, &st.st_size, sizeof(st.st_size));
+        XXH64_update(xxh, &w, sizeof(w));
+        XXH64_update(xxh, &h, sizeof(h));
+        XXH64_update(xxh, &item->mode, sizeof(item->mode));
+        if (item->mode == MODE_FILL)
+            XXH64_update(xxh, &item->crop_strategy, sizeof(item->crop_strategy));
+        std_hash = XXH64_digest(xxh);
+        if (need_glass) {
+            kind = 1;
+            XXH64_update(xxh, &kind, sizeof kind);
+            XXH64_update(xxh, &variant, sizeof(variant));
+            /* The whole recipe, because the appearance moves the blend weights
+             * and an entry built for the other appearance is a different
+             * image. */
+            XXH64_update(xxh, &blur, sizeof(blur));
+            /* The blur space is part of the pixel pipeline: a panel-code-space
+             * bake and an sRGB replay must never share a cache entry. */
+            int blur_space_panel = glass_blur_space_panel();
+            XXH64_update(xxh, &blur_space_panel, sizeof(blur_space_panel));
+            glass_hash = XXH64_digest(xxh);
+        }
+        XXH64_freeState(xxh);
+    }
+
+    cpath = get_cache_filename(std_hash, &cdir);
+    if (need_glass)
+        glass_cpath = get_cache_filename(glass_hash, &glass_cdir);
 
     if (cpath) {
         int cfd = open(cpath, O_RDONLY | O_CLOEXEC);
         if (cfd >= 0) {
             struct stat cst;
-            if (fstat(cfd, &cst) == 0 && (size_t)cst.st_size == total_sz) {
+            if (fstat(cfd, &cst) == 0 && (size_t)cst.st_size == raw_sz) {
                 futimens(cfd, nullptr); /* LRU bump for the mtime-keyed GC */
                 posix_fadvise(cfd, 0, 0, POSIX_FADV_WILLNEED);
-                result.fd = cfd;
-                result.standard
-                    = (struct image_layer){.offset = 0, .size = raw_sz, .width = w, .height = h};
-                result.glass = (struct image_layer){
-                    .offset = aligned_raw_sz, .size = glass_sz, .width = gw, .height = gh};
-                result.success = true;
-                goto finalize;
+                fd = cfd;
+            } else {
+                /* Wrong size = torn/stale entry: remove it so it can be
+                 * republished instead of failing validation forever. */
+                close(cfd);
+                unlink(cpath);
             }
-            /* Wrong size = torn/stale entry: remove it so it can be
-             * republished instead of failing validation forever. */
-            close(cfd);
-            unlink(cpath);
         }
+    }
+    if (need_glass && glass_cpath) {
+        int cfd = open(glass_cpath, O_RDONLY | O_CLOEXEC);
+        if (cfd >= 0) {
+            struct stat cst;
+            if (fstat(cfd, &cst) == 0 && (size_t)cst.st_size == glass_sz) {
+                futimens(cfd, nullptr);
+                posix_fadvise(cfd, 0, 0, POSIX_FADV_WILLNEED);
+                glass_fd = cfd;
+            } else {
+                close(cfd);
+                unlink(glass_cpath);
+            }
+        }
+    }
+    if (fd >= 0 && (!need_glass || glass_fd >= 0))
+        goto publish_result; /* full hit: no decode, no blur */
+
+    if (fd >= 0) {
+        /* Standard hit, glass missing: map the cached standard as the blur
+         * input and skip the decode pipeline entirely. */
+        map = mmap(nullptr, raw_sz, PROT_READ, MAP_SHARED, fd, 0);
+        if (map == MAP_FAILED) {
+            map = nullptr;
+            goto finalize_close;
+        }
+        goto bake_glass;
     }
 
     /* Build into an anonymous file and publish atomically on success, so a
@@ -2098,7 +2143,7 @@ static void* render_thread_worker(void* arg)
         cache_backed = fd >= 0;
     }
     if (fd < 0) {
-        fd           = (int)memfd_create("walle-render", MFD_CLOEXEC);
+        fd           = (int)memfd_create("walle-standard", MFD_CLOEXEC);
         cache_backed = false;
     }
     if (fd < 0)
@@ -2106,27 +2151,21 @@ static void* render_thread_worker(void* arg)
 
     int fal;
     do {
-        fal = posix_fallocate(fd, 0, (off_t)total_sz);
+        fal = posix_fallocate(fd, 0, (off_t)raw_sz);
     } while (fal == EINTR);
     if (fal != 0) {
         /* No ftruncate fallback: a sparse file whose blocks cannot be
          * allocated turns the mmap writes below into SIGBUS. */
-        close(fd);
-        fd = -1;
-        goto finalize;
+        goto finalize_close;
     }
 
-    map = mmap(nullptr, total_sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    map = mmap(nullptr, raw_sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (map == MAP_FAILED) {
-        close(fd);
-        fd  = -1;
         map = nullptr;
-        goto finalize;
+        goto finalize_close;
     }
 
-    madvise(map, total_sz, MADV_SEQUENTIAL);
-
-    VipsImage *img = nullptr, *tmp = nullptr;
+    madvise(map, raw_sz, MADV_SEQUENTIAL);
 
     switch (item->mode) {
         case MODE_FILL:
@@ -2219,27 +2258,7 @@ static void* render_thread_worker(void* arg)
     g_object_unref(img);
     img = nullptr;
 
-    /* The measured backdrop, built from the rows just written rather than from
-     * the decode pipeline again: that pipeline is opened sequential-access, so
-     * a second pass over it is a use-after-read, and this way the wallpaper is
-     * still decoded exactly once. */
-    VipsImage* decoded
-        = vips_image_new_from_memory(map, raw_sz, w, h, bands, VIPS_FORMAT_UCHAR);
-    if (!decoded)
-        goto vips_err;
-    VipsImage* glass = glass_blur_image(decoded, &blur);
-    g_object_unref(decoded);
-    if (!glass)
-        goto vips_err;
-    int written = write_pipeline_to_buffer_direct(glass, map + aligned_raw_sz, glass_sz);
-    g_object_unref(glass);
-    if (written != 0)
-        goto vips_err;
-
-    munmap(map, total_sz);
-    map = nullptr;
-
-    /* Publish the finished entry atomically; a racing sibling render of the
+    /* Publish the standard entry atomically; a racing sibling render of the
      * same key produced identical bytes, so EEXIST is a win, not an error. */
     if (cache_backed && cpath) {
         char proc[64];
@@ -2248,27 +2267,95 @@ static void* render_thread_worker(void* arg)
             dbg_print("cache publish failed: %s", strerror(errno));
     }
 
-    result.fd       = fd;
+bake_glass:
+    if (need_glass && glass_fd < 0) {
+        /* The measured backdrop, built from the standard bytes just written
+         * (or mapped straight from a cached standard entry): the wallpaper is
+         * decoded exactly once ever, and on a standard hit not at all. */
+        if (glass_cdir) {
+            glass_fd           = open(glass_cdir, O_TMPFILE | O_RDWR | O_CLOEXEC, 0600);
+            glass_cache_backed = glass_fd >= 0;
+        }
+        if (glass_fd < 0) {
+            glass_fd           = (int)memfd_create("walle-glass", MFD_CLOEXEC);
+            glass_cache_backed = false;
+        }
+        if (glass_fd < 0)
+            goto vips_err;
+        int gfal;
+        do {
+            gfal = posix_fallocate(glass_fd, 0, (off_t)glass_sz);
+        } while (gfal == EINTR);
+        if (gfal != 0)
+            goto vips_err;
+        glass_map = mmap(nullptr, glass_sz, PROT_READ | PROT_WRITE, MAP_SHARED, glass_fd, 0);
+        if (glass_map == MAP_FAILED) {
+            glass_map = nullptr;
+            goto vips_err;
+        }
+        madvise(glass_map, glass_sz, MADV_SEQUENTIAL);
+
+        VipsImage* decoded
+            = vips_image_new_from_memory(map, raw_sz, w, h, bands, VIPS_FORMAT_UCHAR);
+        if (!decoded)
+            goto vips_err;
+        VipsImage* glass = glass_blur_image(decoded, &blur);
+        g_object_unref(decoded);
+        if (!glass)
+            goto vips_err;
+        int written = write_pipeline_to_buffer_direct(glass, glass_map, glass_sz);
+        g_object_unref(glass);
+        if (written != 0)
+            goto vips_err;
+        munmap(glass_map, glass_sz);
+        glass_map = nullptr;
+
+        if (glass_cache_backed && glass_cpath) {
+            char proc[64];
+            snprintf(proc, sizeof(proc), "/proc/self/fd/%d", glass_fd);
+            if (linkat(AT_FDCWD, proc, AT_FDCWD, glass_cpath, AT_SYMLINK_FOLLOW) < 0
+                && errno != EEXIST)
+                dbg_print("cache publish failed: %s", strerror(errno));
+        }
+    }
+
+    if (map) {
+        munmap(map, raw_sz);
+        map = nullptr;
+    }
+
+publish_result:
+    result.std_fd   = fd;
     fd              = -1; /* ownership moved into result */
+    result.glass_fd = need_glass ? glass_fd : result.std_fd;
+    glass_fd        = -1;
     result.standard = (struct image_layer){.offset = 0, .size = raw_sz, .width = w, .height = h};
-    result.glass    = (struct image_layer){
-           .offset = aligned_raw_sz, .size = glass_sz, .width = gw, .height = gh};
-    result.success = true;
+    result.glass    = (struct image_layer){.offset = 0, .size = glass_sz, .width = w, .height = h};
+    result.success  = true;
     goto finalize;
 
 vips_err:
     if (img)
         g_object_unref(img);
+finalize_close:
     if (map)
-        munmap(map, total_sz);
+        munmap(map, raw_sz);
+    if (glass_map)
+        munmap(glass_map, glass_sz);
     if (fd >= 0) {
-        close(fd); /* anonymous (never linked): no torn entry to unlink */
+        close(fd); /* tmpfiles are anonymous until linked: nothing torn */
         fd = -1;
+    }
+    if (glass_fd >= 0) {
+        close(glass_fd);
+        glass_fd = -1;
     }
 
 finalize:
     free(cpath);
     free(cdir);
+    free(glass_cpath);
+    free(glass_cdir);
     cleanup_vips_thread();
 
     [[maybe_unused]]
@@ -2617,7 +2704,7 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
         walle_vk_output_promote(output->render.vk_output);
         release_render_result(&output->current_source);
         output->current_source = output->pending_source;
-        output->pending_source = (struct render_result){.fd = -1};
+        output->pending_source = (struct render_result){.std_fd = -1, .glass_fd = -1};
     } else {
         if (output->frame_callback)
             wl_callback_destroy(output->frame_callback);
@@ -2797,12 +2884,11 @@ static void finalize_render(struct wallpaper_output* output)
     struct wallpaper_state* state = output->render.state;
 
     struct render_result res = output->async_result;
-    output->async_result     = (struct render_result){.fd = -1};
+    output->async_result     = (struct render_result){.std_fd = -1, .glass_fd = -1};
 
     if (output->render.flags & F_DEAD) {
         transition_sync_unmark(state, output);
-        if (res.fd >= 0)
-            close(res.fd);
+        release_render_result(&res);
         /* Deferred teardown: the thread is joined, its completion CQE is
          * consumed — the event slot (and its fd) can go now. */
         if (output->slot_event >= 0) {
@@ -2817,8 +2903,7 @@ static void finalize_render(struct wallpaper_output* output)
      * the stale result; a section that vanished freezes the output. */
     if (output->pending_reload) {
         if (output->reveal_process_capture_owned) {
-            if (res.fd >= 0)
-                close(res.fd);
+            release_render_result(&res);
             reveal_process_capture_fail(state, "configuration changed during capture");
             return;
         }
@@ -2830,15 +2915,13 @@ static void finalize_render(struct wallpaper_output* output)
         }
         apply_config_to_output(output, cfg);
         update_wallpaper(output);
-        if (res.fd >= 0)
-            close(res.fd);
+        release_render_result(&res);
         return;
     }
 
     if (!res.success) {
         transition_sync_unmark(state, output);
-        if (res.fd >= 0)
-            close(res.fd);
+        release_render_result(&res);
         if (output->reveal_process_capture_owned)
             reveal_process_capture_fail(state, "wallpaper preparation failed");
         return;
@@ -2846,7 +2929,7 @@ static void finalize_render(struct wallpaper_output* output)
 
     if (res.standard.width != output->render.width
         || res.standard.height != output->render.height) {
-        close(res.fd);
+        release_render_result(&res);
         if (output->reveal_process_capture_owned) {
             reveal_process_capture_fail(state, "surface size changed during capture");
             return;
@@ -2873,7 +2956,7 @@ static void finalize_render(struct wallpaper_output* output)
         .height = res.glass.height,
     };
     bool restored = first_boot;
-    if (!first_boot && output->current_source.fd >= 0) {
+    if (!first_boot && output->current_source.std_fd >= 0) {
         const struct walle_vk_image_layer current_standard = {
             .offset = output->current_source.standard.offset,
             .size   = output->current_source.standard.size,
@@ -2888,12 +2971,14 @@ static void finalize_render(struct wallpaper_output* output)
         };
         restored = output->render.vk_output
                    && walle_vk_output_restore_current(output->render.vk_output,
-                                                      output->current_source.fd,
+                                                      output->current_source.std_fd,
                                                       &current_standard,
+                                                      output->current_source.glass_fd,
                                                       &current_glass);
     }
     bool uploaded = restored && output->render.vk_output
-                    && walle_vk_output_upload(output->render.vk_output, res.fd, &standard, &glass);
+                    && walle_vk_output_upload(
+                        output->render.vk_output, res.std_fd, &standard, res.glass_fd, &glass);
 
     if (!uploaded) {
         transition_sync_unmark(state, output);
@@ -2905,7 +2990,7 @@ static void finalize_render(struct wallpaper_output* output)
     }
     release_render_result(&output->pending_source);
     output->pending_source = res;
-    res                    = (struct render_result){.fd = -1};
+    res                    = (struct render_result){.std_fd = -1, .glass_fd = -1};
 
     /* Keep the cache watermark honored on long-lived daemons. */
     if (++state->renders_since_gc >= GC_RENDER_PERIOD) {
@@ -3025,10 +3110,7 @@ static void destroy_output(struct wallpaper_output* o)
             o->slot_event = -1;
             o->event_fd   = -1;
         }
-        if (o->async_result.fd >= 0) {
-            close(o->async_result.fd);
-            o->async_result.fd = -1;
-        }
+        release_render_result(&o->async_result);
     } else {
         /* Render thread in flight: keep the event slot armed so its
          * completion CQE drives finalize_render's join + deferred cleanup. */
@@ -4064,9 +4146,9 @@ static void registry_global(
                                                  .slot_timer     = -1,
                                                  .scale          = 1,
                                                  .wl_output_name = name,
-                                                 .async_result   = {.fd = -1},
-                                                 .current_source = {.fd = -1},
-                                                 .pending_source = {.fd = -1}};
+                                                 .async_result   = {.std_fd = -1, .glass_fd = -1},
+                                                 .current_source = {.std_fd = -1, .glass_fd = -1},
+                                                 .pending_source = {.std_fd = -1, .glass_fd = -1}};
         o->wl_output = wl_registry_bind(reg, name, &wl_output_interface, v);
         wl_output_add_listener(o->wl_output, &output_listener, o);
         wl_list_insert(&state->outputs, &o->link);
@@ -4864,8 +4946,7 @@ teardown:
         if (output->render.flags & F_THREAD_ACTIVE) {
             pthread_join(output->render_thread, nullptr);
             output->render.flags &= ~F_THREAD_ACTIVE;
-            if (output->async_result.fd >= 0)
-                close(output->async_result.fd);
+            release_render_result(&output->async_result);
             if (output->slot_event >= 0) {
                 ev_slot_release(&state.ev, (size_t)output->slot_event);
                 output->slot_event = -1;
