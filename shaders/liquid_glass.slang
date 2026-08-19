@@ -605,9 +605,27 @@ float4 composeFragment(
     shadowBlend *= lerp(1.25, 1.46, lightness);
     float3 shadowedBackground = srgbToLinear(lerp(
         backgroundSrgb, shadowSrgb, shadowBlend * thickness));
-    float3 result = lerp(shadowedBackground, insideColor, mask);
-
-    float3 encoded = linearToSrgb(clamp(result, 0.0, 1.0));
+    // EXPERIMENT: the boundary blend happens in sRGB CODE space, like the
+    // corpus-proven reveal blend - not in linear light.  R8-keyed rows show
+    // walle exact on every full-coverage pixel and 12-15 codes off ONLY on
+    // the AA pixel; Apple's AA value sits above even a code-space blend of
+    // its neighbours by a symmetric m(1-m) hump.  Step 1 (this change, no
+    // fitted constants): blend the material over the background in code
+    // space.  Identical to the old path wherever mask is 0 or 255.
+    float3 encoded = lerp(linearToSrgb(clamp(shadowedBackground, 0.0, 1.0)),
+                          linearToSrgb(clamp(insideColor, 0.0, 1.0)), mask);
+    // Step 2: the boundary highlight.  Apple's AA pixel sits ABOVE the
+    // code-space blend of its neighbours by a symmetric coverage hump,
+    // A * 4m(1-m), zero at full and zero coverage by construction.  A is
+    // fitted on the coded sweeps by projection (clear 25.13 dark / 28.7
+    // light; regular 19.17 dark / 31.0 light); the natural content is the
+    // holdout.  In luma codes, applied to all channels; rides thickness
+    // with the material.
+    float aaHumpA = regular > 0.5
+        ? lerp(19.17, 31.0, lightness)
+        : lerp(25.13, 28.7, lightness);
+    encoded += (aaHumpA / 255.0) * 4.0 * mask * (1.0 - mask) * thickness;
+    encoded = saturate(encoded);
     encoded += triangularDither(fragmentPixels + time * 61.0)
         * kDitherLsb * (1.0 - tFade);
     return float4(encoded, 1.0);
