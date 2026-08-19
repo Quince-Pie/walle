@@ -47,10 +47,15 @@ code values against the M1 captures.
       100.0% from "with hardware-measured per-tile constants" to "from
       public inputs". Probe campaign active (M1 walle-agx-* dirs); the flag
       flips the moment the law closes (TASK.md later-172 era note).
-- [ ] Live-path standing gate: a permanent headless-DRM live-transition
-      soak (the capture path cannot see live-only failures; the 181 abort
-      class must never hide again).
-- [ ] Durable archive for the capture corpora that exceed GitHub scale
-      (lgcap sets, 1.7-9.5 GB each): storage is an infrastructure call.
+- [x] Live-path standing gate — `make live-transition-gate`
+      (analysis/run_walle_live_transition_gate.sh): real timed transitions
+      through the live renderer on a real DRM device, three geometries
+      including 181's abort case, screenshot-verified motion, fails on any
+      "Transition stopped". First run: pass (10-11 distinct frames per
+      case, zero aborts).
+- [x] Durable on-machine archives for the multi-GB capture sets: copied
+      out of volatile /private/tmp into home on the M1 and into
+      /home/quince/walle-archives on the workstation (with the corpus).
+      Off-SITE storage remains an infrastructure choice.
 - [ ] Reduce Transparency / Increase Contrast renditions and non-@2x
       backing-scale validation.

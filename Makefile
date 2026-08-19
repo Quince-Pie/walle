@@ -326,7 +326,7 @@ DEPS    ::= $(OBJECTS:.o=.d)
 
 .PHONY: all activate clean fuzz reveal-best-known-corpus-gate \
 	reveal-best-known-process-gate reveal-mask-model-gate reveal-raster-gate \
-	reveal-presentation-gate material-law
+	reveal-presentation-gate material-law live-transition-gate
 
 all: $(TARGET) activate
 
@@ -368,6 +368,10 @@ reveal-best-known-corpus-gate: reveal-best-known-process-gate
 reveal-best-known-process-gate: $(TARGET) \
 		analysis/run_walle_reveal_process_capture_gate.sh
 	bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
+
+live-transition-gate: $(TARGET) \
+		analysis/run_walle_live_transition_gate.sh
+	bash analysis/run_walle_live_transition_gate.sh $(TARGET)
 
 # The ANIMATING path, which the ladder does not score: an explicitly set
 # progress rounds its bounds, an animating one interpolates between the two
