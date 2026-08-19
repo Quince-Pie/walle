@@ -5687,3 +5687,28 @@ genuine optimum of its family; the mechanism is in the rim colour
 transfer (order-4, 3.7/6.1 held-out rms) or the boundary-depth origin
 against the rasterized mask edge.  That is edge-instrument territory:
 a phase-offset ladder of the boundary within the pixel grid.
+
+## 2026-08-19 (later 183b): THE RIM REFUSES FIELD SURGERY - three falsifications
+
+The rim deficit's ANGULAR structure was measured (deficit vs the
+boundary normal, three states, all four cases): a constant part
+(+3.3..+8.5 codes) plus a bottom lobe (+2..+4 * max(down,0)) - which
+looked like the directional edge light in Apple's own HIG photographs.
+But the rig's twelve-sector measurement (1677 frames, rim varies by a
+median 2.7% of its own excess) says the hardware's rim is isotropic,
+so the angular reading is most likely the lens sampling the coded
+field's diagonal stripes - content coupling, not a law.  The A/B
+agreed: an additive depth-hatted edge light, fitted from the field
+means (uniform and uniform+lobe variants), left regular unchanged
+(edge 10.14 -> 10.09/10.12) and made clear WORSE (3.09 -> 3.56/3.68).
+With per-pixel scatter of 8-14 rms against a mean of 7-10 in a 1-2 px
+band, mean-level surgery is destroyed by sub-pixel misregistration.
+
+Verdict after profile-rescale (both directions) and additive lift:
+the rim's remaining 10-14 code mean deficit at depth 0.5-2.5 cannot be
+closed from wallpaper field captures.  It needs the edge instrument -
+a boundary phase ladder (the element edge stepped through the pixel
+grid in sub-pixel increments over flat and gradient backgrounds), the
+same class that fitted the rim in the first place, now read at the
+final two pixels.  The field measurement stands as the acceptance
+target: mean deficit +7 (light) / +5 (dark) over depth [0.75, 2.25).
