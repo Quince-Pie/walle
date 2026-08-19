@@ -228,6 +228,50 @@ static const double REVEAL_PROCESS_CAPTURE_CENTER_X    = 512.0;
 static const double REVEAL_PROCESS_CAPTURE_CENTER_Y    = 614.4;
 constexpr double    REVEAL_RADIUS_MARGIN               = 1.03;
 
+/* Apple's ANIMATED reveal runs ahead of its own state parameter.
+ *
+ * Measured on the authorized M1 (MacBookPro18,2, macOS 26.6.1 build 25G76,
+ * Retina at backing scale 2) with the rig's `wallpaper-transition` mode.  The
+ * two measurements disagree, and the disagreement IS the finding: read against
+ * the exact-state sweeps the radius is maximum_radius * state to under 4 px
+ * over sixteen states, so the radius law here is right; read against the
+ * presentation clock the same radius covers the frame at 0.636 rather than at
+ * 1.  What is wrong is only the mapping from the clock to the state.
+ *
+ * Fitted over the two `clear` sequences - 71 frames before the radius saturates,
+ * and `clear` because it casts no shadow to inflate the radius read:
+ *
+ *     state(t) = 1.610 * (t - 0.019)        13.3 px rms
+ *     state(t) = min(1, 1.624 * t^1.068)    18.7 px rms
+ *     state(t) = 1.537 * t                  33.2 px rms
+ *     state(t) = t                         422.7 px rms   (what this replaces)
+ *
+ * The form is not chosen by rms alone.  The bare scale is BIASED - its residual
+ * runs +59, +38, +18, +5, -27 px across the timeline - while the shifted line's
+ * wanders between -5 and +6 with no trend, which is what a correct model looks
+ * like.  And the shift is physical: 0.019 of a one-second animation is 1.2
+ * frames at the rig's 61 Hz, i.e. the reveal starts on the frame after the
+ * clock does.  So the radius is LINEAR in time after one frame of latency, at
+ * 1.61x the rate that would fill the timeline, covering the frame at 0.640.
+ *
+ * Chosen by end-to-end score, not by fit: over all 242 animated frames the
+ * shifted line reads 2.31 full-frame code values and 4.62 in the interior
+ * against the power law's 2.38 and 6.65, better on all four sequences.
+ *
+ * LIVE PATH ONLY.  The process capture is indexed BY state against the retained
+ * 65-state corpus, so easing it there would move the very ladder the reveal
+ * gate scores. */
+constexpr float REVEAL_CLOCK_RATE  = 1.610f;
+constexpr float REVEAL_CLOCK_DELAY = 0.019f;
+
+static float reveal_state_from_clock(float clock)
+{
+    float state = REVEAL_CLOCK_RATE * (clock - REVEAL_CLOCK_DELAY);
+    if (!(state > 0.0f))
+        return 0.0f;
+    return state > 1.0f ? 1.0f : state;
+}
+
 constexpr size_t   CACHE_HIGH_WATERMARK    = 512UL * 1024UL * 1024UL;
 constexpr size_t   CACHE_LOW_WATERMARK     = 384UL * 1024UL * 1024UL;
 constexpr int      CACHE_STARTUP_YIELD_SEC = 10;
@@ -530,6 +574,14 @@ struct wallpaper_state
      * are fully materialized at radii the tied mapping cannot reach.  Negative
      * means tied, which is the default and what every gate uses. */
     float    reveal_process_capture_material_progress;
+    /* A comma-separated LIST is accepted too, one value per captured state, so
+     * a run can hold the geometry on one ladder and the material on another.
+     * That is what scoring walle against Apple's animated wallpaper transition
+     * needs: the geometry follows the measured clock-to-state mapping while the
+     * material stays on the raw clock its own law was fitted against.  Null
+     * means the single value above applies. */
+    float*   reveal_process_capture_material_values;
+    uint32_t reveal_process_capture_material_count;
     /* --reveal-mask-process-capture-backing-scale: how many DEVICE PIXELS the
      * capture has per point.  The capture is always 2048x2048 device pixels;
      * this says what those pixels mean, and the material's radii are absolute
@@ -2252,6 +2304,12 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
             progress = 1.0f;
     }
 
+    /* The geometry runs on Apple's measured clock-to-state mapping; the
+     * material keeps the raw linear clock, which is the clock its own
+     * dematerialize law was fitted against.  The capture path passes the state
+     * through untouched - see reveal_state_from_clock. */
+    float reveal_state = process_capture ? progress : reveal_state_from_clock(progress);
+
     struct walle_lg_reveal_mask_geometry      geometry = {};
     const struct walle_lg_reveal_mask_request request  = {
          .target_width   = (uint32_t)output->render.width,
@@ -2259,7 +2317,7 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
          .center_x       = process_capture ? REVEAL_PROCESS_CAPTURE_CENTER_X : output->t_center_x,
          .center_y       = process_capture ? REVEAL_PROCESS_CAPTURE_CENTER_Y : output->t_center_y,
          .maximum_radius = output->reveal_maximum_radius,
-         .progress       = progress,
+         .progress       = reveal_state,
          /* The live transition is an ANIMATION, so its circle interpolates
           * between the two rounded endpoint rects; the process capture drives
           * an explicit progress, which is the rounded rect at that progress and
@@ -2278,10 +2336,16 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
     bool                  first_boot = !(output->render.flags & F_BOOT_COMPLETE);
     /* The material's clock, which is the reveal progress unless the capture
       * asked to drive it separately - see the field's comment. */
-    float material_progress
-        = process_capture && state->reveal_process_capture_material_progress >= 0.0f
-              ? state->reveal_process_capture_material_progress
-              : progress;
+    float material_progress = progress;
+    if (process_capture) {
+        if (state->reveal_process_capture_material_count > 0u)
+            material_progress
+                = state->reveal_process_capture_material_values
+                      [output->reveal_process_capture_state
+                       % state->reveal_process_capture_material_count];
+        else if (state->reveal_process_capture_material_progress >= 0.0f)
+            material_progress = state->reveal_process_capture_material_progress;
+    }
     struct walle_vk_frame frame      = {
              .geometry          = &geometry,
              .progress          = material_progress,
@@ -3830,10 +3894,11 @@ static void print_usage(const char* argv0)
         "          of the 65-state ladder\n"
         "      --reveal-mask-process-capture-presentation\n"
         "          capture with the animating geometry instead of the rounded one\n"
-        "      --reveal-mask-process-capture-material-progress <v>\n"
+        "      --reveal-mask-process-capture-material-progress <v[,v...]>\n"
         "          drive the material's clock from <v> while the geometry stays on\n"
         "          the reveal progress, so a fully materialized element can be\n"
-        "          captured at any radius\n"
+        "          captured at any radius; a list gives one value per captured\n"
+        "          state and must match the capture progress list\n"
         "      --reveal-mask-process-capture-backing-scale <1..4>\n"
         "          device pixels per point for the 2048x2048 capture; the\n"
         "          material's radii are absolute at the corpus's 2x scale\n"
@@ -3942,7 +4007,8 @@ int main(int argc, char* argv[])
     bool        reveal_process_capture_presentation = false;
     const char* reveal_process_capture_progress  = nullptr;
     /* Negative means the material's clock stays tied to the reveal progress. */
-    float reveal_process_capture_material_progress = -1.0f;
+    float       reveal_process_capture_material_progress = -1.0f;
+    const char* reveal_process_capture_material_text     = nullptr;
     int32_t reveal_process_capture_backing_scale = 1;
     const char* vulkan_device_selector           = getenv("WALLE_VK_DEVICE");
     bool        vulkan_device_selector_locked = vulkan_device_selector && *vulkan_device_selector;
@@ -3970,19 +4036,11 @@ int main(int argc, char* argv[])
             case OPT_REVEAL_MASK_PROCESS_CAPTURE_PROGRESS:
                 reveal_process_capture_progress = optarg;
                 break;
-            case OPT_REVEAL_MASK_PROCESS_CAPTURE_MATERIAL_PROGRESS: {
-                char* end = nullptr;
-                double value = strtod(optarg, &end);
-                if (end == optarg || *end != '\0' || !(value >= 0.0 && value <= 1.0)) {
-                    fprintf(stderr,
-                            "--reveal-mask-process-capture-material-progress "
-                            "requires a value in [0,1], got \"%s\"\n",
-                            optarg);
-                    return 1;
-                }
-                reveal_process_capture_material_progress = (float)value;
+            case OPT_REVEAL_MASK_PROCESS_CAPTURE_MATERIAL_PROGRESS:
+                /* One value, or a comma-separated ladder of them - parsed
+                 * below, once, alongside the progress ladder it pairs with. */
+                reveal_process_capture_material_text = optarg;
                 break;
-            }
             case OPT_REVEAL_MASK_PROCESS_CAPTURE_BACKING_SCALE: {
                 char* end = nullptr;
                 long value = strtol(optarg, &end, 10);
@@ -4054,11 +4112,62 @@ int main(int argc, char* argv[])
         }
     }
 
+    /* The material clock: one value, or one per captured state.  A single value
+     * keeps the historical field so every existing gate is byte-identical. */
+    float*   reveal_capture_material_values = nullptr;
+    uint32_t reveal_capture_material_count  = 0;
+    if (reveal_process_capture_material_text != nullptr) {
+        for (const char* cursor = reveal_process_capture_material_text;;) {
+            char*  end   = nullptr;
+            double value = strtod(cursor, &end);
+            if (end == cursor || !(value >= 0.0) || !(value <= 1.0)
+                || (*end != '\0' && *end != ',')) {
+                fprintf(stderr,
+                        "--reveal-mask-process-capture-material-progress requires "
+                        "comma-separated values in [0, 1], got \"%s\"\n",
+                        reveal_process_capture_material_text);
+                free(reveal_capture_progress_values);
+                free(reveal_capture_material_values);
+                return 1;
+            }
+            float* grown = realloc(reveal_capture_material_values,
+                                   (reveal_capture_material_count + 1u) * sizeof(float));
+            if (grown == nullptr) {
+                free(reveal_capture_progress_values);
+                free(reveal_capture_material_values);
+                fprintf(stderr, "Out of memory parsing the material clock list\n");
+                return 1;
+            }
+            reveal_capture_material_values                               = grown;
+            reveal_capture_material_values[reveal_capture_material_count++] = (float)value;
+            if (*end == '\0')
+                break;
+            cursor = end + 1;
+        }
+        if (reveal_capture_material_count == 1u) {
+            reveal_process_capture_material_progress = reveal_capture_material_values[0];
+            free(reveal_capture_material_values);
+            reveal_capture_material_values = nullptr;
+            reveal_capture_material_count  = 0;
+        } else if (reveal_capture_progress_count != 0
+                   && reveal_capture_material_count != reveal_capture_progress_count) {
+            fprintf(stderr,
+                    "--reveal-mask-process-capture-material-progress lists %u values "
+                    "for %u capture progress values\n",
+                    reveal_capture_material_count, reveal_capture_progress_count);
+            free(reveal_capture_progress_values);
+            free(reveal_capture_material_values);
+            return 1;
+        }
+    }
+
     struct wallpaper_state state = {
         .reveal_process_capture              = reveal_process_capture_directory != nullptr,
         .reveal_process_capture_presentation = reveal_process_capture_presentation,
         .reveal_process_capture_material_progress
         = reveal_process_capture_material_progress,
+        .reveal_process_capture_material_values = reveal_capture_material_values,
+        .reveal_process_capture_material_count  = reveal_capture_material_count,
         .reveal_process_capture_backing_scale = reveal_process_capture_backing_scale,
         .reveal_process_capture_single       = reveal_process_capture_progress != nullptr,
         .reveal_process_capture_progress_values = reveal_capture_progress_values,

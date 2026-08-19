@@ -36,6 +36,24 @@ migration: 82 are associated with Apple's unrecovered arbitrary post-clip
 triangle setup coefficients and nine with the already isolated physical
 presentation transfer.
 
+## The transition, end to end
+
+The mask is only half the claim; the other half is what the glass looks like
+while the mask grows. That is scored by rendering the **shipped Vulkan binary**
+and comparing it to Apple's own animation, captured on the authorized M1
+(MacBookPro18,2, macOS 26.6.1 build 25G76, Retina at backing scale 2) with the
+capture rig's `wallpaper-transition` probe:
+
+```text
+animated, 242 frames    full-frame mean 2.31 code values, interior 4.62
+settled, 68 states      full-frame mean 1.68 code values, worst frame 5.34
+```
+
+The alignment is exact rather than arranged: the rig's `--transition-origin
+0.25,0.30` in a 1024x1024-point window at 2x is pixel-for-pixel Walle's own
+capture centre (512, 614.4) in 2048x2048, so the two are compared with no
+resampling. Reproduce with `analysis/score_walle_transition_against_m1.py`.
+
 ## GPU and VRAM design
 
 Walle is a long-running wallpaper process, so the renderer deliberately keeps
@@ -175,6 +193,26 @@ path and writes its 65 top-left, row-major R8 masks after successful presents.
 See `config.ini` for configuration syntax. Place it in
 `$XDG_CONFIG_HOME/walle/config.ini` or pass it with `-c`. The inih parser's
 line limit is 199 characters, so keep individual path lines below that limit.
+
+Each output section takes these keys; the Liquid Glass ones are the first four.
+
+| key | values | default |
+| --- | --- | --- |
+| `transition` | `true` / `false` | `false` |
+| `transition_duration` | seconds, `0 < v <= 600` | `0.6` |
+| `transition_variant` | `clear`, `regular`, `identity` | `clear` |
+| `appearance` | `light`, `dark`, `auto` | `auto` |
+| `tint` | `#RRGGBB`, `RRGGBB`, `none` | `none` |
+| `files` / `paths` | fit-mode-prefixed image paths | — |
+| `timeout` | seconds, `0` disables switching | `0` |
+| `randomize` | `true` / `false` | `false` |
+| `gamemode` | `true` / `false` | `true` |
+
+`transition_variant`, `appearance` and `tint` each select a separately
+MEASURED law, not a parameter of one shared law: the two variants carry their
+own colour transfer, blur mixture, rim, shadow and dematerialize curve, each
+appearance its own transfer again, and `tint` its own two-regime law on top.
+The config is hot-reloaded, so changing any of them takes effect on save.
 
 ## Research handoff
 

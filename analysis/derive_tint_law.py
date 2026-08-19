@@ -60,9 +60,31 @@ supportable and takes it to 2.2 to 3.7 - so the order is chosen here per
 variant and appearance by that same held-out score, not fixed.  In-sample error
 cannot make this choice: it falls with every term added whether the term is
 real or not.
+
+A PINNED OUTPUT IS A MEASUREMENT, NOT A HOLE.  A clipped SUBSTRATE has to go:
+it is the regressor, its true value is above 255 and unknowable, and one wrong
+input corrupts all three rows.  A clipped tinted OUTPUT is the opposite - the
+target is at the rail, and that is a real one-sided reading: the true value is
+at or past it.  Dropping those left four tints in the high-green corner
+(Y11..Y14, all of them 0.30 red) contributing NO red rows at all, so the red
+coefficient functions were unconstrained over exactly the region where M1 and
+M4 sit, and they wandered: `regular` in dark predicted +19.5 codes of red over
+green where the hardware reads 0.  Fitting them as inequalities instead - an
+active set, so a pinned row only pulls while the fit is on the wrong side of
+its rail - is what this does, and it takes `regular` dark from 24.9 to 11.3
+code values on its worst tint and its neutral ladder from 20.9 to 5.2.
+
+WHAT IT DOES NOT REACH is `clear` under a NEUTRAL tint over a saturated
+backdrop: L40 over green-128 reads [0, 131, 0] where every affine-in-substrate
+law that also fits the gray ladder wants about +16 red.  That is a limit of the
+model's FORM, not of this fit - a full 3x3 affine map, a squared chroma term, a
+chroma-magnitude term and the raw backdrop as regressor were each measured and
+none closes it (11.2 codes at best, and worse everywhere else).  It is recorded
+rather than papered over.
 """
 
 import argparse
+import functools
 import itertools
 import json
 from pathlib import Path
@@ -160,8 +182,17 @@ type JsonObject = dict[str, object]
 REGION = "interior"
 
 
-def interior(path: Path) -> np.ndarray | None:
-    if not path.exists():
+def locate(shots: list[Path], name: str) -> Path | None:
+    """The tint corpus was captured over several sessions and lives in several
+    directories; they are searched in order and the first hit wins."""
+    return next((d / name for d in shots if (d / name).exists()), None)
+
+
+@functools.cache
+def interior(path: Path | None) -> np.ndarray | None:
+    """Cached: the hold-out loop refits the same corpus dozens of times, and
+    decoding a 1024 square PNG per call dominated the run."""
+    if path is None or not path.exists():
         return None
     pixels = np.asarray(Image.open(path).convert("RGB")).astype(float)
     height, width, _ = pixels.shape
@@ -172,19 +203,42 @@ def interior(path: Path) -> np.ndarray | None:
     return pixels[picked].mean(axis=0) if picked.sum() >= 8 else None
 
 
-def substrate_table(shots: Path, variant: str, appearance: str
-                    ) -> dict[str, np.ndarray]:
+def substrate_table(shots: list[Path], variant: str, appearance: str,
+                    keep_clipping: bool = False) -> dict[str, np.ndarray]:
     """The same material with no tint - the tint's substrate.
 
-    Backgrounds whose substrate has ANY clipped channel are dropped: the
-    substrate is the regressor, so a pinned channel is a wrong input whose
-    true internal value is above 255 and unknowable, and the tint mixes
+    Backgrounds whose substrate has a clipped channel used to be dropped, on
+    the argument that the substrate is the REGRESSOR, so a pinned channel is a
+    wrong input whose true internal value is unknowable, and the tint mixes
     channels, so one pinned channel corrupts all three rows.
+
+    That argument is about the wrong variable, and it was worth checking: the
+    regressor the SHADER has is not Apple's internal substrate but
+    `saturate(transfer)`, because walle's materialTransfer saturates before the
+    tint runs - and over exactly these backgrounds the clamped substrate
+    predicts Apple's tinted output to a median 1.45 code values where the
+    unclamped transfer manages 2.27.  So they are usable, and keeping them does
+    pull the worst case in.
+
+    KEPT OUT ANYWAY, because it is a bad trade.  Scored over every captured
+    tint and eleven backgrounds - 3300 readings - against the M1:
+
+        clean substrates, pinned readings fitted    1.51 median  4.57 p90  22.99
+        + clipping substrates in the neutral fit    1.71          5.44      20.93
+        + clipping substrates everywhere            1.77          5.45      20.93
+
+    Two code values off the tail for nearly a full code value of p90 across the
+    whole grid.  The composite `clamped substrate -> output` is not affine, so
+    fitting those backgrounds bends the law away from the ones that are.
     """
     table = {}
     for name in BACKGROUNDS:
-        value = interior(shots / f"{name}__{SHAPE}__{variant}__{appearance}.png")
-        if value is None or value.min() <= CLIP_LOW or value.max() >= CLIP_HIGH:
+        value = interior(locate(
+            shots, f"{name}__{SHAPE}__{variant}__{appearance}.png"))
+        if value is None:
+            continue
+        if not keep_clipping and (value.min() <= CLIP_LOW
+                                  or value.max() >= CLIP_HIGH):
             continue
         table[name] = value
     return table
@@ -194,29 +248,87 @@ def chroma_magnitude(tint: np.ndarray) -> float:
     return float(np.linalg.norm(tint - float(LUMA @ tint)))
 
 
+def censored_solve(design: np.ndarray, target: np.ndarray, side: np.ndarray
+                   ) -> np.ndarray | None:
+    """Least squares where `side` marks rows that are one-sided.
+
+    side is 0 for an ordinary reading, -1 where the target is pinned at the
+    low rail and +1 at the high one.  A pinned row says only that the true
+    value is at or past its rail, so it belongs in the fit while the current
+    solution sits on the wrong side of it and nowhere else - an active set,
+    which settles in a handful of passes because each pass can only add or drop
+    rows the previous one disagreed with.
+
+    Recomputing the set from scratch each pass can ALTERNATE between two of
+    them rather than settling, so the best iterate is kept and returned instead
+    of the last one; that makes the result independent of where the cap falls.
+    """
+    active = side == 0
+    best, best_cost = None, np.inf
+    for _ in range(32):
+        if active.sum() < design.shape[1]:
+            break
+        solution, *_ = np.linalg.lstsq(design[active], target[active],
+                                       rcond=None)
+        predicted = design @ solution
+        cost = float((censored_residual(design, target, side,
+                                        solution) ** 2).sum())
+        if cost < best_cost:
+            best, best_cost = solution, cost
+        wanted = ((side == 0)
+                  | ((side < 0) & (predicted > target))
+                  | ((side > 0) & (predicted < target)))
+        if np.array_equal(wanted, active):
+            break
+        active = wanted
+    return best
+
+
+def censored_residual(design: np.ndarray, target: np.ndarray, side: np.ndarray,
+                      solution: np.ndarray) -> np.ndarray:
+    """The error a pixel comparison would see: a pinned row costs nothing while
+    the prediction is past its rail, because the display clamps it too."""
+    predicted = design @ solution
+    residual = predicted - target
+    residual[side < 0] = np.maximum(predicted[side < 0] - target[side < 0], 0.0)
+    residual[side > 0] = np.minimum(predicted[side > 0] - target[side > 0], 0.0)
+    return residual
+
+
 def solve_per_tint(samples, gamma: float | None = None) -> JsonObject | None:
-    """base (3), beta (3) and gamma (1) for one tint, clipping excluded."""
-    rows, targets = [], []
+    """base (3), beta (3) and gamma (1) for one tint.
+
+    A clipped SUBSTRATE is already gone - substrate_table drops it.  A clipped
+    reading stays, as an inequality: see censored_solve.
+    """
+    rows, targets, sides = [], [], []
     for substrate, measured in samples:
         luminance = float(LUMA @ substrate)
         chroma = substrate - luminance
         for channel in range(3):
-            if not (CLIP_LOW < measured[channel] < CLIP_HIGH):
-                continue
             row = np.zeros(7)
             row[channel] = 1.0
             row[3 + channel] = luminance
             row[6] = chroma[channel]
             rows.append(row)
-            targets.append(measured[channel])
+            if CLIP_LOW < measured[channel] < CLIP_HIGH:
+                targets.append(measured[channel])
+                sides.append(0)
+            else:
+                low = measured[channel] <= CLIP_LOW
+                targets.append(0.0 if low else 255.0)
+                sides.append(-1 if low else 1)
     if len(rows) < 10:
         return None
     design, target = np.array(rows), np.array(targets)
+    side = np.array(sides)
     if gamma is not None:
         target = target - gamma * design[:, 6]
         design = design[:, :6]
-    solution, *_ = np.linalg.lstsq(design, target, rcond=None)
-    residual = np.abs(design @ solution - target)
+    solution = censored_solve(design, target, side)
+    if solution is None:
+        return None
+    residual = np.abs(censored_residual(design, target, side, solution))
     return {
         "base": [round(float(v), 4) for v in solution[0:3]],
         "beta": [round(float(v), 6) for v in solution[3:6]],
@@ -287,29 +399,64 @@ def fit_regime(items, neutral: bool, order: int, gamma_free: bool
     same basis, and which way to go is decided by held-out error like
     everything else here.
     """
-    solutions = []
-    residuals = []
+    built = [regime_design(items, channel, neutral, order, gamma_free)
+             for channel in range(3)]
+    return solve_regime(built, keep=None)
+
+
+def regime_design(items, channel: int, neutral: bool, order: int,
+                  gamma_free: bool):
+    """One channel's rows, plus which tint each row came from.
+
+    Held out one tint at a time this is rebuilt fifty-three times over from
+    Python loops, which dominated the run; returning the owner index lets the
+    caller drop one tint's rows from a design it already has.
+    """
+    rows, targets, sides, owner = [], [], [], []
+    for index, (tint, samples) in enumerate(items):
+        terms = np.array(tint_terms(tint, neutral, order))
+        for substrate, measured in samples:
+            luminance = float(LUMA @ substrate)
+            chroma = substrate[channel] - luminance
+            row = [*terms, *(terms * luminance)]
+            if gamma_free:
+                row += list(terms * chroma)
+            rows.append(row)
+            pinned = not (CLIP_LOW < measured[channel] < CLIP_HIGH)
+            low = pinned and measured[channel] <= CLIP_LOW
+            value = (0.0 if low else 255.0) if pinned else measured[channel]
+            targets.append(value
+                           - (0.0 if gamma_free or not neutral else chroma))
+            sides.append(0 if not pinned else (-1 if low else 1))
+            owner.append(index)
+    if not rows:
+        return None
+    return (np.array(rows), np.array(targets), np.array(sides),
+            np.array(owner))
+
+
+def solve_regime(built, keep) -> tuple[np.ndarray, np.ndarray] | None:
+    """Fit the three channels of one regime, optionally over a subset of tints.
+
+    `keep` is None for every tint, or the index of the one to LEAVE OUT.
+    """
+    solutions, residuals = [], []
     for channel in range(3):
-        rows, targets = [], []
-        for tint, samples in items:
-            terms = np.array(tint_terms(tint, neutral, order))
-            for substrate, measured in samples:
-                if not (CLIP_LOW < measured[channel] < CLIP_HIGH):
-                    continue
-                luminance = float(LUMA @ substrate)
-                chroma = substrate[channel] - luminance
-                row = [*terms, *(terms * luminance)]
-                if gamma_free:
-                    row += list(terms * chroma)
-                rows.append(row)
-                targets.append(measured[channel]
-                               - (0.0 if gamma_free or not neutral else chroma))
-        if not rows or len(rows) < 2 * len(rows[0]):
+        if built[channel] is None:
             return None
-        design, target = np.array(rows), np.array(targets)
-        solution, *_ = np.linalg.lstsq(design, target, rcond=None)
+        design, target, side, owner = built[channel]
+        if keep is not None:
+            mask = owner != keep
+            design, target, side = design[mask], target[mask], side[mask]
+        if len(design) < 2 * design.shape[1]:
+            return None
+        if (side == 0).sum() < 2 * design.shape[1]:
+            return None
+        solution = censored_solve(design, target, side)
+        if solution is None:
+            return None
         solutions.append(solution)
-        residuals.append(design @ solution - target)
+        residuals.append(censored_residual(design, target, side, solution))
     return np.array(solutions), np.concatenate(residuals)
 
 
@@ -333,11 +480,17 @@ def hold_out_one_tint(items, neutral: bool, order: int, gamma_free: bool
     In-sample error falls with every term added, so it cannot choose the order.
     What the shader is asked to do is predict a tint nobody captured, and this
     measures exactly that.
+
+    Scored against every reading, pinned ones included, after the same clamp a
+    display applies: predicting -20 where the hardware reads 0 is free, and
+    predicting +20 there is a twenty code value error.  Skipping the pinned
+    readings instead scored a law blind to the one thing it got worst.
     """
+    built = [regime_design(items, channel, neutral, order, gamma_free)
+             for channel in range(3)]
     errors: list[float] = []
     for index in range(len(items)):
-        trained = fit_regime([it for j, it in enumerate(items) if j != index],
-                             neutral, order, gamma_free)
+        trained = solve_regime(built, keep=index)
         if trained is None:
             continue
         tint, samples = items[index]
@@ -345,14 +498,14 @@ def hold_out_one_tint(items, neutral: bool, order: int, gamma_free: bool
             predicted = evaluate(trained[0], tint, substrate, neutral, order,
                                  gamma_free)
             errors.extend(predicted[channel] - measured[channel]
-                          for channel in range(3)
-                          if CLIP_LOW < measured[channel] < CLIP_HIGH)
+                          for channel in range(3))
     return np.array(errors) if errors else np.zeros(1)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--shots", type=Path, required=True)
+    parser.add_argument("--shots", type=Path, nargs="+", required=True,
+                        help="capture directories, searched in order")
     parser.add_argument("--output", type=Path)
     # MEASURED as exact equality, so any value below the smallest chroma an
     # 8-bit tint can carry (0.845, for a one-code difference) is equivalent.
@@ -394,9 +547,9 @@ def main() -> int:
                 samples = [
                     (value, reading)
                     for name, value in substrate.items()
-                    if (reading := interior(
-                        arguments.shots
-                        / f"{name}__{SHAPE}__{overlay}__{appearance}.png")) is not None
+                    if (reading := interior(locate(
+                        arguments.shots,
+                        f"{name}__{SHAPE}__{overlay}__{appearance}.png"))) is not None
                 ]
                 if samples:
                     measured[short] = samples

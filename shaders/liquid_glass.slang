@@ -43,10 +43,38 @@ struct ComposeVertexOutput
     [[vk::location(0)]] float2 uv;
 };
 
-static const float kFadeStart = 0.66;
-// The materialize ease itself is measured per variant and lives in
-// material_law.slang: it is a delayed power, not a bare one, and `clear` and
-// `regular` do not share it.
+// --- Measured wallpaper-transition arrival, macOS 26.6.1 (25G76) -----------
+//
+// Captured on the authorized M1 (MacBookPro18,2, Retina at backing scale 2,
+// Reduce Transparency and Reduce Motion off, no preflight errors) with the
+// rig's own `wallpaper-transition` mode - probeRole
+// "walle-two-wallpaper-expansion", the one probe that animates exactly what
+// walle animates.  Four sequences, 61 frames each, read as the deep-interior
+// code-space alpha against that sequence's own settled material.
+//
+// THE MATERIAL DOES NOT ARRIVE.  It is already there.  Apple reads alpha 1.01
+// in the FIRST frame that clears the lens band - 43 to 54 ms into a one second
+// animation - and holds 0.98 to 1.02 until the exit begins.  The rig's
+// exact-state sweeps say the same thing from the other side: their interior is
+// 222.0 at progress 1/16 and 220.0 at 1, flat to two code values across every
+// radius, so a settled element carries its full material at any size.
+//
+// This retires the materialize ease - kMaterialize{Clear,Regular}, still in
+// material_law.slang and no longer read from here - that used to be replayed
+// over [0, 0.66).  That ease is real, but it belongs to Apple's `materialize`
+// probe - a glass element being INSERTED - and a wallpaper reveal is a
+// different animation.  Replaying it here left the glass at thickness 0.03
+// where the hardware reads 1.00, which over an eight second transition is a
+// bare circle of raw wallpaper for the first three seconds.
+//
+// Only the EXIT is animated, and it is a plain power of the remaining window.
+// Fitted over all 224 dynamic frames: 0.037 rms, against 0.564 for the curve
+// this replaces - and the old curve's worst frame was off by 1.148 of full
+// scale, i.e. the entire material.
+//
+//     x = dematerialize start, y = exponent
+static const float2 kDematerializeClear   = float2(0.7030, 1.720);
+static const float2 kDematerializeRegular = float2(0.6910, 1.585);
 
 
 // --- Measured refraction, macOS 26.6.1 ------------------------------------
@@ -351,8 +379,9 @@ float4 composeFragment(
     float2 centerTopLeft = push.geometry.xy;
     float radiusPixels = push.geometry.z;
 
-    // How the material ARRIVES, measured across 61 frames of each of the four
-    // materials against the rig's own raster clock.
+    // How the material ARRIVES and LEAVES - see kDematerializeClear above for
+    // the measurement.  The material is at full thickness from the first frame
+    // and only the exit is animated, so there is one curve here, not two.
     //
     // It is a CROSSFADE.  One alpha per frame explains the whole frame to 1.5
     // code values - and that is the discriminator, because a ramping blur
@@ -362,32 +391,9 @@ float4 composeFragment(
     // the finished material.  It used to be threaded through the blur, the
     // refraction and the transfer separately, which is a different function of
     // k with the same endpoints.
-    //
-    // The curve is a delayed power that does not finish when the clock does,
-    // and neither part is decoration: with the delay and the overrun the fit
-    // is 0.5% of full scale, with a bare power 3.7%.  All three constants are
-    // per VARIANT, which the old single exponent could not be.
-    //
-    // walle's `time` is a linear clock, so the ease belongs here.
-    float tFade = saturate((time - kFadeStart) / (1.0 - kFadeStart));
-    // The ease spans the MATERIALIZE WINDOW, not the whole timeline: Apple's
-    // clock runs 0..1 across its materialize, whereas walle materializes over
-    // [0, kFadeStart) and then fades.  Easing over the full timeline instead
-    // caps the material at 0.37 thickness before the fade begins.
-    WalleMaterialize arrival = kMaterializeClear;
-    if (regular > 0.5)
-        arrival = kMaterializeRegular;
-    // `end` past one means Apple's transition outlives the window the rig
-    // clocked, so the curve is played over walle's OWN materialize window
-    // rather than cut off where the rig stopped watching: the shape - the
-    // delay and the exponent - is what was measured, and the material has to
-    // arrive by the time the window ends.  Cutting it off instead leaves the
-    // wallpaper permanently 3.5% short of its material for `regular` and 7.2%
-    // for `clear`, which the flat-background check catches at once.
-    float clock = saturate(time / kFadeStart) * arrival.end;
-    float thickness = pow(
-        saturate((clock - arrival.delay) / (arrival.end - arrival.delay)),
-        arrival.exponent) * (1.0 - tFade);
+    float2 arrival = regular > 0.5 ? kDematerializeRegular : kDematerializeClear;
+    float tFade = saturate((time - arrival.x) / (1.0 - arrival.x));
+    float thickness = pow(1.0 - tFade, arrival.y);
 
     // Express the material in the original bottom-left pixel coordinates while
     // Vulkan resources and mask storage remain naturally top-left.
@@ -422,8 +428,10 @@ float4 composeFragment(
     // At FULL radius: under a crossfade the material's own backdrop is the
     // finished blur, and `thickness` blends the finished material against the
     // sharp source once, at the end.
+    // The blurred backdrop is read through the lens below, for both variants,
+    // so there is no unlensed fetch of it here: outside the band the
+    // displacement is zero and the lensed read IS the unlensed one.
     float3 sharpIncoming = texB.Sample(linearSampler, uv).rgb;
-    float3 blurredIncoming = texGlassB.Sample(linearSampler, uv).rgb;
     // Apple selects the material's appearance pole from the SYSTEM
     // appearance, and so does walle: config, then the desktop portal, then
     // dark.  The nine-tap content-luminance wash that used to stand in for it
@@ -460,6 +468,51 @@ float4 composeFragment(
     float rimBlend = lerp(rimWeight(insideRim, edgeDark),
                           rimWeight(insideRim, edgeLight), lightness);
 
+    // The lens, for BOTH variants.  It used to run only for `clear`, on the
+    // reasoning - shaders/frag.glsl:41 - that "the regular variant transmits
+    // nothing, so it gets no lens at all", which rested on a blur model
+    // walle.c:150-153 now retracts as seven to thirty-four times too strong.
+    //
+    // Measured instead, on the M1 (25G76) wallpaper-transition capture, by ring
+    // cross-correlation of the composed frame against the incoming wallpaper at
+    // R = 1082: the inward displacement in capture pixels, per depth inside the
+    // rim, with the correlation in brackets.
+    //
+    //     depth            4            8           16           32
+    //     clear   light  72.0 (0.97)  50.5 (1.00)  25.5 (1.00)  2.5 (1.00)
+    //     regular light  72.0 (0.92)  50.5 (0.99)  25.0 (1.00)  2.5 (1.00)
+    //     clear   dark   72.0 (0.98)  50.5 (1.00)  25.5 (1.00)  2.5 (1.00)
+    //     regular dark   70.0 (0.63)  47.5 (0.97)  21.5 (0.98) -1.5 (0.98)
+    //
+    // `regular` carries the same lens as `clear`, to half a pixel in light; it
+    // reads softer in dark only because that appearance's wide blur layer leaves
+    // less structure to correlate.  The banner at the top of this file says the
+    // same from the sine-grating side - "it is the same for both variants and
+    // both appearances" - and this branch had simply never been revisited.
+    //
+    // The displacement is INWARD, hence the negation.  `inside` is clamped
+    // rather than merely gated: outside the element the raw value is negative,
+    // and it passes through -12.62 exactly, where the denominator is zero.
+    // Multiplying that infinity by a zero gate gives a NaN, not a zero.
+    float inside = max(insideRim, 0.0);
+    float remaining = max(kLensBandCapturePixels - inside, 0.0);
+    float bend = lensUnit * kLensAmplitude * pow(remaining, kLensProfilePower)
+        / (inside + kLensProfileOffset)
+        * step(0.0, insideRim);
+    float2 displacementUv = -float2(normalOut.x, -normalOut.y) * bend * pixelToUv;
+
+    // The refraction displaces the backdrop the material samples, which is
+    // the measured blur - not the sharp source.  Outside the band the
+    // displacement is zero and this is exactly the unlensed backdrop, so the
+    // band needs no separate blend to fade into.
+    float3 lensed;
+    lensed.x = texGlassB.Sample(
+        linearSampler, uv + displacementUv * (1.0 + kLensDispersion)).r;
+    lensed.y = texGlassB.Sample(linearSampler, uv + displacementUv).g;
+    lensed.z = texGlassB.Sample(
+        linearSampler, uv + displacementUv * (1.0 - kLensDispersion)).b;
+    float3 preSrgb = linearToSrgb(lensed);
+
     float3 glassColor;
     if (regular > 0.5)
     {
@@ -469,7 +522,7 @@ float4 composeFragment(
         // The transfer input is the measured backdrop, and only that: an
         // earlier version fed it a nine-tap screen-wide spread and measured
         // MTF 0.11 at period 64 where the hardware transmits 0.50.
-        float3 washSrgb = linearToSrgb(blurredIncoming);
+        float3 washSrgb = preSrgb;
         float3 platterDark = materialTransfer(washSrgb, kMaterialRegularDark);
         float3 platterLight = materialTransfer(washSrgb, kMaterialRegularLight);
         float3 platterSrgb = lerp(platterDark, platterLight, lightness);
@@ -487,31 +540,6 @@ float4 composeFragment(
     }
     else
     {
-        // The measured profile, in capture pixels, converted back to the
-        // output's own.  The displacement is INWARD, hence the negation below.
-        //
-        // `inside` is clamped rather than merely gated: outside the element the
-        // raw value is negative, and it passes through -12.62 exactly, where
-        // the denominator is zero.  Multiplying that infinity by a zero gate
-        // gives a NaN, not a zero.
-        float inside = max(insideRim, 0.0);
-        float remaining = max(kLensBandCapturePixels - inside, 0.0);
-        float bend = lensUnit * kLensAmplitude * pow(remaining, kLensProfilePower)
-            / (inside + kLensProfileOffset)
-            * step(0.0, insideRim);
-        float2 displacementUv = -float2(normalOut.x, -normalOut.y) * bend * pixelToUv;
-
-        // The refraction displaces the backdrop the material samples, which is
-        // the measured blur - not the sharp source.  Outside the band the
-        // displacement is zero and this is exactly `blurredIncoming`, so the
-        // band needs no separate blend to fade into.
-        float3 lensed;
-        lensed.x = texGlassB.Sample(
-            linearSampler, uv + displacementUv * (1.0 + kLensDispersion)).r;
-        lensed.y = texGlassB.Sample(linearSampler, uv + displacementUv).g;
-        lensed.z = texGlassB.Sample(
-            linearSampler, uv + displacementUv * (1.0 - kLensDispersion)).b;
-        float3 preSrgb = linearToSrgb(lensed);
         // Measured 26.6.1 clear: one colour matrix, IDENTICAL in both
         // appearances (the gray ladder matches to the code across light and
         // dark), so no appearance interpolation here.
@@ -535,10 +563,17 @@ float4 composeFragment(
     // the transfer, the blur and the tint were all measured in too.  Fading in
     // linear light instead runs AHEAD of the hardware by up to 0.13 of full
     // scale mid-animation, which is 36 code values over a structured backdrop.
+    //
+    // ONCE means once.  This used to be followed by a second lerp of the same
+    // result back towards `texB.Sample(linearSampler, input.uv)` - byte for
+    // byte the same fetch as `sharpIncoming`, because `uv` is `input.uv` and
+    // neither is touched between them - weighted by the same tFade that
+    // `thickness` already carried.  The exit was therefore quadratic, and its
+    // second half ran in LINEAR light, which is precisely the error this
+    // comment warns about.
     glassColor = srgbToLinear(lerp(linearToSrgb(sharpIncoming),
                                    linearToSrgb(glassColor), thickness));
-    float3 incoming = texB.Sample(linearSampler, input.uv).rgb;
-    float3 insideColor = lerp(glassColor, incoming, tFade);
+    float3 insideColor = glassColor;
     float3 background = texA.Sample(linearSampler, input.uv).rgb;
     // The measured shadow: a colour law on the raw backdrop, weighted by depth
     // outside the boundary and by how far the material has materialized.

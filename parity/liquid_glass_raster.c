@@ -1114,10 +1114,30 @@ static bool center_pair_bits(int32_t       local_pixel,
     struct dyadic exact;
     if (!dyadic_add(constant, product, &exact))
         return false;
+    /* The centre grid is derived from the TILE's own constant - see the caller -
+     * so a tile whose constant is small relative to the slope asks for a step
+     * far finer than the row it has to index.  Measured on a live 1280x720
+     * reveal at centre (320, 240): at radius 421.6 the fourth owner's tile
+     * constant lands near 2**-32, which makes step_exponent -67 while `exact`
+     * carries exponent -34, and the index needs 2**33 more range than an
+     * int64_t has.  The bare failure aborts the whole transition through
+     * WALLE_LG_REVEAL_RASTER_SETUP_FAILED, which is how a reveal ends up frozen
+     * as a bare circle part-way through.
+     *
+     * Coarsen the step to the finest one the index can actually represent.
+     * This CANNOT change any row that already worked: it runs only where
+     * dyadic_floor_ratio_power_two returns false, which is exactly where the
+     * previous code gave up.  It is a representability guard, not a recovered
+     * law - what Apple's fixed-width hardware does with such a tile is still
+     * unknown, and worth measuring if a future capture can reach this case. */
     int64_t index;
-    if (!dyadic_floor_ratio_power_two(exact, step_exponent, &index))
-        return false;
-    struct dyadic left = {.numerator = index, .exponent = step_exponent};
+    int     step = step_exponent;
+    while (!dyadic_floor_ratio_power_two(exact, step, &index)) {
+        if (step >= 0 || step - step_exponent > 127)
+            return false;
+        ++step;
+    }
+    struct dyadic left = {.numerator = index, .exponent = step};
     struct dyadic right;
     if (!dyadic_add(left, slope, &right) || !dyadic_toward_zero_float_bits(left, &result[0])
         || !dyadic_toward_zero_float_bits(right, &result[1])) {

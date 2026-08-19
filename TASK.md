@@ -5203,3 +5203,402 @@ happens in barely matters, and it read 3 to 5 code values throughout either way.
 
 Nothing at full thickness moves - lerp(a, b, 1) is b in any space - so the step
 edges, the flat backgrounds and both reveal gates are untouched by this.
+
+## 2026-08-16 (later 176): `clear`'s BODY DOES NOT SEE THE APPEARANCE
+
+Read the same way the tint law reads it - the mean of the element's interior
+disc - `clear` returns the SAME code values in light and in dark, and so does
+`clear` under any NEUTRAL tint:
+
+    clear          gray-000    light [ 19  19  19]   dark [ 19  19  19]
+    clear          gray-128    light [152 152 152]   dark [152 152 152]
+    clear          green-128   light [ 41 152  34]   dark [ 41 152  34]
+    clearTintL00   green-128   light [  0  36   0]   dark [  0  36   0]
+    clearTintM6    green-128   light [ 45 155  38]   dark [ 45 155  38]
+    clearTintL70   green-128   light [101 202  91]   dark [101 202  91]
+
+over all sixteen backgrounds and all twenty-one neutral tints, to the last code
+value.  It is not an artefact of reading a disc: the derived transfer says the
+same thing independently - `clear`'s light and dark colour transfers were fitted
+separately over 293 backgrounds each and came out with IDENTICAL coefficients,
+to every one of the eight decimal places the report carries.  `regular`'s do
+not; its two appearances differ by up to eighty code values over the same
+wallpaper, which is the whole reason the transfer is fitted per appearance.
+
+What DOES respond to the appearance, for `clear`:
+
+  * any CHROMATIC tint, and hugely - `clearTintM1` over gray-000 is [0, 112, 28]
+    in light and [34, 181, 74] in dark, 69 code values apart.  So SwiftUI's
+    `.tint(Color)` is resolved through the environment even when the colour
+    handed to it is an explicit `Color(.sRGB:)` with no semantic content;
+  * the EDGE.  The capture files differ between the two appearances for every
+    overlay, including the ones whose interiors are identical, and the interior
+    disc is read at 0.8 R - so the difference lives in the rim and the shadow,
+    which is where the rim law already carries its own regimes.
+
+This is a fact about the hardware, not a change: the laws are fitted per
+appearance either way, and `clear`'s two copies simply agree.  It is recorded
+because it is a standing consistency check - if a future `clear` fit ever
+produces two DIFFERENT bodies, the fit is wrong, not the material.
+
+## 2026-08-16 (later 177): A PINNED READING IS A MEASUREMENT
+
+The worst tint error left was walle predicting +19.5 code values of red where
+the M1 reads exactly 0 - `regular` in dark, `tintL25` over green-128, and again
+over cyan-128.  It is not a basis limitation.  It is that the fit had been
+THROWING THOSE READINGS AWAY.
+
+`derive_tint_law.py` dropped any reading at a rail, on the same reasoning that
+drops a clipped SUBSTRATE.  For the substrate that reasoning is right: it is the
+regressor, its true value is past the rail and unknowable, and because the tint
+mixes channels one pinned input corrupts all three rows.  For the tinted OUTPUT
+it is exactly backwards.  A pinned output is a real reading - it says the true
+value is at or past the rail - and dropping it leaves a hole:
+
+    regular dark    Y11..Y14 (all of them 0.30 red, 0.75 green) kept
+                    R0 G9 B9 of 9 substrates - NO red rows at all
+    clear   light   Y11..Y14 kept R0, M4 kept R1, M1 kept R5 of 10
+
+Four tints in the high-green corner contributing nothing whatever to the red
+coefficient functions, which then wandered freely over exactly the region where
+M1 (0.35, 0.70, 0.35) and M4 (0.30, 0.65, 0.65) sit - the two tints the law was
+worst on.  The per-tint fits show the same hole from the other side: Y11..Y14
+report a red base of -47 and a red beta of 0.48 against their neighbours' +33
+and 0.076, which is not a measurement, it is a line extrapolated from the five
+brightest substrates down through a rail.
+
+FITTED AS INEQUALITIES INSTEAD.  A pinned row enters the fit while the current
+solution sits on the wrong side of its rail and drops out when it does not - an
+active set, converging in a handful of passes, with the best iterate kept so an
+alternating set cannot decide the answer.  Scored the way a pixel comparison
+scores it - |clip(prediction) - measured| over EVERY reading, pinned ones
+included, because the shader saturates too:
+
+                        worst tint, in sample        held out, rms
+    regular dark        24.93  ->  11.27            2.53  ->  2.50
+    regular light        9.85  ->   9.32            2.16  ->  2.18
+    clear   dark        17.14  ->  15.99            3.84  ->  3.77
+    clear   light        8.47  ->   7.88            3.78  ->  3.75
+
+and on the NEUTRAL ladder, where 18 of 21 tints have a pinned channel:
+
+    regular dark        20.93  ->   5.24 (at order 4)
+    regular light       held out 21.49  ->  14.53
+
+RULED OUT ALONG THE WAY, each by measurement rather than argument:
+
+  * the tint is NOT a mix into the backdrop evaluated through the material's
+    own transfer.  One blend weight per variant and appearance, fitted over
+    every chromatic tint and background, lands at 25 to 112 code values - the
+    affine-in-substrate law stands;
+  * the regressor is the untinted MATERIAL, not the raw backdrop, and the
+    pinned readings settle it: 2.60 rms against 3.17 for `clear` neutral, 1.36
+    against 2.08 for `regular` neutral;
+  * higher order does not help.  Order 4 is indistinguishable from order 3 for
+    the chromatic branch because the basis is capped there, and where it is
+    free - the neutral branch - it wins only WITH the pinned readings in.
+
+WHAT IS NOT REACHED, and is recorded rather than papered over: `clear` under a
+NEUTRAL tint over a saturated backdrop.  L40 over green-128 reads [0, 131, 0]
+where every affine-in-substrate law that also fits the gray ladder wants about
++16 red.  A full 3x3 affine map (11.16), a squared chroma term (15.92), a
+chroma-magnitude term (11.33) and the raw backdrop as regressor were each
+measured and none of them closes it.  That is a limit of the model's FORM, not
+of this fit, and it is the next thing to attack if `clear` plus a gray tint over
+a saturated wallpaper ever matters.
+
+## 2026-08-16 (later 178): THE PINNED-READING REFIT DOES NOT PAY, MEASURED
+
+Rendered, not predicted.  The refit of 177 was installed and the 528-case grid
+re-run end to end through the release binary:
+
+                    median    mean     p90     p99   worst
+    before           1.695   2.357   4.502  12.963  19.526
+    after            1.720   2.498   4.883  12.383  19.526
+
+116 cases improved, 221 worsened, 191 unchanged; the summed error rises 74.4
+code values.  The two cases the refit was built for - `regular`/dark tintL25
+over green-128 and over cyan-128 - do not move by a hundredth.  The predicted
+27.13 -> 22.99 was measured on the 3300-reading grid and does not transfer.
+
+Do not ship it.  `tint_law_clip.json`, which predicted worst 15.44 against the
+installed law's 19.35 and was never rendered, is the candidate to try next.
+
+## 2026-08-16 (later 179): *** THE MATERIAL NEVER MATERIALIZES ***
+
+The only end-to-end gate walle had for the thing users actually watch scored
+`shaders/frag.glsl` - a GL mirror last touched while the shipped Slang moved on
+for two days - against captures taken on a GitHub CI **VirtualMac2,1** at
+backing scale 1 on macOS 26.4 (25E246), in an "Apple Virtual" colour space.
+None of those three is what we ship or what we are matching, and its 35 code
+values of mean error had gone unexamined because of it.
+
+CAPTURED FRESH, on the authorized machine: MacBookPro18,2, macOS 26.6.1 build
+25G76, built-in Liquid Retina XDR at backing scale 2, Reduce Transparency and
+Reduce Motion off, `preflightErrors: []`.  rig 2.19.0, `wallpaper-transition`
+mode, probeRole `walle-two-wallpaper-expansion` - the one probe that animates
+exactly what walle animates - at 1024x1024 points.  That window is not a
+convenience: `--transition-origin 0.25,0.30` at 2x IS walle's canonical capture
+centre (512, 614.4) in 2048x2048, so the two are comparable pixel for pixel with
+no resampling and no code change.
+
+WALLE'S SETTLED MATERIAL IS ALREADY AT PARITY.  Scored against the 17 exact,
+stability-confirmed states of each of the four sequences, with walle's material
+held at full thickness because Apple's sweep states are settled:
+
+    all 68 states     full-frame mean 1.68 codes, inside 2.71, worst frame 5.34
+    clear / light     0.40 to 1.20 codes, p95 of 1 to 2
+
+The radius law is right too: `clear`'s measured radius tracks
+maximum_radius * state to 0.2% at every state, and the sweep control puts
+R(state) - RMAX*state at -3.87 px mean over sixteen states.
+
+WHAT IS WRONG IS THE CLOCK, and it is wrong twice.
+
+FIRST, THE MATERIAL DOES NOT ARRIVE - IT IS ALREADY THERE.  Read as the
+deep-interior code-space alpha against each sequence's own settled material,
+Apple is at 1.01 in the FIRST frame that clears the lens band - 43 to 54 ms into
+a one second animation - and holds 0.98 to 1.02 until it leaves:
+
+    progress          0.12    0.22    0.32    0.42    0.52    0.62    0.72
+    Apple  clear      1.010   1.000   0.995   0.982   0.987   0.984   0.986
+    walle  clear      0.006   0.068   0.188   0.364   0.593   0.875   0.823
+
+walle was replaying the materialize ease over [0, kFadeStart).  That ease is
+real, but it belongs to Apple's `materialize` probe - a glass element being
+INSERTED - and a wallpaper reveal is a different animation.  Over an eight
+second transition it left the glass at thickness 0.03 where the hardware reads
+1.00 for the first three seconds, which is the "empty circle" exactly.
+
+Only the exit is animated, and it is a plain power of the remaining window:
+
+    thickness = (1 - saturate((t - start) / (1 - start))) ** exponent
+
+        clear      start 0.7030   exponent 1.720
+        regular    start 0.6910   exponent 1.585
+
+Over all 224 dynamic frames: 0.037 rms, against 0.564 for the curve it replaces,
+whose worst frame was off by 1.148 of full scale - the entire material.
+
+RETIRED ALONG THE WAY: the exit was being applied TWICE.  `thickness` carried
+`(1 - tFade)` and then the finished result was lerped back towards
+`texB.Sample(linearSampler, input.uv)` by the same tFade - byte for byte the
+same fetch as `sharpIncoming`, because `uv` is `input.uv` and neither is touched
+between them.  The exit was therefore quadratic, and its second half ran in
+LINEAR light, which is precisely the error the comment three lines above it
+warns costs 36 code values.
+
+SECOND, THE GEOMETRY RUNS BEHIND.  The two readings of Apple's radius disagree,
+and the disagreement is the finding: against the exact-state sweeps the radius
+is maximum_radius * state to under 4 px, but against the presentation clock the
+same radius covers the frame at 0.636 rather than at 1.  So the radius law is
+right and only the clock-to-state mapping is wrong:
+
+    state(t) = 1.610 * (t - 0.019)           13.3 px rms   <- shipped
+    state(t) = min(1, 1.624 * t**1.068)      18.7 px rms
+    state(t) = 1.537 * t                     33.2 px rms
+    state(t) = t                            422.7 px rms   (what it replaces)
+
+The form is not chosen by rms alone.  The bare scale is BIASED - its residual
+runs +59, +38, +18, +5, -27 px across the timeline - while the shifted line's
+wanders between -5 and +6 with no trend, which is what a correct model looks
+like.  And the shift is physical: 0.019 of a one-second animation is 1.2 frames
+at the rig's 61 Hz, so the reveal starts on the frame after the clock does.  The
+radius is LINEAR in time after one frame of latency, at 1.61x the rate that
+would fill the timeline, covering the frame at 0.640.
+
+It is chosen by END-TO-END SCORE, not by fit: over all 242 animated frames the
+shifted line reads 2.31 full-frame code values and 4.62 in the interior against
+the power law's 2.38 and 6.65, better on all four sequences, with the mean
+radius error 13.2 -> 12.2 px.
+
+MEASURED END TO END, production Vulkan binary against those captures:
+
+    animated clock, 242 frames      interior mean   full-frame mean
+      before                            29.20            23.58
+      after the arrival law              5.52            16.19
+        regular / light                 48.40 -> 5.61
+        regular / dark                  41.13 -> 6.22
+
+    geometry held to full thickness, 149 frames
+      linear clock                       7.11            21.24   worst 50.47
+      measured clock                     9.59             2.64   worst  7.32
+
+(These two tables are the staged readings, taken before the clock strip was
+excluded - see the method note below.  They are kept because their RATIOS are
+what isolate the two fixes from each other; the corrected absolute figures are
+in the combined table.)
+
+The interior improves on 221 of 242 frames.  After the arrival law the whole
+residual is the annulus between the two radii - the worst frames read 4 code
+values inside and 100 outside - which is what the second fix closes.
+
+Both fixes are LIVE PATH ONLY where they touch geometry: the process capture is
+indexed BY state against the retained 65-state corpus, so easing it there would
+move the ladder the reveal gate scores.
+
+CONTROL, because the whole geometry finding rests on it: the rig's presentation
+clock is LINEAR IN WALL TIME.  Regressed against each frame's own recorded
+`actualSeconds` over all four sequences,
+
+    presentationProgress = 1.0005..1.0047 * seconds + 0.0022..0.0052
+    linear residual rms 0.0022 to 0.0041, quadratic term -0.0036 to -0.0060
+
+so `presentationProgress` is wall-clock progress to a few parts in a thousand.
+The clock is therefore not what is curved - Apple's geometry really does run
+ahead of a linear clock, and walle's linear geometry really does lag it.
+
+VERIFIED NOT REGRESSED: `analysis/run_walle_reveal_process_capture_gate.sh`
+still passes on the shipped binary - 0 mismatched pixels, 0 composed mismatched
+pixels, 100.0% exact, candidate inventory
+206451dedb5e79b082b24612d5eb39812c3a8b36e2489b5d9341eadcf9201d2b, clean Vulkan
+validation, and `clear` and `regular` still compose identical presentation
+bytes.  Both fixes are invisible to it by construction: the composition change
+is downstream of the `apple_reveal_blend` early return the gate takes, and the
+geometry change is gated on the live path.
+
+COMBINED, both fixes together, production Vulkan binary against the M1 captures
+over all 242 animated frames of the four sequences:
+
+                              interior mean   full-frame mean   worst frame
+    before                        28.85            23.30           76.22
+    after both fixes               4.62             2.31            7.47
+
+10.1x on the full frame and 6.2x in the interior.  Every frame's p95 is 1 to 2
+code values and the settled frames read 0.6 with a MAXIMUM of 7, so what is left
+is the 2 px rim, where a sub-pixel radius difference puts walle's rim one pixel
+from Apple's.
+
+METHOD NOTE, because it moved the numbers: the rig codes its presentation clock
+into the top eight rows of the window's own pixels and declares them in the
+manifest as `analysisExclusionPixels`.  They are a timestamp, not the material,
+and walle does not render them.  Scoring them put a 255-code strip into every
+frame's maximum and 0.44 code values into every frame's mean - on one frame,
+1.640 with the strip against 1.198 without, maximum 255 against 7.  Every figure
+here honours the exclusion; the scorer reads it from the manifest rather than
+hard-coding it.
+
+## 2026-08-16 (later 180): `regular` HAS THE LENS TOO
+
+The refraction ran only for `clear`.  The reasoning was `shaders/frag.glsl:41`,
+"the regular variant transmits nothing, so it gets no lens at all", which rested
+on the sigma ~ 0.032 * diagonal blur model that walle.c:150-153 now retracts as
+seven to thirty-four times too strong.  The lens constants were refit three
+times after that model died and the branch was never revisited.
+
+MEASURED on the M1 wallpaper-transition capture (25G76, backing scale 2, R =
+1082), by ring cross-correlation of the composed frame against the incoming
+wallpaper - inward displacement in capture pixels per depth inside the rim, with
+the correlation in brackets:
+
+    depth            4            8           16           32           60
+    clear   light  72.0 (0.97)  50.5 (1.00)  25.5 (1.00)  2.5 (1.00)  -0.5
+    regular light  72.0 (0.92)  50.5 (0.99)  25.0 (1.00)  2.5 (1.00)  -0.5
+    clear   dark   72.0 (0.98)  50.5 (1.00)  25.5 (1.00)  2.5 (1.00)  -0.5
+    regular dark   70.0 (0.63)  47.5 (0.97)  21.5 (0.98) -1.5 (0.98)  -2.5
+
+`regular` carries the same lens as `clear`, to half a pixel in light.  It reads
+softer in dark only because that appearance's wide blur layer leaves less
+structure to correlate, which is also why its correlation drops.  Both fall to
+zero by depth 32 to 60, consistent with the 35.5796 capture-pixel band already
+in the shader.
+
+The lens is now hoisted out of the `clear` branch and both variants read the
+backdrop through it.  Outside the band the displacement is zero, so the lensed
+read IS the unlensed one and no separate blend is needed - which is why the
+unlensed `blurredIncoming` fetch could simply go.
+
+VERIFIED ON THE FINAL BUILD, all three changes in:
+
+  * `analysis/run_walle_reveal_process_capture_gate.sh` passes - 0 mismatched
+    pixels, 0 composed mismatched pixels, 100.0% exact, candidate inventory
+    206451dedb5e79b082b24612d5eb39812c3a8b36e2489b5d9341eadcf9201d2b, clean
+    Vulkan validation, `clear` and `regular` still byte-identical in composition;
+  * the M1 transition score is the new end-to-end gate, and it is reproducible:
+        analysis/score_walle_transition_against_m1.py
+        analysis/render_walle_transition.sh
+    with the captures' own manifest supplying the geometry, the progress ladder
+    and the exclusion strip.
+
+SHIPPED, ONE PER MEASUREMENT:
+    shaders/liquid_glass.slang   kDematerialize{Clear,Regular}; the single
+                                 application of the exit; the lens hoisted out
+                                 of the `clear` branch
+    walle.c                      REVEAL_CLOCK_{SCALE,POWER} and
+                                 reveal_state_from_clock, live path only; a
+                                 comma-separated material clock so the harness
+                                 can drive geometry and material apart
+
+NOT SHIPPED, and why: the pinned-reading tint refit of 177 is reverted - see
+178.  The `materialize` ease in material_law.slang is left in place though the
+transition no longer reads it; it is a correct measurement of Apple's insertion
+animation, which is simply not the animation walle plays.
+
+The 528-case material grid on the final build, against the same pre-change
+baseline as 178:
+
+                        median    mean     p90     p99   worst
+    pre-change           1.695   2.357   4.502  12.963  19.526
+    final build          1.661   2.312   4.527  13.479  19.580
+
+Mean absolute change 0.228 code values, largest single change 0.721, and only
+38 of 528 cases move by more than half a code.  That is the shift predicted from
+the arrival law alone: the harness renders at progress 0.659, where the old
+curve reached thickness 0.9970 and the new one is flat at 1.0000, so every case
+gains 0.3% of its own (material - backdrop) distance.  The lens hoist cannot
+reach this grid - its backgrounds are flat, and the disc it reads has radius 300
+about the centre while the element's radius is 1426, so the 35.6 capture-pixel
+band is nowhere near it.
+
+## 2026-08-16 (later 181): *** THE LIVE TRANSITION WAS ABORTING ***
+
+Everything in 179 and 180 was measured through `--reveal-mask-process-capture`.
+That path works.  The LIVE path does not, and it has not for as long as the
+current raster has existed - the same failure reproduces on HEAD, so none of
+this session's changes caused it:
+
+    [Vulkan] Transition stopped for HEADLESS-1: Vulkan reveal/composition/present failed
+
+Four times in fourteen seconds, at the same place every time.  A stopped
+transition leaves whatever the last presented frame was, which is a part-grown
+circle: exactly the "circle cut out" the report describes, and invisible to
+every gate in the tree because every gate drives the capture path.
+
+TRACED, by instrumenting each failure site down the stack:
+
+    walle_vk_output_render        WALLE_VK_FRAME_FATAL
+    -> reveal raster              WALLE_LG_REVEAL_RASTER_SETUP_FAILED (6)
+    -> axis_values                slot 3, primitive 0, channel 0,
+                                  axis_start -181, axis_count 924
+    -> center_pair_bits           offset 527, coordinate 346, local pixel 26
+    -> dyadic_floor_ratio_power_two   step_exponent -67 against exact
+                                      exponent -34
+
+The centre grid's step comes from the TILE's own constant:
+
+    step_exponent = floor_binary_exponent(constant) - CENTER_PRECISION_BITS + 1
+
+with CENTER_PRECISION_BITS 36.  A step of -67 means that tile's constant is near
+2**-32 - small, but not the zero the code already special-cases.  `exact` is
+dominated by the slope term and carries exponent -34, so the index wants 2**33
+more range than an int64_t has, the guard returns false, and the whole reveal
+dies.  It reproduces at 1280x720 with centre (320, 240) at radius 421.6, i.e.
+progress 0.2558.
+
+GUARDED, not re-derived: the step is coarsened to the finest one the index can
+represent.  That runs ONLY where dyadic_floor_ratio_power_two already returned
+false, so it cannot move a row that previously worked - and the gate proves it,
+reading the same candidate inventory
+206451dedb5e79b082b24612d5eb39812c3a8b36e2489b5d9341eadcf9201d2b and the same
+composition bytes 8ac1bd7c... for both variants as before the change.
+
+What Apple's fixed-width hardware does with such a tile is NOT known.  This is a
+representability guard so the transition survives, and it is the next thing to
+measure if a capture can be made to reach the case.
+
+METHOD, recorded because it cost the session: the whole material campaign ran
+through the process capture, and the process capture cannot see this.  A live
+run needs a real DRM device - the headless backend answers `Failed to get
+backend DRM FD` and walle's dma-buf presentation never comes up - so the
+reproduction is `WLR_RENDER_DRM_DEVICE=/dev/dri/renderD128` with the headless
+backend, then `grim` against walle's own compositor.

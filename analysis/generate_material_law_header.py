@@ -232,8 +232,9 @@ def emit_tint(reports: dict[str, object]) -> list[str]:
         # Each regime's own width, so a lower-order fit is read from the front
         # of its rows and padded to the emitted width with zeros.  The pinned
         # gamma has no fitted row at all: it is the pinned value on the basis's
-        # constant term, which sits first for the chromatic basis and last for
-        # the neutral one.
+        # constant term, which is the FIRST term of both bases - the chromatic
+        # one is ordered by total degree and the neutral one by power, so both
+        # start there.
         own = chromatic["termCount"]
         blocks = [(chromatic, slice(0, own), width, None),
                   (chromatic, slice(own, 2 * own), width, None)]
