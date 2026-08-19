@@ -73,7 +73,15 @@ struct ComposeVertexOutput
 // scale, i.e. the entire material.
 //
 //     x = dematerialize start, y = exponent
-static const float2 kDematerializeClear   = float2(0.7030, 1.720);
+// The exit start is a SCHEDULING LOTTERY: ten repeat measurements of the
+// same animation land in two clusters, 0.691 +-0.003 and 0.732 +-0.004 -
+// ~2.4 frames apart at 61 Hz, drawn per sequence (one capture run held one
+// of each).  The un-delayed schedule is the law; regular's fitted start
+// already sits on it, and clear's 0.7030 was the average of a
+// cluster-contaminated fit - its early-cluster mean is 0.6908.  Both
+// variants share one start.  Scoring against any single capture still
+// inherits that run's draw; the exponent awaits a cluster-aligned refit.
+static const float2 kDematerializeClear   = float2(0.6908, 1.720);
 static const float2 kDematerializeRegular = float2(0.6910, 1.585);
 
 

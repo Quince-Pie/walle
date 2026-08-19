@@ -5818,3 +5818,37 @@ volatile /private/tmp into home on both machines plus
 /home/quince/walle-archives; the AGX ruler pickles are transient
 session state on no reachable disk - the divider law remains with the
 active probe campaign.
+
+## 2026-08-19 (later 187): THE EXIT'S LOTTERY, AND THE RIM'S DOSSIER CLOSES AT FOUR
+
+THE EXIT START IS A SCHEDULING LOTTERY, MEASURED.  Four repeat
+captures of the identical animation (lgcap-exitjitter-1..4, natural
+backgrounds, dynamics only) plus the two originals give ten exit-start
+readings (interior alpha crossing 0.95), and they are BIMODAL:
+
+    early cluster   0.6928 0.6938 0.6937 0.6914 0.6873   -> 0.691 +-0.003
+    delayed cluster 0.7277 0.7355 0.7289 0.7349 0.7320   -> 0.732 +-0.004
+
+~2.4 frames apart at 61 Hz, drawn PER SEQUENCE (run 2 held one of
+each), i.e. the fade is its own animation landing on one of two vsync
+slots while the geometry runs on time.  The un-delayed schedule is the
+law: regular's fitted start (0.6910) already sits on the early
+cluster, and clear's 0.7030 was a cluster-contaminated average - its
+early-cluster mean is 0.6908.  SHIPPED: both variants now share the
+0.691 start; the exponent awaits a cluster-aligned refit; scoring any
+single run inherits that run's draw (up to 17 codes on high-contrast
+mid-exit frames), which is the capture's variance, not walle's error.
+
+THE RIM'S FIELD DOSSIER CLOSES AT FOUR FALSIFICATIONS.  The last-pixel
+deficit REPRODUCES on natural content to the code (clear -13.0/-14.4,
+regular -13.2/-10.0 in the same two rows; the bottom lobe reproduces
+too: slopes +2.8..+4.3, constants +6.8..+7.1 on both contents) - it is
+real, and it is not content coupling.  Yet the fourth surgery, a
+multiplicative colour-correct caustic keyed on analytic depth,
+worsened the edge on BOTH contents (clear 2.83->3.71 coded,
+2.45->3.22 natural) like the three before it.  A feature whose mean is
+this reproducible while every analytic-depth correction adds error
+must live at PER-PIXEL positions set by the rasterized boundary - the
+mask's own AA values, not the analytic circle.  The edge instrument
+should therefore read (and the eventual law should key on) the R8
+boundary values; that is the complete handoff.

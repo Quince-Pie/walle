@@ -26,12 +26,17 @@ code values against the M1 captures.
 
 ## Needs a dedicated M1 instrument session
 
-- [ ] Edge phase-offset instrument: the element boundary stepped through the
-      pixel grid in sub-pixel increments over flat and gradient backgrounds,
-      read at the final two pixels. Target: the rim's last-pixel row (walle
-      10-14 codes dark at depth 0.5-2.5; falsified for field surgery three
-      ways in 183b). Acceptance: mean deficit +7 light / +5 dark removed
-      without regressing the 128-background edge fit.
+- [ ] Edge phase-offset instrument — now with a complete dossier: the
+      last-pixel deficit reproduces on natural content to the code (same
+      two rows, same constants and bottom lobe on both content classes),
+      and FOUR field surgeries are falsified (profile rescale both ways,
+      additive white, multiplicative colour-correct caustic — the last
+      worsened both contents). Conclusion: the feature lives at per-pixel
+      positions set by the RASTERIZED boundary; the instrument should read,
+      and the law should key on, the R8 mask's own AA values rather than
+      analytic depth. Acceptance: mean deficit +7 light / +5 dark removed
+      on BOTH content classes without regressing the 128-background edge
+      fit.
 - [x] Regular's settled-interior correlated structure — the natural-content
       holdout answered it: settled interiors read 1.47/2.05 (regular
       light/dark) and 1.15 (clear) on unseen content against 3.4-3.8 on the
@@ -46,13 +51,13 @@ code values against the M1 captures.
       `--natural-backgrounds`. Captured: `lgcap-natural-1024` (M1 home +
       /tmp + walle-archives), scored end-to-end.
 
-- [ ] Exit scheduling jitter: the natural holdout exposed that the
-      dematerialize is a separately scheduled animation - geometry ran on
-      time (+0.1..+0.8 frames) while Apple's exit ran ~3 frames late
-      relative to the coded run's schedule, costing up to 17 codes on
-      high-contrast mid-exit frames. A four-repeat capture instrument is
-      measuring the exit-start distribution; the law's anchor (fixed f(t)
-      vs cover+median-delay) follows from it.
+- [x] Exit scheduling jitter — measured with a four-repeat instrument: the
+      start distribution is bimodal (0.691±0.003 / 0.732±0.004, ~2.4 frames
+      apart, drawn per sequence) — a vsync-slot lottery on a separately
+      scheduled fade. The un-delayed cluster is the law; clear's start was
+      a cluster-contaminated fit and now shares regular's 0.691. Shipped;
+      the exponent's cluster-aligned refit and a per-sequence exit
+      alignment option in the scorer remain minor follow-ups.
 
 ## The long game
 
