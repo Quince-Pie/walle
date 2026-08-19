@@ -5602,3 +5602,50 @@ run needs a real DRM device - the headless backend answers `Failed to get
 backend DRM FD` and walle's dma-buf presentation never comes up - so the
 reproduction is `WLR_RENDER_DRM_DEVICE=/dev/dri/renderD128` with the headless
 backend, then `grim` against walle's own compositor.
+
+## 2026-08-19 (later 182): THE BLUR'S SPACE, THE SHADOW'S RETURN, AND THE CORPUS RESTORED
+
+Three results, each with its receipt.
+
+THE CORPUS IS BACK, BIT-EXACT.  liquid-glass-reveal-coverage-01421a3-v1
+had been lost from every reachable machine - every "copy" an empty
+placeholder.  Regenerated on the M1 from the frozen procedure at lg-test
+01421a3 (run label restore2; over SSH the probe needs
+`sudo launchctl asuser 501 sudo -u quince`, or it dies with "capture
+application is not active").  The preregistered validator passed and all
+65 sweep frames are byte-identical to the retained referenceSha256 pins:
+the capture is deterministic across sessions.  Both scored gates ran
+end to end: main reads exactly its 91; this branch reads 0 mask and 0
+composed mismatches across all 272,629,760 samples INCLUDING state 42's
+eighteen previously unverifiable interior positions.  Durable copies:
+~/walle-archives (Linux), ~/lg-test-coverage-01421a3 (M1).
+
+THE BLUR'S SPACE (shipped, one measurement): see the walle.c comment and
+commit "Blur the backdrop in the display's code space, not sRGB".
+Settled 1.68 -> 1.47, animated 2.31 -> 2.17, worst 7.47 -> 6.40, clear
+controls untouched.  The remaining interior floor after the fix:
+regular/light 3.79, regular/dark 2.95, clear ~1.2.
+
+THE SHADOW WAS REAL AND IT IS MISSING (measured, not shipped).  Outside
+the mask, Apple darkens the background and walle does not - the "no
+shadow" of the measured dynamic layer (3fd3367) threw out a real
+regular-only stage.  Measured on the sweeps as (walle-apple)/walle in
+the first 25 px outside the rim, the strength is shared by appearance
+and grows with the element:
+
+    R px      543    812   1083   1353   1624   1894   2029
+    alpha%   ~0.0   1.40   1.16   1.36   1.44   2.04   3.47
+
+flat to ~20 px then decaying to zero by ~100 px; clear shows exactly
+none (+0.03), matching its shadow-disabled pipeline.  One wallpaper
+pair is too thin to fit a law worth shipping - it needs the controlled
+instrument, and the profile fixtures already carry the shadow rows.
+
+ALSO MEASURED: the dynamic score's early tiny-disc frames are capture
+start jitter (Apple's animation zero wanders p=0.001..0.018 per run,
+one 61 Hz frame; a fixed t0 cannot track it) - a scoring floor, not a
+law error.  The settled sweeps show NO small-element regime break down
+to R=136 px (clear interior 1.87 at p=1/16 vs 1.20 at p=7/8).  The rim's
+one remaining sharp row: at d in [-2,-1) walle is 13-15 code values
+below Apple on both variants - the edge falloff's last pixel, refit
+territory for the controlled captures.
