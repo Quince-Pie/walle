@@ -45,9 +45,16 @@ and comparing it to Apple's own animation, captured on the authorized M1
 capture rig's `wallpaper-transition` probe:
 
 ```text
-animated, 242 frames    full-frame mean 2.31 code values, interior 4.62
-settled, 68 states      full-frame mean 1.68 code values, worst frame 5.34
+animated, 242 frames    full-frame mean 2.17 code values, interior 4.36
+settled, 68 states      full-frame mean 1.47 code values, worst frame 4.13
 ```
+
+The backdrop blur operates in the display's code space, not sRGB: the gray
+instruments that measured "sRGB code space" cannot distinguish the two
+(R=G=B is a fixed point of the primary matrix), flat fields cannot see the
+difference at all, and a fit-free single-variable A/B against these captures
+improved every instrument and regressed none. `WALLE_BLUR_SPACE=srgb`
+replays the old behaviour.
 
 The alignment is exact rather than arranged: the rig's `--transition-origin
 0.25,0.30` in a 1024x1024-point window at 2x is pixel-for-pixel Walle's own
