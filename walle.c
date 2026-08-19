@@ -2994,6 +2994,12 @@ static void finalize_render(struct wallpaper_output* output)
     }
 
     if (!res.success) {
+        fprintf(stderr,
+                "[RENDER] wallpaper preparation failed for '%s' (%s); keeping "
+                "the current wallpaper\n",
+                output->num_items ? output->items[output->current_item_index].filename
+                                  : "<empty list>",
+                output->name ? output->name : "-");
         transition_sync_unmark(state, output);
         release_render_result(&res);
         if (output->reveal_process_capture_owned)
