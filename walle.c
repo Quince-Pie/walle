@@ -471,6 +471,7 @@ struct wallpaper_output
     uint32_t sync_gen;
     bool     sync_member;
     bool     sync_held;
+    bool     sync_start_ready;
 
     /* Cold, diagnostic-only state. Keep this outside the frozen render
      * prefix so an absent --reveal-mask-process-capture is layout-neutral. */
@@ -634,6 +635,7 @@ struct wallpaper_state
     uint32_t transition_sync_gen;
     int      transition_sync_pending;
     bool     transition_sync_turn_open;
+    bool     transition_sync_starts_ready;
 };
 
 static void initialize_output(struct wallpaper_output* output);
@@ -2776,22 +2778,65 @@ static void frame_callback_handler(void* data, struct wl_callback* callback, uin
  * trigger until its whole list has been re-baked once.  Members arm as usual
  * but withhold the first frame until the group's last render arrives. */
 
+/* Releasing a group does NOT render: event handlers (finalize, the reload
+ * loop) must never run GPU submits or fence waits inline.  Held outputs are
+ * queued and the main loop flushes them once per turn, after every handler
+ * has run. */
 static void transition_sync_start_held(struct wallpaper_state* state)
 {
-    size_t                   started = 0;
     struct wallpaper_output* o;
     wl_list_for_each(o, &state->outputs, link)
     {
         if (!o->sync_held)
             continue;
-        o->sync_held = false;
+        o->sync_held                        = false;
+        o->sync_start_ready                 = true;
+        state->transition_sync_starts_ready = true;
+    }
+}
+
+static uint64_t trace_now_ns(void)
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)ts.tv_sec * UINT64_C(1'000'000'000) + (uint64_t)ts.tv_nsec;
+}
+
+/* Anything on the main thread that eats more than 50 ms is a presentation
+ * stall the user can see; say so, with the culprit named. */
+static void warn_slow(const char* what, const char* who, uint64_t start_ns)
+{
+    uint64_t took = trace_now_ns() - start_ns;
+    if (took > UINT64_C(50'000'000))
+        fprintf(stderr,
+                "[SLOW] %s (%s) blocked the main thread for %.1f ms\n",
+                what,
+                who ? who : "-",
+                (double)took / 1e6);
+}
+
+/* One call per main-loop turn, after all event handlers. */
+static void transition_sync_flush_starts(struct wallpaper_state* state)
+{
+    if (!state->transition_sync_starts_ready)
+        return;
+    state->transition_sync_starts_ready = false;
+    size_t                   started    = 0;
+    struct wallpaper_output* o;
+    wl_list_for_each(o, &state->outputs, link)
+    {
+        if (!o->sync_start_ready)
+            continue;
+        o->sync_start_ready = false;
         if (o->render.flags & F_DEAD)
             continue;
         if (o->frame_callback) {
             wl_callback_destroy(o->frame_callback);
             o->frame_callback = nullptr;
         }
+        uint64_t t = trace_now_ns();
         (void)render_frame(o);
+        warn_slow("first transition frame", o->name, t);
         started++;
     }
     if (started > 1)
@@ -2969,16 +3014,20 @@ static void finalize_render(struct wallpaper_output* output)
             .width  = output->current_source.glass.width,
             .height = output->current_source.glass.height,
         };
+        uint64_t t_restore = trace_now_ns();
         restored = output->render.vk_output
                    && walle_vk_output_restore_current(output->render.vk_output,
                                                       output->current_source.std_fd,
                                                       &current_standard,
                                                       output->current_source.glass_fd,
                                                       &current_glass);
+        warn_slow("current-wallpaper restore", output->name, t_restore);
     }
-    bool uploaded = restored && output->render.vk_output
+    uint64_t t_upload  = trace_now_ns();
+    bool     uploaded = restored && output->render.vk_output
                     && walle_vk_output_upload(
                         output->render.vk_output, res.std_fd, &standard, res.glass_fd, &glass);
+    warn_slow("wallpaper upload", output->name, t_upload);
 
     if (!uploaded) {
         transition_sync_unmark(state, output);
@@ -3068,8 +3117,10 @@ static void finalize_render(struct wallpaper_output* output)
         /* Submit the first frame immediately. Waiting for a callback on a
          * newly recreated surface can defer visible work until the compositor
          * next happens to repaint an otherwise static background. */
+        uint64_t t_first = trace_now_ns();
         if (render_frame(output) == RENDER_FRAME_FAILED && output->reveal_process_capture_owned)
             reveal_process_capture_fail(state, "initial capture state did not render");
+        warn_slow("first transition frame", output->name, t_first);
     }
 }
 
@@ -3689,8 +3740,10 @@ static void reload_global_config(struct wallpaper_state* state)
             } else if (output->render.flags & F_THREAD_ACTIVE) {
                 output->pending_reload = true;
             } else {
+                uint64_t t = trace_now_ns();
                 apply_config_to_output(output, cfg);
                 update_wallpaper(output);
+                warn_slow("reload update", output->name, t);
             }
         } else if (output->surface) {
             /* Section removed or emptied: stop rotating, keep the last
@@ -4916,6 +4969,8 @@ int main(int argc, char* argv[])
         /* Coalesced: one reload per turn, however many inotify events hit. */
         if (config_dirty)
             reload_global_config(&state);
+
+        transition_sync_flush_starts(&state);
 
         if (state.bus
             && (dbus_fired || (dbus_deadline != UINT64_MAX && monotonic_usec() >= dbus_deadline))) {
