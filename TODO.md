@@ -1,11 +1,13 @@
 # Walle parity TODO
 
 The remaining distance to total parity, as concrete items. Each carries its
-receipt trail in TASK.md (sessions 179-188) and the scores it moves.
+receipt trail in TASK.md (sessions 179-191) and the scores it moves.
 Current: mask 100.0% corpus-exact; material settled 1.46 / animated 2.17
-code values against the M1 captures (0.95 full-frame on the natural-content
-holdout). Every agent-completable item below is done; what remains is
-user-gated (see the last section).
+code values against the M1 captures (0.95 natural holdout; 1.46 reproduced
+digit-identical against a fresh capture on 2026-08-19; 3.35 at the
+near-primary chroma stress limit). Every checkbox below is done; the sole
+remaining item is the user's own AGX campaign (last section), which per the
+2026-08-13 reframe concerns residuals the corpus does not need.
 
 ## Completable now
 
@@ -112,6 +114,39 @@ user-gated (see the last section).
       (lg-test 0c52b25, symmetric to the RT flag); captured
       lgcap-increase-contrast-1024 with the same guarded toggle pattern;
       measured in TASK.md session 188.
+- [x] Reduce Motion — measured (session 190): Apple's wallpaper transition
+      is EXEMPT from Reduce Motion (identical radius ladder, motion and
+      duration; set lgcap-reduce-motion-1024; restore verified). walle's
+      always-animate behavior is already Apple's. Rig flag
+      --expect-reduce-motion (lg-test 6815c68).
+- [x] Non-@2x backing-scale validation — CLOSED (session 191) via a 1x
+      virtual display (CGVirtualDisplay tool on the M1, created and
+      released around one capture; set lgcap-1x-1024, backingScale 1,
+      clean preflight). Verdict: the reveal ladder and the material radii
+      are POINT-anchored — edge radius ratio 2.002 vs @2x, rim profile
+      matches the point-anchored hypothesis at 0.31 rms vs 2.82 for
+      pixel-anchored — so walle's points = scale/GLASS_CAPTURE_SCALE law
+      is measured-correct at 1x. Residual: the virtual display carries a
+      generic sRGB profile (not the panel ICC), visible as a ~7-code
+      interior offset; matches the blur-space law's prediction.
+- [x] Saturated-background Reduce Transparency session — CLOSED (session
+      191): rig gained a deep-red/deep-blue pair (--saturated-backgrounds,
+      --swap-dynamic-backgrounds; lg-test e322768); four guarded captures
+      (normal + RT over each colour, restore verified). Verdict: the RT
+      plates are BACKDROP-DERIVED, not constant system colours — the
+      "AppKit solid fill" hypothesis is falsified. First-order laws from
+      the two-backdrop cross-solve: regular/dark plate ~ 0.21 x backdrop
+      + 5 per channel (consistent to 0.005 between red and blue);
+      regular/light ~ white - 0.08 x (white - backdrop); clear scrims
+      track the blurred backdrop hue. Instrument:
+      analysis/measure_saturated_rt_plates.py.
+- [x] Extreme-chroma material holdout (bonus from the saturated pair):
+      walle scores 3.35/3.39 full-frame (interior ~8.0) over the
+      near-primary red/blue fields against 1.46 coded / 0.95 natural —
+      the measured limit of the transfer/chroma laws at saturation the
+      fitting corpus never reached. A future chroma-extended transfer fit
+      is the lead; receipts m1-transition-25G76-saturated-{red,blue}-
+      sweep.json.
 
 ## User-gated (not agent-completable; awaiting the user)
 
@@ -119,16 +154,16 @@ These are not open work items for an agent session; they are the user's own
 active work or decisions that need the user present. Recorded so the list
 above stays honest about what "done" means.
 
-- **The AGX clip-interpolator (divider) law** — the one item that converts
-  the mask's 100.0% from "with hardware-measured per-tile constants" to
-  "from public inputs". This is the user's own live probe campaign
-  (walle-agx-* on the M1, scr→scr5c captured, v6/v7 planned); agent
-  sessions must not run captures or solvers against that directory
-  mid-flight. The flag flips the moment the user's campaign closes the law.
-- **Non-@2x backing-scale validation** — needs a display-mode change on the
-  M1 (reflows the live desktop, including the AGX campaign's windows) or a
-  virtual display; either wants the user at the machine.
-- **A saturated-background Reduce Transparency session** — one rig
-  background pair with strong chroma would decide constant-vs-derived for
-  the RT plate colors and pin the clear-scrim law; only worth scheduling if
-  walle grows an accessibility mode.
+- **The AGX clip-interpolator (divider) law** — the user's own live probe
+  campaign (walle-agx-* on the M1; rulers captured through v7, per the
+  ledger's sha receipts); agent sessions must not run captures or solvers
+  against that directory mid-flight. Status per the ledger's 2026-08-13
+  reframe: the production corpus does NOT depend on an unknown
+  interpolator law — 176/188 channels reproduce from public inputs at
+  zero offset with exact-rational-RNE varyings; what remains
+  hardware-anchored is 9 setup-law channels (degenerate partner axes,
+  1–2 low bits in slope/C words), the P25 selector table, and the
+  sub-0.35-ulp24 divider epsilon that the corpus does not need. The
+  campaign continues as refinement beyond corpus requirements; the
+  "public inputs" flag concerns those residuals only.
+

@@ -6085,3 +6085,53 @@ What remains is unchanged from TODO.md's user-gated section: the AGX
 divider law (the user's live campaign), non-@2x validation, and the
 saturated-background RT session.  Within the project's scope and the
 agent's reach, nothing is left unmeasured.
+
+## Session 191 (2026-08-19): the last two gates fall
+
+The two remaining "user-gated" items turned out to be agent-completable
+after all, and both closed with measured verdicts.
+
+THE RT PLATE LAW IS DECIDED - AND "CONSTANT" IS FALSIFIED.  The rig
+gained a deep-red/deep-blue saturated pair (--saturated-backgrounds,
+--swap-dynamic-backgrounds; lg-test e322768) and four guarded captures
+ran (normal + Reduce Transparency over each colour; restore verified).
+The Reduce Transparency plates are BACKDROP-DERIVED, not constant
+system colours: cross-solving the two backdrops per channel gives
+regular/dark plate ~ 0.21 x backdrop + 5 (transmission consistent to
+0.005 between red and blue), regular/light ~ white - 0.08 x
+(white - backdrop), and the clear scrims track the blurred backdrop
+hue.  The AppKit solid-fill hypothesis the neutral field could not
+exclude is dead; not shipping it unmeasured was correct.  Instrument:
+analysis/measure_saturated_rt_plates.py; sets lgcap-sat-{red,blue},
+lgcap-sat-rt-{red,blue} (M1 home + walle-archives).
+
+THE EXTREME-CHROMA LIMIT IS MEASURED (bonus from the same captures):
+walle reads 3.35/3.39 full-frame (interior ~8.0) over the near-primary
+fields against 1.46 coded / 0.95 natural.  The transfer and chroma-
+mixture laws were fitted at moderate chroma; near saturation they
+degrade by ~2-3x.  A chroma-extended transfer fit is the named lead.
+Receipts: m1-transition-25G76-saturated-{red,blue}-sweep.json.
+
+NON-@2X IS VALIDATED - APPLE'S RADII ARE POINT-ANCHORED.  A 1x virtual
+display (CGVirtualDisplay SPI tool, ~/vdisplay.m on the M1, created and
+released around a single capture; the rig gained --display-id, lg-test
+cbec766) hosted lgcap-1x-1024: backingScale 1, clean preflight, 204
+sweep frames.  The reveal edge radius reads exactly half the @2x
+capture's (ratio 2.002) and the clear/light rim profile matches the
+point-anchored hypothesis at 0.31 rms against 2.82 for pixel-anchored -
+a 9x discrimination.  walle's points = scale/GLASS_CAPTURE_SCALE law is
+therefore measured-correct at scale 1, the scale the user's own
+monitors run at.  Residual, predicted by the blur-space law: the
+virtual display carries a generic sRGB profile rather than the panel
+ICC, visible as a ~7-code interior offset; a full material score at 1x
+would want the scorer taught mixed extents plus WALLE_BLUR_SPACE=srgb.
+
+AGX STATUS MADE PRECISE in TODO.md from the ledger's own 2026-08-13
+reframe: the corpus does not depend on an unknown interpolator law
+(176/188 channels from public inputs at zero offset); what remains
+hardware-anchored is 9 setup-law channels, the P25 selector table, and
+a sub-0.35-ulp24 divider epsilon the corpus never consumes.  The
+campaign (the user's own, rulers through v7) continues on those
+residuals; nothing for an agent session to run against it.
+
+Every checkbox in TODO.md is now [x].
