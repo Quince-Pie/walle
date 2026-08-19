@@ -4651,7 +4651,13 @@ int main(int argc, char* argv[])
     vips_cache_set_max(0);
     vips_cache_set_max_mem(0);
     vips_cache_set_max_files(0);
-    vips_concurrency_set(1);
+    /* Founding-commit leftover, retired 2026-08-19: this pinned every bake
+     * to ONE core.  The bake's per-pixel operations (convolutions, matrix
+     * transfer, pow curves) are region-parallel with no cross-pixel
+     * accumulation, so the threaded evaluation is byte-identical - verified
+     * by A/B sha256 of the cache entries - and a cold 2560x2880 regular bake
+     * drops from ~600 ms (or ~13 s on a loaded machine) to well under it. */
+    vips_concurrency_set(0); /* 0 = one worker per core */
 
     xoshiro256pp_seed(&g_rng, (uint64_t)time(nullptr) ^ (uint64_t)getpid());
 
