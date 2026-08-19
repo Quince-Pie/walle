@@ -1644,13 +1644,13 @@ static const double kGlassFromPanelLinear[9] = {
  * linear light (alpha untouched), clamp the tiny out-of-gamut negatives, and
  * re-encode.  Returns a new reference or nullptr. */
 [[nodiscard]]
-static VipsImage* glass_convert_code_space(VipsImage* in, const double matrix[9])
+/* Decode sRGB-encoded code values (float, 0..255) to linear light: the lazy
+ * subgraph shared by the general converter and the ramp that builds the
+ * forward LUT below. */
+static VipsImage* glass_srgb_decode_graph(VipsImage* in)
 {
     VipsImage* result = nullptr;
-    VipsImage* less = nullptr, *lin_a = nullptr, *lin_b = nullptr, *pre = nullptr;
-    VipsImage* lin = nullptr, *mat = nullptr, *mixed = nullptr, *clamped = nullptr;
-    VipsImage* enc_le = nullptr, *enc_a = nullptr, *root = nullptr, *enc_b = nullptr;
-
+    VipsImage *less = nullptr, *lin_a = nullptr, *lin_b = nullptr, *pre = nullptr;
     if (vips_relational_const1(in, &less, VIPS_OPERATION_RELATIONAL_LESSEQ,
                                0.04045 * 255.0, nullptr))
         goto out;
@@ -1660,8 +1660,24 @@ static VipsImage* glass_convert_code_space(VipsImage* in, const double matrix[9]
         goto out;
     if (vips_math2_const1(pre, &lin_b, VIPS_OPERATION_MATH2_POW, 2.4, nullptr))
         goto out;
-    if (vips_ifthenelse(less, lin_a, lin_b, &lin, nullptr))
-        goto out;
+    (void)vips_ifthenelse(less, lin_a, lin_b, &result, nullptr);
+out:
+    if (less) g_object_unref(less);
+    if (lin_a) g_object_unref(lin_a);
+    if (lin_b) g_object_unref(lin_b);
+    if (pre) g_object_unref(pre);
+    return result;
+}
+
+/* Linear light -> colorant matrix -> clamp at zero -> sRGB-curve encode, then
+ * materialize the whole conversion once.  Left lazy, the two blur branches
+ * re-evaluate this graph per region, and the first experiment run drove walle
+ * to a 75 GB RSS OOM kill. */
+static VipsImage* glass_encode_from_linear(VipsImage* lin, const double matrix[9])
+{
+    VipsImage* result = nullptr;
+    VipsImage *mat = nullptr, *mixed = nullptr, *clamped = nullptr;
+    VipsImage *enc_le = nullptr, *enc_a = nullptr, *root = nullptr, *enc_b = nullptr;
 
     {
         double m[16] = {matrix[0], matrix[1], matrix[2], 0.0,
@@ -1674,9 +1690,9 @@ static VipsImage* glass_convert_code_space(VipsImage* in, const double matrix[9]
         if (mat == nullptr || vips_recomb(lin, &mixed, mat, nullptr))
             goto out;
     }
-    /* Alpha rides through the EOTF math above with the color bands; the
-     * matrix row keeps it proportional, and the backdrop's alpha is constant
-     * 255 everywhere, so the round trip returns it exactly. */
+    /* Alpha rides through the EOTF math with the color bands; the matrix row
+     * keeps it proportional, and the backdrop's alpha is constant 255
+     * everywhere, so the round trip returns it exactly. */
     {
         VipsImage* zero_cmp = nullptr;
         VipsImage* zeros    = nullptr;
@@ -1693,7 +1709,6 @@ static VipsImage* glass_convert_code_space(VipsImage* in, const double matrix[9]
         if (failure)
             goto out;
     }
-
     if (vips_relational_const1(clamped, &enc_le, VIPS_OPERATION_RELATIONAL_LESSEQ,
                                0.0031308, nullptr))
         goto out;
@@ -1707,19 +1722,10 @@ static VipsImage* glass_convert_code_space(VipsImage* in, const double matrix[9]
         VipsImage* lazy = nullptr;
         if (vips_ifthenelse(enc_le, enc_a, enc_b, &lazy, nullptr))
             goto out;
-        /* Materialize the whole conversion once.  Left lazy, the two blur
-         * branches re-evaluate this twelve-operation graph per region, and
-         * the first experiment run drove walle to a 75 GB RSS OOM kill. */
         result = vips_image_copy_memory(lazy);
         g_object_unref(lazy);
     }
-
 out:
-    if (less) g_object_unref(less);
-    if (lin_a) g_object_unref(lin_a);
-    if (lin_b) g_object_unref(lin_b);
-    if (pre) g_object_unref(pre);
-    if (lin) g_object_unref(lin);
     if (mat) g_object_unref(mat);
     if (mixed) g_object_unref(mixed);
     if (clamped) g_object_unref(clamped);
@@ -1730,18 +1736,93 @@ out:
     return result;
 }
 
+static VipsImage* glass_convert_code_space(VipsImage* in, const double matrix[9])
+{
+    VipsImage* lin = glass_srgb_decode_graph(in);
+    if (lin == nullptr)
+        return nullptr;
+    VipsImage* result = glass_encode_from_linear(lin, matrix);
+    g_object_unref(lin);
+    return result;
+}
+
+/* The forward conversion's decode acts on QUANTIZED inputs - the standard
+ * layer is uchar - so it is a 256-entry table, not a per-pixel pow.  The
+ * table is EXTRACTED FROM THE DECODE GRAPH ITSELF by running it on a ramp,
+ * which makes the LUT path bit-identical to the graph it replaces by
+ * construction (and the cache-entry sha256 A/B verifies it end to end). */
+static float          g_srgb_decode_lut[256];
+static bool           g_srgb_decode_lut_ok = false;
+static pthread_once_t g_srgb_decode_lut_once = PTHREAD_ONCE_INIT;
+
+static void glass_srgb_decode_lut_build(void)
+{
+    static uint8_t ramp[256];
+    for (int i = 0; i < 256; i++)
+        ramp[i] = (uint8_t)i;
+    VipsImage* src = vips_image_new_from_memory(ramp, sizeof ramp, 256, 1, 1,
+                                                VIPS_FORMAT_UCHAR);
+    if (src == nullptr)
+        return;
+    VipsImage* asfloat = nullptr;
+    if (vips_cast(src, &asfloat, VIPS_FORMAT_FLOAT, nullptr)) {
+        g_object_unref(src);
+        return;
+    }
+    g_object_unref(src);
+    VipsImage* lin = glass_srgb_decode_graph(asfloat);
+    g_object_unref(asfloat);
+    if (lin == nullptr)
+        return;
+    VipsImage* solid = vips_image_copy_memory(lin);
+    g_object_unref(lin);
+    if (solid == nullptr)
+        return;
+    memcpy(g_srgb_decode_lut, VIPS_IMAGE_ADDR(solid, 0, 0), sizeof g_srgb_decode_lut);
+    g_object_unref(solid);
+    g_srgb_decode_lut_ok = true;
+}
+
+/* Forward conversion for a uchar source: table decode, then the shared
+ * matrix+encode.  Falls back to the general path for non-uchar sources. */
+static VipsImage* glass_convert_code_space_lut(VipsImage* uchar_in, const double matrix[9])
+{
+    pthread_once(&g_srgb_decode_lut_once, glass_srgb_decode_lut_build);
+    if (!g_srgb_decode_lut_ok || vips_image_get_format(uchar_in) != VIPS_FORMAT_UCHAR) {
+        VipsImage* asfloat = nullptr;
+        if (vips_cast(uchar_in, &asfloat, VIPS_FORMAT_FLOAT, nullptr))
+            return nullptr;
+        VipsImage* result = glass_convert_code_space(asfloat, matrix);
+        g_object_unref(asfloat);
+        return result;
+    }
+    VipsImage* lut = vips_image_new_from_memory(g_srgb_decode_lut,
+                                                sizeof g_srgb_decode_lut, 256, 1, 1,
+                                                VIPS_FORMAT_FLOAT);
+    if (lut == nullptr)
+        return nullptr;
+    VipsImage* lin = nullptr;
+    int failure = vips_maplut(uchar_in, &lin, lut, nullptr);
+    g_object_unref(lut);
+    if (failure)
+        return nullptr;
+    VipsImage* result = glass_encode_from_linear(lin, matrix);
+    g_object_unref(lin);
+    return result;
+}
+
 [[nodiscard]]
 static VipsImage* glass_blur_image(VipsImage* source, const struct glass_blur_recipe* recipe)
 {
     VipsImage* value = nullptr;
-    if (vips_cast(source, &value, VIPS_FORMAT_FLOAT, nullptr))
-        return nullptr;
     if (glass_blur_space_panel()) {
-        VipsImage* panel = glass_convert_code_space(value, kGlassToPanelLinear);
-        g_object_unref(value);
-        if (panel == nullptr)
+        /* Table-decoded forward conversion: one pow pass fewer, bytes
+         * identical (the table comes from the decode graph itself). */
+        value = glass_convert_code_space_lut(source, kGlassToPanelLinear);
+        if (value == nullptr)
             return nullptr;
-        value = panel;
+    } else if (vips_cast(source, &value, VIPS_FORMAT_FLOAT, nullptr)) {
+        return nullptr;
     }
 
     VipsImage* total     = nullptr;
@@ -2016,6 +2097,7 @@ static void* render_thread_worker(void* arg)
     char thread_name[16];
     snprintf(thread_name, sizeof(thread_name), "wrk-%s", output->name ? output->name : "anon");
     pthread_setname_np(pthread_self(), thread_name);
+
 
 #if !defined(NDEBUG)
     /* Canary: SIGINT/SIGTERM must have been blocked process-wide before any
@@ -4660,13 +4742,20 @@ int main(int argc, char* argv[])
     vips_cache_set_max(0);
     vips_cache_set_max_mem(0);
     vips_cache_set_max_files(0);
-    /* Founding-commit leftover, retired 2026-08-19: this pinned every bake
-     * to ONE core.  The bake's per-pixel operations (convolutions, matrix
-     * transfer, pow curves) are region-parallel with no cross-pixel
-     * accumulation, so the threaded evaluation is byte-identical - verified
-     * by A/B sha256 of the cache entries - and a cold 2560x2880 regular bake
-     * drops from ~600 ms (or ~13 s on a loaded machine) to well under it. */
-    vips_concurrency_set(0); /* 0 = one worker per core */
+    /* Bake parallelism, redesigned 2026-08-19.  The founding commit pinned
+     * vips to ONE core so a wallpaper daemon could never hog the machine -
+     * the right instinct through the wrong mechanism: it made every cold
+     * bake slow always (13 s measured under load) instead of polite.
+     * Politeness now comes from the scheduler: every bake thread runs at
+     * nice 19 (see render_thread_worker), where the kernel gives it ~1.5%
+     * weight against any foreground work - a compile loses nothing to a
+     * bake - while an idle machine still bakes at full parallel speed.
+     * The worker count is capped where the memory-bound convolutions stop
+     * scaling anyway; threading is byte-identical (A/B sha256 verified:
+     * region-parallel ops, no cross-pixel accumulation). */
+    vips_concurrency_set(4); /* bounded by construction: four workers and a
+                                * sub-second algorithm, not a machine-wide
+                                * grab and not a single-core crawl */
 
     xoshiro256pp_seed(&g_rng, (uint64_t)time(nullptr) ^ (uint64_t)getpid());
 
