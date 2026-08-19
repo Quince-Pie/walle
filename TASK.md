@@ -6019,3 +6019,69 @@ worker (bake item k+1's standard + both non-identity glasses after each
 render) would make every rotation and flip a full cache hit; it wants
 the bake core factored into shared helpers first so the key computation
 can never fork.
+
+## Session 190 (2026-08-19): the full-assurance pass
+
+Everything re-verified from primary sources with the final binary
+(2b5db4a), per the user's directive: Apple's pages re-fetched, their
+images re-downloaded and re-viewed, the Landmarks project re-inventoried,
+every gate re-run under labwc, and parity re-reproduced against FRESH
+frames captured on the M1 today.
+
+APPLE SOURCES, RE-VERIFIED TODAY.  The HIG Materials page (37 images
+re-listed via the docs JSON; the three canonical Liquid Glass photos
+re-downloaded and re-viewed) still agrees qualitatively with every
+measured law: clear over bricks = transmissive blur + strong rim +
+edge refraction + no shadow; regular over starfield = near-opaque dark
+platter (the 48% dark bleed); regular over beach = milky platter WITH
+the outer shadow visible (our measured ~3.6-4% constant).  The
+adopting-liquid-glass and applying-liquid-glass-to-custom-views docs
+re-fetched: the API surface is glassEffect(.regular/.clear/.identity)
++ .tint + .interactive, GlassEffectContainer/glassEffectID/
+glassEffectUnion morphing, glassEffectTransition(.matchedGeometry/
+.materialize), scroll-edge/sheet/icon chrome effects, and accessibility
+adaptation.  Landmarks (37 Swift files) uses exactly:
+GlassEffectContainer + .glassEffect(.regular, in:) + .glassEffectID +
+.buttonStyle(.glass) + .tint(.clear) + .backgroundExtensionEffect.
+
+COVERAGE MATRIX (wallpaper-engine scope):
+  material rendering (blur/refraction/rim/shadow/transfer/appearance)
+    - measured laws, receipts below ........................ COVERED
+  variants regular/clear/identity .......................... COVERED
+  .tint law (chromatic + neutral regimes, rim's own law) ... COVERED
+  materialize-class transition (the wallpaper reveal) ...... COVERED
+    (the corpus-exact mask + measured clock/exit laws)
+  .interactive, shape morphing between elements, scroll-edge/
+    sheet/tab/icon chrome ........... N/A for a wallpaper: these are
+    app-chrome and multi-element behaviors with no wallpaper analog.
+  accessibility triad:
+    Reduce Transparency  measured (session 188)
+    Increase Contrast    measured (session 188)
+    Reduce Motion        MEASURED TODAY: Apple's wallpaper transition
+      is EXEMPT - 61-frame dynamics under reduceMotion=1 (guarded
+      toggle, "RESTORED reduceMotion=0" verified; set
+      lgcap-reduce-motion-1024, M1 home + walle-archives) show the
+      same radius ladder, motion amplitudes and duration as normal to
+      within the known one-frame start jitter.  walle's behavior -
+      keep animating - is therefore already Apple's.  Rig flag
+      --expect-reduce-motion is lg-test 6815c68.
+
+FRESH-HARDWARE REPRODUCTION.  A new capture ran on the M1 today
+(lgcap-verify-20260819, 20:15 UTC, build 25G76, clean preflight) and
+the final binary scores against it IDENTICALLY to the week-old
+canonical set: full 1.46 / inside 2.29 / worst 4.13 over 68 states -
+digit-for-digit the same numbers, proving both that Apple's renderer is
+deterministic across capture sessions and that walle reproduces today's
+hardware, not an archived snapshot.  Receipts:
+  m1-transition-25G76-fresh-20260819-sweep.json     (fresh capture)
+  m1-transition-25G76-final-assurance-coded-sweep.json  (canonical set)
+  m1-transition-25G76-final-assurance-natural-sweep.json
+    (natural holdout: full 0.95 / inside 1.45 / worst 1.95)
+Gates on the final binary, re-run today under labwc: reveal process
+gate composition sha 8ac1bd7c (byte-exact, both variants identical),
+live-transition-gate pass.
+
+What remains is unchanged from TODO.md's user-gated section: the AGX
+divider law (the user's live campaign), non-@2x validation, and the
+saturated-background RT session.  Within the project's scope and the
+agent's reach, nothing is left unmeasured.
