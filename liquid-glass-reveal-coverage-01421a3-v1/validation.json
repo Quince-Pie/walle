@@ -1,0 +1,28 @@
+{
+  "accepted": true,
+  "capture": {
+    "manifestSHA256": "3e9926fa89acf1abb97e0e3c49d3c81ad16dc1de71dad7fe3a8acabbf905c944",
+    "physicalRetina": true,
+    "preflightSHA256": "a424b3c50899149ba79ef5e70687a01f896e8fbf058da5437a5a564c71a14034"
+  },
+  "claimBoundary": {
+    "doesNotPromote": [
+      "a coverage formula",
+      "a color-compositing formula",
+      "ordinary Walle integration",
+      "production parity"
+    ],
+    "promotes": "complete deterministic coverage-discovery input corpus only"
+  },
+  "combinedRawSampleSHA256": "f3208dc6219f8f33c73d7034c4a5e8c69d1ea9424a53ab7dc67dc8f0faac1303",
+  "comparisonTolerance": 0,
+  "distinctRawBGRAWords": 256,
+  "frameCount": 195,
+  "rawSampleFileCount": 195,
+  "rawSamplePayloadBytes": 127795200,
+  "repeatMismatchedCanonicalFrames": 0,
+  "repeatMismatchedRawSampleFiles": 0,
+  "schemaVersion": 1,
+  "status": "accepted-reveal-coverage-discovery-corpus",
+  "traversalCount": 3
+}

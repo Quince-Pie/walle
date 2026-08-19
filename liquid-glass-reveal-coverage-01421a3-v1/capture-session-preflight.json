@@ -1,0 +1,31 @@
+{
+  "backingScaleFactor" : 2,
+  "classification" : "fail-closed native macOS 26.6.1 presentation-session preflight v2",
+  "displayActive" : true,
+  "displayAsleep" : false,
+  "expectedBackingScaleFactor" : 2,
+  "expectedLogicalPoints" : [
+    1728,
+    1117
+  ],
+  "expectedPhysicalPixels" : [
+    3456,
+    2234
+  ],
+  "localRetinaCaptureSessionPreflightSchemaVersion" : 2,
+  "logicalPoints" : [
+    1728,
+    1117
+  ],
+  "passed" : true,
+  "physicalPixels" : [
+    3456,
+    2234
+  ],
+  "sessionDictionaryAvailable" : true,
+  "sessionLocked" : false,
+  "sessionLockFieldPresent" : false,
+  "sessionLockFieldValid" : true,
+  "sessionLoginDone" : true,
+  "sessionOnConsole" : true
+}

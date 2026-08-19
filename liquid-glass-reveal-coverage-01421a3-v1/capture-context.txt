@@ -1,0 +1,45 @@
+CAPTURE_COMMIT=01421a324a403357efaebadd575212cb5463e363
+GITHUB_ACTIONS_USED=0
+NATIVE_CAPTURE_DEBUGGER_USED=0
+NIX_STORE_PATH_IN_NATIVE_BUILD_OR_CAPTURE=0
+MACOS_PRODUCT_VERSION=26.6.1
+MACOS_BUILD_VERSION=25G76
+ARCHITECTURE=arm64
+NATIVE_SDK_PATH=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+NATIVE_SDK_VERSION=26.5
+CAPTURE_ARGUMENTS=--width 1024 --height 1024 --suite dynamic --dynamic-frames 3 --dynamic-duration 0.2 --dynamic-modes wallpaper-reveal --transition-origin 0.25,0.30 --reveal-coverage-probe
+f2cf57c4724639be712955006db512184489aa58a745f2f8aedf5e788c109f0e  Sources/GlassCapture/main.swift
+2094b1e0355be2c774f048b58073d2573f0c12238d67e20842b42c1632307d64  Analysis/walle_reveal_coverage_corpus_preregistration.json
+19afaaae06afbe69a5834d5c0d3c5e2a535db0a1303ce8d5a032c3fc0db11189  Analysis/validate_walle_reveal_coverage_corpus.py
+0e162d610ed2ed2d1d3069c33c8513ffdc690feb6435aff0e1c6bfd4e9ce5757  Analysis/test_validate_walle_reveal_coverage_corpus.py
+f12a1cbe29629dc843cc3250a46fa686225f3c08bcf1bf1dbdf50aea913926f1  Analysis/check_local_retina_capture_session_v2.swift
+d8b38c26b11446aaf8ed218bcf4f2f6dc1c93091195c57d58f27a8e57c848d6d  /var/folders/36/d8zv14653299sx5bgpk_41th0000gn/T/lg-walle-reveal-coverage.f5ltsfJgfF/glasscap-unlinked
+fad736682875692819d656899376ffd207a472fc47fb0d285957b9a87e9699ba  /var/folders/36/d8zv14653299sx5bgpk_41th0000gn/T/lg-walle-reveal-coverage.f5ltsfJgfF/glasscap
+/var/folders/36/d8zv14653299sx5bgpk_41th0000gn/T/lg-walle-reveal-coverage.f5ltsfJgfF/glasscap:
+Load command 50
+      cmd LC_BUILD_VERSION
+  cmdsize 24
+ platform MACOS
+    minos 26.0
+      sdk 26.5
+   ntools 0
+Graphics/Displays:
+
+    Apple M1 Max:
+
+      Chipset Model: Apple M1 Max
+      Type: GPU
+      Bus: Built-In
+      Total Number of Cores: 32
+      Vendor: Apple (0x106b)
+      Metal Support: Metal 4
+      Displays:
+        Color LCD:
+          Display Type: Built-in Liquid Retina XDR Display
+          Resolution: 3456 x 2234 Retina
+          Main Display: Yes
+          Mirror: Off
+          Online: Yes
+          Automatically Adjust Brightness: Yes
+          Connection Type: Internal
+

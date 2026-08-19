@@ -1,0 +1,7 @@
+clock preflight: static-quarter 0.25, static-three-quarter 0.75, live-midpoint 0.541015625, live-endpoint 1.0, probe-quarter 0.25, probe-three-quarter 0.75, probe-midpoint 0.603515625, probe-endpoint 1.0
+dynamic capture surface fallback: The user declined TCCs for application, window, display capture
+dynamic: wallpaper-reveal__regular__dark
+dynamic complete: wallpaper-reveal__regular__dark, 3/3 target frames, 0 tail frames
+sweep: sweep__wallpaper-reveal__regular__dark
+sweep complete: sweep__wallpaper-reveal__regular__dark, 65 + 65 + 65 exact states
+done: 0 static captures, 1 dynamic sequences/3 frames, 1 sweep sequences/195 frames, 0 failures, scale 2.0x
