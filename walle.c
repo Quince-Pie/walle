@@ -456,6 +456,16 @@ struct wallpaper_output
 
     double reveal_maximum_radius;
 
+    /* Same-trigger transition sync (see the transition_sync_* helpers).
+     * Trigger/finalize-time only - never read per frame, so it lives with
+     * the cold state: the generation this output was recruited into, whether
+     * it still counts toward that group's pending renders, and whether it is
+     * armed but withholding its first frame until the group's last render
+     * lands. */
+    uint32_t sync_gen;
+    bool     sync_member;
+    bool     sync_held;
+
     /* Cold, diagnostic-only state. Keep this outside the frozen render
      * prefix so an absent --reveal-mask-process-capture is layout-neutral. */
     uint8_t* reveal_process_capture_pixels;
@@ -611,6 +621,13 @@ struct wallpaper_state
     int            signal_fd;
     bool           shutting_down;
     uint32_t       renders_since_gc;
+
+    /* Same-trigger transition sync: current group generation, how many of its
+     * renders are still in flight, and whether this loop turn already opened
+     * a group (all triggers in one turn share one group). */
+    uint32_t transition_sync_gen;
+    int      transition_sync_pending;
+    bool     transition_sync_turn_open;
 };
 
 static void initialize_output(struct wallpaper_output* output);
@@ -2662,6 +2679,99 @@ static void frame_callback_handler(void* data, struct wl_callback* callback, uin
         reveal_process_capture_fail(output->render.state, "capture frame callback did not render");
 }
 
+/* -- Same-trigger transition sync ----------------------------------------
+ *
+ * Outputs re-rendered by one trigger (a config reload, rotation timers firing
+ * in the same loop turn) start their transitions TOGETHER.  Without this, each
+ * output starts the moment its own render lands, and a cache hit on one output
+ * against a cold bake on the other reads as the two displays desynchronizing -
+ * a variant change re-keys the bake cache, so the changed output lags every
+ * trigger until its whole list has been re-baked once.  Members arm as usual
+ * but withhold the first frame until the group's last render arrives. */
+
+static void transition_sync_start_held(struct wallpaper_state* state)
+{
+    size_t                   started = 0;
+    struct wallpaper_output* o;
+    wl_list_for_each(o, &state->outputs, link)
+    {
+        if (!o->sync_held)
+            continue;
+        o->sync_held = false;
+        if (o->render.flags & F_DEAD)
+            continue;
+        if (o->frame_callback) {
+            wl_callback_destroy(o->frame_callback);
+            o->frame_callback = nullptr;
+        }
+        (void)render_frame(o);
+        started++;
+    }
+    if (started > 1)
+        printf("[SYNC] %zu transitions started together\n", started);
+}
+
+static void transition_sync_open_turn_group(struct wallpaper_state* state)
+{
+    if (state->transition_sync_turn_open)
+        return;
+    state->transition_sync_turn_open = true;
+    state->transition_sync_gen++;
+    /* A new trigger supersedes a group still waiting on a straggler: release
+     * what is held and drop stale memberships so nothing waits on the old
+     * generation. */
+    struct wallpaper_output* o;
+    wl_list_for_each(o, &state->outputs, link)
+    {
+        if (o->sync_member && o->sync_gen != state->transition_sync_gen)
+            o->sync_member = false;
+    }
+    transition_sync_start_held(state);
+    state->transition_sync_pending = 0;
+}
+
+static void transition_sync_mark(struct wallpaper_state* state, struct wallpaper_output* output)
+{
+    transition_sync_open_turn_group(state);
+    output->sync_gen    = state->transition_sync_gen;
+    output->sync_member = true;
+    state->transition_sync_pending++;
+}
+
+/* The output leaves its group without holding (its render failed, it was
+ * torn down, or it swaps without a transition).  Completes the group if this
+ * was the last pending render. */
+static void transition_sync_unmark(struct wallpaper_state* state, struct wallpaper_output* output)
+{
+    if (!output->sync_member)
+        return;
+    output->sync_member = false;
+    if (output->sync_gen != state->transition_sync_gen)
+        return;
+    if (--state->transition_sync_pending <= 0)
+        transition_sync_start_held(state);
+}
+
+/* Called at arm time.  Returns true when the sync machinery owns the first
+ * frame - the output stays held, or its arrival completed the group and
+ * transition_sync_start_held submitted for everyone just now.  Returns false
+ * when the caller should submit normally (never a current-group member, or a
+ * capture output). */
+[[nodiscard]]
+static bool transition_sync_hold(struct wallpaper_state* state, struct wallpaper_output* output)
+{
+    if (!output->sync_member || output->sync_gen != state->transition_sync_gen
+        || output->reveal_process_capture_owned) {
+        transition_sync_unmark(state, output);
+        return false;
+    }
+    output->sync_member = false;
+    output->sync_held   = true;
+    if (--state->transition_sync_pending <= 0)
+        transition_sync_start_held(state); /* clears sync_held, frames submitted */
+    return true;
+}
+
 static void set_reveal_origin(struct wallpaper_output* output,
                               double                   center_top_left_x,
                               double                   center_top_left_y)
@@ -2690,6 +2800,7 @@ static void finalize_render(struct wallpaper_output* output)
     output->async_result     = (struct render_result){.fd = -1};
 
     if (output->render.flags & F_DEAD) {
+        transition_sync_unmark(state, output);
         if (res.fd >= 0)
             close(res.fd);
         /* Deferred teardown: the thread is joined, its completion CQE is
@@ -2725,6 +2836,7 @@ static void finalize_render(struct wallpaper_output* output)
     }
 
     if (!res.success) {
+        transition_sync_unmark(state, output);
         if (res.fd >= 0)
             close(res.fd);
         if (output->reveal_process_capture_owned)
@@ -2742,6 +2854,8 @@ static void finalize_render(struct wallpaper_output* output)
         /* The surface was reconfigured while this render was in flight;
          * relaunch at the current size instead of dropping the redraw. */
         launch_async_render(output);
+        if (!(output->render.flags & F_THREAD_ACTIVE))
+            transition_sync_unmark(state, output);
         return;
     }
 
@@ -2782,6 +2896,7 @@ static void finalize_render(struct wallpaper_output* output)
                     && walle_vk_output_upload(output->render.vk_output, res.fd, &standard, &glass);
 
     if (!uploaded) {
+        transition_sync_unmark(state, output);
         release_render_result(&res);
         walle_vk_output_abort_transition(output->render.vk_output);
         if (output->reveal_process_capture_owned)
@@ -2798,6 +2913,7 @@ static void finalize_render(struct wallpaper_output* output)
         launch_cache_maintenance_service();
     }
 
+    bool sync_held = false;
     if ((output->render.flags & F_TRANSITION_ON) && !first_boot) {
         output->render.t_state = T_STATE_ARMED;
 
@@ -2830,7 +2946,9 @@ static void finalize_render(struct wallpaper_output* output)
         float duration              = output->transition_duration > 0 ? output->transition_duration
                                                                       : DEFAULT_TRANSITION_DUR;
         output->render.duration_inv = 1.0f / duration;
+        sync_held                   = transition_sync_hold(state, output);
     } else {
+        transition_sync_unmark(state, output);
         output->render.t_state = T_STATE_RUNNING;
 
         struct timespec ts;
@@ -2858,7 +2976,7 @@ static void finalize_render(struct wallpaper_output* output)
                 update_wallpaper(output);
         } else if (result == RENDER_FRAME_FAILED && output->reveal_process_capture_owned)
             reveal_process_capture_fail(state, "capture first-boot frame did not render");
-    } else {
+    } else if (!sync_held) {
         if (output->frame_callback)
             wl_callback_destroy(output->frame_callback);
         output->frame_callback = nullptr;
@@ -2978,6 +3096,8 @@ static void update_wallpaper(struct wallpaper_output* o)
         o->current_item_index = (o->current_item_index + 1) % o->num_items;
     }
     launch_async_render(o);
+    if (o->render.flags & F_THREAD_ACTIVE)
+        transition_sync_mark(o->render.state, o);
 }
 
 /* -- Item List ----------------------------------------------------------- */
@@ -4490,6 +4610,10 @@ int main(int argc, char* argv[])
     bool wl_error = false;
 
     while (running) {
+        /* All update triggers dispatched within one loop turn share one
+         * transition-sync group; the flag re-opens lazily per turn. */
+        state.transition_sync_turn_open = false;
+
         /* Reap outputs whose teardown fully completed: dead, thread joined,
          * and both event-core slots released (no CQE can reference them). */
         struct wallpaper_output *output, *tmp_output;
