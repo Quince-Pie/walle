@@ -1825,7 +1825,16 @@ static VipsImage* glass_blur_image(VipsImage* source, const struct glass_blur_re
             cropped = expanded;
         }
 
-        layers[index] = cropped;
+        /* Materialize each layer ONCE.  Both layers are referenced twice
+         * below - the chroma-weighted sum and the luma-correction difference
+         * - and with the operation cache disabled a lazy layer re-runs its
+         * whole convolution pipeline per reference.  Same bytes, half the
+         * blur work. */
+        VipsImage* solid = vips_image_copy_memory(cropped);
+        g_object_unref(cropped);
+        if (solid == nullptr)
+            goto failed;
+        layers[index] = solid;
     }
     g_object_unref(value);
 
