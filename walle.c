@@ -178,8 +178,8 @@ constexpr double GLASS_BLUR_CLEAR_NARROW_SIGMA     = 0.7251;
 constexpr double GLASS_BLUR_CLEAR_WIDE_SIGMA       = 4.1829;
 constexpr double GLASS_BLUR_REGULAR_SIGMA          = 14.188;
 constexpr double GLASS_BLUR_REGULAR_WIDE_SIGMA     = 329.807;
-constexpr double GLASS_BLUR_REGULAR_WEIGHT_LIGHT   = 0.8846;
-constexpr double GLASS_BLUR_REGULAR_WEIGHT_DARK    = 0.5164;
+constexpr double GLASS_BLUR_REGULAR_WEIGHT_LIGHT   = 0.8983;
+constexpr double GLASS_BLUR_REGULAR_WEIGHT_DARK    = 0.5502;
 /* The chroma mixture, from the one backdrop that carries chroma. */
 constexpr double GLASS_BLUR_CLEAR_CHROMA_WEIGHT    = 0.0880;
 constexpr double GLASS_BLUR_REGULAR_CHROMA_LIGHT   = 0.5420;
@@ -207,10 +207,29 @@ static struct glass_blur_recipe glass_blur_for(enum glass_variant variant,
 {
     double points = (scale > 0 ? (double)scale : 1.0) / GLASS_CAPTURE_SCALE;
     if (variant == GLASS_VARIANT_REGULAR) {
-        double narrow = GLASS_BLUR_REGULAR_WEIGHT_DARK
-                        + ((double)lightness
-                           * (GLASS_BLUR_REGULAR_WEIGHT_LIGHT
-                              - GLASS_BLUR_REGULAR_WEIGHT_DARK));
+        /* The narrow/wide luma weight, per appearance pole.  Overridable so
+         * the referee can grid it: the surface instrument showed the deep
+         * residual is ZERO along narrow == wide - where this weight has no
+         * effect at all, which is why the transfer stays pinned while this
+         * moves - and grows linearly in (narrow - wide) off it.
+         * The shipped pair was measured, not searched: the surface
+         * gives d(residual)/d(narrow-wide) directly, and dividing by
+         * the transfer's luma slope turns it into a weight step.  The
+         * referee then confirmed the prediction - half the step and
+         * twice the step are both worse.
+         * WALLE_NARROW_WEIGHT=0.8846,0.5164 replays the old mixture. */
+        double weight_light = GLASS_BLUR_REGULAR_WEIGHT_LIGHT;
+        double weight_dark  = GLASS_BLUR_REGULAR_WEIGHT_DARK;
+        const char* set     = getenv("WALLE_NARROW_WEIGHT");
+        if (set != nullptr) {
+            double l = 0.0, d = 0.0;
+            if (sscanf(set, "%lf,%lf", &l, &d) == 2) {
+                weight_light = l;
+                weight_dark  = d;
+            }
+        }
+        double narrow = weight_dark + ((double)lightness
+                                       * (weight_light - weight_dark));
         double chroma = GLASS_BLUR_REGULAR_CHROMA_DARK
                         + ((double)lightness
                            * (GLASS_BLUR_REGULAR_CHROMA_LIGHT
