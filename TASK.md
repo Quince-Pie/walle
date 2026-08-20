@@ -6443,3 +6443,48 @@ anti-correlated red<->cyan edge (each channel walks the warp in
 opposite directions in one shot), each with trajectory flats for exact
 per-channel inversion anchors.  Same session should settle the chroma
 weights under the warp - three open questions, one capture.
+
+## Session 195 (cont.): the boundary discontinuity was walle's own lens step
+
+Campaign 4 opened with a decomposition of the AA boundary class
+(instrument: analysis/measure_boundary_blend_curve.py, on the corpus-
+exact R8 masks): the residual carried a sawtooth in coverage - +5/+11
+codes just below m=0.5, -3/-5 just above - which the effective
+blend-curve read located ON WALLE'S SIDE: Apple's boundary pixel moves
+smoothly through half coverage; walle's jumped 0.19 (light) because
+the lens onset was step(0, insideRim) AT THE ANALYTIC CIRCLE - a
+70-100px inward displacement switching across one pixel as the
+center crossed the edge.
+
+The fix is geometry, not a constant: COVERAGE-CENTROID SAMPLING.
+True rasterization AA evaluates the covered sliver, whose centroid at
+coverage m sits m/2 device pixels inside the edge; walle now samples
+the depth-keyed laws (lens, rim; shadow at the uncovered centroid
+symmetrically) there on AA pixels only - full and zero coverage stay
+bit-identical by construction, and the reveal gate's apple-blend path
+is untouched (sha 8ac1bd7c, live gate pass).
+
+With the mechanism in place the aaHump constants - fitted WITH the
+step - were re-projected on the coded sweeps (natural stays the
+holdout): regular 19.17/31.0 -> 13.71/27.47, clear 25.13/28.7 ->
+14.62/17.31.  Clear's hump was ~40% lens-step compensation.
+
+Referee (vs the warp-default epoch): natural edges improve ACROSS THE
+BOARD (cd 1.86->1.77, cl 1.84->1.71, rd 5.10->4.94, rl 3.52->3.51),
+coded clear edges 3.05->2.84 / 2.39->2.12, regular coded edges flat
+(9.83/9.93; worst up-tick +0.04), headlines identical
+(1.37/2.13/3.98 and 0.85/1.29/1.79).  The boundary sawtooth is
+flattened to [-1.8, +4.9] with a mild rising tilt toward m=1.
+
+What remains of the regular ~9.9 coded edge is TEXTURE (12-17 rms
+with state-means removed) plus a channel structure (R +6/+12 above
+G/B at the boundary).  Sharpened lead: the mask is corpus-exact, so
+the texture is CONTENT sampled wrong at the boundary - and the lens
+profile below depth 1 capture px (where the centroid samples land)
+has never been measured; walle extrapolates a diverging 1/(u+12.62)
+there.  A sub-depth-1 lens measurement is the next instrument.
+
+Build-chain gotcha, recorded because it burned a referee run:
+`make | grep -cE "error|warning"` exits 1 when the count is 0, so
+`&&`-chaining a second make after it silently skips the rebuild - the
+first "centroid" scores were rendered by a stale release binary.

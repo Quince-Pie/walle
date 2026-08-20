@@ -467,6 +467,24 @@ float4 composeFragment(
     // with the early-out above, which needs the shadow's reach in the same
     // units.
     float insideRim = (radiusPixels - distancePixels) / lensUnit;
+    // Coverage-centroid sampling at the AA boundary (session 195): walle
+    // evaluates the material once at the PIXEL CENTER and blends by mask
+    // coverage, so the lens's onset (step at insideRim = 0 below) and the
+    // rim's depth switch discontinuously as the center crosses the analytic
+    // circle - the R8-keyed blend-curve instrument reads walle jumping at
+    // m = 0.5 where Apple moves smoothly.  True rasterization AA evaluates
+    // the covered sliver, whose centroid for a straight edge at coverage m
+    // sits m/2 DEVICE pixels inside the edge.  Sampling the material's
+    // depth-keyed laws there is continuous with the interior (at m = 1 the
+    // centroid depth is 0.5 px <= any interior center depth) and leaves
+    // full-coverage pixels byte-identical.  No fitted constants.
+    bool aaBoundary = mask > 0.0 && mask < 1.0;
+    float insideRimMaterial = aaBoundary
+        ? max(insideRim, (0.5 * mask) / lensUnit)
+        : insideRim;
+    float outsideDepthShadow = aaBoundary
+        ? max(-insideRim, (0.5 * (1.0 - mask)) / lensUnit)
+        : -insideRim;
 
     // The edge's own laws, for this variant.  `clear` casts no shadow and its
     // fitted law is the identity, so the branch is only about which numbers
@@ -478,8 +496,8 @@ float4 composeFragment(
         edgeDark = kEdgeRegularDark;
         edgeLight = kEdgeRegularLight;
     }
-    float rimBlend = lerp(rimWeight(insideRim, edgeDark),
-                          rimWeight(insideRim, edgeLight), lightness);
+    float rimBlend = lerp(rimWeight(insideRimMaterial, edgeDark),
+                          rimWeight(insideRimMaterial, edgeLight), lightness);
 
     // The lens, for BOTH variants.  It used to run only for `clear`, on the
     // reasoning - shaders/frag.glsl:41 - that "the regular variant transmits
@@ -507,11 +525,11 @@ float4 composeFragment(
     // rather than merely gated: outside the element the raw value is negative,
     // and it passes through -12.62 exactly, where the denominator is zero.
     // Multiplying that infinity by a zero gate gives a NaN, not a zero.
-    float inside = max(insideRim, 0.0);
+    float inside = max(insideRimMaterial, 0.0);
     float remaining = max(kLensBandCapturePixels - inside, 0.0);
     float bend = lensUnit * kLensAmplitude * pow(remaining, kLensProfilePower)
         / (inside + kLensProfileOffset)
-        * step(0.0, insideRim);
+        * step(0.0, insideRimMaterial);
     float2 displacementUv = -float2(normalOut.x, -normalOut.y) * bend * pixelToUv;
 
     // The refraction displaces the backdrop the material samples, which is
@@ -596,8 +614,8 @@ float4 composeFragment(
     float3 shadowSrgb = lerp(
         edgeTransfer(backgroundSrgb, edgeDark.shadow),
         edgeTransfer(backgroundSrgb, edgeLight.shadow), lightness);
-    float shadowBlend = lerp(shadowWeight(-insideRim, edgeDark),
-                             shadowWeight(-insideRim, edgeLight), lightness);
+    float shadowBlend = lerp(shadowWeight(outsideDepthShadow, edgeDark),
+                             shadowWeight(outsideDepthShadow, edgeLight), lightness);
     // Amplitude term, measured mask-anchored on the wallpaper sweeps: with
     // both sides profiled in bands at the exact ladder radii, walle's shadow
     // is flat per band (+-0.1 across eleven states - the earlier "decay" was
@@ -626,9 +644,12 @@ float4 composeFragment(
     // light; regular 19.17 dark / 31.0 light); the natural content is the
     // holdout.  In luma codes, applied to all channels; rides thickness
     // with the material.
+    // Refit under the coverage-centroid mechanism (session 195): the
+    // centroid sampling supplies the lens/rim share the old constants were
+    // absorbing (regular was 19.17/31.0, clear 25.13/28.7).
     float aaHumpA = regular > 0.5
-        ? lerp(19.17, 31.0, lightness)
-        : lerp(25.13, 28.7, lightness);
+        ? lerp(13.71, 27.47, lightness)
+        : lerp(14.62, 17.31, lightness);
     encoded += (aaHumpA / 255.0) * 4.0 * mask * (1.0 - mask) * thickness;
     encoded = saturate(encoded);
     // Dither disabled pending the flat-field verdict: Apple's settled
