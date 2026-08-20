@@ -7150,3 +7150,40 @@ grid in the GPU bake), composite it depth-keyed with Apple's tone map
 and blend mode, and refit the transfer jointly against the flat tables
 - whose own 500 pt element sits inside the bleed zone, which is why
 the current polynomial carries the bleed's flat contribution baked in.
+
+## Session 201 (coda): the bleed is NOT a depth-keyed mixture weight
+
+Before implementing an edge-confined bleed it had to be measured, not
+assumed.  analysis/measure_wide_field_weight_profile.py inverts Apple's
+settled frames through walle's own transfer (the numpy replica certified
+exact in session 199) to recover the mixed backdrop Apple must have had,
+then projects it onto the narrow/wide axis per depth bin:
+
+    lambda(depth) = <(M_apple - N).(B - N)> / <(B - N).(B - N)>
+
+    depth (pt)      0-30  30-70  70-130 130-210 210-310 310-450 450-650
+    regular/light  0.327  0.228  0.221  0.236  0.249  0.259  0.275
+    regular/dark   0.347  0.285  0.330  0.397  0.393  0.393  0.395
+
+The weight moves by only about +-20% and NOT monotonically - dark's even
+rises inward, toward walle's shipped constant.  So the edge-localised
+residual is NOT a depth-varying narrow/wide mixture, and the natural
+"edgeBleed as a depth-keyed weight" implementation is ruled out before a
+line of it was written.  (The absolute levels are consistent with what
+walle ships: this scalar projection mixes the luma and chroma weights,
+and 0.25 for light sits between 0.115 and 0.458, 0.39 for dark between
+0.388 and 0.484.)
+
+What the residual's shape does say: it is a VARIANCE that decays from
+the edge, not a mean offset - dark's mean residual is flat at -0.4 while
+its rms falls 9.31 -> 1.69.  Content-proportional error of that kind is
+the signature of a GEOMETRIC error, not a tonal one.  Apple's outer
+refraction lobe (outerHeight 80 pt = 160 capture px, outerAmount 128 at
+real sizes) is the candidate, and walle's whole lens is 35.58 capture
+px.  A radial cross-correlation probe settles it for `clear` - zero
+displacement at every depth from 45 to 700 capture px, ncc 0.9987-0.9997,
+so clear has no hidden lobe and walle's band is right there - but it
+cannot settle `regular`, whose own blur drops the correlation against
+the sharp wallpaper to 0.71-0.91 and makes the displacement estimate
+meaningless.  Resolving regular needs the probe run against the BLURRED
+backdrop instead; that is the next instrument.
