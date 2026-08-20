@@ -6664,3 +6664,48 @@ with it, the far field becomes measurable on arbitrary 2-D content
 (no line anchors needed), and the warp can be read on exactly the
 decorrelated statistics where the sweeps live.  Pull the cube shots +
 the noise-rgb statics next session.
+
+## Session 197: the gated class dies honestly; the 2-D noise instrument
+## validates the shipped pipeline to tenths
+
+The noise-gray statics became a 2-D instrument (scratchpad noise2d.py:
+FFT separable blurs with edge padding, the none-overlay shot as the
+pixel-exact backdrop, the exact flat tables as the transfer;
+geometry note - circle-0500 is 500 CAPTURE-PX RADIUS, an analysis box
+must stay r < ~450).  Two findings and a bug:
+
+  THE SHIPPED PIPELINE IS NEARLY EXACT ON 2-D NOISE: rms 0.06/0.09
+  (a016 holdout, dark/light), 0.3-0.4 on full-range gray noise,
+  1.0-1.9 on the mean-shifted block sets.  A loud validation of the
+  whole measured chain (code-space blurs, mixture, flat transfer) on
+  content it was never fitted to.
+
+  FINE GRAY NOISE IS WARP-BLIND: none/power/flip3/LUT agree to 0.01 -
+  sandwich warps cancel through the wide blur's averaging.  The warp
+  expresses only on LARGE-SCALE structure.
+
+  THE GATED LAW HAD A FIXED-POINT BUG: its un-warp keyed the gate on
+  the WARPED field's luma, so flats were not fixed points (0.8-code
+  offsets on near-flat noise) - in the fitter AND the shader.  Fixed
+  to a self-consistent inversion (gate on the un-warped field's own
+  luma, fixed-point iteration; verified dark a016 at the 0.057 floor)
+  and REFIT: light p=0.142 A=0.902 q=0.63, dark p=1.313 A=1.225
+  q=0.81 (statics totals 7.71/11.87, dark's i9 holdout passes 2.28).
+
+  AND THE HONEST LAW IS REJECTED HARDER: coded rl 2.217 -> 3.577,
+  natural rl 0.918 -> 2.814 (vs 2.423 for the buggy version).  The
+  scalar-luma-gated class is dead with no confound: flats exact,
+  constants refit under the exact shader semantics, both sweeps ~2x
+  worse.
+
+The mechanism hunt's honest state, three classes falsified by three
+different referees: pointwise per-channel (by the color lines),
+luma-only (by the isoluminant edge), scalar-luma-gated (by the
+sweeps, twice).  The true law must produce cross-channel
+line-dependent signatures on 1-D color edges, reduce to ~p-power
+behavior on large-gradient content, and vanish on fine noise.  The
+shipped p=0.40/1.34 per-channel power remains the only
+referee-clean form.  Queued: the noise-rgb statics (chroma-
+decorrelated noise, local) evaluated through the color-cube-9
+transfer (729 anchors, local) - the first instrument that can read
+the warp on 2-D chroma statistics.

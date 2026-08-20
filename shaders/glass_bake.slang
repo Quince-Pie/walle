@@ -190,7 +190,7 @@ float4 bakeWarpPow(BakeVertexOutput input, uniform BakePush push) : SV_Target0
     float3 warped;
     if (push.blur.y > 2.5)
     {
-        float g = clamp(push.mix.x * dot(kLuma, v), 0.0, 0.98);
+        float g = clamp(push.mix.x * pow(dot(kLuma, v), push.mix.y), 0.0, 0.98);
         warped = lerp(v, pow(v, push.blur.x), g);
     }
     else if (push.blur.y > 0.5)
@@ -236,23 +236,34 @@ float4 bakeMixFinal(BakeVertexOutput input, uniform BakePush push) : SV_Target0
     float3 far = farS.rgb;
     if (push.blur.x > 0.0 && push.blur.y > 2.5)
     {
-        // gated un-warp: g from the WARPED field's luma (the fitter's
-        // convention), then per channel solve (1-g) f + g f^p = w.
-        float g = clamp(push.matRow0.w * dot(kLuma, saturate(far)), 0.0, 0.98);
+        // gated un-warp, SELF-CONSISTENT (session 196 fix): the gate keys on
+        // the UN-warped far field's own luma, so uniform fields are exact
+        // fixed points.  Fixed-point iteration on Y around a bisection solve
+        // of (1-g) f + g f^p = w per channel.  A in matRow0.w, q in
+        // matRow1.w, p in blur.x.
         float p = push.blur.x;
         float3 w = saturate(far);
-        float3 lo = float3(0.0);
-        float3 hi = float3(1.0);
+        float3 f = w;
         [unroll]
-        for (int it = 0; it < 18; ++it)
+        for (int outer = 0; outer < 3; ++outer)
         {
-            float3 mid = 0.5 * (lo + hi);
-            float3 val = (1.0 - g) * mid + g * pow(mid, p);
-            bool3 below = val < w;
-            lo = select(below, mid, lo);
-            hi = select(below, hi, mid);
+            float g = clamp(
+                push.matRow0.w * pow(max(dot(kLuma, f), 0.0), push.matRow1.w),
+                0.0, 0.98);
+            float3 lo = float3(0.0);
+            float3 hi = float3(1.0);
+            [unroll]
+            for (int it = 0; it < 16; ++it)
+            {
+                float3 mid = 0.5 * (lo + hi);
+                float3 val = (1.0 - g) * mid + g * pow(mid, p);
+                bool3 below = val < w;
+                lo = select(below, mid, lo);
+                hi = select(below, hi, mid);
+            }
+            f = 0.5 * (lo + hi);
         }
-        far = 0.5 * (lo + hi);
+        far = f;
     }
     else if (push.blur.x > 0.0 && push.blur.z > 1.5)
     {

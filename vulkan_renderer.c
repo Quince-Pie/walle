@@ -2636,6 +2636,7 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
                                 : bake->cascade_flip     ? 1.0f
                                                          : 0.0f;
         warp.mix[0]           = bake->cascade_gate;
+        warp.mix[1]           = bake->cascade_gate_power;
         set                   = bake_set(renderer, t, t->full_a.view, t->full_a.view);
         if (set == VK_NULL_HANDLE)
             return false;
@@ -2770,6 +2771,7 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
         push.blur[0]     = bake->cascade_exponent;
         push.blur[1]     = 3.0f;
         push.mat_row0[3] = bake->cascade_gate;
+        push.mat_row1[3] = bake->cascade_gate_power;
     } else {
         push.blur[0] = cascade ? 1.0f / bake->cascade_exponent : 0.0f;
         push.blur[1] = cascade && bake->cascade_flip ? 1.0f : 0.0f;

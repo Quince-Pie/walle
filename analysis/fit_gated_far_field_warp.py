@@ -21,17 +21,22 @@ def far_gated(N, p, gk):
     Nv = np.clip(N, 0, 1)
     M = Nv + g[:, None] * (np.power(Nv, p) - Nv)
     Wm = np.stack([np.convolve(M[:, c], KW, mode="same") for c in range(3)], axis=1)
-    Yf = np.clip(Wm @ KLUMA, 0, 1)
-    gf = np.interp(Yf, GATE_Y, gk)
-    # invert per pixel: U(v, Y)=v+gf(v^p-v) monotone in v for gf in [0, ~1.6], p<1
-    Ug = VGRID[None, :] + gf[:, None] * (np.power(VGRID[None, :], p) - VGRID[None, :])
-    far = np.zeros_like(Wm)
-    for c in range(3):
-        idx = np.clip(np.array([np.searchsorted(Ug[i], Wm[i, c]) for i in range(Wm.shape[0])]), 1, 200)
-        x0 = VGRID[idx-1]; x1 = VGRID[idx]
-        rows = np.arange(Wm.shape[0])
-        y0 = Ug[rows, idx-1]; y1 = Ug[rows, idx]
-        far[:, c] = x0 + (np.clip(Wm[:, c], None, None) - y0) / np.maximum(y1 - y0, 1e-9) * (x1 - x0)
+    # self-consistent un-warp: the gate keys on the UN-warped far field's own
+    # luma (so uniform fields are exact fixed points); solve by fixed-point
+    # iteration on Y, with a monotone grid inversion inside each pass.
+    far = np.clip(Wm, 0, 1)
+    for _ in range(3):
+        Yf = np.clip(far @ KLUMA, 0, 1)
+        gf = np.interp(Yf, GATE_Y, gk)
+        Ug = VGRID[None, :] * (1 - gf[:, None]) + gf[:, None] * np.power(VGRID[None, :], p)
+        for c in range(3):
+            target = Wm[:, c]
+            idx = np.clip((Ug < target[:, None]).sum(axis=1), 1, 200)
+            rows_i = np.arange(Wm.shape[0])
+            y0 = Ug[rows_i, idx-1]; y1 = Ug[rows_i, idx]
+            x0 = VGRID[idx-1]; x1 = VGRID[idx]
+            far[:, c] = x0 + (target - y0) / np.maximum(y1 - y0, 1e-9) * (x1 - x0)
+        far = np.clip(far, 0, 1)
     return np.clip(far, 0, 1)
 
 # ---- colored instruments (forward-J)

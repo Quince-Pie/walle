@@ -1762,9 +1762,10 @@ static bool glass_bake_descriptor(enum glass_variant          variant,
      * local luma: light p=0.285 A=1.045 (lift toward white), dark p=1.313
      * A=1.983 (push toward black). */
     if (wide_mode == 7 && variant == GLASS_VARIANT_REGULAR) {
-        bool light            = lightness > 0.5;
-        out->cascade_exponent = light ? 0.285f : 1.313f;
-        out->cascade_gate     = light ? 1.045f : 1.983f;
+        bool light             = lightness > 0.5;
+        out->cascade_exponent  = light ? 0.142f : 1.313f;
+        out->cascade_gate      = light ? 0.902f : 1.225f;
+        out->cascade_gate_power = light ? 0.63f : 0.81f;
     }
     if ((wide_mode == 5 || wide_mode == 6) && variant == GLASS_VARIANT_REGULAR) {
         bool light            = lightness > 0.5;
