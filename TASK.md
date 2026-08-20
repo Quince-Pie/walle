@@ -6847,3 +6847,34 @@ and dominates the shipped form nowhere.  Both appearances agree: no
 transportable sandwich V beats the shipped per-channel power across
 the measured contexts.  /tmp/honest-V-{light,dark}.npy hold the
 fitted coefficients for the record.
+
+## Session 199: the quarantined divergence dissolves - it was output
+## clamping, and the model is exact
+
+The numpy-vs-GPU-bake mystery (10-19 codes at saturation) is SOLVED
+with a flat test: the transfer polynomial legitimately extrapolates
+past 255 on saturated flats (blue -> 355 R-predicted 315 on red, 290
+G on green) while walle's 8-bit output clamps - and every UNCLAMPED
+channel agrees with the model to +-0.4 codes (gray128 and blue's
+R/G exact).  T-inversion of a clamped channel is meaningless, and
+every inversion-based instrument silently broke there.
+
+With a clip mask (all channels in (0.5, 254.5) on both sides):
+
+  numpy chain vs GPU glass: 0.46 light / 0.43 dark rms - THE MODEL
+  IS EXACT.  Quarantine lifted; every model-based instrument's
+  foundation is validated end to end.
+  The honest cube deficit (valid anchors, 318/729 light, 539/729
+  dark): backdrop-space 5.02 / 4.72 rms (output-space 3.76 / 3.07),
+  sat-growing for light, appearance-mirrored means intact.
+
+RULE for every future inversion instrument: mask any anchor where
+either side has a channel at the rails; the polynomial is only a
+model of the UNCLIPPED response (the derivation itself drops clipped
+backgrounds whole - the instruments must too).
+
+The honest-V conclusions stand (those fits were forward-mode).  The
+cube deficit joins the bounded-residual ledger at its corrected
+magnitude.  Standing open items are now exactly two, both
+instrument-gated: the sub-depth-1 lens profile (campaign 4 tail,
+M1 boundary-phase ladder) and the i9 yellow-line audit.
