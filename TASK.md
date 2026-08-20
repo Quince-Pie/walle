@@ -6281,3 +6281,69 @@ the chain as the blur, re-derive the transfer (the exact flat tables
 already pin its diagonal - clear's is affine at sub-rounding) and the
 chroma weights from the coded/natural captures, then rescore.  The
 laws move together or not at all.
+
+## Session 194: the chain is dead, the asymmetry is real, the warp ships
+
+The planned joint refit died at its premise, and something better
+replaced it.  The exact flat tables enable an un-contaminated fit: on a
+gray step edge the interior is T(blur(backdrop)) with T monotonic and
+EXACT at 17 levels, so inverting T over the measured profile recovers
+Apple's actual blurred backdrop with NO free gain or offset - the
+affine freedom that manufactured the chain's -38%/-52% "win".
+Registration is pinned independently by the clear controls (affine T,
+tiny mixture): shift 0.00 on all four, at the white noise floor
+(rms 0.427).  Under that honest accounting
+(analysis/fit_backdrop_space_mixture.py):
+
+  CHAIN FALSIFIED: chain and two-Gaussian tie at the edge (light
+    8.657 vs 8.665, dark 13.996 vs 14.008 backdrop-rms).  The mip
+    chain was an artifact of the gain/offset freedom.  Session 193's
+    "both appearances converge to w~0.61" dies with it.
+  THE RESIDUAL IS AN ASYMMETRY: with registration locked, model A
+    (blur -> T) leaves rms 2.30 light / 4.31 dark, structured as an
+    appearance-keyed displacement-like warp (dark's edge reads ~+5px
+    toward the bright side; both axes agree; identical backgrounds, so
+    not registration; survives a smooth monotone T, so not chordal
+    interpolation error; tables are exactly neutral, so not tint).
+  GAMMA FAMILY FALSIFIED BY THE CHECKER: a power warp between blur
+    and transfer fits the edges (rms ~1.5 both) but predicts checker
+    interiors T(255*0.5^(1/gamma)); measured means sit on model A's
+    T(127.5) to tenths (light 218.7-219.0 vs A 218.84 / gamma 213.2;
+    dark 60.0-60.2 vs A 59.84 / gamma 66.1).  Whatever the mechanism
+    is, uniform fields are its fixed points.
+  CASCADE-WARP SURVIVES: far = warp^-1(wide(warp(narrow))), warp(x) =
+    x^p per channel - the wide field computed on the power-warped
+    narrow field.  Checker-safe by construction, fits the edges at
+    p=0.45 light (rms 0.70) / p=1.55 dark (1.12) with everything free,
+    and at p=0.40 (0.92) / p=1.34 (2.30) with the shipped mixture
+    constants HELD - the single-variable form.
+
+End-to-end referees (fresh baselines rescored same-epoch):
+
+  cascade (4 constants moved): coded 1.39 / natural 0.89 - REJECTED.
+  warp-only (shipped constants + p): coded 1.37/2.13/3.98 (tie, worst
+    a hair better; reg/light inside 3.669->3.640, reg/dark
+    2.863->2.893), natural 0.86/1.31/1.83 -> 0.85/1.29/1.79 (improved
+    on all three; reg/dark inside 1.922->1.867).  Clear, flats,
+    checkers untouched by construction.  The coded set is largely
+    warp-blind (fine structure = near-uniform at far-field scale,
+    like the checker), exactly as the mechanism predicts.
+
+SHIPPED as the default (walle.c wide_mode, GPU bake pass
+bakeWarpPow + un-warp in bakeMixFinal): the panel-space precedent -
+one variable, measured on ground truth, no regression on any
+instrument that can see it.  WALLE_GLASS_WIDE=gauss replays the
+un-warped law; =chain / =cascade keep the falsified/experimental
+variants for A/B.  The CPU replay (WALLE_GLASS_BAKE=cpu) still
+renders the pre-warp law - it was already a different mechanism
+(1.46 vs 1.43); noted, not fixed.
+
+Physical reading: the OS wide blur plausibly runs in a different
+tonal space than the narrow blur (hardware sRGB views on a
+downsample chain would do this for free), with the per-appearance
+exponent absorbing the material's plate/vibrancy processing between
+the two fields.  The exponents are pointwise and scale-invariant.
+
+Receipts: backdrop-space-mixture-26.6.1.json (registration + all
+three model fits + checker holdout, one command), m1-transition-25G76-
+{nodither-baseline,warp,cascade}-{coded,natural}.json.

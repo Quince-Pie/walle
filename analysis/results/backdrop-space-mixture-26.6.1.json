@@ -1,0 +1,92 @@
+{
+ "registration": [
+  {
+   "appearance": "light",
+   "axis": "x",
+   "shift": -0.0,
+   "rms": 0.4273
+  },
+  {
+   "appearance": "light",
+   "axis": "y",
+   "shift": -0.0,
+   "rms": 0.4273
+  },
+  {
+   "appearance": "dark",
+   "axis": "x",
+   "shift": -0.0,
+   "rms": 0.4273
+  },
+  {
+   "appearance": "dark",
+   "axis": "y",
+   "shift": -0.0,
+   "rms": 0.4273
+  }
+ ],
+ "regular": {
+  "light": {
+   "modelA": {
+    "rms": 2.304,
+    "w": 0.88,
+    "narrowSigma": 14.0,
+    "wideSigma": 250.0
+   },
+   "gammaFamily": {
+    "rms": 1.516,
+    "gamma": 0.82,
+    "w": 0.84,
+    "narrowSigma": 14.5,
+    "wideSigma": 360.0
+   },
+   "cascadeWarp": {
+    "rms": 0.7017,
+    "p": 0.45,
+    "w": 0.87,
+    "narrowSigma": 14.5,
+    "wideSigma": 420.0
+   },
+   "checkerHoldout": {
+    "predictA": 218.84,
+    "predictGamma": 213.22,
+    "measured": {
+     "0004": 219.0,
+     "0008": 218.75,
+     "0016": 218.71
+    }
+   }
+  },
+  "dark": {
+   "modelA": {
+    "rms": 4.3145,
+    "w": 0.49,
+    "narrowSigma": 12.5,
+    "wideSigma": 300.0
+   },
+   "gammaFamily": {
+    "rms": 1.4533,
+    "gamma": 1.28,
+    "w": 0.58,
+    "narrowSigma": 12.5,
+    "wideSigma": 250.0
+   },
+   "cascadeWarp": {
+    "rms": 1.1154,
+    "p": 1.55,
+    "w": 0.55,
+    "narrowSigma": 14.0,
+    "wideSigma": 250.0
+   },
+   "checkerHoldout": {
+    "predictA": 59.84,
+    "predictGamma": 66.09,
+    "measured": {
+     "0004": 60.0,
+     "0008": 60.11,
+     "0016": 60.16
+    }
+   }
+  }
+ }
+}

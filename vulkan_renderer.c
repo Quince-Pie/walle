@@ -89,6 +89,10 @@ alignas(4) static const uint8_t WALLE_VK_BAKE_CHAIN_UP_SPIRV[] = {
 #embed "build/shaders/bakeChainUp2.spv" if_empty(0)
 };
 
+alignas(4) static const uint8_t WALLE_VK_BAKE_WARP_SPIRV[] = {
+#embed "build/shaders/bakeWarpPow.spv" if_empty(0)
+};
+
 static const uint8_t WALLE_VK_REVEAL_RASTER_P25[] = {
 #embed "parity/raster_p25_selector_ceil_bits.bin" limit(2097152) if_empty(0)
 };
@@ -233,6 +237,7 @@ struct walle_vk_renderer
     VkPipeline            bake_mix_pipeline;
     VkPipeline            bake_chain_down_pipeline;
     VkPipeline            bake_chain_up_pipeline;
+    VkPipeline            bake_warp_pipeline;
     VkPipelineLayout      mask_pipeline_layout;
     VkPipelineLayout      compose_pipeline_layout;
     VkPipeline            mask_pipeline;
@@ -2079,6 +2084,8 @@ void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
             vkDestroyPipeline(renderer->device, renderer->bake_chain_down_pipeline, nullptr);
         if (renderer->bake_chain_up_pipeline)
             vkDestroyPipeline(renderer->device, renderer->bake_chain_up_pipeline, nullptr);
+        if (renderer->bake_warp_pipeline)
+            vkDestroyPipeline(renderer->device, renderer->bake_warp_pipeline, nullptr);
         if (renderer->bake_pipeline_layout)
             vkDestroyPipelineLayout(renderer->device, renderer->bake_pipeline_layout, nullptr);
         if (renderer->bake_set_layout)
@@ -2367,7 +2374,18 @@ static bool create_bake_resources(struct walle_vk_renderer* renderer)
                                        renderer->bake_pipeline_layout,
                                        VK_FORMAT_R32G32B32A32_SFLOAT,
                                        false,
-                                       &renderer->bake_chain_up_pipeline);
+                                       &renderer->bake_chain_up_pipeline)
+           && create_graphics_pipeline(renderer,
+                                       WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       sizeof WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       "bakeVertex",
+                                       WALLE_VK_BAKE_WARP_SPIRV,
+                                       sizeof WALLE_VK_BAKE_WARP_SPIRV,
+                                       "bakeWarpPow",
+                                       renderer->bake_pipeline_layout,
+                                       VK_FORMAT_R32G32B32A32_SFLOAT,
+                                       false,
+                                       &renderer->bake_warp_pipeline);
 }
 
 struct bake_push
@@ -2574,7 +2592,38 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
     bake_pass(cmd, renderer, renderer->bake_convert_pipeline, set, &push, &t->full_a);
 
     const struct walle_vk_image* wide_source = &t->low_a;
-    if (bake->chain_levels > 0) {
+    bool cascade = bake->cascade_exponent > 0.0f;
+    if (cascade) {
+        /* Cascade-warp order (session 194): narrow blur FIRST, then the wide
+         * field is computed on the power-warped narrow field (down8 + wide
+         * Gaussian in warped space) and un-warped in the mix.  Uniform
+         * fields are fixed points of the warp, so the flat-field calibration
+         * is untouched; long-range gradients pick up the measured
+         * per-appearance asymmetry. */
+        push.blur[0] = bake->narrow_sigma;
+        push.blur[1] = bake_kernel_radius(bake->narrow_sigma);
+        push.blur[2] = 1.0f;
+        set          = bake_set(renderer, t, t->full_a.view, t->full_a.view);
+        if (set == VK_NULL_HANDLE)
+            return false;
+        bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_b);
+        push.blur[2] = 0.0f;
+        set          = bake_set(renderer, t, t->full_b.view, t->full_b.view);
+        if (set == VK_NULL_HANDLE)
+            return false;
+        bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_a);
+        struct bake_push warp = push;
+        warp.blur[0]          = bake->cascade_exponent;
+        set                   = bake_set(renderer, t, t->full_a.view, t->full_a.view);
+        if (set == VK_NULL_HANDLE)
+            return false;
+        bake_pass(cmd, renderer, renderer->bake_warp_pipeline, set, &warp, &t->full_b);
+        struct bake_push down = push;
+        set                   = bake_set(renderer, t, t->full_b.view, t->full_b.view);
+        if (set == VK_NULL_HANDLE)
+            return false;
+        bake_pass(cmd, renderer, renderer->bake_down_pipeline, set, &down, &t->low_a);
+    } else if (bake->chain_levels > 0) {
         /* The measured mip chain (session 193): gauss5-prefiltered 2x rounds
          * down off the converted field, an optional Gaussian on the coarsest
          * grid, tent rounds back up to full resolution. */
@@ -2633,23 +2682,25 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
 
     /* Narrow blur H (full_a -> full_b), V (full_b -> full_a): full_a then
      * holds the NEAR layer.  Runs after the downsamples, which need the
-     * unblurred converted field. */
-    push.blur[0] = bake->narrow_sigma;
-    push.blur[1] = bake_kernel_radius(bake->narrow_sigma);
-    push.blur[2] = 1.0f;
-    push.mix[2]  = 1.0f / (float)w;
-    push.mix[3]  = 1.0f / (float)h;
-    set          = bake_set(renderer, t, t->full_a.view, t->full_a.view);
-    if (set == VK_NULL_HANDLE)
-        return false;
-    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_b);
-    push.blur[2] = 0.0f;
-    set          = bake_set(renderer, t, t->full_b.view, t->full_b.view);
-    if (set == VK_NULL_HANDLE)
-        return false;
-    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_a);
+     * unblurred converted field.  (The cascade path ran it first, above.) */
+    if (!cascade) {
+        push.blur[0] = bake->narrow_sigma;
+        push.blur[1] = bake_kernel_radius(bake->narrow_sigma);
+        push.blur[2] = 1.0f;
+        push.mix[2]  = 1.0f / (float)w;
+        push.mix[3]  = 1.0f / (float)h;
+        set          = bake_set(renderer, t, t->full_a.view, t->full_a.view);
+        if (set == VK_NULL_HANDLE)
+            return false;
+        bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_b);
+        push.blur[2] = 0.0f;
+        set          = bake_set(renderer, t, t->full_b.view, t->full_b.view);
+        if (set == VK_NULL_HANDLE)
+            return false;
+        bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_a);
+    }
 
-    if (bake->chain_levels > 0) {
+    if (!cascade && bake->chain_levels > 0) {
         /* Tent rounds back up: levels[n-1] -> ... -> levels[0] -> full_b. */
         int levels = bake->chain_levels > 7 ? 7 : bake->chain_levels;
         for (int k = levels - 1; k >= 0; --k) {
@@ -2683,8 +2734,11 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
         wide_source = &t->low_a;
     }
 
-    /* Mixture + back conversion into the sRGB glass image. */
+    /* Mixture + back conversion into the sRGB glass image.  blur.x carries
+     * the cascade far-field un-warp exponent (0 = off) - it must be set
+     * explicitly here since earlier passes left a sigma in that lane. */
     bake_push_matrix(&push, bake->from_panel);
+    push.blur[0] = cascade ? 1.0f / bake->cascade_exponent : 0.0f;
     push.mix[0] = bake->narrow_weight;
     push.mix[1] = bake->narrow_chroma_weight;
     set         = bake_set(renderer, t, t->full_a.view, wide_source->view);

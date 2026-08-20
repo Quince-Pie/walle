@@ -54,7 +54,7 @@ SPIRV_TARGETS ::= $(SPIRV_DIR)/maskVertex.spv $(SPIRV_DIR)/maskFragment.spv \
 	$(SPIRV_DIR)/bakeVertex.spv $(SPIRV_DIR)/bakeConvertForward.spv \
 	$(SPIRV_DIR)/bakeBlur.spv $(SPIRV_DIR)/bakeDownsample8.spv \
 	$(SPIRV_DIR)/bakeMixFinal.spv $(SPIRV_DIR)/bakeChainDown2.spv \
-	$(SPIRV_DIR)/bakeChainUp2.spv
+	$(SPIRV_DIR)/bakeChainUp2.spv $(SPIRV_DIR)/bakeWarpPow.spv
 SPIRV_DEPS ::= $(SPIRV_TARGETS:%=%.d)
 
 # 3. Toolchain and C23 Compliance Flags
@@ -449,6 +449,11 @@ $(SPIRV_DIR)/bakeChainDown2.spv: $(SHADER_DIR)/glass_bake.slang Makefile | $(SPI
 $(SPIRV_DIR)/bakeChainUp2.spv: $(SHADER_DIR)/glass_bake.slang Makefile | $(SPIRV_DIR)
 	@echo "[SLANG] $@"
 	$(SLANGC) $< -entry bakeChainUp2 -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
+	$(SPIRV_VAL) --target-env vulkan1.4 $@
+
+$(SPIRV_DIR)/bakeWarpPow.spv: $(SHADER_DIR)/glass_bake.slang Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $@"
+	$(SLANGC) $< -entry bakeWarpPow -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
 	$(SPIRV_VAL) --target-env vulkan1.4 $@
 
 $(SPIRV_DIR)/bakeMixFinal.spv: $(SHADER_DIR)/glass_bake.slang Makefile | $(SPIRV_DIR)

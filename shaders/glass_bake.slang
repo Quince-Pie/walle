@@ -175,15 +175,28 @@ float4 bakeChainUp2(BakeVertexOutput input, uniform BakePush push) : SV_Target0
     return sourceA.Sample(linearSampler, sourceUv);
 }
 
+// Pointwise tonal warp for the cascade far field (session 194): the wide
+// blur runs in a power-warped copy of panel code space, out = in^p per
+// channel.  Exponent in blur.x.
+[shader("fragment")]
+float4 bakeWarpPow(BakeVertexOutput input, uniform BakePush push) : SV_Target0
+{
+    float3 v = max(sourceA.Sample(linearSampler, input.uv).rgb, 0.0);
+    return float4(pow(v, push.blur.x), 1.0);
+}
+
 // Final pass: mixture in code space, then back to linear light for the sRGB
 // attachment's hardware encode.
 //   out = wC*near + (1-wC)*far + (wL-wC) * luma(near - far)
+// blur.x, when positive, is the cascade far field's un-warp exponent (1/p).
 [shader("fragment")]
 float4 bakeMixFinal(BakeVertexOutput input, uniform BakePush push) : SV_Target0
 {
     static const float3 kLuma = float3(0.2126, 0.7152, 0.0722);
     float3 near = sourceA.Sample(linearSampler, input.uv).rgb;
     float3 far = sourceB.Sample(linearSampler, input.uv).rgb; // bilinear 8x up
+    if (push.blur.x > 0.0)
+        far = pow(max(far, 0.0), push.blur.x);
     float wLuma = push.mix.x;
     float wChroma = push.mix.y;
     float3 mixed = wChroma * near + (1.0 - wChroma) * far

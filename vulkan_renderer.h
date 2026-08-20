@@ -107,6 +107,11 @@ struct walle_vk_glass_bake
      * rounds back up, with an optional Gaussian on the coarsest grid. */
     int   chain_levels;
     float chain_coarse_sigma;
+    /* > 0: the cascade-warp mechanism (session 194) - the wide Gaussian runs
+     * on the NARROW-blurred field power-warped per channel by this exponent,
+     * and the far sample is un-warped in the mix.  Uniform fields are fixed
+     * points, so the flat calibration is untouched. */
+    float cascade_exponent;
 };
 
 [[nodiscard]]

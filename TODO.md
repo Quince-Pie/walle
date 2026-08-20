@@ -176,20 +176,29 @@ remaining 1.43 codes are pure implementation distance with no
 measurement floor beneath them. Method per the GPU-bake result: match
 the MECHANISM, verify on controlled fields, judge by the gates.
 
-- [ ] Crack the dither/quantization pattern — Apple's ~0.5-code output
-      texture is a fixed deterministic function with exact samples on
-      every flat field ever captured. The mask-crack playbook applies:
-      extract the pattern, identify the generator (ordered matrix,
-      position hash, value-threshold), reproduce it bit-exactly, ship
-      behind an env A/B.
-- [ ] The real blur mechanism — replace the fitted Gaussian mixture
-      with the downsample-chain Apple's own "bleed" naming implies;
-      candidate chain shapes scored against the step-edge and sweep
-      captures that measured the current kernels.
-- [ ] The native transfer form — with the true blur mechanism in
-      place, reduce the cross-validated transfer polynomials to
-      Apple's actual (presumably simple) operation in its native
-      space.
+- [x] Crack the dither/quantization pattern — CLOSED session 193:
+      Apple does NOT dither (flat interiors are single codes at
+      >0.9999 dominant fraction; the ~0.5-code texture was plain
+      rounding).  walle's triangular dither was injected noise and is
+      removed (coded 1.43->1.37, natural 0.93->0.86).
+- [x] The real blur mechanism — CLOSED session 194, in two moves:
+      (1) the mip-chain hypothesis is FALSIFIED (it tied the
+      two-Gaussian at the edge once the exact flat tables retired the
+      fitters' free gain/offset; the -38%/-52% "win" was affine
+      contamination); (2) the honest residual was an appearance-keyed
+      ASYMMETRY, cracked as the FAR-FIELD TONAL WARP: the wide field
+      runs in a power-warped code space (p 0.40 light / 1.34 dark),
+      checker/flat/clear fixed points, edges 2.31->0.92 / 4.32->2.30,
+      natural 0.86->0.85, coded tied.  SHIPPED as default
+      (WALLE_GLASS_WIDE=gauss replays).  Instrument:
+      analysis/fit_backdrop_space_mixture.py.
+- [ ] The native transfer form — regular's flat law is a near-shared
+      power (~0.84); the warp discovery says the pipeline has TWO
+      tonal spaces, so re-derive the transfer's split across them
+      (clear's exact affine already closed).  The edge rms floor
+      under the shipped-constants warp (0.92/2.30 vs noise 0.43)
+      is the open signal: refit w/sigmas jointly with p on the edges,
+      then re-referee end-to-end.
 - [ ] The edge band's remaining texture — after the AA mean law, the
       structured residual on the boundary rows via the R8-keyed
       instrument.
