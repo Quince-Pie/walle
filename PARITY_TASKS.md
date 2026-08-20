@@ -40,12 +40,11 @@ Shares of total squared error, from `analysis/error_budget.py`.
 Two structural facts cut across those cells:
 
 * **the lever arm.** Deep inside, the residual is flat where `narrow` and
-  `wide` agree and ~3x higher where they disagree (coded light 1.06 -> 3.12
-  across |narrow-wide| 9-16 -> 90-140; natural dark 0.81 -> 1.73). Over all
-  depths the growth is milder and high-lever pixels carry 36-38% of coded
-  interior MSE, 26-27% of natural. Flattening it entirely is worth ~10% of
-  interior rms. **Cause unknown** - the multi-tap explanation was withdrawn
-  when the parameters stopped supporting it.
+  `wide` agree and ~3x higher where they disagree. CAUSE FOUND and the linear
+  part shipped (P2-1): it is the mixture weight, and the surface proves the
+  transfer exact along the diagonal. A quadratic term remains, real at large
+  |narrow - wide| and sign-flipping between appearances, deliberately
+  unfitted.
 * **the transfer at the extremes.** Binned by output luma at depth >= 450,
   natural/regular/light reads 1.44 / 0.79 / 0.71 / 1.64 across luma
   175-195 / 195-215 / 215-235 / 235-256 while `clear` reads ~0.85 flat. Mid
@@ -125,9 +124,18 @@ compromise: the required weight at the boundary is 1.03 (saturated), 1.11
 is still missing - the composited-screen candidate for it was falsified.
 
 **P2-4. The saturated dark 50-450 px band** - 53% of that capture's error,
-rms 6.5-9.6, DC share 35-85%. Its DC part reverses sign with the wallpaper
-pair, so it is still seam-family, but the shipped constant cannot follow the
-required depth profile.
+rms 6.5-9.6. Keeps its size, has lost its explanation. Its DC part reverses
+sign with the wallpaper pair so THAT part is seam-family, but DC is only 35%
+of the energy at 120-250 px and the seam basis - optimally gained - removes
+about a tenth of the variance. Ruled out for this band: the kernel geometry
+(exact disc ties or loses against the straight-edge approximation, #21), a
+global chroma scale, a chroma-magnitude law (coded light and dark trend in
+OPPOSITE directions on the same wallpaper, #22), and the transfer (the
+surface proves it exact along the diagonal).
+NEXT INSTRUMENT, not next law: the luma surface cannot diagnose this band
+because the saturated wallpapers' luma range is too narrow to populate the
+grid. It needs a chroma-space analogue - a real 2-D read over the chroma
+plane, not a projection onto one direction, which is precisely what failed.
 
 ## P3 - decode work
 
