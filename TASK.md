@@ -7052,3 +7052,43 @@ OFF by default; WALLE_RIM_DIR=1 replays it.
 
 Default verified unchanged after all four experiments: coded
 1.36/2.13/3.98, gates green.
+
+## Session 201 (close): the face composite recovered to ~90%, and the
+## blur proven size-invariant in the rendered result
+
+The YCC struct is not three scalars - it carries three SwiftUI resolved
+colours after black/white/saturation: `normalFill`, `dodgeFill` and
+`burnFill`.  Decoding them at real element sizes gives the face's
+actual composite:
+
+  regular_light  ycc(0.50, 1.03, sat 1.00)  normalFill white  a = 0.40
+  regular_dark   ycc(0.20, 0.60, sat 1.00)  normalFill black  a = 0.40
+  clear          ycc(0.075, 1.15, sat 1.06) normalFill white  a = 0.00
+  (dodge and burn are nil in every case; the `_nil` table's a = 0.25
+   and ycc 0.85 were the no-geometry defaults again)
+
+Model: out = 0.97 * [(1-a) * (black + (white-black) * in) + a * fill],
+in sRGB code space.  Against the exact flat tables:
+
+  clear          [19, 255] predicted, [19, 255] measured   EXACT
+  regular_light  [173, 252] predicted, [179, 250] measured  -5.9/+1.8
+  regular_dark   [ 30,  89] predicted, [ 15,  94] measured  +14.7/-5.0
+
+Clear is exact and regular is structurally right but a few codes off,
+so walle's fitted polynomial (0.5-0.7 rms held out) still ships.  What
+this settles is the FORM: Apple's material colour is a luma
+black/white remap with a chroma saturation and a flat fill composited
+over it - not a polynomial - and clear's whole law is two constants.
+The prediction from walle's own measured table (a = 0.447 from the
+offset, 0.459 from the slope) landed within 15% of Apple's 0.40 before
+the fills were decoded, which is what makes the form credible.
+
+AND THE BLUR DOES NOT SCALE WITH THE ELEMENT.  edgeBleed.amount and
+height are size * 0.35 in the table, which predicts a wide layer that
+grows with the disc - walle bakes a fixed one.  The cube settles it:
+the same 27x27 colour cube under a 500 pt element and under a 4000 pt
+element renders its deep interior identically (central 300x300 rms
+0.90 light / 1.06 dark, central 600x600 1.52 / 1.54) and its tile
+boundaries agree to 0.1 codes.  An eightfold change in element size
+moves the rendered blur not at all.  walle's fixed sigma stands, and
+the corpus's radius-invariance findings are confirmed a second way.
