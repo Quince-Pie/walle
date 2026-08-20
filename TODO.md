@@ -195,10 +195,16 @@ the MECHANISM, verify on controlled fields, judge by the gates.
 - [ ] The native transfer form — regular's flat law is a near-shared
       power (~0.84); the warp discovery says the pipeline has TWO
       tonal spaces, so re-derive the transfer's split across them
-      (clear's exact affine already closed).  The edge rms floor
-      under the shipped-constants warp (0.92/2.30 vs noise 0.43)
-      is the open signal: refit w/sigmas jointly with p on the edges,
-      then re-referee end-to-end.
+      (clear's exact affine already closed).  Known tension, session
+      194: the edge-optimal constants (free joint fit = the `cascade`
+      variant, edge rms 0.70/1.12) LOSE end-to-end (coded 1.39),
+      while the sweep-optimal shipped constants leave edge rms
+      0.92/2.30 vs the 0.43 noise floor — one constant set cannot yet
+      satisfy both referees, so the warp model is still incomplete.
+      Next leads: the warp's exact FORM (power vs sRGB-decode shape,
+      testable on the edges), and its per-channel/chroma coupling
+      (the structured-content per-channel constants are the candidate
+      symptom; the saturated/coded captures are the instrument).
 - [ ] The edge band's remaining texture — after the AA mean law, the
       structured residual on the boundary rows via the R8-keyed
       instrument.

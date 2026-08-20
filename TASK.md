@@ -6347,3 +6347,12 @@ the two fields.  The exponents are pointwise and scale-invariant.
 Receipts: backdrop-space-mixture-26.6.1.json (registration + all
 three model fits + checker holdout, one command), m1-transition-25G76-
 {nodither-baseline,warp,cascade}-{coded,natural}.json.
+
+Session 194 addendum - the warp's form, tested against exact curves on
+the edges (shipped constants held): LIGHT's exponent is statistically
+identical to one extra sRGB ENCODE (power 0.40 rms 0.922, pow(1/2.4)
+0.926, piecewise srgbEncode 0.939 - a hardware signature: the far
+field blurs doubly-encoded codes).  DARK's 1.34 matches NO canonical
+curve (srgbDecode 5.77, pow(2.4) 6.29 - not close), and its 2.30
+floor against the 0.43 noise says the form is still wrong there;
+dark's warp shape is the open thread of the transfer campaign.
