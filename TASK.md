@@ -6943,3 +6943,42 @@ refraction band by Apple's innerHeight/innerAmount ratios (regular
 fitted band's extent - the profile walle measured by grating phase
 stands.  WALLE_LENS=apple replays it; WALLE_SHADOW=symmetric replays
 the old shadow.
+
+## Session 200 (cont.): the amplitude fudge WAS the missing offset
+
+With the shadow's geometry corrected, walle's shadow came out ~18% too
+strong.  Regressing Apple's darkening against walle's over the outside
+band of the CODED sweeps (natural held out) returns k = 0.833 dark /
+0.695 light on the old gains - i.e. the correct gains are 1.041 and
+1.014.  Session 185's `shadowBlend *= lerp(1.25, 1.46, lightness)`,
+introduced because the flat-background fit "under-read the amplitude on
+real content", was compensating for the missing 8 pt offset all along.
+It is retired; the measured profile now stands on its own at unity.
+
+  Referee: full-frame improves on ALL FOUR regular sequences across
+  both sets - coded rd 1.840 -> 1.826, rl 2.218 -> 2.208; natural rd
+  1.130 -> 1.116, rl 0.914 -> 0.909.  Coded headline 1.37 -> 1.36,
+  natural worst frame 1.78 -> 1.77.  Coded outside/edge improve
+  throughout; the one counter-move is natural regular/light's edge
+  sub-band (3.300 -> 3.445) while its full frame still improves.
+  Clear untouched, gates green.
+
+  Cumulative for the session, against the pre-session baseline:
+    coded   regular/dark  full 1.845 -> 1.826, edge 9.826 -> 9.319
+    coded   regular/light full 2.217 -> 2.208, edge 9.933 -> 9.710
+    natural regular/dark  full 1.139 -> 1.116, edge 4.940 -> 4.449
+    natural regular/light full 0.918 -> 0.909, edge 3.507 -> 3.445
+
+ALSO FALSIFIED, cheaply: Apple's `refraction.outerOpacity = 0.3` over a
+6 pt outer lobe does NOT manifest as displacement of the background
+outside the boundary.  Cross-correlating Apple's frames against the
+outgoing wallpaper in rings 1-30 capture px outside the element returns
++0.25 px (the quantisation floor) at every depth for BOTH variants, at
+ncc 0.9994-0.9999.  walle's inside-only lens is correct.
+
+AND CONFIRMED: Apple's own numbers reproduce walle's pixel-measured
+narrow blur.  blur.radius / backdropScale = 2.6667 / 0.25 = 10.667 pt =
+21.33 capture px, and 21.33 / 1.5 = 14.222 against walle's fitted
+sigma of 14.188 - 0.24%.  The blur walle measured off step edges is the
+blur Apple configures, and the 1.5 is the usual CA radius-to-sigma
+convention.

@@ -656,7 +656,14 @@ float4 composeFragment(
     // The colour matrix and the depth profile are right; only the gain is
     // low - the flat-background edge fit under-reads the amplitude on real
     // content.  One factor per appearance, nothing else touched.
-    shadowBlend *= lerp(1.25, 1.46, lightness);
+    // Session 200: that amplitude deficit was the MISSING SHADOW OFFSET.
+    // With the shadow measured against the element displaced down by 8 pt
+    // (Apple's shadow.offset), the fitted profile no longer under-reads:
+    // regressing Apple's darkening against walle's over the outside band of
+    // the coded sweeps returns k = 0.833 (dark) / 0.695 (light) on the old
+    // gains, i.e. gains of 1.041 and 1.014 - unity to a few percent.  The
+    // 1.25/1.46 fudge is retired and the measured profile stands on its own.
+    shadowBlend *= lerp(1.0413, 1.0141, lightness);
     float3 shadowedBackground = srgbToLinear(lerp(
         backgroundSrgb, shadowSrgb, shadowBlend * thickness));
     // EXPERIMENT: the boundary blend happens in sRGB CODE space, like the
