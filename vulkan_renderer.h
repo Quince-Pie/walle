@@ -51,6 +51,8 @@ struct walle_vk_frame
     /* Apple's shadow.offset.height in POINTS (8.0); 0 restores walle's
      * radially symmetric shadow. */
     float                                       shadow_offset_points;
+    /* Scale on the measured directional rim modulation (0 = off). */
+    float                                       rim_directional;
 
     /* Optional diagnostic destination, tightly packed in top-left row order. */
     uint8_t* mask_readback;

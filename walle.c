@@ -1644,6 +1644,27 @@ static inline void cleanup_vips_thread(void)
  * symmetric shadow.  The shadow is therefore sampled against a circle
  * displaced DOWNWARD by 8 pt.  WALLE_SHADOW=symmetric replays the old
  * behaviour. */
+/* Scale on the measured directional rim term.  OFF by default: the
+ * modulation is unambiguous on the rig's FLOATING glass element (gray-128
+ * under a 500 pt circle: a first harmonic at phi = 315 deg, 13.76 codes for
+ * regular/dark at residual 0.38), but transplanting those amplitudes into
+ * the wallpaper reveal makes every edge band worse - coded clear 2.12 ->
+ * 2.40, natural regular/dark 4.45 -> 5.05 - and the reveal's own captures
+ * cannot confirm a directional term at all: fitting the same harmonic there
+ * returns residuals (11-19 codes) as large as the amplitudes, because the
+ * coded field's own structure dominates and the growing disc leaves the
+ * window so only 10-13 sectors survive.  The two configurations are not the
+ * same glass.  WALLE_RIM_DIR=1 replays the experiment. */
+static float glass_rim_directional_scale(void)
+{
+    static float cached = -2.0f;
+    if (cached < -1.0f) {
+        const char* v = getenv("WALLE_RIM_DIR");
+        cached        = v != nullptr ? (float)atof(v) : 0.0f;
+    }
+    return cached;
+}
+
 static int glass_shadow_offset_enabled(void)
 {
     static int cached = -1;
@@ -2948,6 +2969,7 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
              .lens_mode = glass_lens_apple_geometry() ? 1.0f : 0.0f,
              .shadow_offset_points
              = glass_shadow_offset_enabled() ? 8.0f : 0.0f,
+             .rim_directional = glass_rim_directional_scale(),
              /* Apple's `identity` variant leaves content unaffected, which is
               * exactly the mask-weighted crossfade the hardware corpus
               * measures - so it shares the gate's composition path.  The gate

@@ -511,6 +511,21 @@ float4 composeFragment(
     float rimBlend = lerp(rimWeight(insideRimMaterial, edgeDark),
                           rimWeight(insideRimMaterial, edgeLight), lightness);
 
+    // THE RIM IS DIRECTIONAL (session 201).  Apple's Parameters carry a
+    // `highlights` layer with a key and a fill lobe, and the captures show it
+    // plainly: on gray-128 under a 500 pt circle the outermost 3 capture px
+    // carry a cos(theta - phi) modulation with phi = 315 deg (bottom-right)
+    // in three of the four cases - clear/light 8.45 codes, clear/dark 7.62,
+    // regular/dark 13.76 (residual 0.38 - an almost pure first harmonic) -
+    // and regular/light runs the opposite way at 3.84.  Beyond ~3 px the
+    // sectors agree to the code, so the term rides the rim's own profile.
+    // walle's rim was a function of depth alone, at every angle.
+    // push.scaling.w scales it (0 = the old angularly uniform rim).
+    float rimDirectional = 0.70710678 * (normalOut.x - normalOut.y);
+    float rimDirectionalAmplitude = (regular > 0.5
+        ? lerp(13.76, -3.84, lightness)
+        : lerp(7.62, 8.45, lightness)) * push.scaling.w * (1.0 / 255.0);
+
     // The lens, for BOTH variants.  It used to run only for `clear`, on the
     // reasoning - shaders/frag.glsl:41 - that "the regular variant transmits
     // nothing, so it gets no lens at all", which rested on a blur model
@@ -548,13 +563,20 @@ float4 composeFragment(
     // 25% too strong.  Apple's ratios rescale it: the depth axis compresses by
     // 17.28/12.0 (the band ends at 24.7 px instead of 35.6) and the amplitude
     // scales by 38.4/48.0.  `clear` is left exactly as measured.
+    // Session 201: the per-variant reading was an artefact of the DEGENERATE
+    // parameter set.  Apple's Parameters are SIZE-DEPENDENT, and the table
+    // decoded first (`_nil`, no shape dimensions) is the no-geometry default.
+    // At real element sizes - and the wallpaper reveal's disc is enormous -
+    // refraction.innerHeight saturates at 20.0 pt for BOTH variants
+    // (innerAmount -60), which is exactly walle's own finding that the two
+    // variants share one lens.  20.0 pt = 40.0 capture px against walle's
+    // pixel-fitted 35.5796: the band is 12.4% wider than fitted.  The depth
+    // axis is rescaled so the profile keeps its measured near-edge
+    // displacement and reaches zero at 40 px instead of 35.58.
     float lensDepthScale = 1.0;
     float lensAmountScale = 1.0;
-    if (push.scaling.y > 0.5 && regular > 0.5)
-    {
-        lensDepthScale = 17.28 / 12.0;
-        lensAmountScale = 38.4 / 48.0;
-    }
+    if (push.scaling.y > 0.5)
+        lensDepthScale = kLensBandCapturePixels / 40.0;
     float inside = max(insideRimMaterial, 0.0) * lensDepthScale;
     float remaining = max(kLensBandCapturePixels - inside, 0.0);
     float bend = lensUnit * kLensAmplitude * lensAmountScale
@@ -597,6 +619,7 @@ float4 composeFragment(
                               edgeTransfer(washSrgb, edgeLight.rim), lightness);
         rimSrgb = applyTint(rimSrgb, push.material.yzw, lightness,
                             kRimTintRegularDark, kRimTintRegularLight);
+        rimSrgb += rimDirectionalAmplitude * rimDirectional;
         platterSrgb = lerp(platterSrgb, rimSrgb, rimBlend);
         glassColor = srgbToLinear(platterSrgb);
     }
@@ -614,6 +637,7 @@ float4 composeFragment(
                               edgeTransfer(preSrgb, edgeLight.rim), lightness);
         rimSrgb = applyTint(rimSrgb, push.material.yzw, lightness,
                             kRimTintClearDark, kRimTintClearLight);
+        rimSrgb += rimDirectionalAmplitude * rimDirectional;
         veiled = lerp(veiled, rimSrgb, rimBlend);
         glassColor = srgbToLinear(veiled);
     }

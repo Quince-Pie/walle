@@ -6982,3 +6982,73 @@ narrow blur.  blur.radius / backdropScale = 2.6667 / 0.25 = 10.667 pt =
 sigma of 14.188 - 0.24%.  The blur walle measured off step edges is the
 blur Apple configures, and the 1.5 is the usual CA radius-to-sigma
 convention.
+
+## Session 201: Apple's parameters are SIZE-DEPENDENT - and that retires
+## two of my own falsifications
+
+The base table decoded in session 200 turned out to be the DEGENERATE
+case.  `designlibrary_material_context_parameters` sweeps Material.
+Context.shapeDimensions and shows the whole Parameters table moving
+with the element's size; the case captured without dimensions
+(`regular_light_nil`) is the no-geometry default, and it is the one I
+had been reading.  At real sizes the numbers are different, and they
+saturate:
+
+  field                  _nil     127      640        law
+  blur.radius           2.667    6.429    8.000    min(8, size/21 + 0.381)
+  refraction.innerHeight 12.0     20.0     20.0    saturates at 20 pt
+  refraction.innerAmount -38.4    -60      -60     saturates at -60
+  refraction.outerHeight  6.0    15.875    80      size * 0.125
+  edgeBleed.amount/height 16.8   44.45     224     size * 0.35
+  edgeBleed.opacity        0     0.328     0.5 light / 0.8 dark
+  shadow.height          19.2    50.8      256     size * 0.4
+  shadow.amount            30      75       75     saturates at 75
+  shadow.opacity          0.5    0.324     0.25    saturates, BOTH
+                                                    appearances equal
+  shadow.shadowRadius       24      24       24    CONSTANT
+  faceEffects.ycc.black   0.85     0.50     0.50   (dark 0.10 -> 0.20)
+  shadow.offset.height     8.0     8.0      8.0    CONSTANT
+
+Three things fall out at once.
+
+  1. THE PER-VARIANT REFRACTION READING WAS AN ARTEFACT.  At real sizes
+     innerHeight is 20.0 pt for BOTH variants (innerAmount -60 for
+     both) - which is exactly walle's own grating-phase finding that
+     the two variants share one lens.  Session 200's falsification was
+     falsifying the degenerate table, not walle.
+  2. WALLE'S RADIUS-INVARIANCE MEASUREMENTS ARE EXPLAINED.  Everything
+     the corpus probed (R = 137..4305 capture px = 68..2150 pt) sits
+     ABOVE the saturation knees, so the parameters are constant over
+     exactly the range walle measured - and shadowRadius, the term that
+     sets the shadow's visible extent, is constant at every size.
+  3. THE SHADOW GAIN REFIT IS CORROBORATED.  At large sizes
+     shadow.opacity is 0.25 for BOTH appearances; session 200's
+     regression returned gains of 1.041 dark / 1.014 light - equal to
+     within 3% - after the offset was corrected.  Apple says they
+     should be equal, and the data agreed before I knew that.
+
+Apple's own band, tested anyway: innerHeight 20.0 pt = 40.0 capture px
+against walle's pixel-fitted 35.5796.  Rescaling the depth axis to end
+at 40 px is WORSE everywhere (coded clear edge 2.12 -> 2.83, regulars
+flat), so walle's fitted extent stands and `innerHeight` is not the
+extent of walle's profile family.  WALLE_LENS=apple replays it.
+
+THE RIM IS DIRECTIONAL ON A FLOATING ELEMENT - AND THAT DOES NOT
+TRANSPORT.  Apple's Parameters carry a `highlights` layer (key and fill
+lobes, spread pi/2, curvature 0.7, amount 0.5), and on the rig's static
+500 pt circle over gray-128 the outermost 3 capture px carry a clean
+first harmonic: clear/light 8.45 codes at 315 deg, clear/dark 7.62 at
+315, regular/dark 13.76 at 316 with residual 0.38, regular/light 3.84
+running the opposite way; beyond 3 px every sector agrees to the code.
+Implemented as a cos(theta - 315) modulation riding the rim profile, it
+makes the transition WORSE on both holdouts (coded clear edge 2.12 ->
+2.40, natural regular/dark 4.45 -> 5.05).  And the reveal's own frames
+cannot confirm the term: fitting the same harmonic on the sweeps
+returns residuals of 11-19 codes against amplitudes of 8-34, because
+the coded field's structure dominates the band and the growing disc
+leaves the window (only 10-13 of 24 sectors survive).  A floating
+glassEffect element and a wallpaper reveal are not the same glass.
+OFF by default; WALLE_RIM_DIR=1 replays it.
+
+Default verified unchanged after all four experiments: coded
+1.36/2.13/3.98, gates green.
