@@ -6598,3 +6598,36 @@ gate.  The joint fit that decides it: far = wide(N + gate(Y_N) *
 (W(N) - N)) with one monotone W and one gate, fitted simultaneously
 on the gray edges + il + i5 + rc through the forward-J referee
 (i9 quarantined until the yellow gamut question is settled).
+
+## Session 196 (close): ONE gated law fits all four instruments
+
+The deciding computation ran: far = U^-1(wide(U(N, Y_N)), Y_far) with
+U(v, Y) = v + gate(Y) (v^p - v) - one exponent, one gate curve -
+fitted jointly on the gray edges + rc + il + i5 through the exact
+flat tables and the measured Jacobians (i9 quarantined for the yellow
+gamut question).  The flats stay fixed points by construction (the
+un-warp keys on the blurred field's own luma).
+
+  FIT total 7.90: rc 3.52 / il 2.33 / i5 1.06 / gray 1.00
+  vs no-warp 15.54 (8.46/3.98/0.79/2.31)
+  vs ungated sandwich p=0.40 11.42 (6.37/2.32/1.81/0.92)
+
+Every instrument at or near its individual floor under ONE law - the
+first mechanism to survive all four lines.  rc's 3.52 beats every
+single-form fit ever measured there (LUT 4.16, flip3 4.35).
+
+And the fitted gate INVERTS the working hypothesis: gate(Y) = 0.00,
+0.00, 0.52, 0.70, 0.52, 0.69, 1.35 at Y = 0, .125, .25, .375, .5,
+.75, 1 with p = 0.25 - ZERO at low luma, RISING toward bright.  The
+far field's dark channel-values are lifted where the local luma is
+BRIGHT: a glare/bloom-shaped chroma law, not a shadow-side toe.  On
+isoluminant lines the constant luma makes the inner and outer gate
+agree and the sandwich cancels most of the warp - exactly why i5
+read as un-warped.  (Fitter: scratchpad fit_gated_warp.py; knots
+wiggly mid-curve - underdetermined there, monotone refit pending.)
+
+Queue for the next leg: monotone-gate refit with holdouts (slant,
+checkers, i9 after the gamut audit); a simpler closed form for
+gate(Y); dark's version of the same fit; then the GPU bake
+implementation (per-pixel luma in bakeWarpPow) and the sweep referee
+for the default.
