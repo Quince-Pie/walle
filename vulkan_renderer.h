@@ -112,6 +112,10 @@ struct walle_vk_glass_bake
      * and the far sample is un-warped in the mix.  Uniform fields are fixed
      * points, so the flat calibration is untouched. */
     float cascade_exponent;
+    /* With cascade_exponent > 0: apply the power to the INVERTED signal,
+     * warp(v) = 1 - (1-v)^p - light regular's measured identity (p = 3,
+     * session 195). */
+    bool  cascade_flip;
 };
 
 [[nodiscard]]

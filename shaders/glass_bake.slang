@@ -175,20 +175,26 @@ float4 bakeChainUp2(BakeVertexOutput input, uniform BakePush push) : SV_Target0
     return sourceA.Sample(linearSampler, sourceUv);
 }
 
-// Pointwise tonal warp for the cascade far field (session 194): the wide
-// blur runs in a power-warped copy of panel code space, out = in^p per
-// channel.  Exponent in blur.x.
+// Pointwise tonal warp for the cascade far field (sessions 194-195): the
+// wide blur runs in a power-warped copy of panel code space, per channel.
+// Exponent in blur.x; blur.y > 0.5 selects the FLIPPED form 1-(1-v)^p -
+// the same power law measured on the inverted signal (distance from
+// white), which is light regular's identity (p = 3).
 [shader("fragment")]
 float4 bakeWarpPow(BakeVertexOutput input, uniform BakePush push) : SV_Target0
 {
-    float3 v = max(sourceA.Sample(linearSampler, input.uv).rgb, 0.0);
-    return float4(pow(v, push.blur.x), 1.0);
+    float3 v = saturate(sourceA.Sample(linearSampler, input.uv).rgb);
+    float3 warped = push.blur.y > 0.5
+        ? 1.0 - pow(1.0 - v, push.blur.x)
+        : pow(v, push.blur.x);
+    return float4(warped, 1.0);
 }
 
 // Final pass: mixture in code space, then back to linear light for the sRGB
 // attachment's hardware encode.
 //   out = wC*near + (1-wC)*far + (wL-wC) * luma(near - far)
-// blur.x, when positive, is the cascade far field's un-warp exponent (1/p).
+// blur.x, when positive, is the cascade far field's un-warp exponent (1/p);
+// blur.y > 0.5 selects the flipped form's inverse 1-(1-y)^(1/p).
 [shader("fragment")]
 float4 bakeMixFinal(BakeVertexOutput input, uniform BakePush push) : SV_Target0
 {
@@ -196,7 +202,9 @@ float4 bakeMixFinal(BakeVertexOutput input, uniform BakePush push) : SV_Target0
     float3 near = sourceA.Sample(linearSampler, input.uv).rgb;
     float3 far = sourceB.Sample(linearSampler, input.uv).rgb; // bilinear 8x up
     if (push.blur.x > 0.0)
-        far = pow(max(far, 0.0), push.blur.x);
+        far = push.blur.y > 0.5
+            ? 1.0 - pow(saturate(1.0 - far), push.blur.x)
+            : pow(max(far, 0.0), push.blur.x);
     float wLuma = push.mix.x;
     float wChroma = push.mix.y;
     float3 mixed = wChroma * near + (1.0 - wChroma) * far

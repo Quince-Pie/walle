@@ -2614,6 +2614,7 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
         bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_a);
         struct bake_push warp = push;
         warp.blur[0]          = bake->cascade_exponent;
+        warp.blur[1]          = bake->cascade_flip ? 1.0f : 0.0f;
         set                   = bake_set(renderer, t, t->full_a.view, t->full_a.view);
         if (set == VK_NULL_HANDLE)
             return false;
@@ -2735,10 +2736,12 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
     }
 
     /* Mixture + back conversion into the sRGB glass image.  blur.x carries
-     * the cascade far-field un-warp exponent (0 = off) - it must be set
-     * explicitly here since earlier passes left a sigma in that lane. */
+     * the cascade far-field un-warp exponent (0 = off) and blur.y its flip
+     * flag - both must be set explicitly here since earlier passes left a
+     * sigma and radius in those lanes. */
     bake_push_matrix(&push, bake->from_panel);
     push.blur[0] = cascade ? 1.0f / bake->cascade_exponent : 0.0f;
+    push.blur[1] = cascade && bake->cascade_flip ? 1.0f : 0.0f;
     push.mix[0] = bake->narrow_weight;
     push.mix[1] = bake->narrow_chroma_weight;
     set         = bake_set(renderer, t, t->full_a.view, wide_source->view);

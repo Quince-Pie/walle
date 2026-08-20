@@ -6356,3 +6356,55 @@ field blurs doubly-encoded codes).  DARK's 1.34 matches NO canonical
 curve (srgbDecode 5.77, pow(2.4) 6.29 - not close), and its 2.30
 floor against the 0.43 noise says the form is still wrong there;
 dark's warp shape is the open thread of the transfer campaign.
+
+## Session 195: the warp extracted nonparametrically; light's form named
+
+The warp went from a fitted exponent to a measured FUNCTION.  With the
+shipped mixture constants held, W in far = W^-1(wide(W(narrow))) was
+extracted as a free monotone piecewise-linear curve (13 knots,
+second-difference smoothness; W is only identified up to affine maps,
+which the sandwich cancels).  Instrument:
+analysis/extract_far_field_warp.py.
+
+  BOTH appearances collapse to the same floor: light 0.777 / dark
+    0.792 rms (from 2.30 / 4.31 unwarped; clear noise floor 0.427),
+    with x- and y-edge extractions agreeing to |dW| <= 0.007.  A single
+    monotone warp around the wide field explains essentially the whole
+    honest edge residual.
+  LIGHT IS NAMED: W(v) = 1 - (1-v)^3 - the same power law applied to
+    the INVERTED signal (distance from white) - matches the free
+    extraction at its floor (0.770 vs 0.777) and is stable in q across
+    sigma_w at the shipped weight.  The material's polarity decides
+    the warp's polarity: light glass processes distance-from-white.
+  DARK RESISTS NAMING: the extracted W has a plateau at u ~ 0.6-0.7
+    that survives per-axis fits, every smoothness level, and a 16-point
+    joint (w, sigma_w) grid - it is not constant-leakage.  No simple
+    curve reproduces it (best parametric: 0.65u + 0.35u^2.4 at 2.04 vs
+    the LUT's 0.79).
+  THE SLANT EDGE IS THE HOLDOUT and it PASSES: a 12.8-degree edge the
+    fits never saw (per-row sub-pixel line fit, 0.25px residual; the
+    PCA-boundary approach lands 700px off - documented).  Light:
+    no-warp 2.56 -> flipped-cube 0.96; dark: no-warp 4.35 -> power-1.34
+    2.67 -> extracted LUT 1.10.  Dark's plateau generalizes to unseen
+    geometry: it is Apple structure, not overfit.
+  SATURATED SWEEPS: warp vs gauss byte-level identical scores
+    (3.29/7.97 and 3.29/7.80) - full-saturation fields are warp fixed
+    points; the extreme-chroma deficit is a different mechanism.
+  END-TO-END, the two holdouts DISAGREE about light's form: coded
+    prefers the flipped cube strongly (rl inside 3.640 -> 3.438, worst
+    3.98 -> 3.72), natural regresses (rl 0.918/1.382 -> 0.947/1.427,
+    worse than no-warp).  By the regression-on-none bar the default
+    STAYS p=0.40/1.34; the flipped cube ships behind
+    WALLE_GLASS_WIDE=flipcube (bakeWarpPow gained the flip form).  The
+    disagreement itself is the next measured fact: natural-light's
+    residual must be coupled to another law's error.
+
+Open, sharpened: dark's plateau mechanism (the LUT is measured and
+holdout-validated - a candidate to ship as a LUT even unnamed); the
+coded/natural split on light's warp; the per-channel/chroma coupling
+(saturated fields can't see the warp - a MID-saturation gradient
+instrument could).
+
+Receipts: far-field-warp-26.6.1.json,
+m1-transition-25G76-flipcube-{coded,natural}.json,
+m1-transition-25G76-sat{red,blue}-{warp,gauss}.json.

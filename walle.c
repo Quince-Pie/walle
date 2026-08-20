@@ -1692,15 +1692,17 @@ static bool glass_bake_descriptor(enum glass_variant          variant,
      * 3.99->3.98); checkers, flats and clear are fixed points.
      * WALLE_GLASS_WIDE=gauss replays the un-warped mixture; chain/cascade
      * are the falsified/experimental variants kept for A/B. */
-    static int wide_mode = -1; /* 0 gauss, 1 chain, 2 cascade, 3 warp (default) */
+    static int wide_mode = -1; /* 0 gauss, 1 chain, 2 cascade, 3 warp (default),
+                                * 4 flipcube */
     if (wide_mode < 0) {
         const char* mode = getenv("WALLE_GLASS_WIDE");
-        wide_mode        = mode == nullptr             ? 3
-                           : strcmp(mode, "gauss") == 0   ? 0
-                           : strcmp(mode, "chain") == 0   ? 1
-                           : strcmp(mode, "cascade") == 0 ? 2
-                           : strcmp(mode, "warp") == 0    ? 3
-                                                          : 3;
+        wide_mode        = mode == nullptr              ? 3
+                           : strcmp(mode, "gauss") == 0    ? 0
+                           : strcmp(mode, "chain") == 0    ? 1
+                           : strcmp(mode, "cascade") == 0  ? 2
+                           : strcmp(mode, "warp") == 0     ? 3
+                           : strcmp(mode, "flipcube") == 0 ? 4
+                                                           : 3;
     }
     if (wide_mode == 1 && variant == GLASS_VARIANT_REGULAR) {
         double points = (scale > 0 ? (double)scale : 1.0) / GLASS_CAPTURE_SCALE;
@@ -1726,11 +1728,24 @@ static bool glass_bake_descriptor(enum glass_variant          variant,
         out->wide_sigma       = (float)((light ? 420.0 : 250.0) * points);
     }
     /* The shipped default: mixture constants untouched, ONLY the far-field
-     * warp exponent added (the single-variable ship, like panel space).
-     * p refit on the edges under the shipped constants: light 0.40
-     * (rms 2.31->0.92), dark 1.34 (4.32->2.30). */
+     * warp added (the single-variable ship, like panel space).  p refit on
+     * the edges under the shipped constants: light 0.40 (rms 2.31->0.92),
+     * dark 1.34 (4.32->2.30); non-regressing on every referee. */
     if (wide_mode == 3 && variant == GLASS_VARIANT_REGULAR)
         out->cascade_exponent = lightness > 0.5 ? 0.40f : 1.34f;
+    /* Light's warp is NAMED (session 195): the flipped cube 1-(1-v)^3 -
+     * the same power law on the inverted signal - matching the
+     * nonparametric extraction at its floor (edge rms 0.77, slant holdout
+     * 0.96, coded-light inside 3.64->3.44) BUT the natural holdout's light
+     * sequences regress 0.918/1.382->0.947/1.427, so it stays behind
+     * WALLE_GLASS_WIDE=flipcube until the disagreement is understood.
+     * Dark's form is not yet named (extracted LUT with a robust u~0.65
+     * plateau reaches edge 0.79 / slant 1.10; the power 1.34 ships). */
+    if (wide_mode == 4 && variant == GLASS_VARIANT_REGULAR) {
+        bool light            = lightness > 0.5;
+        out->cascade_exponent = light ? 3.0f : 1.34f;
+        out->cascade_flip     = light;
+    }
     for (int i = 0; i < 9; ++i) {
         out->to_panel[i]   = (float)kGlassToPanelLinear[i];
         out->from_panel[i] = (float)kGlassFromPanelLinear[i];
