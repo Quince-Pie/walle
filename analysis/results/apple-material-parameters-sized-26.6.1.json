@@ -1,0 +1,2171 @@
+{
+ "osBuild": "25G76",
+ "schema": 2,
+ "note": "size-dependent table; _nil is a no-geometry default and is reported separately",
+ "fields": {
+  "backdropScale": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.25
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.25
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "_nil": 0.25
+  },
+  "blur.distances.0": {
+   "regular_light": {
+    "kind": "proportional",
+    "slope": -0.5,
+    "intercept": 0.0
+   },
+   "regular_dark": {
+    "kind": "proportional",
+    "slope": -0.5,
+    "intercept": 0.0
+   },
+   "clear_light": {
+    "kind": "proportional",
+    "slope": -0.5,
+    "intercept": 0.0
+   },
+   "clear_dark": {
+    "kind": "proportional",
+    "slope": -0.5,
+    "intercept": 0.0
+   },
+   "_nil": -24.0
+  },
+  "blur.distances.1": {
+   "regular_light": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "_nil": -1.0
+  },
+  "blur.distances.2": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "blur.distances.3": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "blur.opacities.0": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "blur.opacities.1": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "_nil": 0.5
+  },
+  "blur.opacities.2": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "_nil": 0.5
+  },
+  "blur.opacities.3": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "blur.opacities.4": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "blur.opacity": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "blur.radius": {
+   "regular_light": {
+    "kind": "affine-saturating",
+    "slope": 0.04761904761904767,
+    "intercept": 0.38095238095237427,
+    "ceiling": 8.0,
+    "kneeSize": 159.99999999999997
+   },
+   "regular_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      6.428571428571429
+     ],
+     [
+      143,
+      7.190476190476192
+     ],
+     [
+      640,
+      8.0
+     ]
+    ]
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 2.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 2.0
+   },
+   "_nil": 2.6666666666666665
+  },
+  "contentOpacity": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "contrastEdge.hdr": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "contrastEdge.opacity": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "contrastEdge.width": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "controlContentLensing.amount": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "controlContentLensing.height": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "controlContentLensing.inset": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "controlDisplacement.amount": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "controlDisplacement.height": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "controlDisplacement.inset": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "edgeBleed.amount": {
+   "regular_light": {
+    "kind": "proportional",
+    "slope": 0.35000000000000003,
+    "intercept": -7.105427357601002e-15
+   },
+   "regular_dark": {
+    "kind": "proportional",
+    "slope": 0.35000000000000003,
+    "intercept": -7.105427357601002e-15
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 16.799999999999997
+  },
+  "edgeBleed.blurRadius": {
+   "regular_light": {
+    "kind": "proportional-saturating",
+    "slope": 0.7000000000000002,
+    "intercept": -2.842170943040401e-14,
+    "ceiling": 160.0,
+    "kneeSize": 228.57142857142856
+   },
+   "regular_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      88.89999999999999
+     ],
+     [
+      143,
+      100.1
+     ],
+     [
+      640,
+      160.0
+     ]
+    ]
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "edgeBleed.distances.0": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "edgeBleed.distances.1": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "edgeBleed.height": {
+   "regular_light": {
+    "kind": "proportional",
+    "slope": 0.35000000000000003,
+    "intercept": -7.105427357601002e-15
+   },
+   "regular_dark": {
+    "kind": "proportional",
+    "slope": 0.35000000000000003,
+    "intercept": -7.105427357601002e-15
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 16.799999999999997
+  },
+  "edgeBleed.opacity": {
+   "regular_light": {
+    "kind": "affine-saturating",
+    "slope": 0.00520833395421505,
+    "intercept": -0.3333334121853113,
+    "ceiling": 0.5,
+    "kneeSize": 159.9999960660939
+   },
+   "regular_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      0.5250000357627869
+     ],
+     [
+      143,
+      0.6583333611488342
+     ],
+     [
+      640,
+      0.800000011920929
+     ]
+    ]
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "edgeBleed.ycc.black": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.8999999761581421
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.75
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.75
+   },
+   "_nil": 0.8999999761581421
+  },
+  "edgeBleed.ycc.saturation": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.2000000476837158
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.2000000476837158
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.2000000476837158
+   },
+   "_nil": 1.2000000476837158
+  },
+  "edgeBleed.ycc.white": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "faceEffects.opacity": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "faceEffects.ycc.black": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.20000000298023224
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.07500000298023224
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.07500000298023224
+   },
+   "_nil": 0.8500000238418579
+  },
+  "faceEffects.ycc.saturation": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.059999942779541
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.059999942779541
+   },
+   "_nil": 1.0
+  },
+  "faceEffects.ycc.white": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0299999713897705
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.6000000238418579
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.149999976158142
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.149999976158142
+   },
+   "_nil": 1.0299999713897705
+  },
+  "highlights.fill.amount": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "_nil": 0.5
+  },
+  "highlights.fill.curvature": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.7
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.7
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.7
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.7
+   },
+   "_nil": 0.7
+  },
+  "highlights.fill.height": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "highlights.fill.offset": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "highlights.fill.opacity": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "highlights.fill.spread": {
+   "regular_light": {
+    "kind": "affine-saturating",
+    "slope": 0.0,
+    "intercept": 1.5707963267948966,
+    "ceiling": 2.792526803190927,
+    "kneeSize": null
+   },
+   "regular_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      1.5707963267948966
+     ],
+     [
+      143,
+      1.5707963267948966
+     ],
+     [
+      640,
+      2.792526803190927
+     ]
+    ]
+   },
+   "clear_light": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      1.5707963267948966
+     ],
+     [
+      143,
+      1.5707963267948966
+     ],
+     [
+      640,
+      2.792526803190927
+     ]
+    ]
+   },
+   "clear_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      1.5707963267948966
+     ],
+     [
+      143,
+      1.5707963267948966
+     ],
+     [
+      640,
+      2.792526803190927
+     ]
+    ]
+   },
+   "_nil": 1.5707963267948966
+  },
+  "highlights.fill.ycc.black": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.8999999761581421
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.05999999865889549
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.8999999761581421
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.05999999865889549
+   },
+   "_nil": 0.8999999761581421
+  },
+  "highlights.fill.ycc.saturation": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.5
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.2000000476837158
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.5
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.2000000476837158
+   },
+   "_nil": 1.5
+  },
+  "highlights.fill.ycc.white": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.6000000238418579
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.6000000238418579
+   },
+   "_nil": 1.0
+  },
+  "highlights.hdr": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "highlights.inset": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "highlights.key.amount": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "_nil": 0.5
+  },
+  "highlights.key.curvature": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.7
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.7
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.7
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.7
+   },
+   "_nil": 0.7
+  },
+  "highlights.key.height": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "highlights.key.offset": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "highlights.key.opacity": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "highlights.key.spread": {
+   "regular_light": {
+    "kind": "affine-saturating",
+    "slope": 0.0,
+    "intercept": 1.5707963267948966,
+    "ceiling": 2.792526803190927,
+    "kneeSize": null
+   },
+   "regular_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      1.5707963267948966
+     ],
+     [
+      143,
+      1.5707963267948966
+     ],
+     [
+      640,
+      2.792526803190927
+     ]
+    ]
+   },
+   "clear_light": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      1.5707963267948966
+     ],
+     [
+      143,
+      1.5707963267948966
+     ],
+     [
+      640,
+      2.792526803190927
+     ]
+    ]
+   },
+   "clear_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      1.5707963267948966
+     ],
+     [
+      143,
+      1.5707963267948966
+     ],
+     [
+      640,
+      2.792526803190927
+     ]
+    ]
+   },
+   "_nil": 1.5707963267948966
+  },
+  "highlights.key.ycc.black": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.8999999761581421
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.05999999865889549
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.8999999761581421
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.05999999865889549
+   },
+   "_nil": 0.8999999761581421
+  },
+  "highlights.key.ycc.saturation": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.5
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.2000000476837158
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.5
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.2000000476837158
+   },
+   "_nil": 1.5
+  },
+  "highlights.key.ycc.white": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.6000000238418579
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.6000000238418579
+   },
+   "_nil": 1.0
+  },
+  "innerGlow.hdr": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "innerGlow.opacity": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "innerGlow.radius": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.aberrationAmount": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.aberrationAngle": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.aberrationHeight": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.aberrationInset": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.edgeDistances.0": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.edgeDistances.1": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.edgeOpacities.0": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.edgeOpacities.1": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.refractionAmount": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.refractionHeight": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "lensing.refractionInset": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "radiosity.amount": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "radiosity.height": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "radiosity.radius": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "radiosity.saturation": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "refraction.innerAmount": {
+   "regular_light": {
+    "kind": "constant",
+    "value": -60.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": -60.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": -60.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": -60.0
+   },
+   "_nil": -38.400000000000006
+  },
+  "refraction.innerHeight": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 20.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 20.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 20.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 20.0
+   },
+   "_nil": 12.0
+  },
+  "refraction.outerAmount": {
+   "regular_light": {
+    "kind": "proportional",
+    "slope": 0.2,
+    "intercept": 0.0
+   },
+   "regular_dark": {
+    "kind": "proportional",
+    "slope": 0.19999999999999998,
+    "intercept": 3.552713678800501e-15
+   },
+   "clear_light": {
+    "kind": "proportional",
+    "slope": 0.19999999999999998,
+    "intercept": 3.552713678800501e-15
+   },
+   "clear_dark": {
+    "kind": "proportional",
+    "slope": 0.19999999999999998,
+    "intercept": 3.552713678800501e-15
+   },
+   "_nil": 9.600000000000001
+  },
+  "refraction.outerDistances.0": {
+   "regular_light": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "_nil": -1.0
+  },
+  "refraction.outerDistances.1": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "refraction.outerHeight": {
+   "regular_light": {
+    "kind": "proportional",
+    "slope": 0.125,
+    "intercept": 0.0
+   },
+   "regular_dark": {
+    "kind": "proportional",
+    "slope": 0.125,
+    "intercept": 0.0
+   },
+   "clear_light": {
+    "kind": "proportional",
+    "slope": 0.125,
+    "intercept": 0.0
+   },
+   "clear_dark": {
+    "kind": "proportional",
+    "slope": 0.125,
+    "intercept": 0.0
+   },
+   "_nil": 6.0
+  },
+  "refraction.outerOpacity": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.30000001192092896
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.30000001192092896
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.30000001192092896
+  },
+  "sdrAdjustment.faceDimming.distances.0": {
+   "regular_light": {
+    "kind": "constant",
+    "value": -2.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": -2.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": -2.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": -2.0
+   },
+   "_nil": -2.0
+  },
+  "sdrAdjustment.faceDimming.distances.1": {
+   "regular_light": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "_nil": -1.0
+  },
+  "sdrAdjustment.faceDimming.whitePointShift": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.9700000286102295
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.9700000286102295
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.9700000286102295
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.9700000286102295
+   },
+   "_nil": 0.9700000286102295
+  },
+  "sdrAdjustment.headroomTransitionPoint": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 9999.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 9999.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 9999.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 9999.0
+   },
+   "_nil": 9999.0
+  },
+  "sdrAdjustment.shadowOpacityShift": {
+   "regular_light": {
+    "kind": "affine-saturating",
+    "slope": 0.0014285705983638763,
+    "intercept": 0.011428680270910263,
+    "ceiling": 0.23999999463558197,
+    "kneeSize": 160.00001303852363
+   },
+   "regular_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      0.19285714626312256
+     ],
+     [
+      143,
+      0.21571427583694458
+     ],
+     [
+      640,
+      0.23999999463558197
+     ]
+    ]
+   },
+   "clear_light": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      0.19285714626312256
+     ],
+     [
+      143,
+      0.21571427583694458
+     ],
+     [
+      640,
+      0.23999999463558197
+     ]
+    ]
+   },
+   "clear_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      0.19285714626312256
+     ],
+     [
+      143,
+      0.21571427583694458
+     ],
+     [
+      640,
+      0.23999999463558197
+     ]
+    ]
+   },
+   "_nil": 0.07999999821186066
+  },
+  "shadow.amount": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 75.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 75.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 75.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 75.0
+   },
+   "_nil": 30.0
+  },
+  "shadow.blurRadius": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 40.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 40.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "shadow.height": {
+   "regular_light": {
+    "kind": "proportional",
+    "slope": 0.4,
+    "intercept": 0.0
+   },
+   "regular_dark": {
+    "kind": "proportional",
+    "slope": 0.39999999999999997,
+    "intercept": 7.105427357601002e-15
+   },
+   "clear_light": {
+    "kind": "proportional",
+    "slope": 0.39999999999999997,
+    "intercept": 7.105427357601002e-15
+   },
+   "clear_dark": {
+    "kind": "proportional",
+    "slope": 0.39999999999999997,
+    "intercept": 7.105427357601002e-15
+   },
+   "_nil": 19.200000000000003
+  },
+  "shadow.inset": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "shadow.offset.height": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 8.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 8.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 8.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 8.0
+   },
+   "_nil": 8.0
+  },
+  "shadow.offset.width": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "shadow.opacity": {
+   "regular_light": {
+    "kind": "affine-saturating",
+    "slope": -0.0022321436554193497,
+    "intercept": 0.6071429755538702,
+    "ceiling": 0.25,
+    "kneeSize": 159.99999582767634
+   },
+   "regular_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      0.2941964268684387
+     ],
+     [
+      143,
+      0.2727678716182709
+     ],
+     [
+      640,
+      0.25
+     ]
+    ]
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.5
+  },
+  "shadow.shadowRadius": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 24.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 24.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 24.0
+  },
+  "shadow.vibrancyContribution": {
+   "regular_light": {
+    "kind": "affine-saturating",
+    "slope": 0.010416666666666664,
+    "intercept": -0.6666666666666663,
+    "ceiling": 1.0,
+    "kneeSize": 160.0
+   },
+   "regular_dark": {
+    "kind": "irregular",
+    "samples": [
+     [
+      127,
+      0.65625
+     ],
+     [
+      143,
+      0.8229166666666666
+     ],
+     [
+      640,
+      1.0
+     ]
+    ]
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "shadow.ycc.black": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "shadow.ycc.saturation": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.7999999523162842
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.2000000476837158
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.2000000476837158
+   },
+   "_nil": 1.7999999523162842
+  },
+  "shadow.ycc.white": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.5
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "tinting.distances.0": {
+   "regular_light": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": -1.0
+   },
+   "_nil": -1.0
+  },
+  "tinting.distances.1": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  },
+  "tinting.distances.2": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 10.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 10.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 10.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 10.0
+   },
+   "_nil": 10.0
+  },
+  "tinting.opacity": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 1.0
+   },
+   "_nil": 1.0
+  },
+  "updateRate": {
+   "regular_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "regular_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_light": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "clear_dark": {
+    "kind": "constant",
+    "value": 0.0
+   },
+   "_nil": 0.0
+  }
+ }
+}
