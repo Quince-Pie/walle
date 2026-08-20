@@ -6198,3 +6198,39 @@ sets the method for the distance that remains: (1) crack the dither
 pattern, (2) find the real downsample-chain behind the "bleed" blur,
 (3) reduce the transfer polynomials to their native exact form, (4)
 the edge band's remaining texture via the R8-keyed instrument.
+
+## Session 193 (2026-08-19): the dither is dead and the flats speak in codes
+
+Campaign 1 (dither) essentially closed, campaign 3 (native transfer)
+broken open early, both from one static suite.
+
+NO DITHER, SHIPPED (206225b): flat-field extraction showed Apple's
+settled texture is 0.08 rms, aperiodic, positively correlated - plain
+rounding, not dither.  walle's triangular dither injected ~0.4 rms the
+hardware never ships and sat inside every measured "noise floor".
+Removed: coded 1.43 -> 1.37 full / 2.23 -> 2.13 inside, natural
+0.93 -> 0.86 / 1.41 -> 1.31.  Gates green.
+
+THE FLATS ARE SINGLE-CODE.  165/193 static interiors are >= 99.99% one
+exact RGB (the rest are patches spanning element geometry, not material
+mixing).  The level->output tables are now EXACT calibration at ~17
+gray levels x variant x appearance x tint
+(analysis/results/flat-field-rounding-26.6.1.json;
+instrument analysis/measure_flat_field_rounding.py).
+
+NATIVE TRANSFER FORMS, from the exact tables:
+  clear (both appearances, identical - appearance-blindness confirmed
+    at every level): out = 1.0433*in + 18.62 IN CODE SPACE, max
+    residual 0.47 codes = below rounding.  Clear's native flat law is
+    a two-constant affine; the shipped polynomial reduces to it.
+  regular: neither code-affine (max 2.8-4.1) nor a linear-light plate
+    blend (max ~17) nor gamma-space blends; best simple form is a
+    power curve out/255 = a*x^p + b with p = 0.855 light / 0.830 dark
+    (max residual 1.11 / 0.74 codes).  The near-shared exponent ~0.84
+    is the lead for the exact mechanism; the search continues with
+    the step-edge data (the blurred-backdrop input hypothesis).
+
+Campaign 2 instrument ready: analysis/fit_blur_chain_candidates.py
+(downsample-chain kernels synthesized by impulse, scored by the same
+forward-convolution gain/offset method as the kernel derivation) -
+waiting on the suite's kstep shots, still capturing.
