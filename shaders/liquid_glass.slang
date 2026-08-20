@@ -631,7 +631,11 @@ float4 composeFragment(
         : lerp(25.13, 28.7, lightness);
     encoded += (aaHumpA / 255.0) * 4.0 * mask * (1.0 - mask) * thickness;
     encoded = saturate(encoded);
-    encoded += triangularDither(fragmentPixels + time * 61.0)
-        * kDitherLsb * (1.0 - tFade);
+    // Dither disabled pending the flat-field verdict: Apple's settled
+    // material texture reads 0.08 rms with no periodicity - consistent with
+    // plain rounding and NO dither - while this term injected ~0.4 rms the
+    // hardware never ships.  The scorer decides (session 193).
+    // encoded += triangularDither(fragmentPixels + time * 61.0)
+    //     * kDitherLsb * (1.0 - tFade);
     return float4(encoded, 1.0);
 }
