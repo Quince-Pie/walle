@@ -1,0 +1,86 @@
+{
+ "rc/light": {
+  "impureFlats": 0,
+  "channels": {
+   "R": {
+    "transferSpan": -142.0,
+    "asymmetry": -0.2105
+   },
+   "G": {
+    "transferSpan": 78.0,
+    "asymmetry": -0.1002
+   },
+   "B": {
+    "transferSpan": 89.0,
+    "asymmetry": -0.1914
+   },
+   "R-G": {
+    "tDisagreeRms": 49.15
+   },
+   "R-B": {
+    "tDisagreeRms": 38.92
+   },
+   "G-B": {
+    "tDisagreeRms": 19.7
+   }
+  }
+ },
+ "rc/dark": {
+  "impureFlats": 0,
+  "channels": {
+   "R": {
+    "transferSpan": -165.0,
+    "asymmetry": 0.0037
+   },
+   "G": {
+    "transferSpan": 106.0,
+    "asymmetry": 0.0239
+   },
+   "B": {
+    "transferSpan": 106.0,
+    "asymmetry": 0.012
+   },
+   "R-G": {
+    "tDisagreeRms": 27.37
+   },
+   "R-B": {
+    "tDisagreeRms": 22.96
+   },
+   "G-B": {
+    "tDisagreeRms": 8.63
+   }
+  }
+ },
+ "il/light": {
+  "impureFlats": 0,
+  "channels": {
+   "R": {
+    "transferSpan": -86.0,
+    "asymmetry": -0.0775
+   },
+   "G": {
+    "transferSpan": 32.0,
+    "asymmetry": 0.0342
+   },
+   "R-G": {
+    "tDisagreeRms": 69.46
+   }
+  }
+ },
+ "il/dark": {
+  "impureFlats": 0,
+  "channels": {
+   "R": {
+    "transferSpan": -165.0,
+    "asymmetry": 0.0012
+   },
+   "G": {
+    "transferSpan": 50.0,
+    "asymmetry": 0.1261
+   },
+   "R-G": {
+    "tDisagreeRms": 25.43
+   }
+  }
+ }
+}

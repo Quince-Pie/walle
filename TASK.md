@@ -6488,3 +6488,53 @@ Build-chain gotcha, recorded because it burned a referee run:
 `make | grep -cE "error|warning"` exits 1 when the count is 0, so
 `&&`-chaining a second make after it silently skips the rebuild - the
 first "centroid" scores were rendered by a stale release binary.
+
+## Session 196: colored ground truth - luma-only falsified, and so is
+## every pointwise per-channel curve
+
+The M1 came back and the chroma instrument ran twice (sets
+/tmp/lgcap-chroma-1024 and /tmp/lgcap-chroma-jac-1024, 216 shots each;
+M1 home copies; rig at lg-test ad7959c - the capture exits 0 but never
+writes manifest.json under --static-only, noted, shots+references
+complete).  All 68 trajectory flats are SINGLE CODES (the exact
+per-channel anchors), and the j-probe flats measure the material's
+local 3x3 Jacobian at three anchors per line - +-24-code probes per
+channel; regular/light saturates its red output at the t=64 anchor
+(a zero Jacobian row), so hypotheses are scored FORWARD through the
+measured linearization (out = T(t*) + J (B_hyp - line(t*))), no
+inversion, clipping self-weighting.  Instruments:
+analysis/measure_chroma_warp_channels.py (first pass, diagonal - kept
+for the raw asymmetry reads) and measure_chroma_warp_backdrop.py (the
+referee).  Receipts: chroma-warp-{channels,backdrop}-26.6.1.json.
+
+The verdict table (output-code rms, regular):
+
+  rc/light: none 8.46  chan-p0.40 6.37  LUMA 8.41  flip3 4.35  LUT 4.16
+  il/light: none 3.98  chan-p0.40 2.32  LUMA 3.96  flip3 4.41  LUT 4.40
+  rc/dark : none 3.54  chan-1.34 3.37   luma 3.39  LUT 3.87
+  il/dark : none 3.17  chan-1.34 3.09   luma 3.20  LUT 4.01
+
+Three falsifications, one theorem:
+  1. LUMA-ONLY IS DEAD: it scores within noise of no-warp on every
+     colored line (the warp acts through channels, not luma), so its
+     natural-sweep win (session 195) was compensatory, not mechanism.
+  2. THE ISOLUMINANT LINE SHOWS THE WARP AT FULL STRENGTH (il/light
+     R: none 6.29 -> chan 1.42) - final proof the mechanism is
+     chromatic, not luminance.
+  3. NO POINTWISE PER-CHANNEL CURVE SURVIVES: rc/light wants
+     flip3/LUT (4.16 vs chan 6.37), il/light wants the plain power
+     (2.32 vs LUT 4.40).  Any pointwise curve in ANY fixed space
+     composes to one code-space curve and cannot prefer different
+     shapes on different lines - the far-field warp has CROSS-CHANNEL
+     structure (R's effective curve depends on the other channels).
+     Dark barely discriminates on these lines (transfer compression;
+     rms floor ~3 vs differences ~0.3) but orders chan > luma > none.
+
+Standing implications: the sweep default (p 0.40/1.34 full-channel)
+remains the best shipped approximation; flipcube-luma / warp-luma are
+demoted to compensatory variants.  The open mechanism question is now
+sharp: what channel-coupled space does the wide field blur in?
+Candidates to instrument next: warp on chroma-relative coordinates
+(v - Y), value-normalized warp, or a 3D LUT probed by more color
+lines; the per-line nonparametric W_R extraction (rc vs il) will name
+the coupling shape.
