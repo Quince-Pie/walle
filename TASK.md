@@ -6631,3 +6631,36 @@ checkers, i9 after the gamut audit); a simpler closed form for
 gate(Y); dark's version of the same fit; then the GPU bake
 implementation (per-pixel luma in bakeWarpPow) and the sweep referee
 for the default.
+
+## Session 196 (final): the gated law dies out of sample; the cube is next
+
+The gated law was implemented in the GPU bake (bakeWarpPow mode 3 =
+lerp(v, v^p, A*Y) with the un-warp solved by bisection in bakeMixFinal,
+gate clamped 0.98 for monotone invertibility - dark's fitted 1.98*Y
+makes U non-monotone at the toe, so the fit's own inversion was
+ill-defined there) and refereed on the sweeps behind
+WALLE_GLASS_WIDE=gated.  Constants from the closed-form fits: light
+p=0.285 A=1.045 (gate ~ Y, q fitted 1.05); dark p=1.313 A=1.983
+(q 1.04); the screen-blend form U = v + A*Y*(1-v) lost to the
+lerp-power at 9.22 vs 8.57 (il needs the toe shape); the monotone-knot
+fit for dark degenerated (all-zero gate + a spike, i9 29 rms).
+
+  VERDICT: REJECTED, hard - coded rd 1.845 -> 3.515, rl 2.217 ->
+  3.284; natural rd 1.140 -> 2.356, rl 0.918 -> 2.423.  ~2x worse on
+  every regular sequence while fitting ALL the 1-D statics at their
+  floors.  The law interpolates the line geometry and extrapolates
+  wrongly to 2-D content where luma and channel values decorrelate -
+  the color lines constrain W only along 1-D slices where Y and v are
+  strongly correlated.
+
+Standing conclusions: the shipped p=0.40/1.34 per-channel power stays
+the default (still the only form that is regression-free on every
+referee).  Both model classes tried so far - pointwise per-channel
+and scalar-luma-gated - are falsified, each by a different referee.
+The next instrument is already captured: the FULL static suite's
+color-cube-9 family (9x9x9 = 729 color anchors under a 4000pt circle,
+in M1 ~/lgcap-static-1024) IS the complete 3-D material transfer -
+with it, the far field becomes measurable on arbitrary 2-D content
+(no line anchors needed), and the warp can be read on exactly the
+decorrelated statistics where the sweeps live.  Pull the cube shots +
+the noise-rgb statics next session.

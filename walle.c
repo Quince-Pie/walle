@@ -1704,6 +1704,7 @@ static bool glass_bake_descriptor(enum glass_variant          variant,
                            : strcmp(mode, "flipcube") == 0 ? 4
                            : strcmp(mode, "warp-luma") == 0     ? 5
                            : strcmp(mode, "flipcube-luma") == 0 ? 6
+                           : strcmp(mode, "gated") == 0         ? 7
                                                                 : 3;
     }
     if (wide_mode == 1 && variant == GLASS_VARIANT_REGULAR) {
@@ -1753,6 +1754,18 @@ static bool glass_bake_descriptor(enum glass_variant          variant,
      * every gray instrument by construction - only colored content can
      * referee.  warp-luma = the default exponents; flipcube-luma = the
      * named light form. */
+    /* The luma-gated law (session 196): U(v, Y) = lerp(v, v^p, A*Y) around
+     * the wide blur - the single mechanism that fits the gray edges and
+     * every trusted color line at once (fit: analysis/
+     * fit_gated_far_field_warp.py + the chroma ground-truth captures).
+     * The far field is pulled toward the material's pole in proportion to
+     * local luma: light p=0.285 A=1.045 (lift toward white), dark p=1.313
+     * A=1.983 (push toward black). */
+    if (wide_mode == 7 && variant == GLASS_VARIANT_REGULAR) {
+        bool light            = lightness > 0.5;
+        out->cascade_exponent = light ? 0.285f : 1.313f;
+        out->cascade_gate     = light ? 1.045f : 1.983f;
+    }
     if ((wide_mode == 5 || wide_mode == 6) && variant == GLASS_VARIANT_REGULAR) {
         bool light            = lightness > 0.5;
         bool flip             = wide_mode == 6 && light;

@@ -119,6 +119,10 @@ struct walle_vk_glass_bake
     /* With cascade_exponent > 0: warp the far field's LUMA only; chroma
      * mixes from the un-warped far field.  Identical on gray content. */
     bool  cascade_luma;
+    /* > 0: the LUMA-GATED warp (session 196), U(v, Y) = lerp(v, v^p, A*Y)
+     * with p = cascade_exponent and A = this gain - the law the chroma
+     * ground-truth campaign converged on.  Overrides flip/luma modes. */
+    float cascade_gate;
 };
 
 [[nodiscard]]

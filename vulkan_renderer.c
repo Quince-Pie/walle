@@ -2632,7 +2632,10 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
         bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_a);
         struct bake_push warp = push;
         warp.blur[0]          = bake->cascade_exponent;
-        warp.blur[1]          = bake->cascade_flip ? 1.0f : 0.0f;
+        warp.blur[1]          = bake->cascade_gate > 0.0f ? 3.0f
+                                : bake->cascade_flip     ? 1.0f
+                                                         : 0.0f;
+        warp.mix[0]           = bake->cascade_gate;
         set                   = bake_set(renderer, t, t->full_a.view, t->full_a.view);
         if (set == VK_NULL_HANDLE)
             return false;
@@ -2761,8 +2764,16 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
      * flag - both must be set explicitly here since earlier passes left a
      * sigma and radius in those lanes. */
     bake_push_matrix(&push, bake->from_panel);
-    push.blur[0] = cascade ? 1.0f / bake->cascade_exponent : 0.0f;
-    push.blur[1] = cascade && bake->cascade_flip ? 1.0f : 0.0f;
+    if (cascade && bake->cascade_gate > 0.0f) {
+        /* gated mode: blur.x carries p ITSELF (the bisection solves the
+         * forward form), blur.y = 3 selects it, matRow0.w carries A */
+        push.blur[0]     = bake->cascade_exponent;
+        push.blur[1]     = 3.0f;
+        push.mat_row0[3] = bake->cascade_gate;
+    } else {
+        push.blur[0] = cascade ? 1.0f / bake->cascade_exponent : 0.0f;
+        push.blur[1] = cascade && bake->cascade_flip ? 1.0f : 0.0f;
+    }
     push.blur[2] = cascade && bake->cascade_luma ? 2.0f : 0.0f;
     push.mix[0] = bake->narrow_weight;
     push.mix[1] = bake->narrow_chroma_weight;

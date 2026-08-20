@@ -175,18 +175,28 @@ float4 bakeChainUp2(BakeVertexOutput input, uniform BakePush push) : SV_Target0
     return sourceA.Sample(linearSampler, sourceUv);
 }
 
-// Pointwise tonal warp for the cascade far field (sessions 194-195): the
-// wide blur runs in a power-warped copy of panel code space, per channel.
-// Exponent in blur.x; blur.y > 0.5 selects the FLIPPED form 1-(1-v)^p -
-// the same power law measured on the inverted signal (distance from
-// white), which is light regular's identity (p = 3).
+// Pointwise tonal warp for the cascade far field (sessions 194-196): the
+// wide blur runs in a warped copy of panel code space, per channel.
+// Exponent in blur.x; blur.y selects the form: < 0.5 plain power v^p;
+// 0.5..1.5 the FLIPPED power 1-(1-v)^p; > 2.5 the LUMA-GATED lerp
+// U(v, Y) = lerp(v, v^p, A*Y) with A in mix.x - the law the chroma
+// ground-truth campaign converged on (session 196): the far field is
+// pulled toward the material's pole in proportion to local luma.
 [shader("fragment")]
 float4 bakeWarpPow(BakeVertexOutput input, uniform BakePush push) : SV_Target0
 {
     float3 v = saturate(sourceA.Sample(linearSampler, input.uv).rgb);
-    float3 warped = push.blur.y > 0.5
-        ? 1.0 - pow(1.0 - v, push.blur.x)
-        : pow(v, push.blur.x);
+    static const float3 kLuma = float3(0.2126, 0.7152, 0.0722);
+    float3 warped;
+    if (push.blur.y > 2.5)
+    {
+        float g = clamp(push.mix.x * dot(kLuma, v), 0.0, 0.98);
+        warped = lerp(v, pow(v, push.blur.x), g);
+    }
+    else if (push.blur.y > 0.5)
+        warped = 1.0 - pow(1.0 - v, push.blur.x);
+    else
+        warped = pow(v, push.blur.x);
     return float4(warped, 1.0);
 }
 
@@ -208,8 +218,11 @@ float4 bakePrepWarpLuma(BakeVertexOutput input, uniform BakePush push) : SV_Targ
 // Final pass: mixture in code space, then back to linear light for the sRGB
 // attachment's hardware encode.
 //   out = wC*near + (1-wC)*far + (wL-wC) * luma(near - far)
-// blur.x, when positive, is the cascade far field's un-warp exponent (1/p);
-// blur.y > 0.5 selects the flipped form's inverse 1-(1-y)^(1/p);
+// blur.x, when positive, is the cascade far field's un-warp exponent (1/p)
+// - except in gated mode (blur.y > 2.5), where blur.x carries p ITSELF and
+// mix-pass lane matRow0.w carries the gate gain A (the un-warp solves the
+// monotone U(f, Y_far) = far by bisection);
+// blur.y > 0.5 (and < 1.5) selects the flipped form's inverse;
 // blur.z > 1.5 selects the LUMA-ONLY variant: far.rgb is the un-warped far
 // field (chroma), far.a its warped luma - the luma channel mixes from the
 // warped field, chroma from the un-warped one.  On gray content this is
@@ -221,7 +234,27 @@ float4 bakeMixFinal(BakeVertexOutput input, uniform BakePush push) : SV_Target0
     float3 near = sourceA.Sample(linearSampler, input.uv).rgb;
     float4 farS = sourceB.Sample(linearSampler, input.uv); // bilinear 8x up
     float3 far = farS.rgb;
-    if (push.blur.x > 0.0 && push.blur.z > 1.5)
+    if (push.blur.x > 0.0 && push.blur.y > 2.5)
+    {
+        // gated un-warp: g from the WARPED field's luma (the fitter's
+        // convention), then per channel solve (1-g) f + g f^p = w.
+        float g = clamp(push.matRow0.w * dot(kLuma, saturate(far)), 0.0, 0.98);
+        float p = push.blur.x;
+        float3 w = saturate(far);
+        float3 lo = float3(0.0);
+        float3 hi = float3(1.0);
+        [unroll]
+        for (int it = 0; it < 18; ++it)
+        {
+            float3 mid = 0.5 * (lo + hi);
+            float3 val = (1.0 - g) * mid + g * pow(mid, p);
+            bool3 below = val < w;
+            lo = select(below, mid, lo);
+            hi = select(below, hi, mid);
+        }
+        far = 0.5 * (lo + hi);
+    }
+    else if (push.blur.x > 0.0 && push.blur.z > 1.5)
     {
         float yfw = push.blur.y > 0.5
             ? 1.0 - pow(saturate(1.0 - farS.a), push.blur.x)
