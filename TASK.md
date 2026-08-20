@@ -6709,3 +6709,36 @@ referee-clean form.  Queued: the noise-rgb statics (chroma-
 decorrelated noise, local) evaluated through the color-cube-9
 transfer (729 anchors, local) - the first instrument that can read
 the warp on 2-D chroma statistics.
+
+## Session 197 (close): the warp campaign closes; the deficit moves to
+## the chroma transfer
+
+The noise-rgb statics ran through the FULL walle renderer (walle as
+its own predictor: none-shots as pixel-exact wallpapers, one
+full-coverage render per warp mode, centers compared against the
+Apple statics; driver + comparator in scratchpad noisergb/):
+
+  walle vs Apple, 2-D chroma-decorrelated noise, END TO END:
+    a064 full-range RGB noise: 0.62 light / 0.56 dark rms.
+    mean-shifted block sets: 1.8-3.0, channel structure R/B ~ 2x G.
+  All warp forms tie to 0.01 (chroma noise is warp-blind, like gray);
+  gated hurts everywhere (3.4-4.7), consistent with its death.
+
+THE WARP CAMPAIGN CLOSES OPEN-BUT-BOUNDED: the far-field warp's exact
+form remains unresolved at the 1-D color-line level (the rc-vs-il
+cross-channel contradiction stands; three model classes falsified by
+three referees), but every 2-D content class is now measured -
+sweeps, gray noise, chroma noise - and the shipped p=0.40/1.34
+per-channel power satisfies all of them at floors of 0.6-3.0 codes.
+Whatever the true law is, its 2-D expression is indistinguishable
+from the shipped form on real content statistics.  The color-line
+contradiction is a 1-D laboratory fact whose resolving mechanism has
+no measurable 2-D consequence walle currently misses.
+
+THE DEFICIT MOVES: the mean-shifted colored noise (1.8-3.0, R/B twice
+G) and the extreme-chroma sweeps (3.29) carry the same per-channel
+signature as the structured-content constants of the floor memo -
+this is CHROMA TRANSFER structure, warp-independent, and the
+color-cube-9 anchors (local) are the instrument to refine it: fit
+the transfer's chroma dimension against 729 exact anchors instead of
+the gray ladder plus tint law.  That is the next campaign.
