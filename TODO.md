@@ -207,4 +207,20 @@ the MECHANISM, verify on controlled fields, judge by the gates.
       symptom; the saturated/coded captures are the instrument).
 - [ ] The edge band's remaining texture — after the AA mean law, the
       structured residual on the boundary rows via the R8-keyed
-      instrument.
+      instrument.  MAJOR CUT session 195: the m-keyed sawtooth was
+      walle's own lens step at the analytic circle — fixed by
+      coverage-centroid sampling (measure_boundary_blend_curve.py is
+      the referee; natural edges improved across the board, aaHump
+      constants re-projected).  Remaining: the texture proper
+      (12–17 rms, mask is corpus-exact so it is CONTENT sampled
+      wrong at the boundary) and the R +6/+12 channel structure.
+      Sharpened lead: the lens profile below depth 1 capture px has
+      never been measured (walle extrapolates a diverging
+      1/(u+12.62) exactly where the centroid samples land) — a
+      sub-depth-1 lens instrument is the next capture.
+- [ ] The chroma space of the far-field warp — the coded and natural
+      holdouts disagree (full-channel flip3 vs luma/mild) and gray
+      statics are structurally blind.  Rig instrument READY
+      (lg-test 37a8c62: chroma-rc/chroma-il ladders + edges,
+      --static-only) — BLOCKED on the M1 being reachable (down
+      2026-08-20, no ping).
