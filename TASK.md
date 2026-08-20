@@ -6742,3 +6742,26 @@ this is CHROMA TRANSFER structure, warp-independent, and the
 color-cube-9 anchors (local) are the instrument to refine it: fit
 the transfer's chroma dimension against 729 exact anchors instead of
 the gray ladder plus tint law.  That is the next campaign.
+
+## Session 197 (coda): the chroma-transfer campaign opens with its map
+
+The cube backdrop was regenerated exactly from the rig source
+(27x27 tiles, cubeLevels 0..255 by 32s) and rendered through the FULL
+walle pipeline; all 729 anchors read against the circle-4000 regular
+shots (scratchpad cube/; anchors saved /tmp/cube-full-{ap}.npy):
+
+  light: deficit rms 3.94 (mean +2.3 R, -0.6 G, +1.4 B), max 15.2
+  dark : deficit rms 3.35 (mean -1.8 R, +0.9 G, -1.1 B), max 22.9
+  Mirrored between appearances (pole-relative), worst at luma extremes
+  (6.4 light-bright, 4.7/4.1 dark ends) and high saturation.
+  A quadratic-in-backdrop correction HALVES it: 3.94 -> 1.93,
+  3.35 -> 1.71 - the structure is smooth and fittable.
+
+This is the floor memo's structured-content chroma deficit, now
+measured at 729 exact anchors through the shipped renderer.  The
+refit leg: re-derive the material transfer's chroma dimension on
+(blurred-backdrop -> apple) pairs from the cube (through walle's own
+validated blur for the mixed-input values), regenerate
+material_law.slang via analysis/generate_material_law_header.py,
+validate on color-cube-holdout-8 (512 midpoint colors, local), and
+referee on the sweeps + the saturated sets (3.29 standing).
