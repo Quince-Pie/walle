@@ -426,7 +426,19 @@ float4 composeFragment(
     float lensUnit = max(push.scaling.x, 1.0) / kLensCaptureScale;
     float shadowReachPixels = kShadowDepthPixels[kShadowProfileCount - 1] * lensUnit;
 
-    if (mask <= 0.0 && sdf > shadowReachPixels + 2.0)
+    // Apple's shadow is cast by the element DISPLACED DOWNWARD by
+    // shadow.offset.height = 8 pt (DesignLibrary Parameters, 26.6.1;
+    // confirmed on the captures - the integrated darkening below a 500 pt
+    // circle is 3.5x the darkening above, left and right identical).  The
+    // shadow's depth is therefore measured against that displaced circle,
+    // not the element's own boundary.  push.scaling.z carries the offset in
+    // POINTS (0 = walle's old radially symmetric shadow).
+    float shadowOffsetPixels = push.scaling.z * max(push.scaling.x, 1.0);
+    float2 shadowCenterPixels = centerPixels - float2(0.0, shadowOffsetPixels);
+    float shadowDistancePixels = length(fragmentPixels - shadowCenterPixels);
+    float shadowDepth = (shadowDistancePixels - radiusPixels) / lensUnit;
+
+    if (mask <= 0.0 && sdf > shadowReachPixels + shadowOffsetPixels + 2.0)
         return float4(linearToSrgb(texA.Sample(linearSampler, input.uv).rgb), 1.0);
 
     float2 uv = input.uv;
@@ -483,8 +495,8 @@ float4 composeFragment(
         ? max(insideRim, (0.5 * mask) / lensUnit)
         : insideRim;
     float outsideDepthShadow = aaBoundary
-        ? max(-insideRim, (0.5 * (1.0 - mask)) / lensUnit)
-        : -insideRim;
+        ? max(shadowDepth, (0.5 * (1.0 - mask)) / lensUnit)
+        : shadowDepth;
 
     // The edge's own laws, for this variant.  `clear` casts no shadow and its
     // fitted law is the identity, so the branch is only about which numbers
@@ -525,9 +537,28 @@ float4 composeFragment(
     // rather than merely gated: outside the element the raw value is negative,
     // and it passes through -12.62 exactly, where the denominator is zero.
     // Multiplying that infinity by a zero gate gives a NaN, not a zero.
-    float inside = max(insideRimMaterial, 0.0);
+    // APPLE'S OWN REFRACTION GEOMETRY (session 200, read out of
+    // DesignLibrary.framework's GlassMaterialProvider.Parameters on 26.6.1 -
+    // not fitted):
+    //     refraction.innerHeight  12.00 pt regular / 17.28 pt clear
+    //     refraction.innerAmount -38.40    regular / -48.00    clear
+    // walle's profile above was pixel-fitted to ONE band and applied to both
+    // variants; its 35.58 capture px is clear's band (17.28 pt = 34.56 px) to
+    // 3%, so REGULAR has been running a band 44% too wide and an amplitude
+    // 25% too strong.  Apple's ratios rescale it: the depth axis compresses by
+    // 17.28/12.0 (the band ends at 24.7 px instead of 35.6) and the amplitude
+    // scales by 38.4/48.0.  `clear` is left exactly as measured.
+    float lensDepthScale = 1.0;
+    float lensAmountScale = 1.0;
+    if (push.scaling.y > 0.5 && regular > 0.5)
+    {
+        lensDepthScale = 17.28 / 12.0;
+        lensAmountScale = 38.4 / 48.0;
+    }
+    float inside = max(insideRimMaterial, 0.0) * lensDepthScale;
     float remaining = max(kLensBandCapturePixels - inside, 0.0);
-    float bend = lensUnit * kLensAmplitude * pow(remaining, kLensProfilePower)
+    float bend = lensUnit * kLensAmplitude * lensAmountScale
+        * pow(remaining, kLensProfilePower)
         / (inside + kLensProfileOffset)
         * step(0.0, insideRimMaterial);
     float2 displacementUv = -float2(normalOut.x, -normalOut.y) * bend * pixelToUv;

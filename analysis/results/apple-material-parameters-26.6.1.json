@@ -1,0 +1,614 @@
+{
+ "backdropScale": {
+  "regular_light": 0.25,
+  "regular_dark": 0.25,
+  "clear_dark": 0.5,
+  "clear_light": 0.5
+ },
+ "blur.distances.0": {
+  "regular_light": -24.0,
+  "regular_dark": -24.0,
+  "clear_dark": -24.0,
+  "clear_light": -24.0
+ },
+ "blur.distances.1": {
+  "regular_light": -1.0,
+  "regular_dark": -1.0,
+  "clear_dark": -1.0,
+  "clear_light": -1.0
+ },
+ "blur.distances.2": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "blur.distances.3": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "blur.opacities.0": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "blur.opacities.1": {
+  "regular_light": 0.5,
+  "regular_dark": 0.5,
+  "clear_dark": 0.5,
+  "clear_light": 0.5
+ },
+ "blur.opacities.2": {
+  "regular_light": 0.5,
+  "regular_dark": 0.5,
+  "clear_dark": 0.5,
+  "clear_light": 0.5
+ },
+ "blur.opacities.3": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "blur.opacities.4": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "blur.opacity": {
+  "regular_light": 5.263544247e-315,
+  "regular_dark": 5.263544247e-315,
+  "clear_dark": 5.263544247e-315,
+  "clear_light": 5.263544247e-315
+ },
+ "blur.radius": {
+  "regular_light": 2.6666666666666665,
+  "regular_dark": 2.6666666666666665,
+  "clear_dark": 2.0,
+  "clear_light": 2.0
+ },
+ "contentOpacity": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "contrastEdge.hdr": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "contrastEdge.opacity": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "contrastEdge.width": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "controlContentLensing.amount": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "controlContentLensing.height": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "controlContentLensing.inset": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "controlDisplacement.amount": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "controlDisplacement.height": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "controlDisplacement.inset": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "edgeBleed.amount": {
+  "regular_light": 16.799999999999997,
+  "regular_dark": 16.799999999999997,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "edgeBleed.blurRadius": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "edgeBleed.distances.0": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "edgeBleed.distances.1": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "edgeBleed.height": {
+  "regular_light": 16.799999999999997,
+  "regular_dark": 16.799999999999997,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "edgeBleed.opacity": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "edgeBleed.ycc.black": {
+  "regular_light": 0.8999999761581421,
+  "regular_dark": 0.0,
+  "clear_dark": 0.75,
+  "clear_light": 0.75
+ },
+ "edgeBleed.ycc.saturation": {
+  "regular_light": 5.271833295e-315,
+  "regular_dark": 5.263544247e-315,
+  "clear_dark": 5.271833295e-315,
+  "clear_light": 5.271833295e-315
+ },
+ "edgeBleed.ycc.white": {
+  "regular_light": 1.0,
+  "regular_dark": 0.5,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "faceEffects.opacity": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "faceEffects.ycc.black": {
+  "regular_light": 0.8500000238418579,
+  "regular_dark": 0.10000000149011612,
+  "clear_dark": 0.07500000298023224,
+  "clear_light": 0.07500000298023224
+ },
+ "faceEffects.ycc.saturation": {
+  "regular_light": 0.007812501848093234,
+  "regular_dark": 5.263544247e-315,
+  "clear_dark": 0.007812501848966348,
+  "clear_light": 0.007812501848966348
+ },
+ "faceEffects.ycc.white": {
+  "regular_light": 1.0299999713897705,
+  "regular_dark": 0.44999998807907104,
+  "clear_dark": 1.149999976158142,
+  "clear_light": 1.149999976158142
+ },
+ "highlights.fill.amount": {
+  "regular_light": 0.5,
+  "regular_dark": 0.5,
+  "clear_dark": 0.5,
+  "clear_light": 0.5
+ },
+ "highlights.fill.curvature": {
+  "regular_light": 0.7,
+  "regular_dark": 0.7,
+  "clear_dark": 0.7,
+  "clear_light": 0.7
+ },
+ "highlights.fill.height": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "highlights.fill.offset": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "highlights.fill.opacity": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "highlights.fill.spread": {
+  "regular_light": 1.5707963267948966,
+  "regular_dark": 1.5707963267948966,
+  "clear_dark": 1.5707963267948966,
+  "clear_light": 1.5707963267948966
+ },
+ "highlights.fill.ycc.black": {
+  "regular_light": 0.8999999761581421,
+  "regular_dark": 0.05999999865889549,
+  "clear_dark": 0.05999999865889549,
+  "clear_light": 0.8999999761581421
+ },
+ "highlights.fill.ycc.saturation": {
+  "regular_light": 5.28426686e-315,
+  "regular_dark": 5.271833295e-315,
+  "clear_dark": 5.271833295e-315,
+  "clear_light": 5.28426686e-315
+ },
+ "highlights.fill.ycc.white": {
+  "regular_light": 1.0,
+  "regular_dark": 0.6000000238418579,
+  "clear_dark": 0.6000000238418579,
+  "clear_light": 1.0
+ },
+ "highlights.hdr": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "highlights.inset": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "highlights.key.amount": {
+  "regular_light": 0.5,
+  "regular_dark": 0.5,
+  "clear_dark": 0.5,
+  "clear_light": 0.5
+ },
+ "highlights.key.curvature": {
+  "regular_light": 0.7,
+  "regular_dark": 0.7,
+  "clear_dark": 0.7,
+  "clear_light": 0.7
+ },
+ "highlights.key.height": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "highlights.key.offset": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "highlights.key.opacity": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "highlights.key.spread": {
+  "regular_light": 1.5707963267948966,
+  "regular_dark": 1.5707963267948966,
+  "clear_dark": 1.5707963267948966,
+  "clear_light": 1.5707963267948966
+ },
+ "highlights.key.ycc.black": {
+  "regular_light": 0.8999999761581421,
+  "regular_dark": 0.05999999865889549,
+  "clear_dark": 0.05999999865889549,
+  "clear_light": 0.8999999761581421
+ },
+ "highlights.key.ycc.saturation": {
+  "regular_light": 5.28426686e-315,
+  "regular_dark": 5.271833295e-315,
+  "clear_dark": 5.271833295e-315,
+  "clear_light": 5.28426686e-315
+ },
+ "highlights.key.ycc.white": {
+  "regular_light": 1.0,
+  "regular_dark": 0.6000000238418579,
+  "clear_dark": 0.6000000238418579,
+  "clear_light": 1.0
+ },
+ "innerGlow.hdr": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "innerGlow.opacity": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "innerGlow.radius": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.aberrationAmount": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.aberrationAngle": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.aberrationHeight": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.aberrationInset": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.edgeDistances.0": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.edgeDistances.1": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.edgeOpacities.0": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.edgeOpacities.1": {
+  "regular_light": 2.121995791e-314,
+  "regular_dark": 2.121995791e-314,
+  "clear_dark": 2.121995791e-314,
+  "clear_light": 2.121995791e-314
+ },
+ "lensing.refractionAmount": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.refractionHeight": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "lensing.refractionInset": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "radiosity.amount": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "radiosity.height": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "radiosity.radius": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "radiosity.saturation": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "refraction.innerAmount": {
+  "regular_light": -38.400000000000006,
+  "regular_dark": -38.400000000000006,
+  "clear_dark": -48.0,
+  "clear_light": -48.0
+ },
+ "refraction.innerHeight": {
+  "regular_light": 12.0,
+  "regular_dark": 12.0,
+  "clear_dark": 17.28,
+  "clear_light": 17.28
+ },
+ "refraction.outerAmount": {
+  "regular_light": 9.600000000000001,
+  "regular_dark": 9.600000000000001,
+  "clear_dark": 9.600000000000001,
+  "clear_light": 9.600000000000001
+ },
+ "refraction.outerDistances.0": {
+  "regular_light": -1.0,
+  "regular_dark": -1.0,
+  "clear_dark": -1.0,
+  "clear_light": -1.0
+ },
+ "refraction.outerDistances.1": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "refraction.outerHeight": {
+  "regular_light": 6.0,
+  "regular_dark": 6.0,
+  "clear_dark": 6.0,
+  "clear_light": 6.0
+ },
+ "refraction.outerOpacity": {
+  "regular_light": 5.188942835e-315,
+  "regular_dark": 5.188942835e-315,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "sdrAdjustment.faceDimming.distances.0": {
+  "regular_light": -2.0,
+  "regular_dark": -2.0,
+  "clear_dark": -2.0,
+  "clear_light": -2.0
+ },
+ "sdrAdjustment.faceDimming.distances.1": {
+  "regular_light": -1.0,
+  "regular_dark": -1.0,
+  "clear_dark": -1.0,
+  "clear_light": -1.0
+ },
+ "sdrAdjustment.faceDimming.whitePointShift": {
+  "regular_light": 0.9700000286102295,
+  "regular_dark": 0.9700000286102295,
+  "clear_dark": 0.9700000286102295,
+  "clear_light": 0.9700000286102295
+ },
+ "sdrAdjustment.headroomTransitionPoint": {
+  "regular_light": 9999.0,
+  "regular_dark": 9999.0,
+  "clear_dark": 9999.0,
+  "clear_light": 9999.0
+ },
+ "sdrAdjustment.shadowOpacityShift": {
+  "regular_light": 0.07999999821186066,
+  "regular_dark": 0.07999999821186066,
+  "clear_dark": 0.07999999821186066,
+  "clear_light": 0.07999999821186066
+ },
+ "shadow.amount": {
+  "regular_light": 30.0,
+  "regular_dark": 30.0,
+  "clear_dark": 30.0,
+  "clear_light": 30.0
+ },
+ "shadow.blurRadius": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "shadow.height": {
+  "regular_light": 19.200000000000003,
+  "regular_dark": 19.200000000000003,
+  "clear_dark": 19.200000000000003,
+  "clear_light": 19.200000000000003
+ },
+ "shadow.inset": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "shadow.offset.height": {
+  "regular_light": 8.0,
+  "regular_dark": 8.0,
+  "clear_dark": 8.0,
+  "clear_light": 8.0
+ },
+ "shadow.offset.width": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "shadow.opacity": {
+  "regular_light": 0.5,
+  "regular_dark": 0.4000000059604645,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "shadow.shadowRadius": {
+  "regular_light": 24.0,
+  "regular_dark": 24.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "shadow.vibrancyContribution": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "shadow.ycc.black": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "shadow.ycc.saturation": {
+  "regular_light": 5.29670043e-315,
+  "regular_dark": 5.263544247e-315,
+  "clear_dark": 5.271833295e-315,
+  "clear_light": 5.271833295e-315
+ },
+ "shadow.ycc.white": {
+  "regular_light": 1.0,
+  "regular_dark": 0.5,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "tinting.distances.0": {
+  "regular_light": -1.0,
+  "regular_dark": -1.0,
+  "clear_dark": -1.0,
+  "clear_light": -1.0
+ },
+ "tinting.distances.1": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ },
+ "tinting.distances.2": {
+  "regular_light": 5.398241246e-315,
+  "regular_dark": 5.398241246e-315,
+  "clear_dark": 5.398241246e-315,
+  "clear_light": 5.398241246e-315
+ },
+ "tinting.opacity": {
+  "regular_light": 1.0,
+  "regular_dark": 1.0,
+  "clear_dark": 1.0,
+  "clear_light": 1.0
+ },
+ "updateRate": {
+  "regular_light": 0.0,
+  "regular_dark": 0.0,
+  "clear_dark": 0.0,
+  "clear_light": 0.0
+ }
+}

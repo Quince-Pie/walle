@@ -44,6 +44,13 @@ struct walle_vk_frame
     float                                       output_scale;
     /* Glass.tint(Color?) in sRGB 0..1; negative red means untinted. */
     float                                       tint[3];
+    /* Refraction geometry mode: 0 = walle's single pixel-fitted band for both
+     * variants; 1 = Apple's per-variant geometry, read out of
+     * DesignLibrary.framework (session 200). */
+    float                                       lens_mode;
+    /* Apple's shadow.offset.height in POINTS (8.0); 0 restores walle's
+     * radially symmetric shadow. */
+    float                                       shadow_offset_points;
 
     /* Optional diagnostic destination, tightly packed in top-left row order. */
     uint8_t* mask_readback;

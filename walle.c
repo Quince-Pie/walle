@@ -1630,6 +1630,46 @@ static inline void cleanup_vips_thread(void)
  * on every instrument, regression on none.
  *
  * WALLE_BLUR_SPACE=srgb restores the previous behaviour for A/B replays. */
+/* Apple's refraction geometry is per variant - innerHeight 12.0 pt for
+ * `regular` against 17.28 pt for `clear`, innerAmount -38.4 against -48.0 -
+ * read directly out of DesignLibrary.framework's
+ * GlassMaterialProvider.Parameters table on 26.6.1.  walle's pixel-fitted
+ * band matches clear's to 3% and was being applied to both.
+ * WALLE_LENS=fitted restores the shared band for A/B replays. */
+/* Apple's shadow is DIRECTIONAL: shadow.offset = (0, 8) pt in
+ * DesignLibrary's Parameters table, and the captures confirm it - on
+ * gray-128 the integrated darkening below a 500 pt circle is 3.5x the
+ * darkening above it (light -246.0 vs -67.6 codes*px, dark -429.7 vs
+ * -123.1), while left and right match to the code.  walle cast a radially
+ * symmetric shadow.  The shadow is therefore sampled against a circle
+ * displaced DOWNWARD by 8 pt.  WALLE_SHADOW=symmetric replays the old
+ * behaviour. */
+static int glass_shadow_offset_enabled(void)
+{
+    static int cached = -1;
+    if (cached < 0) {
+        const char* mode = getenv("WALLE_SHADOW");
+        cached           = mode == nullptr || strcmp(mode, "symmetric") != 0;
+    }
+    return cached;
+}
+
+static int glass_lens_apple_geometry(void)
+{
+    static int cached = -1;
+    if (cached < 0) {
+        /* FALSIFIED by the referee (session 200): rescaling walle's
+         * pixel-fitted band by Apple's innerHeight/innerAmount ratios made
+         * regular's coded edge WORSE (9.83 -> 10.71).  Apple's innerHeight
+         * is evidently not the same quantity as the fitted band's extent, so
+         * the pixel measurement stands and this is OFF by default;
+         * WALLE_LENS=apple replays the experiment. */
+        const char* mode = getenv("WALLE_LENS");
+        cached           = mode != nullptr && strcmp(mode, "apple") == 0;
+    }
+    return cached;
+}
+
 static int glass_blur_space_panel(void)
 {
     static int cached = -1;
@@ -2901,6 +2941,13 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
                    ? (float)state->reveal_process_capture_backing_scale
                    : (float)(output->scale > 0 ? output->scale : 1),
              .tint = {output->glass_tint[0], output->glass_tint[1], output->glass_tint[2]},
+             /* Apple's per-variant refraction geometry, read out of
+              * DesignLibrary.framework (session 200).  WALLE_LENS=fitted
+              * replays the single pixel-fitted band both variants used to
+              * share. */
+             .lens_mode = glass_lens_apple_geometry() ? 1.0f : 0.0f,
+             .shadow_offset_points
+             = glass_shadow_offset_enabled() ? 8.0f : 0.0f,
              /* Apple's `identity` variant leaves content unaffected, which is
               * exactly the mask-weighted crossfade the hardware corpus
               * measures - so it shares the gate's composition path.  The gate

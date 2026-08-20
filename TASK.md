@@ -6878,3 +6878,68 @@ cube deficit joins the bounded-residual ledger at its corrected
 magnitude.  Standing open items are now exactly two, both
 instrument-gated: the sub-depth-1 lens profile (campaign 4 tail,
 M1 boundary-phase ladder) and the i9 yellow-line audit.
+
+## Session 200: STOP FITTING, START READING - Apple's own parameter table,
+## and the directional shadow it revealed
+
+Every law in walle to this point was fitted from pixels.  This session
+read the numbers out of the framework instead.  The lg-test rig already
+carried 21,598 lines of LLDB/Swift-metadata introspection and a
+recovered construction law over Apple's private glass filter; joining
+its captured payloads with the Swift field descriptors decodes
+`DesignLibrary.GlassMaterialProvider.Parameters` - 1025 bytes, 102
+named scalars - and the 504-byte `BackgroundFilter` it builds, for
+regular/clear x light/dark on 26.6.1 (25G76).  Committed as
+analysis/results/apple-material-parameters-26.6.1.json with the joiner
+analysis/decode_apple_material_parameters.py.
+
+What the table says (all values Apple's, none fitted):
+
+  LAYER INVENTORY - lensing, controlContentLensing, controlDisplacement,
+    contrastEdge, innerGlow and radiosity are ALL ZERO for wallpaper
+    glass.  walle models none of them: correct by omission, now
+    positively confirmed rather than assumed.
+  blur: radius 8/3 (regular) / 2.0 (clear), a FIVE-distance stack
+    (distances [-24, -1, 0, 0, 0], opacities [1, .5, .5, 1, 1]).
+  backdropScale 0.25 (regular) / 0.5 (clear) - Apple blurs a REDUCED
+    backdrop.
+  refraction is PER VARIANT: innerHeight 12.0 pt regular / 17.28 clear,
+    innerAmount -38.4 / -48.0, plus an outer lobe (6.0 pt, 9.6) at 30%
+    opacity on regular only.
+  faceEffects.ycc = black/white/saturation, and for CLEAR it reproduces
+    the exact flat table from two constants:
+        out = 0.97 * (0.075 + 1.075 * in)   (whitePointShift * ycc)
+    15 of 17 levels EXACT, max 1 code - against walle's fitted 56-term
+    polynomial.  On the 729-colour cube the same law leaves 5.6 rms, so
+    the chroma half is not a plain saturation scale and walle's
+    polynomial still wins there; the LUMA law is Apple's, exactly.
+  shadow: offset (0, 8) pt, amount 30, height 19.2, shadowRadius 24
+    (regular) / 0 (clear), opacity 0.5 light / 0.4 dark.
+
+THE SHADOW IS DIRECTIONAL, AND WALLE'S WAS NOT.  `shadow.offset` is a
+geometric claim, and the captures confirm it outright: on gray-128
+under a 500 pt circle the integrated darkening BELOW the element is
+-246.0 codes*px against -67.6 ABOVE (light) and -429.7 against -123.1
+(dark), while LEFT and RIGHT match to the code - exactly an
+offset.height of 8 pt with offset.width 0.  walle cast a radially
+symmetric shadow at every angle.  Now the shadow's depth is measured
+against the element circle DISPLACED DOWN BY 8 pt.
+
+  Referee, both holdouts, regressions nowhere:
+    natural regular/dark  edge 4.940 -> 4.475   full 1.139 -> 1.130
+    natural regular/light edge 3.507 -> 3.300   full 0.918 -> 0.914
+    coded   regular/dark  edge 9.826 -> 9.417   outside 0.961 -> 0.931
+    coded   regular/light edge 9.933 -> 9.733
+    clear byte-identical (it casts no shadow), interiors untouched,
+    reveal gate sha 8ac1bd7c, live gate pass.
+  The edge band had not moved since the coverage-centroid fix; this is
+  the first mechanism to move it, and it came from reading Apple rather
+  than fitting Apple.
+
+FALSIFIED IN THE SAME SESSION, and kept: rescaling walle's pixel-fitted
+refraction band by Apple's innerHeight/innerAmount ratios (regular
+12.0/17.28 deep, 38.4/48.0 strong) made the coded regular edge WORSE
+(9.83 -> 10.71).  Apple's `innerHeight` is not the same quantity as the
+fitted band's extent - the profile walle measured by grating phase
+stands.  WALLE_LENS=apple replays it; WALLE_SHADOW=symmetric replays
+the old shadow.
