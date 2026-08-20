@@ -1693,7 +1693,7 @@ static bool glass_bake_descriptor(enum glass_variant          variant,
      * WALLE_GLASS_WIDE=gauss replays the un-warped mixture; chain/cascade
      * are the falsified/experimental variants kept for A/B. */
     static int wide_mode = -1; /* 0 gauss, 1 chain, 2 cascade, 3 warp (default),
-                                * 4 flipcube */
+                                * 4 flipcube, 5 warp-luma, 6 flipcube-luma */
     if (wide_mode < 0) {
         const char* mode = getenv("WALLE_GLASS_WIDE");
         wide_mode        = mode == nullptr              ? 3
@@ -1702,7 +1702,9 @@ static bool glass_bake_descriptor(enum glass_variant          variant,
                            : strcmp(mode, "cascade") == 0  ? 2
                            : strcmp(mode, "warp") == 0     ? 3
                            : strcmp(mode, "flipcube") == 0 ? 4
-                                                           : 3;
+                           : strcmp(mode, "warp-luma") == 0     ? 5
+                           : strcmp(mode, "flipcube-luma") == 0 ? 6
+                                                                : 3;
     }
     if (wide_mode == 1 && variant == GLASS_VARIANT_REGULAR) {
         double points = (scale > 0 ? (double)scale : 1.0) / GLASS_CAPTURE_SCALE;
@@ -1745,6 +1747,18 @@ static bool glass_bake_descriptor(enum glass_variant          variant,
         bool light            = lightness > 0.5;
         out->cascade_exponent = light ? 3.0f : 1.34f;
         out->cascade_flip     = light;
+    }
+    /* Luma-only variants (session 195 hypothesis test): the warp is a LUMA
+     * operation; chroma mixes from the un-warped far field.  Identical on
+     * every gray instrument by construction - only colored content can
+     * referee.  warp-luma = the default exponents; flipcube-luma = the
+     * named light form. */
+    if ((wide_mode == 5 || wide_mode == 6) && variant == GLASS_VARIANT_REGULAR) {
+        bool light            = lightness > 0.5;
+        bool flip             = wide_mode == 6 && light;
+        out->cascade_exponent = light ? (flip ? 3.0f : 0.40f) : 1.34f;
+        out->cascade_flip     = flip;
+        out->cascade_luma     = true;
     }
     for (int i = 0; i < 9; ++i) {
         out->to_panel[i]   = (float)kGlassToPanelLinear[i];

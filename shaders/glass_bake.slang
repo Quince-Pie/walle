@@ -190,17 +190,60 @@ float4 bakeWarpPow(BakeVertexOutput input, uniform BakePush push) : SV_Target0
     return float4(warped, 1.0);
 }
 
+// Pointwise prep for the LUMA-ONLY warp variant: rgb passes through
+// un-warped (the chroma path), alpha carries the warped luma (the luma
+// path).  Exponent in blur.x, flip in blur.y, as in bakeWarpPow.
+[shader("fragment")]
+float4 bakePrepWarpLuma(BakeVertexOutput input, uniform BakePush push) : SV_Target0
+{
+    static const float3 kLuma = float3(0.2126, 0.7152, 0.0722);
+    float3 v = saturate(sourceA.Sample(linearSampler, input.uv).rgb);
+    float y = dot(kLuma, v);
+    float yw = push.blur.y > 0.5
+        ? 1.0 - pow(1.0 - y, push.blur.x)
+        : pow(y, push.blur.x);
+    return float4(v, yw);
+}
+
 // Final pass: mixture in code space, then back to linear light for the sRGB
 // attachment's hardware encode.
 //   out = wC*near + (1-wC)*far + (wL-wC) * luma(near - far)
 // blur.x, when positive, is the cascade far field's un-warp exponent (1/p);
-// blur.y > 0.5 selects the flipped form's inverse 1-(1-y)^(1/p).
+// blur.y > 0.5 selects the flipped form's inverse 1-(1-y)^(1/p);
+// blur.z > 1.5 selects the LUMA-ONLY variant: far.rgb is the un-warped far
+// field (chroma), far.a its warped luma - the luma channel mixes from the
+// warped field, chroma from the un-warped one.  On gray content this is
+// identical to the full-channel warp.
 [shader("fragment")]
 float4 bakeMixFinal(BakeVertexOutput input, uniform BakePush push) : SV_Target0
 {
     static const float3 kLuma = float3(0.2126, 0.7152, 0.0722);
     float3 near = sourceA.Sample(linearSampler, input.uv).rgb;
-    float3 far = sourceB.Sample(linearSampler, input.uv).rgb; // bilinear 8x up
+    float4 farS = sourceB.Sample(linearSampler, input.uv); // bilinear 8x up
+    float3 far = farS.rgb;
+    if (push.blur.x > 0.0 && push.blur.z > 1.5)
+    {
+        float yfw = push.blur.y > 0.5
+            ? 1.0 - pow(saturate(1.0 - farS.a), push.blur.x)
+            : pow(max(farS.a, 0.0), push.blur.x);
+        float wLuma = push.mix.x;
+        float wChroma = push.mix.y;
+        float3 mixed = wChroma * near + (1.0 - wChroma) * far
+            + ((wLuma - wChroma) * dot(kLuma, near)
+               + (1.0 - wLuma) * yfw
+               - (1.0 - wChroma) * dot(kLuma, far));
+        mixed = saturate(mixed);
+        float3 lin = srgbDecode(mixed);
+        if (push.blur.w > 0.5)
+        {
+            float3 back = float3(
+                dot(push.matRow0.xyz, lin),
+                dot(push.matRow1.xyz, lin),
+                dot(push.matRow2.xyz, lin));
+            lin = max(back, 0.0);
+        }
+        return float4(lin, 1.0);
+    }
     if (push.blur.x > 0.0)
         far = push.blur.y > 0.5
             ? 1.0 - pow(saturate(1.0 - far), push.blur.x)

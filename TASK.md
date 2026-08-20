@@ -6408,3 +6408,38 @@ instrument could).
 Receipts: far-field-warp-26.6.1.json,
 m1-transition-25G76-flipcube-{coded,natural}.json,
 m1-transition-25G76-sat{red,blue}-{warp,gauss}.json.
+
+## Session 195 (cont.): the luma test splits by content; the chroma
+## dimension needs its own instrument
+
+Hypothesis test: the warp is a LUMA operation (chroma mixes from the
+un-warped far field; identical on every gray instrument by
+construction).  Implemented as bakePrepWarpLuma (warped luma rides the
+free alpha channel through down8/wide-blur; bakeMixFinal mixes luma
+from the warped field, chroma from the un-warped) behind
+WALLE_GLASS_WIDE=warp-luma / flipcube-luma.  The referee matrix
+(regular sequences, full/inside):
+
+  coded   rl: baseline 2.224/3.669  warp 2.217/3.640
+              warp-luma 2.240/3.703  FC-FULL 2.188/3.438  fc-luma 2.291/3.799
+  natural rl: baseline 0.918/1.380  warp 0.918/1.382
+              WARP-LUMA 0.911/1.368  fc-full 0.947/1.427  fc-luma 0.923/1.384
+  coded   rd: BASELINE 1.820/2.863  warp 1.845/2.893  luma-1.34 1.832/2.866
+  natural rd: WARP/FC 1.140/1.867   luma 1.141/1.871  baseline 1.159/1.922
+
+Verdicts: (1) natural-light's flipcube regression IS chroma warping
+(luma-only erases it, 1.427->1.384); (2) but the coded flipcube gain
+ALSO lives in the chroma (luma-only forfeits all of it, 3.438->3.799);
+(3) dark's luma variant is the Pareto compromise (coded 2.893->2.866,
+natural kept).  Light's two holdouts want OPPOSITE chroma handling -
+full-channel flip3 (coded, statics) vs luma/mild (natural) - so no
+variant dominates and the default stays p=0.40/1.34 full-channel.
+
+The gray statics are structurally blind to the channel-space question.
+The decisive instrument is COLORED statics from the rig: an
+ISOLUMINANT edge (red vs equal-luma green - luma-only predicts no
+far-field asymmetry, per-channel predicts strong) and an
+anti-correlated red<->cyan edge (each channel walks the warp in
+opposite directions in one shot), each with trajectory flats for exact
+per-channel inversion anchors.  Same session should settle the chroma
+weights under the warp - three open questions, one capture.

@@ -116,6 +116,9 @@ struct walle_vk_glass_bake
      * warp(v) = 1 - (1-v)^p - light regular's measured identity (p = 3,
      * session 195). */
     bool  cascade_flip;
+    /* With cascade_exponent > 0: warp the far field's LUMA only; chroma
+     * mixes from the un-warped far field.  Identical on gray content. */
+    bool  cascade_luma;
 };
 
 [[nodiscard]]
