@@ -6801,3 +6801,49 @@ fitted jointly across the cube + the color lines + the gray edges
 That grand joint fit is the queued computation.  If it too fails,
 the sandwich family itself dies and the far field needs a different
 operator class.
+
+## Session 198 (close): the honest joint V - the shipped power is the
+## sandwich class's transportable optimum
+
+The linear equation-space fit's degeneracy was diagnosed (a
+near-singular V makes implicit-equation residuals small without
+matching far fields - the output-space referee read 30-47 where the
+equations claimed 2-9), and the fit was redone HONESTLY: full
+Levenberg-Marquardt over the 48 cross-channel cubic coefficients
+against the true output-space objective, all six contexts (cube +
+rc/il/i5 + gray x/y) in one residual vector, batched Newton
+inversions inside every evaluation (scratchpad honest_v_fit.py;
+/tmp/honest-V-dark.npy).
+
+  dark, honest output-space rms per context, V=id -> fitted V:
+    cube 10.84 -> 7.10 (block confounded by the quarantined
+    numpy-vs-GPU-bake divergence), rc 3.39 -> 3.30, il 3.25 -> 3.05,
+    i5 2.47 -> 2.33, gray 4.35/4.29 -> 2.06/2.03.  Converged, stable,
+    no degeneration - and the gains over the SHIPPED per-channel
+    power are marginal: rc 3.30 vs 3.37, il 3.05 vs 3.09, gray ~equal
+    (the power's own halving), i5 2.33 vs the power-fit's 1.51
+    (WORSE).
+
+CONCLUSION OF THE MECHANISM HUNT: within the sandwich operator class
+far = V^-1(wide(V(N))), evaluated honestly across every context
+measured, the best transportable V is materially indistinguishable
+from the shipped per-channel power - the elaborate cross-channel
+freedom adds nothing that transports.  Together with the prior
+falsifications (pointwise per-channel by the lines, luma-only by the
+isoluminant edge, scalar-luma-gated by the sweeps, cube-only V by
+transport), the hunt closes: walle's shipped law is the measured
+optimum of every model class tried, and the residuals beyond it
+(cube 3.35-3.94 through the real renderer, line floors 2-4, sweep
+floors 1.37/0.85) are bounded, characterized, and not
+sandwich-expressible.  Whatever Apple's exact far-field operator is,
+every observable consequence measured so far is within ~2 codes of
+the shipped approximation on real content.
+
+Light's honest fit (same machinery) seals it: converged at overall
+7.76 -> 6.99, final per-context cube 11.18 / rc 6.19 / il 2.87 /
+i5 1.09 / gray 2.74+2.77 - il improves but GRAY DEGRADES to 2.74
+against the shipped power's 0.92: the joint optimum trades contexts
+and dominates the shipped form nowhere.  Both appearances agree: no
+transportable sandwich V beats the shipped per-channel power across
+the measured contexts.  /tmp/honest-V-{light,dark}.npy hold the
+fitted coefficients for the record.
