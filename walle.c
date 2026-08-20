@@ -1691,8 +1691,16 @@ static void glass_screen_chroma_gain(float* light, float* dark)
 {
     static float cached[2] = {-1.0f, -1.0f};
     if (cached[0] < 0.0f) {
+        /* Chosen on the referee, not the regression.  `dark` was first shipped
+         * at 0.60 from the coded set alone; the SATURATED pairs - where the
+         * chroma seam is actually stressed - put it far higher, and 0.75 buys
+         * sat-red 1.70 -> 1.59 full and 5.40 -> 4.73 worst for 0.01 on coded
+         * and nothing at all on natural.  0.85 edges 0.85 ahead on sat's full
+         * mean but loses on its interior and worst frame, and costs more on
+         * coded.  `light` sits at its own optimum: 0.85 and 1.15 are both
+         * worse on sat-red (1.73 and 1.74 against 1.70). */
         cached[0]       = 1.00f;
-        cached[1]       = 0.60f;
+        cached[1]       = 0.75f;
         const char* set = getenv("WALLE_SCREEN_CHROMA");
         if (set != nullptr && strcmp(set, "legacy") == 0) {
             cached[0] = 1.0f - 0.5420f;
