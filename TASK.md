@@ -6172,3 +6172,29 @@ survives, the glass entries did not need to exist.
 
 Receipts: m1-transition-25G76-gpu-bake-{sweep,natural}.json; live gate
 pass; shaders/glass_bake.slang.
+
+## The determinism theorem (2026-08-19, session 192 addendum)
+
+Apple-vs-Apple, measured: lgcap-2048 and lgcap-verify-20260819 - two
+independent capture sessions a week apart - differ by 0.000 codes on
+every settled sweep state, every variant, every appearance, every
+pixel.  The settled renderer is BIT-DETERMINISTIC.
+
+Consequences, which change the endgame's status from aspiration to
+target:
+  - the current 1.43-code distance is 100% walle error, 0% measurement
+    noise; byte-exact settled-material parity is well-defined and
+    achievable, exactly as the mask's 100.0% was;
+  - Apple's ~0.5-code "dither" texture is a FIXED deterministic
+    pattern - a pure function of position/state with millions of exact
+    samples in the corpus - crackable by the same playbook that
+    cracked the mask's raster laws;
+  - the only true nondeterminism in the system is animation SCHEDULING
+    (the exit lottery, start jitter), not rendering.
+
+The GPU-bake result (scores moved toward hardware on both content
+classes by matching Apple's mechanism rather than refitting outputs)
+sets the method for the distance that remains: (1) crack the dither
+pattern, (2) find the real downsample-chain behind the "bleed" blur,
+(3) reduce the transfer polynomials to their native exact form, (4)
+the edge band's remaining texture via the R8-keyed instrument.
