@@ -7092,3 +7092,61 @@ element renders its deep interior identically (central 300x300 rms
 boundaries agree to 0.1 codes.  An eightfold change in element size
 moves the rendered blur not at all.  walle's fixed sigma stands, and
 the corpus's radius-invariance findings are confirmed a second way.
+
+## Session 201 (final): walle's #1 residual LOCALISED, and named
+## `edgeBleed` - with Apple's own numbers
+
+The largest number walle has left is regular's interior on coded
+content.  It is not a transfer error: regressing Apple against walle
+over the deep interior returns gains of 1.007-1.048 and offsets under
+3 codes, and applying that affine barely moves the residual (2.94 ->
+2.89).  It is SPATIAL.  Binned by depth inside the boundary:
+
+    depth (capture px)   0-50   50-120  120-250  250-450  450-700  700-1100
+    regular / light     11.19    9.06     6.26     3.63     2.39     1.72
+    regular / dark       9.31    7.10     5.17     3.08     2.36     1.69
+    clear   / light      0.97    0.82     0.81     0.79     0.79     0.77
+
+Regular's residual decays monotonically from the edge and flattens by
+~350 pt; CLEAR'S IS FLAT AT 0.8 EVERYWHERE.  That asymmetry is the
+signature of a layer that regular has and clear does not, confined
+near the boundary - and Apple's table names it exactly:
+
+    edgeBleed (regular, real element sizes):
+        amount 224 pt, height 224 pt, blurRadius 160 pt,
+        opacity 0.5 (light) / 0.8 (dark), distances (1, 0),
+        ycc light (0.90, 1.00, sat 1.20), dark (0.00, 0.50, sat 1.00),
+        useDarkenBlending TRUE (light) / FALSE (dark)
+    edgeBleed (clear): amount 0, height 0, blurRadius 0, opacity 0.
+
+Three independent confirmations that this is the right object: clear
+has none and clear's residual is flat; the decay length (~225-350 pt)
+matches height 224 pt softened by a 160 pt blur; and blurRadius 160 pt
+= 320 capture px is walle's own pixel-fitted wide sigma of 329.807 to
+3% - the very number walle.c's banner already attributed to "a BLEED
+stage with a 160-unit blur radius that clear does not have", now read
+out of the framework rather than inferred.
+
+walle composites that layer as a GLOBAL two-Gaussian mixture weight;
+Apple composites it as an EDGE-CONFINED layer with its own tone map and
+(in light) a DARKEN blend.  That is why walle's wide weight had to be
+fitted per appearance at all - 0.115 light against 0.484 dark is a
+global approximation to a local layer, and under a darken blend the
+light case's effective weight collapses, which is exactly the shape of
+those two numbers.
+
+Swapping it in directly FAILS, for the third time in this project and
+for the same reason: the transfer polynomial was fitted on Apple's
+output WITH the global mixture in place, so replacing the mixture
+without refitting the transfer is incoherent.  Offline, with walle's
+certified numpy chain, Apple's edge-confined composite scores 11.2/9.8
+against the global mixture's 4.4/4.0 on the same frames.  The laws
+move together.
+
+So nothing ships from this - but the deficit is no longer anonymous.
+The next campaign is fully specified: bake the bleed as its own
+low-resolution field (the wide field already exists on the 8x-reduced
+grid in the GPU bake), composite it depth-keyed with Apple's tone map
+and blend mode, and refit the transfer jointly against the flat tables
+- whose own 500 pt element sits inside the bleed zone, which is why
+the current polynomial carries the bleed's flat contribution baked in.
