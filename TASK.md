@@ -7187,3 +7187,47 @@ cannot settle `regular`, whose own blur drops the correlation against
 the sharp wallpaper to 0.71-0.91 and makes the displacement estimate
 meaningless.  Resolving regular needs the probe run against the BLURRED
 backdrop instead; that is the next instrument.
+
+## Session 201 (final): the mid-range excess, and a methodological limit
+
+Two more candidates tested and closed:
+
+  RADIAL DISPLACEMENT.  Cross-correlating Apple's frames against
+  walle's own renders per depth bin clears `clear` outright - +0.50 px
+  at every depth from 12 to 800 capture px at ncc 0.9995-0.9999, so
+  walle's geometry there is exact - and returns no coherent answer for
+  `regular`, whose blur flattens the correlation surface (signs
+  alternate -3.75, +1.75, -4.00, +2.25 as the bins move inward).  There
+  is no systematic geometric offset to find.
+
+  A CLIPPED BACKDROP.  `sdfBackdropMargin` is 9.6 pt for regular and 0
+  for clear, which suggested Apple blurs a backdrop clipped to the
+  element plus that margin while walle blurs the whole wallpaper - an
+  edge-localised, content-dependent difference decaying over one blur
+  radius, which is the residual's exact shape.  Recomputing the wide
+  field as a normalised convolution over the clipped support moves it
+  barely at all (light 15.07 -> 14.78 and 6.82 -> 6.45 by bin; dark
+  unchanged), because at the radii the sweeps actually reach the disc
+  already covers most of the window and the clip is nearly a no-op.
+  It may still matter for small elements; it does not explain this.
+
+METHODOLOGICAL LIMIT, worth recording because it bounds every offline
+test above: the numpy replica is certified exact against the GPU bake
+for the BACKDROP, but it is not the shader - it has no rim, lens, AA
+boundary or shadow.  Its residuals near the edge (15.07 at 0-60 px)
+are therefore larger than walle's real render's (11.19), and only the
+deep bins are comparable.  Near-edge hypotheses have to be tested by
+shipping them into the shader and scoring, which is what the two
+mechanisms that DID ship this session went through.
+
+Where that leaves the residual, in three regimes rather than one:
+  0-40 capture px   the known edge band - rim, AA boundary, lens - and
+                    the only regime the edge.mean metric reports;
+  40-450 capture px a MID-RANGE EXCESS (3.6-9.8 codes falling to ~2.4)
+                    that no current mechanism explains, present in
+                    regular and absent in clear;
+  beyond            a floor of ~1.7 codes, which is where walle's
+                    interior actually stands.
+The mid-range excess is the named target now: regular-only,
+content-proportional, not a mixture weight, not a displacement, not the
+backdrop clip.
