@@ -167,3 +167,29 @@ above stays honest about what "done" means.
   campaign continues as refinement beyond corpus requirements; the
   "public inputs" flag concerns those residuals only.
 
+
+## The road from 1.43 to 0.000 (opened 2026-08-19, session 193)
+
+Licensed by the determinism theorem (TASK.md session 192 addendum):
+Apple's settled renderer is bit-deterministic across sessions, so the
+remaining 1.43 codes are pure implementation distance with no
+measurement floor beneath them. Method per the GPU-bake result: match
+the MECHANISM, verify on controlled fields, judge by the gates.
+
+- [ ] Crack the dither/quantization pattern — Apple's ~0.5-code output
+      texture is a fixed deterministic function with exact samples on
+      every flat field ever captured. The mask-crack playbook applies:
+      extract the pattern, identify the generator (ordered matrix,
+      position hash, value-threshold), reproduce it bit-exactly, ship
+      behind an env A/B.
+- [ ] The real blur mechanism — replace the fitted Gaussian mixture
+      with the downsample-chain Apple's own "bleed" naming implies;
+      candidate chain shapes scored against the step-edge and sweep
+      captures that measured the current kernels.
+- [ ] The native transfer form — with the true blur mechanism in
+      place, reduce the cross-validated transfer polynomials to
+      Apple's actual (presumably simple) operation in its native
+      space.
+- [ ] The edge band's remaining texture — after the AA mean law, the
+      structured residual on the boundary rows via the R8-keyed
+      instrument.
