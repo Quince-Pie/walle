@@ -139,6 +139,42 @@ float4 bakeDownsample8(BakeVertexOutput input, uniform BakePush push) : SV_Targe
     return accum * (1.0 / 16.0);
 }
 
+// One mip-chain level down: 2x decimation behind the [1 4 6 4 1]/16
+// prefilter, out[i] = sum_k pf[k] * src[2i + k - 2] per axis - the bleed
+// mechanism the fresh step edges identified (session 193).
+[shader("fragment")]
+float4 bakeChainDown2(BakeVertexOutput input, uniform BakePush push) : SV_Target0
+{
+    static const float kPf[5] = {1.0 / 16.0, 4.0 / 16.0, 6.0 / 16.0, 4.0 / 16.0, 1.0 / 16.0};
+    float2 sourceTexel = float2(push.mix.z, push.mix.w);
+    float2 outPixel = floor(input.position.xy);
+    float4 accum = float4(0.0);
+    [unroll]
+    for (int ky = 0; ky < 5; ++ky)
+    {
+        [unroll]
+        for (int kx = 0; kx < 5; ++kx)
+        {
+            float2 sourceUv = (2.0 * outPixel
+                               + float2(float(kx), float(ky)) - 2.0 + 0.5)
+                * sourceTexel;
+            accum += (kPf[kx] * kPf[ky]) * sourceA.Sample(linearSampler, sourceUv);
+        }
+    }
+    return accum;
+}
+
+// One mip-chain level up: zero-stuff + [1 2 1]/2 tent, which is exactly
+// bilinear reconstruction at half-texel positions.
+[shader("fragment")]
+float4 bakeChainUp2(BakeVertexOutput input, uniform BakePush push) : SV_Target0
+{
+    float2 sourceTexel = float2(push.mix.z, push.mix.w);
+    float2 outPixel = floor(input.position.xy);
+    float2 sourceUv = (outPixel * 0.5 + 0.5) * sourceTexel;
+    return sourceA.Sample(linearSampler, sourceUv);
+}
+
 // Final pass: mixture in code space, then back to linear light for the sRGB
 // attachment's hardware encode.
 //   out = wC*near + (1-wC)*far + (wL-wC) * luma(near - far)

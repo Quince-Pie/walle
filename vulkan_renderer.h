@@ -102,6 +102,11 @@ struct walle_vk_glass_bake
     float to_panel[9];
     float from_panel[9];
     bool  panel_space;
+    /* Wide-field mechanism: 0 = Gaussian on the 8x-reduced grid; N > 0 = the
+     * measured mip chain, N gauss5-prefiltered 2x rounds down and tent
+     * rounds back up, with an optional Gaussian on the coarsest grid. */
+    int   chain_levels;
+    float chain_coarse_sigma;
 };
 
 [[nodiscard]]

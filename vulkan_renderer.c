@@ -81,6 +81,14 @@ alignas(4) static const uint8_t WALLE_VK_BAKE_MIX_SPIRV[] = {
 #embed "build/shaders/bakeMixFinal.spv" if_empty(0)
 };
 
+alignas(4) static const uint8_t WALLE_VK_BAKE_CHAIN_DOWN_SPIRV[] = {
+#embed "build/shaders/bakeChainDown2.spv" if_empty(0)
+};
+
+alignas(4) static const uint8_t WALLE_VK_BAKE_CHAIN_UP_SPIRV[] = {
+#embed "build/shaders/bakeChainUp2.spv" if_empty(0)
+};
+
 static const uint8_t WALLE_VK_REVEAL_RASTER_P25[] = {
 #embed "parity/raster_p25_selector_ceil_bits.bin" limit(2097152) if_empty(0)
 };
@@ -223,6 +231,8 @@ struct walle_vk_renderer
     VkPipeline            bake_blur_pipeline;
     VkPipeline            bake_down_pipeline;
     VkPipeline            bake_mix_pipeline;
+    VkPipeline            bake_chain_down_pipeline;
+    VkPipeline            bake_chain_up_pipeline;
     VkPipelineLayout      mask_pipeline_layout;
     VkPipelineLayout      compose_pipeline_layout;
     VkPipeline            mask_pipeline;
@@ -2065,6 +2075,10 @@ void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
             vkDestroyPipeline(renderer->device, renderer->bake_down_pipeline, nullptr);
         if (renderer->bake_mix_pipeline)
             vkDestroyPipeline(renderer->device, renderer->bake_mix_pipeline, nullptr);
+        if (renderer->bake_chain_down_pipeline)
+            vkDestroyPipeline(renderer->device, renderer->bake_chain_down_pipeline, nullptr);
+        if (renderer->bake_chain_up_pipeline)
+            vkDestroyPipeline(renderer->device, renderer->bake_chain_up_pipeline, nullptr);
         if (renderer->bake_pipeline_layout)
             vkDestroyPipelineLayout(renderer->device, renderer->bake_pipeline_layout, nullptr);
         if (renderer->bake_set_layout)
@@ -2331,7 +2345,29 @@ static bool create_bake_resources(struct walle_vk_renderer* renderer)
                                        renderer->bake_pipeline_layout,
                                        WALLE_VK_WALLPAPER_FORMAT,
                                        false,
-                                       &renderer->bake_mix_pipeline);
+                                       &renderer->bake_mix_pipeline)
+           && create_graphics_pipeline(renderer,
+                                       WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       sizeof WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       "bakeVertex",
+                                       WALLE_VK_BAKE_CHAIN_DOWN_SPIRV,
+                                       sizeof WALLE_VK_BAKE_CHAIN_DOWN_SPIRV,
+                                       "bakeChainDown2",
+                                       renderer->bake_pipeline_layout,
+                                       VK_FORMAT_R32G32B32A32_SFLOAT,
+                                       false,
+                                       &renderer->bake_chain_down_pipeline)
+           && create_graphics_pipeline(renderer,
+                                       WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       sizeof WALLE_VK_BAKE_VERTEX_SPIRV,
+                                       "bakeVertex",
+                                       WALLE_VK_BAKE_CHAIN_UP_SPIRV,
+                                       sizeof WALLE_VK_BAKE_CHAIN_UP_SPIRV,
+                                       "bakeChainUp2",
+                                       renderer->bake_pipeline_layout,
+                                       VK_FORMAT_R32G32B32A32_SFLOAT,
+                                       false,
+                                       &renderer->bake_chain_up_pipeline);
 }
 
 struct bake_push
@@ -2425,6 +2461,8 @@ struct bake_transients
     struct walle_vk_image full_b;
     struct walle_vk_image low_a;
     struct walle_vk_image low_b;
+    struct walle_vk_image levels[8];
+    struct walle_vk_image coarse_ping;
     VkDescriptorPool      pool;
 };
 
@@ -2434,6 +2472,9 @@ static void destroy_bake_transients(VkDevice device, struct bake_transients* t)
     destroy_image(device, &t->full_b);
     destroy_image(device, &t->low_a);
     destroy_image(device, &t->low_b);
+    for (size_t i = 0; i < 8; ++i)
+        destroy_image(device, &t->levels[i]);
+    destroy_image(device, &t->coarse_ping);
     if (t->pool)
         vkDestroyDescriptorPool(device, t->pool, nullptr);
     t->pool = VK_NULL_HANDLE;
@@ -2507,12 +2548,12 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
         || !create_image(renderer, low_w, low_h, VK_FORMAT_R32G32B32A32_SFLOAT, usage, &t->low_b))
         return false;
     VkDescriptorPoolSize sizes[2] = {
-        {.type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, .descriptorCount = 12},
-        {.type = VK_DESCRIPTOR_TYPE_SAMPLER, .descriptorCount = 6},
+        {.type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, .descriptorCount = 48},
+        {.type = VK_DESCRIPTOR_TYPE_SAMPLER, .descriptorCount = 24},
     };
     VkDescriptorPoolCreateInfo pool_info = {
         .sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-        .maxSets       = 6,
+        .maxSets       = 24,
         .poolSizeCount = 2,
         .pPoolSizes    = sizes,
     };
@@ -2532,52 +2573,121 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
         return false;
     bake_pass(cmd, renderer, renderer->bake_convert_pipeline, set, &push, &t->full_a);
 
-    /* 2/3: narrow blur H (full_a -> full_b), V (full_b -> full_a).  After
-     * this full_a holds the NEAR layer. */
-    push.blur[0] = bake->narrow_sigma;
-    push.blur[1] = bake_kernel_radius(bake->narrow_sigma);
-    push.blur[2] = 1.0f;
-    set          = bake_set(renderer, t, t->full_a.view, t->full_a.view);
-    if (set == VK_NULL_HANDLE)
-        return false;
-    /* the downsample needs the CONVERTED field, not the blurred one: run it
-     * FIRST, off full_a, into low_a */
-    {
+    const struct walle_vk_image* wide_source = &t->low_a;
+    if (bake->chain_levels > 0) {
+        /* The measured mip chain (session 193): gauss5-prefiltered 2x rounds
+         * down off the converted field, an optional Gaussian on the coarsest
+         * grid, tent rounds back up to full resolution. */
+        int levels = bake->chain_levels > 7 ? 7 : bake->chain_levels;
+        uint32_t lw = w, lh = h;
+        const struct walle_vk_image* src = &t->full_a;
+        for (int k = 0; k < levels; ++k) {
+            lw = (lw + 1) / 2;
+            lh = (lh + 1) / 2;
+            if (!create_image(renderer, lw, lh, VK_FORMAT_R32G32B32A32_SFLOAT, usage,
+                              &t->levels[k]))
+                return false;
+            struct bake_push down = push;
+            down.mix[2]           = 1.0f / (float)src->width;
+            down.mix[3]           = 1.0f / (float)src->height;
+            set = bake_set(renderer, t, src->view, src->view);
+            if (set == VK_NULL_HANDLE)
+                return false;
+            bake_pass(cmd, renderer, renderer->bake_chain_down_pipeline, set, &down,
+                      &t->levels[k]);
+            src = &t->levels[k];
+        }
+        if (bake->chain_coarse_sigma > 0.05f) {
+            if (!create_image(renderer, src->width, src->height,
+                              VK_FORMAT_R32G32B32A32_SFLOAT, usage, &t->coarse_ping))
+                return false;
+            struct bake_push coarse = push;
+            coarse.blur[0]          = bake->chain_coarse_sigma;
+            coarse.blur[1]          = bake_kernel_radius(bake->chain_coarse_sigma);
+            coarse.blur[2]          = 1.0f;
+            coarse.mix[2]           = 1.0f / (float)src->width;
+            coarse.mix[3]           = 1.0f / (float)src->height;
+            set = bake_set(renderer, t, src->view, src->view);
+            if (set == VK_NULL_HANDLE)
+                return false;
+            bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &coarse,
+                      &t->coarse_ping);
+            coarse.blur[2] = 0.0f;
+            set = bake_set(renderer, t, t->coarse_ping.view, t->coarse_ping.view);
+            if (set == VK_NULL_HANDLE)
+                return false;
+            bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &coarse,
+                      &t->levels[levels - 1]);
+        }
+    } else {
+        /* Gaussian wide path (clear, and the pre-chain replay): 8x reduce,
+         * blur on the reduced grid; the mix pass upsamples implicitly. */
         struct bake_push down = push;
         down.mix[2]           = 1.0f / (float)w;
         down.mix[3]           = 1.0f / (float)h;
+        set = bake_set(renderer, t, t->full_a.view, t->full_a.view);
+        if (set == VK_NULL_HANDLE)
+            return false;
         bake_pass(cmd, renderer, renderer->bake_down_pipeline, set, &down, &t->low_a);
     }
-    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_b);
-    push.blur[2] = 0.0f;
+
+    /* Narrow blur H (full_a -> full_b), V (full_b -> full_a): full_a then
+     * holds the NEAR layer.  Runs after the downsamples, which need the
+     * unblurred converted field. */
+    push.blur[0] = bake->narrow_sigma;
+    push.blur[1] = bake_kernel_radius(bake->narrow_sigma);
+    push.blur[2] = 1.0f;
     push.mix[2]  = 1.0f / (float)w;
     push.mix[3]  = 1.0f / (float)h;
+    set          = bake_set(renderer, t, t->full_a.view, t->full_a.view);
+    if (set == VK_NULL_HANDLE)
+        return false;
+    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_b);
+    push.blur[2] = 0.0f;
     set          = bake_set(renderer, t, t->full_b.view, t->full_b.view);
     if (set == VK_NULL_HANDLE)
         return false;
     bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->full_a);
 
-    /* 4/5: wide blur on the reduced grid (low_a -> low_b -> low_a) */
-    push.blur[0] = bake->wide_sigma / 8.0f;
-    push.blur[1] = bake_kernel_radius(push.blur[0]);
-    push.blur[2] = 1.0f;
-    push.mix[2]  = 1.0f / (float)t->low_a.width;
-    push.mix[3]  = 1.0f / (float)t->low_a.height;
-    set          = bake_set(renderer, t, t->low_a.view, t->low_a.view);
-    if (set == VK_NULL_HANDLE)
-        return false;
-    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->low_b);
-    push.blur[2] = 0.0f;
-    set          = bake_set(renderer, t, t->low_b.view, t->low_b.view);
-    if (set == VK_NULL_HANDLE)
-        return false;
-    bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->low_a);
+    if (bake->chain_levels > 0) {
+        /* Tent rounds back up: levels[n-1] -> ... -> levels[0] -> full_b. */
+        int levels = bake->chain_levels > 7 ? 7 : bake->chain_levels;
+        for (int k = levels - 1; k >= 0; --k) {
+            const struct walle_vk_image* up_src = &t->levels[k];
+            const struct walle_vk_image* up_dst = k > 0 ? &t->levels[k - 1] : &t->full_b;
+            struct bake_push up = push;
+            up.mix[2]           = 1.0f / (float)up_src->width;
+            up.mix[3]           = 1.0f / (float)up_src->height;
+            set = bake_set(renderer, t, up_src->view, up_src->view);
+            if (set == VK_NULL_HANDLE)
+                return false;
+            bake_pass(cmd, renderer, renderer->bake_chain_up_pipeline, set, &up, up_dst);
+        }
+        wide_source = &t->full_b;
+    } else {
+        /* Wide Gaussian on the reduced grid (low_a -> low_b -> low_a). */
+        push.blur[0] = bake->wide_sigma / 8.0f;
+        push.blur[1] = bake_kernel_radius(push.blur[0]);
+        push.blur[2] = 1.0f;
+        push.mix[2]  = 1.0f / (float)t->low_a.width;
+        push.mix[3]  = 1.0f / (float)t->low_a.height;
+        set          = bake_set(renderer, t, t->low_a.view, t->low_a.view);
+        if (set == VK_NULL_HANDLE)
+            return false;
+        bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->low_b);
+        push.blur[2] = 0.0f;
+        set          = bake_set(renderer, t, t->low_b.view, t->low_b.view);
+        if (set == VK_NULL_HANDLE)
+            return false;
+        bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->low_a);
+        wide_source = &t->low_a;
+    }
 
-    /* 6: mixture + back conversion into the sRGB glass image */
+    /* Mixture + back conversion into the sRGB glass image. */
     bake_push_matrix(&push, bake->from_panel);
     push.mix[0] = bake->narrow_weight;
     push.mix[1] = bake->narrow_chroma_weight;
-    set         = bake_set(renderer, t, t->full_a.view, t->low_a.view);
+    set         = bake_set(renderer, t, t->full_a.view, wide_source->view);
     if (set == VK_NULL_HANDLE)
         return false;
     bake_pass(cmd, renderer, renderer->bake_mix_pipeline, set, &push, glass);

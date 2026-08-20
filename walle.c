@@ -1672,6 +1672,29 @@ static bool glass_bake_descriptor(enum glass_variant          variant,
         .narrow_chroma_weight = (float)recipe.narrow_chroma_weight,
         .panel_space          = glass_blur_space_panel() != 0,
     };
+    /* The measured wide mechanism for `regular` (session 193): a five-level
+     * gauss5 mip chain at the 2x capture scale, one fewer level per halving
+     * of the output's pixels-per-point, with the fitted per-appearance
+     * narrow mix.  WALLE_GLASS_WIDE=gauss replays the Gaussian stand-in. */
+    /* OFF by default: the chain kernel is measured-correct at the edge
+     * (-38%/-52% residual) but the shipped transfer and chroma laws were
+     * fitted on the Gaussian's output statistics and compensate its shape
+     * error - end-to-end the swap reads 3.21 coded until those laws are
+     * re-derived on the chain (the campaign-3 refit).  WALLE_GLASS_WIDE=chain
+     * enables it for that work. */
+    static int chain_enabled = -1;
+    if (chain_enabled < 0) {
+        const char* mode = getenv("WALLE_GLASS_WIDE");
+        chain_enabled    = mode != nullptr && strcmp(mode, "chain") == 0;
+    }
+    if (chain_enabled && variant == GLASS_VARIANT_REGULAR) {
+        double points = (scale > 0 ? (double)scale : 1.0) / GLASS_CAPTURE_SCALE;
+        int    levels = 5 + (int)lround(log2(points));
+        out->chain_levels       = levels < 1 ? 1 : levels;
+        out->chain_coarse_sigma = (float)(lightness > 0.5 ? 0.25 : 3.25);
+        out->narrow_weight      = 0.61f;
+        out->narrow_sigma       = (float)((lightness > 0.5 ? 10.5 : 12.0) * points);
+    }
     for (int i = 0; i < 9; ++i) {
         out->to_panel[i]   = (float)kGlassToPanelLinear[i];
         out->from_panel[i] = (float)kGlassFromPanelLinear[i];

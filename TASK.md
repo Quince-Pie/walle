@@ -6260,3 +6260,24 @@ more Apple-shaped.  Next: put the L5-gauss5 chain into the GPU bake
 
 Receipts: blur-chain-fit-regular-{light,dark}.json; the full static
 suite (2633 shots, 4.7GB) lives at M1 ~/lgcap-static-1024.
+
+## Session 193 (close): the chain is real but the laws must move together
+
+The L5-gauss5 chain went into the GPU bake end to end
+(shaders/glass_bake.slang bakeChainDown2/bakeChainUp2; transient
+pyramid in the renderer; WALLE_GLASS_WIDE selects) and the score said
+what the ledger's own coupling warning predicted: coded 3.21 / natural
+1.19 against the Gaussian baseline's 1.37 / 0.86.  The kernel is
+measured-correct at the edge (-38%/-52% residual, both axes agreeing),
+but the shipped transfer polynomials and chroma-mixture weights were
+FITTED ON the Gaussian's output statistics and encode its shape error;
+swap the blur alone and they compensate an error that is no longer
+there.  The chain ships OFF by default (WALLE_GLASS_WIDE=chain enables
+it for the refit work); the mechanism, its fitted parameters, and the
+full pass machinery are in place.
+
+The forward path for campaigns 2+3 is therefore ONE JOINT refit: with
+the chain as the blur, re-derive the transfer (the exact flat tables
+already pin its diagonal - clear's is affine at sub-rounding) and the
+chroma weights from the coded/natural captures, then rescore.  The
+laws move together or not at all.
