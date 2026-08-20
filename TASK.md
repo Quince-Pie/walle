@@ -6578,3 +6578,23 @@ jointly on all four lines + the gray edges (one W, one gate for
 light); decide i9 by re-deriving the panel matrix's behavior at
 saturated yellow from the none-overlay round-trip data the rig
 already logs.
+
+Session 196 sensitivity addendum: the nulls are real and the gray LUT
+needs reinterpretation.  Jacobian row norms: i5/light R = 0.94 at
+t>=128 - exactly the toe region where a warp lifts most - so its
+no-warp reading is instrument-valid, not blindness (only the t=64
+anchor has R output-clipped, row 0.10).  i9/light's B row is the most
+sensitive measured (1.5-1.6): its misfit is real signal, but sits on
+saturated yellow where the sRGB->panel model is least trusted.
+Dark's B rows are 0.000 on i5 and i9-dark-end (the material floors
+blue to 0) - dark's blue channel is unreadable there.
+
+The apparent gray-vs-i5 contradiction dissolves: with sigma_w = 330
+spanning both sides of any edge, a LUMA-GATED toe warp inside the
+blur smears into an apparent full-range pointwise curve under the
+sandwich model - the gray "LUT" was never a pointwise measurement of
+W, only an edge-profile fit.  Gray is therefore compatible with the
+gate.  The joint fit that decides it: far = wide(N + gate(Y_N) *
+(W(N) - N)) with one monotone W and one gate, fitted simultaneously
+on the gray edges + il + i5 + rc through the forward-J referee
+(i9 quarantined until the yellow gamut question is settled).
