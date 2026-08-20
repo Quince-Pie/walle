@@ -5,9 +5,9 @@ Every number here is measured, not estimated. Scores are
 (full / inside / worst, in 8-bit codes) over 68 settled states.
 
     capture      full   inside   worst      what it stresses
-    coded        1.28     1.93    3.34      structured synthetic field
-    natural      0.82     1.20    1.63      natural-statistics photographs
-    sat-red      1.59     2.67    4.73      saturated blue -> red
+    coded        1.27     1.92    3.33      structured synthetic field
+    natural      0.81     1.18    1.61      natural-statistics photographs
+    sat-red      1.59     2.67    4.75      saturated blue -> red
     sat-blue     1.57     2.53    4.57      saturated red -> blue  (reversed pair)
 
 Already at parity and not on this list: the reveal mask geometry (byte-exact,
@@ -104,10 +104,15 @@ on smooth gradients for a metric win. Only worth doing if a better-shaped
 
 ## P2 - measured structure with no mechanism yet
 
-**P2-1. The lever-arm dependence.** ~10% of interior rms. The honest next step
-is not another candidate law but a *discriminating* measurement: the residual
-is a function of `narrow` and `wide` separately, so fit it as a 2-D surface in
-(luma(narrow), luma(wide)) and read the shape rather than guessing forms.
+**P2-1. The lever-arm dependence. DONE (commit 3071a73).** The surface read
+settled it: the residual is zero along `narrow == wide` - so the transfer is
+exact - and linear across it, so the error is the mixture weight. The linear
+coefficient divided by the transfer's luma slope predicted the correction, and
+the referee confirmed the predicted value is the optimum (half too little,
+twice too much). Shipped 0.8846 -> 0.8983 light, 0.5164 -> 0.5502 dark.
+REMAINING: the quadratic term is real at large |narrow - wide| and flips sign
+between appearances, so a pure reweighting is not the whole story. Left
+unfitted deliberately.
 
 **P2-2. The coded capture's uniform excess.** coded/regular/light reads
 1.54-2.31 across its whole narrow output range where natural reads 0.71
