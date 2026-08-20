@@ -57,6 +57,11 @@ struct walle_vk_frame
      * so the compose pass can weight the screen-backdrop correction by how
      * much of that kernel falls outside the reveal.  0 disables it. */
     float                                       wide_sigma_output;
+    /* Weight the screen-backdrop correction carries in CHROMA, per appearance
+     * pole; the luma half keeps the mixture's own 1 - wLuma.  See
+     * glass_screen_chroma_gain in walle.c. */
+    float                                       screen_chroma_light;
+    float                                       screen_chroma_dark;
 
     /* Optional diagnostic destination, tightly packed in top-left row order. */
     uint8_t* mask_readback;

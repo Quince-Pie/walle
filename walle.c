@@ -1669,6 +1669,46 @@ static int glass_screen_backdrop_enabled(void)
     return cached;
 }
 
+/* The screen-backdrop correction ships at the mixture's own chroma weight,
+ * 1 - wChroma, on the theory that only the wide field is wrong at the seam.
+ * The residual says the direction is right and the weight is short: on the
+ * coded sweeps 81% of the surviving near-edge error is a constant per-channel
+ * offset, and that offset is PARALLEL to (wideOut - wideIn) at correlation
+ * 0.92.  The natural sweeps' two wallpapers are both near-neutral - mean
+ * chroma norms 1.8 and 1.9 against coded's 21.5 - so the term has nothing to
+ * correct there, and natural shows no offset at all.  One mechanism, both
+ * captures.
+ *
+ * Why more than the mixture weight is the open question.  The likeliest
+ * reading is that Apple blurs the COMPOSITED screen, which inside the disc is
+ * the glass output rather than the raw wallpaper - and regular's face law
+ * compresses hard (slope 0.53 light, 0.40 dark), so the true inside field is
+ * far flatter than the one walle blurs.  That is the next mechanism to chase;
+ * until it is measured this carries the weight as a constant per appearance,
+ * chosen by the referee.  WALLE_SCREEN_CHROMA=<light>,<dark> overrides it and
+ * `legacy` restores the mixture weight. */
+static void glass_screen_chroma_gain(float* light, float* dark)
+{
+    static float cached[2] = {-1.0f, -1.0f};
+    if (cached[0] < 0.0f) {
+        cached[0]       = 1.00f;
+        cached[1]       = 0.60f;
+        const char* set = getenv("WALLE_SCREEN_CHROMA");
+        if (set != nullptr && strcmp(set, "legacy") == 0) {
+            cached[0] = 1.0f - 0.5420f;
+            cached[1] = 1.0f - 0.6120f;
+        } else if (set != nullptr) {
+            float l = 0.0f, d = 0.0f;
+            if (sscanf(set, "%f,%f", &l, &d) == 2) {
+                cached[0] = l;
+                cached[1] = d;
+            }
+        }
+    }
+    *light = cached[0];
+    *dark  = cached[1];
+}
+
 static float glass_rim_directional_scale(void)
 {
     static float cached = -2.0f;
@@ -2962,6 +3002,8 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
         else if (state->reveal_process_capture_material_progress >= 0.0f)
             material_progress = state->reveal_process_capture_material_progress;
     }
+    float screen_chroma_light = 0.0f, screen_chroma_dark = 0.0f;
+    glass_screen_chroma_gain(&screen_chroma_light, &screen_chroma_dark);
     struct walle_vk_frame frame      = {
              .geometry          = &geometry,
              .progress          = material_progress,
@@ -2998,6 +3040,8 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
                                          : (output->scale > 0 ? output->scale : 1))
                          .wide_sigma
                    : 0.0f,
+             .screen_chroma_light = screen_chroma_light,
+             .screen_chroma_dark  = screen_chroma_dark,
              /* Apple's `identity` variant leaves content unaffected, which is
               * exactly the mask-weighted crossfade the hardware corpus
               * measures - so it shares the gate's composition path.  The gate

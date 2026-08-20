@@ -643,9 +643,14 @@ float4 composeFragment(
         float3 wideIn = texWideB.Sample(linearSampler, uv).rgb;
         float3 deltaWide = (1.0 - insideFraction) * (wideOut - wideIn);
         float wLuma = lerp(0.5164, 0.8846, lightness);
-        float wChroma = lerp(0.6120, 0.5420, lightness);
-        float3 deltaMix = (1.0 - wChroma) * deltaWide
-            - (wLuma - wChroma) * dot(kLuma, deltaWide);
+        // The luma half keeps the mixture's own weight - the residual is
+        // luma-NEUTRAL, under a quarter of a code at every depth - while the
+        // chroma half carries a measured weight per appearance pole.  Writing
+        // the split this way reduces to the mixture form exactly when
+        // gChroma = 1 - wChroma, which WALLE_SCREEN_CHROMA=legacy restores.
+        float gChroma = lerp(push.wide.z, push.wide.w, lightness);
+        float3 deltaMix = gChroma * deltaWide
+            + (1.0 - wLuma - gChroma) * dot(kLuma, deltaWide);
         // The baked glass is sRGB; the mixture lives in panel code space, so
         // the correction is applied there and converted back.
         float3 panelCode = linearToSrgb(mul(kToPanelLinear, srgbToLinear(preSrgb)));

@@ -17,6 +17,17 @@ pixel-for-pixel walle's canonical capture centre (512, 614.4) in 2048x2048.
 Apple's element radius is measured from the frames rather than assumed, so a
 disagreement in the radius law shows up as its own number instead of smearing
 into the colour error.
+
+PASS --material-progress 0.66.  The rig's sweeps are SETTLED - fully formed
+glass at every state - while walle's material runs on the wall clock against a
+one-second transition, and capturing seventeen states takes longer than that.
+Omitting the flag therefore renders the late states AFTER the transition has
+finished, where the glass is gone and the frame is the bare wallpaper: state 16
+comes out byte-identical to the incoming reference and scores 94 codes against
+Apple, dragging the headline from 1.27 to 24.08.  It fails quietly - the render
+succeeds, the masks are correct to the pixel, and walle.log is byte-identical
+to a good run - so nothing announces it but the score.  0.66 is full thickness;
+1.0 is the far end of the materialize curve and is just as wrong (112 inside).
 """
 
 import argparse
