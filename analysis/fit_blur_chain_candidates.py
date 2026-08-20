@@ -25,9 +25,8 @@ ROW_HALF_BAND = 40
 INTERIOR_RADIUS = 220
 
 STEPS = {
-    "kstep-x-000-255": (0.0, 255.0),
-    "kstep-x-064-192": (64.0, 192.0),
-    "kstep-y-064-192": (64.0, 192.0),
+    "edge-x": (0.0, 255.0),
+    "edge-y": (0.0, 255.0),
 }
 
 
@@ -103,9 +102,9 @@ def main():
 
     results = []
     for step_name, (low, high) in STEPS.items():
-        axis = "y" if "-y-" in step_name else "x"
+        axis = "y" if step_name.endswith("-y") else "x"
         matches = sorted(shots.glob(
-            f"{step_name}__*__{args.overlay}__{args.appearance}.png"))
+            f"{step_name}__circle-0500-center__{args.overlay}__{args.appearance}.png"))
         if not matches:
             continue
         measured, start, width = edge_profile(matches[0], axis)
@@ -144,21 +143,32 @@ def main():
                     "coarseSigma": best[1],
                     "rms": round(best[0], 4),
                 })
-        # mixture: narrow gaussian + chain (the bleed as a chain)
-        for levels in (4, 5, 6):
-            best = None
-            for w in (0.80, 0.8846, 0.92):
-                for ns in (10.0, 14.188, 18.0):
-                    k = w * gaussian_kernel(ns) + (1 - w) * chain_kernel(levels, "tent", 1.0)
-                    rms, _, _ = scored(k)
-                    if best is None or rms < best[0]:
-                        best = (rms, w, ns)
-            results.append({
-                "step": step_name,
-                "model": f"narrowGauss+chain-L{levels}",
-                "narrowWeight": best[1], "narrowSigma": best[2],
-                "rms": round(best[0], 4),
-            })
+        # mixture: narrow gaussian + chain (the bleed as a chain), refined by
+        # coordinate descent over weight, narrow sigma, and coarse sigma
+        for levels in (4, 5, 6, 7):
+            for pf in ("tent", "gauss5"):
+                w, ns, cs = 0.8, 14.0, 1.0
+                best = (1e9, w, ns, cs)
+                for _ in range(4):
+                    for w_try in np.arange(max(0.05, best[1]-0.1), min(0.99, best[1]+0.1)+1e-9, 0.01):
+                        k = w_try*gaussian_kernel(best[2]) + (1-w_try)*chain_kernel(levels, pf, best[3])
+                        r, _, _ = scored(k)
+                        if r < best[0]: best = (r, w_try, best[2], best[3])
+                    for ns_try in np.arange(max(2.0, best[2]-4), best[2]+4+1e-9, 0.5):
+                        k = best[1]*gaussian_kernel(ns_try) + (1-best[1])*chain_kernel(levels, pf, best[3])
+                        r, _, _ = scored(k)
+                        if r < best[0]: best = (r, best[1], ns_try, best[3])
+                    for cs_try in np.arange(0.0, 4.01, 0.25):
+                        k = best[1]*gaussian_kernel(best[2]) + (1-best[1])*chain_kernel(levels, pf, cs_try)
+                        r, _, _ = scored(k)
+                        if r < best[0]: best = (r, best[1], best[2], cs_try)
+                results.append({
+                    "step": step_name,
+                    "model": f"narrowGauss+chain-L{levels}-{pf}",
+                    "narrowWeight": round(best[1], 3), "narrowSigma": round(best[2], 2),
+                    "coarseSigma": best[3],
+                    "rms": round(best[0], 4),
+                })
 
     for r in results:
         print(json.dumps(r))

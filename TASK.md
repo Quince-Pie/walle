@@ -6234,3 +6234,29 @@ Campaign 2 instrument ready: analysis/fit_blur_chain_candidates.py
 (downsample-chain kernels synthesized by impulse, scored by the same
 forward-convolution gain/offset method as the kernel derivation) -
 waiting on the suite's kstep shots, still capturing.
+
+## Session 193 (cont.): the bleed is a mip chain, and the blur may be shared
+
+Campaign 2's first fit, on the fresh 26.6.1 edge-x/edge-y statics
+(instrument analysis/fit_blur_chain_candidates.py; both edges agree to
+the third decimal, so the fit is real):
+
+  regular/light: narrowGauss(10.5) 0.61 + chainL5-gauss5(coarse 0.25)
+      rms 0.816 / 0.814   vs shipped two-Gaussian 1.317 / 1.316  (-38%)
+  regular/dark:  narrowGauss(12.0) 0.60 + chainL5..7-gauss5
+      rms 1.214 / 1.206   vs shipped 2.529 / 2.496               (-52%)
+
+The mechanism hypothesis is confirmed: the "bleed" is a downsample
+chain (five 2x rounds behind a [1 4 6 4 1]/16 prefilter, near-zero
+coarse blur, bilinear up), not a wide Gaussian.  And the structural
+surprise: BOTH appearances converge to the same mixture (w ~ 0.61,
+narrow sigma 10.5-12) - the shipped law's wildly appearance-dependent
+weights (0.8846 light / 0.5164 dark) look like Gaussian-shape error
+compensated per appearance.  Candidate simplification: ONE blur
+mechanism, with the appearance living entirely in the transfer - far
+more Apple-shaped.  Next: put the L5-gauss5 chain into the GPU bake
+(whose wide path is already a chain) and score end-to-end against
+1.37 coded / 0.86 natural.
+
+Receipts: blur-chain-fit-regular-{light,dark}.json; the full static
+suite (2633 shots, 4.7GB) lives at M1 ~/lgcap-static-1024.

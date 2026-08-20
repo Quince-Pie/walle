@@ -1,0 +1,236 @@
+[
+ {
+  "step": "edge-x",
+  "model": "shipped-twoGaussian",
+  "rms": 2.5287
+ },
+ {
+  "step": "edge-x",
+  "model": "chain-L3-tent",
+  "coarseSigma": 3.0,
+  "rms": 2.4316
+ },
+ {
+  "step": "edge-x",
+  "model": "chain-L3-gauss5",
+  "coarseSigma": 3.0,
+  "rms": 2.4324
+ },
+ {
+  "step": "edge-x",
+  "model": "chain-L4-tent",
+  "coarseSigma": 1.5,
+  "rms": 3.2197
+ },
+ {
+  "step": "edge-x",
+  "model": "chain-L4-gauss5",
+  "coarseSigma": 1.5,
+  "rms": 3.2219
+ },
+ {
+  "step": "edge-x",
+  "model": "chain-L5-tent",
+  "coarseSigma": 0.5,
+  "rms": 2.75
+ },
+ {
+  "step": "edge-x",
+  "model": "chain-L5-gauss5",
+  "coarseSigma": 0.5,
+  "rms": 2.8581
+ },
+ {
+  "step": "edge-x",
+  "model": "chain-L6-tent",
+  "coarseSigma": 0.0,
+  "rms": 2.4501
+ },
+ {
+  "step": "edge-x",
+  "model": "chain-L6-gauss5",
+  "coarseSigma": 0.0,
+  "rms": 3.1263
+ },
+ {
+  "step": "edge-x",
+  "model": "narrowGauss+chain-L4-tent",
+  "narrowWeight": 0.61,
+  "narrowSigma": 11.5,
+  "coarseSigma": 4.0,
+  "rms": 1.8441
+ },
+ {
+  "step": "edge-x",
+  "model": "narrowGauss+chain-L4-gauss5",
+  "narrowWeight": 0.61,
+  "narrowSigma": 11.5,
+  "coarseSigma": 4.0,
+  "rms": 1.842
+ },
+ {
+  "step": "edge-x",
+  "model": "narrowGauss+chain-L5-tent",
+  "narrowWeight": 0.61,
+  "narrowSigma": 12.0,
+  "coarseSigma": 3.25,
+  "rms": 1.2233
+ },
+ {
+  "step": "edge-x",
+  "model": "narrowGauss+chain-L5-gauss5",
+  "narrowWeight": 0.61,
+  "narrowSigma": 12.0,
+  "coarseSigma": 3.25,
+  "rms": 1.2219
+ },
+ {
+  "step": "edge-x",
+  "model": "narrowGauss+chain-L6-tent",
+  "narrowWeight": 0.61,
+  "narrowSigma": 12.5,
+  "coarseSigma": 1.75,
+  "rms": 1.2329
+ },
+ {
+  "step": "edge-x",
+  "model": "narrowGauss+chain-L6-gauss5",
+  "narrowWeight": 0.61,
+  "narrowSigma": 12.0,
+  "coarseSigma": 1.5,
+  "rms": 1.2229
+ },
+ {
+  "step": "edge-x",
+  "model": "narrowGauss+chain-L7-tent",
+  "narrowWeight": 0.6,
+  "narrowSigma": 12.5,
+  "coarseSigma": 0.75,
+  "rms": 1.2462
+ },
+ {
+  "step": "edge-x",
+  "model": "narrowGauss+chain-L7-gauss5",
+  "narrowWeight": 0.6,
+  "narrowSigma": 12.0,
+  "coarseSigma": 0.5,
+  "rms": 1.214
+ },
+ {
+  "step": "edge-y",
+  "model": "shipped-twoGaussian",
+  "rms": 2.4961
+ },
+ {
+  "step": "edge-y",
+  "model": "chain-L3-tent",
+  "coarseSigma": 3.0,
+  "rms": 2.4137
+ },
+ {
+  "step": "edge-y",
+  "model": "chain-L3-gauss5",
+  "coarseSigma": 3.0,
+  "rms": 2.4154
+ },
+ {
+  "step": "edge-y",
+  "model": "chain-L4-tent",
+  "coarseSigma": 1.5,
+  "rms": 3.2033
+ },
+ {
+  "step": "edge-y",
+  "model": "chain-L4-gauss5",
+  "coarseSigma": 1.5,
+  "rms": 3.2061
+ },
+ {
+  "step": "edge-y",
+  "model": "chain-L5-tent",
+  "coarseSigma": 0.5,
+  "rms": 2.7474
+ },
+ {
+  "step": "edge-y",
+  "model": "chain-L5-gauss5",
+  "coarseSigma": 0.5,
+  "rms": 2.8607
+ },
+ {
+  "step": "edge-y",
+  "model": "chain-L6-tent",
+  "coarseSigma": 0.0,
+  "rms": 2.4568
+ },
+ {
+  "step": "edge-y",
+  "model": "chain-L6-gauss5",
+  "coarseSigma": 0.0,
+  "rms": 3.1479
+ },
+ {
+  "step": "edge-y",
+  "model": "narrowGauss+chain-L4-tent",
+  "narrowWeight": 0.61,
+  "narrowSigma": 11.5,
+  "coarseSigma": 4.0,
+  "rms": 1.8255
+ },
+ {
+  "step": "edge-y",
+  "model": "narrowGauss+chain-L4-gauss5",
+  "narrowWeight": 0.61,
+  "narrowSigma": 11.5,
+  "coarseSigma": 4.0,
+  "rms": 1.8233
+ },
+ {
+  "step": "edge-y",
+  "model": "narrowGauss+chain-L5-tent",
+  "narrowWeight": 0.61,
+  "narrowSigma": 12.0,
+  "coarseSigma": 3.25,
+  "rms": 1.216
+ },
+ {
+  "step": "edge-y",
+  "model": "narrowGauss+chain-L5-gauss5",
+  "narrowWeight": 0.61,
+  "narrowSigma": 12.0,
+  "coarseSigma": 3.25,
+  "rms": 1.2147
+ },
+ {
+  "step": "edge-y",
+  "model": "narrowGauss+chain-L6-tent",
+  "narrowWeight": 0.61,
+  "narrowSigma": 12.0,
+  "coarseSigma": 1.5,
+  "rms": 1.2252
+ },
+ {
+  "step": "edge-y",
+  "model": "narrowGauss+chain-L6-gauss5",
+  "narrowWeight": 0.61,
+  "narrowSigma": 12.0,
+  "coarseSigma": 1.5,
+  "rms": 1.2156
+ },
+ {
+  "step": "edge-y",
+  "model": "narrowGauss+chain-L7-tent",
+  "narrowWeight": 0.61,
+  "narrowSigma": 12.5,
+  "coarseSigma": 0.75,
+  "rms": 1.2394
+ },
+ {
+  "step": "edge-y",
+  "model": "narrowGauss+chain-L7-gauss5",
+  "narrowWeight": 0.6,
+  "narrowSigma": 12.0,
+  "coarseSigma": 0.5,
+  "rms": 1.2059
+ }
+]
