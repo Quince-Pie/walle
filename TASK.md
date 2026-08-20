@@ -7231,3 +7231,62 @@ Where that leaves the residual, in three regimes rather than one:
 The mid-range excess is the named target now: regular-only,
 content-proportional, not a mixture weight, not a displacement, not the
 backdrop clip.
+
+## Session 202: THE BACKDROP DOES NOT STOP AT THE REVEAL
+
+The mid-range excess is explained, and the explanation was in the
+name of the thing all along: Apple's object is a `BackgroundFilter`,
+and a background filter blurs the BACKDROP - the composited screen
+behind the glass.  During a wallpaper reveal the screen outside the
+growing disc still shows the OUTGOING wallpaper.  walle bakes each
+wallpaper's glass from that wallpaper alone, so within one wide radius
+of the boundary its bleed averages in incoming content that Apple
+never sees there.
+
+Measured offline first, on the M1 sweeps, by recomputing the wide
+field over the composited screen instead of the incoming wallpaper:
+
+    depth (capture px)     0-60  60-140 140-260 260-420 700-1100
+    incoming only (walle) 15.07   9.84    6.82    3.95     1.63
+    screen-composited     12.14   7.32    5.03    3.47     1.63
+
+and across the transition, whole interior: state 6 -13.3%, state 9
+-27.7%, state 12 -21.0%, and state 16 EXACTLY 0.0% - at full coverage
+there is no outside left to see.  That last row is the control: a
+mechanism keyed on content beyond the boundary must vanish when the
+boundary leaves the screen, and it does.
+
+SHIPPED.  The mixture is linear in the wide field, so the correction is
+exact given both fields: the bake now keeps each wallpaper's wide field
+on its 8x-reduced grid (a persistent low-res image, ~1 MB), the
+outgoing wallpaper is GPU-baked on restore instead of being rebuilt
+from its cached glass bytes, and the compose pass rebuilds the seam
+
+    dB   = (1 - Phi(depth / sigma)) * (B_outgoing - B_incoming)
+    dMix = (1 - wChroma) * dB - (wLuma - wChroma) * luma(dB)
+
+in panel code space, with Phi the normal CDF - the fraction of the
+wide Gaussian that fell inside the reveal.  `clear` carries no wide
+layer and is skipped entirely.
+
+  Referee, both holdouts, every regular metric better, nothing worse:
+    coded   headline 1.36 -> 1.30   inside 2.13 -> 1.96  worst 3.98 -> 3.54
+    natural headline 0.85 -> 0.83   inside 1.29 -> 1.21  worst 1.77 -> 1.69
+    coded   rd inside 2.894 -> 2.661  edge 9.319 -> 8.740  full 1.826 -> 1.733
+    coded   rl inside 3.641 -> 3.225  edge 9.710 -> 8.969  full 2.208 -> 2.054
+    natural rd inside 1.862 -> 1.649  edge 4.449 -> 4.060  full 1.116 -> 1.078
+    natural rl inside 1.384 -> 1.277  edge 3.445 -> 3.320  full 0.909 -> 0.872
+    clear BYTE-IDENTICAL on both sets, reveal gate sha 8ac1bd7c, live
+    gate pass.
+
+Two bugs found while wiring it, both worth remembering: a cached
+`wide_available` flag went stale the moment either wallpaper was
+re-uploaded through the non-baking restore path (availability is now
+read from the pairs actually bound), and the wide sigma was computed
+with `output->scale` where the frame uses the process-capture backing
+scale, so it was half the baked value.  Neither showed up as a crash -
+the correction simply did nothing, and the score was byte-identical to
+the build without it.  A smoke test that forces the correction to its
+maximum and diffs the render is what caught it.
+
+WALLE_SCREEN_BACKDROP=off replays the isolated bake.

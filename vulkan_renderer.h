@@ -53,6 +53,10 @@ struct walle_vk_frame
     float                                       shadow_offset_points;
     /* Scale on the measured directional rim modulation (0 = off). */
     float                                       rim_directional;
+    /* The wide ("bleed") sigma in OUTPUT pixels for this frame's material,
+     * so the compose pass can weight the screen-backdrop correction by how
+     * much of that kernel falls outside the reveal.  0 disables it. */
+    float                                       wide_sigma_output;
 
     /* Optional diagnostic destination, tightly packed in top-left row order. */
     uint8_t* mask_readback;
@@ -150,7 +154,8 @@ bool walle_vk_output_restore_current(struct walle_vk_output*            output,
                                      int                                standard_fd,
                                      const struct walle_vk_image_layer* standard,
                                      int                                glass_fd,
-                                     const struct walle_vk_image_layer* glass);
+                                     const struct walle_vk_image_layer* glass,
+                                     const struct walle_vk_glass_bake*  bake);
 
 [[nodiscard]]
 enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      output,

@@ -36,6 +36,10 @@ enum
     WALLE_VK_COMPOSE_BINDING_GLASS_B = 3,
     WALLE_VK_COMPOSE_BINDING_MASK    = 4,
     WALLE_VK_COMPOSE_BINDING_SAMPLER = 5,
+    /* The wide ("bleed") field of each wallpaper, at the bake's 8x-reduced
+     * grid, in PANEL CODE space (session 202). */
+    WALLE_VK_COMPOSE_BINDING_WIDE_A  = 6,
+    WALLE_VK_COMPOSE_BINDING_WIDE_B  = 7,
 };
 
 constexpr uint32_t WALLE_VK_OWNER_VECTOR_COUNT
@@ -142,6 +146,13 @@ struct walle_vk_texture_pair
 {
     struct walle_vk_image standard;
     struct walle_vk_image glass;
+    /* The wide field this wallpaper's bake produced, kept at the reduced
+     * grid so the compose pass can rebuild the backdrop the way Apple sees
+     * it: outside the reveal the screen still shows the OTHER wallpaper, so
+     * the wide blur near the boundary must mix the two.  Zero-sized when the
+     * pair was uploaded without a GPU bake. */
+    struct walle_vk_image wide;
+    bool                  has_wide;
 };
 
 struct walle_vk_dmabuf_format
@@ -205,14 +216,18 @@ struct walle_vk_compose_push
     /* Device pixels per point, then three unused lanes kept so the C and
      * Vulkan layouts stay identical without relying on member alignment. */
     float scaling[4];
+    /* x: 1 when both wallpapers carry a wide field and the screen-backdrop
+     * correction may run; y: the wide sigma in OUTPUT pixels; z, w unused. */
+    float wide[4];
 };
 
 static_assert(sizeof(struct walle_vk_mask_push) == 48);
-static_assert(sizeof(struct walle_vk_compose_push) == 64);
+static_assert(sizeof(struct walle_vk_compose_push) == 80);
 static_assert(offsetof(struct walle_vk_compose_push, timeline) == 0);
 static_assert(offsetof(struct walle_vk_compose_push, geometry) == 16);
 static_assert(offsetof(struct walle_vk_compose_push, material) == 32);
 static_assert(offsetof(struct walle_vk_compose_push, scaling) == 48);
+static_assert(offsetof(struct walle_vk_compose_push, wide) == 64);
 
 struct walle_vk_renderer
 {
@@ -288,6 +303,7 @@ struct walle_vk_output
 
     struct walle_vk_texture_pair current;
     struct walle_vk_texture_pair incoming;
+    bool                         wide_available;
     struct walle_vk_image        mask;
     VkImageLayout                mask_layout;
 
@@ -1524,24 +1540,20 @@ static bool create_descriptor_layouts(struct walle_vk_renderer* renderer)
                   "vkCreateDescriptorSetLayout(mask)"))
         return false;
 
-    VkDescriptorSetLayoutBinding compose_bindings[6] = {};
-    for (uint32_t index = 0; index < 5; ++index) {
+    VkDescriptorSetLayoutBinding compose_bindings[8] = {};
+    for (uint32_t index = 0; index < 8; ++index) {
         compose_bindings[index] = (VkDescriptorSetLayoutBinding){
             .binding         = index,
-            .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+            .descriptorType  = index == WALLE_VK_COMPOSE_BINDING_SAMPLER
+                                   ? VK_DESCRIPTOR_TYPE_SAMPLER
+                                   : VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
             .descriptorCount = 1,
             .stageFlags      = VK_SHADER_STAGE_FRAGMENT_BIT,
         };
     }
-    compose_bindings[5] = (VkDescriptorSetLayoutBinding){
-        .binding         = WALLE_VK_COMPOSE_BINDING_SAMPLER,
-        .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLER,
-        .descriptorCount = 1,
-        .stageFlags      = VK_SHADER_STAGE_FRAGMENT_BIT,
-    };
     VkDescriptorSetLayoutCreateInfo compose_info = {
         .sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-        .bindingCount = 6,
+        .bindingCount = 8,
         .pBindings    = compose_bindings,
     };
     return vk_check(vkCreateDescriptorSetLayout(
@@ -2130,6 +2142,8 @@ static void destroy_texture_pair(VkDevice device, struct walle_vk_texture_pair* 
 {
     destroy_image(device, &pair->standard);
     destroy_image(device, &pair->glass);
+    destroy_image(device, &pair->wide);
+    pair->has_wide = false;
 }
 
 static void destroy_present_images(struct walle_vk_output* output)
@@ -2570,7 +2584,8 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
                               const struct walle_vk_image*      standard,
                               const struct walle_vk_image*      glass,
                               const struct walle_vk_glass_bake* bake,
-                              struct bake_transients*           t)
+                              struct bake_transients*           t,
+                              const struct walle_vk_image*      wide_out)
 {
     uint32_t w    = standard->width;
     uint32_t h    = standard->height;
@@ -2756,8 +2771,13 @@ static bool record_glass_bake(struct walle_vk_renderer*         renderer,
         set          = bake_set(renderer, t, t->low_b.view, t->low_b.view);
         if (set == VK_NULL_HANDLE)
             return false;
-        bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, &t->low_a);
-        wide_source = &t->low_a;
+        /* The wide field is written to the PERSISTENT reduced-grid image when
+         * one was supplied: the compose pass needs it to rebuild the backdrop
+         * across the reveal boundary (session 202).  It is the same content
+         * either way; only its lifetime differs. */
+        const struct walle_vk_image* wide_dst = wide_out ? wide_out : &t->low_a;
+        bake_pass(cmd, renderer, renderer->bake_blur_pipeline, set, &push, wide_dst);
+        wide_source = wide_dst;
     }
 
     /* Mixture + back conversion into the sRGB glass image.  blur.x carries
@@ -2805,6 +2825,7 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
         && ckd_add(&total_size, (VkDeviceSize)standard->size, (VkDeviceSize)glass->size))
         return false;
     struct walle_vk_texture_pair pair    = {};
+    pair.has_wide                        = bake != nullptr;
     struct walle_vk_buffer       staging = {};
     struct bake_transients       transients = {};
     VkImageUsageFlags image_usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
@@ -2822,6 +2843,14 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
                                    WALLE_VK_WALLPAPER_FORMAT,
                                    glass_usage,
                                    &pair.glass)
+                   && (bake == nullptr
+                       || create_image(renderer,
+                                       ((uint32_t)standard->width + 7u) / 8u,
+                                       ((uint32_t)standard->height + 7u) / 8u,
+                                       VK_FORMAT_R32G32B32A32_SFLOAT,
+                                       VK_IMAGE_USAGE_SAMPLED_BIT
+                                           | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                                       &pair.wide))
                    && create_buffer(renderer,
                                     total_size,
                                     VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
@@ -2914,7 +2943,7 @@ static bool upload_texture_pair(struct walle_vk_output*            output,
         } else {
             success = record_glass_bake(
                 renderer, renderer->upload_command_buffer, &pair.standard, &pair.glass, bake,
-                &transients);
+                &transients, pair.has_wide ? &pair.wide : nullptr);
         }
         success = success && end_upload(renderer);
     }
@@ -2956,7 +2985,8 @@ bool walle_vk_output_restore_current(struct walle_vk_output*            output,
                                      int                                standard_fd,
                                      const struct walle_vk_image_layer* standard,
                                      int                                glass_fd,
-                                     const struct walle_vk_image_layer* glass)
+                                     const struct walle_vk_image_layer* glass,
+                                     const struct walle_vk_glass_bake*  bake)
 {
     if (!output || output->renderer->fatal)
         return false;
@@ -2965,7 +2995,11 @@ bool walle_vk_output_restore_current(struct walle_vk_output*            output,
     if (output->current.standard.handle || output->current.glass.handle)
         return false;
     struct walle_vk_texture_pair pair = {};
-    if (!upload_texture_pair(output, standard_fd, standard, glass_fd, glass, nullptr, &pair))
+    /* The OUTGOING wallpaper is baked on the GPU too, not just restored from
+     * its cached glass bytes: the compose pass needs its wide field to
+     * rebuild the backdrop across the reveal boundary (session 202).  Under
+     * the default GPU bake the cached glass is dead weight anyway. */
+    if (!upload_texture_pair(output, standard_fd, standard, glass_fd, glass, bake, &pair))
         return false;
     output->current                   = pair;
     output->compose_descriptors_ready = false;
@@ -3110,7 +3144,7 @@ static bool create_transition_descriptor_sets(struct walle_vk_output* output)
     struct walle_vk_renderer* renderer     = output->renderer;
     VkDescriptorPoolSize      pool_sizes[] = {
         {.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, .descriptorCount = 6},
-        {.type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, .descriptorCount = 5},
+        {.type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, .descriptorCount = 7},
         {.type = VK_DESCRIPTOR_TYPE_SAMPLER, .descriptorCount = 1},
     };
     VkDescriptorPoolCreateInfo pool_info = {
@@ -3340,16 +3374,27 @@ static bool update_compose_descriptors(struct walle_vk_output* output, bool firs
     if (!a->standard.view || !a->glass.view || !b->standard.view || !b->glass.view
         || !output->mask.view)
         return false;
-    VkDescriptorImageInfo infos[5] = {
+    /* The wide fields are optional: a pair uploaded without a GPU bake has
+     * none, and the correction is disabled for that frame.  The descriptor
+     * still has to point somewhere, so the glass view stands in. */
+    VkImageView wide_a = a->has_wide && a->wide.view ? a->wide.view : a->glass.view;
+    VkImageView wide_b = b->has_wide && b->wide.view ? b->wide.view : b->glass.view;
+    VkDescriptorImageInfo infos[8] = {
         {.imageView = a->standard.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
         {.imageView = a->glass.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
         {.imageView = b->standard.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
         {.imageView = b->glass.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
         {.imageView = output->mask.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
+        {},
+        {.imageView = wide_a, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
+        {.imageView = wide_b, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
     };
-    VkWriteDescriptorSet writes[5] = {};
-    for (uint32_t index = 0; index < 5; ++index) {
-        writes[index] = (VkWriteDescriptorSet){
+    VkWriteDescriptorSet writes[7] = {};
+    uint32_t             count     = 0;
+    for (uint32_t index = 0; index < 8; ++index) {
+        if (index == WALLE_VK_COMPOSE_BINDING_SAMPLER)
+            continue;
+        writes[count++] = (VkWriteDescriptorSet){
             .sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
             .dstSet          = output->compose_set,
             .dstBinding      = index,
@@ -3358,7 +3403,8 @@ static bool update_compose_descriptors(struct walle_vk_output* output, bool firs
             .pImageInfo      = &infos[index],
         };
     }
-    vkUpdateDescriptorSets(output->renderer->device, 5, writes, 0, nullptr);
+    output->wide_available = a->has_wide && b->has_wide;
+    vkUpdateDescriptorSets(output->renderer->device, count, writes, 0, nullptr);
     output->compose_descriptors_first_boot = first_boot;
     output->compose_descriptors_ready      = true;
     return true;
@@ -3771,6 +3817,12 @@ static bool record_frame(struct walle_vk_output*              output,
                            renderer->compose_pipeline_layout,
                            VK_SHADER_STAGE_FRAGMENT_BIT,
                            output->compose_set);
+    /* Availability is read from the pairs that are actually bound this frame:
+     * a cached flag goes stale as soon as either wallpaper is re-uploaded
+     * through a path that does not bake (restore_current). */
+    const struct walle_vk_texture_pair* wide_a
+        = frame->first_boot ? &output->incoming : &output->current;
+    bool wide_ready = wide_a->has_wide && output->incoming.has_wide;
     struct walle_vk_compose_push compose_push = {
         .timeline = {frame->progress,
                      (float)output->extent.width,
@@ -3784,6 +3836,8 @@ static bool record_frame(struct walle_vk_output*              output,
         .scaling  = {frame->output_scale > 0.0f ? frame->output_scale : 1.0f,
                      frame->lens_mode, frame->shadow_offset_points,
                      frame->rim_directional},
+        .wide     = {wide_ready && frame->wide_sigma_output > 0.0f ? 1.0f : 0.0f,
+                     frame->wide_sigma_output, 0.0f, 0.0f},
     };
     push_constants_14(command_buffer,
                       renderer->compose_pipeline_layout,

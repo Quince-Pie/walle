@@ -26,6 +26,10 @@
 [[vk::binding(3, 0)]] Texture2D<float4> texGlassB;
 [[vk::binding(4, 0)]] Texture2D<uint> revealMask;
 [[vk::binding(5, 0)]] SamplerState linearSampler;
+// The two wallpapers' WIDE ("bleed") fields at the bake's 8x-reduced grid, in
+// PANEL CODE space (session 202).
+[[vk::binding(6, 0)]] Texture2D<float4> texWideA;
+[[vk::binding(7, 0)]] Texture2D<float4> texWideB;
 
 struct ComposePush
 {
@@ -35,6 +39,7 @@ struct ComposePush
     float4 geometry; // centerTopLeft.x, centerTopLeft.y, radius, appleBlend
     float4 material; // appearance (0 dark, 1 light), tint rgb (<0 in y = untinted)
     float4 scaling;  // device pixels per point, then three unused lanes
+    float4 wide;     // enable, wide sigma in output px, two unused lanes
 };
 
 struct ComposeVertexOutput
@@ -274,6 +279,25 @@ float3 srgbToLinear(float3 value)
 // NEGATIVE in the channel opposite its hue, and a plane through the rest of the
 // colour cube cannot reach that.  How far past affine is measured per material,
 // and the generated header pads the chosen orders to one width.
+// sRGB-linear <-> panel-linear colorants, the same pair the bake uses
+// (walle.c kGlassToPanelLinear / kGlassFromPanelLinear).
+static const float3x3 kToPanelLinear = float3x3(
+    0.8225172, 0.1774401, -0.0000221,
+    0.0331941, 0.9667933, -0.0000244,
+    0.0171003, 0.0724382,  0.9108519);
+static const float3x3 kFromPanelLinear = float3x3(
+     1.2248519, -0.2248045, 0.0000237,
+    -0.0420549,  1.0420637, 0.0000269,
+    -0.0196507, -0.0786527, 1.0978707);
+
+// Standard-normal CDF, tanh form - the fraction of a Gaussian kernel that
+// falls on the inside of a locally straight boundary at signed depth z.
+float normalCdf(float z)
+{
+    float t = 0.7978845608 * z * (1.0 + 0.044715 * z * z);
+    return 0.5 * (1.0 + tanh(t));
+}
+
 float3 applyTint(float3 substrateSrgb, float3 tint, float lightness,
                  WalleTintRegime dark, WalleTintRegime light)
 {
@@ -596,6 +620,38 @@ float4 composeFragment(
     lensed.z = texGlassB.Sample(
         linearSampler, uv + displacementUv * (1.0 - kLensDispersion)).b;
     float3 preSrgb = linearToSrgb(lensed);
+
+    // THE BACKDROP DOES NOT STOP AT THE REVEAL (session 202).  Apple's filter
+    // blurs the BACKDROP - the composited screen behind the glass - and
+    // outside the growing disc the screen still shows the OUTGOING wallpaper.
+    // walle bakes each wallpaper's glass from that wallpaper alone, so its
+    // wide field near the boundary averages in incoming content Apple never
+    // sees there.  The fix rebuilds the wide field the compositor actually
+    // had: the fraction of a Gaussian of sigma `push.wide.y` lying inside the
+    // reveal is normalCdf(depth / sigma), and the rest of it sat on the other
+    // wallpaper.  The mixture is linear in the wide field, so the correction
+    // is exact given both fields:
+    //     dMix = (1 - wChroma) * dB - (wLuma - wChroma) * luma(dB)
+    // Measured offline against the M1 sweeps, this cuts the interior residual
+    // 13-28% mid-transition and exactly 0% at full coverage, where there is
+    // no outside left to see.  `clear` carries no wide layer and is skipped.
+    if (push.wide.x > 0.5 && regular > 0.5 && mask > 0.0)
+    {
+        float sigmaWide = max(push.wide.y, 1.0);
+        float insideFraction = normalCdf(insideRimMaterial * lensUnit / sigmaWide);
+        float3 wideOut = texWideA.Sample(linearSampler, uv).rgb;
+        float3 wideIn = texWideB.Sample(linearSampler, uv).rgb;
+        float3 deltaWide = (1.0 - insideFraction) * (wideOut - wideIn);
+        float wLuma = lerp(0.5164, 0.8846, lightness);
+        float wChroma = lerp(0.6120, 0.5420, lightness);
+        float3 deltaMix = (1.0 - wChroma) * deltaWide
+            - (wLuma - wChroma) * dot(kLuma, deltaWide);
+        // The baked glass is sRGB; the mixture lives in panel code space, so
+        // the correction is applied there and converted back.
+        float3 panelCode = linearToSrgb(mul(kToPanelLinear, srgbToLinear(preSrgb)));
+        panelCode = saturate(panelCode + deltaMix);
+        preSrgb = linearToSrgb(max(mul(kFromPanelLinear, srgbToLinear(panelCode)), 0.0));
+    }
 
     float3 glassColor;
     if (regular > 0.5)

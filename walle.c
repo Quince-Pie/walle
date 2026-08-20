@@ -1655,6 +1655,20 @@ static inline void cleanup_vips_thread(void)
  * coded field's own structure dominates and the growing disc leaves the
  * window so only 10-13 sectors survive.  The two configurations are not the
  * same glass.  WALLE_RIM_DIR=1 replays the experiment. */
+/* Apple blurs the BACKDROP - the composited screen behind the glass - so
+ * outside the reveal its wide field sees the OUTGOING wallpaper.  walle bakes
+ * each wallpaper's glass in isolation; the compose pass corrects the seam.
+ * WALLE_SCREEN_BACKDROP=off replays the isolated bake. */
+static int glass_screen_backdrop_enabled(void)
+{
+    static int cached = -1;
+    if (cached < 0) {
+        const char* mode = getenv("WALLE_SCREEN_BACKDROP");
+        cached           = mode == nullptr || strcmp(mode, "off") != 0;
+    }
+    return cached;
+}
+
 static float glass_rim_directional_scale(void)
 {
     static float cached = -2.0f;
@@ -2970,6 +2984,20 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
              .shadow_offset_points
              = glass_shadow_offset_enabled() ? 8.0f : 0.0f,
              .rim_directional = glass_rim_directional_scale(),
+             /* The wide sigma this output's material is baked with, in OUTPUT
+              * pixels, so the compose pass can weight the screen-backdrop
+              * correction (session 202).  Zero for `clear`, which has no wide
+              * layer, and when the correction is disabled. */
+             .wide_sigma_output
+             = glass_screen_backdrop_enabled()
+                       && output->glass_variant == GLASS_VARIANT_REGULAR
+                   ? (float)glass_blur_for(
+                         output->glass_variant,
+                         glass_appearance_value(output),
+                         process_capture ? state->reveal_process_capture_backing_scale
+                                         : (output->scale > 0 ? output->scale : 1))
+                         .wide_sigma
+                   : 0.0f,
              /* Apple's `identity` variant leaves content unaffected, which is
               * exactly the mask-weighted crossfade the hardware corpus
               * measures - so it shares the gate's composition path.  The gate
@@ -3337,6 +3365,14 @@ static void finalize_render(struct wallpaper_output* output)
         .width  = res.glass.width,
         .height = res.glass.height,
     };
+    struct walle_vk_glass_bake bake;
+    bool                       gpu_bake = glass_bake_descriptor(
+        output->glass_variant,
+        glass_appearance_value(output),
+        output->reveal_process_capture_owned
+            ? state->reveal_process_capture_backing_scale
+            : (output->scale > 0 ? output->scale : 1),
+        &bake);
     bool restored = first_boot;
     if (!first_boot && output->current_source.std_fd >= 0) {
         const struct walle_vk_image_layer current_standard = {
@@ -3357,17 +3393,10 @@ static void finalize_render(struct wallpaper_output* output)
                                                       output->current_source.std_fd,
                                                       &current_standard,
                                                       output->current_source.glass_fd,
-                                                      &current_glass);
+                                                      &current_glass,
+                                                      gpu_bake ? &bake : nullptr);
         warn_slow("current-wallpaper restore", output->name, t_restore);
     }
-    struct walle_vk_glass_bake bake;
-    bool                       gpu_bake = glass_bake_descriptor(
-        output->glass_variant,
-        glass_appearance_value(output),
-        output->reveal_process_capture_owned
-            ? state->reveal_process_capture_backing_scale
-            : (output->scale > 0 ? output->scale : 1),
-        &bake);
     uint64_t t_upload  = trace_now_ns();
     bool     uploaded = restored && output->render.vk_output
                     && walle_vk_output_upload(output->render.vk_output,
