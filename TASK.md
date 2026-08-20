@@ -6538,3 +6538,43 @@ Candidates to instrument next: warp on chroma-relative coordinates
 (v - Y), value-normalized warp, or a 3D LUT probed by more color
 lines; the per-line nonparametric W_R extraction (rc vs il) will name
 the coupling shape.
+
+## Session 196 (cont.): the luma-slice family dies; a luma-GATED warp
+## unifies four lines
+
+Two more isoluminant lines captured (chroma-i5 orange<->green at
+Y~0.50, chroma-i9 yellow<->equal-luma-gray at Y~0.93; set
+/tmp/lgcap-chroma-iso-1024, 432 shots with their own trajectory flats
+and j-probes; rig lg-test 9336350).  Registered prediction from the
+W(v;Y)=v^p(Y) slice family (p implied by the gray diagonal): i5 ->
+p~0.23, i9 -> p~0.14 for light.  VERDICT: REJECTED for light - i5
+fits NO WARP AT ALL (none rms 0.79 = the floor; free power converges
+to identity), and i9's misfit (B channel 11.5) is fit by no power.
+Dark's i9 HIT its predicted convex exponent (2.40 measured vs 2.29
+implied) but its i5 flips concave (0.55) - not a monotone slice
+family either.
+
+What survives contact with all four lines for LIGHT is a LUMA-GATED
+per-channel warp: full strength over dark content (il, Y~0.21 - reads
+as the plain power there), ZERO at mid luma (i5), partial on rc
+(whose luma traverses dark to bright - reads mid-strength
+flip-cube-ish), and on GRAY the gate variable and the channel value
+coincide (v = Y), which is exactly why the gray extraction read a
+single fixed curve.  The one dissenter is i9's B channel over
+saturated yellow, where the panel-gamut model itself is suspect (the
+rig logs source round-trip deltas on saturated flats; P3-vs-sRGB is
+widest at yellow) - flagged, not resolved.
+
+Direct far-field extraction gotcha: solving the mixture for F
+amplifies luma-direction errors by 1/(wC - (wC-wL)) ~ 8.7x for light
+(0.1154 eigenvalue) - light's F can only be read in the chroma
+subspace; dark's matrix is well-conditioned (0.48).  Dark's extracted
+deviations are line-contradictory S-curves (il compressive around
+0.45, i9 expansive around 0.55) - dark's coupling is cross-channel
+too and remains unnamed.
+
+Next instrument: fit the gated model far' = lerp(F, W_ch(F), gate(Y_F))
+jointly on all four lines + the gray edges (one W, one gate for
+light); decide i9 by re-deriving the panel matrix's behavior at
+saturated yellow from the none-overlay round-trip data the rig
+already logs.

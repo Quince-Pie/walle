@@ -35,7 +35,8 @@ HALF = 1600
 LADDER = list(range(0, 241, 16)) + [255]
 ANCHORS = (64, 128, 192)
 PROBE_DELTA = 24.0
-LINES = {"rc": ((255, 0, 0), (0, 255, 255)), "il": ((255, 0, 0), (0, 76, 0))}
+LINES = {"rc": ((255, 0, 0), (0, 255, 255)), "il": ((255, 0, 0), (0, 76, 0)),
+         "i5": ((255, 103, 0), (0, 179, 0)), "i9": ((255, 255, 0), (237, 237, 237))}
 KLUMA = np.array([0.2126, 0.7152, 0.0722])
 TO_PANEL = np.array([[0.8225172, 0.1774401, -0.0000221],
                      [0.0331941, 0.9667933, -0.0000244],
@@ -143,11 +144,34 @@ def predict_backdrop(tag, ap, hyp, count, start, width):
     return out[pad + start:pad + start + count]
 
 
+def predict_backdrop_power(tag, ap, p, count, start, width):
+    a, b = LINES[tag]
+    pad = HALF
+    n = width + 2 * pad
+    lo_c, hi_c = line_color(0, a, b), line_color(255, a, b)
+    B = np.tile(lo_c, (n, 1))
+    B[pad + width // 2:] = hi_c
+    P = srgb_encode(np.clip(srgb_decode(B / 255.0) @ TO_PANEL.T, 0, None))
+    c0 = CONST[ap]
+    N = np.stack([np.convolve(P[:, c], KN, mode="same") for c in range(3)], axis=1)
+    Wn = warp_apply(N, p, False)
+    F = warp_invert(np.stack([np.convolve(Wn[:, c], KW, mode="same")
+                              for c in range(3)], axis=1), p, False)
+    mixed = (c0["wC"] * N + (1 - c0["wC"]) * F
+             + ((c0["wL"] - c0["wC"]) * ((N - F) @ KLUMA))[:, None])
+    out = srgb_encode(np.clip(srgb_decode(np.clip(mixed, 0, 1)) @ FROM_PANEL.T,
+                              0, None)) * 255.0
+    return out[pad + start:pad + start + count]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--flats", required=True, help="lgcap-chroma dir (T tables + edges)")
     parser.add_argument("--probes", required=True, help="lgcap-chroma-jac dir (j-probe flats)")
     parser.add_argument("--overlay", default="regular")
+    parser.add_argument("--lines", nargs="*", default=None)
+    parser.add_argument("--fit-exponent", action="store_true",
+                        help="also scan a free per-channel power exponent per line")
     parser.add_argument("--out")
     args = parser.parse_args()
     fshots = Path(args.flats) / "shots"
@@ -155,6 +179,8 @@ def main():
 
     results = {}
     for tag, (a, b) in LINES.items():
+        if args.lines and tag not in args.lines:
+            continue
         for ap in ("light", "dark"):
             # on-line transfer
             ts = np.array(LADDER, float)
@@ -207,6 +233,23 @@ def main():
                               "perChannel": [round(float(v), 3) for v in per]}
                 print(f"   {hyp:6s}: rms {total:6.2f}   "
                       f"R {per[0]:6.2f}  G {per[1]:6.2f}  B {per[2]:6.2f}")
+            if args.fit_exponent:
+                best = None
+                for p in np.concatenate([np.arange(0.05, 1.0, 0.05),
+                                         np.arange(1.0, 3.01, 0.1)]):
+                    B_hyp = predict_backdrop_power(tag, ap, p, count, start, width)
+                    t_star = np.clip((B_hyp - line0) @ line_dir
+                                     / (line_dir @ line_dir) * 255.0, 0.0, 255.0)
+                    out_hyp = np.zeros_like(B_hyp)
+                    for i in range(count):
+                        Tt = np.array([np.interp(t_star[i], ts, T[:, c]) for c in range(3)])
+                        out_hyp[i] = Tt + J_at(t_star[i]) @ (B_hyp[i] - line_color(t_star[i], a, b))
+                    r = prof - out_hyp
+                    v = float(np.sqrt((r * r).mean()))
+                    if best is None or v < best[0]:
+                        best = (v, float(p))
+                entry["fitPower"] = {"rms": round(best[0], 3), "p": round(best[1], 2)}
+                print(f"   power-fit: p={best[1]:.2f} rms {best[0]:6.2f}")
             results[f"{tag}/{ap}"] = entry
 
     if args.out:
