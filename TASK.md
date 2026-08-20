@@ -6765,3 +6765,39 @@ validated blur for the mixed-input values), regenerate
 material_law.slang via analysis/generate_material_law_header.py,
 validate on color-cube-holdout-8 (512 midpoint colors, local), and
 referee on the sweeps + the saturated sets (3.29 standing).
+
+## Session 198: the cube decomposition - mixture exonerated at saturation,
+## and a cautionary tale about context-free fits
+
+The chroma-transfer campaign's refit premise DISSOLVED on inspection:
+the shipped transfer is order 4/5 with held-out 0.69-0.74 rms (the
+order-2 story in derive_material_matrices.py's docstring is stale),
+smaller than the cube deficit - so the deficit is NOT transfer
+interpolation.  The decomposition went chain-free (my numpy bake
+replica diverges from the GPU bake by 10-19 codes at saturation -
+quarantined, separate mystery): inverting the shipped polynomial on
+BOTH walle's own render and Apple's shot gives the true glass-space
+deficit with no model in the loop:
+
+  TRUE backdrop deficit at the 729 anchors: 6.74 light / 5.05 dark
+  rms (panel-space 4.5/4.6), split evenly luma/chroma, growing with
+  saturation, appearance-mirrored.
+  MIXTURE WEIGHTS EXONERATED AGAIN, now at high saturation: a full
+  Jacobian regression (wC, wL, per-channel wC) explains almost
+  nothing (4.46->4.41 light, 4.57->4.27 dark).
+
+Then the trap, documented so nobody falls in it twice: fitting a
+cross-channel cubic V in far = V^-1(wide(V(N))) on the cube alone
+scored a spectacular 19.05 -> 1.62 (dark, checkerboard-held-out
+1.63!) and FAILED TRANSPORT COMPLETELY (10-48 rms on the color lines
+vs their 2-4 floors).  The cube's wide field is nearly constant
+across the image, so W(Q(N)) ~ const and the "sandwich fit" was a
+plain regression of the deficit onto cubic features of the far field
+- the checkerboard split shares that context and cannot catch it.
+CONTEXT VARIATION IS THE ONLY PROTECTION: a transportable V must be
+fitted jointly across the cube + the color lines + the gray edges
+(three different wide-field contexts), or it is not a mechanism.
+
+That grand joint fit is the queued computation.  If it too fails,
+the sandwich family itself dies and the far field needs a different
+operator class.
