@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "frames": 1188,
+  "paired_matrix_frames": 216,
+  "paired_differences": 0,
+  "tiny_and_endpoint_cases": 108,
+  "validation_errors": 0,
+  "sources_unchanged": true,
+  "spirv_unchanged": true,
+  "all_18_spirv_match_accepted": true,
+  "renderer_sha256": "e0b5ad3a904a4d92dd4f076b17928100d7bf83ac049d6632b4eca6d41ace16e2",
+  "transition_sha256": "7c43df21a45fa429a931dc31a73b9919fcf87f826e73f1a391657a300a55c91c",
+  "capture_sha256": "3d095f68ac0bef083a1ed71a0ac99c79e44d28d0a3f66020efabd9c75d10d396",
+  "result_sha256": "474ce21d58b26106c138e0871f8a81e5243a0c100233c21aa1c72af59873f805",
+  "frame_hash_manifest_sha256": "c40a613572e1337edb460763ee34dc9585879b62e90afb41fb1cd100a99b65ff",
+  "compiler": "gcc (GCC) 15.2.0",
+  "scope": "Final assembled runtime C/H/SPIR-V, release O3/LTO plus source no-contraction; validation active/checked teardown. App frontend/layer-shell lifecycle tested separately."
+}

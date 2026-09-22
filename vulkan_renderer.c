@@ -8,81 +8,100 @@
 #include <fcntl.h>
 #include <inttypes.h>
 #include <limits.h>
+#include <linux/dma-buf.h>
 #include <math.h>
 #include <stdarg.h>
+#include <stdatomic.h>
 #include <stdckdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <unistd.h>
 #define VK_USE_PLATFORM_WAYLAND_KHR
 #include <vulkan/vulkan.h>
 
-#include "parity/liquid_glass_raster.h"
 #include "protocols/linux-dmabuf-v1.h"
 
+constexpr VkFormat          WALLE_VK_PRESENT_FORMAT       = VK_FORMAT_B8G8R8A8_UNORM;
+constexpr VkFormat          WALLE_VK_WALLPAPER_FORMAT     = VK_FORMAT_R8G8B8A8_UNORM;
+constexpr uint32_t          WALLE_VK_REQUIRED_API_VERSION = VK_API_VERSION_1_4;
+constexpr VkImageUsageFlags PRESENT_USAGE                 = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+                                                            | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT
+                                                            | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 enum
 {
-    WALLE_VK_MASK_BINDING_AXIS       = 0,
-    WALLE_VK_MASK_BINDING_SQRT       = 1,
-    WALLE_VK_MASK_BINDING_OWNER      = 2,
-    WALLE_VK_MASK_BINDING_MAPPING    = 3,
-    WALLE_VK_COMPOSE_BINDING_TEX_A   = 0,
-    WALLE_VK_COMPOSE_BINDING_GLASS_A = 1,
-    WALLE_VK_COMPOSE_BINDING_TEX_B   = 2,
-    WALLE_VK_COMPOSE_BINDING_GLASS_B = 3,
-    WALLE_VK_COMPOSE_BINDING_MASK    = 4,
-    WALLE_VK_COMPOSE_BINDING_SAMPLER = 5,
+    PIPE_WALLPAPER = WALLE_VK_PASS_COUNT,
+    PIPE_COUNT,
+    LAYOUT_GRAPHICS = 0,
+    LAYOUT_CAPTURE  = 1,
+    LAYOUT_COMPUTE  = 2,
+    LAYOUT_COUNT    = 3
 };
-
-constexpr uint32_t WALLE_VK_OWNER_VECTOR_COUNT
-    = sizeof(struct walle_lg_reveal_owner_block) / sizeof(int32_t[4]);
-constexpr VkFormat WALLE_VK_PRESENT_FORMAT       = VK_FORMAT_B8G8R8A8_UNORM;
-constexpr VkFormat WALLE_VK_WALLPAPER_FORMAT     = VK_FORMAT_R8G8B8A8_SRGB;
-constexpr VkFormat WALLE_VK_MASK_FORMAT          = VK_FORMAT_R8_UINT;
-constexpr uint32_t WALLE_VK_REQUIRED_API_VERSION = VK_API_VERSION_1_4;
-
-alignas(4) static const uint8_t WALLE_VK_MASK_VERTEX_SPIRV[] = {
-#embed "build/shaders/maskVertex.spv" if_empty(0)
+alignas(4) static const uint8_t spv_glassVertex[] = {
+#embed "build/shaders/glassVertex.spv" if_empty(0)
 };
-
-alignas(4) static const uint8_t WALLE_VK_MASK_FRAGMENT_SPIRV[] = {
-#embed "build/shaders/maskFragment.spv" if_empty(0)
+alignas(4) static const uint8_t spv_revealFragment[] = {
+#embed "build/shaders/revealFragment.spv" if_empty(0)
 };
-
-alignas(4) static const uint8_t WALLE_VK_COMPOSE_VERTEX_SPIRV[] = {
-#embed "build/shaders/composeVertex.spv" if_empty(0)
+alignas(4) static const uint8_t spv_regularFragment[] = {
+#embed "build/shaders/regularFragment.spv" if_empty(0)
 };
-
-alignas(4) static const uint8_t WALLE_VK_COMPOSE_FRAGMENT_SPIRV[] = {
-#embed "build/shaders/composeFragment.spv" if_empty(0)
+alignas(4) static const uint8_t spv_clearFragment[] = {
+#embed "build/shaders/clearFragment.spv" if_empty(0)
 };
-
-static const uint8_t WALLE_VK_REVEAL_RASTER_P25[] = {
-#embed "parity/raster_p25_selector_ceil_bits.bin" limit(2097152) if_empty(0)
+alignas(4) static const uint8_t spv_faceFragment_local[] = {
+#embed "build/shaders/faceFragment_local.spv" if_empty(0)
 };
-
-static const uint8_t WALLE_VK_APPLE_FAST_SQRT[] = {
-#embed "parity/apple_fast_sqrt_correction_nibbles.bin" limit(4194304) if_empty(0)
+alignas(4) static const uint8_t spv_tintMaskFragment[] = {
+#embed "build/shaders/tintMaskFragment.spv" if_empty(0)
 };
-
-static_assert(sizeof WALLE_VK_REVEAL_RASTER_P25 == 2u * 1024u * 1024u);
-static_assert(sizeof WALLE_VK_APPLE_FAST_SQRT == 4u * 1024u * 1024u);
-static_assert(sizeof WALLE_VK_MASK_VERTEX_SPIRV % sizeof(uint32_t) == 0);
-static_assert(sizeof WALLE_VK_MASK_FRAGMENT_SPIRV % sizeof(uint32_t) == 0);
-static_assert(sizeof WALLE_VK_COMPOSE_VERTEX_SPIRV % sizeof(uint32_t) == 0);
-static_assert(sizeof WALLE_VK_COMPOSE_FRAGMENT_SPIRV % sizeof(uint32_t) == 0);
-static_assert(WALLE_VK_OWNER_VECTOR_COUNT == 283);
-
+alignas(4) static const uint8_t spv_tintGradientFragment_local[] = {
+#embed "build/shaders/tintGradientFragment_local.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_tintCompositeFragment[] = {
+#embed "build/shaders/tintCompositeFragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_highlightFragment_local[] = {
+#embed "build/shaders/highlightFragment_local.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_productFinishFragment_local[] = {
+#embed "build/shaders/productFinishFragment_local.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_wallpaperFragment[] = {
+#embed "build/shaders/wallpaperFragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_captureCopyFragment[] = {
+#embed "build/shaders/captureCopyFragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_captureVertex[] = {
+#embed "build/shaders/captureVertex.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_capture4Fragment[] = {
+#embed "build/shaders/capture4Fragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_capture6Fragment[] = {
+#embed "build/shaders/capture6Fragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_capture8Fragment[] = {
+#embed "build/shaders/capture8Fragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_lg_blur_copy_base_mip[] = {
+#embed "build/shaders/lg_blur_copy_base_mip.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_lg_blur_downsample_agx2[] = {
+#embed "build/shaders/lg_blur_downsample_agx2.spv" if_empty(0)
+};
 struct walle_vk_memory
 {
-    VkDeviceMemory        handle;
-    VkDeviceSize          size;
-    VkMemoryPropertyFlags properties;
-    void*                 mapped;
+    VkDeviceMemory            handle;
+    VkDeviceSize              size;
+    VkMemoryPropertyFlags     properties;
+    void*                     mapped;
+    struct walle_vk_renderer* owner;
 };
 
 struct walle_vk_buffer
@@ -100,12 +119,8 @@ struct walle_vk_image
     uint32_t               width;
     uint32_t               height;
     VkFormat               format;
-};
-
-struct walle_vk_texture_pair
-{
-    struct walle_vk_image standard;
-    struct walle_vk_image glass;
+    uint32_t               mip_count;
+    VkImageView            mip_views[32];
 };
 
 struct walle_vk_dmabuf_format
@@ -144,37 +159,16 @@ struct walle_vk_present_image
     VkImageLayout           layout;
     bool                    busy;
     bool                    foreign_owned;
+    int                     dmabuf_fd;
+    bool                    has_dmabuf_fd;
 };
-
-struct walle_vk_mask_push
-{
-    float    resolution[2];
-    float    compact_family;
-    float    padding;
-    uint32_t owner_count;
-    uint32_t base_owner_count;
-    uint32_t packed_width;
-    uint32_t primitive_count;
-};
-
-struct walle_vk_compose_push
-{
-    float timeline[4];
-    float geometry[4];
-};
-
-static_assert(sizeof(struct walle_vk_mask_push) == 32);
-static_assert(sizeof(struct walle_vk_compose_push) == 32);
-static_assert(offsetof(struct walle_vk_compose_push, timeline) == 0);
-static_assert(offsetof(struct walle_vk_compose_push, geometry) == 16);
 
 struct walle_vk_renderer
 {
-    struct wl_display*       display;
-    char*                    device_selector;
-    VkInstance               instance;
-    VkDebugUtilsMessengerEXT debug_messenger;
-
+    struct wl_display*                           display;
+    char*                                        device_selector;
+    VkInstance                                   instance;
+    VkDebugUtilsMessengerEXT                     debug_messenger;
     VkPhysicalDevice                             physical_device;
     VkPhysicalDeviceProperties                   properties;
     VkPhysicalDeviceMemoryProperties             memory_properties;
@@ -184,75 +178,79 @@ struct walle_vk_renderer
     VkQueue                                      queue;
     PFN_vkGetMemoryFdKHR                         get_memory_fd;
     PFN_vkGetImageDrmFormatModifierPropertiesEXT get_image_drm_format_modifier_properties;
-
-    VkDescriptorSetLayout mask_set_layout;
-    VkDescriptorSetLayout compose_set_layout;
-    VkPipelineLayout      mask_pipeline_layout;
-    VkPipelineLayout      compose_pipeline_layout;
-    VkPipeline            mask_pipeline;
-    VkPipeline            compose_pipeline;
-    VkSampler             linear_sampler;
-
-    struct walle_vk_buffer sqrt_buffer;
-    uint32_t               transition_resource_users;
-    VkCommandPool          upload_command_pool;
-    VkCommandBuffer        upload_command_buffer;
-    VkFence                upload_fence;
-
+    PFN_vkGetSemaphoreFdKHR                      get_semaphore_fd;
+    PFN_vkImportSemaphoreFdKHR                   import_semaphore_fd;
+    VkDescriptorSetLayout                        set_layout[LAYOUT_COUNT];
+    VkPipelineLayout                             pipeline_layout[LAYOUT_COUNT];
+    VkPipeline                   pipelines[PIPE_COUNT], capture_pipelines[4], compute_pipelines[2];
+    VkSampler                    linear_sampler;
+    VkCommandPool                upload_command_pool;
+    VkCommandBuffer              upload_command_buffer;
+    VkFence                      upload_fence;
+    atomic_uint_fast64_t         validation_error_count;
+    struct walle_vk_memory_stats memory_stats;
     struct walle_vk_dmabuf_feedback dmabuf;
-
-    bool validation_enabled;
-    bool device_ready;
-    bool fatal;
+    bool                            upload_pending, validation_enabled, device_ready, fatal;
 };
-
 struct walle_vk_output
 {
-    struct walle_vk_renderer* renderer;
-    VkSurfaceKHR              surface;
-    struct wl_surface*        wayland_surface;
-    VkExtent2D                extent;
-
+    struct walle_vk_renderer*     renderer;
+    VkSurfaceKHR                  surface;
+    struct wl_surface*            wayland_surface;
+    VkExtent2D                    extent;
     struct walle_vk_present_image present_images[2];
-    uint32_t                      next_present_image;
-    uint32_t                      last_present_image;
-    uint32_t                      idle_present_image;
-    uint32_t                      present_drm_format;
-    uint32_t                      present_plane_count;
+    uint32_t                      next_present_image, last_present_image, idle_present_image;
+    uint32_t                      present_drm_format, present_plane_count;
     uint64_t                      present_modifier;
     bool                          compact_present;
-
-    VkCommandPool   command_pool;
-    VkCommandBuffer command_buffer;
-    VkFence         frame_fence;
-
-    VkDescriptorPool descriptor_pool;
-    VkDescriptorSet  mask_set;
-    VkDescriptorSet  compose_set;
-
-    struct walle_vk_texture_pair current;
-    struct walle_vk_texture_pair incoming;
-    struct walle_vk_image        mask;
-    VkImageLayout                mask_layout;
-
-    struct walle_vk_buffer transition_buffer;
-    struct walle_vk_buffer staging_buffer;
-    struct walle_vk_buffer readback_buffer;
-
-    VkDeviceSize vertex_offset;
-    VkDeviceSize index_offset;
-    VkDeviceSize owner_offset;
-    VkDeviceSize mapping_offset;
-    VkDeviceSize axis_offset;
-
-    uint32_t axis_packed_width;
-    bool     transition_resources_ready;
-    bool     mask_descriptors_ready;
-    bool     compose_descriptors_ready;
-    bool     compose_descriptors_first_boot;
-    bool     composition_readback_enabled;
+    VkCommandPool                 command_pool;
+    VkCommandBuffer               command_buffer;
+    VkFence                       frame_fence;
+    bool                          frame_pending, composition_readback_enabled;
+    VkSemaphore                   acquire_semaphore, render_semaphore;
+    VkDescriptorPool              descriptor_pool;
+    uint32_t                      descriptor_capacity;
+    struct walle_vk_image       current, incoming, capture, pyramid, blur_scratch, tint, mask, ramp;
+    struct wm_capture_plan      capture_plan;
+    struct wm_pyramid_plan      pyramid_plan;
+    bool                        backdrop_ready, tint_ready, ramp_ready;
+    uint8_t                     ramp_bytes[2048];
+    struct walle_vk_buffer      frame_buffer, readback_buffer;
+    VkDeviceSize                cursor;
+    VkQueryPool                 timestamp_pool;
+    uint32_t                    timestamp_bits;
+    bool                        timing_pending, pending_built_backdrop;
+    uint64_t                    timed_frame_id;
+    struct walle_vk_diagnostics last_timing;
 };
-
+struct shader_blob
+{
+    const uint8_t* data;
+    size_t         size;
+    const char*    entry;
+};
+#define SHADER(n, e)                                                                               \
+    (struct shader_blob)                                                                           \
+    {                                                                                              \
+        spv_##n, sizeof spv_##n, e                                                                 \
+    }
+struct glass_push
+{
+    float    resolution[2], edr;
+    uint32_t mode;
+    float    material_opacity, reserved[3];
+};
+static_assert(sizeof(struct glass_push) == 32);
+static bool device_candidate(struct walle_vk_renderer*,
+                             VkPhysicalDevice,
+                             VkSurfaceKHR,
+                             uint32_t*,
+                             VkPhysicalDeviceProperties2*,
+                             VkPhysicalDeviceVulkan14Properties*);
+static bool create_descriptor_layouts(struct walle_vk_renderer*);
+static bool create_pipeline_layouts(struct walle_vk_renderer*);
+static bool create_pipelines(struct walle_vk_renderer*);
+static bool collect_timing(struct walle_vk_output*);
 static void dmabuf_feedback_reset_table(struct walle_vk_dmabuf_feedback* feedback)
 {
     if (feedback->table)
@@ -455,7 +453,9 @@ debug_callback(VkDebugUtilsMessageSeverityFlagBitsEXT      severity,
                void*                                       user_data)
 {
     (void)type;
-    (void)user_data;
+    struct walle_vk_renderer* renderer = user_data;
+    if (renderer && (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT))
+        atomic_fetch_add_explicit(&renderer->validation_error_count, 1, memory_order_relaxed);
     const char* level = severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT     ? "ERROR"
                         : severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT ? "WARN"
                                                                                      : "INFO";
@@ -527,12 +527,34 @@ static bool device_extension_available(VkPhysicalDevice physical_device, const c
     return false;
 }
 
+static bool track_memory(struct walle_vk_renderer* renderer, struct walle_vk_memory* memory)
+{
+    uint64_t total;
+    if (ckd_add(&total, renderer->memory_stats.allocated_bytes, memory->size)
+        || renderer->memory_stats.allocation_count == UINT32_MAX)
+        return false;
+    memory->owner                          = renderer;
+    renderer->memory_stats.allocated_bytes = total;
+    renderer->memory_stats.allocation_count++;
+    if (total > renderer->memory_stats.peak_bytes)
+        renderer->memory_stats.peak_bytes = total;
+    if (renderer->memory_stats.allocation_count > renderer->memory_stats.peak_allocation_count)
+        renderer->memory_stats.peak_allocation_count = renderer->memory_stats.allocation_count;
+    return true;
+}
 static void destroy_memory(VkDevice device, struct walle_vk_memory* memory)
 {
     if (memory->mapped)
         vkUnmapMemory(device, memory->handle);
-    if (memory->handle)
+    if (memory->handle) {
         vkFreeMemory(device, memory->handle, nullptr);
+        if (memory->owner) {
+            assert(memory->owner->memory_stats.allocated_bytes >= memory->size);
+            assert(memory->owner->memory_stats.allocation_count != 0);
+            memory->owner->memory_stats.allocated_bytes -= memory->size;
+            memory->owner->memory_stats.allocation_count--;
+        }
+    }
     *memory = (struct walle_vk_memory){};
 }
 
@@ -546,6 +568,9 @@ static void destroy_buffer(VkDevice device, struct walle_vk_buffer* buffer)
 
 static void destroy_image(VkDevice device, struct walle_vk_image* image)
 {
+    for (uint32_t i = 0; i < image->mip_count; ++i)
+        if (image->mip_views[i])
+            vkDestroyImageView(device, image->mip_views[i], nullptr);
     if (image->view)
         vkDestroyImageView(device, image->view, nullptr);
     if (image->handle)
@@ -601,6 +626,10 @@ static bool allocate_memory(struct walle_vk_renderer*   renderer,
     if (!vk_check(vkAllocateMemory(renderer->device, &allocate_info, nullptr, &memory.handle),
                   "vkAllocateMemory"))
         return false;
+    if (!track_memory(renderer, &memory)) {
+        destroy_memory(renderer->device, &memory);
+        return false;
+    }
     if (map
         && !vk_check(
             vkMapMemory(renderer->device, memory.handle, 0, memory.size, 0, &memory.mapped),
@@ -645,6 +674,30 @@ static bool create_buffer(struct walle_vk_renderer* renderer,
     return true;
 }
 
+/* Our graphics paths render over the complete attachment with viewport
+ * x=0, y=height, width=width, height=-height. Check exactly those endpoints.
+ * Image-only limits remain separate for sampled/storage compute textures. */
+static bool
+image_extent_valid(const struct walle_vk_renderer* renderer, uint32_t width, uint32_t height)
+{
+    return width && height && width <= renderer->properties.limits.maxImageDimension2D
+           && height <= renderer->properties.limits.maxImageDimension2D;
+}
+static bool
+graphics_extent_valid(const struct walle_vk_renderer* renderer, uint32_t width, uint32_t height)
+{
+    const VkPhysicalDeviceLimits* limits          = &renderer->properties.limits;
+    double                        viewport_width  = (double)(float)width;
+    double                        viewport_height = (double)(float)height;
+    double                        minimum         = (double)limits->viewportBoundsRange[0];
+    double                        maximum         = (double)limits->viewportBoundsRange[1];
+    return image_extent_valid(renderer, width, height) && width <= limits->maxFramebufferWidth
+           && height <= limits->maxFramebufferHeight
+           && viewport_width <= (double)limits->maxViewportDimensions[0]
+           && viewport_height <= (double)limits->maxViewportDimensions[1] && !isnan(minimum)
+           && !isnan(maximum) && minimum <= 0 && maximum >= 0 && viewport_width <= maximum
+           && viewport_height <= maximum;
+}
 static bool create_image(struct walle_vk_renderer* renderer,
                          uint32_t                  width,
                          uint32_t                  height,
@@ -652,7 +705,11 @@ static bool create_image(struct walle_vk_renderer* renderer,
                          VkImageUsageFlags         usage,
                          struct walle_vk_image*    result)
 {
-    if (width == 0 || height == 0)
+    constexpr VkImageUsageFlags attachment_usage
+        = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+          | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+    if (!image_extent_valid(renderer, width, height)
+        || ((usage & attachment_usage) && !graphics_extent_valid(renderer, width, height)))
         return false;
     VkImageCreateInfo create_info = {
         .sType         = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
@@ -845,6 +902,8 @@ static void destroy_present_image(VkDevice device, struct walle_vk_present_image
 {
     if (image->buffer)
         wl_buffer_destroy(image->buffer);
+    if (image->has_dmabuf_fd)
+        close(image->dmabuf_fd);
     destroy_image(device, &image->image);
     *image = (struct walle_vk_present_image){};
 }
@@ -856,7 +915,9 @@ static bool create_present_image(struct walle_vk_output*        output,
                                  VkImageUsageFlags              usage,
                                  struct walle_vk_present_image* result)
 {
-    struct walle_vk_renderer* renderer       = output->renderer;
+    struct walle_vk_renderer* renderer = output->renderer;
+    if (!graphics_extent_valid(renderer, output->extent.width, output->extent.height))
+        return false;
     *result                                  = (struct walle_vk_present_image){};
     result->output                           = output;
     VkExternalMemoryImageCreateInfo external = {
@@ -919,7 +980,9 @@ static bool create_present_image(struct walle_vk_output*        output,
         = renderer->memory_properties.memoryTypes[memory_type].propertyFlags;
     if (!vk_check(
             vkAllocateMemory(renderer->device, &allocation, nullptr, &result->image.memory.handle),
-            "vkAllocateMemory(dma-buf present)")
+            "vkAllocateMemory(dma-buf present)"))
+        goto failed;
+    if (!track_memory(renderer, &result->image.memory)
         || !vk_check(vkBindImageMemory(
                          renderer->device, result->image.handle, result->image.memory.handle, 0),
                      "vkBindImageMemory(dma-buf present)"))
@@ -984,7 +1047,8 @@ static bool create_present_image(struct walle_vk_output*        output,
                                        (uint32_t)modifier);
         close(plane_fd);
     }
-    close(memory_fd);
+    result->dmabuf_fd     = memory_fd;
+    result->has_dmabuf_fd = true;
     if (!planes_valid) {
         if (params)
             zwp_linux_buffer_params_v1_destroy(params);
@@ -1005,10 +1069,19 @@ failed:
 
 static bool create_present_slot(struct walle_vk_output* output, uint32_t index)
 {
-    constexpr VkImageUsageFlags usage
-        = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+    constexpr VkImageUsageFlags usage = PRESENT_USAGE;
     if (index >= 2 || output->present_images[index].image.handle)
         return false;
+    if (!output->wayland_surface) {
+        auto p    = &output->present_images[index];
+        p->output = output;
+        return create_image(output->renderer,
+                            output->extent.width,
+                            output->extent.height,
+                            WALLE_VK_PRESENT_FORMAT,
+                            PRESENT_USAGE,
+                            &p->image);
+    }
     return create_present_image(output,
                                 output->present_drm_format,
                                 output->present_modifier,
@@ -1019,8 +1092,9 @@ static bool create_present_slot(struct walle_vk_output* output, uint32_t index)
 
 static bool initialize_present_images(struct walle_vk_output* output)
 {
-    constexpr VkImageUsageFlags usage
-        = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+    constexpr VkImageUsageFlags usage = PRESENT_USAGE;
+    if (!output->wayland_surface)
+        return create_present_slot(output, 0);
     if (!select_present_modifier(output->renderer,
                                  usage,
                                  &output->present_drm_format,
@@ -1122,48 +1196,6 @@ static void buffer_barrier(VkCommandBuffer       command_buffer,
     vkCmdPipelineBarrier2(command_buffer, &dependency);
 }
 
-static bool begin_upload(struct walle_vk_renderer* renderer)
-{
-    if (!vk_check(
-            vkWaitForFences(renderer->device, 1, &renderer->upload_fence, VK_TRUE, UINT64_MAX),
-            "vkWaitForFences(upload)"))
-        return false;
-    if (!vk_check(vkResetFences(renderer->device, 1, &renderer->upload_fence),
-                  "vkResetFences(upload)"))
-        return false;
-    if (!vk_check(vkResetCommandBuffer(renderer->upload_command_buffer, 0),
-                  "vkResetCommandBuffer(upload)"))
-        return false;
-    VkCommandBufferBeginInfo begin_info = {
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-        .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
-    };
-    return vk_check(vkBeginCommandBuffer(renderer->upload_command_buffer, &begin_info),
-                    "vkBeginCommandBuffer(upload)");
-}
-
-static bool end_upload(struct walle_vk_renderer* renderer)
-{
-    if (!vk_check(vkEndCommandBuffer(renderer->upload_command_buffer),
-                  "vkEndCommandBuffer(upload)"))
-        return false;
-    VkCommandBufferSubmitInfo command_info = {
-        .sType         = VK_STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO,
-        .commandBuffer = renderer->upload_command_buffer,
-    };
-    VkSubmitInfo2 submit_info = {
-        .sType                  = VK_STRUCTURE_TYPE_SUBMIT_INFO_2,
-        .commandBufferInfoCount = 1,
-        .pCommandBufferInfos    = &command_info,
-    };
-    if (!vk_check(vkQueueSubmit2(renderer->queue, 1, &submit_info, renderer->upload_fence),
-                  "vkQueueSubmit2(upload)"))
-        return false;
-    return vk_check(
-        vkWaitForFences(renderer->device, 1, &renderer->upload_fence, VK_TRUE, UINT64_MAX),
-        "vkWaitForFences(upload completion)");
-}
-
 static bool string_is_true(const char* value)
 {
     return value
@@ -1182,10 +1214,11 @@ static bool create_debug_messenger(struct walle_vk_renderer* renderer)
         .sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
         .messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
                            | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
-        .messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT
-                       | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
-                       | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
+        .messageType     = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT
+                           | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
+                           | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
         .pfnUserCallback = debug_callback,
+        .pUserData       = renderer,
     };
     return vk_check(
         create_messenger(renderer->instance, &create_info, nullptr, &renderer->debug_messenger),
@@ -1221,9 +1254,10 @@ static bool create_instance(struct walle_vk_renderer* renderer)
         VK_KHR_SURFACE_EXTENSION_NAME,
         VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
     };
-    uint32_t extension_count = 2;
-    if (!instance_extension_available(extensions[0])
-        || !instance_extension_available(extensions[1])) {
+    uint32_t extension_count = renderer->display ? 2u : 0u;
+    if (renderer->display
+        && (!instance_extension_available(extensions[0])
+            || !instance_extension_available(extensions[1]))) {
         fprintf(stderr, "FATAL: Vulkan Wayland WSI extensions are unavailable.\n");
         return false;
     }
@@ -1243,6 +1277,8 @@ static bool create_instance(struct walle_vk_renderer* renderer)
         fprintf(
             stderr,
             "[Vulkan] Validation was requested but VK_LAYER_KHRONOS_validation is unavailable.\n");
+        if (string_is_true(getenv("WALLE_VULKAN_VALIDATION")))
+            return false;
     }
 
     VkApplicationInfo application_info = {
@@ -1253,8 +1289,19 @@ static bool create_instance(struct walle_vk_renderer* renderer)
         .engineVersion      = VK_MAKE_API_VERSION(0, 0, 0, 1),
         .apiVersion         = WALLE_VK_REQUIRED_API_VERSION,
     };
+    VkDebugUtilsMessengerCreateInfoEXT creation_debug = {
+        .sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
+        .messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
+                           | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
+        .messageType     = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT
+                           | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
+                           | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
+        .pfnUserCallback = debug_callback,
+        .pUserData       = renderer,
+    };
     VkInstanceCreateInfo create_info = {
         .sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+        .pNext                   = renderer->validation_enabled ? &creation_debug : nullptr,
         .pApplicationInfo        = &application_info,
         .enabledLayerCount       = renderer->validation_enabled ? 1u : 0u,
         .ppEnabledLayerNames     = renderer->validation_enabled ? layers : nullptr,
@@ -1278,102 +1325,6 @@ format_supports(VkPhysicalDevice physical_device, VkFormat format, VkFormatFeatu
     };
     vkGetPhysicalDeviceFormatProperties2(physical_device, format, &properties2);
     return (properties3.optimalTilingFeatures & required) == required;
-}
-
-static bool select_queue_family(VkPhysicalDevice   physical_device,
-                                VkSurfaceKHR       surface,
-                                struct wl_display* display,
-                                uint32_t*          result)
-{
-    uint32_t count = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &count, nullptr);
-    if (count == 0)
-        return false;
-    VkQueueFamilyProperties* properties = calloc(count, sizeof *properties);
-    if (!properties)
-        return false;
-    vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &count, properties);
-    for (uint32_t index = 0; index < count; ++index) {
-        VkBool32 surface_support = VK_FALSE;
-        if ((properties[index].queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0
-            && vkGetPhysicalDeviceSurfaceSupportKHR(
-                   physical_device, index, surface, &surface_support)
-                   == VK_SUCCESS
-            && surface_support
-            && vkGetPhysicalDeviceWaylandPresentationSupportKHR(physical_device, index, display)) {
-            free(properties);
-            *result = index;
-            return true;
-        }
-    }
-    free(properties);
-    return false;
-}
-
-static bool device_candidate(struct walle_vk_renderer*           renderer,
-                             VkPhysicalDevice                    physical_device,
-                             VkSurfaceKHR                        surface,
-                             uint32_t*                           queue_family,
-                             VkPhysicalDeviceProperties2*        properties2,
-                             VkPhysicalDeviceVulkan14Properties* properties14)
-{
-    *properties14 = (VkPhysicalDeviceVulkan14Properties){
-        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_4_PROPERTIES,
-    };
-    *properties2 = (VkPhysicalDeviceProperties2){
-        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
-        .pNext = properties14,
-    };
-    vkGetPhysicalDeviceProperties2(physical_device, properties2);
-    if (properties2->properties.apiVersion < WALLE_VK_REQUIRED_API_VERSION
-        || !device_extension_available(physical_device, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME)
-        || !device_extension_available(physical_device,
-                                       VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME)
-        || !device_extension_available(physical_device,
-                                       VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME)
-        || !device_extension_available(physical_device, VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME)
-        || !select_queue_family(physical_device, surface, renderer->display, queue_family))
-        return false;
-
-    VkPhysicalDeviceVulkan14Features features14 = {
-        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_4_FEATURES,
-    };
-    VkPhysicalDeviceVulkan13Features features13 = {
-        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES,
-        .pNext = &features14,
-    };
-    VkPhysicalDeviceVulkan12Features features12 = {
-        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES,
-        .pNext = &features13,
-    };
-    VkPhysicalDeviceVulkan11Features features11 = {
-        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES,
-        .pNext = &features12,
-    };
-    VkPhysicalDeviceFeatures2 features2 = {
-        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
-        .pNext = &features11,
-    };
-    vkGetPhysicalDeviceFeatures2(physical_device, &features2);
-    if (!features2.features.shaderInt64 || !features2.features.geometryShader
-        || !features11.shaderDrawParameters || !features12.vulkanMemoryModel
-        || !features12.vulkanMemoryModelDeviceScope || !features13.dynamicRendering
-        || !features13.synchronization2 || !features14.maintenance5 || !features14.maintenance6)
-        return false;
-
-    if (!format_supports(physical_device,
-                         WALLE_VK_WALLPAPER_FORMAT,
-                         VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_BIT
-                             | VK_FORMAT_FEATURE_2_TRANSFER_DST_BIT)
-        || !format_supports(physical_device,
-                            WALLE_VK_MASK_FORMAT,
-                            VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT
-                                | VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_BIT
-                                | VK_FORMAT_FEATURE_2_TRANSFER_SRC_BIT)
-        || !format_supports(
-            physical_device, WALLE_VK_PRESENT_FORMAT, VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT))
-        return false;
-    return true;
 }
 
 static uint32_t wallpaper_device_preference(VkPhysicalDeviceType type)
@@ -1444,259 +1395,17 @@ static bool device_selector_matches(const char*                       selector,
     return strcasestr(properties->deviceName, selector) != nullptr;
 }
 
-static bool create_descriptor_layouts(struct walle_vk_renderer* renderer)
-{
-    VkDescriptorSetLayoutBinding mask_bindings[4] = {};
-    for (uint32_t index = 0; index < 4; ++index) {
-        mask_bindings[index] = (VkDescriptorSetLayoutBinding){
-            .binding         = index,
-            .descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-            .descriptorCount = 1,
-            .stageFlags      = VK_SHADER_STAGE_FRAGMENT_BIT,
-        };
-    }
-    VkDescriptorSetLayoutCreateInfo mask_info = {
-        .sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-        .bindingCount = 4,
-        .pBindings    = mask_bindings,
-    };
-    if (!vk_check(vkCreateDescriptorSetLayout(
-                      renderer->device, &mask_info, nullptr, &renderer->mask_set_layout),
-                  "vkCreateDescriptorSetLayout(mask)"))
-        return false;
-
-    VkDescriptorSetLayoutBinding compose_bindings[6] = {};
-    for (uint32_t index = 0; index < 5; ++index) {
-        compose_bindings[index] = (VkDescriptorSetLayoutBinding){
-            .binding         = index,
-            .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
-            .descriptorCount = 1,
-            .stageFlags      = VK_SHADER_STAGE_FRAGMENT_BIT,
-        };
-    }
-    compose_bindings[5] = (VkDescriptorSetLayoutBinding){
-        .binding         = WALLE_VK_COMPOSE_BINDING_SAMPLER,
-        .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLER,
-        .descriptorCount = 1,
-        .stageFlags      = VK_SHADER_STAGE_FRAGMENT_BIT,
-    };
-    VkDescriptorSetLayoutCreateInfo compose_info = {
-        .sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-        .bindingCount = 6,
-        .pBindings    = compose_bindings,
-    };
-    return vk_check(vkCreateDescriptorSetLayout(
-                        renderer->device, &compose_info, nullptr, &renderer->compose_set_layout),
-                    "vkCreateDescriptorSetLayout(compose)");
-}
-
-static bool create_pipeline_layouts(struct walle_vk_renderer* renderer)
-{
-    VkPushConstantRange mask_push = {
-        .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-        .offset     = 0,
-        .size       = sizeof(struct walle_vk_mask_push),
-    };
-    VkPipelineLayoutCreateInfo mask_info = {
-        .sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-        .setLayoutCount         = 1,
-        .pSetLayouts            = &renderer->mask_set_layout,
-        .pushConstantRangeCount = 1,
-        .pPushConstantRanges    = &mask_push,
-    };
-    if (!vk_check(vkCreatePipelineLayout(
-                      renderer->device, &mask_info, nullptr, &renderer->mask_pipeline_layout),
-                  "vkCreatePipelineLayout(mask)"))
-        return false;
-
-    VkPushConstantRange compose_push = {
-        .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-        .offset     = 0,
-        .size       = sizeof(struct walle_vk_compose_push),
-    };
-    VkPipelineLayoutCreateInfo compose_info = {
-        .sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-        .setLayoutCount         = 1,
-        .pSetLayouts            = &renderer->compose_set_layout,
-        .pushConstantRangeCount = 1,
-        .pPushConstantRanges    = &compose_push,
-    };
-    return vk_check(
-        vkCreatePipelineLayout(
-            renderer->device, &compose_info, nullptr, &renderer->compose_pipeline_layout),
-        "vkCreatePipelineLayout(compose)");
-}
-
-static bool create_graphics_pipeline(struct walle_vk_renderer* renderer,
-                                     const uint8_t*            vertex_bytes,
-                                     size_t                    vertex_byte_count,
-                                     const char*               vertex_entry,
-                                     const uint8_t*            fragment_bytes,
-                                     size_t                    fragment_byte_count,
-                                     const char*               fragment_entry,
-                                     VkPipelineLayout          layout,
-                                     VkFormat                  color_format,
-                                     bool                      mask_pipeline,
-                                     VkPipeline*               result)
-{
-    if (!vertex_bytes || !fragment_bytes || vertex_byte_count == 0 || fragment_byte_count == 0
-        || vertex_byte_count % sizeof(uint32_t) != 0 || fragment_byte_count % sizeof(uint32_t) != 0)
-        return false;
-    VkShaderModuleCreateInfo vertex_module = {
-        .sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-        .codeSize = vertex_byte_count,
-        .pCode    = (const uint32_t*)vertex_bytes,
-    };
-    VkShaderModuleCreateInfo fragment_module = {
-        .sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-        .codeSize = fragment_byte_count,
-        .pCode    = (const uint32_t*)fragment_bytes,
-    };
-    VkPipelineShaderStageCreateInfo stages[2] = {
-        {
-            .sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-            .pNext  = &vertex_module,
-            .stage  = VK_SHADER_STAGE_VERTEX_BIT,
-            .module = VK_NULL_HANDLE,
-            .pName  = vertex_entry,
-        },
-        {
-            .sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-            .pNext  = &fragment_module,
-            .stage  = VK_SHADER_STAGE_FRAGMENT_BIT,
-            .module = VK_NULL_HANDLE,
-            .pName  = fragment_entry,
-        },
-    };
-    VkVertexInputBindingDescription binding = {
-        .binding   = 0,
-        .stride    = sizeof(struct walle_lg_reveal_mask_vertex),
-        .inputRate = VK_VERTEX_INPUT_RATE_VERTEX,
-    };
-    VkVertexInputAttributeDescription attributes[3] = {
-        {
-            .location = 0,
-            .binding  = 0,
-            .format   = VK_FORMAT_R32G32B32A32_SFLOAT,
-            .offset   = offsetof(struct walle_lg_reveal_mask_vertex, position),
-        },
-        {
-            .location = 1,
-            .binding  = 0,
-            .format   = VK_FORMAT_R32G32_SFLOAT,
-            .offset   = offsetof(struct walle_lg_reveal_mask_vertex, first_coordinates),
-        },
-        {
-            .location = 2,
-            .binding  = 0,
-            .format   = VK_FORMAT_R32G32_SFLOAT,
-            .offset   = offsetof(struct walle_lg_reveal_mask_vertex, second_coordinates),
-        },
-    };
-    VkPipelineVertexInputStateCreateInfo vertex_input = {
-        .sType                         = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-        .vertexBindingDescriptionCount = mask_pipeline ? 1u : 0u,
-        .pVertexBindingDescriptions    = mask_pipeline ? &binding : nullptr,
-        .vertexAttributeDescriptionCount = mask_pipeline ? 3u : 0u,
-        .pVertexAttributeDescriptions    = mask_pipeline ? attributes : nullptr,
-    };
-    VkPipelineInputAssemblyStateCreateInfo assembly = {
-        .sType    = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
-        .topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
-    };
-    VkPipelineViewportStateCreateInfo viewport = {
-        .sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
-        .viewportCount = 1,
-        .scissorCount  = 1,
-    };
-    VkPipelineRasterizationStateCreateInfo rasterization = {
-        .sType       = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
-        .polygonMode = VK_POLYGON_MODE_FILL,
-        .cullMode    = VK_CULL_MODE_NONE,
-        .frontFace   = VK_FRONT_FACE_COUNTER_CLOCKWISE,
-        .lineWidth   = 1.0f,
-    };
-    VkPipelineMultisampleStateCreateInfo multisample = {
-        .sType                = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
-        .rasterizationSamples = VK_SAMPLE_COUNT_1_BIT,
-    };
-    VkPipelineColorBlendAttachmentState blend_attachment = {
-        .colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT
-                          | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT,
-    };
-    VkPipelineColorBlendStateCreateInfo blend = {
-        .sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
-        .attachmentCount = 1,
-        .pAttachments    = &blend_attachment,
-    };
-    VkDynamicState dynamic_states[] = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
-    VkPipelineDynamicStateCreateInfo dynamic = {
-        .sType             = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
-        .dynamicStateCount = 2,
-        .pDynamicStates    = dynamic_states,
-    };
-    VkPipelineRenderingCreateInfo rendering = {
-        .sType                   = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO,
-        .colorAttachmentCount    = 1,
-        .pColorAttachmentFormats = &color_format,
-    };
-    VkGraphicsPipelineCreateInfo create_info = {
-        .sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
-        .pNext               = &rendering,
-        .stageCount          = 2,
-        .pStages             = stages,
-        .pVertexInputState   = &vertex_input,
-        .pInputAssemblyState = &assembly,
-        .pViewportState      = &viewport,
-        .pRasterizationState = &rasterization,
-        .pMultisampleState   = &multisample,
-        .pColorBlendState    = &blend,
-        .pDynamicState       = &dynamic,
-        .layout              = layout,
-    };
-    return vk_check(vkCreateGraphicsPipelines(
-                        renderer->device, VK_NULL_HANDLE, 1, &create_info, nullptr, result),
-                    mask_pipeline ? "vkCreateGraphicsPipelines(mask)"
-                                  : "vkCreateGraphicsPipelines(compose)");
-}
-
-static bool create_pipelines(struct walle_vk_renderer* renderer)
-{
-    return create_graphics_pipeline(renderer,
-                                    WALLE_VK_MASK_VERTEX_SPIRV,
-                                    sizeof WALLE_VK_MASK_VERTEX_SPIRV,
-                                    "maskVertex",
-                                    WALLE_VK_MASK_FRAGMENT_SPIRV,
-                                    sizeof WALLE_VK_MASK_FRAGMENT_SPIRV,
-                                    "maskFragment",
-                                    renderer->mask_pipeline_layout,
-                                    WALLE_VK_MASK_FORMAT,
-                                    true,
-                                    &renderer->mask_pipeline)
-           && create_graphics_pipeline(renderer,
-                                       WALLE_VK_COMPOSE_VERTEX_SPIRV,
-                                       sizeof WALLE_VK_COMPOSE_VERTEX_SPIRV,
-                                       "composeVertex",
-                                       WALLE_VK_COMPOSE_FRAGMENT_SPIRV,
-                                       sizeof WALLE_VK_COMPOSE_FRAGMENT_SPIRV,
-                                       "composeFragment",
-                                       renderer->compose_pipeline_layout,
-                                       WALLE_VK_PRESENT_FORMAT,
-                                       false,
-                                       &renderer->compose_pipeline);
-}
-
 static bool create_global_resources(struct walle_vk_renderer* renderer)
 {
     VkSamplerCreateInfo sampler_info = {
         .sType        = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
         .magFilter    = VK_FILTER_LINEAR,
         .minFilter    = VK_FILTER_LINEAR,
-        .mipmapMode   = VK_SAMPLER_MIPMAP_MODE_NEAREST,
+        .mipmapMode   = VK_SAMPLER_MIPMAP_MODE_LINEAR,
         .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
         .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
         .addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-        .maxLod       = 0.0f,
+        .maxLod       = VK_LOD_CLAMP_NONE,
     };
     if (!vk_check(
             vkCreateSampler(renderer->device, &sampler_info, nullptr, &renderer->linear_sampler),
@@ -1734,55 +1443,11 @@ static bool create_global_resources(struct walle_vk_renderer* renderer)
     return true;
 }
 
-static bool ensure_sqrt_buffer(struct walle_vk_renderer* renderer)
-{
-    if (renderer->sqrt_buffer.handle)
-        return true;
-
-    struct walle_vk_buffer staging = {};
-    bool                   success
-        = create_buffer(renderer,
-                        sizeof WALLE_VK_APPLE_FAST_SQRT,
-                        VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
-                        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                        false,
-                        &renderer->sqrt_buffer)
-          && create_buffer(renderer,
-                           sizeof WALLE_VK_APPLE_FAST_SQRT,
-                           VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-                               | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                           VK_MEMORY_PROPERTY_HOST_CACHED_BIT,
-                           true,
-                           &staging);
-    if (success) {
-        memcpy(staging.memory.mapped, WALLE_VK_APPLE_FAST_SQRT, sizeof WALLE_VK_APPLE_FAST_SQRT);
-        success = begin_upload(renderer);
-    }
-    if (success) {
-        VkBufferCopy copy = {.size = sizeof WALLE_VK_APPLE_FAST_SQRT};
-        vkCmdCopyBuffer(renderer->upload_command_buffer,
-                        staging.handle,
-                        renderer->sqrt_buffer.handle,
-                        1,
-                        &copy);
-        buffer_barrier(renderer->upload_command_buffer,
-                       VK_PIPELINE_STAGE_2_TRANSFER_BIT,
-                       VK_ACCESS_2_TRANSFER_WRITE_BIT,
-                       VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
-                       VK_ACCESS_2_SHADER_STORAGE_READ_BIT);
-        success = end_upload(renderer);
-    }
-    destroy_buffer(renderer->device, &staging);
-    if (!success)
-        destroy_buffer(renderer->device, &renderer->sqrt_buffer);
-    return success;
-}
-
 static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR surface)
 {
     if (renderer->device_ready) {
+        if (!surface)
+            return true;
         VkBool32 supported = VK_FALSE;
         return vkGetPhysicalDeviceSurfaceSupportKHR(
                    renderer->physical_device, renderer->queue_family, surface, &supported)
@@ -1862,33 +1527,40 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
         .pQueuePriorities = &priority,
     };
     VkPhysicalDeviceVulkan14Features features14 = {
-        .sType        = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_4_FEATURES,
-        .maintenance5 = VK_TRUE,
-        .maintenance6 = VK_TRUE,
+        .sType                     = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_4_FEATURES,
+        .maintenance5              = VK_TRUE,
+        .maintenance6              = VK_TRUE,
+        .dynamicRenderingLocalRead = VK_TRUE,
     };
     VkPhysicalDeviceVulkan13Features features13 = {
-        .sType            = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES,
-        .pNext            = &features14,
-        .synchronization2 = VK_TRUE,
-        .dynamicRendering = VK_TRUE,
+        .sType                          = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES,
+        .pNext                          = &features14,
+        .synchronization2               = VK_TRUE,
+        .dynamicRendering               = VK_TRUE,
+        .shaderDemoteToHelperInvocation = VK_TRUE,
     };
     VkPhysicalDeviceVulkan12Features features12 = {
         .sType                        = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES,
         .pNext                        = &features13,
         .vulkanMemoryModel            = VK_TRUE,
         .vulkanMemoryModelDeviceScope = VK_TRUE,
+        .shaderFloat16                = VK_TRUE,
+        .scalarBlockLayout            = VK_TRUE,
     };
     VkPhysicalDeviceVulkan11Features features11 = {
-        .sType                = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES,
-        .pNext                = &features12,
-        .shaderDrawParameters = VK_TRUE,
+        .sType                              = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES,
+        .pNext                              = &features12,
+        .shaderDrawParameters               = VK_TRUE,
+        .uniformAndStorageBuffer16BitAccess = VK_TRUE,
+        .storageBuffer16BitAccess           = VK_TRUE,
     };
     VkPhysicalDeviceFeatures features = {
-        .geometryShader = VK_TRUE,
-        .shaderInt64    = VK_TRUE,
+        .shaderStorageImageExtendedFormats = VK_TRUE,
+        .independentBlend                  = VK_TRUE,
     };
     const char* extensions[] = {
         VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
+        VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME,
         VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME,
         VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME,
         VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME,
@@ -1898,7 +1570,7 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
         .pNext                   = &features11,
         .queueCreateInfoCount    = 1,
         .pQueueCreateInfos       = &queue_info,
-        .enabledExtensionCount   = sizeof extensions / sizeof *extensions,
+        .enabledExtensionCount   = renderer->display ? sizeof extensions / sizeof *extensions : 0,
         .ppEnabledExtensionNames = extensions,
         .pEnabledFeatures        = &features,
     };
@@ -1911,11 +1583,18 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
     renderer->get_image_drm_format_modifier_properties
         = (PFN_vkGetImageDrmFormatModifierPropertiesEXT)vkGetDeviceProcAddr(
             renderer->device, "vkGetImageDrmFormatModifierPropertiesEXT");
-    if (!renderer->get_memory_fd || !renderer->get_image_drm_format_modifier_properties) {
+    if (renderer->display
+        && (!renderer->get_memory_fd || !renderer->get_image_drm_format_modifier_properties)) {
         fprintf(stderr, "FATAL: Vulkan dma-buf export entry points are unavailable.\n");
         return false;
     }
 
+    renderer->get_semaphore_fd
+        = (PFN_vkGetSemaphoreFdKHR)vkGetDeviceProcAddr(renderer->device, "vkGetSemaphoreFdKHR");
+    renderer->import_semaphore_fd = (PFN_vkImportSemaphoreFdKHR)vkGetDeviceProcAddr(
+        renderer->device, "vkImportSemaphoreFdKHR");
+    if (renderer->display && (!renderer->get_semaphore_fd || !renderer->import_semaphore_fd))
+        return false;
     renderer->physical_device = selected;
     renderer->properties      = selected_properties.properties;
     renderer->properties14    = selected_properties14;
@@ -1924,14 +1603,16 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
     vkGetPhysicalDeviceMemoryProperties(selected, &renderer->memory_properties);
 
     if (renderer->properties.limits.maxPushConstantsSize < 32
-        || renderer->properties.limits.maxImageDimension2D < 4'434
-        || renderer->properties.limits.maxStorageBufferRange < sizeof WALLE_VK_APPLE_FAST_SQRT) {
+        || renderer->properties.limits.maxComputeWorkGroupInvocations < 400
+        || renderer->properties.limits.maxComputeWorkGroupSize[0] < 20
+        || renderer->properties.limits.maxComputeWorkGroupSize[1] < 20) {
         fprintf(stderr, "FATAL: Vulkan device limits are below Walle's exact renderer floor.\n");
         return false;
     }
 
     if (!create_descriptor_layouts(renderer) || !create_pipeline_layouts(renderer)
-        || !create_pipelines(renderer) || !create_global_resources(renderer))
+        || !create_pipelines(renderer) || !create_global_resources(renderer)
+        || walle_vk_renderer_validation_errors(renderer))
         return false;
     renderer->device_ready = true;
     fprintf(stderr,
@@ -1950,12 +1631,13 @@ bool walle_vk_renderer_create(struct wl_display*         display,
                               const char*                device_selector,
                               struct walle_vk_renderer** result)
 {
-    if (!display || !result)
+    if (!result)
         return false;
     *result                            = nullptr;
     struct walle_vk_renderer* renderer = calloc(1, sizeof *renderer);
     if (!renderer)
         return false;
+    atomic_init(&renderer->validation_error_count, 0);
     renderer->display = display;
     renderer->device_selector
         = strdup(device_selector && *device_selector ? device_selector : "auto");
@@ -1963,7 +1645,7 @@ bool walle_vk_renderer_create(struct wl_display*         display,
         free(renderer);
         return false;
     }
-    if (!create_instance(renderer)) {
+    if (!create_instance(renderer) || walle_vk_renderer_validation_errors(renderer)) {
         walle_vk_renderer_destroy(renderer);
         return false;
     }
@@ -1997,56 +1679,12 @@ bool walle_vk_renderer_linux_dmabuf_ready(const struct walle_vk_renderer* render
     return renderer && renderer->dmabuf.ready && !renderer->dmabuf.failed;
 }
 
-void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
-{
-    if (!renderer)
-        return;
-    if (renderer->device) {
-        vkDeviceWaitIdle(renderer->device);
-        destroy_buffer(renderer->device, &renderer->sqrt_buffer);
-        if (renderer->upload_fence)
-            vkDestroyFence(renderer->device, renderer->upload_fence, nullptr);
-        if (renderer->upload_command_pool)
-            vkDestroyCommandPool(renderer->device, renderer->upload_command_pool, nullptr);
-        if (renderer->linear_sampler)
-            vkDestroySampler(renderer->device, renderer->linear_sampler, nullptr);
-        if (renderer->mask_pipeline)
-            vkDestroyPipeline(renderer->device, renderer->mask_pipeline, nullptr);
-        if (renderer->compose_pipeline)
-            vkDestroyPipeline(renderer->device, renderer->compose_pipeline, nullptr);
-        if (renderer->mask_pipeline_layout)
-            vkDestroyPipelineLayout(renderer->device, renderer->mask_pipeline_layout, nullptr);
-        if (renderer->compose_pipeline_layout)
-            vkDestroyPipelineLayout(renderer->device, renderer->compose_pipeline_layout, nullptr);
-        if (renderer->mask_set_layout)
-            vkDestroyDescriptorSetLayout(renderer->device, renderer->mask_set_layout, nullptr);
-        if (renderer->compose_set_layout)
-            vkDestroyDescriptorSetLayout(renderer->device, renderer->compose_set_layout, nullptr);
-        vkDestroyDevice(renderer->device, nullptr);
-    }
-    if (renderer->dmabuf.object)
-        zwp_linux_dmabuf_feedback_v1_destroy(renderer->dmabuf.object);
-    if (renderer->dmabuf.factory)
-        zwp_linux_dmabuf_v1_destroy(renderer->dmabuf.factory);
-    dmabuf_feedback_reset_table(&renderer->dmabuf);
-    free(renderer->dmabuf.candidates);
-    destroy_debug_messenger(renderer);
-    if (renderer->instance)
-        vkDestroyInstance(renderer->instance, nullptr);
-    free(renderer->device_selector);
-    free(renderer);
-}
-
 uint32_t walle_vk_renderer_max_image_dimension(const struct walle_vk_renderer* renderer)
 {
+    /* Image ceiling only. Each graphics extent has additional per-axis limits,
+     * checked by output/attachment creation and resize before image allocation. */
     return renderer && renderer->device_ready ? renderer->properties.limits.maxImageDimension2D
                                               : UINT32_MAX;
-}
-
-static void destroy_texture_pair(VkDevice device, struct walle_vk_texture_pair* pair)
-{
-    destroy_image(device, &pair->standard);
-    destroy_image(device, &pair->glass);
 }
 
 static void destroy_present_images(struct walle_vk_output* output)
@@ -2074,9 +1712,9 @@ static bool create_output_command_resources(struct walle_vk_output* output)
 {
     struct walle_vk_renderer* renderer  = output->renderer;
     VkCommandPoolCreateInfo   pool_info = {
-          .sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-          .flags            = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
-          .queueFamilyIndex = renderer->queue_family,
+        .sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+        .flags            = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
+        .queueFamilyIndex = renderer->queue_family,
     };
     if (!vk_check(vkCreateCommandPool(renderer->device, &pool_info, nullptr, &output->command_pool),
                   "vkCreateCommandPool(output)"))
@@ -2095,8 +1733,20 @@ static bool create_output_command_resources(struct walle_vk_output* output)
         .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
         .flags = VK_FENCE_CREATE_SIGNALED_BIT,
     };
-    return vk_check(vkCreateFence(renderer->device, &fence_info, nullptr, &output->frame_fence),
-                    "vkCreateFence(frame)");
+    if (!vk_check(vkCreateFence(renderer->device, &fence_info, nullptr, &output->frame_fence),
+                  "vkCreateFence(frame)"))
+        return false;
+    if (!output->wayland_surface)
+        return true;
+    VkSemaphoreCreateInfo si = {.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
+    if (!vk_check(vkCreateSemaphore(renderer->device, &si, nullptr, &output->acquire_semaphore),
+                  "vkCreateSemaphore(acquire)"))
+        return false;
+    VkExportSemaphoreCreateInfo ex = {.sType       = VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO,
+                                      .handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT};
+    si.pNext                       = &ex;
+    return vk_check(vkCreateSemaphore(renderer->device, &si, nullptr, &output->render_semaphore),
+                    "vkCreateSemaphore(render done)");
 }
 
 bool walle_vk_output_create(struct walle_vk_renderer* renderer,
@@ -2106,9 +1756,11 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
                             bool                      enable_composition_readback,
                             struct walle_vk_output**  result)
 {
-    if (!renderer || !renderer->instance || !surface || !result || width == 0 || height == 0)
+    if (!renderer || !renderer->instance || !result || width == 0 || height == 0)
         return false;
-    *result                        = nullptr;
+    *result = nullptr;
+    if (renderer->device_ready && !graphics_extent_valid(renderer, width, height))
+        return false;
     struct walle_vk_output* output = calloc(1, sizeof *output);
     if (!output)
         return false;
@@ -2121,12 +1773,12 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
         .display = renderer->display,
         .surface = surface,
     };
-    bool success = vk_check(vkCreateWaylandSurfaceKHR(
-                                renderer->instance, &surface_info, nullptr, &output->surface),
-                            "vkCreateWaylandSurfaceKHR")
+    bool success = (!surface
+                    || vk_check(vkCreateWaylandSurfaceKHR(
+                                    renderer->instance, &surface_info, nullptr, &output->surface),
+                                "vkCreateWaylandSurfaceKHR"))
                    && initialize_device(renderer, output->surface)
-                   && width <= renderer->properties.limits.maxImageDimension2D
-                   && height <= renderer->properties.limits.maxImageDimension2D
+                   && graphics_extent_valid(renderer, width, height)
                    && initialize_present_images(output) && create_output_command_resources(output);
     if (!success) {
         walle_vk_output_destroy(output);
@@ -2134,22 +1786,6 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
     }
     *result = output;
     return true;
-}
-
-bool walle_vk_output_resize(struct walle_vk_output* output, uint32_t width, uint32_t height)
-{
-    if (!output || width == 0 || height == 0 || output->renderer->fatal)
-        return false;
-    if (output->extent.width == width && output->extent.height == height)
-        return true;
-    if (!vk_check(vkDeviceWaitIdle(output->renderer->device), "vkDeviceWaitIdle(resize)"))
-        return false;
-    walle_vk_output_abort_transition(output);
-    destroy_texture_pair(output->renderer->device, &output->current);
-    destroy_texture_pair(output->renderer->device, &output->incoming);
-    destroy_present_images(output);
-    output->extent = (VkExtent2D){.width = width, .height = height};
-    return initialize_present_images(output);
 }
 
 static bool read_layer_exact(int fd, const struct walle_vk_image_layer* layer, void* destination)
@@ -2181,933 +1817,6 @@ static bool layer_valid(const struct walle_vk_renderer*    renderer,
            && !ckd_mul(&byte_count, pixel_count, 4u) && layer->size == byte_count;
 }
 
-static bool upload_texture_pair(struct walle_vk_output*            output,
-                                int                                fd,
-                                const struct walle_vk_image_layer* standard,
-                                const struct walle_vk_image_layer* glass,
-                                struct walle_vk_texture_pair*      result)
-{
-    struct walle_vk_renderer* renderer = output->renderer;
-    if (fd < 0 || !layer_valid(renderer, standard) || !layer_valid(renderer, glass)
-        || standard->width != (int32_t)output->extent.width
-        || standard->height != (int32_t)output->extent.height)
-        return false;
-    VkDeviceSize total_size;
-    if (ckd_add(&total_size, (VkDeviceSize)standard->size, (VkDeviceSize)glass->size))
-        return false;
-    struct walle_vk_texture_pair pair    = {};
-    struct walle_vk_buffer       staging = {};
-    VkImageUsageFlags image_usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-    bool              success     = create_image(renderer,
-                                (uint32_t)standard->width,
-                                (uint32_t)standard->height,
-                                WALLE_VK_WALLPAPER_FORMAT,
-                                image_usage,
-                                &pair.standard)
-                   && create_image(renderer,
-                                   (uint32_t)glass->width,
-                                   (uint32_t)glass->height,
-                                   WALLE_VK_WALLPAPER_FORMAT,
-                                   image_usage,
-                                   &pair.glass)
-                   && create_buffer(renderer,
-                                    total_size,
-                                    VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-                                        | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                                    VK_MEMORY_PROPERTY_HOST_CACHED_BIT,
-                                    true,
-                                    &staging);
-    if (success) {
-        success = read_layer_exact(fd, standard, staging.memory.mapped)
-                  && read_layer_exact(fd, glass, (uint8_t*)staging.memory.mapped + standard->size)
-                  && begin_upload(renderer);
-    }
-    if (success) {
-        image_barrier(renderer->upload_command_buffer,
-                      pair.standard.handle,
-                      VK_PIPELINE_STAGE_2_NONE,
-                      VK_ACCESS_2_NONE,
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_WRITE_BIT,
-                      VK_IMAGE_LAYOUT_UNDEFINED,
-                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        image_barrier(renderer->upload_command_buffer,
-                      pair.glass.handle,
-                      VK_PIPELINE_STAGE_2_NONE,
-                      VK_ACCESS_2_NONE,
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_WRITE_BIT,
-                      VK_IMAGE_LAYOUT_UNDEFINED,
-                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        VkBufferImageCopy copies[2] = {
-            {
-                .bufferOffset = 0,
-                .imageSubresource = {
-                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                    .layerCount = 1,
-                },
-                .imageExtent = {
-                    .width = (uint32_t)standard->width,
-                    .height = (uint32_t)standard->height,
-                    .depth = 1,
-                },
-            },
-            {
-                .bufferOffset = standard->size,
-                .imageSubresource = {
-                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                    .layerCount = 1,
-                },
-                .imageExtent = {
-                    .width = (uint32_t)glass->width,
-                    .height = (uint32_t)glass->height,
-                    .depth = 1,
-                },
-            },
-        };
-        vkCmdCopyBufferToImage(renderer->upload_command_buffer,
-                               staging.handle,
-                               pair.standard.handle,
-                               VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                               1,
-                               &copies[0]);
-        vkCmdCopyBufferToImage(renderer->upload_command_buffer,
-                               staging.handle,
-                               pair.glass.handle,
-                               VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                               1,
-                               &copies[1]);
-        image_barrier(renderer->upload_command_buffer,
-                      pair.standard.handle,
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_WRITE_BIT,
-                      VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
-                      VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
-                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                      VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
-        image_barrier(renderer->upload_command_buffer,
-                      pair.glass.handle,
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_WRITE_BIT,
-                      VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
-                      VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
-                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                      VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
-        success = end_upload(renderer);
-    }
-    destroy_buffer(renderer->device, &staging);
-    if (!success) {
-        destroy_texture_pair(renderer->device, &pair);
-        return false;
-    }
-    *result = pair;
-    return true;
-}
-
-bool walle_vk_output_upload(struct walle_vk_output*            output,
-                            int                                fd,
-                            const struct walle_vk_image_layer* standard,
-                            const struct walle_vk_image_layer* glass)
-{
-    if (!output || output->renderer->fatal)
-        return false;
-    struct walle_vk_texture_pair pair = {};
-    if (!upload_texture_pair(output, fd, standard, glass, &pair))
-        return false;
-    if (!vk_check(
-            vkWaitForFences(output->renderer->device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX),
-            "vkWaitForFences(before wallpaper replacement)")) {
-        destroy_texture_pair(output->renderer->device, &pair);
-        return false;
-    }
-    destroy_texture_pair(output->renderer->device, &output->incoming);
-    output->incoming                  = pair;
-    output->compose_descriptors_ready = false;
-    return true;
-}
-
-bool walle_vk_output_restore_current(struct walle_vk_output*            output,
-                                     int                                fd,
-                                     const struct walle_vk_image_layer* standard,
-                                     const struct walle_vk_image_layer* glass)
-{
-    if (!output || output->renderer->fatal)
-        return false;
-    if (output->current.standard.handle && output->current.glass.handle)
-        return true;
-    if (output->current.standard.handle || output->current.glass.handle)
-        return false;
-    struct walle_vk_texture_pair pair = {};
-    if (!upload_texture_pair(output, fd, standard, glass, &pair))
-        return false;
-    output->current                   = pair;
-    output->compose_descriptors_ready = false;
-    return true;
-}
-
-static VkDeviceSize align_device_size(VkDeviceSize value, VkDeviceSize alignment)
-{
-    if (alignment <= 1)
-        return value;
-    VkDeviceSize remainder = value % alignment;
-    return remainder ? value + (alignment - remainder) : value;
-}
-
-static bool reveal_geometry_valid(const struct walle_vk_output*               output,
-                                  const struct walle_lg_reveal_mask_geometry* geometry)
-{
-    if (!geometry || geometry->vertex_count > WALLE_LG_REVEAL_MAX_VERTEX_COUNT
-        || geometry->index_count > WALLE_LG_REVEAL_MAX_INDEX_COUNT
-        || geometry->index_count % 3 != 0)
-        return false;
-    for (uint32_t index = 0; index < geometry->index_count; ++index) {
-        if (geometry->indices[index] >= geometry->vertex_count)
-            return false;
-    }
-    if (geometry->circle.empty) {
-        return geometry->family == WALLE_LG_REVEAL_MASK_EMPTY && geometry->vertex_count == 0
-               && geometry->index_count == 0 && !geometry->clear_to_inside;
-    }
-    int64_t right  = (int64_t)geometry->circle.scissor[0] + geometry->circle.scissor[2];
-    int64_t bottom = (int64_t)geometry->circle.scissor[1] + geometry->circle.scissor[3];
-    if (geometry->circle.scissor[0] < 0 || geometry->circle.scissor[1] < 0
-        || geometry->circle.scissor[2] <= 0 || geometry->circle.scissor[3] <= 0
-        || right > output->extent.width || bottom > output->extent.height)
-        return false;
-    if (geometry->family == WALLE_LG_REVEAL_MASK_BORDER_GRID) {
-        return geometry->vertex_count == 16
-               && (geometry->index_count == 48 || geometry->index_count == 54)
-               && !geometry->clear_to_inside;
-    }
-    return geometry->family == WALLE_LG_REVEAL_MASK_COMPACT_VISIBLE_ARCS
-           && geometry->vertex_count % 4 == 0
-           && geometry->index_count == geometry->vertex_count / 4 * 6 && geometry->clear_to_inside;
-}
-
-static bool reveal_raster_valid(const struct walle_lg_reveal_raster* raster)
-{
-    size_t row_count;
-    size_t expected_word_count;
-    if (!raster || raster->owner_count == 0
-        || raster->owner_count > WALLE_LG_REVEAL_RASTER_MAX_OWNER_COUNT
-        || raster->base_owner_count == 0
-        || raster->base_owner_count > WALLE_LG_REVEAL_RASTER_MAX_BASE_OWNER_COUNT
-        || raster->base_owner_count > raster->owner_count || raster->original_primitive_count == 0
-        || raster->original_primitive_count > WALLE_LG_REVEAL_RASTER_MAX_PRIMITIVE_COUNT
-        || raster->packed_width == 0 || !raster->packed_words
-        || raster->postguard_child_count
-               != raster->supported_postguard_child_count
-                      + raster->unsupported_postguard_child_count
-                      + raster->offscreen_postguard_child_count
-        || raster->supported_postguard_child_count != raster->owner_count - raster->base_owner_count
-        || raster->owner_block.counts[0] != (int32_t)raster->owner_count
-        || raster->owner_block.counts[1] != (int32_t)raster->base_owner_count
-        || raster->owner_block.counts[2] != 0 || raster->owner_block.counts[3] != 0
-        || ckd_mul(&row_count, (size_t)raster->owner_count, WALLE_LG_RASTER_PRIMITIVE_COUNT)
-        || ckd_mul(&expected_word_count, row_count, (size_t)raster->packed_width)
-        || ckd_mul(&expected_word_count, expected_word_count, WALLE_LG_REVEAL_RASTER_CHANNEL_COUNT)
-        || raster->packed_word_count != expected_word_count)
-        return false;
-
-    for (size_t slot = 0; slot < raster->owner_count; ++slot) {
-        const struct walle_lg_reveal_raster_quad* owner  = &raster->owners[slot];
-        const int32_t*                            bounds = raster->owner_block.bounds[slot];
-        const int32_t* transform                         = raster->owner_block.origin_extent[slot];
-        const int32_t* control                           = raster->owner_block.control[slot];
-        int64_t        lower = bounds[0] < bounds[1] ? bounds[0] : bounds[1];
-        int64_t        upper = bounds[2] > bounds[3] ? bounds[2] : bounds[3];
-        if (memcmp(bounds, owner->visible_bounds, sizeof owner->visible_bounds) != 0
-            || transform[0] != owner->origin_fixed[0] || transform[1] != owner->origin_fixed[1]
-            || transform[2] != owner->extent_fixed[0] || transform[3] != owner->extent_fixed[1]
-            || control[0] != owner->axis_start || control[1] != (int32_t)owner->ascending_diagonal
-            || control[2] != owner->active_primitive_mask
-            || control[3]
-                   != (slot < raster->base_owner_count
-                           ? 0
-                           : WALLE_LG_POSTGUARD_CHILD_SCOPED_CENTER_FALLBACK)
-            || owner->extent_fixed[0] <= 0 || owner->extent_fixed[1] <= 0 || bounds[2] <= bounds[0]
-            || bounds[3] <= bounds[1] || owner->active_primitive_mask == 0
-            || owner->active_primitive_mask > 3 || owner->axis_start != lower - 1
-            || upper + 1 - owner->axis_start <= 0
-            || upper + 1 - owner->axis_start > raster->packed_width)
-            return false;
-    }
-    for (size_t primitive = 0; primitive < raster->original_primitive_count; ++primitive) {
-        const struct walle_lg_reveal_raster_primitive* mapping = &raster->primitives[primitive];
-        bool invalid_slot = mapping->packed_slot == WALLE_LG_REVEAL_RASTER_INVALID_MAPPING;
-        bool invalid_primitive
-            = mapping->geometric_primitive == WALLE_LG_REVEAL_RASTER_INVALID_MAPPING;
-        if (invalid_slot != invalid_primitive)
-            return false;
-        if (!invalid_slot
-            && (mapping->packed_slot >= raster->base_owner_count
-                || mapping->geometric_primitive >= WALLE_LG_RASTER_PRIMITIVE_COUNT))
-            return false;
-    }
-    return true;
-}
-
-static void destroy_transition_resources(struct walle_vk_output* output)
-{
-    struct walle_vk_renderer* renderer = output->renderer;
-    VkDevice                  device   = renderer->device;
-    bool                      counted  = output->transition_resources_ready;
-    if (output->descriptor_pool)
-        vkDestroyDescriptorPool(device, output->descriptor_pool, nullptr);
-    output->descriptor_pool = VK_NULL_HANDLE;
-    output->mask_set        = VK_NULL_HANDLE;
-    output->compose_set     = VK_NULL_HANDLE;
-    destroy_image(device, &output->mask);
-    destroy_buffer(device, &output->transition_buffer);
-    destroy_buffer(device, &output->staging_buffer);
-    destroy_buffer(device, &output->readback_buffer);
-    output->mask_layout                = VK_IMAGE_LAYOUT_UNDEFINED;
-    output->axis_packed_width          = 0;
-    output->vertex_offset              = 0;
-    output->index_offset               = 0;
-    output->owner_offset               = 0;
-    output->mapping_offset             = 0;
-    output->axis_offset                = 0;
-    output->transition_resources_ready = false;
-    output->mask_descriptors_ready     = false;
-    output->compose_descriptors_ready  = false;
-    if (counted) {
-        assert(renderer->transition_resource_users != 0);
-        if (--renderer->transition_resource_users == 0)
-            destroy_buffer(device, &renderer->sqrt_buffer);
-    }
-}
-
-static bool create_transition_descriptor_sets(struct walle_vk_output* output)
-{
-    struct walle_vk_renderer* renderer     = output->renderer;
-    VkDescriptorPoolSize      pool_sizes[] = {
-        {.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, .descriptorCount = 4},
-        {.type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, .descriptorCount = 5},
-        {.type = VK_DESCRIPTOR_TYPE_SAMPLER, .descriptorCount = 1},
-    };
-    VkDescriptorPoolCreateInfo pool_info = {
-        .sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-        .maxSets       = 2,
-        .poolSizeCount = 3,
-        .pPoolSizes    = pool_sizes,
-    };
-    if (!vk_check(
-            vkCreateDescriptorPool(renderer->device, &pool_info, nullptr, &output->descriptor_pool),
-            "vkCreateDescriptorPool(transition)"))
-        return false;
-    VkDescriptorSetLayout layouts[] = {
-        renderer->mask_set_layout,
-        renderer->compose_set_layout,
-    };
-    VkDescriptorSet             sets[2]       = {};
-    VkDescriptorSetAllocateInfo allocate_info = {
-        .sType              = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-        .descriptorPool     = output->descriptor_pool,
-        .descriptorSetCount = 2,
-        .pSetLayouts        = layouts,
-    };
-    if (!vk_check(vkAllocateDescriptorSets(renderer->device, &allocate_info, sets),
-                  "vkAllocateDescriptorSets(transition)"))
-        return false;
-    output->mask_set    = sets[0];
-    output->compose_set = sets[1];
-
-    VkDescriptorImageInfo sampler_info  = {.sampler = renderer->linear_sampler};
-    VkWriteDescriptorSet  sampler_write = {
-         .sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-         .dstSet          = output->compose_set,
-         .dstBinding      = WALLE_VK_COMPOSE_BINDING_SAMPLER,
-         .descriptorCount = 1,
-         .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLER,
-         .pImageInfo      = &sampler_info,
-    };
-    vkUpdateDescriptorSets(renderer->device, 1, &sampler_write, 0, nullptr);
-    return true;
-}
-
-static bool ensure_transition_base(struct walle_vk_output* output, bool readback)
-{
-    struct walle_vk_renderer* renderer = output->renderer;
-    bool                      success  = ensure_sqrt_buffer(renderer);
-    if (success && !output->mask.handle)
-        success = create_image(renderer,
-                               output->extent.width,
-                               output->extent.height,
-                               WALLE_VK_MASK_FORMAT,
-                               VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT
-                                   | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
-                               &output->mask);
-    if (success && !output->descriptor_pool)
-        success = create_transition_descriptor_sets(output);
-    if (readback && !output->readback_buffer.handle) {
-        VkDeviceSize size;
-        success
-            = success
-              && !ckd_mul(
-                  &size, (VkDeviceSize)output->extent.width, (VkDeviceSize)output->extent.height)
-              && (!output->composition_readback_enabled || !ckd_mul(&size, size, (VkDeviceSize)5))
-              && create_buffer(renderer,
-                               size,
-                               VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-                                   | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                               VK_MEMORY_PROPERTY_HOST_CACHED_BIT,
-                               true,
-                               &output->readback_buffer);
-    }
-    if (!success) {
-        if (renderer->transition_resource_users == 0)
-            destroy_buffer(renderer->device, &renderer->sqrt_buffer);
-        return false;
-    }
-    if (!output->transition_resources_ready) {
-        output->transition_resources_ready = true;
-        ++renderer->transition_resource_users;
-    }
-    return true;
-}
-
-static bool ensure_transition_buffers(struct walle_vk_output*              output,
-                                      const struct walle_lg_reveal_raster* raster)
-{
-    struct walle_vk_renderer* renderer = output->renderer;
-    VkDeviceSize storage_alignment = renderer->properties.limits.minStorageBufferOffsetAlignment;
-    VkDeviceSize vertex_size
-        = sizeof(struct walle_lg_reveal_mask_vertex) * WALLE_LG_REVEAL_MAX_VERTEX_COUNT;
-    VkDeviceSize index_size   = sizeof(uint16_t) * WALLE_LG_REVEAL_MAX_INDEX_COUNT;
-    VkDeviceSize mapping_size = sizeof(int32_t[2]) * WALLE_LG_REVEAL_RASTER_MAX_PRIMITIVE_COUNT;
-    VkDeviceSize axis_size;
-    if (ckd_mul(
-            &axis_size, (VkDeviceSize)raster->packed_word_count, (VkDeviceSize)sizeof(uint32_t)))
-        return false;
-    if (axis_size > renderer->properties.limits.maxStorageBufferRange)
-        return false;
-
-    output->vertex_offset = 0;
-    output->index_offset  = align_device_size(vertex_size, alignof(uint16_t));
-    output->owner_offset  = align_device_size(output->index_offset + index_size, storage_alignment);
-    output->mapping_offset = align_device_size(
-        output->owner_offset + sizeof(struct walle_lg_reveal_owner_block), storage_alignment);
-    output->axis_offset
-        = align_device_size(output->mapping_offset + mapping_size, storage_alignment);
-    VkDeviceSize total_size;
-    if (ckd_add(&total_size, output->axis_offset, axis_size))
-        return false;
-
-    if (output->transition_buffer.capacity < total_size) {
-        destroy_buffer(renderer->device, &output->transition_buffer);
-        destroy_buffer(renderer->device, &output->staging_buffer);
-        output->mask_descriptors_ready = false;
-        VkBufferUsageFlags usage
-            = VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
-              | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
-        bool directly_mapped = create_buffer(renderer,
-                                             total_size,
-                                             usage,
-                                             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-                                                 | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-                                                 | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                                             VK_MEMORY_PROPERTY_HOST_CACHED_BIT,
-                                             true,
-                                             &output->transition_buffer);
-        if (!directly_mapped) {
-            bool staged = create_buffer(renderer,
-                                        total_size,
-                                        usage,
-                                        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                                        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                                        false,
-                                        &output->transition_buffer)
-                          && create_buffer(renderer,
-                                           total_size,
-                                           VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-                                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-                                               | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                                           VK_MEMORY_PROPERTY_HOST_CACHED_BIT,
-                                           true,
-                                           &output->staging_buffer);
-            if (!staged) {
-                destroy_buffer(renderer->device, &output->transition_buffer);
-                destroy_buffer(renderer->device, &output->staging_buffer);
-                return false;
-            }
-        }
-    }
-    output->axis_packed_width = raster->packed_width;
-
-    if (output->mask_descriptors_ready)
-        return true;
-
-    VkDescriptorBufferInfo buffer_infos[4] = {
-        {
-            .buffer = output->transition_buffer.handle,
-            .offset = output->axis_offset,
-            .range  = output->transition_buffer.capacity - output->axis_offset,
-        },
-        {
-            .buffer = renderer->sqrt_buffer.handle,
-            .offset = 0,
-            .range  = sizeof WALLE_VK_APPLE_FAST_SQRT,
-        },
-        {
-            .buffer = output->transition_buffer.handle,
-            .offset = output->owner_offset,
-            .range  = sizeof(struct walle_lg_reveal_owner_block),
-        },
-        {
-            .buffer = output->transition_buffer.handle,
-            .offset = output->mapping_offset,
-            .range  = mapping_size,
-        },
-    };
-    VkWriteDescriptorSet writes[4] = {};
-    for (uint32_t index = 0; index < 4; ++index) {
-        writes[index] = (VkWriteDescriptorSet){
-            .sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-            .dstSet          = output->mask_set,
-            .dstBinding      = index,
-            .descriptorCount = 1,
-            .descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-            .pBufferInfo     = &buffer_infos[index],
-        };
-    }
-    vkUpdateDescriptorSets(renderer->device, 4, writes, 0, nullptr);
-    output->mask_descriptors_ready = true;
-    return true;
-}
-
-static bool update_compose_descriptors(struct walle_vk_output* output, bool first_boot)
-{
-    if (output->compose_descriptors_ready && output->compose_descriptors_first_boot == first_boot)
-        return true;
-    const struct walle_vk_texture_pair* a = first_boot ? &output->incoming : &output->current;
-    const struct walle_vk_texture_pair* b = &output->incoming;
-    if (!a->standard.view || !a->glass.view || !b->standard.view || !b->glass.view
-        || !output->mask.view)
-        return false;
-    VkDescriptorImageInfo infos[5] = {
-        {.imageView = a->standard.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
-        {.imageView = a->glass.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
-        {.imageView = b->standard.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
-        {.imageView = b->glass.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
-        {.imageView = output->mask.view, .imageLayout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL},
-    };
-    VkWriteDescriptorSet writes[5] = {};
-    for (uint32_t index = 0; index < 5; ++index) {
-        writes[index] = (VkWriteDescriptorSet){
-            .sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-            .dstSet          = output->compose_set,
-            .dstBinding      = index,
-            .descriptorCount = 1,
-            .descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
-            .pImageInfo      = &infos[index],
-        };
-    }
-    vkUpdateDescriptorSets(output->renderer->device, 5, writes, 0, nullptr);
-    output->compose_descriptors_first_boot = first_boot;
-    output->compose_descriptors_ready      = true;
-    return true;
-}
-
-static bool stage_reveal_data(struct walle_vk_output*                     output,
-                              const struct walle_lg_reveal_mask_geometry* geometry,
-                              const struct walle_lg_reveal_raster*        raster,
-                              VkBufferCopy                                copies[static 5],
-                              uint32_t*                                   copy_count,
-                              bool*                                       host_written)
-{
-    if (!ensure_transition_buffers(output, raster))
-        return false;
-    bool     direct = output->transition_buffer.memory.mapped != nullptr;
-    uint8_t* staging
-        = direct ? output->transition_buffer.memory.mapped : output->staging_buffer.memory.mapped;
-    VkDeviceSize vertex_size  = geometry->vertex_count * sizeof geometry->vertices[0];
-    VkDeviceSize index_size   = geometry->index_count * sizeof geometry->indices[0];
-    VkDeviceSize mapping_size = sizeof(int32_t[2]) * WALLE_LG_REVEAL_RASTER_MAX_PRIMITIVE_COUNT;
-    VkDeviceSize axis_size    = raster->packed_word_count * sizeof(uint32_t);
-    memcpy(staging + output->vertex_offset, geometry->vertices, (size_t)vertex_size);
-    memcpy(staging + output->index_offset, geometry->indices, (size_t)index_size);
-    memcpy(staging + output->owner_offset, &raster->owner_block, sizeof raster->owner_block);
-    memset(staging + output->mapping_offset, 0, (size_t)mapping_size);
-    int32_t (*mappings)[2] = (int32_t (*)[2])(staging + output->mapping_offset);
-    for (uint32_t primitive = 0; primitive < raster->original_primitive_count; ++primitive) {
-        const struct walle_lg_reveal_raster_primitive* mapping = &raster->primitives[primitive];
-        if (mapping->packed_slot == WALLE_LG_REVEAL_RASTER_INVALID_MAPPING)
-            continue;
-        mappings[primitive][0] = mapping->packed_slot;
-        mappings[primitive][1] = mapping->geometric_primitive;
-    }
-    memcpy(staging + output->axis_offset, raster->packed_words, (size_t)axis_size);
-
-    *host_written = direct;
-    if (direct) {
-        *copy_count = 0;
-        return true;
-    }
-
-    uint32_t count  = 0;
-    copies[count++] = (VkBufferCopy){
-        .srcOffset = output->vertex_offset,
-        .dstOffset = output->vertex_offset,
-        .size      = vertex_size,
-    };
-    copies[count++] = (VkBufferCopy){
-        .srcOffset = output->index_offset,
-        .dstOffset = output->index_offset,
-        .size      = index_size,
-    };
-    copies[count++] = (VkBufferCopy){
-        .srcOffset = output->owner_offset,
-        .dstOffset = output->owner_offset,
-        .size      = sizeof raster->owner_block,
-    };
-    copies[count++] = (VkBufferCopy){
-        .srcOffset = output->mapping_offset,
-        .dstOffset = output->mapping_offset,
-        .size      = mapping_size,
-    };
-    copies[count++] = (VkBufferCopy){
-        .srcOffset = output->axis_offset,
-        .dstOffset = output->axis_offset,
-        .size      = axis_size,
-    };
-    *copy_count = count;
-    return true;
-}
-
-static void bind_descriptor_set_14(VkCommandBuffer    command_buffer,
-                                   VkPipelineLayout   layout,
-                                   VkShaderStageFlags stages,
-                                   VkDescriptorSet    set)
-{
-    VkBindDescriptorSetsInfo bind_info = {
-        .sType              = VK_STRUCTURE_TYPE_BIND_DESCRIPTOR_SETS_INFO,
-        .stageFlags         = stages,
-        .layout             = layout,
-        .firstSet           = 0,
-        .descriptorSetCount = 1,
-        .pDescriptorSets    = &set,
-    };
-    vkCmdBindDescriptorSets2(command_buffer, &bind_info);
-}
-
-static void push_constants_14(VkCommandBuffer    command_buffer,
-                              VkPipelineLayout   layout,
-                              VkShaderStageFlags stages,
-                              const void*        data,
-                              uint32_t           size)
-{
-    VkPushConstantsInfo push_info = {
-        .sType      = VK_STRUCTURE_TYPE_PUSH_CONSTANTS_INFO,
-        .layout     = layout,
-        .stageFlags = stages,
-        .offset     = 0,
-        .size       = size,
-        .pValues    = data,
-    };
-    vkCmdPushConstants2(command_buffer, &push_info);
-}
-
-static void set_full_viewport(VkCommandBuffer command_buffer, VkExtent2D extent)
-{
-    VkViewport viewport = {
-        .x        = 0.0f,
-        .y        = (float)extent.height,
-        .width    = (float)extent.width,
-        .height   = -(float)extent.height,
-        .minDepth = 0.0f,
-        .maxDepth = 1.0f,
-    };
-    VkRect2D scissor = {.extent = extent};
-    vkCmdSetViewport(command_buffer, 0, 1, &viewport);
-    vkCmdSetScissor(command_buffer, 0, 1, &scissor);
-}
-
-static bool record_frame(struct walle_vk_output*              output,
-                         uint32_t                             image_index,
-                         const struct walle_vk_frame*         frame,
-                         const struct walle_lg_reveal_raster* raster,
-                         const VkBufferCopy                   copies[static 5],
-                         uint32_t                             copy_count,
-                         bool                                 host_written,
-                         VkDeviceSize                         mask_size)
-{
-    struct walle_vk_renderer*      renderer       = output->renderer;
-    struct walle_vk_present_image* present        = &output->present_images[image_index];
-    VkCommandBuffer                command_buffer = output->command_buffer;
-    if (!vk_check(vkResetCommandBuffer(command_buffer, 0), "vkResetCommandBuffer(frame)"))
-        return false;
-    VkCommandBufferBeginInfo begin_info = {
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-        .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
-    };
-    if (!vk_check(vkBeginCommandBuffer(command_buffer, &begin_info), "vkBeginCommandBuffer(frame)"))
-        return false;
-
-    if (copy_count) {
-        vkCmdCopyBuffer(command_buffer,
-                        output->staging_buffer.handle,
-                        output->transition_buffer.handle,
-                        copy_count,
-                        copies);
-        buffer_barrier(command_buffer,
-                       VK_PIPELINE_STAGE_2_TRANSFER_BIT,
-                       VK_ACCESS_2_TRANSFER_WRITE_BIT,
-                       VK_PIPELINE_STAGE_2_VERTEX_INPUT_BIT
-                           | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
-                       VK_ACCESS_2_VERTEX_ATTRIBUTE_READ_BIT | VK_ACCESS_2_INDEX_READ_BIT
-                           | VK_ACCESS_2_SHADER_STORAGE_READ_BIT);
-    } else if (host_written) {
-        buffer_barrier(command_buffer,
-                       VK_PIPELINE_STAGE_2_HOST_BIT,
-                       VK_ACCESS_2_HOST_WRITE_BIT,
-                       VK_PIPELINE_STAGE_2_VERTEX_INPUT_BIT
-                           | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
-                       VK_ACCESS_2_VERTEX_ATTRIBUTE_READ_BIT | VK_ACCESS_2_INDEX_READ_BIT
-                           | VK_ACCESS_2_SHADER_STORAGE_READ_BIT);
-    }
-
-    image_barrier(
-        command_buffer,
-        output->mask.handle,
-        output->mask_layout == VK_IMAGE_LAYOUT_UNDEFINED ? VK_PIPELINE_STAGE_2_NONE
-                                                         : VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
-        output->mask_layout == VK_IMAGE_LAYOUT_UNDEFINED ? VK_ACCESS_2_NONE
-                                                         : VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
-        VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-        VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-        output->mask_layout,
-        VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL);
-
-    VkClearValue              mask_clear      = {.color = {.uint32 = {0, 0, 0, 0}}};
-    VkRenderingAttachmentInfo mask_attachment = {
-        .sType       = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
-        .imageView   = output->mask.view,
-        .imageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-        .loadOp      = VK_ATTACHMENT_LOAD_OP_CLEAR,
-        .storeOp     = VK_ATTACHMENT_STORE_OP_STORE,
-        .clearValue  = mask_clear,
-    };
-    VkRenderingInfo mask_rendering = {
-        .sType                = VK_STRUCTURE_TYPE_RENDERING_INFO,
-        .renderArea           = {.extent = output->extent},
-        .layerCount           = 1,
-        .colorAttachmentCount = 1,
-        .pColorAttachments    = &mask_attachment,
-    };
-    vkCmdBeginRendering(command_buffer, &mask_rendering);
-    set_full_viewport(command_buffer, output->extent);
-    if (!frame->geometry->circle.empty && frame->geometry->clear_to_inside) {
-        VkClearAttachment clear_attachment = {
-            .aspectMask      = VK_IMAGE_ASPECT_COLOR_BIT,
-            .colorAttachment = 0,
-            .clearValue      = {.color = {.uint32 = {255, 0, 0, 0}}},
-        };
-        VkClearRect clear_rect = {
-            .rect = {
-                .offset = {
-                    .x = frame->geometry->circle.scissor[0],
-                    .y = frame->geometry->circle.scissor[1],
-                },
-                .extent = {
-                    .width = (uint32_t)frame->geometry->circle.scissor[2],
-                    .height = (uint32_t)frame->geometry->circle.scissor[3],
-                },
-            },
-            .layerCount = 1,
-        };
-        vkCmdClearAttachments(command_buffer, 1, &clear_attachment, 1, &clear_rect);
-    }
-    if (frame->geometry->index_count) {
-        VkRect2D draw_scissor = {
-            .offset = {
-                .x = frame->geometry->circle.scissor[0],
-                .y = frame->geometry->circle.scissor[1],
-            },
-            .extent = {
-                .width = (uint32_t)frame->geometry->circle.scissor[2],
-                .height = (uint32_t)frame->geometry->circle.scissor[3],
-            },
-        };
-        vkCmdSetScissor(command_buffer, 0, 1, &draw_scissor);
-        vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, renderer->mask_pipeline);
-        bind_descriptor_set_14(command_buffer,
-                               renderer->mask_pipeline_layout,
-                               VK_SHADER_STAGE_FRAGMENT_BIT,
-                               output->mask_set);
-        struct walle_vk_mask_push push = {
-            .resolution = {(float)output->extent.width, (float)output->extent.height},
-            .compact_family
-            = frame->geometry->family == WALLE_LG_REVEAL_MASK_COMPACT_VISIBLE_ARCS ? 1.0f : 0.0f,
-            .owner_count      = raster->owner_count,
-            .base_owner_count = raster->base_owner_count,
-            .packed_width     = raster->packed_width,
-            .primitive_count  = raster->original_primitive_count,
-        };
-        push_constants_14(command_buffer,
-                          renderer->mask_pipeline_layout,
-                          VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                          &push,
-                          sizeof push);
-        VkBuffer     vertex_buffer = output->transition_buffer.handle;
-        VkDeviceSize vertex_offset = output->vertex_offset;
-        vkCmdBindVertexBuffers(command_buffer, 0, 1, &vertex_buffer, &vertex_offset);
-        vkCmdBindIndexBuffer(command_buffer,
-                             output->transition_buffer.handle,
-                             output->index_offset,
-                             VK_INDEX_TYPE_UINT16);
-        vkCmdDrawIndexed(command_buffer, frame->geometry->index_count, 1, 0, 0, 0);
-    }
-    vkCmdEndRendering(command_buffer);
-
-    if (frame->mask_readback) {
-        image_barrier(command_buffer,
-                      output->mask.handle,
-                      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-                      VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_READ_BIT,
-                      VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        VkBufferImageCopy copy = {
-            .imageSubresource = {
-                .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                .layerCount = 1,
-            },
-            .imageExtent = {
-                .width = output->extent.width,
-                .height = output->extent.height,
-                .depth = 1,
-            },
-        };
-        vkCmdCopyImageToBuffer(command_buffer,
-                               output->mask.handle,
-                               VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                               output->readback_buffer.handle,
-                               1,
-                               &copy);
-        image_barrier(command_buffer,
-                      output->mask.handle,
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_READ_BIT,
-                      VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
-                      VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
-                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                      VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
-    } else {
-        image_barrier(command_buffer,
-                      output->mask.handle,
-                      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-                      VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-                      VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
-                      VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
-                      VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                      VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
-    }
-    output->mask_layout = VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL;
-
-    image_barrier_queues(command_buffer,
-                         present->image.handle,
-                         VK_PIPELINE_STAGE_2_NONE,
-                         VK_ACCESS_2_NONE,
-                         VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-                         VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-                         present->layout,
-                         VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                         present->foreign_owned ? VK_QUEUE_FAMILY_FOREIGN_EXT
-                                                : VK_QUEUE_FAMILY_IGNORED,
-                         present->foreign_owned ? renderer->queue_family : VK_QUEUE_FAMILY_IGNORED);
-    VkRenderingAttachmentInfo compose_attachment = {
-        .sType       = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
-        .imageView   = present->image.view,
-        .imageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-        .loadOp      = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-        .storeOp     = VK_ATTACHMENT_STORE_OP_STORE,
-    };
-    VkRenderingInfo compose_rendering = {
-        .sType                = VK_STRUCTURE_TYPE_RENDERING_INFO,
-        .renderArea           = {.extent = output->extent},
-        .layerCount           = 1,
-        .colorAttachmentCount = 1,
-        .pColorAttachments    = &compose_attachment,
-    };
-    vkCmdBeginRendering(command_buffer, &compose_rendering);
-    set_full_viewport(command_buffer, output->extent);
-    vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, renderer->compose_pipeline);
-    bind_descriptor_set_14(command_buffer,
-                           renderer->compose_pipeline_layout,
-                           VK_SHADER_STAGE_FRAGMENT_BIT,
-                           output->compose_set);
-    struct walle_vk_compose_push compose_push = {
-        .timeline = {frame->progress,
-                     (float)output->extent.width,
-                     (float)output->extent.height,
-                     frame->variant},
-        .geometry = {frame->center_top_left_x, frame->center_top_left_y, frame->radius, 0.0f},
-    };
-    push_constants_14(command_buffer,
-                      renderer->compose_pipeline_layout,
-                      VK_SHADER_STAGE_FRAGMENT_BIT,
-                      &compose_push,
-                      sizeof compose_push);
-    vkCmdDraw(command_buffer, 3, 1, 0, 0);
-    vkCmdEndRendering(command_buffer);
-    if (frame->composition_readback) {
-        image_barrier(command_buffer,
-                      present->image.handle,
-                      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-                      VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-                      VK_PIPELINE_STAGE_2_COPY_BIT,
-                      VK_ACCESS_2_TRANSFER_READ_BIT,
-                      VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        VkBufferImageCopy copy = {
-            .bufferOffset = mask_size,
-            .imageSubresource = {
-                .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                .layerCount = 1,
-            },
-            .imageExtent = {
-                .width = output->extent.width,
-                .height = output->extent.height,
-                .depth = 1,
-            },
-        };
-        vkCmdCopyImageToBuffer(command_buffer,
-                               present->image.handle,
-                               VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                               output->readback_buffer.handle,
-                               1,
-                               &copy);
-        image_barrier_queues(command_buffer,
-                             present->image.handle,
-                             VK_PIPELINE_STAGE_2_COPY_BIT,
-                             VK_ACCESS_2_TRANSFER_READ_BIT,
-                             VK_PIPELINE_STAGE_2_NONE,
-                             VK_ACCESS_2_NONE,
-                             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                             VK_IMAGE_LAYOUT_GENERAL,
-                             renderer->queue_family,
-                             VK_QUEUE_FAMILY_FOREIGN_EXT);
-    } else {
-        image_barrier_queues(command_buffer,
-                             present->image.handle,
-                             VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
-                             VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-                             VK_PIPELINE_STAGE_2_NONE,
-                             VK_ACCESS_2_NONE,
-                             VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                             VK_IMAGE_LAYOUT_GENERAL,
-                             renderer->queue_family,
-                             VK_QUEUE_FAMILY_FOREIGN_EXT);
-    }
-    present->layout        = VK_IMAGE_LAYOUT_GENERAL;
-    present->foreign_owned = true;
-    return vk_check(vkEndCommandBuffer(command_buffer), "vkEndCommandBuffer(frame)");
-}
-
 static bool take_present_image(struct walle_vk_output* output, uint32_t* result)
 {
     for (uint32_t offset = 0; offset < 2; ++offset) {
@@ -3133,164 +1842,1873 @@ static bool take_present_image(struct walle_vk_output* output, uint32_t* result)
     return false;
 }
 
-enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      output,
+static bool device_candidate(struct walle_vk_renderer*           r,
+                             VkPhysicalDevice                    dev,
+                             VkSurfaceKHR                        surface,
+                             uint32_t*                           queue_family,
+                             VkPhysicalDeviceProperties2*        p,
+                             VkPhysicalDeviceVulkan14Properties* p14)
+{
+    *p14 = (VkPhysicalDeviceVulkan14Properties){
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_4_PROPERTIES};
+    *p = (VkPhysicalDeviceProperties2){.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
+                                       .pNext = p14};
+    vkGetPhysicalDeviceProperties2(dev, p);
+    if (p->properties.apiVersion < WALLE_VK_REQUIRED_API_VERSION)
+        return false;
+    if (r->display
+        && (!device_extension_available(dev, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME)
+            || !device_extension_available(dev, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME)
+            || !device_extension_available(dev, VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME)
+            || !device_extension_available(dev, VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME)
+            || !device_extension_available(dev, VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME)))
+        return false;
+    if (r->display) {
+        VkPhysicalDeviceExternalSemaphoreInfo si
+            = {.sType      = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO,
+               .handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT};
+        VkExternalSemaphoreProperties sp
+            = {.sType = VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES};
+        vkGetPhysicalDeviceExternalSemaphoreProperties(dev, &si, &sp);
+        if ((sp.externalSemaphoreFeatures
+             & (VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT
+                | VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT))
+            != (VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT
+                | VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT))
+            return false;
+    }
+    uint32_t count = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(dev, &count, nullptr);
+    VkQueueFamilyProperties* queues = calloc(count, sizeof *queues);
+    if (!queues)
+        return false;
+    vkGetPhysicalDeviceQueueFamilyProperties(dev, &count, queues);
+    bool found = false;
+    for (uint32_t i = 0; i < count; i++) {
+        VkBool32 support = VK_TRUE;
+        if (surface
+            && (vkGetPhysicalDeviceSurfaceSupportKHR(dev, i, surface, &support) != VK_SUCCESS
+                || !vkGetPhysicalDeviceWaylandPresentationSupportKHR(dev, i, r->display)))
+            support = VK_FALSE;
+        if (support
+            && (queues[i].queueFlags & (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT))
+                   == (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT)) {
+            *queue_family = i;
+            found         = true;
+            break;
+        }
+    }
+    free(queues);
+    if (!found)
+        return false;
+    VkPhysicalDeviceVulkan14Features f14
+        = {.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_4_FEATURES};
+    VkPhysicalDeviceVulkan13Features f13
+        = {.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES, .pNext = &f14};
+    VkPhysicalDeviceVulkan12Features f12
+        = {.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES, .pNext = &f13};
+    VkPhysicalDeviceVulkan11Features f11
+        = {.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES, .pNext = &f12};
+    VkPhysicalDeviceFeatures2 f
+        = {.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2, .pNext = &f11};
+    vkGetPhysicalDeviceFeatures2(dev, &f);
+    return f14.dynamicRenderingLocalRead && f14.maintenance5 && f14.maintenance6
+           && f13.dynamicRendering && f13.synchronization2 && f13.shaderDemoteToHelperInvocation
+           && f12.shaderFloat16 && f12.scalarBlockLayout && f12.vulkanMemoryModel
+           && f12.vulkanMemoryModelDeviceScope && f11.uniformAndStorageBuffer16BitAccess
+           && f11.storageBuffer16BitAccess && f11.shaderDrawParameters
+           && f.features.shaderStorageImageExtendedFormats && f.features.independentBlend
+           && format_supports(dev,
+                              WALLE_VK_WALLPAPER_FORMAT,
+                              VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_BIT
+                                  | VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_FILTER_LINEAR_BIT
+                                  | VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT
+                                  | VK_FORMAT_FEATURE_2_STORAGE_IMAGE_BIT
+                                  | VK_FORMAT_FEATURE_2_TRANSFER_DST_BIT)
+           && format_supports(dev,
+                              VK_FORMAT_R16G16B16A16_SFLOAT,
+                              VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_BIT
+                                  | VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_FILTER_LINEAR_BIT
+                                  | VK_FORMAT_FEATURE_2_TRANSFER_DST_BIT)
+           && format_supports(
+               dev, WALLE_VK_PRESENT_FORMAT, VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT);
+}
+
+static bool wait_submission(struct walle_vk_renderer* r, VkFence fence, bool* pending)
+{
+    if (!*pending)
+        return true;
+    VkResult status = vkWaitForFences(r->device, 1, &fence, VK_TRUE, UINT64_MAX);
+    if (status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST)
+        *pending = false;
+    if (!vk_check(status, "vkWaitForFences(submitted work)")) {
+        r->fatal = true;
+        return false;
+    }
+    return true;
+}
+static bool begin_upload(struct walle_vk_renderer* r)
+{
+    if (!wait_submission(r, r->upload_fence, &r->upload_pending)
+        || !vk_check(vkResetCommandBuffer(r->upload_command_buffer, 0),
+                     "vkResetCommandBuffer(upload)"))
+        return false;
+    VkCommandBufferBeginInfo b = {.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                                  .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT};
+    return vk_check(vkBeginCommandBuffer(r->upload_command_buffer, &b),
+                    "vkBeginCommandBuffer(upload)");
+}
+static bool
+submit_command(struct walle_vk_renderer* r, VkCommandBuffer cmd, VkFence fence, bool* pending)
+{
+    if (*pending || !vk_check(vkEndCommandBuffer(cmd), "vkEndCommandBuffer")
+        || !vk_check(vkResetFences(r->device, 1, &fence), "vkResetFences(before submit)"))
+        return false;
+    VkCommandBufferSubmitInfo c
+        = {.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO, .commandBuffer = cmd};
+    VkSubmitInfo2 s = {.sType                  = VK_STRUCTURE_TYPE_SUBMIT_INFO_2,
+                       .commandBufferInfoCount = 1,
+                       .pCommandBufferInfos    = &c};
+    if (!vk_check(vkQueueSubmit2(r->queue, 1, &s, fence), "vkQueueSubmit2")) {
+        r->fatal = true;
+        return false;
+    }
+    *pending = true;
+    return true;
+}
+static bool end_upload(struct walle_vk_renderer* r)
+{
+    return submit_command(r, r->upload_command_buffer, r->upload_fence, &r->upload_pending)
+           && wait_submission(r, r->upload_fence, &r->upload_pending);
+}
+static bool create_descriptor_layouts(struct walle_vk_renderer* r)
+{
+    const VkDescriptorType       types[]     = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                                                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                                                VK_DESCRIPTOR_TYPE_SAMPLER,
+                                                VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,
+                                                VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                                                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                                                VK_DESCRIPTOR_TYPE_SAMPLER,
+                                                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                                                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE};
+    VkDescriptorSetLayoutBinding bindings[9] = {};
+    for (uint32_t i = 0; i < 9; i++)
+        bindings[i] = (VkDescriptorSetLayoutBinding){.binding         = i,
+                                                     .descriptorType  = types[i],
+                                                     .descriptorCount = 1,
+                                                     .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT};
+    VkDescriptorSetLayoutCreateInfo ci
+        = {.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+           .bindingCount = 9,
+           .pBindings    = bindings};
+    if (!vk_check(
+            vkCreateDescriptorSetLayout(r->device, &ci, nullptr, &r->set_layout[LAYOUT_GRAPHICS]),
+            "vkCreateDescriptorSetLayout(graphics)"))
+        return false;
+    ci.bindingCount = 3;
+    if (!vk_check(
+            vkCreateDescriptorSetLayout(r->device, &ci, nullptr, &r->set_layout[LAYOUT_CAPTURE]),
+            "vkCreateDescriptorSetLayout(capture)"))
+        return false;
+    const uint32_t         slots[] = {0, 16, 33, 34, 48};
+    const VkDescriptorType ct[]    = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                                      VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                                      VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+                                      VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+                                      VK_DESCRIPTOR_TYPE_SAMPLER};
+    for (uint32_t i = 0; i < 5; i++)
+        bindings[i] = (VkDescriptorSetLayoutBinding){.binding         = slots[i],
+                                                     .descriptorType  = ct[i],
+                                                     .descriptorCount = 1,
+                                                     .stageFlags = VK_SHADER_STAGE_COMPUTE_BIT};
+    ci.bindingCount = 5;
+    return vk_check(
+        vkCreateDescriptorSetLayout(r->device, &ci, nullptr, &r->set_layout[LAYOUT_COMPUTE]),
+        "vkCreateDescriptorSetLayout(compute)");
+}
+static bool create_pipeline_layouts(struct walle_vk_renderer* r)
+{
+    for (uint32_t i = 0; i < LAYOUT_COUNT; i++) {
+        VkPushConstantRange push
+            = {.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+               .size       = i == LAYOUT_GRAPHICS ? 32u : 16u};
+        VkPipelineLayoutCreateInfo ci = {.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+                                         .setLayoutCount         = 1,
+                                         .pSetLayouts            = &r->set_layout[i],
+                                         .pushConstantRangeCount = i == LAYOUT_COMPUTE ? 0u : 1u,
+                                         .pPushConstantRanges    = &push};
+        if (!vk_check(vkCreatePipelineLayout(r->device, &ci, nullptr, &r->pipeline_layout[i]),
+                      "vkCreatePipelineLayout"))
+            return false;
+    }
+    return true;
+}
+static bool shader_module(struct walle_vk_renderer* r, struct shader_blob blob, VkShaderModule* out)
+{
+    VkShaderModuleCreateInfo ci = {.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
+                                   .codeSize = blob.size,
+                                   .pCode    = (const uint32_t*)blob.data};
+    return blob.size > 4 && blob.size % 4 == 0
+           && vk_check(vkCreateShaderModule(r->device, &ci, nullptr, out), blob.entry);
+}
+static bool create_graphics_pipeline(struct walle_vk_renderer* r,
+                                     struct shader_blob        vs,
+                                     struct shader_blob        fs,
+                                     uint32_t                  layout,
+                                     bool                      blend,
+                                     bool                      local,
+                                     bool                      tint,
+                                     VkFormat                  format,
+                                     VkPipeline*               out)
+{
+    VkShaderModule vert = VK_NULL_HANDLE, frag = VK_NULL_HANDLE;
+    if (!shader_module(r, vs, &vert) || !shader_module(r, fs, &frag))
+        goto fail;
+    VkPipelineShaderStageCreateInfo stages[2]
+        = {{.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+            .stage  = VK_SHADER_STAGE_VERTEX_BIT,
+            .module = vert,
+            .pName  = vs.entry},
+           {.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+            .stage  = VK_SHADER_STAGE_FRAGMENT_BIT,
+            .module = frag,
+            .pName  = fs.entry}};
+    VkVertexInputBindingDescription   vb = {.binding   = 0,
+                                            .stride    = sizeof(struct walle_vk_vertex),
+                                            .inputRate = VK_VERTEX_INPUT_RATE_VERTEX};
+    VkVertexInputAttributeDescription va[3]
+        = {{.location = 0, .binding = 0, .format = VK_FORMAT_R32G32_SFLOAT, .offset = 0},
+           {.location = 1, .binding = 0, .format = VK_FORMAT_R32G32_SFLOAT, .offset = 8},
+           {.location = 2, .binding = 0, .format = VK_FORMAT_R32G32_SFLOAT, .offset = 16}};
+    if (layout == LAYOUT_CAPTURE)
+        va[1] = va[2];
+    VkPipelineVertexInputStateCreateInfo vi
+        = {.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
+           .vertexBindingDescriptionCount   = 1,
+           .pVertexBindingDescriptions      = &vb,
+           .vertexAttributeDescriptionCount = layout == LAYOUT_CAPTURE ? 2u : 3u,
+           .pVertexAttributeDescriptions    = va};
+    VkPipelineInputAssemblyStateCreateInfo ia
+        = {.sType    = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
+           .topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST};
+    VkPipelineViewportStateCreateInfo vp
+        = {.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
+           .viewportCount = 1,
+           .scissorCount  = 1};
+    VkPipelineRasterizationStateCreateInfo rs
+        = {.sType       = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
+           .polygonMode = VK_POLYGON_MODE_FILL,
+           .cullMode    = VK_CULL_MODE_NONE,
+           .frontFace   = VK_FRONT_FACE_COUNTER_CLOCKWISE,
+           .lineWidth   = 1.f};
+    VkPipelineMultisampleStateCreateInfo ms
+        = {.sType                = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
+           .rasterizationSamples = VK_SAMPLE_COUNT_1_BIT};
+    VkPipelineColorBlendAttachmentState ba[2]
+        = {{.blendEnable         = blend,
+            .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
+            .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+            .colorBlendOp        = VK_BLEND_OP_ADD,
+            .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+            .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+            .alphaBlendOp        = VK_BLEND_OP_ADD,
+            .colorWriteMask      = 15},
+           {.colorWriteMask = 0}};
+    VkPipelineColorBlendStateCreateInfo bs
+        = {.sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
+           .attachmentCount = tint ? 2u : 1u,
+           .pAttachments    = ba};
+    VkDynamicState states[] = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+    VkPipelineDynamicStateCreateInfo ds
+        = {.sType             = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
+           .dynamicStateCount = 2,
+           .pDynamicStates    = states};
+    uint32_t locations[2] = {0, VK_ATTACHMENT_UNUSED},
+             inputs[2]    = {local ? 0 : VK_ATTACHMENT_UNUSED, VK_ATTACHMENT_UNUSED};
+    if (tint) {
+        inputs[0] = VK_ATTACHMENT_UNUSED;
+        inputs[1] = 0;
+    }
+    VkRenderingInputAttachmentIndexInfo ii
+        = {.sType                        = VK_STRUCTURE_TYPE_RENDERING_INPUT_ATTACHMENT_INDEX_INFO,
+           .colorAttachmentCount         = tint ? 2u : 1u,
+           .pColorAttachmentInputIndices = inputs};
+    VkRenderingAttachmentLocationInfo li
+        = {.sType                     = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_LOCATION_INFO,
+           .pNext                     = &ii,
+           .colorAttachmentCount      = tint ? 2u : 1u,
+           .pColorAttachmentLocations = locations};
+    VkFormat                      formats[] = {format, WALLE_VK_PRESENT_FORMAT};
+    VkPipelineRenderingCreateInfo rendering
+        = {.sType                   = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO,
+           .pNext                   = &li,
+           .colorAttachmentCount    = tint ? 2u : 1u,
+           .pColorAttachmentFormats = formats};
+    VkGraphicsPipelineCreateInfo ci = {.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
+                                       .pNext = &rendering,
+                                       .stageCount          = 2,
+                                       .pStages             = stages,
+                                       .pVertexInputState   = &vi,
+                                       .pInputAssemblyState = &ia,
+                                       .pViewportState      = &vp,
+                                       .pRasterizationState = &rs,
+                                       .pMultisampleState   = &ms,
+                                       .pColorBlendState    = &bs,
+                                       .pDynamicState       = &ds,
+                                       .layout              = r->pipeline_layout[layout]};
+    bool ok = vk_check(vkCreateGraphicsPipelines(r->device, VK_NULL_HANDLE, 1, &ci, nullptr, out),
+                       fs.entry);
+    vkDestroyShaderModule(r->device, vert, nullptr);
+    vkDestroyShaderModule(r->device, frag, nullptr);
+    return ok;
+fail:
+    if (vert)
+        vkDestroyShaderModule(r->device, vert, nullptr);
+    if (frag)
+        vkDestroyShaderModule(r->device, frag, nullptr);
+    return false;
+}
+static bool create_pipelines(struct walle_vk_renderer* r)
+{
+    const struct shader_blob fragments[PIPE_COUNT]
+        = {SHADER(revealFragment, "revealFragment"),
+           SHADER(regularFragment, "regularFragment"),
+           SHADER(clearFragment, "clearFragment"),
+           SHADER(faceFragment_local, "faceFragment"),
+           SHADER(tintMaskFragment, "tintMaskFragment"),
+           SHADER(tintGradientFragment_local, "tintGradientFragment"),
+           SHADER(tintCompositeFragment, "tintCompositeFragment"),
+           SHADER(highlightFragment_local, "highlightFragment"),
+           SHADER(productFinishFragment_local, "productFinishFragment"),
+           SHADER(wallpaperFragment, "wallpaperFragment")};
+    for (uint32_t i = 0; i < PIPE_COUNT; i++) {
+        bool blend = i == WALLE_VK_REVEAL || i == WALLE_VK_GLASS_REGULAR
+                     || i == WALLE_VK_GLASS_CLEAR || i == WALLE_VK_TINT_COMPOSITE;
+        bool local = i == WALLE_VK_FACE || i == WALLE_VK_HIGHLIGHT || i == WALLE_VK_PRODUCT_FINISH;
+        bool tint  = i == WALLE_VK_TINT_GRADIENT;
+        VkFormat format = (tint || i == WALLE_VK_TINT_MASK) ? WALLE_VK_WALLPAPER_FORMAT
+                                                            : WALLE_VK_PRESENT_FORMAT;
+        if (!create_graphics_pipeline(r,
+                                      SHADER(glassVertex, "glassVertex"),
+                                      fragments[i],
+                                      LAYOUT_GRAPHICS,
+                                      blend,
+                                      local,
+                                      tint,
+                                      format,
+                                      &r->pipelines[i]))
+            return false;
+    }
+    const struct shader_blob caps[] = {SHADER(capture4Fragment, "capture4Fragment"),
+                                       SHADER(capture6Fragment, "capture6Fragment"),
+                                       SHADER(capture8Fragment, "capture8Fragment"),
+                                       SHADER(captureCopyFragment, "captureCopyFragment")};
+    for (uint32_t i = 0; i < 4; i++)
+        if (!create_graphics_pipeline(r,
+                                      SHADER(captureVertex, "captureVertex"),
+                                      caps[i],
+                                      LAYOUT_CAPTURE,
+                                      false,
+                                      false,
+                                      false,
+                                      WALLE_VK_WALLPAPER_FORMAT,
+                                      &r->capture_pipelines[i]))
+            return false;
+    const struct shader_blob computes[]
+        = {SHADER(lg_blur_copy_base_mip, "lg_blur_copy_base_mip"),
+           SHADER(lg_blur_downsample_agx2, "lg_blur_downsample_agx2")};
+    for (uint32_t i = 0; i < 2; i++) {
+        VkShaderModule m;
+        if (!shader_module(r, computes[i], &m))
+            return false;
+        VkComputePipelineCreateInfo ci
+            = {.sType  = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+               .stage  = {.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                          .stage  = VK_SHADER_STAGE_COMPUTE_BIT,
+                          .module = m,
+                          .pName  = computes[i].entry},
+               .layout = r->pipeline_layout[LAYOUT_COMPUTE]};
+        bool ok
+            = vk_check(vkCreateComputePipelines(
+                           r->device, VK_NULL_HANDLE, 1, &ci, nullptr, &r->compute_pipelines[i]),
+                       computes[i].entry);
+        vkDestroyShaderModule(r->device, m, nullptr);
+        if (!ok)
+            return false;
+    }
+    return true;
+}
+
+static bool create_mip_image(struct walle_vk_renderer* r,
+                             uint32_t                  w,
+                             uint32_t                  h,
+                             uint32_t                  levels,
+                             struct walle_vk_image*    out)
+{
+    if (!w || !h || !levels || levels > 32 || w > r->properties.limits.maxImageDimension2D
+        || h > r->properties.limits.maxImageDimension2D)
+        return false;
+    struct walle_vk_image image
+        = {.width = w, .height = h, .format = WALLE_VK_WALLPAPER_FORMAT, .mip_count = levels};
+    VkImageCreateInfo ci = {.sType       = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+                            .imageType   = VK_IMAGE_TYPE_2D,
+                            .format      = image.format,
+                            .extent      = {w, h, 1},
+                            .mipLevels   = levels,
+                            .arrayLayers = 1,
+                            .samples     = VK_SAMPLE_COUNT_1_BIT,
+                            .tiling      = VK_IMAGE_TILING_OPTIMAL,
+                            .usage       = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
+                            .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+                            .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED};
+    if (!vk_check(vkCreateImage(r->device, &ci, nullptr, &image.handle), "vkCreateImage(pyramid)"))
+        return false;
+    VkMemoryRequirements requirements;
+    vkGetImageMemoryRequirements(r->device, image.handle, &requirements);
+    if (!allocate_memory(r,
+                         &requirements,
+                         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                         false,
+                         &image.memory)
+        || !vk_check(vkBindImageMemory(r->device, image.handle, image.memory.handle, 0),
+                     "vkBindImageMemory(pyramid)"))
+        goto fail;
+    VkImageViewCreateInfo vi
+        = {.sType    = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+           .image    = image.handle,
+           .viewType = VK_IMAGE_VIEW_TYPE_2D,
+           .format   = image.format,
+           .subresourceRange
+           = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT, .levelCount = levels, .layerCount = 1}};
+    if (!vk_check(vkCreateImageView(r->device, &vi, nullptr, &image.view),
+                  "vkCreateImageView(pyramid)"))
+        goto fail;
+    vi.subresourceRange.levelCount = 1;
+    for (uint32_t i = 0; i < levels; i++) {
+        vi.subresourceRange.baseMipLevel = i;
+        if (!vk_check(vkCreateImageView(r->device, &vi, nullptr, &image.mip_views[i]),
+                      "vkCreateImageView(pyramid mip)"))
+            goto fail;
+    }
+    *out = image;
+    return true;
+fail:
+    destroy_image(r->device, &image);
+    return false;
+}
+static void mip_barrier(VkCommandBuffer        cmd,
+                        struct walle_vk_image* image,
+                        VkPipelineStageFlags2  src,
+                        VkAccessFlags2         sa,
+                        VkPipelineStageFlags2  dst,
+                        VkAccessFlags2         da,
+                        VkImageLayout          old,
+                        VkImageLayout          next)
+{
+    VkImageMemoryBarrier2 b
+        = {.sType               = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2,
+           .srcStageMask        = src,
+           .srcAccessMask       = sa,
+           .dstStageMask        = dst,
+           .dstAccessMask       = da,
+           .oldLayout           = old,
+           .newLayout           = next,
+           .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+           .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+           .image               = image->handle,
+           .subresourceRange    = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                   .levelCount = image->mip_count ? image->mip_count : 1,
+                                   .layerCount = 1}};
+    VkDependencyInfo d = {.sType                   = VK_STRUCTURE_TYPE_DEPENDENCY_INFO,
+                          .imageMemoryBarrierCount = 1,
+                          .pImageMemoryBarriers    = &b};
+    vkCmdPipelineBarrier2(cmd, &d);
+}
+static void destroy_backdrop(struct walle_vk_output* o)
+{
+    destroy_image(o->renderer->device, &o->capture);
+    destroy_image(o->renderer->device, &o->pyramid);
+    destroy_image(o->renderer->device, &o->blur_scratch);
+    o->backdrop_ready = false;
+}
+static void destroy_transition_resources(struct walle_vk_output* o)
+{
+    VkDevice d = o->renderer->device;
+    destroy_backdrop(o);
+    destroy_image(d, &o->tint);
+    destroy_image(d, &o->mask);
+    destroy_image(d, &o->ramp);
+    destroy_buffer(d, &o->frame_buffer);
+    destroy_buffer(d, &o->readback_buffer);
+    if (o->descriptor_pool)
+        vkDestroyDescriptorPool(d, o->descriptor_pool, nullptr);
+    o->descriptor_pool     = VK_NULL_HANDLE;
+    o->descriptor_capacity = 0;
+    o->cursor              = 0;
+    o->tint_ready          = false;
+    o->ramp_ready          = false;
+}
+static bool upload_image(struct walle_vk_output*            o,
+                         int                                fd,
+                         const struct walle_vk_image_layer* layer,
+                         struct walle_vk_image*             out)
+{
+    struct walle_vk_renderer* r = o->renderer;
+    if (fd < 0 || !layer_valid(r, layer) || (uint32_t)layer->width != o->extent.width
+        || (uint32_t)layer->height != o->extent.height)
+        return false;
+    struct walle_vk_image  image   = {};
+    struct walle_vk_buffer staging = {};
+    bool ok = create_image(r,
+                           (uint32_t)layer->width,
+                           (uint32_t)layer->height,
+                           WALLE_VK_WALLPAPER_FORMAT,
+                           VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+                           &image)
+              && create_buffer(r,
+                               layer->size,
+                               VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+                                   | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                               VK_MEMORY_PROPERTY_HOST_CACHED_BIT,
+                               true,
+                               &staging)
+              && read_layer_exact(fd, layer, staging.memory.mapped) && begin_upload(r);
+    if (ok) {
+        image_barrier(r->upload_command_buffer,
+                      image.handle,
+                      VK_PIPELINE_STAGE_2_NONE,
+                      0,
+                      VK_PIPELINE_STAGE_2_COPY_BIT,
+                      VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                      VK_IMAGE_LAYOUT_UNDEFINED,
+                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        VkBufferImageCopy cp
+            = {.imageSubresource = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT, .layerCount = 1},
+               .imageExtent      = {(uint32_t)layer->width, (uint32_t)layer->height, 1}};
+        vkCmdCopyBufferToImage(r->upload_command_buffer,
+                               staging.handle,
+                               image.handle,
+                               VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                               1,
+                               &cp);
+        image_barrier(r->upload_command_buffer,
+                      image.handle,
+                      VK_PIPELINE_STAGE_2_COPY_BIT,
+                      VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                      VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+                      VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                      VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+        ok = end_upload(r);
+    }
+    if (r->upload_pending) {
+        if (vkDeviceWaitIdle(r->device) == VK_SUCCESS)
+            r->upload_pending = false;
+        else
+            r->fatal = true;
+    }
+    destroy_buffer(r->device, &staging);
+    if (!ok) {
+        destroy_image(r->device, &image);
+        return false;
+    }
+    *out = image;
+    return true;
+}
+bool walle_vk_output_upload(struct walle_vk_output*            o,
+                            int                                fd,
+                            const struct walle_vk_image_layer* layer)
+{
+    if (!o || o->renderer->fatal
+        || !wait_submission(o->renderer, o->frame_fence, &o->frame_pending))
+        return false;
+    struct walle_vk_image image = {};
+    if (!upload_image(o, fd, layer, &image))
+        return false;
+    destroy_image(o->renderer->device, &o->incoming);
+    o->incoming = image;
+    destroy_backdrop(o);
+    return true;
+}
+bool walle_vk_output_restore_current(struct walle_vk_output*            o,
+                                     int                                fd,
+                                     const struct walle_vk_image_layer* layer)
+{
+    if (!o || o->renderer->fatal)
+        return false;
+    return o->current.handle || upload_image(o, fd, layer, &o->current);
+}
+static bool ensure_buffer(struct walle_vk_renderer* r,
+                          struct walle_vk_buffer*   b,
+                          VkDeviceSize              size,
+                          VkBufferUsageFlags        usage)
+{
+    if (b->capacity >= size)
+        return true;
+    struct walle_vk_buffer next = {};
+    if (!create_buffer(r,
+                       size,
+                       usage,
+                       VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                       VK_MEMORY_PROPERTY_HOST_CACHED_BIT,
+                       true,
+                       &next))
+        return false;
+    destroy_buffer(r->device, b);
+    *b = next;
+    return true;
+}
+static bool prepare_pool(struct walle_vk_output* o, uint32_t sets)
+{
+    VkDevice d = o->renderer->device;
+    if (o->descriptor_pool && o->descriptor_capacity >= sets)
+        return vk_check(vkResetDescriptorPool(d, o->descriptor_pool, 0),
+                        "vkResetDescriptorPool(frame)");
+    if (o->descriptor_pool)
+        vkDestroyDescriptorPool(d, o->descriptor_pool, nullptr);
+    o->descriptor_pool                 = VK_NULL_HANDLE;
+    o->descriptor_capacity             = 0;
+    VkDescriptorPoolSize       sizes[] = {{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2 * sets},
+                                          {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 4 * sets},
+                                          {VK_DESCRIPTOR_TYPE_SAMPLER, 2 * sets},
+                                          {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, sets},
+                                          {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 2 * sets}};
+    VkDescriptorPoolCreateInfo ci      = {.sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+                                          .maxSets       = sets,
+                                          .poolSizeCount = 5,
+                                          .pPoolSizes    = sizes};
+    if (!vk_check(vkCreateDescriptorPool(d, &ci, nullptr, &o->descriptor_pool),
+                  "vkCreateDescriptorPool(frame)"))
+        return false;
+    o->descriptor_capacity = sets;
+    return true;
+}
+static VkDeviceSize
+stage_bytes(struct walle_vk_output* o, const void* data, VkDeviceSize size, VkDeviceSize alignment)
+{
+    VkDeviceSize offset = o->cursor;
+    if (alignment > 1) {
+        VkDeviceSize rem = offset % alignment;
+        if (rem)
+            offset += alignment - rem;
+    }
+    if (offset > o->frame_buffer.capacity || size > o->frame_buffer.capacity - offset)
+        return UINT64_MAX;
+    if (data)
+        memcpy((uint8_t*)o->frame_buffer.memory.mapped + offset, data, (size_t)size);
+    else
+        memset((uint8_t*)o->frame_buffer.memory.mapped + offset, 0, (size_t)size);
+    o->cursor = offset + size;
+    return offset;
+}
+static VkDescriptorSet allocate_set(struct walle_vk_output* o, uint32_t layout)
+{
+    VkDescriptorSet             set = VK_NULL_HANDLE;
+    VkDescriptorSetAllocateInfo ai  = {.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+                                       .descriptorPool     = o->descriptor_pool,
+                                       .descriptorSetCount = 1,
+                                       .pSetLayouts        = &o->renderer->set_layout[layout]};
+    if (!vk_check(vkAllocateDescriptorSets(o->renderer->device, &ai, &set),
+                  "vkAllocateDescriptorSets"))
+        return VK_NULL_HANDLE;
+    return set;
+}
+static void write_image(VkDevice         device,
+                        VkDescriptorSet  set,
+                        uint32_t         binding,
+                        VkDescriptorType type,
+                        VkImageView      view,
+                        VkImageLayout    layout,
+                        VkSampler        sampler)
+{
+    VkDescriptorImageInfo ii = {.sampler = sampler, .imageView = view, .imageLayout = layout};
+    VkWriteDescriptorSet  w  = {.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                                .dstSet          = set,
+                                .dstBinding      = binding,
+                                .descriptorCount = 1,
+                                .descriptorType  = type,
+                                .pImageInfo      = &ii};
+    vkUpdateDescriptorSets(device, 1, &w, 0, nullptr);
+}
+static void write_uniform(struct walle_vk_output* o,
+                          VkDescriptorSet         set,
+                          uint32_t                binding,
+                          VkDeviceSize            offset,
+                          VkDeviceSize            size)
+{
+    VkDescriptorBufferInfo bi = {.buffer = o->frame_buffer.handle, .offset = offset, .range = size};
+    VkWriteDescriptorSet   w  = {.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                                 .dstSet          = set,
+                                 .dstBinding      = binding,
+                                 .descriptorCount = 1,
+                                 .descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                                 .pBufferInfo     = &bi};
+    vkUpdateDescriptorSets(o->renderer->device, 1, &w, 0, nullptr);
+}
+static void set_viewport(VkCommandBuffer cmd, uint32_t w, uint32_t h, VkRect2D scissor)
+{
+    VkViewport vp = {.x        = 0,
+                     .y        = (float)h,
+                     .width    = (float)w,
+                     .height   = -(float)h,
+                     .minDepth = 0,
+                     .maxDepth = 1};
+    vkCmdSetViewport(cmd, 0, 1, &vp);
+    vkCmdSetScissor(cmd, 0, 1, &scissor);
+}
+static void begin_render(VkCommandBuffer cmd,
+                         VkImageView     target,
+                         VkImageView     scene,
+                         uint32_t        w,
+                         uint32_t        h,
+                         bool            clear,
+                         bool            local,
+                         bool            tint)
+{
+    VkRenderingAttachmentInfo ai[2]
+        = {{.sType       = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
+            .imageView   = target,
+            .imageLayout = VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ,
+            .loadOp      = clear ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD,
+            .storeOp     = VK_ATTACHMENT_STORE_OP_STORE},
+           {.sType       = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
+            .imageView   = scene,
+            .imageLayout = VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ,
+            .loadOp      = VK_ATTACHMENT_LOAD_OP_LOAD,
+            .storeOp     = VK_ATTACHMENT_STORE_OP_STORE}};
+    VkRenderingInfo ri = {.sType                = VK_STRUCTURE_TYPE_RENDERING_INFO,
+                          .renderArea           = {{0, 0}, {w, h}},
+                          .layerCount           = 1,
+                          .colorAttachmentCount = tint ? 2u : 1u,
+                          .pColorAttachments    = ai};
+    vkCmdBeginRendering(cmd, &ri);
+    uint32_t locations[2] = {0, VK_ATTACHMENT_UNUSED},
+             indices[2]   = {local ? 0 : VK_ATTACHMENT_UNUSED, VK_ATTACHMENT_UNUSED};
+    if (tint) {
+        indices[0] = VK_ATTACHMENT_UNUSED;
+        indices[1] = 0;
+    }
+    VkRenderingAttachmentLocationInfo li
+        = {.sType                     = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_LOCATION_INFO,
+           .colorAttachmentCount      = tint ? 2u : 1u,
+           .pColorAttachmentLocations = locations};
+    VkRenderingInputAttachmentIndexInfo ii
+        = {.sType                        = VK_STRUCTURE_TYPE_RENDERING_INPUT_ATTACHMENT_INDEX_INFO,
+           .colorAttachmentCount         = tint ? 2u : 1u,
+           .pColorAttachmentInputIndices = indices};
+    vkCmdSetRenderingAttachmentLocations(cmd, &li);
+    vkCmdSetRenderingInputAttachmentIndices(cmd, &ii);
+}
+static void local_read_barrier(VkCommandBuffer cmd)
+{
+    VkMemoryBarrier2 b  = {.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER_2,
+                           .srcStageMask  = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                           .srcAccessMask = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                           .dstStageMask  = VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT
+                                            | VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                           .dstAccessMask = VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT
+                                            | VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT
+                                            | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT};
+    VkDependencyInfo di = {.sType              = VK_STRUCTURE_TYPE_DEPENDENCY_INFO,
+                           .dependencyFlags    = VK_DEPENDENCY_BY_REGION_BIT,
+                           .memoryBarrierCount = 1,
+                           .pMemoryBarriers    = &b};
+    vkCmdPipelineBarrier2(cmd, &di);
+}
+static void quad_vertices(struct walle_vk_vertex v[4], const float p[4], const float uv[4])
+{
+    v[0] = (struct walle_vk_vertex){.position = {p[0], p[1]}, .source_uv = {uv[0], uv[1]}};
+    v[1] = (struct walle_vk_vertex){.position = {p[2], p[1]}, .source_uv = {uv[2], uv[1]}};
+    v[2] = (struct walle_vk_vertex){.position = {p[2], p[3]}, .source_uv = {uv[2], uv[3]}};
+    v[3] = (struct walle_vk_vertex){.position = {p[0], p[3]}, .source_uv = {uv[0], uv[3]}};
+}
+static bool issue_geometry(struct walle_vk_output*       o,
+                           VkPipelineLayout              layout,
+                           VkDescriptorSet               set,
+                           const struct walle_vk_vertex* vertices,
+                           size_t                        nv,
+                           const uint32_t*               indices,
+                           size_t                        ni,
+                           const struct glass_push*      push,
+                           uint32_t                      push_size)
+{
+    VkDeviceSize vo = stage_bytes(o, vertices, nv * sizeof *vertices, 4),
+                 io = stage_bytes(o, indices, ni * sizeof *indices, 4);
+    if (vo == UINT64_MAX || io == UINT64_MAX)
+        return false;
+    vkCmdBindDescriptorSets(
+        o->command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &set, 0, nullptr);
+    vkCmdBindVertexBuffers(o->command_buffer, 0, 1, &o->frame_buffer.handle, &vo);
+    vkCmdBindIndexBuffer(o->command_buffer, o->frame_buffer.handle, io, VK_INDEX_TYPE_UINT32);
+    vkCmdPushConstants(o->command_buffer,
+                       layout,
+                       VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                       0,
+                       push_size,
+                       push);
+    vkCmdDrawIndexed(o->command_buffer, (uint32_t)ni, 1, 0, 0, 0);
+    return true;
+}
+
+static bool ensure_backdrop(struct walle_vk_output* o, const struct walle_vk_frame* frame)
+{
+    const struct wm_capture_plan* c = frame->capture;
+    const struct wm_pyramid_plan* p = frame->pyramid;
+    if (!c || !p || !graphics_extent_valid(o->renderer, c->texture[0], c->texture[1])
+        || c->quad_count > 9 || !c->quad_count
+        || (c->tap_count != 0 && c->tap_count != 4 && c->tap_count != 6 && c->tap_count != 8)
+        || p->mip_count > 32 || p->down_count > 32)
+        return false;
+    if (o->capture.handle && !memcmp(&o->capture_plan, c, sizeof *c)
+        && !memcmp(&o->pyramid_plan, p, sizeof *p))
+        return true;
+    destroy_backdrop(o);
+    auto r = o->renderer;
+    if (!create_image(r,
+                      c->texture[0],
+                      c->texture[1],
+                      WALLE_VK_WALLPAPER_FORMAT,
+                      VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT
+                          | VK_IMAGE_USAGE_SAMPLED_BIT,
+                      &o->capture))
+        return false;
+    if (p->mip_count
+        && (!p->groups[0] || !p->groups[1]
+            || !create_mip_image(r, p->texture[0], p->texture[1], p->mip_count, &o->pyramid))) {
+        destroy_backdrop(o);
+        return false;
+    }
+    if (p->mip_count && p->dst1_level >= p->mip_count) {
+        /* The native base stores are independent of blurOut. A one-mip plan
+         * still executes that unchanged kernel; discard its separate blur output. */
+        if (p->mip_count != 1 || p->dst1_level != 1 || p->no_base || !p->dst1[0] || !p->dst1[1]
+            || !create_image(r,
+                             p->dst1[0],
+                             p->dst1[1],
+                             WALLE_VK_WALLPAPER_FORMAT,
+                             VK_IMAGE_USAGE_STORAGE_BIT,
+                             &o->blur_scratch)) {
+            destroy_backdrop(o);
+            return false;
+        }
+    }
+    for (uint32_t i = 0; i < p->down_count; i++)
+        if (p->down[i].src_level >= p->mip_count || p->down[i].dst_level >= p->mip_count
+            || !p->down[i].groups_x || !p->down[i].groups_y) {
+            destroy_backdrop(o);
+            return false;
+        }
+    o->capture_plan = *c;
+    o->pyramid_plan = *p;
+    return true;
+}
+static bool record_backdrop(struct walle_vk_output* o)
+{
+    auto    r            = o->renderer;
+    auto    cmd          = o->command_buffer;
+    auto    c            = &o->capture_plan;
+    auto    p            = &o->pyramid_plan;
+    uint8_t uniforms[80] = {};
+    memcpy(uniforms, c->taps, sizeof c->taps);
+    const uint16_t weights[] = {0x3400, 0x3400, 0x3400, 0x3400, 0, 0, 0, 0};
+    memcpy(uniforms + 64, weights, sizeof weights);
+    VkDeviceSize u = stage_bytes(
+        o, uniforms, sizeof uniforms, r->properties.limits.minUniformBufferOffsetAlignment);
+    VkDescriptorSet set = allocate_set(o, LAYOUT_CAPTURE);
+    if (!set || u == UINT64_MAX)
+        return false;
+    write_uniform(o, set, 0, u, 80);
+    write_image(r->device,
+                set,
+                1,
+                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                o->incoming.view,
+                VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+                VK_NULL_HANDLE);
+    write_image(r->device,
+                set,
+                2,
+                VK_DESCRIPTOR_TYPE_SAMPLER,
+                VK_NULL_HANDLE,
+                VK_IMAGE_LAYOUT_UNDEFINED,
+                r->linear_sampler);
+    image_barrier(cmd,
+                  o->capture.handle,
+                  VK_PIPELINE_STAGE_2_NONE,
+                  0,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                  VK_IMAGE_LAYOUT_UNDEFINED,
+                  VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ);
+    begin_render(
+        cmd, o->capture.view, VK_NULL_HANDLE, c->texture[0], c->texture[1], true, false, false);
+    uint32_t ci = c->tap_count == 0 ? 3 : c->tap_count == 8 ? 2 : c->tap_count == 6 ? 1 : 0;
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, r->capture_pipelines[ci]);
+    set_viewport(
+        cmd, c->texture[0], c->texture[1], (VkRect2D){{0, 0}, {c->texture[0], c->texture[1]}});
+    struct walle_vk_vertex vertices[36];
+    uint32_t               indices[54];
+    const uint32_t         quad_indices[] = {0, 1, 2, 0, 2, 3};
+    for (uint32_t q = 0; q < c->quad_count; q++) {
+        float uv[4] = {c->quads[q].texcoord[0] * c->texture_matrix[0],
+                       c->quads[q].texcoord[1] * c->texture_matrix[1],
+                       c->quads[q].texcoord[2] * c->texture_matrix[0],
+                       c->quads[q].texcoord[3] * c->texture_matrix[1]};
+        quad_vertices(vertices + 4 * q, c->quads[q].position, uv);
+        for (uint32_t j = 0; j < 6; j++)
+            indices[6 * q + j] = 4 * q + quad_indices[j];
+    }
+    struct glass_push push = {.resolution = {(float)c->texture[0], (float)c->texture[1]}, .edr = 1};
+    bool              ok   = issue_geometry(o,
+                                            r->pipeline_layout[LAYOUT_CAPTURE],
+                                            set,
+                                            vertices,
+                                            4 * c->quad_count,
+                                            indices,
+                                            6 * c->quad_count,
+                                            &push,
+                                            16);
+    vkCmdEndRendering(cmd);
+    if (!ok)
+        return false;
+    image_barrier(cmd,
+                  o->capture.handle,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                  VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+                  VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                  VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ,
+                  VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+    if (!p->mip_count)
+        return true;
+    mip_barrier(cmd,
+                &o->pyramid,
+                VK_PIPELINE_STAGE_2_NONE,
+                0,
+                VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
+                VK_ACCESS_2_SHADER_STORAGE_WRITE_BIT,
+                VK_IMAGE_LAYOUT_UNDEFINED,
+                VK_IMAGE_LAYOUT_GENERAL);
+    if (o->blur_scratch.handle)
+        image_barrier(cmd,
+                      o->blur_scratch.handle,
+                      VK_PIPELINE_STAGE_2_NONE,
+                      0,
+                      VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
+                      VK_ACCESS_2_SHADER_STORAGE_WRITE_BIT,
+                      VK_IMAGE_LAYOUT_UNDEFINED,
+                      VK_IMAGE_LAYOUT_GENERAL);
+    struct
+    {
+        int32_t  base[2], pad[2], clamp[4];
+        uint32_t dst0[2], dst1[2], level, no_base;
+    } base = {};
+    static_assert(sizeof base == 56);
+    memcpy(base.base, p->coordinate_base, sizeof base.base);
+    memcpy(base.clamp, p->coordinate_clamp, sizeof base.clamp);
+    memcpy(base.dst0, p->dst0, sizeof base.dst0);
+    memcpy(base.dst1, p->dst1, sizeof base.dst1);
+    base.level   = p->dst1_level;
+    base.no_base = p->no_base;
+    u   = stage_bytes(o, &base, sizeof base, r->properties.limits.minUniformBufferOffsetAlignment);
+    set = allocate_set(o, LAYOUT_COMPUTE);
+    if (!set || u == UINT64_MAX)
+        return false;
+    write_uniform(o, set, 0, u, sizeof base);
+    write_image(r->device,
+                set,
+                16,
+                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                o->capture.view,
+                VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+                VK_NULL_HANDLE);
+    write_image(r->device,
+                set,
+                33,
+                VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+                o->pyramid.mip_views[0],
+                VK_IMAGE_LAYOUT_GENERAL,
+                VK_NULL_HANDLE);
+    write_image(r->device,
+                set,
+                34,
+                VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+                o->blur_scratch.handle ? o->blur_scratch.view : o->pyramid.mip_views[p->dst1_level],
+                VK_IMAGE_LAYOUT_GENERAL,
+                VK_NULL_HANDLE);
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, r->compute_pipelines[0]);
+    vkCmdBindDescriptorSets(cmd,
+                            VK_PIPELINE_BIND_POINT_COMPUTE,
+                            r->pipeline_layout[LAYOUT_COMPUTE],
+                            0,
+                            1,
+                            &set,
+                            0,
+                            nullptr);
+    vkCmdDispatch(cmd, p->groups[0], p->groups[1], 1);
+    for (uint32_t i = 0; i < p->down_count; i++) {
+        mip_barrier(cmd,
+                    &o->pyramid,
+                    VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
+                    VK_ACCESS_2_SHADER_STORAGE_WRITE_BIT,
+                    VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
+                    VK_ACCESS_2_SHADER_SAMPLED_READ_BIT | VK_ACCESS_2_SHADER_STORAGE_WRITE_BIT,
+                    VK_IMAGE_LAYOUT_GENERAL,
+                    VK_IMAGE_LAYOUT_GENERAL);
+        auto down = &p->down[i];
+        struct
+        {
+            uint32_t src, dst, w, h;
+            float    dx, dy;
+        } du = {down->src_level, down->dst_level, down->width, down->height, down->dx, down->dy};
+        static_assert(sizeof du == 24);
+        u   = stage_bytes(o, &du, sizeof du, r->properties.limits.minUniformBufferOffsetAlignment);
+        set = allocate_set(o, LAYOUT_COMPUTE);
+        if (!set || u == UINT64_MAX)
+            return false;
+        write_uniform(o, set, 0, u, sizeof du);
+        write_image(r->device,
+                    set,
+                    16,
+                    VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                    o->pyramid.view,
+                    VK_IMAGE_LAYOUT_GENERAL,
+                    VK_NULL_HANDLE);
+        write_image(r->device,
+                    set,
+                    33,
+                    VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+                    o->pyramid.mip_views[down->dst_level],
+                    VK_IMAGE_LAYOUT_GENERAL,
+                    VK_NULL_HANDLE);
+        write_image(r->device,
+                    set,
+                    48,
+                    VK_DESCRIPTOR_TYPE_SAMPLER,
+                    VK_NULL_HANDLE,
+                    VK_IMAGE_LAYOUT_UNDEFINED,
+                    r->linear_sampler);
+        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, r->compute_pipelines[1]);
+        vkCmdBindDescriptorSets(cmd,
+                                VK_PIPELINE_BIND_POINT_COMPUTE,
+                                r->pipeline_layout[LAYOUT_COMPUTE],
+                                0,
+                                1,
+                                &set,
+                                0,
+                                nullptr);
+        vkCmdDispatch(cmd, down->groups_x, down->groups_y, 1);
+    }
+    mip_barrier(cmd,
+                &o->pyramid,
+                VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
+                VK_ACCESS_2_SHADER_STORAGE_WRITE_BIT,
+                VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+                VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                VK_IMAGE_LAYOUT_GENERAL,
+                VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+    return true;
+}
+static bool ensure_tint(struct walle_vk_output* o)
+{
+    VkImageUsageFlags usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+                              | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+    if (!o->tint.handle
+        && !create_image(o->renderer,
+                         o->extent.width,
+                         o->extent.height,
+                         WALLE_VK_WALLPAPER_FORMAT,
+                         usage,
+                         &o->tint))
+        return false;
+    if (!o->mask.handle
+        && !create_image(o->renderer,
+                         o->extent.width,
+                         o->extent.height,
+                         WALLE_VK_WALLPAPER_FORMAT,
+                         usage,
+                         &o->mask))
+        return false;
+    return true;
+}
+static bool record_ramp(struct walle_vk_output* o, const uint8_t* bytes)
+{
+    if (!bytes)
+        return true;
+    if (o->ramp_ready && !memcmp(o->ramp_bytes, bytes, 2048))
+        return true;
+    if (!o->ramp.handle
+        && !create_image(o->renderer,
+                         256,
+                         1,
+                         VK_FORMAT_R16G16B16A16_SFLOAT,
+                         VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+                         &o->ramp))
+        return false;
+    VkDeviceSize offset = stage_bytes(o, bytes, 2048, 8);
+    if (offset == UINT64_MAX)
+        return false;
+    image_barrier(o->command_buffer,
+                  o->ramp.handle,
+                  o->ramp_ready ? VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT
+                                : VK_PIPELINE_STAGE_2_NONE,
+                  o->ramp_ready ? VK_ACCESS_2_SHADER_SAMPLED_READ_BIT : 0,
+                  VK_PIPELINE_STAGE_2_COPY_BIT,
+                  VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                  o->ramp_ready ? VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED,
+                  VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    VkBufferImageCopy cp
+        = {.bufferOffset     = offset,
+           .imageSubresource = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT, .layerCount = 1},
+           .imageExtent      = {256, 1, 1}};
+    vkCmdCopyBufferToImage(o->command_buffer,
+                           o->frame_buffer.handle,
+                           o->ramp.handle,
+                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                           1,
+                           &cp);
+    image_barrier(o->command_buffer,
+                  o->ramp.handle,
+                  VK_PIPELINE_STAGE_2_COPY_BIT,
+                  VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                  VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+                  VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                  VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                  VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+    memcpy(o->ramp_bytes, bytes, 2048);
+    return true;
+}
+static VkDescriptorSet graphics_set(struct walle_vk_output*     o,
+                                    const struct walle_vk_draw* draw,
+                                    VkImageView                 source,
+                                    VkImageView                 scene)
+{
+    auto            r         = o->renderer;
+    VkDeviceSize    alignment = r->properties.limits.minUniformBufferOffsetAlignment;
+    VkDeviceSize    gu        = stage_bytes(o, draw ? draw->glass : nullptr, 272, alignment),
+                    eu        = stage_bytes(o, draw ? draw->effect : nullptr, 184, alignment);
+    VkDescriptorSet set       = allocate_set(o, LAYOUT_GRAPHICS);
+    if (!set || gu == UINT64_MAX || eu == UINT64_MAX)
+        return VK_NULL_HANDLE;
+    write_uniform(o, set, 0, gu, 272);
+    write_uniform(o, set, 4, eu, 184);
+    write_image(r->device,
+                set,
+                1,
+                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                source,
+                VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+                VK_NULL_HANDLE);
+    write_image(r->device,
+                set,
+                2,
+                VK_DESCRIPTOR_TYPE_SAMPLER,
+                VK_NULL_HANDLE,
+                VK_IMAGE_LAYOUT_UNDEFINED,
+                r->linear_sampler);
+    write_image(r->device,
+                set,
+                3,
+                VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,
+                scene,
+                VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ,
+                VK_NULL_HANDLE);
+    write_image(r->device,
+                set,
+                5,
+                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                o->ramp.handle ? o->ramp.view : o->incoming.view,
+                VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+                VK_NULL_HANDLE);
+    write_image(r->device,
+                set,
+                6,
+                VK_DESCRIPTOR_TYPE_SAMPLER,
+                VK_NULL_HANDLE,
+                VK_IMAGE_LAYOUT_UNDEFINED,
+                r->linear_sampler);
+    write_image(r->device,
+                set,
+                7,
+                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                o->mask.handle ? o->mask.view : o->incoming.view,
+                VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+                VK_NULL_HANDLE);
+    write_image(r->device,
+                set,
+                8,
+                VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                o->tint.handle ? o->tint.view : o->incoming.view,
+                VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+                VK_NULL_HANDLE);
+    return set;
+}
+static bool record_wallpaper(struct walle_vk_output* o, VkImageView scene, VkImageView source)
+{
+    VkDescriptorSet set = graphics_set(o, nullptr, source, scene);
+    if (!set)
+        return false;
+    begin_render(o->command_buffer,
+                 scene,
+                 VK_NULL_HANDLE,
+                 o->extent.width,
+                 o->extent.height,
+                 true,
+                 false,
+                 false);
+    vkCmdBindPipeline(
+        o->command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, o->renderer->pipelines[PIPE_WALLPAPER]);
+    set_viewport(
+        o->command_buffer, o->extent.width, o->extent.height, (VkRect2D){{0, 0}, o->extent});
+    struct walle_vk_vertex v[4];
+    const float p[] = {0, 0, (float)o->extent.width, (float)o->extent.height}, uv[] = {0, 0, 1, 1};
+    quad_vertices(v, p, uv);
+    const uint32_t    indices[] = {0, 1, 2, 0, 2, 3};
+    struct glass_push push
+        = {.resolution = {(float)o->extent.width, (float)o->extent.height}, .edr = 1};
+    bool ok = issue_geometry(
+        o, o->renderer->pipeline_layout[LAYOUT_GRAPHICS], set, v, 4, indices, 6, &push, 32);
+    vkCmdEndRendering(o->command_buffer);
+    return ok;
+}
+static bool record_draw(struct walle_vk_output*     o,
+                        VkImageView                 scene,
+                        const struct walle_vk_draw* draw,
+                        float                       material_opacity,
+                        bool                        clear_target)
+{
+    auto r    = o->renderer;
+    auto cmd  = o->command_buffer;
+    bool tint = draw->pass == WALLE_VK_TINT_GRADIENT, mask = draw->pass == WALLE_VK_TINT_MASK;
+    bool local         = draw->pass == WALLE_VK_FACE || draw->pass == WALLE_VK_HIGHLIGHT
+                         || draw->pass == WALLE_VK_PRODUCT_FINISH;
+    VkImageView source = o->incoming.view;
+    if (draw->pass == WALLE_VK_GLASS_REGULAR || draw->pass == WALLE_VK_GLASS_CLEAR)
+        source = o->pyramid.handle ? o->pyramid.view : o->capture.view;
+    VkDescriptorSet set = graphics_set(o, draw, source, scene);
+    if (!set)
+        return false;
+    VkImageView target = tint ? o->tint.view : mask ? o->mask.view : scene;
+    if (tint || mask) {
+        struct walle_vk_image* image = tint ? &o->tint : &o->mask;
+        image_barrier(cmd,
+                      image->handle,
+                      VK_PIPELINE_STAGE_2_ALL_GRAPHICS_BIT,
+                      VK_ACCESS_2_SHADER_SAMPLED_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                      VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT
+                          | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                      clear_target ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+                      VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ);
+    }
+    local_read_barrier(cmd);
+    begin_render(cmd,
+                 target,
+                 scene,
+                 o->extent.width,
+                 o->extent.height,
+                 (tint || mask) && clear_target,
+                 local,
+                 tint);
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, r->pipelines[draw->pass]);
+    int64_t x0 = draw->scissor[0], y0 = draw->scissor[1], x1 = x0 + draw->scissor[2],
+            y1 = y0 + draw->scissor[3];
+    if (x0 < 0)
+        x0 = 0;
+    if (y0 < 0)
+        y0 = 0;
+    if (x1 > o->extent.width)
+        x1 = o->extent.width;
+    if (y1 > o->extent.height)
+        y1 = o->extent.height;
+    bool ok = true;
+    if (x1 > x0 && y1 > y0) {
+        set_viewport(
+            cmd,
+            o->extent.width,
+            o->extent.height,
+            (VkRect2D){{(int32_t)x0, (int32_t)y0}, {(uint32_t)(x1 - x0), (uint32_t)(y1 - y0)}});
+        struct glass_push push = {.resolution = {(float)o->extent.width, (float)o->extent.height},
+                                  .edr        = draw->edr_scale,
+                                  .mode       = draw->shape_mode,
+                                  .material_opacity = material_opacity};
+        ok                     = issue_geometry(o,
+                                                r->pipeline_layout[LAYOUT_GRAPHICS],
+                                                set,
+                                                draw->vertices,
+                                                draw->vertex_count,
+                                                draw->indices,
+                                                draw->index_count,
+                                                &push,
+                                                32);
+    }
+    vkCmdEndRendering(cmd);
+    if (tint || mask)
+        image_barrier(cmd,
+                      tint ? o->tint.handle : o->mask.handle,
+                      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                      VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                      VK_PIPELINE_STAGE_2_ALL_GRAPHICS_BIT,
+                      VK_ACCESS_2_SHADER_SAMPLED_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                      VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ,
+                      VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+    return ok;
+}
+
+static int retry_ioctl(int fd, unsigned long operation, void* argument)
+{
+    int rc;
+    do {
+        rc = ioctl(fd, operation, argument);
+    } while (rc < 0 && errno == EINTR);
+    return rc;
+}
+static bool submit_frame(struct walle_vk_output* o, struct walle_vk_present_image* present)
+{
+    auto r = o->renderer;
+    if (o->frame_pending
+        || !vk_check(vkEndCommandBuffer(o->command_buffer), "vkEndCommandBuffer(frame)"))
+        return false;
+    bool wait_acquire = false;
+    if (o->wayland_surface) {
+        struct dma_buf_export_sync_file ex = {.flags = DMA_BUF_SYNC_WRITE, .fd = -1};
+        if (retry_ioctl(present->dmabuf_fd, DMA_BUF_IOCTL_EXPORT_SYNC_FILE, &ex) < 0) {
+            perror("DMA_BUF_IOCTL_EXPORT_SYNC_FILE");
+            return false;
+        }
+        if (ex.fd >= 0) {
+            VkImportSemaphoreFdInfoKHR in
+                = {.sType      = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FD_INFO_KHR,
+                   .semaphore  = o->acquire_semaphore,
+                   .flags      = VK_SEMAPHORE_IMPORT_TEMPORARY_BIT,
+                   .handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT,
+                   .fd         = ex.fd};
+            if (!vk_check(r->import_semaphore_fd(r->device, &in),
+                          "vkImportSemaphoreFdKHR(acquire)")) {
+                close(ex.fd);
+                return false;
+            }
+            /* Successful Vulkan import consumes the descriptor. */
+            wait_acquire = true;
+        }
+    }
+    if (!vk_check(vkResetFences(r->device, 1, &o->frame_fence),
+                  "vkResetFences(frame before submit)"))
+        return false;
+    VkCommandBufferSubmitInfo cmd    = {.sType         = VK_STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO,
+                                        .commandBuffer = o->command_buffer};
+    VkSemaphoreSubmitInfo     wait   = {.sType     = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO,
+                                        .semaphore = o->acquire_semaphore,
+                                        .stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT};
+    VkSemaphoreSubmitInfo     signal = {.sType     = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO,
+                                        .semaphore = o->render_semaphore,
+                                        .stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT};
+    VkSubmitInfo2             si     = {.sType                    = VK_STRUCTURE_TYPE_SUBMIT_INFO_2,
+                                        .waitSemaphoreInfoCount   = wait_acquire ? 1u : 0u,
+                                        .pWaitSemaphoreInfos      = &wait,
+                                        .commandBufferInfoCount   = 1,
+                                        .pCommandBufferInfos      = &cmd,
+                                        .signalSemaphoreInfoCount = o->wayland_surface ? 1u : 0u,
+                                        .pSignalSemaphoreInfos    = &signal};
+    if (!vk_check(vkQueueSubmit2(r->queue, 1, &si, o->frame_fence), "vkQueueSubmit2(frame)"))
+        return false;
+    o->frame_pending = true;
+    if (o->wayland_surface) {
+        VkSemaphoreGetFdInfoKHR info
+            = {.sType      = VK_STRUCTURE_TYPE_SEMAPHORE_GET_FD_INFO_KHR,
+               .semaphore  = o->render_semaphore,
+               .handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT};
+        int fd = -1;
+        if (!vk_check(r->get_semaphore_fd(r->device, &info, &fd),
+                      "vkGetSemaphoreFdKHR(render done)"))
+            return false;
+        if (fd >= 0) {
+            struct dma_buf_import_sync_file in = {.flags = DMA_BUF_SYNC_WRITE, .fd = fd};
+            int rc    = retry_ioctl(present->dmabuf_fd, DMA_BUF_IOCTL_IMPORT_SYNC_FILE, &in);
+            int error = errno;
+            close(fd);
+            errno = error;
+            if (rc < 0) {
+                perror("DMA_BUF_IOCTL_IMPORT_SYNC_FILE");
+                return false;
+            }
+        }
+        /* fd=-1 is an already-signaled payload; nothing remains to publish. */
+    }
+    return true;
+}
+static bool frame_resources(struct walle_vk_output*      o,
+                            const struct walle_vk_frame* frame,
+                            VkDeviceSize                 readback_size)
+{
+    if (frame->draw_count > 4096 || (frame->draw_count && !frame->draws))
+        return false;
+    VkDeviceSize alignment = o->renderer->properties.limits.minUniformBufferOffsetAlignment;
+    VkDeviceSize bytes     = (frame->draw_count + 40) * (alignment * 2 + 512) + 8192;
+    bool         backdrop = false, tint = false;
+    for (size_t i = 0; i < frame->draw_count; i++) {
+        auto         d = &frame->draws[i];
+        VkDeviceSize vb, ib;
+        if (d->pass >= WALLE_VK_PASS_COUNT || !isfinite(d->edr_scale) || d->edr_scale <= 0
+            || !d->vertices || !d->indices || !d->vertex_count || !d->index_count
+            || d->vertex_count > UINT32_MAX || d->index_count > UINT32_MAX || d->index_count % 3
+            || d->scissor[2] < 0 || d->scissor[3] < 0
+            || ckd_mul(&vb, (VkDeviceSize)d->vertex_count, (VkDeviceSize)sizeof *d->vertices)
+            || ckd_mul(&ib, (VkDeviceSize)d->index_count, (VkDeviceSize)sizeof *d->indices)
+            || ckd_add(&bytes, bytes, vb) || ckd_add(&bytes, bytes, ib))
+            return false;
+        for (size_t v = 0; v < d->vertex_count; v++)
+            for (unsigned a = 0; a < 2; a++)
+                if (!isfinite(d->vertices[v].position[a]) || !isfinite(d->vertices[v].local[a])
+                    || !isfinite(d->vertices[v].source_uv[a]))
+                    return false;
+        for (size_t j = 0; j < d->index_count; j++)
+            if (d->indices[j] >= d->vertex_count)
+                return false;
+        backdrop |= d->pass == WALLE_VK_GLASS_REGULAR || d->pass == WALLE_VK_GLASS_CLEAR;
+        tint |= d->pass == WALLE_VK_TINT_MASK || d->pass == WALLE_VK_TINT_GRADIENT
+                || d->pass == WALLE_VK_TINT_COMPOSITE;
+    }
+    if (backdrop && !ensure_backdrop(o, frame))
+        return false;
+    if (tint && (!frame->tint_ramp_rgba16f || !ensure_tint(o)))
+        return false;
+    if (!prepare_pool(o, (uint32_t)frame->draw_count + 40)
+        || !ensure_buffer(o->renderer,
+                          &o->frame_buffer,
+                          bytes,
+                          VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT
+                              | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
+                              | VK_BUFFER_USAGE_TRANSFER_SRC_BIT))
+        return false;
+    if (readback_size
+        && !ensure_buffer(
+            o->renderer, &o->readback_buffer, readback_size, VK_BUFFER_USAGE_TRANSFER_DST_BIT))
+        return false;
+    o->cursor = 0;
+    return true;
+}
+enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o,
                                                   const struct walle_vk_frame* frame)
 {
-    if (!output || !frame || output->renderer->fatal
-        || !reveal_geometry_valid(output, frame->geometry) || !isfinite(frame->progress)
-        || !isfinite(frame->variant) || !isfinite(frame->center_top_left_x)
-        || !isfinite(frame->center_top_left_y) || !isfinite(frame->radius) || frame->radius < 0.0f) {
-        fprintf(stderr, "[Vulkan] Frame rejected: invalid reveal geometry or timeline.\n");
+    if (!o || !frame || o->renderer->fatal || !o->incoming.handle
+        || (!frame->plain_incoming && !o->current.handle) || !isfinite(frame->material_opacity))
+        return WALLE_VK_FRAME_FATAL;
+    auto r = o->renderer;
+    if (walle_vk_renderer_validation_errors(r)) {
+        r->fatal = true;
         return WALLE_VK_FRAME_FATAL;
     }
-    VkDeviceSize mask_size;
-    bool readback = frame->mask_readback != nullptr || frame->composition_readback != nullptr;
-    VkDeviceSize composition_size;
-    if (ckd_mul(&mask_size, (VkDeviceSize)output->extent.width, (VkDeviceSize)output->extent.height)
-        || ckd_mul(&composition_size, mask_size, (VkDeviceSize)4)
-        || (frame->mask_readback && frame->mask_readback_size != mask_size)
-        || (frame->composition_readback
-            && (!output->composition_readback_enabled
-                || frame->composition_readback_size != composition_size))) {
-        fprintf(stderr, "[Vulkan] Frame rejected: readback size mismatch.\n");
-        return WALLE_VK_FRAME_FATAL;
-    }
-    if (!ensure_transition_base(output, readback))
-        return WALLE_VK_FRAME_FATAL;
-
-    VkDevice device = output->renderer->device;
-    if (!vk_check(vkWaitForFences(device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX),
-                  "vkWaitForFences(frame)"))
-        return WALLE_VK_FRAME_FATAL;
-
-    uint32_t image_index;
-    if (!take_present_image(output, &image_index))
-        return output->renderer->fatal ? WALLE_VK_FRAME_FATAL : WALLE_VK_FRAME_RETRY;
-
-    struct walle_lg_reveal_raster raster       = {};
-    VkBufferCopy                  copies[5]    = {};
-    uint32_t                      copy_count   = 0;
-    bool                          host_written = false;
-    if (frame->geometry->index_count) {
-        const struct walle_lg_raster_calibration calibration = {
-            .p25_ceil_bits          = WALLE_VK_REVEAL_RASTER_P25,
-            .p25_selector_bit_count = UINT64_C(1) << 24,
-        };
-        enum walle_lg_reveal_raster_status status = walle_lg_reveal_raster_construct(
-            frame->geometry, output->extent.width, output->extent.height, &calibration, &raster);
-        if (status != WALLE_LG_REVEAL_RASTER_OK || !reveal_raster_valid(&raster)
-            || !stage_reveal_data(
-                output, frame->geometry, &raster, copies, &copy_count, &host_written)) {
-            fprintf(stderr,
-                    "[Vulkan] Reveal raster rejected: status %d at progress %.9f, "
-                    "center (%.3f, %.3f), radius %.3f.\n",
-                    (int)status,
-                    (double)frame->progress,
-                    (double)frame->center_top_left_x,
-                    (double)frame->center_top_left_y,
-                    (double)frame->radius);
-            walle_lg_reveal_raster_destroy(&raster);
+    if (o->frame_pending) {
+        VkResult status = vkGetFenceStatus(r->device, o->frame_fence);
+        if (status == VK_NOT_READY)
+            return WALLE_VK_FRAME_RETRY;
+        if (!vk_check(status, "vkGetFenceStatus(frame)")) {
+            r->fatal = true;
             return WALLE_VK_FRAME_FATAL;
         }
+        o->frame_pending = false;
     }
-
-    if (!update_compose_descriptors(output, frame->first_boot)) {
-        fprintf(stderr, "[Vulkan] Frame rejected: compose descriptors unavailable.\n");
-        walle_lg_reveal_raster_destroy(&raster);
-        return WALLE_VK_FRAME_FATAL;
-    }
-
-    if (!record_frame(
-            output, image_index, frame, &raster, copies, copy_count, host_written, mask_size)
-        || !vk_check(vkResetFences(device, 1, &output->frame_fence), "vkResetFences(frame)")) {
-        output->renderer->fatal = true;
-        walle_lg_reveal_raster_destroy(&raster);
-        return WALLE_VK_FRAME_FATAL;
-    }
-    walle_lg_reveal_raster_destroy(&raster);
-
-    VkCommandBufferSubmitInfo command_info = {
-        .sType         = VK_STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO,
-        .commandBuffer = output->command_buffer,
-    };
-    VkSubmitInfo2 submit_info = {
-        .sType                  = VK_STRUCTURE_TYPE_SUBMIT_INFO_2,
-        .commandBufferInfoCount = 1,
-        .pCommandBufferInfos    = &command_info,
-    };
-    if (!vk_check(vkQueueSubmit2(output->renderer->queue, 1, &submit_info, output->frame_fence),
-                  "vkQueueSubmit2(frame)")) {
-        output->renderer->fatal = true;
-        return WALLE_VK_FRAME_FATAL;
-    }
-    struct walle_vk_present_image* present = &output->present_images[image_index];
-    if (readback) {
-        if (!vk_check(vkWaitForFences(device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX),
-                      "vkWaitForFences(mask readback)")) {
-            output->renderer->fatal = true;
+    if (!collect_timing(o))
+        goto fail;
+    VkDeviceSize rb = 0;
+    if (frame->composition_readback) {
+        if (!o->composition_readback_enabled
+            || ckd_mul(&rb, (VkDeviceSize)o->extent.width, (VkDeviceSize)o->extent.height)
+            || ckd_mul(&rb, rb, (VkDeviceSize)4) || frame->composition_readback_size != rb)
             return WALLE_VK_FRAME_FATAL;
-        }
-        if (frame->mask_readback)
-            memcpy(frame->mask_readback, output->readback_buffer.memory.mapped, (size_t)mask_size);
-        if (frame->composition_readback)
-            memcpy(frame->composition_readback,
-                   (uint8_t*)output->readback_buffer.memory.mapped + (size_t)mask_size,
-                   (size_t)composition_size);
     }
-    wl_surface_attach(output->wayland_surface, present->buffer, 0, 0);
-    wl_surface_damage_buffer(output->wayland_surface,
-                             0,
-                             0,
-                             (int32_t)output->extent.width,
-                             (int32_t)output->extent.height);
-    present->busy              = true;
-    output->last_present_image = image_index;
+    uint32_t index;
+    if (!take_present_image(o, &index))
+        return r->fatal ? WALLE_VK_FRAME_FATAL : WALLE_VK_FRAME_RETRY;
+    if (!frame_resources(o, frame, rb))
+        return WALLE_VK_FRAME_FATAL;
+    if (!vk_check(vkResetCommandBuffer(o->command_buffer, 0), "vkResetCommandBuffer(frame)"))
+        goto fail;
+    VkCommandBufferBeginInfo bi = {.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                                   .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT};
+    if (!vk_check(vkBeginCommandBuffer(o->command_buffer, &bi), "vkBeginCommandBuffer(frame)"))
+        goto fail;
+    if (o->timestamp_pool) {
+        vkCmdResetQueryPool(o->command_buffer, o->timestamp_pool, 0, 4);
+        vkCmdWriteTimestamp2(
+            o->command_buffer, VK_PIPELINE_STAGE_2_TOP_OF_PIPE_BIT, o->timestamp_pool, 0);
+    }
+    buffer_barrier(o->command_buffer,
+                   VK_PIPELINE_STAGE_2_HOST_BIT,
+                   VK_ACCESS_2_HOST_WRITE_BIT,
+                   VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+                   VK_ACCESS_2_UNIFORM_READ_BIT | VK_ACCESS_2_VERTEX_ATTRIBUTE_READ_BIT
+                       | VK_ACCESS_2_INDEX_READ_BIT | VK_ACCESS_2_TRANSFER_READ_BIT);
+    bool build_backdrop = o->capture.handle && !o->backdrop_ready;
+    if (build_backdrop && !record_backdrop(o))
+        goto fail;
+    if (o->timestamp_pool)
+        vkCmdWriteTimestamp2(
+            o->command_buffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, o->timestamp_pool, 1);
+    if (!record_ramp(o, frame->tint_ramp_rgba16f))
+        goto fail;
+    struct walle_vk_present_image* present = &o->present_images[index];
+    image_barrier_queues(
+        o->command_buffer,
+        present->image.handle,
+        VK_PIPELINE_STAGE_2_NONE,
+        0,
+        VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+        VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT,
+        present->layout,
+        VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ,
+        present->foreign_owned ? VK_QUEUE_FAMILY_FOREIGN_EXT : VK_QUEUE_FAMILY_IGNORED,
+        present->foreign_owned ? r->queue_family : VK_QUEUE_FAMILY_IGNORED);
+    if (!record_wallpaper(
+            o, present->image.view, frame->plain_incoming ? o->incoming.view : o->current.view))
+        goto fail;
+    if (!frame->plain_incoming)
+        for (size_t i = 0; i < frame->draw_count; i++)
+            if (!record_draw(o,
+                             present->image.view,
+                             &frame->draws[i],
+                             frame->material_opacity,
+                             i == 0 || frame->draws[i - 1].pass != frame->draws[i].pass))
+                goto fail;
+    if (o->timestamp_pool)
+        vkCmdWriteTimestamp2(
+            o->command_buffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, o->timestamp_pool, 2);
+    VkImageLayout         layout = VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ;
+    VkPipelineStageFlags2 stage
+        = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT;
+    VkAccessFlags2 access
+        = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT;
+    if (rb) {
+        image_barrier(o->command_buffer,
+                      present->image.handle,
+                      stage,
+                      access,
+                      VK_PIPELINE_STAGE_2_COPY_BIT,
+                      VK_ACCESS_2_TRANSFER_READ_BIT,
+                      layout,
+                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        VkBufferImageCopy cp
+            = {.imageSubresource = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT, .layerCount = 1},
+               .imageExtent      = {o->extent.width, o->extent.height, 1}};
+        vkCmdCopyImageToBuffer(o->command_buffer,
+                               present->image.handle,
+                               VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                               o->readback_buffer.handle,
+                               1,
+                               &cp);
+        buffer_barrier(o->command_buffer,
+                       VK_PIPELINE_STAGE_2_COPY_BIT,
+                       VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                       VK_PIPELINE_STAGE_2_HOST_BIT,
+                       VK_ACCESS_2_HOST_READ_BIT);
+        layout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+        stage  = VK_PIPELINE_STAGE_2_COPY_BIT;
+        access = VK_ACCESS_2_TRANSFER_READ_BIT;
+    }
+    image_barrier_queues(o->command_buffer,
+                         present->image.handle,
+                         stage,
+                         access,
+                         VK_PIPELINE_STAGE_2_NONE,
+                         0,
+                         layout,
+                         VK_IMAGE_LAYOUT_GENERAL,
+                         o->wayland_surface ? r->queue_family : VK_QUEUE_FAMILY_IGNORED,
+                         o->wayland_surface ? VK_QUEUE_FAMILY_FOREIGN_EXT
+                                            : VK_QUEUE_FAMILY_IGNORED);
+    if (o->timestamp_pool)
+        vkCmdWriteTimestamp2(
+            o->command_buffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, o->timestamp_pool, 3);
+    if (walle_vk_renderer_validation_errors(r) || !submit_frame(o, present)
+        || walle_vk_renderer_validation_errors(r))
+        goto fail;
+    if (o->timestamp_pool) {
+        o->timing_pending         = true;
+        o->pending_built_backdrop = build_backdrop;
+        o->timed_frame_id++;
+    }
+    present->layout        = VK_IMAGE_LAYOUT_GENERAL;
+    present->foreign_owned = o->wayland_surface != nullptr;
+    if (build_backdrop)
+        o->backdrop_ready = true;
+    if (frame->tint_ramp_rgba16f)
+        o->ramp_ready = true;
+    if (rb) {
+        if (!wait_submission(r, o->frame_fence, &o->frame_pending))
+            goto fail;
+        memcpy(frame->composition_readback, o->readback_buffer.memory.mapped, (size_t)rb);
+    }
+    if (o->wayland_surface) {
+        wl_surface_attach(o->wayland_surface, present->buffer, 0, 0);
+        wl_surface_damage_buffer(
+            o->wayland_surface, 0, 0, (int32_t)o->extent.width, (int32_t)o->extent.height);
+        present->busy = true;
+    }
+    o->last_present_image = index;
+    if (walle_vk_renderer_validation_errors(r))
+        goto fail;
     return WALLE_VK_FRAME_OK;
+fail:
+    r->fatal = true;
+    return WALLE_VK_FRAME_FATAL;
 }
-
-void walle_vk_output_promote(struct walle_vk_output* output)
+bool walle_vk_renderer_create_offscreen(const char* selector, struct walle_vk_renderer** result)
 {
-    if (!output)
-        return;
-    VkDevice device = output->renderer->device;
-    if (output->frame_fence)
-        vkWaitForFences(device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX);
-    destroy_texture_pair(device, &output->current);
-    destroy_texture_pair(device, &output->incoming);
-    destroy_transition_resources(output);
-    compact_present_images(output);
+    return walle_vk_renderer_create(nullptr, selector && *selector ? selector : "cpu", result);
 }
-
-void walle_vk_output_abort_transition(struct walle_vk_output* output)
+bool walle_vk_output_create_offscreen(struct walle_vk_renderer* r,
+                                      uint32_t                  w,
+                                      uint32_t                  h,
+                                      struct walle_vk_output**  result)
 {
-    if (!output || !output->renderer->device)
-        return;
-    VkDevice device = output->renderer->device;
-    if (output->frame_fence)
-        vkWaitForFences(device, 1, &output->frame_fence, VK_TRUE, UINT64_MAX);
-    destroy_texture_pair(device, &output->current);
-    destroy_texture_pair(device, &output->incoming);
-    destroy_transition_resources(output);
-    compact_present_images(output);
+    if (!r || r->display)
+        return false;
+    return walle_vk_output_create(r, nullptr, w, h, true, result);
 }
-
-void walle_vk_output_destroy(struct walle_vk_output* output)
+void walle_vk_output_promote(struct walle_vk_output* o)
 {
-    if (!output)
+    if (!o || !o->renderer->device)
         return;
-    struct walle_vk_renderer* renderer = output->renderer;
-    if (renderer && renderer->device) {
-        vkDeviceWaitIdle(renderer->device);
-        destroy_texture_pair(renderer->device, &output->current);
-        destroy_texture_pair(renderer->device, &output->incoming);
-        destroy_transition_resources(output);
-        if (output->frame_fence)
-            vkDestroyFence(renderer->device, output->frame_fence, nullptr);
-        if (output->command_pool)
-            vkDestroyCommandPool(renderer->device, output->command_pool, nullptr);
-        destroy_present_images(output);
+    if (!wait_submission(o->renderer, o->frame_fence, &o->frame_pending))
+        return;
+    if (!collect_timing(o))
+        return;
+    destroy_image(o->renderer->device, &o->current);
+    destroy_image(o->renderer->device, &o->incoming);
+    destroy_transition_resources(o);
+    compact_present_images(o);
+}
+void walle_vk_output_abort_transition(struct walle_vk_output* o)
+{
+    walle_vk_output_promote(o);
+}
+bool walle_vk_output_resize(struct walle_vk_output* o, uint32_t w, uint32_t h)
+{
+    if (!o || o->renderer->fatal || !graphics_extent_valid(o->renderer, w, h))
+        return false;
+    if (o->extent.width == w && o->extent.height == h)
+        return true;
+    if (!wait_submission(o->renderer, o->frame_fence, &o->frame_pending))
+        return false;
+    walle_vk_output_abort_transition(o);
+    destroy_present_images(o);
+    o->extent = (VkExtent2D){w, h};
+    return initialize_present_images(o);
+}
+void walle_vk_output_destroy(struct walle_vk_output* o)
+{
+    if (!o)
+        return;
+    auto r = o->renderer;
+    if (r && r->device) {
+        /* Submission failures leave no pending flag and no unsignaled-fence wait. */
+        if (o->frame_pending && !wait_submission(r, o->frame_fence, &o->frame_pending))
+            vkDeviceWaitIdle(r->device);
+        destroy_image(r->device, &o->current);
+        destroy_image(r->device, &o->incoming);
+        destroy_transition_resources(o);
+        if (o->timestamp_pool)
+            vkDestroyQueryPool(r->device, o->timestamp_pool, nullptr);
+        if (o->acquire_semaphore)
+            vkDestroySemaphore(r->device, o->acquire_semaphore, nullptr);
+        if (o->render_semaphore)
+            vkDestroySemaphore(r->device, o->render_semaphore, nullptr);
+        if (o->frame_fence)
+            vkDestroyFence(r->device, o->frame_fence, nullptr);
+        if (o->command_pool)
+            vkDestroyCommandPool(r->device, o->command_pool, nullptr);
+        destroy_present_images(o);
     }
-    if (renderer && renderer->instance && output->surface)
-        vkDestroySurfaceKHR(renderer->instance, output->surface, nullptr);
-    free(output);
+    if (r && r->instance && o->surface)
+        vkDestroySurfaceKHR(r->instance, o->surface, nullptr);
+    free(o);
+}
+uint64_t walle_vk_renderer_destroy_checked(struct walle_vk_renderer* r)
+{
+    if (!r)
+        return 0;
+    if (r->device) {
+        vkDeviceWaitIdle(r->device);
+        if (r->upload_fence)
+            vkDestroyFence(r->device, r->upload_fence, nullptr);
+        if (r->upload_command_pool)
+            vkDestroyCommandPool(r->device, r->upload_command_pool, nullptr);
+        if (r->linear_sampler)
+            vkDestroySampler(r->device, r->linear_sampler, nullptr);
+        for (uint32_t i = 0; i < PIPE_COUNT; i++)
+            if (r->pipelines[i])
+                vkDestroyPipeline(r->device, r->pipelines[i], nullptr);
+        for (uint32_t i = 0; i < 4; i++)
+            if (r->capture_pipelines[i])
+                vkDestroyPipeline(r->device, r->capture_pipelines[i], nullptr);
+        for (uint32_t i = 0; i < 2; i++)
+            if (r->compute_pipelines[i])
+                vkDestroyPipeline(r->device, r->compute_pipelines[i], nullptr);
+        for (uint32_t i = 0; i < LAYOUT_COUNT; i++) {
+            if (r->pipeline_layout[i])
+                vkDestroyPipelineLayout(r->device, r->pipeline_layout[i], nullptr);
+            if (r->set_layout[i])
+                vkDestroyDescriptorSetLayout(r->device, r->set_layout[i], nullptr);
+        }
+        vkDestroyDevice(r->device, nullptr);
+    }
+    if (r->dmabuf.object)
+        zwp_linux_dmabuf_feedback_v1_destroy(r->dmabuf.object);
+    if (r->dmabuf.factory)
+        zwp_linux_dmabuf_v1_destroy(r->dmabuf.factory);
+    dmabuf_feedback_reset_table(&r->dmabuf);
+    free(r->dmabuf.candidates);
+    destroy_debug_messenger(r);
+    if (r->instance)
+        vkDestroyInstance(r->instance, nullptr);
+    uint64_t validation_errors = walle_vk_renderer_validation_errors(r);
+    free(r->device_selector);
+    free(r);
+    return validation_errors;
+}
+
+void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
+{
+    uint64_t errors = walle_vk_renderer_destroy_checked(renderer);
+    (void)errors;
+}
+uint64_t walle_vk_renderer_validation_errors(const struct walle_vk_renderer* renderer)
+{
+    return renderer && renderer->validation_enabled
+               ? atomic_load_explicit(&renderer->validation_error_count, memory_order_relaxed)
+               : 0;
+}
+bool walle_vk_renderer_validation_active(const struct walle_vk_renderer* renderer)
+{
+    return renderer && renderer->validation_enabled;
+}
+
+static bool collect_timing(struct walle_vk_output* output)
+{
+    if (!output->timestamp_pool || !output->timing_pending || output->frame_pending)
+        return true;
+    uint64_t ticks[4];
+    if (!vk_check(vkGetQueryPoolResults(output->renderer->device,
+                                        output->timestamp_pool,
+                                        0,
+                                        4,
+                                        sizeof ticks,
+                                        ticks,
+                                        sizeof ticks[0],
+                                        VK_QUERY_RESULT_64_BIT),
+                  "vkGetQueryPoolResults(completed frame)"))
+        return false;
+    uint64_t mask
+        = output->timestamp_bits == 64 ? UINT64_MAX : (UINT64_C(1) << output->timestamp_bits) - 1;
+    double period       = (double)output->renderer->properties.limits.timestampPeriod;
+    output->last_timing = (struct walle_vk_diagnostics){
+        .timing_enabled   = true,
+        .timing_available = true,
+        .built_backdrop   = output->pending_built_backdrop,
+        .timed_frame_id   = output->timed_frame_id,
+        .gpu_capture_ns
+        = output->pending_built_backdrop ? (double)((ticks[1] - ticks[0]) & mask) * period : 0,
+        .gpu_draw_ns  = (double)((ticks[2] - ticks[1]) & mask) * period,
+        .gpu_frame_ns = (double)((ticks[2] - ticks[0]) & mask) * period,
+        .gpu_tail_ns  = (double)((ticks[3] - ticks[2]) & mask) * period,
+        .gpu_total_ns = (double)((ticks[3] - ticks[0]) & mask) * period,
+    };
+    output->timing_pending = false;
+    return true;
+}
+
+bool walle_vk_output_enable_timing(struct walle_vk_output* output, bool enabled)
+{
+    if (!output || !output->renderer->device || output->renderer->fatal)
+        return false;
+    if ((output->timestamp_pool != VK_NULL_HANDLE) == enabled)
+        return true;
+    if (!wait_submission(output->renderer, output->frame_fence, &output->frame_pending)
+        || !collect_timing(output))
+        return false;
+    if (!enabled) {
+        vkDestroyQueryPool(output->renderer->device, output->timestamp_pool, nullptr);
+        output->timestamp_pool = VK_NULL_HANDLE;
+        return true;
+    }
+    auto renderer = output->renderer;
+    if (!renderer->properties.limits.timestampComputeAndGraphics
+        || !(renderer->properties.limits.timestampPeriod > 0))
+        return false;
+    uint32_t count = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(renderer->physical_device, &count, nullptr);
+    VkQueueFamilyProperties* families = calloc(count, sizeof *families);
+    if (!families)
+        return false;
+    vkGetPhysicalDeviceQueueFamilyProperties(renderer->physical_device, &count, families);
+    uint32_t bits
+        = renderer->queue_family < count ? families[renderer->queue_family].timestampValidBits : 0;
+    free(families);
+    if (!bits || bits > 64)
+        return false;
+    VkQueryPoolCreateInfo create = {
+        .sType      = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
+        .queryType  = VK_QUERY_TYPE_TIMESTAMP,
+        .queryCount = 4,
+    };
+    if (!vk_check(vkCreateQueryPool(renderer->device, &create, nullptr, &output->timestamp_pool),
+                  "vkCreateQueryPool(frame diagnostics)"))
+        return false;
+    output->timestamp_bits = bits;
+    output->last_timing    = (struct walle_vk_diagnostics){};
+    return true;
+}
+
+void walle_vk_renderer_memory_stats(const struct walle_vk_renderer* renderer,
+                                    struct walle_vk_memory_stats*   result)
+{
+    if (result)
+        *result = renderer ? renderer->memory_stats : (struct walle_vk_memory_stats){};
+}
+
+bool walle_vk_output_diagnostics(struct walle_vk_output*      output,
+                                 bool                         wait,
+                                 struct walle_vk_diagnostics* result)
+{
+    if (!output || !result)
+        return false;
+    if (output->timestamp_pool && output->timing_pending) {
+        if (wait) {
+            if (!wait_submission(output->renderer, output->frame_fence, &output->frame_pending))
+                return false;
+        } else if (output->frame_pending) {
+            VkResult status = vkGetFenceStatus(output->renderer->device, output->frame_fence);
+            if (status == VK_SUCCESS)
+                output->frame_pending = false;
+            else if (status != VK_NOT_READY)
+                return vk_check(status, "vkGetFenceStatus(diagnostics)");
+        }
+        if (!collect_timing(output))
+            return false;
+    }
+    *result                 = output->last_timing;
+    result->timing_enabled  = output->timestamp_pool != VK_NULL_HANDLE;
+    result->timing_pending  = output->timing_pending;
+    result->renderer_memory = output->renderer->memory_stats;
+    result->source_bytes    = output->current.memory.size + output->incoming.memory.size;
+    result->backdrop_bytes  = output->capture.memory.size + output->pyramid.memory.size;
+    result->scratch_bytes   = output->blur_scratch.memory.size;
+    result->effect_bytes
+        = output->tint.memory.size + output->mask.memory.size + output->ramp.memory.size;
+    result->frame_buffer_bytes = output->frame_buffer.memory.size;
+    result->readback_bytes     = output->readback_buffer.memory.size;
+    for (uint32_t i = 0; i < 2; ++i) {
+        if (output->present_images[i].image.memory.handle) {
+            result->present_bytes += output->present_images[i].image.memory.size;
+            result->present_image_count++;
+        }
+    }
+    result->output_bytes = result->source_bytes + result->backdrop_bytes + result->scratch_bytes
+                           + result->effect_bytes + result->frame_buffer_bytes
+                           + result->readback_bytes + result->present_bytes;
+    return true;
 }

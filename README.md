@@ -1,182 +1,127 @@
-# WALLE
+# Walle
 
-A Linux/Wayland wallpaper engine with a recovered Liquid Glass transition.
+A C23/Wayland wallpaper engine with source-derived Liquid Glass materials and
+Slang shaders compiled offline for Vulkan 1.4.
 
-## Renderer
-
-Walle has one rendering backend and no fallback:
-
-- Vulkan 1.4 is a hard runtime requirement;
-- shaders are authored in Slang 2026 and compiled offline to SPIR-V 1.6;
-- the SPIR-V uses the Vulkan memory model and is validated for Vulkan 1.4 at
-  build time;
-- rendering uses dynamic rendering, synchronization2, `vkQueueSubmit2`, and
-  the Vulkan 1.4 maintenance6 forms of descriptor-set binding and push
-  constants;
-- image transitions use the generic Vulkan 1.3+ `ATTACHMENT_OPTIMAL` and
-  `READ_ONLY_OPTIMAL` layouts;
-- maintenance5 feeds the embedded, build-validated SPIR-V directly into
-  pipeline creation, without creating temporary shader-module objects;
-- there are no render passes, framebuffers, runtime shader compilers, EGL,
-  OpenGL, or OpenGL ES paths.
-
-The recovered reveal-mask implementation currently agrees with the retained
-65-frame, 2048×2048 corpus at 272,629,669 of 272,629,760 samples:
-**99.99996662139893%**, with 91 one-code residuals and 52/65 exact frames.
-The actual Walle layer-shell process reproduces the canonical candidate
-inventory on both the integrated Radeon and RX 9070 XT:
-
-```text
-9062b7bfde617f88638c9b48fdb8ace7b6f91b4518d54c5a6e54abcb51e93644
-```
-
-This is the best public-input algorithm recovered so far, not a per-state or
-per-pixel correction table. The remaining 91 samples are outside the Vulkan
-migration: 82 are associated with Apple's unrecovered arbitrary post-clip
-triangle setup coefficients and nine with the already isolated physical
-presentation transfer.
-
-## GPU and VRAM design
-
-Walle is a long-running wallpaper process, so the renderer deliberately keeps
-its persistent GPU footprint small:
-
-- direct Vulkan-exported `linux-dmabuf` presentation, with no Vulkan
-  swapchain;
-- one compositor-held presentation image per output while idle; a second is
-  allocated lazily only while frames are changing, then destroyed after the
-  terminal frame is released;
-- `auto` prefers a qualifying discrete GPU, avoiding cross-GPU presentation
-  when displays are attached to it; CPU Vulkan devices are never selected
-  automatically;
-- decoded wallpaper backing remains in the normal cache/file descriptor while
-  idle; both current and incoming GPU texture pairs are transition-lived and
-  destroyed on promotion or abort;
-- the R8_UINT reveal mask, owner/axis data, descriptors, and optional readback
-  are also transition-lived;
-- one shared 4 MiB nibble-packed Apple fast-sqrt table while any output is
-  transitioning; it is released when the last transition finishes;
-- vertex, index, owner, mapping, and RG32 axis data share one allocation;
-- host-visible device-local memory is used directly when available; otherwise
-  one transition-lived staging allocation is used;
-- one frame fence per output and no presentation semaphores; one reveal draw
-  and one composition draw are submitted per transition frame;
-- image and storage descriptors are written only when their transition-owned
-  resources are created or replaced, never redundantly per frame.
-
-Each exported image uses a compositor-advertised XRGB8888/ARGB8888 DRM
-modifier supported by the selected Vulkan device. Queue ownership is
-transferred explicitly between the graphics queue and
-`VK_QUEUE_FAMILY_FOREIGN_EXT`; Wayland's implicit dma-buf synchronization then
-guards compositor access. If both active images are compositor-owned, Walle
-defers to the next frame callback instead of allocating a third image or
-failing the transition.
-
-At 2048×2048 the reveal mask is exactly 4 MiB. No RGBA intermediate is used.
-Wallpaper images use sRGB textures; the exported presentation image uses
-BGRA8 UNORM with the composition shader performing the final sRGB transfer
-exactly once.
-
-On the measured 5120×2880 + 2560×2880 desktop, the two unavoidable idle
-presentation images contain 84.375 MiB of pixels and occupy 86.25 MiB with the
-compositor-selected AMD modifier. Total Walle VRAM now settles at about
-97.6 MiB, down from 101.6 MiB before transition-only calibration eviction and
-about 448 MiB with the previous four-image-per-output WSI path. It
-temporarily rises during a transition, then returns to the one-image-per-output
-floor. A single presentation image cannot safely be rewritten while Wayland
-retains it, so the lazily allocated second image is the minimum nonblocking
-active pool rather than persistent double buffering.
-
-## Features
-
-- multiple images and directories;
-- per-output configuration;
-- `clear` and `regular` Liquid Glass material variants;
-- fill/stretch/fit and attention/entropy crop modes;
-- native-pixel integer HiDPI rendering;
-- hot configuration reload;
-- GameMode integration;
-- io_uring event core and coalesced timers;
-- libvips image/PDF decoding and an atomically published, LRU-trimmed cache.
-
-## Requirements
-
-- Linux kernel 5.15 or newer;
-- a Vulkan 1.4 driver with Wayland presentation, dma-buf export, DRM format
-  modifiers, foreign queue ownership, geometry shaders, shader int64, dynamic
-  rendering, synchronization2, maintenance5, maintenance6, and the Vulkan
-  memory-model features;
-- a C23 compiler with `#embed` support (GCC 15 in the Nix build);
-- Slang and SPIR-V Tools at build time;
-- Wayland, wayland-protocols, wlr-protocols, libdrm, libvips, inih, jemalloc,
-  liburing, libsystemd, and xxHash.
-
-The compositor must implement `zwlr_layer_shell_v1` and
-`zwp_linux_dmabuf_v1` feedback (protocol version 4 or newer).
+The glass implementation comes from the macOS26.6.1/M1 Max extraction: analytic
+SDFs, refraction, variable blur, native blur-pyramid kernels, shadows, vibrant
+color matrices, highlights and the complete tint-gradient/mask composition.
+Walle supplies its own transition movement and final settle into the incoming
+wallpaper. This is not a claim that Apple implements these wallpaper transitions
+or that Vulkan produces bit-identical pixels to the M1 Metal implementation.
 
 ## Build
 
-```sh
-nix develop
-make -j
-```
-
-The release package is built with:
+The flake and lock file define the dependencies and compiler versions.
 
 ```sh
-nix build
+nix develop -c make MODE=release -j
+nix develop -c make MODE=release test
+nix build path:.
 ```
 
-Useful verification targets:
+CPU contract tests run without a display; `make test-sanitize` adds ASan/UBSan.
+`MODE=debug SANITIZER=1` builds the complete instrumented application in a separate
+profile. See [VERIFICATION.md](VERIFICATION.md) for GPU and compositor coverage.
+
+The tested toolchain is GCC15.2, GNU Make4.4.1, Slang2026.12 and SPIR-V Tools for
+Vulkan1.4. Shader compilation uses language2026, SPIR-V1.6, the Vulkan memory
+model and explicit precision settings. Each generated module is validated before
+C23 `#embed` includes it. There is no runtime shader compiler or OpenGL fallback.
+
+The Vulkan device must support half arithmetic, 16-bit uniform/storage access,
+scalar block layout, dynamic rendering/local read, synchronization2,
+maintenance5/6, demote-to-helper and Linux external-memory/sync-file interfaces.
+The compositor needs layer-shell and linux-dmabuf feedback version4 or newer;
+the kernel needs dma-buf reservation-fence import/export ioctls. Actual validation
+covers the installed Linux6.18/Mesa26.1.8 environment. See the verification record
+for the tested devices and limits. [PERFORMANCE.md](PERFORMANCE.md) keeps each
+material, motion, resolution and GPU measurement separate.
+
+## Configure
+
+Use `$XDG_CONFIG_HOME/walle/config.ini`, `~/.config/walle/config.ini`, or `-c`.
+A `[default]` section applies to outputs without a named section; a named output
+section replaces it rather than merging fields. See [config.ini](config.ini).
+
+```ini
+[default]
+files =
+    fill:~/.config/bg
+timeout = 60
+randomize = true
+gamemode = true
+transition = true
+transition_duration = 2.4
+transition_variant = clear
+transition_appearance = auto
+transition_motion = sweep
+transition_tint = none
+```
+
+| Setting | Values and meaning |
+| --- | --- |
+| `transition_variant` | `clear` preserves more image detail; `regular` gives the stronger extracted frosted material. |
+| `transition_motion` | `sweep` moves a broad curved glass front; `lens` expands a glass lens from a varying origin. Both use the same extracted optics. |
+| `transition_appearance` | `light`, `dark`, or `auto` from the desktop portal color scheme. No preference/unavailable portal defaults to light. This is desktop appearance policy, not an invented image-luminance threshold. |
+| `transition_tint` | `none`, `#RRGGBB`, or `#RRGGBBAA`. A present transparent tint is distinct from absent tint. The renderer uses the extracted matrix/ramp/mask pipeline, not an RGB overlay. |
+| `transition_duration` | Positive finite seconds, up to600. The default is2.4. |
+| `transition` | `false` presents the incoming wallpaper directly. First boot is also a direct presentation. |
+
+In-flight material/appearance/duration are snapshots. Timer and configuration
+requests coalesce while a transition is active, so short cycling intervals do
+not repeatedly jump back to an older image. GameMode pauses queued cycling.
+Resize and scale changes cancel the old callback/resources and present a freshly
+prepared image at the new dimensions. Failed reload parsing retains the old
+configuration. Images, directories, PDF decoding and fill/stretch/fit/attention/
+entropy crop modes continue through libvips. Transparent images are composited
+over black into the explicitly opaque wallpaper surface.
+
+`vulkan_device` belongs in `[walle]`. It accepts `auto`, `discrete`, `integrated`,
+a device index, or a case-insensitive device-name substring. Command-line
+`--vulkan-device` overrides `WALLE_VK_DEVICE`, which overrides configuration.
+Changing the selected device requires restarting the process. Automatic selection
+never chooses a CPU Vulkan implementation.
+
+## Run and inspect
 
 ```sh
-make reveal-mask-model-gate reveal-raster-gate
-make MODE=release reveal-best-known-process-gate
-make MODE=release ANALYZE=1
-make MODE=release SANITIZER=1
+build/bin/walle --check-config -c config.ini
+build/bin/walle -c config.ini
 ```
 
-The process gate launches an isolated headless Wayland compositor, enables
-Vulkan validation, renders/presents 65 normal Walle frames, scores every R8
-mask, and requires the 91-residual canonical inventory. At fixed state 32 it
-also reads back actual presented BGRA bytes for clear and regular and requires
-at least 1% of their bytes to differ, which guards the material push-constant
-ABI. This is a Vulkan composition regression test, not an Apple
-composed-output oracle. The gate also verifies the actual layer-shell process,
-direct dma-buf presentation, clear/regular distinction, and the canonical mask
-inventory on both selectable AMD device classes.
-
-## Usage
-
-```text
-walle [-c /path/to/config.ini] [--vulkan-device SELECTOR] [--help] [--version]
-```
-
-`SELECTOR` is `auto` (the default), `discrete`, `integrated`, a Vulkan device
-index printed at startup, or a case-insensitive device-name substring. It can
-also be set globally as `vulkan_device` in the config's `[walle]` section or
-through `WALLE_VK_DEVICE`. Precedence is command line, environment, config,
-then `auto`; changing it requires restarting Walle. For example:
+A deterministic diagnostic uses the same layer-shell renderer, records61 full
+BGRA8 frames at1280×720 into an existing empty directory, then exits. Its config
+must list exactly two images. It does not need the old mask corpus or calibration
+files. Run it under an isolated compositor when testing rather than replacing a
+live wallpaper process:
 
 ```sh
-walle --vulkan-device discrete
-walle --vulkan-device 'RX 9070 XT'
+build/bin/walle -c preview.ini --preview /path/to/empty-directory
 ```
 
-For the deterministic parity diagnostic only:
+Set `WALLE_VULKAN_VALIDATION=1` to require the validation layer. Validation errors
+fail renderer operations and the process's checked teardown. Synchronization
+validation can be enabled with `VK_LAYER_VALIDATE_SYNC=1`.
 
-```text
-walle -c CONFIG --reveal-mask-process-capture EMPTY_DIRECTORY
-```
+## Resources and provenance
 
-The capture option is not a second renderer. It state-steps the same Vulkan
-path and writes its 65 top-left, row-major R8 masks after successful presents.
+Wallpapers are decoded once into opaque encoded-sRGB RGBA8. The extracted
+capture/pyramid is prepared on the GPU when the incoming image/material changes;
+it is not a fitted CPU Gaussian blur. Automatic sRGB texture conversion is
+intentionally disabled because the extracted shader expects encoded values.
+The final image is the unchanged incoming wallpaper, with no idle veil.
 
-See `config.ini` for configuration syntax. Place it in
-`$XDG_CONFIG_HOME/walle/config.ini` or pass it with `-c`. The inih parser's
-line limit is 199 characters, so keep individual path lines below that limit.
+Local attachment reads preserve the intermediate 8-bit stores between optical
+stages. Direct dma-buf presentation uses at most two images and returns to one idle
+image after the compositor releases the previous one. Compositor reservation fences are bridged to Vulkan
+sync-file semaphores; a compositor-owned image is never overwritten. Sampled
+images and transition resources are released after promotion/abort. Timing
+queries are opt-in; allocation diagnostics count owned Vulkan allocations,
+not opaque driver/compositor memory.
 
-## Research handoff
-
-`TASK.md` records the exact implementation boundary, validation receipts,
-remaining Apple setup problem, and the files future work should touch.
+[RESEARCH.md](RESEARCH.md) separates extracted mechanisms from Walle choices and
+records the qualification boundaries. The full Apple system-host extraction is
+paused, with its remaining ICC, system-color, display and lifecycle work retained
+in the research workspace. Those missing Apple services are not runtime fallbacks
+in this image-input implementation.

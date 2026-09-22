@@ -26,6 +26,7 @@ NATIVE ?= 0
 ANALYZE ?=
 SANITIZER ?=
 TRACY ?= 0
+PYTHON ?= python3
 PROFILE ::= $(if $(filter release,$(MODE)),release,debug)$(if $(filter 1,$(NATIVE)),-native)$(if $(strip $(SANITIZER)),-sanitized)$(if $(strip $(ANALYZE)),-analyzed)$(if $(filter 1,$(TRACY)),-tracy)
 
 # Directories (Use POSIX simple expansion ::=)
@@ -41,12 +42,17 @@ TARGET        ::= $(PROFILE_BIN_DIR)/walle
 ACTIVE_TARGET ::= $(BIN_DIR)/walle
 
 # Core Application Sources (Located in root)
-APP_SOURCES ::= walle.c shiro.c vulkan_renderer.c \
-	parity/liquid_glass_reveal_mask_model.c parity/liquid_glass_postguard.c \
-	parity/liquid_glass_raster.c
+APP_SOURCES ::= walle.c shiro.c vulkan_renderer.c transition.c \
+    material/material.c material/material_math.c material/applelog.c \
+    material/capture.c material/geometry.c material/scissor.c
 
-SPIRV_TARGETS ::= $(SPIRV_DIR)/maskVertex.spv $(SPIRV_DIR)/maskFragment.spv \
-	$(SPIRV_DIR)/composeVertex.spv $(SPIRV_DIR)/composeFragment.spv
+GLASS_ENTRIES ::= glassVertex revealFragment regularFragment clearFragment \
+    tintMaskFragment tintCompositeFragment wallpaperFragment
+LOCAL_ENTRIES ::= faceFragment tintGradientFragment highlightFragment productFinishFragment
+CAPTURE_ENTRIES ::= captureVertex captureCopyFragment capture4Fragment capture6Fragment capture8Fragment
+BLUR_ENTRIES ::= lg_blur_copy_base_mip lg_blur_downsample_agx2
+SPIRV_TARGETS ::= $(addprefix $(SPIRV_DIR)/,$(addsuffix .spv,$(GLASS_ENTRIES) $(CAPTURE_ENTRIES) $(BLUR_ENTRIES))) \
+    $(addprefix $(SPIRV_DIR)/,$(addsuffix _local.spv,$(LOCAL_ENTRIES)))
 SPIRV_DEPS ::= $(SPIRV_TARGETS:%=%.d)
 
 # 3. Toolchain and C23 Compliance Flags
@@ -87,7 +93,7 @@ C23_STRICT ::=\
     -std=c23 \
     -Wall -Wextra -Wpedantic \
     -Wshadow  \
-    -Wimplicit-fallthrough
+    -Wimplicit-fallthrough -Werror=implicit-function-declaration -Werror=implicit-int -Werror=incompatible-pointer-types -Werror=return-type
 
 # Usage:
 #   make                       (Debug: assertions and symbols)
@@ -111,8 +117,10 @@ else
 endif
 
 # Security Hardening
-C23_SECURITY ::=\
-    -fstack-protector-strong -D_FORTIFY_SOURCE=3
+C23_SECURITY ::=
+ifeq ($(strip $(SANITIZER)),)
+    C23_SECURITY += -fstack-protector-strong -D_FORTIFY_SOURCE=3
+endif
 
 # Static Analysis
 # Usage: make ANALYZE=1
@@ -123,7 +131,7 @@ endif
 
 SANITIZER_FLAGS ::=
 ifneq ($(strip $(SANITIZER)),)
-    SANITIZER_FLAGS ::= -fsanitize=address,undefined
+    SANITIZER_FLAGS ::= -fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer
 endif
 
 CFLAGS  ::= $(C23_STRICT) $(C23_OPTIMIZE) $(C23_SECURITY) $(SANITIZER_FLAGS)
@@ -139,7 +147,7 @@ LDFLAGS += -pthread
 DEPFLAGS ::= -MMD -MP
 
 # Base Include Paths
-CFLAGS += -I. -I$(PROTOCOL_DIR)
+CFLAGS += -I. -Imaterial -I$(PROTOCOL_DIR)
 
 # The development shell exposes Tracy's installed headers and client library
 # through its compiler wrapper. Normal builds retain no profiling overhead or
@@ -320,27 +328,28 @@ ALL_SOURCES ::= $(APP_SOURCES) $(GENERATED_SOURCES)
 OBJECTS ::= $(ALL_SOURCES:%.c=$(OBJ_DIR)/%.c.o)
 DEPS    ::= $(OBJECTS:.o=.d)
 
-.PHONY: all activate clean fuzz reveal-best-known-corpus-gate \
-	reveal-best-known-process-gate reveal-mask-model-gate reveal-raster-gate
+.PHONY: all activate clean fuzz check-config test test-sanitize
 
 all: $(TARGET) activate
 
 activate: $(TARGET) | $(BIN_DIR)
 	ln -sfn $(PROFILE)/walle $(ACTIVE_TARGET)
 
-reveal-mask-model-gate:
-	./parity/run_liquid_glass_reveal_mask_model_gate.sh
+check-config: $(TARGET)
+	$(TARGET) --check-config -c config.ini
 
-reveal-raster-gate: parity/raster_p25_selector_ceil_bits.bin \
-		artifacts/apple-float-intrinsics-r8-30556057571.bin \
-		parity/apple_fast_sqrt_correction_nibbles.bin
-	bash parity/run_liquid_glass_reveal_raster_gate.sh
+# Display-free contract checks. GPU/layer-shell checks are documented separately.
+test: $(TARGET) $(GENERATED_HEADERS)
+	$(PYTHON) tests/run_renderer_bounds.py --repo-root . --cc "$(CC)"
+	$(PYTHON) tests/run_material.py --cc "$(CC)"
+	$(PYTHON) tests/run_transition.py --repo-root . --cc "$(CC)"
+	$(PYTHON) tests/run_app.py --repo-root . --cc "$(CC)"
+	$(PYTHON) tests/check_config.py --binary "$(abspath $(TARGET))"
 
-reveal-best-known-corpus-gate: reveal-best-known-process-gate
-
-reveal-best-known-process-gate: $(TARGET) \
-		analysis/run_walle_reveal_process_capture_gate.sh
-	bash analysis/run_walle_reveal_process_capture_gate.sh $(TARGET)
+test-sanitize: $(GENERATED_HEADERS)
+	$(PYTHON) tests/run_material.py --sanitize --cc "$(CC)"
+	$(PYTHON) tests/run_transition.py --repo-root . --cc "$(CC)" --profile sanitize
+	$(PYTHON) tests/run_app.py --repo-root . --cc "$(CC)" --profile sanitize
 
 # --- Linking Rule ---
 $(TARGET): $(OBJECTS) | $(PROFILE_BIN_DIR)
@@ -358,39 +367,34 @@ $(OBJ_DIR)/%.c.o: %.c
 
 $(OBJ_DIR)/vulkan_renderer.c.o: $(SPIRV_TARGETS)
 
+# Preserve source rounding except at explicit fma/fmaf sites.
+$(OBJ_DIR)/material/%.c.o: CFLAGS += -ffp-contract=off
+$(OBJ_DIR)/transition.c.o: CFLAGS += -ffp-contract=off
+
 SLANG_COMMON ::= -target spirv -profile spirv_1_6 -std 2026 -O2 \
-	-capability vk_mem_model \
-	-emit-spirv-directly -matrix-layout-row-major -restrictive-capability-check \
-	-fp-mode precise -fvk-use-entrypoint-name -default-image-format-unknown
+    -capability vk_mem_model -emit-spirv-directly -fp-mode precise \
+    -fvk-use-c-layout -fvk-use-entrypoint-name
+SHADER_INPUTS ::= $(wildcard $(SHADER_DIR)/*.slang)
+BLUR_BINDINGS ::= -fvk-b-shift 0 0 -fvk-t-shift 16 0 -fvk-u-shift 32 0 -fvk-s-shift 48 0
 
-$(SPIRV_DIR)/maskVertex.spv: $(SHADER_DIR)/reveal_mask.slang Makefile | $(SPIRV_DIR)
-	@echo "[SLANG] $@"
-	$(SLANGC) $< -entry maskVertex -stage vertex $(SLANG_COMMON) -depfile $@.d -o $@
-	$(SPIRV_VAL) --target-env vulkan1.4 $@
+define SHADER_RULE
+$(SPIRV_DIR)/$(1).spv: $(SHADER_DIR)/$(2) $(SHADER_INPUTS) Makefile | $(SPIRV_DIR)
+	@echo "[SLANG] $$@"
+	$(SLANGC) $$< -entry $(3) -stage $(4) $(SLANG_COMMON) $(5) -depfile $$@.d -o $$@.tmp -reflection-json $$@.json
+	$(SPIRV_VAL) --target-env vulkan1.4 --scalar-block-layout $$@.tmp
+	mv $$@.tmp $$@
+endef
 
-$(SPIRV_DIR)/maskFragment.spv: $(SHADER_DIR)/reveal_mask.slang Makefile | $(SPIRV_DIR)
-	@echo "[SLANG] $@"
-	$(SLANGC) $< -entry maskFragment -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
-	$(SPIRV_VAL) --target-env vulkan1.4 $@
-
-$(SPIRV_DIR)/composeVertex.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(SPIRV_DIR)
-	@echo "[SLANG] $@"
-	$(SLANGC) $< -entry composeVertex -stage vertex $(SLANG_COMMON) -depfile $@.d -o $@
-	$(SPIRV_VAL) --target-env vulkan1.4 $@
-
-$(SPIRV_DIR)/composeFragment.spv: $(SHADER_DIR)/liquid_glass.slang Makefile | $(SPIRV_DIR)
-	@echo "[SLANG] $@"
-	$(SLANGC) $< -entry composeFragment -stage fragment $(SLANG_COMMON) -depfile $@.d -o $@
-	$(SPIRV_VAL) --target-env vulkan1.4 $@
-	$(SPIRV_DIS) $@ -o - | grep -Eq \
-		'OpMemberDecorate[[:space:]]+%ComposePush_std430[[:space:]]+0[[:space:]]+Offset[[:space:]]+0'
-	$(SPIRV_DIS) $@ -o - | grep -Eq \
-		'OpMemberDecorate[[:space:]]+%ComposePush_std430[[:space:]]+1[[:space:]]+Offset[[:space:]]+16'
+$(foreach entry,$(GLASS_ENTRIES),$(eval $(call SHADER_RULE,$(entry),walle_glass.slang,$(entry),$(if $(filter glassVertex,$(entry)),vertex,fragment),)))
+$(foreach entry,$(LOCAL_ENTRIES),$(eval $(call SHADER_RULE,$(entry)_local,walle_glass_local.slang,$(entry),fragment,)))
+$(foreach entry,$(CAPTURE_ENTRIES),$(eval $(call SHADER_RULE,$(entry),walle_capture.slang,$(entry),$(if $(filter captureVertex,$(entry)),vertex,fragment),)))
+$(eval $(call SHADER_RULE,lg_blur_copy_base_mip,lg_metal_blur.slang,lg_blur_copy_base_mip,compute,-DLG_KERNEL=1 $(BLUR_BINDINGS)))
+$(eval $(call SHADER_RULE,lg_blur_downsample_agx2,lg_metal_blur.slang,lg_blur_downsample_agx2,compute,-DLG_KERNEL=4 $(BLUR_BINDINGS)))
 
 # Cold-start correctness: on the first build no .d files exist yet, so objects
 # must explicitly depend on the generated protocol headers or a parallel build
 # races the scanner (walle.c includes wlr-layer-shell-unstable-v1.h).
-$(OBJECTS): $(GENERATED_HEADERS)
+$(OBJECTS): $(GENERATED_HEADERS) Makefile
 
 # --- Protocol Generation Rules (Grouped Targets - Make 4.3+) ---
 

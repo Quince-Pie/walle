@@ -1,0 +1,76 @@
+--- qualified/liquidglass/lg_metal_blur.slang
++++ shaders/lg_metal_blur.slang
+@@ -18,12 +18,25 @@
+ 
+ import liquidglass;
+ 
++// Vulkan transport ABI widens narrow host integers; the original kernels
++// perform their addressing in 32-bit integers. Host constructors retain the
++// native signed16 base/clamp and unsigned16 destination ranges; renderer limits
++// come from actual device image, framebuffer and viewport capabilities.
++struct VulkanBlurCopyBaseMipUniforms {
++ int2 tex_coord_base; int2 pad0; int4 tex_coord_clamp;
++ uint2 dst_0_size; uint2 dst_1_size; uint dst_1_level; uint no_base_mip;
++}
++struct VulkanBlurDownsampleUniforms {
++ uint src_level; uint dst_level; uint dst_w; uint dst_h;
++ float dst_dx; float dst_dy;
++}
++
+ #if LG_KERNEL == 1
+ 
+-Texture2D<half4> textureIn : register(t0);
+-WTexture2D<half4> baseOut : register(u1);
+-WTexture2D<half4> blurOut : register(u2);
+-ConstantBuffer<BlurCopyBaseMipUniforms> u : register(b0);
++[[vk::image_format("rgba8")]] Texture2D<half4> textureIn : register(t0);
++[[vk::image_format("rgba8")]] WTexture2D<half4> baseOut : register(u1);
++[[vk::image_format("rgba8")]] WTexture2D<half4> blurOut : register(u2);
++ConstantBuffer<VulkanBlurCopyBaseMipUniforms> u : register(b0);
+ groupshared half4 boxes[400];
+ 
+ /// Each 20x20 group covers a 32x32 tile of mip 0 plus a 4-texel apron (as 2x2 boxes), and
+@@ -68,10 +81,10 @@
+ 
+ #elif LG_KERNEL == 2
+ 
+-Texture2D<half4> textureIn : register(t0);
+-WTexture2D<half4> textureOut : register(u1);
++[[vk::image_format("rgba8")]] Texture2D<half4> textureIn : register(t0);
++[[vk::image_format("rgba8")]] WTexture2D<half4> textureOut : register(u1);
+ SamplerState boxSampler : register(s0);
+-ConstantBuffer<BlurDownsampleUniforms> u : register(b0);
++ConstantBuffer<VulkanBlurDownsampleUniforms> u : register(b0);
+ groupshared half4 boxes[720];
+ 
+ half4 box(float2 uv)
+@@ -145,10 +158,10 @@
+ // tile of level dst_level from a 20x36 cache of 2x2 boxes (the tile plus a 2-texel apron), filled in two
+ // phases, and runs the 13-tap diamond twice per thread (rows tid.y and tid.y + 16). A tile smaller than
+ // 16x32 fills only its valid size plus the apron and writes only texels inside the level.
+-Texture2D<half4> textureIn : register(t0);
+-WTexture2D<half4> textureOut : register(u1);
++[[vk::image_format("rgba8")]] Texture2D<half4> textureIn : register(t0);
++[[vk::image_format("rgba8")]] WTexture2D<half4> textureOut : register(u1);
+ SamplerState boxSampler : register(s0);        // linear filtering, nearest mip, clamp to edge (0x7bff0000082a49)
+-ConstantBuffer<BlurDownsampleUniforms> u : register(b0);
++ConstantBuffer<VulkanBlurDownsampleUniforms> u : register(b0);
+ groupshared half4 cache[720];
+ 
+ half4 boxAt(float2 uv)
+--- qualified/liquidglass/lg_sdf.slang
++++ shaders/lg_sdf.slang
+@@ -151,7 +151,12 @@
+ /// Coverage of the shape from its distance: a one-pixel antialiased edge.
+ public T sdfCoverage<T : __BuiltinFloatingPointType>(T dist, T alpha)
+ {
+-    let fw = max(fwidth(dist), T(0.0001f));
++    // SPIR-V derivatives require float32. Native half fwidth lowers to
++    // half-result derivatives followed by a half abs/add (retained AGX
++    // G.code.pretty @0xf200..0xf208). Keep both narrowing points.
++    let dx = T(ddx(dist.toFloat()));
++    let dy = T(ddy(dist.toFloat()));
++    let fw = max(abs(dx) + abs(dy), T(0.0001f));
+     return T(saturate((-dist / fw).toFloat() + 0.5f)) * alpha;
+ }
+ 

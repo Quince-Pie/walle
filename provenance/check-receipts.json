@@ -1,0 +1,38 @@
+{
+  "release_unit_log": {
+    "path": "/tmp/walle-work/verification/delivery-release-tests.txt",
+    "sha256": "d29b34ed9a327ba3fafdc58e9f1e86663f3abe0bef0b1de5b75782d77bd526c8"
+  },
+  "cpu_sanitizer_log": {
+    "path": "/tmp/walle-work/verification/final-cpu-sanitizer.txt",
+    "sha256": "411a3c0299b159d2417a4a0e3758e8e1c56d1970e4e6c103b40d6c07396221a8"
+  },
+  "analyzer_log": {
+    "path": "/tmp/walle-work/verification/delivery-analyzer.txt",
+    "sha256": "20c26c4b88b1a6b8e4eeb9f1c11973e405e8f37eea5a792205ff56530faccdb4"
+  },
+  "sanitizer_build_log": {
+    "path": "/tmp/walle-work/verification/delivery-sanitizer-build.txt",
+    "sha256": "1b4259339af122325c4bc3c8c02d9c128c7b874fd1ec922b120a6485dee2abc2"
+  },
+  "nix_build_log": {
+    "path": "/tmp/walle-work/verification/nix-package-build.txt",
+    "sha256": "7377284310e9b8e6a592070847ab6a1e8a9b60eb692f3736f65786b5e4c79a1e"
+  },
+  "nix_check_log": {
+    "path": "/tmp/walle-work/verification/nix-package-checks.txt",
+    "sha256": "4c57cd66af765c29d2f407d62fdfa37030354db424836b32875ae3f9f38418fe"
+  },
+  "driver_enumeration_leak_control": {
+    "path": "/tmp/walle-work/verification/vulkan-enumeration-asan.txt",
+    "sha256": "38676b455126e093fc40cde606577b798b8a66a49df0aa3fc25e6af55f2c93a8"
+  },
+  "radeon_enumeration_leak_control": {
+    "path": "/tmp/walle-work/verification/vulkan-enumeration-radeon-asan.txt",
+    "sha256": "db7522f300e3f628d18aa42a418c26015ceb3407c680d188f62e311cdbbbdcc6"
+  },
+  "radeon_pinned_control": {
+    "path": "/tmp/walle-work/verification/vulkan-enumeration-radeon-pinned-asan.txt",
+    "sha256": "f1619ad485a017b9a8aec7d4a541caef435693deec4f8bb35394a898c15e5a00"
+  }
+}

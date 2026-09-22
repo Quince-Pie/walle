@@ -1,0 +1,30 @@
+{
+  "frozen_base_unchanged": true,
+  "files": {
+    "README.md": "72015b2b938591e8558adf62065122f0628b095eba143f23fc1b904196855b33",
+    "bounds_verification.json": "3d0969342fac726a3ad6f9e5a63db18a47f89589b344ae66c596f4cff5d7e899",
+    "capture.c": "7e6f2c00459bf292e7414fa58a7b35a70f3811305072229d9f568ea53756dba0",
+    "capture.h": "a2a86059685d7373f1e37f063b3efc0b9af55aefe1ffd0dbbc14d231ea5cee61",
+    "capture_verification.json": "8500de2f458d52e8db6dd38bc2a8997eb54b07d69bbff8437fe9ddab1a93233c",
+    "check_bounds.py": "97c1855be0e4963ebad078c633d74472e156a4f71b5e1569bd8782a01ad2fc7f",
+    "check_original.py": "c94fc25837ad72aa1087d3a6f3a3bea9f3284ea28059fea87e3930c9831eec71",
+    "libcapture.so": "72deea97889bc592171f81b534112fff2672898c0e2f989954937c9f13c8f7f9"
+  },
+  "results": {
+    "bounds_verification.json": {
+      "capture_matches": 69,
+      "pyramid_matches": 232,
+      "capture_repr_rejections": 5,
+      "pyramid_repr_rejections": 251,
+      "invalid_zeroed_cases": 8,
+      "mismatches": 0,
+      "candidate_sha256": "7e6f2c00459bf292e7414fa58a7b35a70f3811305072229d9f568ea53756dba0"
+    },
+    "capture_verification.json": {
+      "capture_cases": 236,
+      "pyramid_cases": 1416,
+      "mismatches": 0,
+      "capture_c_sha256": "7e6f2c00459bf292e7414fa58a7b35a70f3811305072229d9f568ea53756dba0"
+    }
+  }
+}

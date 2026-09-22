@@ -1,0 +1,154 @@
+{
+  "all_parameters_identical": true,
+  "entries": [
+    {
+      "entry": "captureVertex",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "lg_blur_downsample_agx2",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 6,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "faceFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "highlightFragment_local",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "capture8Fragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 16,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "tintGradientFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "tintCompositeFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "faceFragment_local",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "regularFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 8,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "highlightFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "tintMaskFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "productFinishFragment_local",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "capture6Fragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "tintGradientFragment_local",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "revealFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "captureCopyFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "wallpaperFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "lg_blur_copy_base_mip",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 3,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "clearFragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 7,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "glassVertex",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 0,
+      "memory_model": true,
+      "no_contraction": 0
+    },
+    {
+      "entry": "capture4Fragment",
+      "reflection_parameters_identical": true,
+      "explicit_fma": 4,
+      "memory_model": true,
+      "no_contraction": 0
+    }
+  ],
+  "derivative_evidence": "regularFragment.spvasm lines982..988: OpDPdx float -> FConvert half; OpDPdy float -> FConvert half; FAbs half each; FAdd half",
+  "scope": "Static ABI/operation preservation only; matched device controls separately."
+}

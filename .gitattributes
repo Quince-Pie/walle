@@ -1,1 +1,7 @@
 *.bin binary
+
+# Retain generated CSV endings and the context lines of source patches.
+provenance/performance.csv whitespace=cr-at-eol
+provenance/shader-source_port.diff -whitespace
+# Keep the extracted shader's terminal blank line without changing its hash.
+shaders/lg_precision.slang whitespace=-blank-at-eof

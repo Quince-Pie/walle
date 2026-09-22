@@ -1,0 +1,23 @@
+{
+  "contract": "regular/clear; light/dark/portal auto; byte RGB(A) tint; sweep/lens",
+  "runtime_revision": "013f6596fd422099b1052da0fd5257e6c681dbeaeac978e1c394b3821e828201",
+  "builds": [
+    {
+      "path": "/tmp/walle/build/bin/release/walle",
+      "sha256": "979a9d1337c32dc5525b896ea80b054dde2438519283bfa552828502080a64b2"
+    },
+    {
+      "path": "/nix/store/jgyqbpnjsdb9d6jf3j68n9m4n5bmb4gg-walle-0.0.1/bin/walle",
+      "sha256": "cbda3ef230b1e9eabb0cb98f4e56d1f8bf998701bce48ea892118c799d77e24a"
+    }
+  ],
+  "package_check_phase": "40 renderer bounds,32 material fixtures,28800 transition frames,1000 Fortify controls,74 app assertions,11 CLI cases passed",
+  "package_binary_identical_to_smoke_tested_binary": true,
+  "logs": {
+    "build": "/tmp/walle-work/verification/delivered-tree-build-tests.txt",
+    "nix": "/tmp/walle-work/verification/delivered-nix-build.txt",
+    "nix_checks": "/tmp/walle-work/verification/delivered-nix-checks.txt"
+  },
+  "live_deployment": false,
+  "broader_extraction_goal": "paused by user; open work retained in /tmp/extract-liquidglass/work/continue/TABLED.md"
+}

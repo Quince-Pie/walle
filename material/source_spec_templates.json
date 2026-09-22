@@ -1,0 +1,840 @@
+{
+  "scope": "Original SpecV1 constructor definitions specialized to public subvariant0, active context, source tuning defaults; size maps remain unevaluated. This is not a table of rendered/material outputs.",
+  "templates": {
+    "regular_light": {
+      "backdropScale": 0.25,
+      "shadow": {
+        "normalizedHeight": 0.4,
+        "normalizedAmount": 0.625,
+        "blurRadius": 40.0,
+        "opacity": {
+          "inputRange": [
+            48.0,
+            160.0
+          ],
+          "outputRange": [
+            0.25,
+            0.5
+          ],
+          "reverseOutput": 1,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        },
+        "shadowRadius": 24.0,
+        "offset": [
+          0.0,
+          8.0
+        ],
+        "ycc": {
+          "black": 0.0,
+          "white": 1.0,
+          "saturation": 1.7999999523162842,
+          "normalFill": [
+            0.0,
+            0.0,
+            0.0,
+            0.11999999731779099
+          ],
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "vibrancyContribution": {
+          "inputRange": [
+            64.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            1.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        }
+      },
+      "blur": {
+        "opacity": 1.0,
+        "opacities": [
+          1.0,
+          0.5,
+          0.5,
+          1.0,
+          1.0
+        ],
+        "distances": [
+          {
+            "value": -0.5,
+            "kind": 1
+          },
+          {
+            "value": -1.0,
+            "kind": 0
+          },
+          {
+            "value": 0.0,
+            "kind": 0
+          },
+          {
+            "value": 0.0,
+            "kind": 0
+          },
+          {
+            "value": 2.0,
+            "kind": 2
+          }
+        ],
+        "blurRadius": {
+          "inputRange": [
+            48.0,
+            160.0
+          ],
+          "outputRange": [
+            1.3333333333333333,
+            4.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        }
+      },
+      "refraction": {
+        "normalizedInnerHeight": 0.25,
+        "innerHeightRange": [
+          0.0,
+          20.0
+        ],
+        "normalizedInnerAmount": -0.8,
+        "innerAmountRange": [
+          -60.0,
+          Infinity
+        ],
+        "normalizedOuterHeight": 0.125,
+        "normalizedOuterAmount": 0.2,
+        "outerOpacity": 0.30000001192092896
+      },
+      "edgeBleed": {
+        "opacity": {
+          "inputRange": [
+            64.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            0.5
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        },
+        "normalizedHeight": 0.35,
+        "normalizedAmount": 0.35,
+        "normalizedBlurRadius": 0.7,
+        "maxBlurRadius": 160.0,
+        "ycc": {
+          "black": 0.8999999761581421,
+          "white": 1.0,
+          "saturation": 1.2000000476837158,
+          "normalFill": null,
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "useDarkenBlending": 1
+      },
+      "faceEffect": {
+        "opacity": 1.0,
+        "ycc": {
+          "black": 0.5,
+          "white": 1.0299999713897705,
+          "saturation": 1.0,
+          "normalFill": [
+            1.0,
+            1.0,
+            1.0,
+            0.4000000059604645
+          ],
+          "dodgeFill": null,
+          "burnFill": null
+        }
+      },
+      "highlights": {
+        "white": 1.2000000476837158,
+        "keyOpacity": 1.0,
+        "fillOpacity": 1.0,
+        "keyHeight": {
+          "tag": 0,
+          "const": 1.0
+        },
+        "fillHeight": {
+          "tag": 0,
+          "const": 1.0
+        },
+        "keyYCC": {
+          "black": 0.8999999761581421,
+          "white": 1.0,
+          "saturation": 1.5,
+          "normalFill": null,
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "fillYCC": {
+          "black": 0.8999999761581421,
+          "white": 1.0,
+          "saturation": 1.5,
+          "normalFill": null,
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "keyOffset": 0.0,
+        "fillOffset": 0.0,
+        "spread": {
+          "tag": 1,
+          "clm": {
+            "inputRange": [
+              166.0,
+              201.3
+            ],
+            "outputRange": [
+              1.5707963267948966,
+              2.792526803190927
+            ],
+            "reverseOutput": 0,
+            "upperMaxInputResult": null,
+            "upperMaxInputTransition": null
+          }
+        },
+        "amount": 0.5,
+        "curvature": 0.7
+      }
+    },
+    "regular_dark": {
+      "backdropScale": 0.25,
+      "shadow": {
+        "normalizedHeight": 0.4,
+        "normalizedAmount": 0.625,
+        "blurRadius": 40.0,
+        "opacity": {
+          "inputRange": [
+            48.0,
+            160.0
+          ],
+          "outputRange": [
+            0.25,
+            0.4000000059604645
+          ],
+          "reverseOutput": 1,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        },
+        "shadowRadius": 24.0,
+        "offset": [
+          0.0,
+          8.0
+        ],
+        "ycc": {
+          "black": 0.0,
+          "white": 0.5,
+          "saturation": 1.0,
+          "normalFill": null,
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "vibrancyContribution": {
+          "inputRange": [
+            64.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            1.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        }
+      },
+      "blur": {
+        "opacity": 1.0,
+        "opacities": [
+          1.0,
+          0.5,
+          0.5,
+          1.0,
+          1.0
+        ],
+        "distances": [
+          {
+            "value": -0.5,
+            "kind": 1
+          },
+          {
+            "value": -1.0,
+            "kind": 0
+          },
+          {
+            "value": 0.0,
+            "kind": 0
+          },
+          {
+            "value": 0.0,
+            "kind": 0
+          },
+          {
+            "value": 2.0,
+            "kind": 2
+          }
+        ],
+        "blurRadius": {
+          "inputRange": [
+            48.0,
+            160.0
+          ],
+          "outputRange": [
+            1.3333333333333333,
+            4.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        }
+      },
+      "refraction": {
+        "normalizedInnerHeight": 0.25,
+        "innerHeightRange": [
+          0.0,
+          20.0
+        ],
+        "normalizedInnerAmount": -0.8,
+        "innerAmountRange": [
+          -60.0,
+          Infinity
+        ],
+        "normalizedOuterHeight": 0.125,
+        "normalizedOuterAmount": 0.2,
+        "outerOpacity": 0.30000001192092896
+      },
+      "edgeBleed": {
+        "opacity": {
+          "inputRange": [
+            64.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            0.800000011920929
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        },
+        "normalizedHeight": 0.35,
+        "normalizedAmount": 0.35,
+        "normalizedBlurRadius": 0.7,
+        "maxBlurRadius": 160.0,
+        "ycc": {
+          "black": 0.0,
+          "white": 0.5,
+          "saturation": 1.0,
+          "normalFill": null,
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "useDarkenBlending": 0
+      },
+      "faceEffect": {
+        "opacity": 1.0,
+        "ycc": {
+          "black": 0.20000000298023224,
+          "white": 0.6000000238418579,
+          "saturation": 1.0,
+          "normalFill": [
+            0.0,
+            0.0,
+            0.0,
+            0.4000000059604645
+          ],
+          "dodgeFill": null,
+          "burnFill": null
+        }
+      },
+      "highlights": {
+        "white": 1.2000000476837158,
+        "keyOpacity": 1.0,
+        "fillOpacity": 1.0,
+        "keyHeight": {
+          "tag": 0,
+          "const": 1.0
+        },
+        "fillHeight": {
+          "tag": 0,
+          "const": 1.0
+        },
+        "keyYCC": {
+          "black": 0.05999999865889549,
+          "white": 0.6000000238418579,
+          "saturation": 1.2000000476837158,
+          "normalFill": null,
+          "dodgeFill": [
+            0.3185468316078186,
+            0.3185468316078186,
+            0.3185468316078186,
+            1.0
+          ],
+          "burnFill": null
+        },
+        "fillYCC": {
+          "black": 0.05999999865889549,
+          "white": 0.6000000238418579,
+          "saturation": 1.2000000476837158,
+          "normalFill": null,
+          "dodgeFill": [
+            0.3185468316078186,
+            0.3185468316078186,
+            0.3185468316078186,
+            1.0
+          ],
+          "burnFill": null
+        },
+        "keyOffset": 0.0,
+        "fillOffset": 0.0,
+        "spread": {
+          "tag": 1,
+          "clm": {
+            "inputRange": [
+              166.0,
+              201.3
+            ],
+            "outputRange": [
+              1.5707963267948966,
+              2.792526803190927
+            ],
+            "reverseOutput": 0,
+            "upperMaxInputResult": null,
+            "upperMaxInputTransition": null
+          }
+        },
+        "amount": 0.5,
+        "curvature": 0.7
+      }
+    },
+    "clear_light": {
+      "backdropScale": 0.5,
+      "shadow": {
+        "normalizedHeight": 0.4,
+        "normalizedAmount": 0.625,
+        "blurRadius": 40.0,
+        "opacity": {
+          "inputRange": [
+            48.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            0.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        },
+        "shadowRadius": 24.0,
+        "offset": [
+          0.0,
+          8.0
+        ],
+        "ycc": {
+          "black": 0.0,
+          "white": 1.0,
+          "saturation": 1.2000000476837158,
+          "normalFill": [
+            0.0,
+            0.0,
+            0.0,
+            0.10000000149011612
+          ],
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "vibrancyContribution": {
+          "inputRange": [
+            64.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            0.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        }
+      },
+      "blur": {
+        "opacity": 1.0,
+        "opacities": [
+          1.0,
+          0.5,
+          0.5,
+          1.0,
+          1.0
+        ],
+        "distances": [
+          {
+            "value": -0.5,
+            "kind": 1
+          },
+          {
+            "value": -1.0,
+            "kind": 0
+          },
+          {
+            "value": 0.0,
+            "kind": 0
+          },
+          {
+            "value": 0.0,
+            "kind": 0
+          },
+          {
+            "value": 2.0,
+            "kind": 2
+          }
+        ],
+        "blurRadius": {
+          "inputRange": [
+            48.0,
+            120.0
+          ],
+          "outputRange": [
+            1.0,
+            1.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        }
+      },
+      "refraction": {
+        "normalizedInnerHeight": 0.36,
+        "innerHeightRange": [
+          0.0,
+          20.0
+        ],
+        "normalizedInnerAmount": -1.0,
+        "innerAmountRange": [
+          -60.0,
+          Infinity
+        ],
+        "normalizedOuterHeight": 0.125,
+        "normalizedOuterAmount": 0.2,
+        "outerOpacity": 0.0
+      },
+      "edgeBleed": {
+        "opacity": {
+          "inputRange": [
+            64.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            0.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        },
+        "normalizedHeight": 0.35,
+        "normalizedAmount": 0.35,
+        "normalizedBlurRadius": 0.35,
+        "maxBlurRadius": 120.0,
+        "ycc": {
+          "black": 0.75,
+          "white": 1.0,
+          "saturation": 1.2000000476837158,
+          "normalFill": null,
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "useDarkenBlending": 1
+      },
+      "faceEffect": {
+        "opacity": 1.0,
+        "ycc": {
+          "black": 0.07500000298023224,
+          "white": 1.149999976158142,
+          "saturation": 1.059999942779541,
+          "normalFill": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+          ],
+          "dodgeFill": null,
+          "burnFill": null
+        }
+      },
+      "highlights": {
+        "white": 1.2000000476837158,
+        "keyOpacity": 1.0,
+        "fillOpacity": 1.0,
+        "keyHeight": {
+          "tag": 0,
+          "const": 1.0
+        },
+        "fillHeight": {
+          "tag": 0,
+          "const": 1.0
+        },
+        "keyYCC": {
+          "black": 0.8999999761581421,
+          "white": 1.0,
+          "saturation": 1.5,
+          "normalFill": null,
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "fillYCC": {
+          "black": 0.8999999761581421,
+          "white": 1.0,
+          "saturation": 1.5,
+          "normalFill": null,
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "keyOffset": 0.0,
+        "fillOffset": 0.0,
+        "spread": {
+          "tag": 1,
+          "clm": {
+            "inputRange": [
+              166.0,
+              201.3
+            ],
+            "outputRange": [
+              1.5707963267948966,
+              2.792526803190927
+            ],
+            "reverseOutput": 0,
+            "upperMaxInputResult": null,
+            "upperMaxInputTransition": null
+          }
+        },
+        "amount": 0.5,
+        "curvature": 0.7
+      }
+    },
+    "clear_dark": {
+      "backdropScale": 0.5,
+      "shadow": {
+        "normalizedHeight": 0.4,
+        "normalizedAmount": 0.625,
+        "blurRadius": 40.0,
+        "opacity": {
+          "inputRange": [
+            48.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            0.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        },
+        "shadowRadius": 24.0,
+        "offset": [
+          0.0,
+          8.0
+        ],
+        "ycc": {
+          "black": 0.0,
+          "white": 1.0,
+          "saturation": 1.2000000476837158,
+          "normalFill": [
+            0.0,
+            0.0,
+            0.0,
+            0.10000000149011612
+          ],
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "vibrancyContribution": {
+          "inputRange": [
+            64.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            0.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        }
+      },
+      "blur": {
+        "opacity": 1.0,
+        "opacities": [
+          1.0,
+          0.5,
+          0.5,
+          1.0,
+          1.0
+        ],
+        "distances": [
+          {
+            "value": -0.5,
+            "kind": 1
+          },
+          {
+            "value": -1.0,
+            "kind": 0
+          },
+          {
+            "value": 0.0,
+            "kind": 0
+          },
+          {
+            "value": 0.0,
+            "kind": 0
+          },
+          {
+            "value": 2.0,
+            "kind": 2
+          }
+        ],
+        "blurRadius": {
+          "inputRange": [
+            48.0,
+            120.0
+          ],
+          "outputRange": [
+            1.0,
+            1.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        }
+      },
+      "refraction": {
+        "normalizedInnerHeight": 0.36,
+        "innerHeightRange": [
+          0.0,
+          20.0
+        ],
+        "normalizedInnerAmount": -1.0,
+        "innerAmountRange": [
+          -60.0,
+          Infinity
+        ],
+        "normalizedOuterHeight": 0.125,
+        "normalizedOuterAmount": 0.2,
+        "outerOpacity": 0.0
+      },
+      "edgeBleed": {
+        "opacity": {
+          "inputRange": [
+            64.0,
+            160.0
+          ],
+          "outputRange": [
+            0.0,
+            0.0
+          ],
+          "reverseOutput": 0,
+          "upperMaxInputResult": null,
+          "upperMaxInputTransition": null
+        },
+        "normalizedHeight": 0.35,
+        "normalizedAmount": 0.35,
+        "normalizedBlurRadius": 0.35,
+        "maxBlurRadius": 120.0,
+        "ycc": {
+          "black": 0.75,
+          "white": 1.0,
+          "saturation": 1.2000000476837158,
+          "normalFill": null,
+          "dodgeFill": null,
+          "burnFill": null
+        },
+        "useDarkenBlending": 1
+      },
+      "faceEffect": {
+        "opacity": 1.0,
+        "ycc": {
+          "black": 0.07500000298023224,
+          "white": 1.149999976158142,
+          "saturation": 1.059999942779541,
+          "normalFill": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+          ],
+          "dodgeFill": null,
+          "burnFill": null
+        }
+      },
+      "highlights": {
+        "white": 1.2000000476837158,
+        "keyOpacity": 1.0,
+        "fillOpacity": 1.0,
+        "keyHeight": {
+          "tag": 0,
+          "const": 1.0
+        },
+        "fillHeight": {
+          "tag": 0,
+          "const": 1.0
+        },
+        "keyYCC": {
+          "black": 0.05999999865889549,
+          "white": 0.6000000238418579,
+          "saturation": 1.2000000476837158,
+          "normalFill": null,
+          "dodgeFill": [
+            0.3185468316078186,
+            0.3185468316078186,
+            0.3185468316078186,
+            1.0
+          ],
+          "burnFill": null
+        },
+        "fillYCC": {
+          "black": 0.05999999865889549,
+          "white": 0.6000000238418579,
+          "saturation": 1.2000000476837158,
+          "normalFill": null,
+          "dodgeFill": [
+            0.3185468316078186,
+            0.3185468316078186,
+            0.3185468316078186,
+            1.0
+          ],
+          "burnFill": null
+        },
+        "keyOffset": 0.0,
+        "fillOffset": 0.0,
+        "spread": {
+          "tag": 1,
+          "clm": {
+            "inputRange": [
+              166.0,
+              201.3
+            ],
+            "outputRange": [
+              1.5707963267948966,
+              2.792526803190927
+            ],
+            "reverseOutput": 0,
+            "upperMaxInputResult": null,
+            "upperMaxInputTransition": null
+          }
+        },
+        "amount": 0.5,
+        "curvature": 0.7
+      }
+    }
+  }
+}

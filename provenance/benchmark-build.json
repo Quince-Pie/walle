@@ -1,0 +1,502 @@
+{
+  "repo_root": "/tmp/walle-work/assembled",
+  "commands": [
+    [
+      "make",
+      "-C",
+      "/tmp/walle-work/assembled",
+      "MODE=release",
+      "-j2",
+      "build/shaders/glassVertex.spv",
+      "build/shaders/revealFragment.spv",
+      "build/shaders/regularFragment.spv",
+      "build/shaders/clearFragment.spv",
+      "build/shaders/faceFragment_local.spv",
+      "build/shaders/tintMaskFragment.spv",
+      "build/shaders/tintGradientFragment_local.spv",
+      "build/shaders/tintCompositeFragment.spv",
+      "build/shaders/highlightFragment_local.spv",
+      "build/shaders/productFinishFragment_local.spv",
+      "build/shaders/wallpaperFragment.spv",
+      "build/shaders/captureCopyFragment.spv",
+      "build/shaders/captureVertex.spv",
+      "build/shaders/capture4Fragment.spv",
+      "build/shaders/capture6Fragment.spv",
+      "build/shaders/capture8Fragment.spv",
+      "build/shaders/lg_blur_copy_base_mip.spv",
+      "build/shaders/lg_blur_downsample_agx2.spv",
+      "protocols/linux-dmabuf-v1.c",
+      "protocols/linux-dmabuf-v1.h"
+    ],
+    [
+      "gcc",
+      "-std=c23",
+      "-O3",
+      "-DNDEBUG",
+      "-flto=auto",
+      "-fno-plt",
+      "-ffp-contract=off",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wshadow",
+      "-Wimplicit-fallthrough",
+      "-Werror",
+      "-fstack-protector-strong",
+      "-D_FORTIFY_SOURCE=3",
+      "-I/tmp/walle-work/benchmark-final/build/source",
+      "-I/tmp/walle-work/benchmark-final/build/source/material",
+      "/tmp/walle-work/assembled/tools/benchmark/benchmark.c",
+      "/tmp/walle-work/benchmark-final/build/source/transition.c",
+      "/tmp/walle-work/benchmark-final/build/source/material/material.c",
+      "/tmp/walle-work/benchmark-final/build/source/material/material_math.c",
+      "/tmp/walle-work/benchmark-final/build/source/material/applelog.c",
+      "/tmp/walle-work/benchmark-final/build/source/material/capture.c",
+      "/tmp/walle-work/benchmark-final/build/source/material/geometry.c",
+      "/tmp/walle-work/benchmark-final/build/source/material/scissor.c",
+      "/tmp/walle-work/benchmark-final/build/source/protocols/linux-dmabuf-v1.c",
+      "-o",
+      "/tmp/walle-work/benchmark-final/build/benchmark",
+      "-I/nix/store/jl06f30bsw7ya4qvlpawjqx23x52hm62-libdrm-2.4.133-dev/include",
+      "-I/nix/store/jl06f30bsw7ya4qvlpawjqx23x52hm62-libdrm-2.4.133-dev/include/libdrm",
+      "-I/nix/store/57ssz1lf4v7brl30xxqm37apdna6b89k-wayland-1.25.0-dev/include",
+      "-I/nix/store/m0wrp2r1l8qcif5r6ni1y4h92ihnfr51-vulkan-headers-1.4.341.0/include",
+      "-L/nix/store/3rjzxgsnsb6qq6xazc8lc3m39vkf0jra-libdrm-2.4.133/lib",
+      "-L/nix/store/clvzgv5kqq953s4azqhkg3ddgpvgl9wc-wayland-1.25.0/lib",
+      "-L/nix/store/y5a34h6vgvsc1pmfmvcqfcvxy2grg3hx-vulkan-loader-1.4.341.0/lib",
+      "-lvulkan",
+      "-lwayland-client",
+      "-lm",
+      "-ldrm",
+      "-lm"
+    ],
+    [
+      "gcc",
+      "-std=c23",
+      "-O3",
+      "-DNDEBUG",
+      "-flto=auto",
+      "-fno-plt",
+      "-ffp-contract=off",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wshadow",
+      "-Wimplicit-fallthrough",
+      "-Werror",
+      "-fstack-protector-strong",
+      "-D_FORTIFY_SOURCE=3",
+      "/tmp/walle-work/assembled/tools/benchmark/prepare.c",
+      "-o",
+      "/tmp/walle-work/benchmark-final/build/prepare",
+      "-I/nix/store/93rh4451ylcpadchfi6vsvckcrrkrm6n-vips-8.18.3-dev/include",
+      "-I/nix/store/a4cs5wyw21yhw4c81827b85cdy42vlw7-glib-2.88.1-dev/include",
+      "-I/nix/store/a4cs5wyw21yhw4c81827b85cdy42vlw7-glib-2.88.1-dev/include/glib-2.0",
+      "-I/nix/store/7dl2py4dnp4ffj92r1lq0i54ik1v8kzn-glib-2.88.1/lib/glib-2.0/include",
+      "-L/nix/store/ay6g2lhvw9vda3wrqmd8i7i13dngk52x-vips-8.18.3/lib",
+      "-L/nix/store/7dl2py4dnp4ffj92r1lq0i54ik1v8kzn-glib-2.88.1/lib",
+      "-lvips",
+      "-lgio-2.0",
+      "-lgobject-2.0",
+      "-lglib-2.0"
+    ]
+  ],
+  "compiler_path": "/nix/store/kyvsljnidcjz344sz30kqmp3c7jz5r3c-gcc-wrapper-15.2.0/bin/gcc",
+  "compiler_version": "gcc (GCC) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "shader_compiler_path": "/nix/store/6j9ddimwhqibmjb9hlpysja33xg2x6fz-shader-slang-2026.12/bin/slangc",
+  "shader_compiler_version": "v2026.12-nixpkgs\n",
+  "package_versions": "1.4.341\n1.25.0\n2.4.133\n8.18.3\n",
+  "binary": {
+    "path": "/tmp/walle-work/benchmark-final/build/benchmark",
+    "sha256": "7c4454e2e6f163ed9b92a3a563fb26e97562ae78aae5e8ef54366a2803fdba3c",
+    "size": 378928
+  },
+  "preparation_binary": {
+    "path": "/tmp/walle-work/benchmark-final/build/prepare",
+    "sha256": "0bc43c9bedfc63483cf739dea5f6ff28b3b3810a8e2578483e1d7d36660deb6a",
+    "size": 16920
+  },
+  "sources": [
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/capture4Fragment.spv",
+      "sha256": "7cb126a6523d6a31979bbff0b3b4f92311a1f905a714272942db60924afe2fa9",
+      "size": 3004
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/capture6Fragment.spv",
+      "sha256": "f81b605d514c1cfb0ed73c9366a4b2e9dc77246227864bcad54c4d9094f6a51a",
+      "size": 3020
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/capture8Fragment.spv",
+      "sha256": "c6b9df47d9ab5574783a74720b3cc696df73d661060158b3b0a07c95534fac7e",
+      "size": 4768
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/captureCopyFragment.spv",
+      "sha256": "4106946baf7386ffca956abfcca1a50c5f0c0e1d0615135e6d2fa7de21ab493f",
+      "size": 1352
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/captureVertex.spv",
+      "sha256": "8e531c53f2d3b74a94adb042c9ac8e26cf6754f1b5386644c055c8708733d76d",
+      "size": 1216
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/clearFragment.spv",
+      "sha256": "f3d3139279c2ac3e66311d595a4814997860fe532dcf72d9b85d0291ca534ac8",
+      "size": 43372
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/faceFragment_local.spv",
+      "sha256": "243fc5556e6ccb5049dbed6e05c3d14eef0486a43aa6d6632ed86d3c541954a7",
+      "size": 7020
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/glassVertex.spv",
+      "sha256": "92020621e8cc982b72b273d5e43e0a2d8251e16a6a590a79137887323a5beeb4",
+      "size": 1480
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/highlightFragment_local.spv",
+      "sha256": "cae1ec43b24fc72ab0b38e48b078492a67787f29bb8e35c4f15161dbab2496e7",
+      "size": 21716
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/lg_blur_copy_base_mip.spv",
+      "sha256": "96a3295085f7d9cd1a98197dfab72c174f022bb81e53c0cf24bdfcedb433a754",
+      "size": 6076
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/lg_blur_downsample_agx2.spv",
+      "sha256": "2e55ee7593b7c7758516e23e41c85359ad6c150b07cead8f84c3a421ab7e8fef",
+      "size": 7684
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/productFinishFragment_local.spv",
+      "sha256": "0e3e0d9e2d0d36cf9bfd2acd24a4b3354397d09bd1ad61e81a1aceb0f2fd6004",
+      "size": 15068
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/regularFragment.spv",
+      "sha256": "8c3563e74a17a1011948f40fce076579f6628c14e06e7ce64db7383af48869f3",
+      "size": 46068
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/revealFragment.spv",
+      "sha256": "0727a2cd8972a1ce6bb32a16ba1942a2046da5af7f99abff43cdfc7f8dc2b407",
+      "size": 14628
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/tintCompositeFragment.spv",
+      "sha256": "bc727a81c3ec1a9235093a9103e35313d1be6c9defdb8b1f351b9efba567d520",
+      "size": 1052
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/tintGradientFragment_local.spv",
+      "sha256": "f58cb0e178eece55b76253212ead3f29cb6f930e451751d98b33c8a88a8e6a02",
+      "size": 17324
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/tintMaskFragment.spv",
+      "sha256": "4c0f893bf95a46bd4d9accdab87d4e83f3908908180ffc70257807cc8c89bc04",
+      "size": 14192
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/build/shaders/wallpaperFragment.spv",
+      "sha256": "a8d544e92229c9045ce05e7a106af11470996ca9035d998f19e3c56855e9df74",
+      "size": 852
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/applelog.c",
+      "sha256": "d0cc440090d416e6f4723721d217055076329ce046e76dca5ef867e324866e50",
+      "size": 3837
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/applelog_tables.h",
+      "sha256": "6a7b59c66e524f21d0975d6cc581ef5d2a677f30477fc22afc6980143e68571d",
+      "size": 13028
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/capture.c",
+      "sha256": "3d095f68ac0bef083a1ed71a0ac99c79e44d28d0a3f66020efabd9c75d10d396",
+      "size": 8937
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/capture.h",
+      "sha256": "784a1fcd5fbeb39ea0ad3589131a57de932ef2e875bfd8685a2db42a79c38264",
+      "size": 2222
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/geometry.c",
+      "sha256": "e74ec9a20f8a73fb72ae3bff93b2cdfc85eb4115c9c8f8e3ca685bc19b7916d1",
+      "size": 10292
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/geometry.h",
+      "sha256": "a0c0687ad2ecdbe1674bc12ca8bf70b7859b1c902f2d636e1c39a831b4cfd9f0",
+      "size": 2612
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/material.c",
+      "sha256": "12a45109242316cd9f009d5c87cc8c3e251d10ddbe162e948dd8a5b47cdda09e",
+      "size": 24138
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/material.h",
+      "sha256": "923dfe73cddc97bc1b29ee4df62b9fb02dfa95dc89a0b52ae4d5b97a69a8763e",
+      "size": 125
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/material_boundary.h",
+      "sha256": "055123c9cea3cb588e4fe8dbf677a6a4eb4d3bccf49606b4af7f9b77cb9c53c0",
+      "size": 4067
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/material_internal.h",
+      "sha256": "76e2df4f15b682d2839b5f3b191745ac9683de50d23dfb4268a9f33cd6181993",
+      "size": 2212
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/material_math.c",
+      "sha256": "815a4c2a2943fab5e9869291fb345764880b3f7476fad3c84d541c53db89f0f7",
+      "size": 13167
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/material_math.h",
+      "sha256": "d2af019ff099cec7d453a5ef5e142df9b38c2a3b814301dcb0775031bb790938",
+      "size": 691
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/material_specs.h",
+      "sha256": "800bff2fbb1c423e05dccfa8265c9870f5c07d64a2b2d02c03eaaeca6b506025",
+      "size": 14085
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/powf_tables.h",
+      "sha256": "30bfc1ef76e1a1656e2285082b709adb23b93cd1d2e20fd272a580e11ba50b6a",
+      "size": 8797
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/scissor.c",
+      "sha256": "fc0fe630c7e4132f95d8ec5520fe7438e3548b5d6f2adf06b9fca99b7ed6912f",
+      "size": 7006
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/scissor.h",
+      "sha256": "0c7314e21efc3590f9db59172f7e16cd579e17111cb07ae59d23df94b7a068cf",
+      "size": 1419
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/material/trig_tables.h",
+      "sha256": "a6aa65bfed02a4b69fd28b7412b128b982ebbd7d1a103ee42507e4965661aea9",
+      "size": 3661
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/protocols/linux-dmabuf-v1.c",
+      "sha256": "4a43e7b53bc8cd754ffcd659ae90d4f77a46901503576399501274573005b803",
+      "size": 4208
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/protocols/linux-dmabuf-v1.h",
+      "sha256": "1da32ec0a96d5be84b7aa813a1a64ac2ee96ead139b6c7f4c0ec5879f556e7e8",
+      "size": 43013
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/lg_blur.slang",
+      "sha256": "148d3366b244a63b84f4dfd8d83efa46946f32db9006debbf079df0c43fd0635",
+      "size": 8704
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/lg_glass_background.slang",
+      "sha256": "2536d57205c603dddb7f9d56241281eba0d00ba71669e3e2fb73881f14c59f19",
+      "size": 13134
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/lg_glass_foreground.slang",
+      "sha256": "ec4f7879fc97e97a662fcb7c15124fe656aa835cb8b080714098e0a0d1eeccf0",
+      "size": 9130
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/lg_metal_blur.slang",
+      "sha256": "b8622e38219a13ac25d71729507974d10126aad84a3a0e4f2f2ba14c13e4e629",
+      "size": 11163
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/lg_precision.slang",
+      "sha256": "165b8fa8a60ac115097d46bbd3986db306d3a70561e010cd1fa9a6f5edccbf8a",
+      "size": 7898
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/lg_sdf.slang",
+      "sha256": "351d3669a58290dc972febd9ee10c245a4b28cda9c873131ae136c59b3bc09f1",
+      "size": 8695
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/lg_sdf_effects.slang",
+      "sha256": "15ba4bf6053dee6c0d613cc414a77d59fbfbd7da0f36c64cf391e062aeb7ac5c",
+      "size": 25481
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/liquidglass.slang",
+      "sha256": "bfc091a4bcb0d717d1f8a8517d311d0fbb5127a09f17d0e99c29f8882fe2119f",
+      "size": 424
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/walle_capture.slang",
+      "sha256": "8be9d8052da7e9e595f556b4f053e32885445399f7e4783afbbefa81b43313f7",
+      "size": 1723
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/walle_glass.slang",
+      "sha256": "6b088b84aa74abd80f400cbbda4175ef896cc2aef220f3e91793315e672406d8",
+      "size": 5527
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/shaders/walle_glass_local.slang",
+      "sha256": "9dd3ffcca1e0646ea50470a99695b5cde165922c2f01648cad241b02895125fc",
+      "size": 5458
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/transition.c",
+      "sha256": "7c43df21a45fa429a931dc31a73b9919fcf87f826e73f1a391657a300a55c91c",
+      "size": 21659
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/transition.h",
+      "sha256": "c833ca33cb39db496aa2c562046f78518944d2e8f3b26ae4df1d2c61b9b1bee2",
+      "size": 3296
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/vulkan_renderer.c",
+      "sha256": "e0b5ad3a904a4d92dd4f076b17928100d7bf83ac049d6632b4eca6d41ace16e2",
+      "size": 165895
+    },
+    {
+      "path": "/tmp/walle-work/benchmark-final/build/source/vulkan_renderer.h",
+      "sha256": "d6c71fec24fbd7b3ea9037644115b995a13e68d4d1f5346b0f7749f2b6bc89d7",
+      "size": 7099
+    }
+  ],
+  "harness_sources": [
+    {
+      "path": "/tmp/walle-work/assembled/tools/benchmark/README.md",
+      "sha256": "d21d2ad964fbd287e0f9d3feaef6c6aee3cf8ce1dcfcc04bd9fd3a410b2b7045",
+      "size": 4663
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tools/benchmark/benchmark.c",
+      "sha256": "85e6c3f733aad300c6deee5bbea42068e5a9116f80a247ad8670603a878363bb",
+      "size": 13536
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tools/benchmark/build.py",
+      "sha256": "37e8a8e02edf3726cabe94bfd1ebffe3910b88668c238faa54098fbdbbad616e",
+      "size": 4234
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tools/benchmark/prepare.c",
+      "sha256": "e528e80026618aa172ce1ff337f1dd3775f505b7bd7f82677d9bdbe4f524fc32",
+      "size": 2976
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tools/benchmark/prepare_inputs.py",
+      "sha256": "fc665d6662bb3cd9c117454c91c96c31471bba9ed55e00bbdcb7a502a473076c",
+      "size": 1849
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tools/benchmark/report.py",
+      "sha256": "576c67aa8a33d45b5008fdd925da5e6e3fd5d2e689fc631c5077870ad16b660f",
+      "size": 4246
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tools/benchmark/run_plan.py",
+      "sha256": "754fed7e40d7c4ec452e1469941db3fd28c51bcf23eacb2c9a5f289008a05736",
+      "size": 3346
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tools/benchmark/schema.json",
+      "sha256": "a6bfbd0478c144788a3bb8ff5b02fa474a53784006ba645f16e5939c5b11125c",
+      "size": 3690
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tools/benchmark/summarize.py",
+      "sha256": "19e9a4b64f32ef7aa52e8874c725854964d9ddced26f7df8f372accbff40d9b1",
+      "size": 3377
+    }
+  ],
+  "repository_build_files": [
+    {
+      "path": "/tmp/walle-work/assembled/Makefile",
+      "sha256": "a524091d19acabeb4d2a3dbb827422b85ff81fee6beca09a58cfd65660e08c5f",
+      "size": 16805
+    },
+    {
+      "path": "/tmp/walle-work/assembled/flake.nix",
+      "sha256": "de7fb41fb3e4eaee8ab663ba83412c1e85bc95295ecef5d93f54fb339caec46e",
+      "size": 2955
+    },
+    {
+      "path": "/tmp/walle-work/assembled/flake.lock",
+      "sha256": "eb95e20b32318a9600731a26accc67db9501b82a1176f02e53850ece25113301",
+      "size": 569
+    }
+  ],
+  "repository_application_sources": [
+    {
+      "path": "/tmp/walle-work/assembled/shiro.c",
+      "sha256": "4b6cf326e45e77cd377e361429b601de59ade7a9aad1789861ca5321acdf6a4c",
+      "size": 2597
+    },
+    {
+      "path": "/tmp/walle-work/assembled/shiro.h",
+      "sha256": "d1fde38223ba30275c2f5a54eadd965469678595a61f14d7d1934859909420ee",
+      "size": 1679
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tilde.c",
+      "sha256": "d42551be5c51ffecf88d983a4c7ca9757d1873eb580a72cf7a141bc641dca409",
+      "size": 6617
+    },
+    {
+      "path": "/tmp/walle-work/assembled/tilde.h",
+      "sha256": "c68c2b394e32dc2ff64585b085cc88f99fde1eda2816d4a3ad8724acef6e4cf7",
+      "size": 220
+    },
+    {
+      "path": "/tmp/walle-work/assembled/transition.c",
+      "sha256": "7c43df21a45fa429a931dc31a73b9919fcf87f826e73f1a391657a300a55c91c",
+      "size": 21659
+    },
+    {
+      "path": "/tmp/walle-work/assembled/transition.h",
+      "sha256": "c833ca33cb39db496aa2c562046f78518944d2e8f3b26ae4df1d2c61b9b1bee2",
+      "size": 3296
+    },
+    {
+      "path": "/tmp/walle-work/assembled/uring.c",
+      "sha256": "d307b235251d568213aaa2b02364b06103156ba2558a39bc8adb3370c1e2075e",
+      "size": 12771
+    },
+    {
+      "path": "/tmp/walle-work/assembled/uring.h",
+      "sha256": "d0548720b9e53a7a159fdff22bdb8100089e5bf6a6b72302052ee45a36edaaa6",
+      "size": 3493
+    },
+    {
+      "path": "/tmp/walle-work/assembled/vulkan_renderer.c",
+      "sha256": "e0b5ad3a904a4d92dd4f076b17928100d7bf83ac049d6632b4eca6d41ace16e2",
+      "size": 165895
+    },
+    {
+      "path": "/tmp/walle-work/assembled/vulkan_renderer.h",
+      "sha256": "d6c71fec24fbd7b3ea9037644115b995a13e68d4d1f5346b0f7749f2b6bc89d7",
+      "size": 7099
+    },
+    {
+      "path": "/tmp/walle-work/assembled/walle.c",
+      "sha256": "f8fcd4a517ea381159a39114bbe0ee83bd40ff82901028e29ef1392979273e7c",
+      "size": 137457
+    }
+  ]
+}

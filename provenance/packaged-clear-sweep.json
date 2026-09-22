@@ -1,0 +1,29 @@
+{
+  "command": [
+    "/run/current-system/sw/bin/labwc",
+    "-C",
+    "/tmp/walle-work/verification/final-package-clear-sweep/compositor",
+    "-S",
+    "/nix/store/r2vsjqmb0scb2vbw1a0g7qga2iqgybc6-python3-3.14.4-env/bin/python3 -c 'import json,subprocess,sys; p=subprocess.Popen(sys.argv[2:]); code=p.wait(); open(sys.argv[1],'\"'\"'w'\"'\"').write(json.dumps({'\"'\"'pid'\"'\"':p.pid,'\"'\"'returncode'\"'\"':code})); sys.exit(code)' /tmp/walle-work/verification/final-package-clear-sweep/child-status.json /nix/store/80bvd8w3wbfrsm62h72qzk7zgpa5yhvw-walle-0.0.1/bin/walle -c /tmp/walle-work/verification/final-package-clear-sweep/walle.ini --vulkan-device discrete --preview /tmp/walle-work/verification/final-package-clear-sweep/frames"
+  ],
+  "binary_sha256": "cbda3ef230b1e9eabb0cb98f4e56d1f8bf998701bce48ea892118c799d77e24a",
+  "timeout": 60,
+  "cleanup": [],
+  "pid": 33460,
+  "returncode": 0,
+  "elapsed": 1.3658872760133818,
+  "child": {
+    "pid": 33481,
+    "returncode": 0
+  },
+  "metadata": {
+    "width": 1280,
+    "height": 720,
+    "frames": 61,
+    "format": "BGRA8 top-left",
+    "callbacks": 60
+  },
+  "frames": 61,
+  "errors": [],
+  "passed": true
+}
