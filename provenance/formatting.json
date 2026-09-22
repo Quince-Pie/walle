@@ -1,0 +1,107 @@
+[
+  {
+    "path": "transition.c",
+    "before": "65b136d8ca850392bf490184387ba30411f2368f980b4347447abe086489d346",
+    "after": "7c43df21a45fa429a931dc31a73b9919fcf87f826e73f1a391657a300a55c91c",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "transition.h",
+    "before": "d1680c750cc74a29e650663d43fb18ec9173684f989de801905953b5156d5c81",
+    "after": "c833ca33cb39db496aa2c562046f78518944d2e8f3b26ae4df1d2c61b9b1bee2",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/applelog.c",
+    "before": "39fa90aee75c6b270157151eb4fd6479e47919cecc7305961172e1190f7c6840",
+    "after": "d0cc440090d416e6f4723721d217055076329ce046e76dca5ef867e324866e50",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/capture.c",
+    "before": "7e6f2c00459bf292e7414fa58a7b35a70f3811305072229d9f568ea53756dba0",
+    "after": "3d095f68ac0bef083a1ed71a0ac99c79e44d28d0a3f66020efabd9c75d10d396",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/geometry.c",
+    "before": "bfccbec724186c567298487a208d52160d6239d4f223cc8956a4fa706e1048f9",
+    "after": "e74ec9a20f8a73fb72ae3bff93b2cdfc85eb4115c9c8f8e3ca685bc19b7916d1",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/material.c",
+    "before": "4b2149ffaf3dca4fe962f78dfc8e6bed6fee2d96e16316697bc73a0267774e94",
+    "after": "12a45109242316cd9f009d5c87cc8c3e251d10ddbe162e948dd8a5b47cdda09e",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/material_math.c",
+    "before": "b821e8f4380af407ec232bcfc9de17a9f31c9bf20f81ea8c4275f958116e1529",
+    "after": "815a4c2a2943fab5e9869291fb345764880b3f7476fad3c84d541c53db89f0f7",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/scissor.c",
+    "before": "cd7e6662ac39caf7208d66ea94bb69add6a91da4980016f4df93b0e2121a2d56",
+    "after": "fc0fe630c7e4132f95d8ec5520fe7438e3548b5d6f2adf06b9fca99b7ed6912f",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/capture.h",
+    "before": "a2a86059685d7373f1e37f063b3efc0b9af55aefe1ffd0dbbc14d231ea5cee61",
+    "after": "784a1fcd5fbeb39ea0ad3589131a57de932ef2e875bfd8685a2db42a79c38264",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/geometry.h",
+    "before": "b362cc69959840400e3efce83d891f29c4db36712838228ef023ad2d1c48fffe",
+    "after": "a0c0687ad2ecdbe1674bc12ca8bf70b7859b1c902f2d636e1c39a831b4cfd9f0",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/material.h",
+    "before": "923dfe73cddc97bc1b29ee4df62b9fb02dfa95dc89a0b52ae4d5b97a69a8763e",
+    "after": "923dfe73cddc97bc1b29ee4df62b9fb02dfa95dc89a0b52ae4d5b97a69a8763e",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/material_boundary.h",
+    "before": "0d80fb23554d2bc421c38489d028d36ba52cc8b6bb4ce4dc6daa866c2c82ee47",
+    "after": "055123c9cea3cb588e4fe8dbf677a6a4eb4d3bccf49606b4af7f9b77cb9c53c0",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/material_internal.h",
+    "before": "e23b4a4c844b1ca5f4617fd8cd45329adfc9ed4891963f3d8ac6777475142268",
+    "after": "76e2df4f15b682d2839b5f3b191745ac9683de50d23dfb4268a9f33cd6181993",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/material_math.h",
+    "before": "1516a95c85a40e6c38286ea5f9c8459d60f8fa4d2c7b715b69df2177317fb941",
+    "after": "d2af019ff099cec7d453a5ef5e142df9b38c2a3b814301dcb0775031bb790938",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  },
+  {
+    "path": "material/scissor.h",
+    "before": "76c9b38d27717cec882ce7a8451b32c570cadf2b8da550941237502a3ba9731f",
+    "after": "0c7314e21efc3590f9db59172f7e16cd579e17111cb07ae59d23df94b7a068cf",
+    "tokens_equal": true,
+    "lexical_token_comparison": "equal (comments/whitespace/line splices excluded; operators, identifiers, pp-numbers and literals retained)"
+  }
+]

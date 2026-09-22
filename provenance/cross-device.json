@@ -1,0 +1,891 @@
+{
+  "scope": "Observed target-device difference; no cross-GPU or M1 bit equality promised.",
+  "comparisons": [
+    {
+      "devices": [
+        "discrete",
+        "integrated"
+      ],
+      "frames": 72,
+      "max_byte": 0,
+      "mean_byte": 0.0,
+      "cases": [
+        {
+          "frame": "frame_s0_m0_t0_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t0_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t0_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t0_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t0_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t0_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t1_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t1_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t1_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t1_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t1_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t1_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t2_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t2_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t2_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t2_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t2_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t2_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t0_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t0_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t0_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t0_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t0_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t0_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t1_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t1_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t1_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t1_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t1_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t1_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t2_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t2_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t2_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t2_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t2_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t2_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t0_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t0_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t0_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t0_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t0_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t0_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t1_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t1_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t1_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t1_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t1_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t1_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t2_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t2_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t2_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t2_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t2_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t2_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t0_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t0_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t0_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t0_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t0_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t0_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t1_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t1_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t1_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t1_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t1_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t1_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t2_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t2_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t2_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t2_p50.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t2_p80.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t2_p95.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        }
+      ]
+    },
+    {
+      "devices": [
+        "discrete",
+        "cpu"
+      ],
+      "frames": 72,
+      "max_byte": 14,
+      "mean_byte": 0.0720662803105843,
+      "cases": [
+        {
+          "frame": "frame_s0_m0_t0_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t0_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t0_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t0_p50.bgra",
+          "different_pixels": 14967,
+          "max_byte": 3,
+          "mean_byte": 0.10954544432199007
+        },
+        {
+          "frame": "frame_s0_m0_t0_p80.bgra",
+          "different_pixels": 22176,
+          "max_byte": 3,
+          "mean_byte": 0.15921819122376915
+        },
+        {
+          "frame": "frame_s0_m0_t0_p95.bgra",
+          "different_pixels": 7038,
+          "max_byte": 1,
+          "mean_byte": 0.04205933289849531
+        },
+        {
+          "frame": "frame_s0_m0_t1_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t1_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t1_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t1_p50.bgra",
+          "different_pixels": 14967,
+          "max_byte": 3,
+          "mean_byte": 0.10954544432199007
+        },
+        {
+          "frame": "frame_s0_m0_t1_p80.bgra",
+          "different_pixels": 22176,
+          "max_byte": 3,
+          "mean_byte": 0.15921819122376915
+        },
+        {
+          "frame": "frame_s0_m0_t1_p95.bgra",
+          "different_pixels": 7038,
+          "max_byte": 1,
+          "mean_byte": 0.04205933289849531
+        },
+        {
+          "frame": "frame_s0_m0_t2_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t2_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t2_p20.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m0_t2_p50.bgra",
+          "different_pixels": 9964,
+          "max_byte": 3,
+          "mean_byte": 0.07048874294325363
+        },
+        {
+          "frame": "frame_s0_m0_t2_p80.bgra",
+          "different_pixels": 11179,
+          "max_byte": 4,
+          "mean_byte": 0.07150086592744202
+        },
+        {
+          "frame": "frame_s0_m0_t2_p95.bgra",
+          "different_pixels": 6976,
+          "max_byte": 1,
+          "mean_byte": 0.04178381053057736
+        },
+        {
+          "frame": "frame_s0_m1_t0_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t0_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t0_p20.bgra",
+          "different_pixels": 5754,
+          "max_byte": 6,
+          "mean_byte": 0.04293088324599087
+        },
+        {
+          "frame": "frame_s0_m1_t0_p50.bgra",
+          "different_pixels": 22277,
+          "max_byte": 4,
+          "mean_byte": 0.16557769730775287
+        },
+        {
+          "frame": "frame_s0_m1_t0_p80.bgra",
+          "different_pixels": 22274,
+          "max_byte": 3,
+          "mean_byte": 0.1591563392636243
+        },
+        {
+          "frame": "frame_s0_m1_t0_p95.bgra",
+          "different_pixels": 7638,
+          "max_byte": 1,
+          "mean_byte": 0.045753581790782934
+        },
+        {
+          "frame": "frame_s0_m1_t1_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t1_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t1_p20.bgra",
+          "different_pixels": 5754,
+          "max_byte": 6,
+          "mean_byte": 0.04293088324599087
+        },
+        {
+          "frame": "frame_s0_m1_t1_p50.bgra",
+          "different_pixels": 22277,
+          "max_byte": 4,
+          "mean_byte": 0.16557769730775287
+        },
+        {
+          "frame": "frame_s0_m1_t1_p80.bgra",
+          "different_pixels": 22274,
+          "max_byte": 3,
+          "mean_byte": 0.1591563392636243
+        },
+        {
+          "frame": "frame_s0_m1_t1_p95.bgra",
+          "different_pixels": 7638,
+          "max_byte": 1,
+          "mean_byte": 0.045753581790782934
+        },
+        {
+          "frame": "frame_s0_m1_t2_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t2_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s0_m1_t2_p20.bgra",
+          "different_pixels": 5653,
+          "max_byte": 5,
+          "mean_byte": 0.042031218371156746
+        },
+        {
+          "frame": "frame_s0_m1_t2_p50.bgra",
+          "different_pixels": 15169,
+          "max_byte": 4,
+          "mean_byte": 0.10933177391421696
+        },
+        {
+          "frame": "frame_s0_m1_t2_p80.bgra",
+          "different_pixels": 11117,
+          "max_byte": 3,
+          "mean_byte": 0.07152335754931288
+        },
+        {
+          "frame": "frame_s0_m1_t2_p95.bgra",
+          "different_pixels": 7155,
+          "max_byte": 1,
+          "mean_byte": 0.04269472121634691
+        },
+        {
+          "frame": "frame_s1_m0_t0_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t0_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t0_p20.bgra",
+          "different_pixels": 70,
+          "max_byte": 2,
+          "mean_byte": 0.0005397989249004745
+        },
+        {
+          "frame": "frame_s1_m0_t0_p50.bgra",
+          "different_pixels": 20342,
+          "max_byte": 11,
+          "mean_byte": 0.19002609028137019
+        },
+        {
+          "frame": "frame_s1_m0_t0_p80.bgra",
+          "different_pixels": 36168,
+          "max_byte": 14,
+          "mean_byte": 0.3394997863295922
+        },
+        {
+          "frame": "frame_s1_m0_t0_p95.bgra",
+          "different_pixels": 13158,
+          "max_byte": 1,
+          "mean_byte": 0.08194822428645329
+        },
+        {
+          "frame": "frame_s1_m0_t1_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t1_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t1_p20.bgra",
+          "different_pixels": 70,
+          "max_byte": 2,
+          "mean_byte": 0.0005397989249004745
+        },
+        {
+          "frame": "frame_s1_m0_t1_p50.bgra",
+          "different_pixels": 20342,
+          "max_byte": 11,
+          "mean_byte": 0.19002609028137019
+        },
+        {
+          "frame": "frame_s1_m0_t1_p80.bgra",
+          "different_pixels": 36168,
+          "max_byte": 14,
+          "mean_byte": 0.3394997863295922
+        },
+        {
+          "frame": "frame_s1_m0_t1_p95.bgra",
+          "different_pixels": 13158,
+          "max_byte": 1,
+          "mean_byte": 0.08194822428645329
+        },
+        {
+          "frame": "frame_s1_m0_t2_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t2_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m0_t2_p20.bgra",
+          "different_pixels": 79,
+          "max_byte": 2,
+          "mean_byte": 0.0006635028451901666
+        },
+        {
+          "frame": "frame_s1_m0_t2_p50.bgra",
+          "different_pixels": 14250,
+          "max_byte": 4,
+          "mean_byte": 0.11422932457659522
+        },
+        {
+          "frame": "frame_s1_m0_t2_p80.bgra",
+          "different_pixels": 25128,
+          "max_byte": 7,
+          "mean_byte": 0.20056341512786488
+        },
+        {
+          "frame": "frame_s1_m0_t2_p95.bgra",
+          "different_pixels": 7371,
+          "max_byte": 1,
+          "mean_byte": 0.0440442185285981
+        },
+        {
+          "frame": "frame_s1_m1_t0_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t0_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t0_p20.bgra",
+          "different_pixels": 427,
+          "max_byte": 7,
+          "mean_byte": 0.0046838802546051595
+        },
+        {
+          "frame": "frame_s1_m1_t0_p50.bgra",
+          "different_pixels": 24959,
+          "max_byte": 14,
+          "mean_byte": 0.23884415555205685
+        },
+        {
+          "frame": "frame_s1_m1_t0_p80.bgra",
+          "different_pixels": 36195,
+          "max_byte": 14,
+          "mean_byte": 0.33852140077821014
+        },
+        {
+          "frame": "frame_s1_m1_t0_p95.bgra",
+          "different_pixels": 13232,
+          "max_byte": 2,
+          "mean_byte": 0.08233620476372551
+        },
+        {
+          "frame": "frame_s1_m1_t1_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t1_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t1_p20.bgra",
+          "different_pixels": 427,
+          "max_byte": 7,
+          "mean_byte": 0.0046838802546051595
+        },
+        {
+          "frame": "frame_s1_m1_t1_p50.bgra",
+          "different_pixels": 24959,
+          "max_byte": 14,
+          "mean_byte": 0.23884415555205685
+        },
+        {
+          "frame": "frame_s1_m1_t1_p80.bgra",
+          "different_pixels": 36195,
+          "max_byte": 14,
+          "mean_byte": 0.33852140077821014
+        },
+        {
+          "frame": "frame_s1_m1_t1_p95.bgra",
+          "different_pixels": 13232,
+          "max_byte": 2,
+          "mean_byte": 0.08233620476372551
+        },
+        {
+          "frame": "frame_s1_m1_t2_p0.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t2_p100.bgra",
+          "different_pixels": 0,
+          "max_byte": 0,
+          "mean_byte": 0.0
+        },
+        {
+          "frame": "frame_s1_m1_t2_p20.bgra",
+          "different_pixels": 307,
+          "max_byte": 3,
+          "mean_byte": 0.0030476147635005962
+        },
+        {
+          "frame": "frame_s1_m1_t2_p50.bgra",
+          "different_pixels": 16887,
+          "max_byte": 6,
+          "mean_byte": 0.13519713906569802
+        },
+        {
+          "frame": "frame_s1_m1_t2_p80.bgra",
+          "different_pixels": 24799,
+          "max_byte": 6,
+          "mean_byte": 0.19586266615685657
+        },
+        {
+          "frame": "frame_s1_m1_t2_p95.bgra",
+          "different_pixels": 7393,
+          "max_byte": 1,
+          "mean_byte": 0.04452778839882144
+        }
+      ]
+    }
+  ]
+}

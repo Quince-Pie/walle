@@ -1,0 +1,20 @@
+{
+  "regressions_rejected": 3,
+  "results": [
+    {
+      "mutation": "unknown-appearance-retains-dark",
+      "rejected": true,
+      "assertion": "FAIL /tmp/walle-work/app-tests/contracts.c:131: state.desktop_dark == (values[i] == 1)"
+    },
+    {
+      "mutation": "timerless-pending-stranded",
+      "rejected": true,
+      "assertion": "FAIL /tmp/walle-work/app-tests/contracts.c:155: !output.pending_cycle && output.current_item_index == 2"
+    },
+    {
+      "mutation": "tiny-duration-float-reciprocal",
+      "rejected": true,
+      "assertion": "FAIL /tmp/walle-work/app-tests/contracts.c:180: builds == 1 && isfinite(observed_progress) && observed_progress == 0"
+    }
+  ]
+}

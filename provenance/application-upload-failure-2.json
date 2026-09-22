@@ -1,0 +1,79 @@
+{
+  "command": [
+    "/run/current-system/sw/bin/labwc",
+    "-C",
+    "/tmp/walle-work/app-faults/fixed-upload-2/compositor",
+    "-S",
+    "/nix/store/jkq7011nvzb5ggz2zlxmlhqagjg2rbcr-python3-3.14.6-env/bin/python /tmp/walle-work/app-faults/run.py --inside /tmp/walle-work/app-faults/fixed-upload-2 --binary /tmp/walle-work/assembled/build/bin/release/walle --device discrete --stage 2"
+  ],
+  "binary_sha256": "979a9d1337c32dc5525b896ea80b054dde2438519283bfa552828502080a64b2",
+  "mode": "upload-failure",
+  "stage": 2,
+  "cleanup": [],
+  "compositor_pid": 26242,
+  "compositor_returncode": 0,
+  "child": {
+    "cleanup": [],
+    "passed": true,
+    "app_pid": 26263,
+    "app_returncode": 1,
+    "elapsed": 0.1637750850059092,
+    "validation_or_sanitizer_errors": [],
+    "trace": [
+      {
+        "event": "source_open",
+        "fd": 18
+      },
+      {
+        "event": "submit",
+        "upload": true,
+        "upload_ordinal": 1,
+        "injected": false
+      },
+      {
+        "event": "submit",
+        "upload": false,
+        "upload_ordinal": 0,
+        "injected": false
+      },
+      {
+        "event": "source_open",
+        "fd": 19
+      },
+      {
+        "event": "submit",
+        "upload": true,
+        "upload_ordinal": 2,
+        "injected": true
+      },
+      {
+        "event": "source_close",
+        "fd": 19
+      },
+      {
+        "event": "source_close",
+        "fd": 18
+      },
+      {
+        "event": "summary",
+        "uploads": 2,
+        "frames": 1,
+        "injections": 1,
+        "source_opened": 2,
+        "source_closed": 2,
+        "source_remaining": 0
+      }
+    ],
+    "summary": {
+      "event": "summary",
+      "uploads": 2,
+      "frames": 1,
+      "injections": 1,
+      "source_opened": 2,
+      "source_closed": 2,
+      "source_remaining": 0
+    }
+  },
+  "binary_unchanged": true,
+  "passed": true
+}

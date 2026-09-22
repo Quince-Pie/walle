@@ -1,0 +1,20 @@
+[
+  {
+    "reference": "layer-shell-clear-sweep",
+    "candidate": "final-package-clear-sweep",
+    "frames": 61,
+    "different_frames": []
+  },
+  {
+    "reference": "layer-shell-regular-tint-lens",
+    "candidate": "final-package-regular-tint-lens",
+    "frames": 61,
+    "different_frames": []
+  },
+  {
+    "reference": "layer-shell-regular-tint-lens",
+    "candidate": "final-asan-pinned-regular-tint-lens",
+    "frames": 61,
+    "different_frames": []
+  }
+]

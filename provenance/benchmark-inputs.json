@@ -1,0 +1,109 @@
+{
+  "repo_root": "/tmp/walle-work/assembled",
+  "method": "libvips thumbnail centered cover/no_rotate; sRGB; black flatten if alpha; opaque alpha; uchar",
+  "preparation_outside_timing": true,
+  "inputs": [
+    {
+      "label": "a",
+      "width": 1920,
+      "height": 1080,
+      "source": "/home/quince/.config/bg/0008.jpg",
+      "source_sha256": "2a11c75bf9fd03425ad8cbe16a18deaf3366d753b97828b7cf71654e72bb31a4",
+      "prepared": "/tmp/walle-work/benchmark-final/inputs/1920x1080/a.rgba",
+      "prepared_sha256": "9234cb68c15c1b3d65da2dd68b7804c5880447b44ca4c9ef5c0ce11ec587a625",
+      "bytes": 8294400,
+      "command": [
+        "/tmp/walle-work/benchmark-final/build/prepare",
+        "/home/quince/.config/bg/0008.jpg",
+        "1920",
+        "1080",
+        "/tmp/walle-work/benchmark-final/inputs/1920x1080/a.rgba"
+      ]
+    },
+    {
+      "label": "b",
+      "width": 1920,
+      "height": 1080,
+      "source": "/home/quince/.config/bg/0010.jpg",
+      "source_sha256": "21f54c5bd9961bdae13f6ba1c337215bc5ecfefce3adc78cf05f8bdefc0726ee",
+      "prepared": "/tmp/walle-work/benchmark-final/inputs/1920x1080/b.rgba",
+      "prepared_sha256": "ce92189c486ff0f97ff7c4f2c54f3aa7d0e689fa0b8cf4a5817743aa60bb62f8",
+      "bytes": 8294400,
+      "command": [
+        "/tmp/walle-work/benchmark-final/build/prepare",
+        "/home/quince/.config/bg/0010.jpg",
+        "1920",
+        "1080",
+        "/tmp/walle-work/benchmark-final/inputs/1920x1080/b.rgba"
+      ]
+    },
+    {
+      "label": "a",
+      "width": 2560,
+      "height": 2880,
+      "source": "/home/quince/.config/bg/0008.jpg",
+      "source_sha256": "2a11c75bf9fd03425ad8cbe16a18deaf3366d753b97828b7cf71654e72bb31a4",
+      "prepared": "/tmp/walle-work/benchmark-final/inputs/2560x2880/a.rgba",
+      "prepared_sha256": "b3155af97284d3b1cc891e456bfb187f6e798ade62297c8e2805fa89d83a0207",
+      "bytes": 29491200,
+      "command": [
+        "/tmp/walle-work/benchmark-final/build/prepare",
+        "/home/quince/.config/bg/0008.jpg",
+        "2560",
+        "2880",
+        "/tmp/walle-work/benchmark-final/inputs/2560x2880/a.rgba"
+      ]
+    },
+    {
+      "label": "b",
+      "width": 2560,
+      "height": 2880,
+      "source": "/home/quince/.config/bg/0010.jpg",
+      "source_sha256": "21f54c5bd9961bdae13f6ba1c337215bc5ecfefce3adc78cf05f8bdefc0726ee",
+      "prepared": "/tmp/walle-work/benchmark-final/inputs/2560x2880/b.rgba",
+      "prepared_sha256": "ecddae4d9e73ae892e58b2b22d84899b79970387185c0871a57ae928735d2aae",
+      "bytes": 29491200,
+      "command": [
+        "/tmp/walle-work/benchmark-final/build/prepare",
+        "/home/quince/.config/bg/0010.jpg",
+        "2560",
+        "2880",
+        "/tmp/walle-work/benchmark-final/inputs/2560x2880/b.rgba"
+      ]
+    },
+    {
+      "label": "a",
+      "width": 5120,
+      "height": 2880,
+      "source": "/home/quince/.config/bg/0008.jpg",
+      "source_sha256": "2a11c75bf9fd03425ad8cbe16a18deaf3366d753b97828b7cf71654e72bb31a4",
+      "prepared": "/tmp/walle-work/benchmark-final/inputs/5120x2880/a.rgba",
+      "prepared_sha256": "a5c7280314fa5f86138bd09ac940f060e824bca5c7453ad3299f843ccb558b63",
+      "bytes": 58982400,
+      "command": [
+        "/tmp/walle-work/benchmark-final/build/prepare",
+        "/home/quince/.config/bg/0008.jpg",
+        "5120",
+        "2880",
+        "/tmp/walle-work/benchmark-final/inputs/5120x2880/a.rgba"
+      ]
+    },
+    {
+      "label": "b",
+      "width": 5120,
+      "height": 2880,
+      "source": "/home/quince/.config/bg/0010.jpg",
+      "source_sha256": "21f54c5bd9961bdae13f6ba1c337215bc5ecfefce3adc78cf05f8bdefc0726ee",
+      "prepared": "/tmp/walle-work/benchmark-final/inputs/5120x2880/b.rgba",
+      "prepared_sha256": "27552cb83fd6ff5c2808adc02a0ab722d2477f6866bcd57dab1c002bfb64ef1c",
+      "bytes": 58982400,
+      "command": [
+        "/tmp/walle-work/benchmark-final/build/prepare",
+        "/home/quince/.config/bg/0010.jpg",
+        "5120",
+        "2880",
+        "/tmp/walle-work/benchmark-final/inputs/5120x2880/b.rgba"
+      ]
+    }
+  ]
+}

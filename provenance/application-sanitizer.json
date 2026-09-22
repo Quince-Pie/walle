@@ -1,0 +1,29 @@
+{
+  "command": [
+    "/run/current-system/sw/bin/labwc",
+    "-C",
+    "/tmp/walle-work/verification/final-asan-pinned-regular-tint-lens/compositor",
+    "-S",
+    "/nix/store/r2vsjqmb0scb2vbw1a0g7qga2iqgybc6-python3-3.14.4-env/bin/python3 -c 'import json,subprocess,sys; p=subprocess.Popen(sys.argv[2:]); code=p.wait(); open(sys.argv[1],'\"'\"'w'\"'\"').write(json.dumps({'\"'\"'pid'\"'\"':p.pid,'\"'\"'returncode'\"'\"':code})); sys.exit(code)' /tmp/walle-work/verification/final-asan-pinned-regular-tint-lens/child-status.json env VK_DRIVER_FILES=/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json LD_PRELOAD=/nix/store/ylhz2168f7jckz5pxah25dpgpsdbgj2r-gcc-15.2.0-lib/lib/libasan.so:/nix/store/d8wvsjgnk6giw73jhyv5rbl99jl4j5nb-mesa-26.1.8/lib/libvulkan_radeon.so /tmp/walle-work/assembled/build/bin/debug-sanitized/walle -c /tmp/walle-work/verification/final-asan-pinned-regular-tint-lens/walle.ini --vulkan-device discrete --preview /tmp/walle-work/verification/final-asan-pinned-regular-tint-lens/frames"
+  ],
+  "binary_sha256": "0e350e8fefbd40dd4381fef69748ea40f51ec86edcfe0dc61375b4a9f1b62860",
+  "timeout": 60,
+  "cleanup": [],
+  "pid": 33648,
+  "returncode": 0,
+  "elapsed": 1.4653069039341062,
+  "child": {
+    "pid": 33669,
+    "returncode": 0
+  },
+  "metadata": {
+    "width": 1280,
+    "height": 720,
+    "frames": 61,
+    "format": "BGRA8 top-left",
+    "callbacks": 60
+  },
+  "frames": 61,
+  "errors": [],
+  "passed": true
+}

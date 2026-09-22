@@ -1,0 +1,9 @@
+{
+  "powf": 5000,
+  "trig": 5000,
+  "half": 5000,
+  "tint_matrices": 13072,
+  "byte_transfer_cases": 512,
+  "mismatches": 0,
+  "sha256": "b821e8f4380af407ec232bcfc9de17a9f31c9bf20f81ea8c4275f958116e1529"
+}

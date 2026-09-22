@@ -1,0 +1,27 @@
+{
+  "status": "Optimized/Fortify, sanitizer and NDEBUG PASS; comment-only SPIR-V identical",
+  "candidate_files": {
+    "transition.c": "65b136d8ca850392bf490184387ba30411f2368f980b4347447abe086489d346",
+    "shaders/lg_metal_blur.slang": "b8622e38219a13ac25d71729507974d10126aad84a3a0e4f2f2ba14c13e4e629",
+    "material/capture.c": "7e6f2c00459bf292e7414fa58a7b35a70f3811305072229d9f568ea53756dba0",
+    "material/capture.h": "a2a86059685d7373f1e37f063b3efc0b9af55aefe1ffd0dbbc14d231ea5cee61"
+  },
+  "tests": {
+    "README.md": "60cf4c5585761d4776983f4f27407d7a2af7dc64b9e8c6857e7f4e3c6ce089ea",
+    "provenance.json": "b6159e25defcce3e1039db36c78e512b0ed6c6ea94b41b5863a80d0bfdf8efc5",
+    "qualification.json": "cd428af2d2d7fe5bd986644c0e0bb571e9ecc50db543d9149d71689d0794d76b",
+    "run_transition.py": "21baa41b05747f17b5c54bd23689148e16c3fcd5df84eb031bcbe5319e92f233",
+    "source_transport.diff": "b22b294928c4fa744d567a944e7cba51a4cd2238d457ada6958f4b51e6ff26d0",
+    "transition.mk": "25611fdc94ff9cf08bb589e93d749bf5daee94bbabee8b1990fb5afbd239ef0d",
+    "transition_check.h": "6337512cfb4ff1cd40e02c6558b4a548c830496d6ac158e073d26ef177610893",
+    "transition_contracts.c": "e55027f877fa204ccca521a6f8d940cef510dcfb437bfd6c4b23e1e884c9c0c2",
+    "transition_fortify_bounds.c": "108d4d02e385e420b773d9618c78ca4e50a053cb9d556ea9b88362d2ed0268f3"
+  },
+  "evidence": {
+    "fortify": "f5bd10648aaa0bd6a72db914e208da9d6886e87591fe73ec155466a9184bdcc4",
+    "sanitize": "9b0578744366a30504648a8a948ee83743aadeaa5d159178054e36b7c04a5646",
+    "ndebug": "63de47a7f65d9db0f98e9330d8a86eea4b0a16783af2e6e52cd7ad39d09e54ba",
+    "comment_spirv": "5ee9da6cdb37b8dd870b424d13bb188e12da2c22d8f7e292fd75f1f99f034130"
+  },
+  "frozen_original": "../frozen/ preserved; benchmark inputs unchanged"
+}

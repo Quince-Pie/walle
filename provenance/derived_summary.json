@@ -1,0 +1,202 @@
+[
+  {
+    "style": 0,
+    "appearance": "light",
+    "D": 1080,
+    "tracks_luma": false,
+    "backdrop_scale": 0.25,
+    "margin": 378.0,
+    "blur_radius": 8.0,
+    "gb216_sha256": "4a7f8e3d131616a2103e02ec95677b7aad62089ae6e85a29b64ae96e2b966028"
+  },
+  {
+    "style": 0,
+    "appearance": "light",
+    "D": 200,
+    "tracks_luma": false,
+    "backdrop_scale": 0.25,
+    "margin": 83.0,
+    "blur_radius": 8.0,
+    "gb216_sha256": "9d7ea70f5179d8020013f5ab2652502843acf82237aea85a9dc57d4c715f0eea"
+  },
+  {
+    "style": 0,
+    "appearance": "light",
+    "D": 65,
+    "tracks_luma": false,
+    "backdrop_scale": 0.25,
+    "margin": 48.625,
+    "blur_radius": 3.4761904761904763,
+    "gb216_sha256": "a3cde7f490450669431894d0bac17fc4d18e8266b12e17f55daa747adbc193ee"
+  },
+  {
+    "style": 0,
+    "appearance": "light",
+    "D": 64,
+    "tracks_luma": true,
+    "backdrop_scale": 0.25,
+    "margin": 12.8,
+    "blur_radius": 3.4285714285714284,
+    "gb216_sha256": "a652e93b75e8b75cdeb905b22b6261d2dc2d553bcff844e85efc08d5c1b6bd52"
+  },
+  {
+    "style": 0,
+    "appearance": "light",
+    "D": 40,
+    "tracks_luma": true,
+    "backdrop_scale": 0.25,
+    "margin": 8.0,
+    "blur_radius": 2.6666666666666665,
+    "gb216_sha256": "ccfb7d690e076a290d348390761d171e7924d9ffdc87439a0b1f6500c97f513b"
+  },
+  {
+    "style": 0,
+    "appearance": "dark",
+    "D": 1080,
+    "tracks_luma": false,
+    "backdrop_scale": 0.25,
+    "margin": 378.0,
+    "blur_radius": 8.0,
+    "gb216_sha256": "2567ea9ff6a432c5a7c8cfcc1c326e803f737b22df1aa69174269543553e5c77"
+  },
+  {
+    "style": 0,
+    "appearance": "dark",
+    "D": 200,
+    "tracks_luma": false,
+    "backdrop_scale": 0.25,
+    "margin": 83.0,
+    "blur_radius": 8.0,
+    "gb216_sha256": "17c6eab4e8b1f13372545cea05b1c6693c09001d1abc93dca3987eff22e38c02"
+  },
+  {
+    "style": 0,
+    "appearance": "dark",
+    "D": 65,
+    "tracks_luma": false,
+    "backdrop_scale": 0.25,
+    "margin": 48.625,
+    "blur_radius": 3.4761904761904763,
+    "gb216_sha256": "a2e0d69335cb019b2ddf496edefb47b637b21cf4cf4cd4cf2df061b1127decce"
+  },
+  {
+    "style": 0,
+    "appearance": "dark",
+    "D": 64,
+    "tracks_luma": true,
+    "backdrop_scale": 0.25,
+    "margin": 12.8,
+    "blur_radius": 3.4285714285714284,
+    "gb216_sha256": "1cf072a6410d87818dbc6ee829d669d4b8f85facdc429a8649334979ac1afd8c"
+  },
+  {
+    "style": 0,
+    "appearance": "dark",
+    "D": 40,
+    "tracks_luma": true,
+    "backdrop_scale": 0.25,
+    "margin": 8.0,
+    "blur_radius": 2.6666666666666665,
+    "gb216_sha256": "bf3fcae01590ac2c9ed3adc5a30960381ceef5af81f18165d37c28a0967b2987"
+  },
+  {
+    "style": 1,
+    "appearance": "light",
+    "D": 1080,
+    "tracks_luma": false,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "04da2c5fc5df229ac77c0947c97349539a6b89ffd12ae2e841ac1fb60083bf79"
+  },
+  {
+    "style": 1,
+    "appearance": "light",
+    "D": 200,
+    "tracks_luma": false,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "467a67c2d3b5cf3e053eb2c4138e9d36ce3a7afb238efca763f4ec61e86a5b12"
+  },
+  {
+    "style": 1,
+    "appearance": "light",
+    "D": 65,
+    "tracks_luma": false,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "fc33163c5a050cc1a82c5ef436015d79a9f7b5422803b3b080b5ee1e915b5e40"
+  },
+  {
+    "style": 1,
+    "appearance": "light",
+    "D": 64,
+    "tracks_luma": true,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "a70c20c3b18bb447d288e83360983dd63b0a36127d0902557452979ed0246a7b"
+  },
+  {
+    "style": 1,
+    "appearance": "light",
+    "D": 40,
+    "tracks_luma": true,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "a93663c02849aee6166727b1108ae4b544ea5f18641506122eae092184bb73d7"
+  },
+  {
+    "style": 1,
+    "appearance": "dark",
+    "D": 1080,
+    "tracks_luma": false,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "04da2c5fc5df229ac77c0947c97349539a6b89ffd12ae2e841ac1fb60083bf79"
+  },
+  {
+    "style": 1,
+    "appearance": "dark",
+    "D": 200,
+    "tracks_luma": false,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "467a67c2d3b5cf3e053eb2c4138e9d36ce3a7afb238efca763f4ec61e86a5b12"
+  },
+  {
+    "style": 1,
+    "appearance": "dark",
+    "D": 65,
+    "tracks_luma": false,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "fc33163c5a050cc1a82c5ef436015d79a9f7b5422803b3b080b5ee1e915b5e40"
+  },
+  {
+    "style": 1,
+    "appearance": "dark",
+    "D": 64,
+    "tracks_luma": true,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "79b34c8eebec98e190ed81ab62527655bd137f77e12aeba7ba66663103b05361"
+  },
+  {
+    "style": 1,
+    "appearance": "dark",
+    "D": 40,
+    "tracks_luma": true,
+    "backdrop_scale": 0.5,
+    "margin": 0.0,
+    "blur_radius": 2.0,
+    "gb216_sha256": "14a2e5bb824703a771addd627175be9a681f863cbf64f9a1e0a6a991df499a54"
+  }
+]

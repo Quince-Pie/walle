@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <inttypes.h>
 #include <math.h>
 #include <signal.h>
 #include <stdckdint.h>
@@ -44,7 +45,7 @@
 #include <wayland-client.h>
 #include <xxhash.h>
 
-#include "parity/liquid_glass_reveal_mask_model.h"
+#include "transition.h"
 #include "protocols/wlr-layer-shell-unstable-v1.h"
 #include "shiro.h"
 #include "vulkan_renderer.h"
@@ -72,34 +73,20 @@
 
 #define WALLE_VERSION "0.0.1"
 
-/* Liquid Glass preprocess (vips): background mega-blur for the glass body.
- * Structured-light measurement of real macOS 26.4 glassEffect (calibration
- * captures, 3200x2000 @1x) bounds the interior fundamental transmission at
- * p=256 px to 0.011-0.027 -> gaussian sigma >= ~110 px at a 3774 px window
- * diagonal, identical across element sizes: sigma ~ 0.032 * diagonal, same
- * for both variants. The measured clear veil is an exact affine map with no
- * extra vibrancy (gray sweep fits to +-0.002), so saturation stays 1.0; the
- * knobs remain for future divergence (e.g. dark-appearance captures). */
-constexpr double GLASS_SIGMA_FRAC_CLEAR   = 0.032;
-constexpr double GLASS_SIGMA_FRAC_REGULAR = 0.032;
-constexpr double GLASS_SAT_CLEAR          = 1.0;
-constexpr double GLASS_SAT_REGULAR        = 1.0;
-constexpr int    GLASS_DOWN_FACTOR        = 8;
-
+/* Decode wallpaper pixels once. The renderer derives its capture and blur
+ * pyramid with the extracted GPU kernels; no fitted CPU blur is cached. */
 /* Bump whenever the cached pixel pipeline changes shape (layout, band count,
  * preprocess constants). Hashed into every cache key. */
-constexpr uint32_t CACHE_SCHEMA_VERSION = 4;
+constexpr uint32_t CACHE_SCHEMA_VERSION = 5;
 
-constexpr float DEFAULT_TRANSITION_DUR = 0.6f;
+constexpr float DEFAULT_TRANSITION_DUR = 2.4f;
 constexpr int   INOTIFY_BUF_LEN        = 4096;
 
-constexpr uint32_t  REVEAL_PROCESS_CAPTURE_WIDTH       = 2048;
-constexpr uint32_t  REVEAL_PROCESS_CAPTURE_HEIGHT      = 2048;
-constexpr uint32_t  REVEAL_PROCESS_CAPTURE_STATE_COUNT = 65;
-constexpr uint32_t  REVEAL_PROCESS_COMPOSITION_STATE   = 32;
-static const double REVEAL_PROCESS_CAPTURE_CENTER_X    = 512.0;
-static const double REVEAL_PROCESS_CAPTURE_CENTER_Y    = 614.4;
-constexpr double    REVEAL_RADIUS_MARGIN               = 1.03;
+constexpr uint32_t  PREVIEW_CAPTURE_WIDTH       = 1280;
+constexpr uint32_t  PREVIEW_CAPTURE_HEIGHT      = 720;
+constexpr uint32_t  PREVIEW_CAPTURE_STATE_COUNT = 61;
+static const double PREVIEW_CAPTURE_CENTER_X    = 640.0;
+static const double PREVIEW_CAPTURE_CENTER_Y    = 360.0;
 
 constexpr size_t   CACHE_HIGH_WATERMARK    = 512UL * 1024UL * 1024UL;
 constexpr size_t   CACHE_LOW_WATERMARK     = 384UL * 1024UL * 1024UL;
@@ -134,14 +121,17 @@ enum transition_state : uint8_t
     T_STATE_RUNNING
 };
 
-/* HIG "Materials": Liquid Glass "provides two variants — regular and clear".
- * Clear is the zero value: a wallpaper is exactly the "media background"
- * the HIG prescribes the clear variant for ("components that float above
- * media backgrounds — such as photos and videos"). */
 enum glass_variant : uint8_t
 {
     GLASS_VARIANT_CLEAR = 0,
     GLASS_VARIANT_REGULAR
+};
+
+enum glass_appearance : uint8_t
+{
+    GLASS_APPEARANCE_AUTO = 0,
+    GLASS_APPEARANCE_LIGHT,
+    GLASS_APPEARANCE_DARK
 };
 
 typedef enum : uint8_t
@@ -181,6 +171,9 @@ struct output_config
     bool               gamemode;
     enum glass_variant variant;
     float              transition_duration;
+    enum glass_appearance appearance;
+    enum walle_transition_motion motion;
+    struct wm_tint tint;
 };
 
 struct config_parse_ctx
@@ -197,13 +190,12 @@ struct image_layer
 };
 
 /* Pixels are always tightly packed RGBA8 (sRGB): a single band count keeps
- * texture storage, PBO sizing, and row alignment uniform. */
+ * texture storage, buffer sizing, and row alignment uniform. */
 struct render_result
 {
     int                fd; /* one fd for both layers; -1 = none */
     bool               success;
     struct image_layer standard;
-    struct image_layer glass;
 };
 
 struct wallpaper_state;
@@ -223,7 +215,7 @@ struct wallpaper_output
 
         int32_t width;
         int32_t height;
-        float   duration_inv; /* 1.0/duration, NOT duration. MUL is faster than DIV per-frame. */
+        float   duration_seconds; /* Snapshot; double division also handles very short durations. */
 
         enum transition_state t_state;
         output_flags_t        flags;
@@ -240,6 +232,7 @@ struct wallpaper_output
     int32_t   scale;      /* wl_output.scale; buffer px = logical px * scale */
     int32_t   logical_w;
     int32_t   logical_h;
+    int32_t   configured_scale;
     pthread_t render_thread;
 
     struct render_result async_result;
@@ -260,25 +253,29 @@ struct wallpaper_output
     int                    timeout;
     bool                   gamemode_enabled;
     enum glass_variant     glass_variant;
+    enum glass_appearance glass_appearance;
+    enum walle_transition_motion glass_motion;
+    struct wm_tint glass_tint;
+    struct walle_transition *transition;
+    bool transition_reverse;
+    bool transition_immediate;
 
     bool pending_reload;
+    bool pending_cycle;
 
     /* Snapshot taken on the main thread immediately before pthread_create
      * (the create is the happens-before edge); the worker must never read
      * render.width/height, which a configure event can mutate mid-render. */
     int32_t            job_w;
     int32_t            job_h;
-    enum glass_variant job_variant;
 
-    double reveal_maximum_radius;
 
     /* Cold, diagnostic-only state. Keep this outside the frozen render
-     * prefix so an absent --reveal-mask-process-capture is layout-neutral. */
-    uint8_t* reveal_process_capture_pixels;
-    uint8_t* reveal_process_composition_pixels;
-    uint32_t reveal_process_capture_state;
-    bool     reveal_process_capture_owned;
-    bool     reveal_process_capture_active;
+     * prefix so an absent --preview is layout-neutral. */
+    uint8_t* preview_pixels;
+    uint32_t preview_capture_state;
+    bool     preview_capture_owned;
+    bool     preview_capture_active;
 };
 
 static_assert(sizeof(((struct wallpaper_output*)0)->render) == 64,
@@ -367,13 +364,13 @@ struct wallpaper_state
     uint32_t                  vk_max_image_dimension;
     bool                      globals_ready;
 
-    bool     reveal_process_capture;
-    bool     reveal_process_capture_output_claimed;
-    bool     reveal_process_capture_complete;
-    int      reveal_process_capture_status;
-    int      reveal_process_capture_directory_fd;
-    uint32_t reveal_process_capture_swap_count;
-    uint32_t reveal_process_capture_callback_count;
+    bool     preview_capture;
+    bool     preview_capture_output_claimed;
+    bool     preview_capture_complete;
+    int      preview_capture_status;
+    int      preview_capture_directory_fd;
+    uint32_t preview_capture_swap_count;
+    uint32_t preview_capture_callback_count;
 
     int   inotify_fd;
     int   config_wd;
@@ -384,6 +381,8 @@ struct wallpaper_state
     sd_bus*      bus;
     sd_bus_slot* gamemode_slot;
     bool         gamemode_active;
+    sd_bus_slot* appearance_slot;
+    bool desktop_dark;
 
     struct ev_core ev;
     int            signal_fd;
@@ -1107,9 +1106,11 @@ static void toggle_gamemode_timers(struct wallpaper_state* state, bool active)
     struct wallpaper_output* o;
     wl_list_for_each(o, &state->outputs, link)
     {
-        if ((o->render.flags & F_DEAD) || o->timer_fd < 0 || !o->gamemode_enabled)
+        if ((o->render.flags & F_DEAD) || !o->gamemode_enabled)
             continue;
         arm_rotation_timer(o, active);
+        if (!active && o->pending_cycle && o->render.t_state == T_STATE_IDLE)
+            update_wallpaper(o);
         dbg_print(
             "[GAMEMODE] Output '%s': %s", o->name, active ? "DISARMED (Zero-Wakeup)" : "ARMED");
     }
@@ -1177,6 +1178,41 @@ static int on_gamemode_initial_state(sd_bus_message* m, void* userdata, sd_bus_e
     return 0;
 }
 
+/* Automatic appearance is a desktop preference. It does not replace the
+ * extracted material's separate luminance observer/animation mechanism. */
+static void accept_desktop_appearance(struct wallpaper_state* state, uint32_t value)
+{
+    /* The portal defines every unknown value as no preference. */
+    state->desktop_dark = value == 1;
+    /* Each transition snapshots appearance, so a setting change cannot flash
+     * the material half way through a frame sequence. */
+}
+
+static int appearance_initial(sd_bus_message* message, void* userdata,
+                              [[maybe_unused]] sd_bus_error* error)
+{
+    if (!message || sd_bus_message_is_method_error(message, nullptr))
+        return 0; /* No portal preference: retain the initial light appearance. */
+    uint32_t value;
+    if (sd_bus_message_enter_container(message, 'v', "u") > 0) {
+        if (sd_bus_message_read(message, "u", &value) > 0)
+            accept_desktop_appearance(userdata, value);
+        (void)sd_bus_message_exit_container(message);
+    }
+    return 0;
+}
+
+static int appearance_changed(sd_bus_message* message, void* userdata,
+                              [[maybe_unused]] sd_bus_error* error)
+{
+    const char *space = nullptr, *key = nullptr;
+    if (sd_bus_message_read(message, "ss", &space, &key) < 0
+        || strcmp(space, "org.freedesktop.appearance") != 0
+        || strcmp(key, "color-scheme") != 0)
+        return 0;
+    return appearance_initial(message, userdata, nullptr);
+}
+
 [[nodiscard]]
 static bool gamemode_init(struct wallpaper_state* state)
 {
@@ -1185,46 +1221,64 @@ static bool gamemode_init(struct wallpaper_state* state)
         return false;
     }
 
-    char match_rule[512];
-    snprintf(match_rule,
-             sizeof(match_rule),
-             "type='signal',"
-             "sender='%s',"
-             "path='%s',"
-             "interface='%s',"
-             "member='PropertiesChanged',"
-             "arg0='%s'", /* Kernel-side filter. Removes this and you get wakeups for ALL portal
-                             properties. */
-             GAMEMODE_BUS_NAME,
-             GAMEMODE_PATH,
-             DBUS_PROPS_INTERFACE,
-             GAMEMODE_INTERFACE);
+    if (!state->preview_capture) {
+        char match_rule[512];
+        snprintf(match_rule,
+                 sizeof(match_rule),
+                 "type='signal',"
+                 "sender='%s',"
+                 "path='%s',"
+                 "interface='%s',"
+                 "member='PropertiesChanged',"
+                 "arg0='%s'", /* Kernel-side filter. Removes this and you get wakeups for ALL portal
+                                 properties. */
+                 GAMEMODE_BUS_NAME,
+                 GAMEMODE_PATH,
+                 DBUS_PROPS_INTERFACE,
+                 GAMEMODE_INTERFACE);
 
-    int r = sd_bus_add_match(
-        state->bus, &state->gamemode_slot, match_rule, gamemode_property_changed, state);
-    if (r < 0) {
-        sd_bus_unref(state->bus);
-        state->bus = nullptr;
-        return false;
+        int r = sd_bus_add_match(
+            state->bus, &state->gamemode_slot, match_rule, gamemode_property_changed, state);
+        if (r < 0) {
+            sd_bus_unref(state->bus);
+            state->bus = nullptr;
+            return false;
+        }
+
+        r = sd_bus_call_method_async(state->bus,
+                                     nullptr,
+                                     GAMEMODE_BUS_NAME,
+                                     GAMEMODE_PATH,
+                                     DBUS_PROPS_INTERFACE,
+                                     "Get",
+                                     on_gamemode_initial_state,
+                                     state,
+                                     "ss",
+                                     GAMEMODE_INTERFACE,
+                                     GAMEMODE_PROPERTY);
+
     }
 
-    r = sd_bus_call_method_async(state->bus,
-                                 nullptr,
-                                 GAMEMODE_BUS_NAME,
-                                 GAMEMODE_PATH,
-                                 DBUS_PROPS_INTERFACE,
-                                 "Get",
-                                 on_gamemode_initial_state,
-                                 state,
-                                 "ss",
-                                 GAMEMODE_INTERFACE,
-                                 GAMEMODE_PROPERTY);
+    int appearance_match = sd_bus_add_match(state->bus, &state->appearance_slot,
+        "type='signal',sender='org.freedesktop.portal.Desktop',"
+        "path='/org/freedesktop/portal/desktop',interface='org.freedesktop.portal.Settings',"
+        "member='SettingChanged',arg0='org.freedesktop.appearance',arg1='color-scheme'",
+        appearance_changed, state);
+    if (appearance_match >= 0)
+        (void)sd_bus_call_method_async(state->bus, nullptr,
+            "org.freedesktop.portal.Desktop", "/org/freedesktop/portal/desktop",
+            "org.freedesktop.portal.Settings", "ReadOne", appearance_initial, state,
+            "ss", "org.freedesktop.appearance", "color-scheme");
 
     return true;
 }
 
 static void gamemode_cleanup(struct wallpaper_state* state)
 {
+    if (state->appearance_slot) {
+        sd_bus_slot_unref(state->appearance_slot);
+        state->appearance_slot = nullptr;
+    }
     if (state->gamemode_slot) {
         sd_bus_slot_unref(state->gamemode_slot);
         state->gamemode_slot = nullptr;
@@ -1307,49 +1361,6 @@ static int write_pipeline_to_buffer_direct(VipsImage* in, void* dest, size_t len
     return 0;
 }
 
-[[nodiscard]]
-static VipsImage* apply_liquid_glass_effect_vips(VipsImage* input, double sigma, double saturation)
-{
-    VipsImage *curr = input, *temp = nullptr;
-    g_object_ref(curr);
-
-    if (vips_gaussblur(curr, &temp, sigma, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    if (vips_colourspace(curr, &temp, VIPS_INTERPRETATION_HSV, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    /* Vibrancy only. No baked-in tint: Apple's material "has no inherent
-     * color"; the legibility treatment happens adaptively in the shader. */
-    double m[]   = {1.0, saturation, 1.0, 1.0};
-    double o[]   = {0.0, 0.0, 0.0, 0.0};
-    int    bands = vips_image_get_bands(curr);
-    if (vips_linear(curr, &temp, m, o, bands, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    if (vips_colourspace(curr, &temp, VIPS_INTERPRETATION_sRGB, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    if (vips_cast(curr, &temp, VIPS_FORMAT_UCHAR, nullptr))
-        goto err;
-    g_object_unref(curr);
-    curr = temp;
-
-    return curr;
-err:
-    if (curr)
-        g_object_unref(curr);
-    return nullptr;
-}
-
 /* -- Render Thread ------------------------------------------------------- */
 
 static void* render_thread_worker(void* arg)
@@ -1374,22 +1385,13 @@ static void* render_thread_worker(void* arg)
     auto                 item    = &output->items[output->current_item_index];
     int                  w       = output->job_w;
     int                  h       = output->job_h;
-    enum glass_variant   variant = output->job_variant;
-
-    /* Per-variant material blur, relative to the output's own scale
-     * (sigma/diameter ratios measured off the HIG variant photos). */
-    bool   is_regular  = variant == GLASS_VARIANT_REGULAR;
-    double glass_sigma = hypot((double)w, (double)h)
-                         * (is_regular ? GLASS_SIGMA_FRAC_REGULAR : GLASS_SIGMA_FRAC_CLEAR);
-    double   glass_sat    = is_regular ? GLASS_SAT_REGULAR : GLASS_SAT_CLEAR;
-    long     page_size    = sysconf(_SC_PAGESIZE);
     char*    cpath        = nullptr;
     char*    cdir         = nullptr;
     int      fd           = -1;
     bool     cache_backed = false;
     uint8_t* map          = nullptr;
 
-    /* Always decode to RGBA: one band count keeps texture storage, PBO sizing,
+    /* Always decode to RGBA: one band count keeps texture storage, buffer sizing,
      * and row alignment uniform for every image and output. */
     constexpr int bands = 4;
 
@@ -1408,23 +1410,11 @@ static void* render_thread_worker(void* arg)
     }
     g_object_unref(header);
 
-    size_t raw_sz, glass_sz, total_sz;
-    if (ckd_mul(&raw_sz, (size_t)w * h, bands))
+    size_t pixels, raw_sz;
+    if (w <= 0 || h <= 0 || ckd_mul(&pixels, (size_t)w, (size_t)h)
+        || ckd_mul(&raw_sz, pixels, (size_t)bands))
         goto finalize;
-
-    size_t aligned_raw_sz = (raw_sz + (page_size - 1)) & ~(page_size - 1);
-
-    int gw = w / GLASS_DOWN_FACTOR;
-    if (gw < 1)
-        gw = 1;
-    int gh = h / GLASS_DOWN_FACTOR;
-    if (gh < 1)
-        gh = 1;
-
-    if (ckd_mul(&glass_sz, (size_t)gw * gh, bands))
-        goto finalize;
-    if (ckd_add(&total_sz, aligned_raw_sz, glass_sz))
-        goto finalize;
+    size_t total_sz = raw_sz;
 
     struct stat st;
     if (stat(item->filename, &st))
@@ -1439,10 +1429,6 @@ static void* render_thread_worker(void* arg)
     XXH64_update(xxh, &st.st_size, sizeof(st.st_size));
     XXH64_update(xxh, &w, sizeof(w));
     XXH64_update(xxh, &h, sizeof(h));
-    XXH64_update(xxh, &variant, sizeof(variant));
-    XXH64_update(xxh, &glass_sigma, sizeof(glass_sigma));
-    XXH64_update(xxh, &GLASS_DOWN_FACTOR, sizeof(GLASS_DOWN_FACTOR));
-    XXH64_update(xxh, &glass_sat, sizeof(glass_sat));
     XXH64_update(xxh, &item->mode, sizeof(item->mode));
     if (item->mode == MODE_FILL) {
         XXH64_update(xxh, &item->crop_strategy, sizeof(item->crop_strategy));
@@ -1462,8 +1448,6 @@ static void* render_thread_worker(void* arg)
                 result.fd = cfd;
                 result.standard
                     = (struct image_layer){.offset = 0, .size = raw_sz, .width = w, .height = h};
-                result.glass = (struct image_layer){
-                    .offset = aligned_raw_sz, .size = glass_sz, .width = gw, .height = gh};
                 result.success = true;
                 goto finalize;
             }
@@ -1577,6 +1561,15 @@ static void* render_thread_worker(void* arg)
     g_object_unref(img);
     img = tmp;
 
+    /* Wallpaper surfaces are opaque. Composite transparent input over black
+     * before feeding the encoded-sRGB optical path, then restore opaque alpha. */
+    if (vips_image_hasalpha(img)) {
+        if (vips_flatten(img, &tmp, nullptr))
+            goto vips_err;
+        g_object_unref(img);
+        img = tmp;
+    }
+
     /* Normalize to exactly RGBA. */
     if (vips_image_get_bands(img) < 4) {
         if (vips_addalpha(img, &tmp, nullptr))
@@ -1600,31 +1593,6 @@ static void* render_thread_worker(void* arg)
     if (write_pipeline_to_buffer_direct(img, map, raw_sz) != 0)
         goto vips_err;
 
-    /* Wrap mmap'd standard layer as source for glass. Single decode, not two. */
-    VipsImage* from_map = vips_image_new_from_memory(map, raw_sz, w, h, bands, VIPS_FORMAT_UCHAR);
-    if (!from_map)
-        goto vips_err;
-
-    double scale_x = (double)gw / (double)w;
-    double scale_y = (double)gh / (double)h;
-    if (vips_resize(from_map, &tmp, scale_x, "vscale", scale_y, nullptr)) {
-        g_object_unref(from_map);
-        goto vips_err;
-    }
-    g_object_unref(from_map);
-    VipsImage* g_in = tmp;
-
-    VipsImage* g_out
-        = apply_liquid_glass_effect_vips(g_in, glass_sigma / GLASS_DOWN_FACTOR, glass_sat);
-    g_object_unref(g_in);
-    if (!g_out)
-        goto vips_err;
-
-    if (write_pipeline_to_buffer_direct(g_out, map + aligned_raw_sz, glass_sz) != 0) {
-        g_object_unref(g_out);
-        goto vips_err;
-    }
-    g_object_unref(g_out);
     g_object_unref(img);
     img = nullptr;
 
@@ -1643,8 +1611,6 @@ static void* render_thread_worker(void* arg)
     result.fd       = fd;
     fd              = -1; /* ownership moved into result */
     result.standard = (struct image_layer){.offset = 0, .size = raw_sz, .width = w, .height = h};
-    result.glass    = (struct image_layer){
-           .offset = aligned_raw_sz, .size = glass_sz, .width = gw, .height = gh};
     result.success = true;
     goto finalize;
 
@@ -1679,7 +1645,7 @@ finalize:
     }
 #if defined(WALLE_TRACY)
     TracyCZoneValue(tracy_prepare_wallpaper,
-                    result.success ? result.standard.size + result.glass.size : 0);
+                    result.success ? result.standard.size : 0);
     TracyCZoneEnd(tracy_prepare_wallpaper);
 #endif
     return nullptr;
@@ -1690,13 +1656,13 @@ finalize:
 static void frame_callback_handler(void* data, struct wl_callback* callback, uint32_t time);
 static const struct wl_callback_listener frame_listener = {.done = frame_callback_handler};
 
-static void reveal_process_capture_fail(struct wallpaper_state* state, const char* reason)
+static void preview_capture_fail(struct wallpaper_state* state, const char* reason)
 {
-    if (!state->reveal_process_capture || state->reveal_process_capture_complete)
+    if (!state->preview_capture || state->preview_capture_complete)
         return;
-    fprintf(stderr, "[REVEAL CAPTURE] Failed: %s\n", reason);
-    state->reveal_process_capture_status   = 1;
-    state->reveal_process_capture_complete = true;
+    fprintf(stderr, "[PREVIEW] Failed: %s\n", reason);
+    state->preview_capture_status   = 1;
+    state->preview_capture_complete = true;
 }
 
 [[nodiscard]]
@@ -1720,78 +1686,49 @@ static bool write_all_bytes(int fd, const uint8_t* bytes, size_t byte_count)
 }
 
 [[nodiscard]]
-static bool write_reveal_process_capture(struct wallpaper_output* output)
+static bool write_preview_capture(struct wallpaper_output* output)
 {
-    struct wallpaper_state* state = output->render.state;
-    char                    name[sizeof "state-0000.r8"];
-    int                     name_length
-        = snprintf(name, sizeof(name), "state-%04u.r8", output->reveal_process_capture_state);
-    if (name_length < 0 || (size_t)name_length >= sizeof(name)) {
-        errno = EOVERFLOW;
+    char name[64];
+    int n = snprintf(name, sizeof name, "frame-%04u.bgra", output->preview_capture_state);
+    if (n < 0 || (size_t)n >= sizeof name)
         return false;
-    }
-
-    int fd = openat(state->reveal_process_capture_directory_fd,
-                    name,
-                    O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC | O_NOFOLLOW,
-                    S_IRUSR | S_IWUSR);
+    int fd = openat(output->render.state->preview_capture_directory_fd, name,
+                    O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC | O_NOFOLLOW, 0600);
     if (fd < 0)
         return false;
-
-    bool success
-        = write_all_bytes(fd,
-                          output->reveal_process_capture_pixels,
-                          (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT);
-
-    int saved_errno = errno;
-    if (close(fd) < 0 && success) {
-        success     = false;
-        saved_errno = errno;
+    size_t pixels, bytes;
+    bool ok = !ckd_mul(&pixels, (size_t)output->render.width, (size_t)output->render.height)
+              && !ckd_mul(&bytes, pixels, (size_t)4)
+              && write_all_bytes(fd, output->preview_pixels, bytes);
+    int saved = errno;
+    if (close(fd) < 0 && ok) {
+        ok = false;
+        saved = errno;
     }
-    if (!success)
-        (void)unlinkat(state->reveal_process_capture_directory_fd, name, 0);
-    errno = saved_errno;
-    return success;
+    if (!ok)
+        (void)unlinkat(output->render.state->preview_capture_directory_fd, name, 0);
+    errno = saved;
+    return ok;
 }
 
-[[nodiscard]]
-static bool write_reveal_process_composition(struct wallpaper_output* output)
+static void cancel_transition(struct wallpaper_output* output)
 {
-    static const char       name[] = "composition-state-0032.bgra";
-    struct wallpaper_state* state  = output->render.state;
-    int                     fd     = openat(state->reveal_process_capture_directory_fd,
-                    name,
-                    O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC | O_NOFOLLOW,
-                    S_IRUSR | S_IWUSR);
-    if (fd < 0)
-        return false;
-
-    bool success
-        = write_all_bytes(fd,
-                          output->reveal_process_composition_pixels,
-                          (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT * 4);
-    int saved_errno = errno;
-    if (close(fd) < 0 && success) {
-        success     = false;
-        saved_errno = errno;
-    }
-    if (!success)
-        (void)unlinkat(state->reveal_process_capture_directory_fd, name, 0);
-    errno = saved_errno;
-    return success;
-}
-
-static void stop_failed_transition(struct wallpaper_output* output, const char* reason)
-{
-    fprintf(stderr, "[Vulkan] Transition stopped for %s: %s\n", output->name, reason);
-    reveal_process_capture_fail(output->render.state, reason);
     if (output->frame_callback) {
         wl_callback_destroy(output->frame_callback);
         output->frame_callback = nullptr;
     }
     output->render.t_state = T_STATE_IDLE;
     walle_vk_output_abort_transition(output->render.vk_output);
+    walle_transition_destroy(output->transition);
+    output->transition = nullptr;
     release_render_result(&output->pending_source);
+}
+
+static void stop_failed_transition(struct wallpaper_output* output, const char* reason)
+{
+    fprintf(stderr, "[Vulkan] Transition stopped for %s: %s\n", output->name, reason);
+    preview_capture_fail(output->render.state, reason);
+    cancel_transition(output);
 }
 
 enum render_frame_result : uint8_t
@@ -1809,7 +1746,7 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
         return RENDER_FRAME_FAILED;
 
     struct wallpaper_state* state           = output->render.state;
-    bool                    process_capture = output->reveal_process_capture_active;
+    bool                    process_capture = output->preview_capture_active;
 #if defined(WALLE_TRACY)
     TracyCZoneN(tracy_transition_frame, "Vulkan transition frame", true);
 #endif
@@ -1821,61 +1758,47 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
         output->render.anim_start_ns = now_ns;
         output->render.t_state       = T_STATE_RUNNING;
     }
-    float elapsed = (float)(now_ns - output->render.anim_start_ns) * 1e-9f;
-    float progress;
+    double elapsed = (double)(now_ns - output->render.anim_start_ns) * 1e-9;
+    double progress;
     bool  finished;
     if (process_capture) {
-        progress = (float)output->reveal_process_capture_state
-                   / (float)(REVEAL_PROCESS_CAPTURE_STATE_COUNT - 1);
-        finished = output->reveal_process_capture_state == REVEAL_PROCESS_CAPTURE_STATE_COUNT - 1;
+        progress = (double)output->preview_capture_state
+                   / (double)(PREVIEW_CAPTURE_STATE_COUNT - 1);
+        finished = output->preview_capture_state == PREVIEW_CAPTURE_STATE_COUNT - 1;
     } else {
-        progress = elapsed * output->render.duration_inv;
+        progress = elapsed / (double)output->render.duration_seconds;
         finished = progress >= 1.0f;
         if (finished)
             progress = 1.0f;
     }
 
-    struct walle_lg_reveal_mask_geometry      geometry = {};
-    const struct walle_lg_reveal_mask_request request  = {
-         .target_width   = (uint32_t)output->render.width,
-         .target_height  = (uint32_t)output->render.height,
-         .center_x       = process_capture ? REVEAL_PROCESS_CAPTURE_CENTER_X : output->t_center_x,
-         .center_y       = process_capture ? REVEAL_PROCESS_CAPTURE_CENTER_Y : output->t_center_y,
-         .maximum_radius = output->reveal_maximum_radius,
-         .progress       = progress,
-    };
-    if (!walle_lg_reveal_mask_geometry_construct(&request, &geometry)) {
-        stop_failed_transition(output, "public reveal geometry construction failed");
-#if defined(WALLE_TRACY)
-        TracyCZoneEnd(tracy_transition_frame);
-#endif
-        return RENDER_FRAME_FAILED;
+    bool first_boot = !(output->render.flags & F_BOOT_COMPLETE);
+    if (output->transition_immediate) {
+        progress = 1.0f;
+        finished = true;
     }
-
-    bool                  first_boot = !(output->render.flags & F_BOOT_COMPLETE);
-    struct walle_vk_frame frame      = {
-             .geometry          = &geometry,
-             .progress          = progress,
-             .variant           = output->glass_variant == GLASS_VARIANT_REGULAR ? 1.0f : 0.0f,
-             .center_top_left_x = geometry.circle.center[0],
-             .center_top_left_y = geometry.circle.center[1],
-             .radius            = geometry.circle.radius,
-             .first_boot        = first_boot,
-             .mask_readback     = process_capture ? output->reveal_process_capture_pixels : nullptr,
-             .mask_readback_size
-        = process_capture ? (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT
-                               : 0,
-             .composition_readback
-        = process_capture
-                  && output->reveal_process_capture_state == REVEAL_PROCESS_COMPOSITION_STATE
-                   ? output->reveal_process_composition_pixels
-                   : nullptr,
-             .composition_readback_size
-        = process_capture
-                  && output->reveal_process_capture_state == REVEAL_PROCESS_COMPOSITION_STATE
-                   ? (size_t)REVEAL_PROCESS_CAPTURE_WIDTH * REVEAL_PROCESS_CAPTURE_HEIGHT * 4
-                   : 0,
-    };
+    struct walle_vk_frame frame = {.plain_incoming = true};
+    if (output->transition) {
+        const struct walle_vk_frame* borrowed = nullptr;
+        if (!walle_transition_build(output->transition, progress, first_boot, &borrowed)) {
+            stop_failed_transition(output, "transition frame construction failed");
+#if defined(WALLE_TRACY)
+            TracyCZoneEnd(tracy_transition_frame);
+#endif
+            return RENDER_FRAME_FAILED;
+        }
+        frame = *borrowed;
+    }
+    if (process_capture) {
+        size_t pixels, bytes;
+        if (ckd_mul(&pixels, (size_t)output->render.width, (size_t)output->render.height)
+            || ckd_mul(&bytes, pixels, (size_t)4)) {
+            stop_failed_transition(output, "preview byte count overflow");
+            return RENDER_FRAME_FAILED;
+        }
+        frame.composition_readback = output->preview_pixels;
+        frame.composition_readback_size = bytes;
+    }
 #if defined(WALLE_TRACY)
     TracyCZoneN(tracy_present, "Vulkan render and present", true);
 #endif
@@ -1884,7 +1807,7 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
     TracyCZoneEnd(tracy_present);
 #endif
     if (status == WALLE_VK_FRAME_FATAL) {
-        stop_failed_transition(output, "Vulkan reveal/composition/present failed");
+        stop_failed_transition(output, "Vulkan glass/composition/present failed");
 #if defined(WALLE_TRACY)
         TracyCZoneEnd(tracy_transition_frame);
 #endif
@@ -1903,12 +1826,12 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
     }
 
     if (process_capture) {
-        if (!write_reveal_process_capture(output)) {
+        if (!write_preview_capture(output)) {
             char reason[160];
             snprintf(reason,
                      sizeof reason,
-                     "could not create state-%04u.r8: %s",
-                     output->reveal_process_capture_state,
+                     "could not create frame-%04u.bgra: %s",
+                     output->preview_capture_state,
                      strerror(errno));
             stop_failed_transition(output, reason);
 #if defined(WALLE_TRACY)
@@ -1916,17 +1839,9 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
 #endif
             return RENDER_FRAME_FAILED;
         }
-        if (output->reveal_process_capture_state == REVEAL_PROCESS_COMPOSITION_STATE
-            && !write_reveal_process_composition(output)) {
-            stop_failed_transition(output, "could not create composition-state-0032.bgra");
-#if defined(WALLE_TRACY)
-            TracyCZoneEnd(tracy_transition_frame);
-#endif
-            return RENDER_FRAME_FAILED;
-        }
-        ++state->reveal_process_capture_swap_count;
+        ++state->preview_capture_swap_count;
         if (!finished)
-            ++output->reveal_process_capture_state;
+            ++output->preview_capture_state;
     }
 #if defined(WALLE_TRACY)
     TracyCPlotF("transition progress", progress);
@@ -1934,6 +1849,8 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
 #endif
 
     if (finished) {
+        if (first_boot)
+            output->render.flags |= F_BOOT_COMPLETE;
         output->render.t_state = T_STATE_IDLE;
         if (output->frame_callback) {
             wl_callback_destroy(output->frame_callback);
@@ -1941,6 +1858,8 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
         }
         wl_surface_commit(output->surface);
         walle_vk_output_promote(output->render.vk_output);
+        walle_transition_destroy(output->transition);
+        output->transition = nullptr;
         release_render_result(&output->current_source);
         output->current_source = output->pending_source;
         output->pending_source = (struct render_result){.fd = -1};
@@ -1952,57 +1871,72 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
         wl_surface_commit(output->surface);
     }
     if (process_capture && finished) {
-        state->reveal_process_capture_status   = 0;
-        state->reveal_process_capture_complete = true;
-        printf(
-            "walleExecutableProcessRendered=true\n"
-            "walleLayerShellSurfaceRendered=true\n"
-            "walleRenderer=Vulkan-1.4-Slang-SPIR-V-1.6\n"
-            "revealMaskProcessCaptureStates=%u\n"
-            "revealMaskProcessCaptureSwaps=%u\n"
-            "revealMaskProcessCaptureCallbacks=%u\n"
-            "revealMaskProcessCaptureDimensions=2048x2048\n"
-            "revealMaskProcessCaptureCenterTopLeft=512.0,614.4\n"
-            "revealMaskProcessCaptureProgress=state/64\n"
-            "revealMaskProcessCaptureFormat=R8-top-left-row-major\n"
-            "compositionProcessCaptureState=32\n"
-            "compositionProcessCaptureFormat=BGRA8-top-left-row-major\n"
-            "revealMaskProcessCaptureComplete=true\n",
-            REVEAL_PROCESS_CAPTURE_STATE_COUNT,
-            state->reveal_process_capture_swap_count,
-            state->reveal_process_capture_callback_count);
+        state->preview_capture_status   = 0;
+        state->preview_capture_complete = true;
+        int fd = openat(state->preview_capture_directory_fd, "frames.json",
+                        O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC | O_NOFOLLOW, 0600);
+        if (fd < 0 || dprintf(fd,
+                "{\"width\":%d,\"height\":%d,\"frames\":%u,"
+                "\"format\":\"BGRA8 top-left\",\"callbacks\":%u}\n",
+                output->render.width, output->render.height,
+                state->preview_capture_swap_count, state->preview_capture_callback_count) < 0) {
+            state->preview_capture_status = 1;
+        }
+        if (fd >= 0 && close(fd) < 0)
+            state->preview_capture_status = 1;
+        printf("Preview complete: %u full-color frames (%dx%d).\n",
+               state->preview_capture_swap_count, output->render.width, output->render.height);
         fflush(stdout);
     }
 #if defined(WALLE_TRACY)
     TracyCZoneEnd(tracy_transition_frame);
 #endif
+    if (finished && ((first_boot && output->preview_capture_owned) || output->pending_cycle))
+        update_wallpaper(output);
     return RENDER_FRAME_PRESENTED;
 }
 
 static void frame_callback_handler(void* data, struct wl_callback* callback, uint32_t time)
 {
     (void)time;
-    (void)callback;
     auto output = (struct wallpaper_output*)data;
-    if (output->reveal_process_capture_active)
-        ++output->render.state->reveal_process_capture_callback_count;
-    if (render_frame(output) == RENDER_FRAME_FAILED && output->reveal_process_capture_owned)
-        reveal_process_capture_fail(output->render.state, "capture frame callback did not render");
+    if (output->frame_callback == callback)
+        output->frame_callback = nullptr;
+    wl_callback_destroy(callback);
+    if ((output->render.flags & F_DEAD) || output->render.t_state == T_STATE_IDLE)
+        return;
+    if (output->preview_capture_active)
+        ++output->render.state->preview_capture_callback_count;
+    if (render_frame(output) == RENDER_FRAME_FAILED && output->preview_capture_owned)
+        preview_capture_fail(output->render.state, "preview callback did not render");
 }
 
-static void set_reveal_origin(struct wallpaper_output* output,
-                              double                   center_top_left_x,
-                              double                   center_top_left_y)
+static void set_reveal_origin(struct wallpaper_output* output, double x, double y)
 {
-    output->t_center_x = (float)center_top_left_x;
-    output->t_center_y = (float)center_top_left_y;
+    output->t_center_x = (float)x;
+    output->t_center_y = (float)y;
+}
 
-    double d1 = hypot(center_top_left_x, center_top_left_y);
-    double d2 = hypot((double)output->render.width - center_top_left_x, center_top_left_y);
-    double d3 = hypot(center_top_left_x, (double)output->render.height - center_top_left_y);
-    double d4 = hypot((double)output->render.width - center_top_left_x,
-                      (double)output->render.height - center_top_left_y);
-    output->reveal_maximum_radius = fmax(d1, fmax(d2, fmax(d3, d4))) * REVEAL_RADIUS_MARGIN;
+static bool prepare_transition(struct wallpaper_output* output)
+{
+    struct walle_transition_options options = {
+        .style = output->glass_variant == GLASS_VARIANT_REGULAR ? WM_REGULAR : WM_CLEAR,
+        .dark = output->glass_appearance == GLASS_APPEARANCE_AUTO
+                ? output->render.state->desktop_dark
+                : output->glass_appearance == GLASS_APPEARANCE_DARK,
+        .active = true,
+        .tint = output->glass_tint,
+        .motion = output->glass_motion,
+        .origin = {output->t_center_x / output->render.width,
+                   output->t_center_y / output->render.height},
+        .direction = {output->transition_reverse ? -1.0 : 1.0, 0.0},
+    };
+    walle_transition_destroy(output->transition);
+    output->transition = nullptr;
+    return walle_transition_create((uint32_t)output->render.width,
+            (uint32_t)output->render.height,
+            output->configured_scale > 0 ? output->configured_scale : 1,
+            &options, &output->transition);
 }
 
 static void finalize_render(struct wallpaper_output* output)
@@ -2033,10 +1967,10 @@ static void finalize_render(struct wallpaper_output* output)
     /* Deferred reload: config changed while render was in-flight. Discard
      * the stale result; a section that vanished freezes the output. */
     if (output->pending_reload) {
-        if (output->reveal_process_capture_owned) {
+        if (output->preview_capture_owned) {
             if (res.fd >= 0)
                 close(res.fd);
-            reveal_process_capture_fail(state, "configuration changed during capture");
+            preview_capture_fail(state, "configuration changed during capture");
             return;
         }
         output->pending_reload    = false;
@@ -2055,16 +1989,16 @@ static void finalize_render(struct wallpaper_output* output)
     if (!res.success) {
         if (res.fd >= 0)
             close(res.fd);
-        if (output->reveal_process_capture_owned)
-            reveal_process_capture_fail(state, "wallpaper preparation failed");
+        if (output->preview_capture_owned)
+            preview_capture_fail(state, "wallpaper preparation failed");
         return;
     }
 
     if (res.standard.width != output->render.width
         || res.standard.height != output->render.height) {
         close(res.fd);
-        if (output->reveal_process_capture_owned) {
-            reveal_process_capture_fail(state, "surface size changed during capture");
+        if (output->preview_capture_owned) {
+            preview_capture_fail(state, "surface size changed during capture");
             return;
         }
         /* The surface was reconfigured while this render was in flight;
@@ -2073,18 +2007,15 @@ static void finalize_render(struct wallpaper_output* output)
         return;
     }
 
+    if (output->render.t_state != T_STATE_IDLE)
+        cancel_transition(output);
+
     bool                              first_boot = !(output->render.flags & F_BOOT_COMPLETE);
     const struct walle_vk_image_layer standard   = {
           .offset = res.standard.offset,
           .size   = res.standard.size,
           .width  = res.standard.width,
           .height = res.standard.height,
-    };
-    const struct walle_vk_image_layer glass = {
-        .offset = res.glass.offset,
-        .size   = res.glass.size,
-        .width  = res.glass.width,
-        .height = res.glass.height,
     };
     bool restored = first_boot;
     if (!first_boot && output->current_source.fd >= 0) {
@@ -2094,26 +2025,17 @@ static void finalize_render(struct wallpaper_output* output)
             .width  = output->current_source.standard.width,
             .height = output->current_source.standard.height,
         };
-        const struct walle_vk_image_layer current_glass = {
-            .offset = output->current_source.glass.offset,
-            .size   = output->current_source.glass.size,
-            .width  = output->current_source.glass.width,
-            .height = output->current_source.glass.height,
-        };
         restored = output->render.vk_output
                    && walle_vk_output_restore_current(output->render.vk_output,
                                                       output->current_source.fd,
-                                                      &current_standard,
-                                                      &current_glass);
+                                                      &current_standard);
     }
     bool uploaded = restored && output->render.vk_output
-                    && walle_vk_output_upload(output->render.vk_output, res.fd, &standard, &glass);
+                    && walle_vk_output_upload(output->render.vk_output, res.fd, &standard);
 
     if (!uploaded) {
         release_render_result(&res);
-        walle_vk_output_abort_transition(output->render.vk_output);
-        if (output->reveal_process_capture_owned)
-            reveal_process_capture_fail(state, "wallpaper texture upload failed");
+        stop_failed_transition(output, "wallpaper texture upload failed");
         return;
     }
     release_render_result(&output->pending_source);
@@ -2126,66 +2048,34 @@ static void finalize_render(struct wallpaper_output* output)
         launch_cache_maintenance_service();
     }
 
-    if ((output->render.flags & F_TRANSITION_ON) && !first_boot) {
-        output->render.t_state = T_STATE_ARMED;
-
-        if (output->reveal_process_capture_owned) {
-            output->reveal_process_capture_state  = 0;
-            output->reveal_process_capture_active = true;
-            set_reveal_origin(
-                output, REVEAL_PROCESS_CAPTURE_CENTER_X, REVEAL_PROCESS_CAPTURE_CENTER_Y);
+    output->transition_immediate = first_boot || !(output->render.flags & F_TRANSITION_ON);
+    output->render.t_state = T_STATE_ARMED;
+    output->render.duration_seconds = output->transition_duration;
+    if (!output->transition_immediate) {
+        if (output->preview_capture_owned) {
+            output->preview_capture_state = 0;
+            output->preview_capture_active = true;
+            set_reveal_origin(output, PREVIEW_CAPTURE_CENTER_X, PREVIEW_CAPTURE_CENTER_Y);
+            output->transition_reverse = false;
         } else {
-            int cx = (int)xoshiro256pp_bounded(&g_rng, output->render.width / 2)
-                     + output->render.width / 4;
-            int cy = (int)xoshiro256pp_bounded(&g_rng, output->render.height / 2)
-                     + output->render.height / 4;
-
-            /* Debug/measurement override: WALLE_DEBUG_CENTER="x,y" pins the
-             * transition origin (buffer px, top-left origin) so external
-             * instrumentation can align with the circle deterministically. */
-            const char* dbg_center = getenv("WALLE_DEBUG_CENTER");
-            if (dbg_center) {
-                int dx_, dy_;
-                if (sscanf(dbg_center, "%d,%d", &dx_, &dy_) == 2) {
-                    cx = dx_;
-                    cy = dy_;
-                }
-            }
-
-            set_reveal_origin(output, (double)cx, (double)cy);
+            double x = 0.25 + 0.5 * (double)(xoshiro256pp_next(&g_rng) >> 11) * 0x1p-53;
+            double y = 0.25 + 0.5 * (double)(xoshiro256pp_next(&g_rng) >> 11) * 0x1p-53;
+            set_reveal_origin(output, x * output->render.width, y * output->render.height);
         }
-
-        float duration              = output->transition_duration > 0 ? output->transition_duration
-                                                                      : DEFAULT_TRANSITION_DUR;
-        output->render.duration_inv = 1.0f / duration;
-    } else {
-        output->render.t_state = T_STATE_RUNNING;
-
-        struct timespec ts;
-        clock_gettime(CLOCK_MONOTONIC, &ts);
-        float duration              = output->transition_duration > 0 ? output->transition_duration
-                                                                      : DEFAULT_TRANSITION_DUR;
-        output->render.duration_inv = 1.0f / duration;
-
-        uint64_t offset_ns           = (uint64_t)(duration + 1.0f) * 1000000000ULL;
-        uint64_t now_ns              = (uint64_t)ts.tv_sec * 1000000000ULL + (uint64_t)ts.tv_nsec;
-        output->render.anim_start_ns = now_ns - offset_ns;
-
-        /* Single frame at Time=1: the circle mask must already cover the
-         * whole screen, because nothing outside the circle ever fades to the
-         * incoming image (a tiny radius would leave the OLD wallpaper up). */
-        set_reveal_origin(
-            output, (double)output->render.width * 0.5, (double)output->render.height * 0.5);
+        if (!prepare_transition(output)) {
+            stop_failed_transition(output, "material/geometry preparation failed");
+            return;
+        }
+        if (!output->preview_capture_owned)
+            output->transition_reverse = !output->transition_reverse;
     }
 
     if (first_boot) {
         enum render_frame_result result = render_frame(output);
         if (result == RENDER_FRAME_PRESENTED) {
             output->render.flags |= F_BOOT_COMPLETE;
-            if (output->reveal_process_capture_owned)
-                update_wallpaper(output);
-        } else if (result == RENDER_FRAME_FAILED && output->reveal_process_capture_owned)
-            reveal_process_capture_fail(state, "capture first-boot frame did not render");
+        } else if (result == RENDER_FRAME_FAILED && output->preview_capture_owned)
+            preview_capture_fail(state, "capture first-boot frame did not render");
     } else {
         if (output->frame_callback)
             wl_callback_destroy(output->frame_callback);
@@ -2193,8 +2083,8 @@ static void finalize_render(struct wallpaper_output* output)
         /* Submit the first frame immediately. Waiting for a callback on a
          * newly recreated surface can defer visible work until the compositor
          * next happens to repaint an otherwise static background. */
-        if (render_frame(output) == RENDER_FRAME_FAILED && output->reveal_process_capture_owned)
-            reveal_process_capture_fail(state, "initial capture state did not render");
+        if (render_frame(output) == RENDER_FRAME_FAILED && output->preview_capture_owned)
+            preview_capture_fail(state, "initial capture state did not render");
     }
 }
 
@@ -2211,13 +2101,13 @@ static void destroy_output(struct wallpaper_output* o)
               o->wl_output_name);
 
     struct wallpaper_state* state = o->render.state;
-    if (o->reveal_process_capture_owned)
-        reveal_process_capture_fail(state, "capture output was removed before completion");
-    o->reveal_process_capture_active = false;
-    free(o->reveal_process_capture_pixels);
-    o->reveal_process_capture_pixels = nullptr;
-    free(o->reveal_process_composition_pixels);
-    o->reveal_process_composition_pixels = nullptr;
+    if (o->preview_capture_owned)
+        preview_capture_fail(state, "capture output was removed before completion");
+    o->preview_capture_active = false;
+    free(o->preview_pixels);
+    o->preview_pixels = nullptr;
+    walle_transition_destroy(o->transition);
+    o->transition = nullptr;
     release_render_result(&o->current_source);
     release_render_result(&o->pending_source);
 
@@ -2278,20 +2168,29 @@ static void launch_async_render(struct wallpaper_output* o)
         ;
     o->job_w       = o->render.width;
     o->job_h       = o->render.height;
-    o->job_variant = o->glass_variant;
     if (pthread_create(&o->render_thread, nullptr, render_thread_worker, o) == 0) {
         o->render.flags |= F_THREAD_ACTIVE;
-    } else if (o->reveal_process_capture_owned) {
-        reveal_process_capture_fail(o->render.state, "could not start wallpaper preparation");
+    } else if (o->preview_capture_owned) {
+        preview_capture_fail(o->render.state, "could not start wallpaper preparation");
     }
 }
 
 static void update_wallpaper(struct wallpaper_output* o)
 {
-    if ((o->render.flags & F_DEAD) || (o->render.flags & F_THREAD_ACTIVE))
+    if (o->render.flags & F_DEAD)
         return;
-    if (o->num_items == 0)
-        return; /* hot reload can empty the list; %0 below would be UB */
+    if (o->num_items == 0) {
+        o->pending_cycle = false;
+        return;
+    }
+    if ((o->render.flags & F_THREAD_ACTIVE) || o->render.t_state != T_STATE_IDLE
+        || (o->gamemode_enabled && o->render.state->gamemode_active)) {
+        /* Coalesce requests; never restart a partly visible transition from
+         * an older completed wallpaper when timeout is shorter than duration. */
+        o->pending_cycle = true;
+        return;
+    }
+    o->pending_cycle = false;
     if (o->render.flags & F_RANDOMIZE) {
         size_t next;
         do {
@@ -2589,7 +2488,7 @@ static int parse_int_setting(const char* value, int lo, int hi, int fallback)
     errno     = 0;
     char* end = nullptr;
     long  v   = strtol(value, &end, 10);
-    if (errno != 0 || end == value || v < lo || v > hi) {
+    if (errno != 0 || end == value || *end != '\0' || v < lo || v > hi) {
         fprintf(stderr,
                 "[CONFIG] Invalid integer '%s' (allowed %d..%d); using %d\n",
                 value,
@@ -2606,7 +2505,7 @@ static float parse_duration_setting(const char* value)
     errno     = 0;
     char* end = nullptr;
     float v   = strtof(value, &end);
-    if (errno != 0 || end == value || !isfinite(v) || v <= 0.0f || v > 600.0f) {
+    if (errno != 0 || end == value || *end != '\0' || !isfinite(v) || v <= 0.0f || v > 600.0f) {
         fprintf(stderr,
                 "[CONFIG] Invalid transition_duration '%s'; using %.2fs\n",
                 value,
@@ -2614,6 +2513,34 @@ static float parse_duration_setting(const char* value)
         return DEFAULT_TRANSITION_DUR;
     }
     return v;
+}
+
+static int hex_digit(unsigned char c)
+{
+    if (c >= '0' && c <= '9') return c - '0';
+    if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+    if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+    return -1;
+}
+
+static bool parse_tint_setting(const char* value, struct wm_tint* result)
+{
+    if (strcasecmp(value, "none") == 0) {
+        *result = (struct wm_tint){};
+        return true;
+    }
+    size_t length = strlen(value);
+    if (value[0] != '#' || (length != 7 && length != 9))
+        return false;
+    struct wm_tint tint = {.present = true, .srgb = {0, 0, 0, 255}};
+    for (size_t component = 0; component < (length - 1) / 2; ++component) {
+        int hi = hex_digit((unsigned char)value[1 + component * 2]);
+        int lo = hex_digit((unsigned char)value[2 + component * 2]);
+        if (hi < 0 || lo < 0) return false;
+        tint.srgb[component] = (uint8_t)((hi << 4) | lo);
+    }
+    *result = tint;
+    return true;
 }
 
 static int config_handler(void* user, const char* section, const char* name, const char* value)
@@ -2634,7 +2561,8 @@ static int config_handler(void* user, const char* section, const char* name, con
         return 0;
 
     if (strcasecmp(name, "files") == 0 || strcasecmp(name, "paths") == 0) {
-        process_single_config_entry(&oc->items, value);
+        if (!process_single_config_entry(&oc->items, value))
+            return 0;
     } else if (strcasecmp(name, "timeout") == 0) {
         oc->timeout = parse_int_setting(value, 0, 366 * 24 * 3600, 0);
     } else if (strcasecmp(name, "randomize") == 0) {
@@ -2654,10 +2582,50 @@ static int config_handler(void* user, const char* section, const char* name, con
                     value);
             oc->variant = GLASS_VARIANT_CLEAR;
         }
+    } else if (strcasecmp(name, "transition_appearance") == 0) {
+        if (strcasecmp(value, "auto") == 0) oc->appearance = GLASS_APPEARANCE_AUTO;
+        else if (strcasecmp(value, "light") == 0) oc->appearance = GLASS_APPEARANCE_LIGHT;
+        else if (strcasecmp(value, "dark") == 0) oc->appearance = GLASS_APPEARANCE_DARK;
+        else return 0;
+    } else if (strcasecmp(name, "transition_motion") == 0) {
+        if (strcasecmp(value, "sweep") == 0) oc->motion = WALLE_TRANSITION_SWEEP;
+        else if (strcasecmp(value, "lens") == 0) oc->motion = WALLE_TRANSITION_LENS;
+        else return 0;
+    } else if (strcasecmp(name, "transition_tint") == 0) {
+        if (!parse_tint_setting(value, &oc->tint)) return 0;
     } else if (strcasecmp(name, "gamemode") == 0) {
         oc->gamemode = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
     }
     return 1;
+}
+
+static int check_config_file(void)
+{
+    char* path = get_config_path();
+    if (!path) return 1;
+    struct wl_list configs;
+    wl_list_init(&configs);
+    char* selector = nullptr;
+    struct config_parse_ctx ctx = {.config_list = &configs, .renderer_device_selector = &selector};
+    int result = ini_parse(path, config_handler, &ctx);
+    size_t outputs = 0;
+    struct output_config *item, *next;
+    wl_list_for_each_safe(item, next, &configs, link) {
+        ++outputs;
+        wl_list_remove(&item->link);
+        free_item_list(&item->items);
+        free(item->output_name);
+        free(item);
+    }
+    if (result)
+        fprintf(stderr, "Configuration rejected at line %d: %s\n", result, path);
+    else if (!outputs)
+        fprintf(stderr, "Configuration has no output sections: %s\n", path);
+    else
+        printf("Configuration valid: %zu output sections.\n", outputs);
+    free(selector);
+    free(path);
+    return result || !outputs ? 1 : 0;
 }
 
 /* -- Config Application -------------------------------------------------- */
@@ -2716,6 +2684,9 @@ static void apply_config_to_output(struct wallpaper_output* output, struct outpu
         output->render.flags &= ~F_TRANSITION_ON;
     output->transition_duration = config->transition_duration;
     output->glass_variant       = config->variant;
+    output->glass_appearance    = config->appearance;
+    output->glass_motion        = config->motion;
+    output->glass_tint          = config->tint;
 
     if (output->current_item_index >= output->num_items)
         output->current_item_index = 0;
@@ -2843,16 +2814,16 @@ static void layer_surface_configure(
 
     struct wallpaper_state* state = output->render.state;
     if (w == 0 || h == 0) {
-        if (state->reveal_process_capture) {
-            reveal_process_capture_fail(state, "compositor returned a zero-sized capture surface");
+        if (state->preview_capture) {
+            preview_capture_fail(state, "compositor returned a zero-sized capture surface");
             destroy_output(output);
         }
         return;
     }
-    bool process_capture = state->reveal_process_capture;
+    bool process_capture = state->preview_capture;
     if (process_capture
-        && (w != REVEAL_PROCESS_CAPTURE_WIDTH || h != REVEAL_PROCESS_CAPTURE_HEIGHT)) {
-        reveal_process_capture_fail(state, "compositor rejected the canonical 2048x2048 size");
+        && (w != PREVIEW_CAPTURE_WIDTH || h != PREVIEW_CAPTURE_HEIGHT)) {
+        preview_capture_fail(state, "compositor did not accept the requested preview size");
         destroy_output(output);
         return;
     }
@@ -2870,13 +2841,15 @@ static void layer_surface_configure(
                 h,
                 scale,
                 output->name);
-        reveal_process_capture_fail(state, "capture surface dimensions exceed Vulkan limits");
+        preview_capture_fail(state, "capture surface dimensions exceed Vulkan limits");
         destroy_output(output);
         return;
     }
 
     bool size_changed
-        = output->render.width != buffer_width || output->render.height != buffer_height;
+        = output->render.width != buffer_width || output->render.height != buffer_height
+          || output->configured_scale != scale;
+    output->configured_scale = scale;
     output->logical_w     = (int32_t)w;
     output->logical_h     = (int32_t)h;
     output->render.width  = buffer_width;
@@ -2900,6 +2873,8 @@ static void layer_surface_configure(
                 = walle_vk_renderer_max_image_dimension(state->vk_renderer);
         }
     } else {
+        if (size_changed)
+            cancel_transition(output);
         renderer_ready = !size_changed
                          || walle_vk_output_resize(output->render.vk_output,
                                                    (uint32_t)buffer_width,
@@ -2908,39 +2883,24 @@ static void layer_surface_configure(
             output->render.flags &= ~F_BOOT_COMPLETE;
     }
     if (!renderer_ready) {
-        reveal_process_capture_fail(state, "Vulkan Wayland output creation/resize failed");
+        preview_capture_fail(state, "Vulkan Wayland output creation/resize failed");
         destroy_output(output);
         return;
     }
 
-    if (process_capture && !output->reveal_process_capture_pixels) {
-        size_t byte_count;
-        if (ckd_mul(&byte_count,
-                    (size_t)REVEAL_PROCESS_CAPTURE_WIDTH,
-                    (size_t)REVEAL_PROCESS_CAPTURE_HEIGHT)) {
-            reveal_process_capture_fail(state, "capture buffer size overflow");
-            destroy_output(output);
-            return;
-        }
-        output->reveal_process_capture_pixels = malloc(byte_count);
-        if (!output->reveal_process_capture_pixels) {
-            reveal_process_capture_fail(state, "could not allocate the R8 readback buffer");
-            destroy_output(output);
-            return;
-        }
-        if (ckd_mul(&byte_count, byte_count, (size_t)4)) {
-            reveal_process_capture_fail(state, "composition capture buffer size overflow");
-            destroy_output(output);
-            return;
-        }
-        output->reveal_process_composition_pixels = malloc(byte_count);
-        if (!output->reveal_process_composition_pixels) {
-            reveal_process_capture_fail(state, "could not allocate the BGRA8 readback buffer");
+    if (process_capture && !output->preview_pixels) {
+        size_t pixels, bytes;
+        if (ckd_mul(&pixels, (size_t)buffer_width, (size_t)buffer_height)
+            || ckd_mul(&bytes, pixels, (size_t)4)
+            || !(output->preview_pixels = malloc(bytes))) {
+            preview_capture_fail(state, "could not allocate preview readback");
             destroy_output(output);
             return;
         }
     }
-    if (!state->reveal_process_capture_complete)
+    if (!state->preview_capture_complete
+        && (size_changed || !(output->render.flags & F_BOOT_COMPLETE))
+        && output->render.t_state == T_STATE_IDLE)
         launch_async_render(output);
 }
 
@@ -2997,7 +2957,7 @@ static void output_handle_done(void* data, struct wl_output* wl_output)
     initialize_output(output);
 
     /* Scale changed after init (display settings): rescale the buffer. */
-    if (!output->render.state->reveal_process_capture && !(output->render.flags & F_DEAD)
+    if (!output->render.state->preview_capture && !(output->render.flags & F_DEAD)
         && output->surface && output->render.vk_output && output->logical_w > 0) {
         int32_t scale = output->scale > 0 ? output->scale : 1;
         int32_t bw;
@@ -3013,7 +2973,9 @@ static void output_handle_done(void* data, struct wl_output* wl_output)
             destroy_output(output);
             return;
         }
-        if (bw != output->render.width || bh != output->render.height) {
+        if (bw != output->render.width || bh != output->render.height
+            || output->configured_scale != scale) {
+            cancel_transition(output);
             if (wl_proxy_get_version((struct wl_proxy*)output->surface)
                 >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
                 wl_surface_set_buffer_scale(output->surface, scale);
@@ -3023,6 +2985,7 @@ static void output_handle_done(void* data, struct wl_output* wl_output)
             }
             output->render.width  = bw;
             output->render.height = bh;
+            output->configured_scale = scale;
             output->render.flags &= ~F_BOOT_COMPLETE;
             launch_async_render(output);
         }
@@ -3049,24 +3012,24 @@ static void initialize_output(struct wallpaper_output* output)
     if (state->shutting_down)
         return;
 
-    if (state->reveal_process_capture) {
-        if (state->reveal_process_capture_output_claimed) {
+    if (state->preview_capture) {
+        if (state->preview_capture_output_claimed) {
             output->render.flags |= F_INITIALIZED;
             return;
         }
-        state->reveal_process_capture_output_claimed = true;
-        output->reveal_process_capture_owned         = true;
+        state->preview_capture_output_claimed = true;
+        output->preview_capture_owned         = true;
     }
 
     struct output_config* config = get_config_for_output(state, output->name);
 
     if (config && config->items.count > 0) {
-        if (state->reveal_process_capture && config->items.count != 2) {
+        if (state->preview_capture && config->items.count != 2) {
             fprintf(stderr,
-                    "[REVEAL CAPTURE] The selected config must contain exactly two "
+                    "[PREVIEW] The selected config must contain exactly two "
                     "wallpapers (A then B).\n");
             output->render.flags |= F_INITIALIZED;
-            reveal_process_capture_fail(state, "capture config does not contain two wallpapers");
+            preview_capture_fail(state, "capture config does not contain two wallpapers");
             return;
         }
         printf("[CONFIG] Applying config [%s] to output %s (%zu items)\n",
@@ -3078,7 +3041,7 @@ static void initialize_output(struct wallpaper_output* output)
         if (!duplicate_item_list(&config->items, &dup_list)) {
             fprintf(stderr, "[FATAL] OOM duplicating item list for %s\n", output->name);
             output->render.flags |= F_INITIALIZED;
-            reveal_process_capture_fail(state, "could not duplicate capture wallpaper list");
+            preview_capture_fail(state, "could not duplicate capture wallpaper list");
             return;
         }
 
@@ -3092,8 +3055,11 @@ static void initialize_output(struct wallpaper_output* output)
             output->render.flags |= F_TRANSITION_ON;
         output->transition_duration = config->transition_duration;
         output->glass_variant       = config->variant;
+    output->glass_appearance    = config->appearance;
+    output->glass_motion        = config->motion;
+    output->glass_tint          = config->tint;
 
-        if (state->reveal_process_capture) {
+        if (state->preview_capture) {
             output->timeout          = 0;
             output->gamemode_enabled = false;
             output->render.flags &= ~F_RANDOMIZE;
@@ -3107,7 +3073,7 @@ static void initialize_output(struct wallpaper_output* output)
     } else {
         printf("[INFO] No configuration for output: %s. Inactive.\n", output->name);
         output->render.flags |= F_INITIALIZED;
-        reveal_process_capture_fail(state, "no configured wallpapers for capture output");
+        preview_capture_fail(state, "no configured wallpapers for capture output");
         return;
     }
 
@@ -3149,7 +3115,7 @@ static void initialize_output(struct wallpaper_output* output)
         wl_region_destroy(opaque);
     }
 
-    if (!state->reveal_process_capture && output->scale > 1
+    if (!state->preview_capture && output->scale > 1
         && wl_proxy_get_version((struct wl_proxy*)output->surface)
                >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
         wl_surface_set_buffer_scale(output->surface, output->scale);
@@ -3166,9 +3132,9 @@ static void initialize_output(struct wallpaper_output* output)
         goto init_failed;
     }
 
-    if (state->reveal_process_capture) {
+    if (state->preview_capture) {
         zwlr_layer_surface_v1_set_size(
-            output->layer_surface, REVEAL_PROCESS_CAPTURE_WIDTH, REVEAL_PROCESS_CAPTURE_HEIGHT);
+            output->layer_surface, PREVIEW_CAPTURE_WIDTH, PREVIEW_CAPTURE_HEIGHT);
         zwlr_layer_surface_v1_set_anchor(output->layer_surface,
                                          ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP
                                              | ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT);
@@ -3270,7 +3236,7 @@ static const struct wl_registry_listener registry_listener
 /* -- Main ---------------------------------------------------------------- */
 
 [[nodiscard]]
-static int open_empty_reveal_process_capture_directory(const char* path)
+static int open_empty_preview_capture_directory(const char* path)
 {
     int directory_fd = open(path, O_RDONLY | O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW);
     if (directory_fd < 0)
@@ -3321,12 +3287,13 @@ static void print_usage(const char* argv0)
         "  -c, --config <path>  use this config file instead of the XDG lookup\n"
         "      --vulkan-device <selector>\n"
         "                         auto, discrete, integrated, device index, or name substring\n"
+        "      --check-config  validate configuration without opening a display\n"
         "  -h, --help           show this help and exit\n"
         "  -V, --version        print version and exit\n"
         "\n"
         "Reveal-mask process diagnostic:\n"
-        "      --reveal-mask-process-capture <empty-directory>\n"
-        "          write state-0000.r8..state-0064.r8 (2048x2048, top-left), then exit\n"
+        "      --preview <empty-directory>\n"
+        "          write 61 BGRA8 frames at1280x720 plus frames.json, then exit\n"
         "\n"
         "Renderer: Vulkan 1.4, offline Slang/SPIR-V 1.6 (no fallback).\n",
         argv0);
@@ -3394,21 +3361,24 @@ int main(int argc, char* argv[])
 {
     enum
     {
-        OPT_REVEAL_MASK_PROCESS_CAPTURE = 256,
+        OPT_PREVIEW = 256,
         OPT_VULKAN_DEVICE,
+        OPT_CHECK_CONFIG,
     };
     static const struct option LONG_OPTS[] = {
         {"config", required_argument, nullptr, 'c'},
         {"help", no_argument, nullptr, 'h'},
         {"version", no_argument, nullptr, 'V'},
+        {"check-config", no_argument, nullptr, OPT_CHECK_CONFIG},
         {"vulkan-device", required_argument, nullptr, OPT_VULKAN_DEVICE},
-        {"reveal-mask-process-capture",
+        {"preview",
          required_argument,
          nullptr,
-         OPT_REVEAL_MASK_PROCESS_CAPTURE},
+         OPT_PREVIEW},
         {},
     };
-    const char* reveal_process_capture_directory = nullptr;
+    bool check_config_only = false;
+    const char* preview_capture_directory = nullptr;
     const char* vulkan_device_selector           = getenv("WALLE_VK_DEVICE");
     bool        vulkan_device_selector_locked = vulkan_device_selector && *vulkan_device_selector;
     for (int opt; (opt = getopt_long(argc, argv, "c:hV", LONG_OPTS, nullptr)) != -1;) {
@@ -3422,12 +3392,15 @@ int main(int argc, char* argv[])
             case 'V':
                 printf("walle %s\n", WALLE_VERSION);
                 return 0;
+            case OPT_CHECK_CONFIG:
+                check_config_only = true;
+                break;
             case OPT_VULKAN_DEVICE:
                 vulkan_device_selector        = optarg;
                 vulkan_device_selector_locked = true;
                 break;
-            case OPT_REVEAL_MASK_PROCESS_CAPTURE:
-                reveal_process_capture_directory = optarg;
+            case OPT_PREVIEW:
+                preview_capture_directory = optarg;
                 break;
             default:
                 print_usage(argv[0]);
@@ -3438,6 +3411,13 @@ int main(int argc, char* argv[])
         fprintf(stderr, "Unexpected argument: %s\n", argv[optind]);
         print_usage(argv[0]);
         return 1;
+    }
+    if (check_config_only) {
+        if (VIPS_INIT(argv[0]))
+            return 1;
+        int status = check_config_file();
+        vips_shutdown();
+        return status;
     }
     /* Block SIGINT/SIGTERM before ANY thread exists (vips spawns workers,
      * which inherit the mask); both are consumed via signalfd in the loop. */
@@ -3452,8 +3432,8 @@ int main(int argc, char* argv[])
     signal(SIGPIPE, SIG_IGN);
 
     struct wallpaper_state state = {
-        .reveal_process_capture              = reveal_process_capture_directory != nullptr,
-        .reveal_process_capture_directory_fd = -1,
+        .preview_capture              = preview_capture_directory != nullptr,
+        .preview_capture_directory_fd = -1,
         .signal_fd                           = -1,
         .inotify_fd                          = -1,
         .vk_max_image_dimension              = UINT32_MAX,
@@ -3461,13 +3441,13 @@ int main(int argc, char* argv[])
     char* config_device_selector = nullptr;
     int   rc                     = 0;
 
-    if (state.reveal_process_capture) {
-        state.reveal_process_capture_directory_fd
-            = open_empty_reveal_process_capture_directory(reveal_process_capture_directory);
-        if (state.reveal_process_capture_directory_fd < 0) {
+    if (state.preview_capture) {
+        state.preview_capture_directory_fd
+            = open_empty_preview_capture_directory(preview_capture_directory);
+        if (state.preview_capture_directory_fd < 0) {
             fprintf(stderr,
-                    "Could not open empty reveal capture directory '%s': %s\n",
-                    reveal_process_capture_directory,
+                    "Could not open empty preview directory '%s': %s\n",
+                    preview_capture_directory,
                     strerror(errno));
             return 1;
         }
@@ -3476,8 +3456,8 @@ int main(int argc, char* argv[])
     state.signal_fd = signalfd(-1, &sigmask, SFD_CLOEXEC | SFD_NONBLOCK);
     if (state.signal_fd < 0) {
         perror("signalfd");
-        if (state.reveal_process_capture_directory_fd >= 0)
-            close(state.reveal_process_capture_directory_fd);
+        if (state.preview_capture_directory_fd >= 0)
+            close(state.preview_capture_directory_fd);
         return 1;
     }
 
@@ -3490,7 +3470,7 @@ int main(int argc, char* argv[])
 
     xoshiro256pp_seed(&g_rng, (uint64_t)time(nullptr) ^ (uint64_t)getpid());
 
-    if (!state.reveal_process_capture)
+    if (!state.preview_capture)
         launch_cache_maintenance_service();
 
     wl_list_init(&state.outputs);
@@ -3533,9 +3513,9 @@ int main(int argc, char* argv[])
                 goto teardown;
             }
 
-            if (!state.reveal_process_capture)
+            if (!state.preview_capture)
                 state.inotify_fd = inotify_init1(IN_CLOEXEC | IN_NONBLOCK);
-            if (!state.reveal_process_capture && state.inotify_fd >= 0) {
+            if (!state.preview_capture && state.inotify_fd >= 0) {
                 char* tmp = strdup(state.config_path);
                 if (tmp) {
                     char* last_slash = strrchr(tmp, '/');
@@ -3569,9 +3549,9 @@ int main(int argc, char* argv[])
             goto teardown;
         }
 
-        if (!state.reveal_process_capture && !gamemode_init(&state)) {
+        if (!gamemode_init(&state)) {
             fprintf(stderr,
-                    "[GAMEMODE] Portal unavailable. Continuing without GameMode support.\n");
+                    "[SESSION] Portal unavailable; retaining explicit appearance or auto/light.\n");
         }
     }
 
@@ -3633,9 +3613,13 @@ int main(int argc, char* argv[])
             }
         }
 
-        if (state.reveal_process_capture_complete && !state.shutting_down) {
-            rc = state.reveal_process_capture_status;
+        if (state.preview_capture_complete && !state.shutting_down) {
+            rc = state.preview_capture_status;
             begin_shutdown(&state);
+            /* Teardown can retire the last output without any future event
+             * (for example, an upload failed before its first presentation).
+             * Reap it before entering the blocking wait again. */
+            continue;
         }
 
         if (state.shutting_down && wl_list_empty(&state.outputs))
@@ -3896,8 +3880,8 @@ teardown:
         close(state.inotify_fd);
     if (state.signal_fd >= 0)
         close(state.signal_fd);
-    if (state.reveal_process_capture_directory_fd >= 0)
-        close(state.reveal_process_capture_directory_fd);
+    if (state.preview_capture_directory_fd >= 0)
+        close(state.preview_capture_directory_fd);
     free(state.config_path);
     free(state.config_dir);
     free(state.config_filename);
@@ -3905,8 +3889,12 @@ teardown:
 
     gamemode_cleanup(&state);
 
-    walle_vk_renderer_destroy(state.vk_renderer);
+    uint64_t validation_errors = walle_vk_renderer_destroy_checked(state.vk_renderer);
     state.vk_renderer = nullptr;
+    if (validation_errors) {
+        fprintf(stderr, "[Vulkan] Validation failed: %" PRIu64 " errors.\n", validation_errors);
+        rc = 1;
+    }
 
     if (state.layer_shell) {
         /* The destroy request only exists since v3; on an older bind just

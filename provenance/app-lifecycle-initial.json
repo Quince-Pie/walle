@@ -1,0 +1,567 @@
+{
+  "command": [
+    "/run/current-system/sw/bin/labwc",
+    "-C",
+    "/tmp/walle-work/app-lifecycle/run-1/compositor",
+    "-S",
+    "/nix/store/jkq7011nvzb5ggz2zlxmlhqagjg2rbcr-python3-3.14.6-env/bin/python /tmp/walle-work/app-lifecycle/run.py --inside /tmp/walle-work/app-lifecycle/run-1 --binary /tmp/walle-work/assembled/build/bin/release/walle --device discrete"
+  ],
+  "binary_sha256": "d25ea712434ed4a03e3ed5f215de273dba1eb0ad26ac33c40ced40b119c8137c",
+  "source_sha256": "f143ca6e751fd9afe1742626b0552daa9c13e2b03edea4f80ace434a63308a37",
+  "cleanup": [],
+  "compositor_pid": 18122,
+  "compositor_returncode": 0,
+  "child": {
+    "events": [
+      {
+        "event": "output_control",
+        "ns": 566525562280501,
+        "requested": [
+          640,
+          360,
+          1
+        ],
+        "returncode": 0,
+        "stdout": "{\"applied\":true,\"width\":640,\"height\":360,\"scale\":1}\n",
+        "stderr": ""
+      },
+      {
+        "event": "config_replaced",
+        "ns": 566527810161613
+      },
+      {
+        "event": "output_control",
+        "ns": 566532606084422,
+        "requested": [
+          800,
+          450,
+          1
+        ],
+        "returncode": 0,
+        "stdout": "{\"applied\":true,\"width\":800,\"height\":450,\"scale\":1}\n",
+        "stderr": ""
+      },
+      {
+        "event": "output_control",
+        "ns": 566532781069192,
+        "requested": [
+          800,
+          450,
+          2
+        ],
+        "returncode": 0,
+        "stdout": "{\"applied\":true,\"width\":800,\"height\":450,\"scale\":2}\n",
+        "stderr": ""
+      },
+      {
+        "event": "SIGTERM",
+        "ns": 566534074456342,
+        "pid": 18144
+      }
+    ],
+    "observations": [
+      {
+        "ns": 566525736863365,
+        "size": [
+          640,
+          360
+        ],
+        "fractions": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "sha256": "c9e5ce1f80b4d8ba5ae663464103f88f116fa740f82e13f0d103c4f64542258e",
+        "label": "initial-A"
+      },
+      {
+        "ns": 566527809838078,
+        "size": [
+          640,
+          360
+        ],
+        "fractions": [
+          0.9881076388888889,
+          0.0,
+          0.0
+        ],
+        "sha256": "2994d1da715a1eea7f0a76720ca39253803b452d47d0d624a7ae4398a827c503",
+        "label": "before-reload"
+      },
+      {
+        "ns": 566527890155107,
+        "size": [
+          640,
+          360
+        ],
+        "fractions": [
+          0.9730295138888889,
+          0.0,
+          0.0
+        ],
+        "sha256": "fc5e2463187131a6844d8e36061e1c602db184be91aca71f6de793659fe4d7e6",
+        "label": "after-reload"
+      },
+      {
+        "ns": 566531529993704,
+        "size": [
+          640,
+          360
+        ],
+        "fractions": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "sha256": "befad0dfd477c52781c2e912fe9ef6687c7d03960c1022c511936f061273b5e1",
+        "label": "plain-B"
+      },
+      {
+        "ns": 566532604667992,
+        "size": [
+          640,
+          360
+        ],
+        "fractions": [
+          0.0,
+          0.9929600694444445,
+          0.0
+        ],
+        "sha256": "7af922d1f67db9a96ab15f39e577bff8c29c3002ebbb8df74941fbd966f1b282",
+        "label": "C-before-resize"
+      },
+      {
+        "ns": 566532723624276,
+        "size": [
+          800,
+          450
+        ],
+        "fractions": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "sha256": "128a038b6071159ec10e52281a7b45220bb66ac1df54e46a64cc7ef707b28ed9",
+        "label": "resized"
+      },
+      {
+        "ns": 566534074231094,
+        "size": [
+          800,
+          450
+        ],
+        "fractions": [
+          0.9909083333333333,
+          0.0,
+          0.0
+        ],
+        "sha256": "a727a14b1c6e1fe28a21d4e6044c90322c069dee9ea9fda3877943b85055d890",
+        "label": "before-SIGTERM"
+      }
+    ],
+    "checks": {
+      "coalesced_worker_indices": [
+        1,
+        2
+      ],
+      "timer_expirations_while_B": 3,
+      "B_job_to_C_job_seconds": 4.516738711,
+      "next_job_uses_reloaded_material": true,
+      "resize_and_scale_decode": true,
+      "all_jobs_started_idle": true,
+      "graceful_shutdown_observed": true
+    },
+    "cleanup": [],
+    "passed": true,
+    "app_pid": 18144,
+    "app_returncode": 0,
+    "trace": [
+      {
+        "event": "trace_ready",
+        "ns": 566525578135990,
+        "pid": 18144
+      },
+      {
+        "event": "decode_start",
+        "ns": 566525680967321,
+        "output": 140737268763648,
+        "index": 0,
+        "items": 3,
+        "width": 640,
+        "height": 360,
+        "scale": 1,
+        "state": 0,
+        "flags": 163,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 4.5,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 566525688205797,
+        "output": 140737268763648,
+        "index": 0,
+        "items": 3,
+        "width": 640,
+        "height": 360,
+        "scale": 1,
+        "state": 0,
+        "flags": 171,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 4.5,
+        "success": true
+      },
+      {
+        "event": "timer_read",
+        "ns": 566527000025781,
+        "fd": 17,
+        "expirations": 1
+      },
+      {
+        "event": "decode_start",
+        "ns": 566527000044667,
+        "output": 140737268763648,
+        "index": 1,
+        "items": 3,
+        "width": 640,
+        "height": 360,
+        "scale": 1,
+        "state": 0,
+        "flags": 167,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 4.5,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 566527008050450,
+        "output": 140737268763648,
+        "index": 1,
+        "items": 3,
+        "width": 640,
+        "height": 360,
+        "scale": 1,
+        "state": 0,
+        "flags": 175,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 4.5,
+        "success": true
+      },
+      {
+        "event": "timer_read",
+        "ns": 566529000008120,
+        "fd": 17,
+        "expirations": 1
+      },
+      {
+        "event": "timer_read",
+        "ns": 566530000008811,
+        "fd": 17,
+        "expirations": 1
+      },
+      {
+        "event": "timer_read",
+        "ns": 566531000011637,
+        "fd": 17,
+        "expirations": 1
+      },
+      {
+        "event": "decode_start",
+        "ns": 566531516783378,
+        "output": 140737268763648,
+        "index": 2,
+        "items": 3,
+        "width": 640,
+        "height": 360,
+        "scale": 1,
+        "state": 0,
+        "flags": 167,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 566531522765508,
+        "output": 140737268763648,
+        "index": 2,
+        "items": 3,
+        "width": 640,
+        "height": 360,
+        "scale": 1,
+        "state": 0,
+        "flags": 175,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "timer_read",
+        "ns": 566532000012072,
+        "fd": 17,
+        "expirations": 1
+      },
+      {
+        "event": "decode_start",
+        "ns": 566532606332082,
+        "output": 140737268763648,
+        "index": 2,
+        "items": 3,
+        "width": 800,
+        "height": 450,
+        "scale": 1,
+        "state": 0,
+        "flags": 163,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 566532614834147,
+        "output": 140737268763648,
+        "index": 2,
+        "items": 3,
+        "width": 800,
+        "height": 450,
+        "scale": 1,
+        "state": 0,
+        "flags": 171,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "decode_start",
+        "ns": 566532615654585,
+        "output": 140737268763648,
+        "index": 0,
+        "items": 3,
+        "width": 800,
+        "height": 450,
+        "scale": 1,
+        "state": 0,
+        "flags": 167,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 566532623806415,
+        "output": 140737268763648,
+        "index": 0,
+        "items": 3,
+        "width": 800,
+        "height": 450,
+        "scale": 1,
+        "state": 0,
+        "flags": 175,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "decode_start",
+        "ns": 566532781149595,
+        "output": 140737268763648,
+        "index": 0,
+        "items": 3,
+        "width": 800,
+        "height": 450,
+        "scale": 2,
+        "state": 0,
+        "flags": 163,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 566532781402255,
+        "output": 140737268763648,
+        "index": 0,
+        "items": 3,
+        "width": 800,
+        "height": 450,
+        "scale": 2,
+        "state": 0,
+        "flags": 171,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "timer_read",
+        "ns": 566533000019321,
+        "fd": 17,
+        "expirations": 1
+      },
+      {
+        "event": "decode_start",
+        "ns": 566533000036333,
+        "output": 140737268763648,
+        "index": 1,
+        "items": 3,
+        "width": 800,
+        "height": 450,
+        "scale": 2,
+        "state": 0,
+        "flags": 167,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 566533008522478,
+        "output": 140737268763648,
+        "index": 1,
+        "items": 3,
+        "width": 800,
+        "height": 450,
+        "scale": 2,
+        "state": 0,
+        "flags": 175,
+        "variant": 0,
+        "motion": 1,
+        "appearance": 2,
+        "tinted": true,
+        "rgba": [
+          41,
+          199,
+          143,
+          128
+        ],
+        "duration": 6,
+        "success": true
+      },
+      {
+        "event": "timer_read",
+        "ns": 566534000007997,
+        "fd": 17,
+        "expirations": 1
+      }
+    ],
+    "errors": []
+  },
+  "passed": true,
+  "binary_unchanged": true
+}

@@ -1,0 +1,363 @@
+{
+  "command": [
+    "/run/current-system/sw/bin/labwc",
+    "-C",
+    "/tmp/walle-work/app-faults/fixed-multi/compositor",
+    "-S",
+    "/nix/store/jkq7011nvzb5ggz2zlxmlhqagjg2rbcr-python3-3.14.6-env/bin/python /tmp/walle-work/app-faults/run.py --inside /tmp/walle-work/app-faults/fixed-multi --binary /tmp/walle-work/assembled/build/bin/release/walle --device discrete --stage 1 --multi"
+  ],
+  "binary_sha256": "979a9d1337c32dc5525b896ea80b054dde2438519283bfa552828502080a64b2",
+  "mode": "multi-output",
+  "stage": 1,
+  "cleanup": [],
+  "compositor_pid": 26310,
+  "compositor_returncode": 0,
+  "child": {
+    "cleanup": [],
+    "passed": true,
+    "app_pid": 26332,
+    "outputs": [
+      140737268764032,
+      140737268763648
+    ],
+    "jobs": [
+      {
+        "event": "decode_start",
+        "ns": 567699521994157,
+        "output": 140737268764032,
+        "index": 0,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 163,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "decode_start",
+        "ns": 567699522140626,
+        "output": 140737268763648,
+        "index": 0,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 163,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "decode_start",
+        "ns": 567701000056010,
+        "output": 140737268764032,
+        "index": 1,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 167,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "decode_start",
+        "ns": 567701000108830,
+        "output": 140737268763648,
+        "index": 1,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 167,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      }
+    ],
+    "active_output_frames": {
+      "HEADLESS-1": {
+        "fractions": [
+          0.9776410590277778,
+          0.0
+        ],
+        "size": [
+          1280,
+          720
+        ],
+        "ns": 567701418189419
+      },
+      "HEADLESS-2": {
+        "fractions": [
+          0.9594943576388889,
+          0.0
+        ],
+        "size": [
+          1280,
+          720
+        ],
+        "ns": 567701475785436
+      }
+    },
+    "signal": "SIGTERM after both output frame observations",
+    "app_returncode": 0,
+    "elapsed": 2.074768441962078,
+    "validation_or_sanitizer_errors": [],
+    "trace": [
+      {
+        "event": "trace_ready",
+        "ns": 567699421202274,
+        "pid": 26332
+      },
+      {
+        "event": "decode_start",
+        "ns": 567699521994157,
+        "output": 140737268764032,
+        "index": 0,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 163,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "decode_start",
+        "ns": 567699522140626,
+        "output": 140737268763648,
+        "index": 0,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 163,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 567699542238059,
+        "output": 140737268763648,
+        "index": 0,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 171,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 567699544312159,
+        "output": 140737268764032,
+        "index": 0,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 171,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "timer_read",
+        "ns": 567701000030942,
+        "fd": 17,
+        "expirations": 1
+      },
+      {
+        "event": "decode_start",
+        "ns": 567701000056010,
+        "output": 140737268764032,
+        "index": 1,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 167,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "timer_read",
+        "ns": 567701000107638,
+        "fd": 19,
+        "expirations": 1
+      },
+      {
+        "event": "decode_start",
+        "ns": 567701000108830,
+        "output": 140737268763648,
+        "index": 1,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 167,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 567701019613196,
+        "output": 140737268764032,
+        "index": 1,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 175,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      },
+      {
+        "event": "decode_join",
+        "ns": 567701029194911,
+        "output": 140737268763648,
+        "index": 1,
+        "items": 2,
+        "width": 1280,
+        "height": 720,
+        "scale": 1,
+        "state": 0,
+        "flags": 175,
+        "variant": 1,
+        "motion": 0,
+        "appearance": 1,
+        "tinted": false,
+        "rgba": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "duration": 2,
+        "success": true
+      }
+    ]
+  },
+  "binary_unchanged": true,
+  "passed": true
+}

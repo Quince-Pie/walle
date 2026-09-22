@@ -1,0 +1,11 @@
+{
+  "gaussian_cases": 6022,
+  "dod_cases": 3000,
+  "aa_cases": 6000,
+  "affine_cases": 4000,
+  "recipe_cases": 56,
+  "mismatches": 0,
+  "host_platform_log_result_drifts": 0,
+  "source_sha256": "cd7e6662ac39caf7208d66ea94bb69add6a91da4980016f4df93b0e2121a2d56",
+  "oracle": "retained H control flow; scalar log replaced by independently retained target Apple Python log"
+}

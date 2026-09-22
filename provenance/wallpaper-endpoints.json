@@ -1,0 +1,23 @@
+{
+  "width": 1280,
+  "height": 720,
+  "results": [
+    {
+      "endpoint": "A",
+      "input_sha256": "2a11c75bf9fd03425ad8cbe16a18deaf3366d753b97828b7cf71654e72bb31a4",
+      "output_sha256": "af51b6aef55feabb312e77b604822e4012a5151281b07129f6cdffb6058b00c3",
+      "differing_bytes": 0,
+      "max_error": 0,
+      "opaque": true
+    },
+    {
+      "endpoint": "B",
+      "input_sha256": "21f54c5bd9961bdae13f6ba1c337215bc5ecfefce3adc78cf05f8bdefc0726ee",
+      "output_sha256": "dde08ac5d47b992b0a0434b36d38d2117d1e58468dd7291c1ecd18bf4ba4d2ed",
+      "differing_bytes": 0,
+      "max_error": 0,
+      "opaque": true
+    }
+  ],
+  "passed": true
+}

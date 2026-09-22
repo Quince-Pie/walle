@@ -1,0 +1,73 @@
+[
+  {
+    "destination": "shaders/lg_blur.slang",
+    "sha256": "148d3366b244a63b84f4dfd8d83efa46946f32db9006debbf079df0c43fd0635",
+    "origin": "liquidglass/lg_blur.slang",
+    "origin_sha256": "148d3366b244a63b84f4dfd8d83efa46946f32db9006debbf079df0c43fd0635",
+    "identical": true
+  },
+  {
+    "destination": "shaders/lg_glass_background.slang",
+    "sha256": "2536d57205c603dddb7f9d56241281eba0d00ba71669e3e2fb73881f14c59f19",
+    "origin": "liquidglass/lg_glass_background.slang",
+    "origin_sha256": "2536d57205c603dddb7f9d56241281eba0d00ba71669e3e2fb73881f14c59f19",
+    "identical": true
+  },
+  {
+    "destination": "shaders/lg_glass_foreground.slang",
+    "sha256": "ec4f7879fc97e97a662fcb7c15124fe656aa835cb8b080714098e0a0d1eeccf0",
+    "origin": "liquidglass/lg_glass_foreground.slang",
+    "origin_sha256": "ec4f7879fc97e97a662fcb7c15124fe656aa835cb8b080714098e0a0d1eeccf0",
+    "identical": true
+  },
+  {
+    "destination": "shaders/lg_metal_blur.slang",
+    "sha256": "b8622e38219a13ac25d71729507974d10126aad84a3a0e4f2f2ba14c13e4e629",
+    "origin": "liquidglass/lg_metal_blur.slang",
+    "origin_sha256": "811936f7557f432595aeb70e0cf307b6668b33d5a2490ba3481b3f093aa02b24",
+    "identical": false
+  },
+  {
+    "destination": "shaders/lg_precision.slang",
+    "sha256": "165b8fa8a60ac115097d46bbd3986db306d3a70561e010cd1fa9a6f5edccbf8a",
+    "origin": "liquidglass/lg_precision.slang",
+    "origin_sha256": "165b8fa8a60ac115097d46bbd3986db306d3a70561e010cd1fa9a6f5edccbf8a",
+    "identical": true
+  },
+  {
+    "destination": "shaders/lg_sdf.slang",
+    "sha256": "351d3669a58290dc972febd9ee10c245a4b28cda9c873131ae136c59b3bc09f1",
+    "origin": "liquidglass/lg_sdf.slang",
+    "origin_sha256": "909f54f378c0eb7aeae8e2b62aa81c3e5a97e54a9eb975dfbb6a012984b176b4",
+    "identical": false
+  },
+  {
+    "destination": "shaders/lg_sdf_effects.slang",
+    "sha256": "15ba4bf6053dee6c0d613cc414a77d59fbfbd7da0f36c64cf391e062aeb7ac5c",
+    "origin": "liquidglass/lg_sdf_effects.slang",
+    "origin_sha256": "15ba4bf6053dee6c0d613cc414a77d59fbfbd7da0f36c64cf391e062aeb7ac5c",
+    "identical": true
+  },
+  {
+    "destination": "shaders/liquidglass.slang",
+    "sha256": "bfc091a4bcb0d717d1f8a8517d311d0fbb5127a09f17d0e99c29f8882fe2119f",
+    "origin": "liquidglass/liquidglass.slang",
+    "origin_sha256": "bfc091a4bcb0d717d1f8a8517d311d0fbb5127a09f17d0e99c29f8882fe2119f",
+    "identical": true
+  },
+  {
+    "destination": "shaders/walle_capture.slang",
+    "sha256": "8be9d8052da7e9e595f556b4f053e32885445399f7e4783afbbefa81b43313f7",
+    "origin": "Application Vulkan transport/composition wrapper"
+  },
+  {
+    "destination": "shaders/walle_glass.slang",
+    "sha256": "6b088b84aa74abd80f400cbbda4175ef896cc2aef220f3e91793315e672406d8",
+    "origin": "Application Vulkan transport/composition wrapper"
+  },
+  {
+    "destination": "shaders/walle_glass_local.slang",
+    "sha256": "9dd3ffcca1e0646ea50470a99695b5cde165922c2f01648cad241b02895125fc",
+    "origin": "Application Vulkan transport/composition wrapper"
+  }
+]

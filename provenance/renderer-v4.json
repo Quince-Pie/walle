@@ -1,0 +1,128 @@
+{
+  "version": 4,
+  "created_utc": "2026-09-22T04:48:07.803447+00:00",
+  "runtime": [
+    {
+      "path": "/tmp/walle-work/renderer-v4/vulkan_renderer.c",
+      "sha256": "e0b5ad3a904a4d92dd4f076b17928100d7bf83ac049d6632b4eca6d41ace16e2",
+      "size": 165895
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/vulkan_renderer.h",
+      "sha256": "d6c71fec24fbd7b3ea9037644115b995a13e68d4d1f5346b0f7749f2b6bc89d7",
+      "size": 7099
+    }
+  ],
+  "based_on": {
+    "source": "/tmp/walle-work/renderer/MANIFEST.json",
+    "version": 3
+  },
+  "embedded_shaders": [
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/glassVertex.spv",
+      "sha256": "92020621e8cc982b72b273d5e43e0a2d8251e16a6a590a79137887323a5beeb4",
+      "size": 1480
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/revealFragment.spv",
+      "sha256": "0727a2cd8972a1ce6bb32a16ba1942a2046da5af7f99abff43cdfc7f8dc2b407",
+      "size": 14628
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/regularFragment.spv",
+      "sha256": "8c3563e74a17a1011948f40fce076579f6628c14e06e7ce64db7383af48869f3",
+      "size": 46068
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/clearFragment.spv",
+      "sha256": "f3d3139279c2ac3e66311d595a4814997860fe532dcf72d9b85d0291ca534ac8",
+      "size": 43372
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/faceFragment_local.spv",
+      "sha256": "243fc5556e6ccb5049dbed6e05c3d14eef0486a43aa6d6632ed86d3c541954a7",
+      "size": 7020
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/tintMaskFragment.spv",
+      "sha256": "4c0f893bf95a46bd4d9accdab87d4e83f3908908180ffc70257807cc8c89bc04",
+      "size": 14192
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/tintGradientFragment_local.spv",
+      "sha256": "f58cb0e178eece55b76253212ead3f29cb6f930e451751d98b33c8a88a8e6a02",
+      "size": 17324
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/tintCompositeFragment.spv",
+      "sha256": "bc727a81c3ec1a9235093a9103e35313d1be6c9defdb8b1f351b9efba567d520",
+      "size": 1052
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/highlightFragment_local.spv",
+      "sha256": "cae1ec43b24fc72ab0b38e48b078492a67787f29bb8e35c4f15161dbab2496e7",
+      "size": 21716
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/productFinishFragment_local.spv",
+      "sha256": "0e3e0d9e2d0d36cf9bfd2acd24a4b3354397d09bd1ad61e81a1aceb0f2fd6004",
+      "size": 15068
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/wallpaperFragment.spv",
+      "sha256": "a8d544e92229c9045ce05e7a106af11470996ca9035d998f19e3c56855e9df74",
+      "size": 852
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/captureCopyFragment.spv",
+      "sha256": "4106946baf7386ffca956abfcca1a50c5f0c0e1d0615135e6d2fa7de21ab493f",
+      "size": 1352
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/captureVertex.spv",
+      "sha256": "8e531c53f2d3b74a94adb042c9ac8e26cf6754f1b5386644c055c8708733d76d",
+      "size": 1216
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/capture4Fragment.spv",
+      "sha256": "7cb126a6523d6a31979bbff0b3b4f92311a1f905a714272942db60924afe2fa9",
+      "size": 3004
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/capture6Fragment.spv",
+      "sha256": "f81b605d514c1cfb0ed73c9366a4b2e9dc77246227864bcad54c4d9094f6a51a",
+      "size": 3020
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/capture8Fragment.spv",
+      "sha256": "c6b9df47d9ab5574783a74720b3cc696df73d661060158b3b0a07c95534fac7e",
+      "size": 4768
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/lg_blur_copy_base_mip.spv",
+      "sha256": "96a3295085f7d9cd1a98197dfab72c174f022bb81e53c0cf24bdfcedb433a754",
+      "size": 6076
+    },
+    {
+      "path": "/tmp/walle-work/renderer-v4/build/shaders/lg_blur_downsample_agx2.spv",
+      "sha256": "2e55ee7593b7c7758516e23e41c85359ad6c150b07cead8f84c3a421ab7e8fef",
+      "size": 7684
+    }
+  ],
+  "qualification": {
+    "strict_cpu_control_compile": "build/bounds_compile.txt",
+    "bounds_control": "probes/bounds.txt",
+    "gpu_status": "PASS: actual limit rejection/allocation preservation plus72 optical frames on each of three devices, validation active and checked teardown errors0",
+    "gpu_records": [
+      "probes/live_bounds_discrete.txt",
+      "probes/live_bounds_integrated.txt",
+      "probes/live_bounds_cpu.txt",
+      "probes/optical_discrete.txt",
+      "probes/optical_integrated.txt",
+      "probes/optical_cpu.txt"
+    ]
+  },
+  "contract": "BOUNDS.md",
+  "benchmark_status": "v3 initial confirmation retained separately; final delivered source rerun pending",
+  "scalar_api": "original maxImageDimension2D image-ceiling semantics; exact graphics checks remain per-axis"
+}

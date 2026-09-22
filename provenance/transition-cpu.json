@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "compiler": "gcc (GCC) 15.2.0",
+  "profiles": [
+    "O2 Fortify3",
+    "O1 ASan+UBSan without Fortify",
+    "O2 Fortify3 with NDEBUG"
+  ],
+  "baseline_trajectories": 144,
+  "baseline_generated_frames": 28800,
+  "invalid_configurations": 26,
+  "wide_and_successful_update_cases": 12,
+  "fortify_six_coordinate_cases": 1000,
+  "cpu_only": true,
+  "source_sha256": {
+    "tests/transition_contracts.c": "e55027f877fa204ccca521a6f8d940cef510dcfb437bfd6c4b23e1e884c9c0c2",
+    "tests/transition_fortify_bounds.c": "108d4d02e385e420b773d9618c78ca4e50a053cb9d556ea9b88362d2ed0268f3",
+    "tests/transition_check.h": "6337512cfb4ff1cd40e02c6558b4a548c830496d6ac158e073d26ef177610893",
+    "transition.c": "65b136d8ca850392bf490184387ba30411f2368f980b4347447abe086489d346",
+    "material/material.c": "4b2149ffaf3dca4fe962f78dfc8e6bed6fee2d96e16316697bc73a0267774e94",
+    "material/material_math.c": "b821e8f4380af407ec232bcfc9de17a9f31c9bf20f81ea8c4275f958116e1529",
+    "material/applelog.c": "39fa90aee75c6b270157151eb4fd6479e47919cecc7305961172e1190f7c6840",
+    "material/capture.c": "7e6f2c00459bf292e7414fa58a7b35a70f3811305072229d9f568ea53756dba0",
+    "material/geometry.c": "bfccbec724186c567298487a208d52160d6239d4f223cc8956a4fa706e1048f9",
+    "material/scissor.c": "cd7e6662ac39caf7208d66ea94bb69add6a91da4980016f4df93b0e2121a2d56",
+    "transition.h": "d1680c750cc74a29e650663d43fb18ec9173684f989de801905953b5156d5c81",
+    "vulkan_renderer.h": "cdbc0ecd57a8b6caf94f72ed70af40bcccdff9982c311916d5a46d97631e310f",
+    "material/applelog_tables.h": "6a7b59c66e524f21d0975d6cc581ef5d2a677f30477fc22afc6980143e68571d",
+    "material/capture.h": "a2a86059685d7373f1e37f063b3efc0b9af55aefe1ffd0dbbc14d231ea5cee61",
+    "material/geometry.h": "b362cc69959840400e3efce83d891f29c4db36712838228ef023ad2d1c48fffe",
+    "material/material.h": "923dfe73cddc97bc1b29ee4df62b9fb02dfa95dc89a0b52ae4d5b97a69a8763e",
+    "material/material_boundary.h": "0d80fb23554d2bc421c38489d028d36ba52cc8b6bb4ce4dc6daa866c2c82ee47",
+    "material/material_internal.h": "e23b4a4c844b1ca5f4617fd8cd45329adfc9ed4891963f3d8ac6777475142268",
+    "material/material_math.h": "1516a95c85a40e6c38286ea5f9c8459d60f8fa4d2c7b715b69df2177317fb941",
+    "material/material_specs.h": "800bff2fbb1c423e05dccfa8265c9870f5c07d64a2b2d02c03eaaeca6b506025",
+    "material/powf_tables.h": "30bfc1ef76e1a1656e2285082b709adb23b93cd1d2e20fd272a580e11ba50b6a",
+    "material/scissor.h": "76c9b38d27717cec882ce7a8451b32c570cadf2b8da550941237502a3ba9731f",
+    "material/trig_tables.h": "a6aa65bfed02a4b69fd28b7412b128b982ebbd7d1a103ee42507e4965661aea9"
+  },
+  "scope": "Actual checked-out CPU planner/material code. No native oracle imports, GPU calls or pixel parity claim. Source packet bounds and device limits remain separate.",
+  "prior_gpu_qualification": {
+    "scope": "Earlier ordinary-dimension candidate; no expanded-dimension GPU claim",
+    "validated_frames": 1892,
+    "shader_pairs": 216,
+    "shader_pair_pixel_differences": 0,
+    "devices": [
+      "AMD Radeon RX 9070 XT",
+      "AMD Ryzen9 9950X3D iGPU",
+      "lavapipe"
+    ],
+    "validation_errors": 0,
+    "cross_device_max_byte": 14,
+    "cross_device_mean_byte": 0.0720662803105843
+  },
+  "checks_independent_of_ndebug": "Verified by a separate gcc -DNDEBUG build and run",
+  "result_sha256": {
+    "fortify": "f5bd10648aaa0bd6a72db914e208da9d6886e87591fe73ec155466a9184bdcc4",
+    "sanitize": "9b0578744366a30504648a8a948ee83743aadeaa5d159178054e36b7c04a5646",
+    "ndebug": "63de47a7f65d9db0f98e9330d8a86eea4b0a16783af2e6e52cd7ad39d09e54ba"
+  }
+}

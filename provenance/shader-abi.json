@@ -1,0 +1,25 @@
+{
+  "note": "newer reflection adds sizes metadata; compare resource types and field bindings/offsets/sizes",
+  "checks": [
+    {
+      "entry": "highlightFragment_local",
+      "descriptor_types_offsets_sizes_equal": true
+    },
+    {
+      "entry": "regularFragment",
+      "descriptor_types_offsets_sizes_equal": true
+    },
+    {
+      "entry": "lg_blur_copy_base_mip",
+      "descriptor_types_offsets_sizes_equal": true
+    },
+    {
+      "entry": "lg_blur_downsample_agx2",
+      "descriptor_types_offsets_sizes_equal": true
+    },
+    {
+      "entry": "capture4Fragment",
+      "descriptor_types_offsets_sizes_equal": true
+    }
+  ]
+}

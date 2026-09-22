@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Walle benchmark JSONL record",
+  "type": "object",
+  "required": [
+    "type"
+  ],
+  "oneOf": [
+    {
+      "properties": {
+        "type": {
+          "const": "case"
+        },
+        "scenario": {
+          "const": "actual_app_horizontal_center"
+        },
+        "origin": {
+          "const": [
+            0.5,
+            0.5
+          ]
+        },
+        "direction": {
+          "const": [
+            1,
+            0
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "schema",
+        "selector",
+        "width",
+        "height",
+        "runs",
+        "warm_samples_per_run",
+        "readback",
+        "source_a",
+        "source_b",
+        "scenario",
+        "origin",
+        "direction"
+      ]
+    },
+    {
+      "properties": {
+        "type": {
+          "const": "device"
+        }
+      },
+      "required": [
+        "type",
+        "run",
+        "name",
+        "device_uuid",
+        "driver_uuid",
+        "pipeline_cache_uuid"
+      ]
+    },
+    {
+      "properties": {
+        "type": {
+          "const": "warmup"
+        }
+      },
+      "required": [
+        "type",
+        "run",
+        "frames",
+        "retries",
+        "timestamps_enabled"
+      ]
+    },
+    {
+      "properties": {
+        "type": {
+          "const": "sample"
+        },
+        "gpu_total_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "gpu_frame_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "gpu_capture_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "gpu_draw_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "gpu_tail_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cpu_build_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cpu_render_calls_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cpu_retry_wait_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cpu_completion_wait_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cpu_total_ns": {
+          "type": "number",
+          "minimum": 0
+        },
+        "run": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "phase": {
+          "enum": [
+            "first_use",
+            "warm"
+          ]
+        },
+        "progress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "retries": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "type",
+        "run",
+        "phase",
+        "index",
+        "progress",
+        "built_backdrop",
+        "timed_frame_id",
+        "retries",
+        "gpu_total_ns",
+        "gpu_frame_ns",
+        "gpu_capture_ns",
+        "gpu_draw_ns",
+        "gpu_tail_ns",
+        "cpu_build_ns",
+        "cpu_render_calls_ns",
+        "cpu_retry_wait_ns",
+        "cpu_completion_wait_ns",
+        "cpu_total_ns"
+      ]
+    },
+    {
+      "properties": {
+        "type": {
+          "const": "memory"
+        }
+      },
+      "required": [
+        "type",
+        "run",
+        "checkpoint",
+        "renderer_bytes",
+        "output_bytes",
+        "present_images",
+        "readback_bytes"
+      ]
+    },
+    {
+      "properties": {
+        "type": {
+          "const": "run_end"
+        }
+      },
+      "required": [
+        "type",
+        "run",
+        "owned_bytes_after_output_destroy",
+        "validation_errors",
+        "status"
+      ]
+    }
+  ]
+}
