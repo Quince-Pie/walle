@@ -29,12 +29,50 @@
 constexpr VkFormat          WALLE_VK_PRESENT_FORMAT       = VK_FORMAT_B8G8R8A8_UNORM;
 constexpr VkFormat          WALLE_VK_WALLPAPER_FORMAT     = VK_FORMAT_R8G8B8A8_UNORM;
 constexpr uint32_t          WALLE_VK_REQUIRED_API_VERSION = VK_API_VERSION_1_4;
+/* Exact identity gate for the extracted fixed ramp and coordinate parameters.
+ * Sampling uses the bound ramp texture; these bytes are never a GPU buffer. */
+static const uint8_t native_tint_ramp[] = {
+#embed "shaders/native_tint_ramp.rgba16f"
+};
+static const uint8_t native_tint_gradient[] = {
+#embed "shaders/native_tint_gradient.bin"
+};
+static_assert(sizeof native_tint_ramp == 2048);
+static_assert(sizeof native_tint_gradient == 24);
+#if defined(WALLE_STAGE_READBACK)
+constexpr VkImageUsageFlags STAGE_READBACK_USAGE = VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+#else
+constexpr VkImageUsageFlags STAGE_READBACK_USAGE = 0;
+#endif
 constexpr VkImageUsageFlags PRESENT_USAGE                 = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
                                                             | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT
                                                             | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+enum auxiliary_role : uint8_t
+{
+    AUXILIARY_NONE,
+    AUXILIARY_DISCARD,
+    AUXILIARY_READ_BACKDROP,
+};
+/* Isolated qualification candidate. Only unread/unwritten/discarded native
+ * attachment1 is optional; the tint backdrop input remains required. Define
+ * this to1 for the retained-state control on the identical source tree. */
+#ifndef WALLE_RETAIN_DISCARD_ATTACHMENT
+#define WALLE_RETAIN_DISCARD_ATTACHMENT 0
+#endif
+constexpr bool RETAIN_DISCARD_ATTACHMENT = WALLE_RETAIN_DISCARD_ATTACHMENT != 0;
+static enum auxiliary_role retained_auxiliary_role(enum auxiliary_role role)
+{
+    return !RETAIN_DISCARD_ATTACHMENT && role == AUXILIARY_DISCARD ? AUXILIARY_NONE : role;
+}
+
 enum
 {
     PIPE_WALLPAPER = WALLE_VK_PASS_COUNT,
+    PIPE_TINT_BACKDROP,
+    PIPE_REGULAR_CACHED,
+    PIPE_CLEAR_CACHED,
+    PIPE_MASK_CACHED,
+    PIPE_HIGHLIGHT_CACHED,
     PIPE_COUNT,
     LAYOUT_GRAPHICS = 0,
     LAYOUT_CAPTURE  = 1,
@@ -44,14 +82,17 @@ enum
 alignas(4) static const uint8_t spv_glassVertex[] = {
 #embed "build/shaders/glassVertex.spv" if_empty(0)
 };
-alignas(4) static const uint8_t spv_revealFragment[] = {
-#embed "build/shaders/revealFragment.spv" if_empty(0)
+alignas(4) static const uint8_t spv_effectsVertex[] = {
+#embed "build/shaders/effectsVertex.spv" if_empty(0)
 };
-alignas(4) static const uint8_t spv_regularFragment[] = {
-#embed "build/shaders/regularFragment.spv" if_empty(0)
+alignas(4) static const uint8_t spv_revealFragment_local[] = {
+#embed "build/shaders/revealFragment_local.spv" if_empty(0)
 };
-alignas(4) static const uint8_t spv_clearFragment[] = {
-#embed "build/shaders/clearFragment.spv" if_empty(0)
+alignas(4) static const uint8_t spv_regularFragment_local[] = {
+#embed "build/shaders/regularFragment_local.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_clearFragment_local[] = {
+#embed "build/shaders/clearFragment_local.spv" if_empty(0)
 };
 alignas(4) static const uint8_t spv_faceFragment_local[] = {
 #embed "build/shaders/faceFragment_local.spv" if_empty(0)
@@ -62,8 +103,17 @@ alignas(4) static const uint8_t spv_tintMaskFragment[] = {
 alignas(4) static const uint8_t spv_tintGradientFragment_local[] = {
 #embed "build/shaders/tintGradientFragment_local.spv" if_empty(0)
 };
-alignas(4) static const uint8_t spv_tintCompositeFragment[] = {
-#embed "build/shaders/tintCompositeFragment.spv" if_empty(0)
+alignas(4) static const uint8_t spv_tintCompositeFragment_local[] = {
+#embed "build/shaders/tintCompositeFragment_local.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_tintApplyMaskFragment_local[] = {
+#embed "build/shaders/tintApplyMaskFragment_local.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_tintBackdropFragment[] = {
+#embed "build/shaders/tintBackdropFragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_maskedImageFragment[] = {
+#embed "build/shaders/maskedImageFragment.spv" if_empty(0)
 };
 alignas(4) static const uint8_t spv_highlightFragment_local[] = {
 #embed "build/shaders/highlightFragment_local.spv" if_empty(0)
@@ -73,6 +123,21 @@ alignas(4) static const uint8_t spv_productFinishFragment_local[] = {
 };
 alignas(4) static const uint8_t spv_wallpaperFragment[] = {
 #embed "build/shaders/wallpaperFragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_sdfCacheFragment[] = {
+#embed "build/shaders/sdfCacheFragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_regularCachedFragment_local[] = {
+#embed "build/shaders/regularCachedFragment_local.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_clearCachedFragment_local[] = {
+#embed "build/shaders/clearCachedFragment_local.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_tintMaskCachedFragment[] = {
+#embed "build/shaders/tintMaskCachedFragment.spv" if_empty(0)
+};
+alignas(4) static const uint8_t spv_highlightCachedFragment_local[] = {
+#embed "build/shaders/highlightCachedFragment_local.spv" if_empty(0)
 };
 alignas(4) static const uint8_t spv_captureCopyFragment[] = {
 #embed "build/shaders/captureCopyFragment.spv" if_empty(0)
@@ -183,13 +248,14 @@ struct walle_vk_renderer
     VkDescriptorSetLayout                        set_layout[LAYOUT_COUNT];
     VkPipelineLayout                             pipeline_layout[LAYOUT_COUNT];
     VkPipeline                   pipelines[PIPE_COUNT], capture_pipelines[4], compute_pipelines[2];
-    VkSampler                    linear_sampler;
+    VkSampler                    linear_sampler, nearest_sampler, linear_level0_sampler;
     VkCommandPool                upload_command_pool;
     VkCommandBuffer              upload_command_buffer;
     VkFence                      upload_fence;
     atomic_uint_fast64_t         validation_error_count;
     struct walle_vk_memory_stats memory_stats;
     struct walle_vk_dmabuf_feedback dmabuf;
+    bool                            native_half_fma, hardware_source_over;
     bool                            upload_pending, validation_enabled, device_ready, fatal;
 };
 struct walle_vk_output
@@ -202,6 +268,7 @@ struct walle_vk_output
     uint32_t                      next_present_image, last_present_image, idle_present_image;
     uint32_t                      present_drm_format, present_plane_count;
     uint64_t                      present_modifier;
+    VkImageUsageFlags              present_usage;
     bool                          compact_present;
     VkCommandPool                 command_pool;
     VkCommandBuffer               command_buffer;
@@ -211,9 +278,22 @@ struct walle_vk_output
     VkDescriptorPool              descriptor_pool;
     uint32_t                      descriptor_capacity;
     struct walle_vk_image       current, incoming, capture, pyramid, blur_scratch, tint, mask, ramp;
+    struct walle_vk_image       scene_copy;
+    struct walle_vk_image       tint_backdrop;
+    struct walle_vk_image       reveal_mask, reveal_image;
+    struct walle_vk_image       sdf;
+    /* Private to this output. Native graphics passes bind an RGBA16F second
+     * attachment even when no fragment writes or reads it. */
+    struct walle_vk_image       auxiliary;
+    struct walle_vk_surface_plan tint_mask_plan, tint_group_plan;
+    struct walle_vk_surface_plan reveal_plan;
+    struct walle_vk_surface_plan sdf_plan;
+    bool sdf_ready;
+    bool sdf_replan;
     struct wm_capture_plan      capture_plan;
     struct wm_pyramid_plan      pyramid_plan;
-    bool                        backdrop_ready, tint_ready, ramp_ready;
+    bool                        ramp_ready;
+    bool                        ramp_native;
     uint8_t                     ramp_bytes[2048];
     struct walle_vk_buffer      frame_buffer, readback_buffer;
     VkDeviceSize                cursor;
@@ -238,9 +318,13 @@ struct glass_push
 {
     float    resolution[2], edr;
     uint32_t mode;
-    float    material_opacity, reserved[3];
+    float    material_opacity;
+    uint32_t native_ramp;
+    float    projection_offset[2];
 };
 static_assert(sizeof(struct glass_push) == 32);
+static_assert(offsetof(struct glass_push, native_ramp) == 20);
+static_assert(offsetof(struct glass_push, projection_offset) == 24);
 static bool device_candidate(struct walle_vk_renderer*,
                              VkPhysicalDevice,
                              VkSurfaceKHR,
@@ -603,6 +687,12 @@ static bool find_memory_type(const struct walle_vk_renderer* renderer,
     return true;
 }
 
+static bool resource_check(struct walle_vk_renderer* renderer,VkResult result,const char* operation)
+{
+    if(result==VK_ERROR_DEVICE_LOST)renderer->fatal=true;
+    return vk_check(result,operation);
+}
+
 static bool allocate_memory(struct walle_vk_renderer*   renderer,
                             const VkMemoryRequirements* requirements,
                             VkMemoryPropertyFlags       required,
@@ -623,7 +713,7 @@ static bool allocate_memory(struct walle_vk_renderer*   renderer,
         .size       = requirements->size,
         .properties = renderer->memory_properties.memoryTypes[type_index].propertyFlags,
     };
-    if (!vk_check(vkAllocateMemory(renderer->device, &allocate_info, nullptr, &memory.handle),
+    if (!resource_check(renderer,vkAllocateMemory(renderer->device, &allocate_info, nullptr, &memory.handle),
                   "vkAllocateMemory"))
         return false;
     if (!track_memory(renderer, &memory)) {
@@ -631,7 +721,7 @@ static bool allocate_memory(struct walle_vk_renderer*   renderer,
         return false;
     }
     if (map
-        && !vk_check(
+        && !resource_check(renderer,
             vkMapMemory(renderer->device, memory.handle, 0, memory.size, 0, &memory.mapped),
             "vkMapMemory")) {
         destroy_memory(renderer->device, &memory);
@@ -639,6 +729,31 @@ static bool allocate_memory(struct walle_vk_renderer*   renderer,
     }
     *result = memory;
     return true;
+}
+
+static bool allocate_transient_memory(struct walle_vk_renderer* renderer,
+                                      const VkMemoryRequirements* requirements,
+                                      struct walle_vk_memory* result)
+{
+    uint32_t lazy_type;
+    if (find_memory_type(renderer, requirements->memoryTypeBits,
+                         VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT,
+                         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &lazy_type)) {
+        VkMemoryRequirements lazy = *requirements;
+        lazy.memoryTypeBits = UINT32_C(1) << lazy_type;
+        if (allocate_memory(renderer, &lazy, VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT,
+                             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, false, result)) return true;
+        if (renderer->fatal) return false;
+    }
+    /* A lazy heap is optional, including when its allocation is exhausted.
+     * Never select it again while trying the ordinary device-local fallback. */
+    VkMemoryRequirements fallback = *requirements;
+    for (uint32_t i = 0; i < renderer->memory_properties.memoryTypeCount; ++i)
+        if (renderer->memory_properties.memoryTypes[i].propertyFlags
+            & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT)
+            fallback.memoryTypeBits &= ~(UINT32_C(1) << i);
+    return allocate_memory(renderer, &fallback, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, false, result);
 }
 
 static bool create_buffer(struct walle_vk_renderer* renderer,
@@ -725,19 +840,22 @@ static bool create_image(struct walle_vk_renderer* renderer,
         .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
     };
     struct walle_vk_image image = {.width = width, .height = height, .format = format};
-    if (!vk_check(vkCreateImage(renderer->device, &create_info, nullptr, &image.handle),
+    if (!resource_check(renderer,vkCreateImage(renderer->device, &create_info, nullptr, &image.handle),
                   "vkCreateImage"))
         return false;
 
     VkMemoryRequirements requirements;
     vkGetImageMemoryRequirements(renderer->device, image.handle, &requirements);
-    if (!allocate_memory(renderer,
+    bool allocated = (usage & VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT)
+        ? allocate_transient_memory(renderer, &requirements, &image.memory)
+        : allocate_memory(renderer,
                          &requirements,
                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                          false,
-                         &image.memory)
-        || !vk_check(vkBindImageMemory(renderer->device, image.handle, image.memory.handle, 0),
+                         &image.memory);
+    if (!allocated
+        || !resource_check(renderer,vkBindImageMemory(renderer->device, image.handle, image.memory.handle, 0),
                      "vkBindImageMemory")) {
         destroy_image(renderer->device, &image);
         return false;
@@ -762,7 +880,7 @@ static bool create_image(struct walle_vk_renderer* renderer,
             .layerCount = 1,
         },
     };
-    if (!vk_check(vkCreateImageView(renderer->device, &view_info, nullptr, &image.view),
+    if (!resource_check(renderer,vkCreateImageView(renderer->device, &view_info, nullptr, &image.view),
                   "vkCreateImageView")) {
         destroy_image(renderer->device, &image);
         return false;
@@ -771,9 +889,21 @@ static bool create_image(struct walle_vk_renderer* renderer,
     return true;
 }
 
+static bool present_format_extent(const VkImageFormatProperties* properties,VkExtent2D extent)
+{
+    VkDeviceSize bytes;
+    return extent.width && extent.height
+        && extent.width<=properties->maxExtent.width && extent.height<=properties->maxExtent.height
+        && properties->maxExtent.depth>=1 && properties->maxMipLevels>=1
+        && properties->maxArrayLayers>=1 && (properties->sampleCounts&VK_SAMPLE_COUNT_1_BIT)
+        && !ckd_mul(&bytes,(VkDeviceSize)extent.width,(VkDeviceSize)extent.height)
+        && !ckd_mul(&bytes,bytes,(VkDeviceSize)4) && bytes<=properties->maxResourceSize;
+}
+
 static bool present_modifier_exportable(struct walle_vk_renderer* renderer,
                                         uint64_t                  modifier,
-                                        VkImageUsageFlags         usage)
+                                        VkImageUsageFlags         usage,
+                                        VkExtent2D                extent)
 {
     VkPhysicalDeviceExternalImageFormatInfo external = {
         .sType      = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_IMAGE_FORMAT_INFO,
@@ -803,6 +933,7 @@ static bool present_modifier_exportable(struct walle_vk_renderer* renderer,
     };
     return vkGetPhysicalDeviceImageFormatProperties2(renderer->physical_device, &info, &properties)
                == VK_SUCCESS
+           && present_format_extent(&properties.imageFormatProperties,extent)
            && (external_properties.externalMemoryProperties.externalMemoryFeatures
                & VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT)
                   != 0;
@@ -810,6 +941,7 @@ static bool present_modifier_exportable(struct walle_vk_renderer* renderer,
 
 static bool select_present_modifier(struct walle_vk_renderer* renderer,
                                     VkImageUsageFlags         usage,
+                                    VkExtent2D                extent,
                                     uint32_t*                 drm_format,
                                     uint64_t*                 modifier,
                                     uint32_t*                 plane_count)
@@ -833,7 +965,9 @@ static bool select_present_modifier(struct walle_vk_renderer* renderer,
         renderer->physical_device, WALLE_VK_PRESENT_FORMAT, &properties);
 
     const VkFormatFeatureFlags2 required
-        = VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_2_TRANSFER_SRC_BIT;
+        = VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_2_TRANSFER_SRC_BIT
+          | ((usage & VK_IMAGE_USAGE_SAMPLED_BIT)
+                ? VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_FILTER_LINEAR_BIT : 0);
     bool found = false;
     for (unsigned format_pass = 0; format_pass < 2 && !found; ++format_pass) {
         uint32_t preferred_format = format_pass == 0 ? DRM_FORMAT_XRGB8888 : DRM_FORMAT_ARGB8888;
@@ -852,7 +986,7 @@ static bool select_present_modifier(struct walle_vk_renderer* renderer,
                     && (property->drmFormatModifierTilingFeatures & required) == required
                     && property->drmFormatModifierPlaneCount != 0
                     && property->drmFormatModifierPlaneCount <= 4
-                    && present_modifier_exportable(renderer, candidate->modifier, usage)) {
+                    && present_modifier_exportable(renderer, candidate->modifier, usage, extent)) {
                     *drm_format  = preferred_format;
                     *modifier    = candidate->modifier;
                     *plane_count = property->drmFormatModifierPlaneCount;
@@ -947,7 +1081,7 @@ static bool create_present_image(struct walle_vk_output*        output,
     result->image.width  = output->extent.width;
     result->image.height = output->extent.height;
     result->image.format = WALLE_VK_PRESENT_FORMAT;
-    if (!vk_check(vkCreateImage(renderer->device, &create_info, nullptr, &result->image.handle),
+    if (!resource_check(renderer, vkCreateImage(renderer->device, &create_info, nullptr, &result->image.handle),
                   "vkCreateImage(dma-buf present)"))
         return false;
 
@@ -978,12 +1112,12 @@ static bool create_present_image(struct walle_vk_output*        output,
     result->image.memory.size = requirements.size;
     result->image.memory.properties
         = renderer->memory_properties.memoryTypes[memory_type].propertyFlags;
-    if (!vk_check(
+    if (!resource_check(renderer,
             vkAllocateMemory(renderer->device, &allocation, nullptr, &result->image.memory.handle),
             "vkAllocateMemory(dma-buf present)"))
         goto failed;
     if (!track_memory(renderer, &result->image.memory)
-        || !vk_check(vkBindImageMemory(
+        || !resource_check(renderer, vkBindImageMemory(
                          renderer->device, result->image.handle, result->image.memory.handle, 0),
                      "vkBindImageMemory(dma-buf present)"))
         goto failed;
@@ -999,14 +1133,14 @@ static bool create_present_image(struct walle_vk_output*        output,
             .layerCount = 1,
         },
     };
-    if (!vk_check(vkCreateImageView(renderer->device, &view_info, nullptr, &result->image.view),
+    if (!resource_check(renderer, vkCreateImageView(renderer->device, &view_info, nullptr, &result->image.view),
                   "vkCreateImageView(dma-buf present)"))
         goto failed;
 
     VkImageDrmFormatModifierPropertiesEXT modifier_properties = {
         .sType = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_PROPERTIES_EXT,
     };
-    if (!vk_check(renderer->get_image_drm_format_modifier_properties(
+    if (!resource_check(renderer, renderer->get_image_drm_format_modifier_properties(
                       renderer->device, result->image.handle, &modifier_properties),
                   "vkGetImageDrmFormatModifierPropertiesEXT")
         || modifier_properties.drmFormatModifier != modifier)
@@ -1017,7 +1151,7 @@ static bool create_present_image(struct walle_vk_output*        output,
         .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
     };
     int memory_fd = -1;
-    if (!vk_check(renderer->get_memory_fd(renderer->device, &fd_info, &memory_fd),
+    if (!resource_check(renderer, renderer->get_memory_fd(renderer->device, &fd_info, &memory_fd),
                   "vkGetMemoryFdKHR"))
         goto failed;
 
@@ -1069,7 +1203,7 @@ failed:
 
 static bool create_present_slot(struct walle_vk_output* output, uint32_t index)
 {
-    constexpr VkImageUsageFlags usage = PRESENT_USAGE;
+    VkImageUsageFlags usage = output->present_usage;
     if (index >= 2 || output->present_images[index].image.handle)
         return false;
     if (!output->wayland_surface) {
@@ -1079,7 +1213,7 @@ static bool create_present_slot(struct walle_vk_output* output, uint32_t index)
                             output->extent.width,
                             output->extent.height,
                             WALLE_VK_PRESENT_FORMAT,
-                            PRESENT_USAGE,
+                            usage,
                             &p->image);
     }
     return create_present_image(output,
@@ -1092,28 +1226,37 @@ static bool create_present_slot(struct walle_vk_output* output, uint32_t index)
 
 static bool initialize_present_images(struct walle_vk_output* output)
 {
-    constexpr VkImageUsageFlags usage = PRESENT_USAGE;
-    if (!output->wayland_surface)
-        return create_present_slot(output, 0);
-    if (!select_present_modifier(output->renderer,
-                                 usage,
-                                 &output->present_drm_format,
-                                 &output->present_modifier,
-                                 &output->present_plane_count)) {
-        fprintf(stderr, "FATAL: no shared Vulkan/linux-dmabuf presentation modifier.\n");
-        return false;
+    const VkImageUsageFlags usages[2]={PRESENT_USAGE|VK_IMAGE_USAGE_SAMPLED_BIT,PRESENT_USAGE};
+    unsigned first=0;
+#if defined(WALLE_FORCE_CAPTURE_COPY)
+    first=1;
+#endif
+    for(unsigned attempt=first;attempt<2;++attempt) {
+        output->present_usage=usages[attempt];
+        if(!output->wayland_surface) {
+            VkImageFormatProperties properties;
+            if(vkGetPhysicalDeviceImageFormatProperties(output->renderer->physical_device,
+                   WALLE_VK_PRESENT_FORMAT,VK_IMAGE_TYPE_2D,VK_IMAGE_TILING_OPTIMAL,
+                   output->present_usage,0,&properties)!=VK_SUCCESS
+               || !present_format_extent(&properties,output->extent)) continue;
+        } else if(!select_present_modifier(output->renderer,output->present_usage,output->extent,
+                                            &output->present_drm_format,&output->present_modifier,
+                                            &output->present_plane_count)) continue;
+        /* A successful format query does not guarantee resource allocation or
+         * export. Before publishing a buffer, retry the original usage/modifier
+         * route if the optional sampled presentation image cannot be created. */
+        if(create_present_slot(output,0)) {
+            if(output->wayland_surface)
+                fprintf(stderr,
+                    "[Vulkan] Adaptive direct buffer: DRM format 0x%08" PRIx32 ", modifier 0x%016" PRIx64
+                    ", %u plane%s.\n",output->present_drm_format,output->present_modifier,
+                    output->present_plane_count,output->present_plane_count==1?"":"s");
+            return true;
+        }
+        if(output->renderer->fatal)return false;
     }
-    if (!create_present_slot(output, 0)) {
-        return false;
-    }
-    fprintf(stderr,
-            "[Vulkan] Adaptive direct buffer: DRM format 0x%08" PRIx32 ", modifier 0x%016" PRIx64
-            ", %u plane%s.\n",
-            output->present_drm_format,
-            output->present_modifier,
-            output->present_plane_count,
-            output->present_plane_count == 1 ? "" : "s");
-    return true;
+    fprintf(stderr,"FATAL: no usable Vulkan presentation image for this output.\n");
+    return false;
 }
 
 static void image_barrier_queues(VkCommandBuffer       command_buffer,
@@ -1411,6 +1554,18 @@ static bool create_global_resources(struct walle_vk_renderer* renderer)
             vkCreateSampler(renderer->device, &sampler_info, nullptr, &renderer->linear_sampler),
             "vkCreateSampler"))
         return false;
+    sampler_info.magFilter = sampler_info.minFilter = VK_FILTER_NEAREST;
+    sampler_info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+    if (!vk_check(vkCreateSampler(renderer->device, &sampler_info, nullptr,
+                                  &renderer->nearest_sampler), "vkCreateSampler(nearest)"))
+        return false;
+    /* AIR cached SDF: linear/nearest-mip; ramp: linear/no-mip.
+     * Both are one-level textures. The dedicated sampler also fixes LOD zero. */
+    sampler_info.magFilter = sampler_info.minFilter = VK_FILTER_LINEAR;
+    sampler_info.maxLod = 0.0f;
+    if (!vk_check(vkCreateSampler(renderer->device, &sampler_info, nullptr,
+                                  &renderer->linear_level0_sampler), "vkCreateSampler(linear level0)"))
+        return false;
 
     VkCommandPoolCreateInfo pool_info = {
         .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
@@ -1443,8 +1598,64 @@ static bool create_global_resources(struct walle_vk_renderer* renderer)
     return true;
 }
 
+/* This is a backend-specific lowering qualification, never device admission.
+ * Float16 was already required and enabled when this predicate is used. The
+ * exact Mesa/ACO build and two inspected instruction sets support fused RNE
+ * half arithmetic with preserved subnormals. GFX8 and every unknown tuple use
+ * the portable exact helper. RTZ support distinguishes ACO from LLVM in this
+ * pinned RADV source. See shaders/M1_FMA.md for the source/proof boundary. */
+static bool native_half_fma_profile(const VkPhysicalDeviceProperties* p,
+                                    const VkPhysicalDeviceVulkan12Properties* p12)
+{
+    static constexpr uint8_t cache_uuid[VK_UUID_SIZE] = {
+        0x36,0x53,0xc5,0xb4,0x95,0xfa,0x5b,0x49,0xff,0xc1,0xd0,0x0b,0x65,0x1e,0x8a,0x06};
+    return p->vendorID == 0x1002u && (p->deviceID == 0x7550u || p->deviceID == 0x13c0u)
+        && p12->driverID == VK_DRIVER_ID_MESA_RADV
+        && memcmp(p->pipelineCacheUUID,cache_uuid,sizeof cache_uuid) == 0
+        && p12->shaderDenormPreserveFloat16 && p12->shaderRoundingModeRTEFloat16
+        && p12->shaderSignedZeroInfNanPreserveFloat16 && p12->shaderRoundingModeRTZFloat16;
+}
+
+/* Optional optimization: never changes device or modifier admission. Require
+ * blend support for optimal images and every advertised attachable DRM modifier.
+ * A failed/inconsistent enumeration conservatively keeps shader source-over. */
+static bool hardware_source_over_supported(struct walle_vk_renderer* renderer)
+{
+    if (!format_supports(renderer->physical_device, WALLE_VK_PRESENT_FORMAT,
+                         VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT
+                             | VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BLEND_BIT))
+        return false;
+    if (!renderer->display) return true;
+    VkDrmFormatModifierPropertiesList2EXT list = {
+        .sType = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_2_EXT};
+    VkFormatProperties2 properties = {
+        .sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2, .pNext = &list};
+    vkGetPhysicalDeviceFormatProperties2(renderer->physical_device,WALLE_VK_PRESENT_FORMAT,&properties);
+    uint32_t count = list.drmFormatModifierCount;
+    if (!count) return false;
+    list.pDrmFormatModifierProperties = calloc(count,sizeof *list.pDrmFormatModifierProperties);
+    if (!list.pDrmFormatModifierProperties) return false;
+    vkGetPhysicalDeviceFormatProperties2(renderer->physical_device,WALLE_VK_PRESENT_FORMAT,&properties);
+    bool supported = list.drmFormatModifierCount == count;
+    for (uint32_t i = 0; supported && i < count; ++i) {
+        VkFormatFeatureFlags2 flags = list.pDrmFormatModifierProperties[i].drmFormatModifierTilingFeatures;
+        if ((flags & VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT)
+            && !(flags & VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BLEND_BIT)) supported = false;
+    }
+    free(list.pDrmFormatModifierProperties);
+    list.pDrmFormatModifierProperties = nullptr;
+    list.drmFormatModifierCount = 0;
+    vkGetPhysicalDeviceFormatProperties2(renderer->physical_device,WALLE_VK_PRESENT_FORMAT,&properties);
+    return supported && list.drmFormatModifierCount == count;
+}
 static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR surface)
 {
+    /* A failed initialization owns a partial device until renderer teardown.
+     * Never overwrite those handles when another output is configured. */
+    if (renderer->fatal || (renderer->device && !renderer->device_ready)) {
+        renderer->fatal = true;
+        return false;
+    }
     if (renderer->device_ready) {
         if (!surface)
             return true;
@@ -1531,6 +1742,7 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
         .maintenance5              = VK_TRUE,
         .maintenance6              = VK_TRUE,
         .dynamicRenderingLocalRead = VK_TRUE,
+        .shaderFloatControls2      = VK_TRUE,
     };
     VkPhysicalDeviceVulkan13Features features13 = {
         .sType                          = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES,
@@ -1578,6 +1790,8 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
                   "vkCreateDevice"))
         return false;
 
+    renderer->fatal = true; /* Cleared only after the whole device is ready. */
+
     renderer->get_memory_fd
         = (PFN_vkGetMemoryFdKHR)vkGetDeviceProcAddr(renderer->device, "vkGetMemoryFdKHR");
     renderer->get_image_drm_format_modifier_properties
@@ -1599,10 +1813,19 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
     renderer->properties      = selected_properties.properties;
     renderer->properties14    = selected_properties14;
     renderer->queue_family    = selected_queue;
+    VkPhysicalDeviceVulkan12Properties arithmetic_properties = {
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES};
+    VkPhysicalDeviceProperties2 arithmetic_query = {
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
+        .pNext = &arithmetic_properties};
+    vkGetPhysicalDeviceProperties2(selected,&arithmetic_query);
+    renderer->native_half_fma = native_half_fma_profile(&renderer->properties,&arithmetic_properties);
+    renderer->hardware_source_over = hardware_source_over_supported(renderer);
     vkGetDeviceQueue(renderer->device, selected_queue, 0, &renderer->queue);
     vkGetPhysicalDeviceMemoryProperties(selected, &renderer->memory_properties);
 
     if (renderer->properties.limits.maxPushConstantsSize < 32
+        || renderer->properties.limits.maxColorAttachments < 2
         || renderer->properties.limits.maxComputeWorkGroupInvocations < 400
         || renderer->properties.limits.maxComputeWorkGroupSize[0] < 20
         || renderer->properties.limits.maxComputeWorkGroupSize[1] < 20) {
@@ -1615,6 +1838,7 @@ static bool initialize_device(struct walle_vk_renderer* renderer, VkSurfaceKHR s
         || walle_vk_renderer_validation_errors(renderer))
         return false;
     renderer->device_ready = true;
+    renderer->fatal = false;
     fprintf(stderr,
             "[Vulkan] Selected device %u: %s [%s], API %u.%u.%u, SPIR-V 1.6, dynamic "
             "rendering, synchronization2, adaptive one/two-image linux-dmabuf presentation.\n",
@@ -1759,6 +1983,8 @@ bool walle_vk_output_create(struct walle_vk_renderer* renderer,
     if (!renderer || !renderer->instance || !result || width == 0 || height == 0)
         return false;
     *result = nullptr;
+    if (renderer->fatal)
+        return false;
     if (renderer->device_ready && !graphics_extent_valid(renderer, width, height))
         return false;
     struct walle_vk_output* output = calloc(1, sizeof *output);
@@ -1912,7 +2138,10 @@ static bool device_candidate(struct walle_vk_renderer*           r,
     VkPhysicalDeviceFeatures2 f
         = {.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2, .pNext = &f11};
     vkGetPhysicalDeviceFeatures2(dev, &f);
-    return f14.dynamicRenderingLocalRead && f14.maintenance5 && f14.maintenance6
+    /* shaderFloatControls2 is a required Vulkan1.4 feature. It preserves
+     * explicit native half-narrowing boundaries in the optical shaders. */
+    return f14.dynamicRenderingLocalRead && f14.shaderFloatControls2
+           && f14.maintenance5 && f14.maintenance6
            && f13.dynamicRendering && f13.synchronization2 && f13.shaderDemoteToHelperInvocation
            && f12.shaderFloat16 && f12.scalarBlockLayout && f12.vulkanMemoryModel
            && f12.vulkanMemoryModelDeviceScope && f11.uniformAndStorageBuffer16BitAccess
@@ -1929,6 +2158,7 @@ static bool device_candidate(struct walle_vk_renderer*           r,
                               VK_FORMAT_R16G16B16A16_SFLOAT,
                               VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_BIT
                                   | VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_FILTER_LINEAR_BIT
+                                  | VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT
                                   | VK_FORMAT_FEATURE_2_TRANSFER_DST_BIT)
            && format_supports(
                dev, WALLE_VK_PRESENT_FORMAT, VK_FORMAT_FEATURE_2_COLOR_ATTACHMENT_BIT);
@@ -2007,6 +2237,7 @@ static bool create_descriptor_layouts(struct walle_vk_renderer* r)
             "vkCreateDescriptorSetLayout(graphics)"))
         return false;
     ci.bindingCount = 3;
+    bindings[0].stageFlags |= VK_SHADER_STAGE_VERTEX_BIT;
     if (!vk_check(
             vkCreateDescriptorSetLayout(r->device, &ci, nullptr, &r->set_layout[LAYOUT_CAPTURE]),
             "vkCreateDescriptorSetLayout(capture)"))
@@ -2056,15 +2287,25 @@ static bool create_graphics_pipeline(struct walle_vk_renderer* r,
                                      struct shader_blob        vs,
                                      struct shader_blob        fs,
                                      uint32_t                  layout,
-                                     bool                      blend,
+                                     unsigned                  blend,
                                      bool                      local,
-                                     bool                      tint,
+                                     enum auxiliary_role       auxiliary,
                                      VkFormat                  format,
                                      VkPipeline*               out)
 {
+    auxiliary = retained_auxiliary_role(auxiliary);
     VkShaderModule vert = VK_NULL_HANDLE, frag = VK_NULL_HANDLE;
     if (!shader_module(r, vs, &vert) || !shader_module(r, fs, &frag))
         goto fail;
+    const VkBool32 specialization_values[2] = {
+        r->native_half_fma ? VK_TRUE : VK_FALSE,
+        r->hardware_source_over ? VK_TRUE : VK_FALSE};
+    const VkSpecializationMapEntry specialization_entries[2] = {
+        {.constantID = 100, .offset = 0, .size = sizeof(VkBool32)},
+        {.constantID = 101, .offset = sizeof(VkBool32), .size = sizeof(VkBool32)}};
+    const VkSpecializationInfo arithmetic_specialization = {
+        .mapEntryCount = 2, .pMapEntries = specialization_entries,
+        .dataSize = sizeof specialization_values, .pData = specialization_values};
     VkPipelineShaderStageCreateInfo stages[2]
         = {{.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
             .stage  = VK_SHADER_STAGE_VERTEX_BIT,
@@ -2073,7 +2314,8 @@ static bool create_graphics_pipeline(struct walle_vk_renderer* r,
            {.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
             .stage  = VK_SHADER_STAGE_FRAGMENT_BIT,
             .module = frag,
-            .pName  = fs.entry}};
+            .pName  = fs.entry,
+            .pSpecializationInfo = &arithmetic_specialization}};
     VkVertexInputBindingDescription   vb = {.binding   = 0,
                                             .stride    = sizeof(struct walle_vk_vertex),
                                             .inputRate = VK_VERTEX_INPUT_RATE_VERTEX};
@@ -2106,18 +2348,18 @@ static bool create_graphics_pipeline(struct walle_vk_renderer* r,
         = {.sType                = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
            .rasterizationSamples = VK_SAMPLE_COUNT_1_BIT};
     VkPipelineColorBlendAttachmentState ba[2]
-        = {{.blendEnable         = blend,
-            .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
-            .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+        = {{.blendEnable         = blend != 0,
+            .srcColorBlendFactor = blend == 2 ? VK_BLEND_FACTOR_ZERO : VK_BLEND_FACTOR_ONE,
+            .dstColorBlendFactor = blend == 2 ? VK_BLEND_FACTOR_SRC_ALPHA : VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
             .colorBlendOp        = VK_BLEND_OP_ADD,
-            .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-            .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+            .srcAlphaBlendFactor = blend == 2 ? VK_BLEND_FACTOR_ZERO : VK_BLEND_FACTOR_ONE,
+            .dstAlphaBlendFactor = blend == 2 ? VK_BLEND_FACTOR_SRC_ALPHA : VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
             .alphaBlendOp        = VK_BLEND_OP_ADD,
             .colorWriteMask      = 15},
            {.colorWriteMask = 0}};
     VkPipelineColorBlendStateCreateInfo bs
         = {.sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
-           .attachmentCount = tint ? 2u : 1u,
+           .attachmentCount = auxiliary != AUXILIARY_NONE ? 2u : 1u,
            .pAttachments    = ba};
     VkDynamicState states[] = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
     VkPipelineDynamicStateCreateInfo ds
@@ -2126,24 +2368,24 @@ static bool create_graphics_pipeline(struct walle_vk_renderer* r,
            .pDynamicStates    = states};
     uint32_t locations[2] = {0, VK_ATTACHMENT_UNUSED},
              inputs[2]    = {local ? 0 : VK_ATTACHMENT_UNUSED, VK_ATTACHMENT_UNUSED};
-    if (tint) {
+    if (auxiliary == AUXILIARY_READ_BACKDROP) {
         inputs[0] = VK_ATTACHMENT_UNUSED;
         inputs[1] = 0;
     }
     VkRenderingInputAttachmentIndexInfo ii
         = {.sType                        = VK_STRUCTURE_TYPE_RENDERING_INPUT_ATTACHMENT_INDEX_INFO,
-           .colorAttachmentCount         = tint ? 2u : 1u,
+           .colorAttachmentCount         = auxiliary != AUXILIARY_NONE ? 2u : 1u,
            .pColorAttachmentInputIndices = inputs};
     VkRenderingAttachmentLocationInfo li
         = {.sType                     = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_LOCATION_INFO,
            .pNext                     = &ii,
-           .colorAttachmentCount      = tint ? 2u : 1u,
+           .colorAttachmentCount      = auxiliary != AUXILIARY_NONE ? 2u : 1u,
            .pColorAttachmentLocations = locations};
-    VkFormat                      formats[] = {format, WALLE_VK_PRESENT_FORMAT};
+    VkFormat                      formats[] = {format, VK_FORMAT_R16G16B16A16_SFLOAT};
     VkPipelineRenderingCreateInfo rendering
         = {.sType                   = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO,
            .pNext                   = &li,
-           .colorAttachmentCount    = tint ? 2u : 1u,
+           .colorAttachmentCount    = auxiliary != AUXILIARY_NONE ? 2u : 1u,
            .pColorAttachmentFormats = formats};
     VkGraphicsPipelineCreateInfo ci = {.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
                                        .pNext = &rendering,
@@ -2169,33 +2411,61 @@ fail:
         vkDestroyShaderModule(r->device, frag, nullptr);
     return false;
 }
+/* Original source-over pipeline sites. Backdrop-dependent VCM and dest-in
+ * remain shader operations with their original local input attachments. */
+static bool plain_source_over_pipeline(unsigned pipeline)
+{
+    return pipeline == WALLE_VK_REVEAL || pipeline == WALLE_VK_PRODUCT_FINISH
+        || pipeline == WALLE_VK_GLASS_REGULAR || pipeline == WALLE_VK_GLASS_CLEAR
+        || pipeline == PIPE_REGULAR_CACHED || pipeline == PIPE_CLEAR_CACHED
+        || pipeline == WALLE_VK_TINT_COMPOSITE;
+}
 static bool create_pipelines(struct walle_vk_renderer* r)
 {
     const struct shader_blob fragments[PIPE_COUNT]
-        = {SHADER(revealFragment, "revealFragment"),
-           SHADER(regularFragment, "regularFragment"),
-           SHADER(clearFragment, "clearFragment"),
+        = {SHADER(revealFragment_local, "revealFragment"),
+           SHADER(regularFragment_local, "regularFragment"),
+           SHADER(clearFragment_local, "clearFragment"),
            SHADER(faceFragment_local, "faceFragment"),
            SHADER(tintMaskFragment, "tintMaskFragment"),
            SHADER(tintGradientFragment_local, "tintGradientFragment"),
-           SHADER(tintCompositeFragment, "tintCompositeFragment"),
+           SHADER(tintCompositeFragment_local, "tintCompositeFragment"),
            SHADER(highlightFragment_local, "highlightFragment"),
            SHADER(productFinishFragment_local, "productFinishFragment"),
-           SHADER(wallpaperFragment, "wallpaperFragment")};
+           SHADER(tintApplyMaskFragment_local, "tintApplyMaskFragment"),
+           SHADER(tintMaskFragment, "tintMaskFragment"),
+           SHADER(maskedImageFragment, "maskedImageFragment"),
+           SHADER(maskedImageFragment, "maskedImageFragment"),
+           SHADER(sdfCacheFragment, "sdfCacheFragment"),
+           SHADER(wallpaperFragment, "wallpaperFragment"),
+           SHADER(tintBackdropFragment, "tintBackdropFragment"),
+           SHADER(regularCachedFragment_local, "regularCachedFragment"),
+           SHADER(clearCachedFragment_local, "clearCachedFragment"),
+           SHADER(tintMaskCachedFragment, "tintMaskCachedFragment"),
+           SHADER(highlightCachedFragment_local, "highlightCachedFragment")};
     for (uint32_t i = 0; i < PIPE_COUNT; i++) {
-        bool blend = i == WALLE_VK_REVEAL || i == WALLE_VK_GLASS_REGULAR
-                     || i == WALLE_VK_GLASS_CLEAR || i == WALLE_VK_TINT_COMPOSITE;
-        bool local = i == WALLE_VK_FACE || i == WALLE_VK_HIGHLIGHT || i == WALLE_VK_PRODUCT_FINISH;
+        unsigned blend = r->hardware_source_over && plain_source_over_pipeline(i) ? 1u : 0u;
+        bool local = i == WALLE_VK_FACE || i == WALLE_VK_HIGHLIGHT || i == WALLE_VK_TINT_COMPOSITE
+                     || i == WALLE_VK_GLASS_REGULAR || i == WALLE_VK_GLASS_CLEAR
+                     || i == WALLE_VK_TINT_APPLY_MASK || i == WALLE_VK_REVEAL || i == WALLE_VK_PRODUCT_FINISH
+                     || i == PIPE_REGULAR_CACHED || i == PIPE_CLEAR_CACHED || i == PIPE_HIGHLIGHT_CACHED;
         bool tint  = i == WALLE_VK_TINT_GRADIENT;
-        VkFormat format = (tint || i == WALLE_VK_TINT_MASK) ? WALLE_VK_WALLPAPER_FORMAT
+        VkFormat format = (tint || i == WALLE_VK_TINT_MASK || i == WALLE_VK_TINT_APPLY_MASK) ? WALLE_VK_WALLPAPER_FORMAT
                                                             : WALLE_VK_PRESENT_FORMAT;
+        if (i == PIPE_TINT_BACKDROP || i == WALLE_VK_SDF_CACHE) format = VK_FORMAT_R16G16B16A16_SFLOAT;
+        if (i == PIPE_MASK_CACHED) format = WALLE_VK_WALLPAPER_FORMAT;
+        if (i == WALLE_VK_REVEAL_MASK || i == WALLE_VK_REVEAL_IMAGE || i == WALLE_VK_FINISH_IMAGE)
+            format = WALLE_VK_WALLPAPER_FORMAT;
+        bool glass_vertex=i==WALLE_VK_GLASS_REGULAR || i==WALLE_VK_GLASS_CLEAR
+                            || i==PIPE_REGULAR_CACHED || i==PIPE_CLEAR_CACHED;
         if (!create_graphics_pipeline(r,
-                                      SHADER(glassVertex, "glassVertex"),
+                                      glass_vertex ? SHADER(glassVertex, "glassVertex")
+                                                   : SHADER(effectsVertex, "effectsVertex"),
                                       fragments[i],
                                       LAYOUT_GRAPHICS,
                                       blend,
                                       local,
-                                      tint,
+                                      tint ? AUXILIARY_READ_BACKDROP : AUXILIARY_DISCARD,
                                       format,
                                       &r->pipelines[i]))
             return false;
@@ -2211,13 +2481,19 @@ static bool create_pipelines(struct walle_vk_renderer* r)
                                       LAYOUT_CAPTURE,
                                       false,
                                       false,
-                                      false,
+                                      AUXILIARY_DISCARD,
                                       WALLE_VK_WALLPAPER_FORMAT,
                                       &r->capture_pipelines[i]))
             return false;
     const struct shader_blob computes[]
         = {SHADER(lg_blur_copy_base_mip, "lg_blur_copy_base_mip"),
            SHADER(lg_blur_downsample_agx2, "lg_blur_downsample_agx2")};
+    const VkBool32 native_half_fma = r->native_half_fma ? VK_TRUE : VK_FALSE;
+    const VkSpecializationMapEntry native_half_fma_entry = {
+        .constantID = 100, .offset = 0, .size = sizeof native_half_fma};
+    const VkSpecializationInfo arithmetic_specialization = {
+        .mapEntryCount = 1, .pMapEntries = &native_half_fma_entry,
+        .dataSize = sizeof native_half_fma, .pData = &native_half_fma};
     for (uint32_t i = 0; i < 2; i++) {
         VkShaderModule m;
         if (!shader_module(r, computes[i], &m))
@@ -2227,7 +2503,8 @@ static bool create_pipelines(struct walle_vk_renderer* r)
                .stage  = {.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                           .stage  = VK_SHADER_STAGE_COMPUTE_BIT,
                           .module = m,
-                          .pName  = computes[i].entry},
+                          .pName  = computes[i].entry,
+                          .pSpecializationInfo = &arithmetic_specialization},
                .layout = r->pipeline_layout[LAYOUT_COMPUTE]};
         bool ok
             = vk_check(vkCreateComputePipelines(
@@ -2259,7 +2536,8 @@ static bool create_mip_image(struct walle_vk_renderer* r,
                             .arrayLayers = 1,
                             .samples     = VK_SAMPLE_COUNT_1_BIT,
                             .tiling      = VK_IMAGE_TILING_OPTIMAL,
-                            .usage       = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
+                            .usage       = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT
+                                           | STAGE_READBACK_USAGE,
                             .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                             .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED};
     if (!vk_check(vkCreateImage(r->device, &ci, nullptr, &image.handle), "vkCreateImage(pyramid)"))
@@ -2331,7 +2609,6 @@ static void destroy_backdrop(struct walle_vk_output* o)
     destroy_image(o->renderer->device, &o->capture);
     destroy_image(o->renderer->device, &o->pyramid);
     destroy_image(o->renderer->device, &o->blur_scratch);
-    o->backdrop_ready = false;
 }
 static void destroy_transition_resources(struct walle_vk_output* o)
 {
@@ -2340,6 +2617,13 @@ static void destroy_transition_resources(struct walle_vk_output* o)
     destroy_image(d, &o->tint);
     destroy_image(d, &o->mask);
     destroy_image(d, &o->ramp);
+    destroy_image(d, &o->scene_copy);
+    destroy_image(d, &o->tint_backdrop);
+    destroy_image(d, &o->reveal_mask);
+    destroy_image(d, &o->reveal_image);
+    destroy_image(d, &o->sdf);
+    destroy_image(d, &o->auxiliary);
+    o->sdf_ready = false;
     destroy_buffer(d, &o->frame_buffer);
     destroy_buffer(d, &o->readback_buffer);
     if (o->descriptor_pool)
@@ -2347,8 +2631,8 @@ static void destroy_transition_resources(struct walle_vk_output* o)
     o->descriptor_pool     = VK_NULL_HANDLE;
     o->descriptor_capacity = 0;
     o->cursor              = 0;
-    o->tint_ready          = false;
     o->ramp_ready          = false;
+    o->ramp_native         = false;
 }
 static bool upload_image(struct walle_vk_output*            o,
                          int                                fd,
@@ -2561,13 +2845,14 @@ static void set_viewport(VkCommandBuffer cmd, uint32_t w, uint32_t h, VkRect2D s
 }
 static void begin_render(VkCommandBuffer cmd,
                          VkImageView     target,
-                         VkImageView     scene,
+                         VkImageView     secondary,
                          uint32_t        w,
                          uint32_t        h,
                          bool            clear,
                          bool            local,
-                         bool            tint)
+                         enum auxiliary_role auxiliary)
 {
+    auxiliary = retained_auxiliary_role(auxiliary);
     VkRenderingAttachmentInfo ai[2]
         = {{.sType       = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
             .imageView   = target,
@@ -2575,32 +2860,48 @@ static void begin_render(VkCommandBuffer cmd,
             .loadOp      = clear ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD,
             .storeOp     = VK_ATTACHMENT_STORE_OP_STORE},
            {.sType       = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
-            .imageView   = scene,
-            .imageLayout = VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ,
-            .loadOp      = VK_ATTACHMENT_LOAD_OP_LOAD,
-            .storeOp     = VK_ATTACHMENT_STORE_OP_STORE}};
+            .imageView   = secondary,
+            .imageLayout = auxiliary == AUXILIARY_DISCARD
+                ? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ,
+            .loadOp      = auxiliary == AUXILIARY_DISCARD
+                ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : VK_ATTACHMENT_LOAD_OP_LOAD,
+            .storeOp     = auxiliary == AUXILIARY_DISCARD
+                ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE}};
     VkRenderingInfo ri = {.sType                = VK_STRUCTURE_TYPE_RENDERING_INFO,
                           .renderArea           = {{0, 0}, {w, h}},
                           .layerCount           = 1,
-                          .colorAttachmentCount = tint ? 2u : 1u,
+                          .colorAttachmentCount = auxiliary != AUXILIARY_NONE ? 2u : 1u,
                           .pColorAttachments    = ai};
     vkCmdBeginRendering(cmd, &ri);
     uint32_t locations[2] = {0, VK_ATTACHMENT_UNUSED},
              indices[2]   = {local ? 0 : VK_ATTACHMENT_UNUSED, VK_ATTACHMENT_UNUSED};
-    if (tint) {
+    if (auxiliary == AUXILIARY_READ_BACKDROP) {
         indices[0] = VK_ATTACHMENT_UNUSED;
         indices[1] = 0;
     }
     VkRenderingAttachmentLocationInfo li
         = {.sType                     = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_LOCATION_INFO,
-           .colorAttachmentCount      = tint ? 2u : 1u,
+           .colorAttachmentCount      = auxiliary != AUXILIARY_NONE ? 2u : 1u,
            .pColorAttachmentLocations = locations};
     VkRenderingInputAttachmentIndexInfo ii
         = {.sType                        = VK_STRUCTURE_TYPE_RENDERING_INPUT_ATTACHMENT_INDEX_INFO,
-           .colorAttachmentCount         = tint ? 2u : 1u,
+           .colorAttachmentCount         = auxiliary != AUXILIARY_NONE ? 2u : 1u,
            .pColorAttachmentInputIndices = indices};
     vkCmdSetRenderingAttachmentLocations(cmd, &li);
     vkCmdSetRenderingInputAttachmentIndices(cmd, &ii);
+}
+static void discard_auxiliary_contents(struct walle_vk_output* output)
+{
+    if (!RETAIN_DISCARD_ATTACHMENT) return;
+    assert(output->auxiliary.handle && output->auxiliary.view);
+    /* No pass observes these contents. Keep execution ordering for image
+     * layout transitions, but discard the previous encoder's values. */
+    image_barrier(output->command_buffer, output->auxiliary.handle,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                  VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 }
 static void local_read_barrier(VkCommandBuffer cmd)
 {
@@ -2658,74 +2959,157 @@ static bool ensure_backdrop(struct walle_vk_output* o, const struct walle_vk_fra
     const struct wm_capture_plan* c = frame->capture;
     const struct wm_pyramid_plan* p = frame->pyramid;
     if (!c || !p || !graphics_extent_valid(o->renderer, c->texture[0], c->texture[1])
-        || c->quad_count > 9 || !c->quad_count
+        || c->quad_count > 9 || c->extent[0] > c->texture[0] || c->extent[1] > c->texture[1]
         || (c->tap_count != 0 && c->tap_count != 4 && c->tap_count != 6 && c->tap_count != 8)
         || p->mip_count > 32 || p->down_count > 32)
         return false;
-    if (o->capture.handle && !memcmp(&o->capture_plan, c, sizeof *c)
-        && !memcmp(&o->pyramid_plan, p, sizeof *p))
-        return true;
-    destroy_backdrop(o);
-    auto r = o->renderer;
-    if (!create_image(r,
-                      c->texture[0],
-                      c->texture[1],
-                      WALLE_VK_WALLPAPER_FORMAT,
-                      VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT
-                          | VK_IMAGE_USAGE_SAMPLED_BIT,
-                      &o->capture))
-        return false;
-    if (p->mip_count
-        && (!p->groups[0] || !p->groups[1]
-            || !create_mip_image(r, p->texture[0], p->texture[1], p->mip_count, &o->pyramid))) {
-        destroy_backdrop(o);
-        return false;
-    }
-    if (p->mip_count && p->dst1_level >= p->mip_count) {
-        /* The native base stores are independent of blurOut. A one-mip plan
-         * still executes that unchanged kernel; discard its separate blur output. */
-        if (p->mip_count != 1 || p->dst1_level != 1 || p->no_base || !p->dst1[0] || !p->dst1[1]
-            || !create_image(r,
-                             p->dst1[0],
-                             p->dst1[1],
-                             WALLE_VK_WALLPAPER_FORMAT,
-                             VK_IMAGE_USAGE_STORAGE_BIT,
-                             &o->blur_scratch)) {
-            destroy_backdrop(o);
-            return false;
-        }
-    }
-    for (uint32_t i = 0; i < p->down_count; i++)
+    if (!c->extent[0] || !c->extent[1]) return false;
+    bool scratch = p->mip_count && p->dst1_level >= p->mip_count;
+    if (p->mip_count && (!p->groups[0] || !p->groups[1])) return false;
+    if (scratch && (p->mip_count != 1 || p->dst1_level != 1 || p->no_base
+                    || !p->dst1[0] || !p->dst1[1])) return false;
+    for (uint32_t i = 0; i < p->down_count; ++i)
         if (p->down[i].src_level >= p->mip_count || p->down[i].dst_level >= p->mip_count
-            || !p->down[i].groups_x || !p->down[i].groups_y) {
-            destroy_backdrop(o);
-            return false;
-        }
+            || !p->down[i].groups_x || !p->down[i].groups_y) return false;
+    auto r = o->renderer;
+    /* Reuse only exact allocation shapes; source normalization and mip layout
+     * remain native. Contents are recomputed from the current scene every frame. */
+    if (!o->capture.handle || o->capture.width != c->texture[0] || o->capture.height != c->texture[1]) {
+        struct walle_vk_image next = {};
+        if (!create_image(r,c->texture[0],c->texture[1],WALLE_VK_WALLPAPER_FORMAT,
+                          VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT
+                            | VK_IMAGE_USAGE_SAMPLED_BIT | STAGE_READBACK_USAGE,&next)) return false;
+        destroy_image(r->device,&o->capture); o->capture=next;
+    }
+    if (!p->mip_count) destroy_image(r->device,&o->pyramid);
+    else if (!o->pyramid.handle || o->pyramid.width != p->texture[0]
+             || o->pyramid.height != p->texture[1] || o->pyramid.mip_count != p->mip_count) {
+        struct walle_vk_image next = {};
+        if (!create_mip_image(r,p->texture[0],p->texture[1],p->mip_count,&next)) return false;
+        destroy_image(r->device,&o->pyramid); o->pyramid=next;
+    }
+    if (!scratch) destroy_image(r->device,&o->blur_scratch);
+    else if (!o->blur_scratch.handle || o->blur_scratch.width != p->dst1[0]
+             || o->blur_scratch.height != p->dst1[1]) {
+        struct walle_vk_image next = {};
+        if (!create_image(r,p->dst1[0],p->dst1[1],WALLE_VK_WALLPAPER_FORMAT,
+                          VK_IMAGE_USAGE_STORAGE_BIT,&next)) return false;
+        destroy_image(r->device,&o->blur_scratch); o->blur_scratch=next;
+    }
     o->capture_plan = *c;
     o->pyramid_plan = *p;
     return true;
 }
-static bool record_backdrop(struct walle_vk_output* o)
+static bool ensure_scene_copy(struct walle_vk_output* o)
+{
+    if (o->present_usage & VK_IMAGE_USAGE_SAMPLED_BIT)
+        return true;
+    if (o->scene_copy.handle && o->scene_copy.width == o->extent.width
+        && o->scene_copy.height == o->extent.height)
+        return true;
+    /* A raw B8->R8 transfer preserves the four bytes. Swizzle the sampled view
+     * back to RGBA, using the sampled R8 format already required by uploads.
+     * This does not require a sampleable export modifier or another draw. */
+    struct walle_vk_image copy = {};
+    if (!create_image(o->renderer, o->extent.width, o->extent.height,
+                      WALLE_VK_WALLPAPER_FORMAT,
+                      VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, &copy))
+        return false;
+    VkImageView view = VK_NULL_HANDLE;
+    VkImageViewCreateInfo info = {
+        .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+        .image = copy.handle,
+        .viewType = VK_IMAGE_VIEW_TYPE_2D,
+        .format = WALLE_VK_WALLPAPER_FORMAT,
+        .components = {VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_G,
+                       VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_A},
+        .subresourceRange = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                             .levelCount = 1, .layerCount = 1},
+    };
+    if (!vk_check(vkCreateImageView(o->renderer->device, &info, nullptr, &view),
+                  "vkCreateImageView(pre-glass copy)")) {
+        destroy_image(o->renderer->device, &copy);
+        return false;
+    }
+    vkDestroyImageView(o->renderer->device, copy.view, nullptr);
+    copy.view = view;
+    destroy_image(o->renderer->device, &o->scene_copy);
+    o->scene_copy = copy;
+    return true;
+}
+
+static VkImageView begin_scene_capture(struct walle_vk_output* o,
+                                       struct walle_vk_present_image* present)
+{
+    auto cmd = o->command_buffer;
+    if (o->present_usage & VK_IMAGE_USAGE_SAMPLED_BIT) {
+        image_barrier(cmd, present->image.handle,
+                      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                      VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                      VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+                      VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                      VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ, VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+        return present->image.view;
+    }
+    image_barrier(cmd, present->image.handle,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                  VK_PIPELINE_STAGE_2_COPY_BIT, VK_ACCESS_2_TRANSFER_READ_BIT,
+                  VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    image_barrier(cmd, o->scene_copy.handle, VK_PIPELINE_STAGE_2_NONE, 0,
+                  VK_PIPELINE_STAGE_2_COPY_BIT, VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                  VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    VkImageCopy copy = {
+        .srcSubresource = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT, .layerCount = 1},
+        .dstSubresource = {.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT, .layerCount = 1},
+        .extent = {o->extent.width, o->extent.height, 1},
+    };
+    vkCmdCopyImage(cmd, present->image.handle, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                   o->scene_copy.handle, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy);
+    image_barrier(cmd, o->scene_copy.handle,
+                  VK_PIPELINE_STAGE_2_COPY_BIT, VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                  VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT, VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                  VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+    return o->scene_copy.view;
+}
+
+static void end_scene_capture(struct walle_vk_output* o,
+                              struct walle_vk_present_image* present)
+{
+    bool direct = (o->present_usage & VK_IMAGE_USAGE_SAMPLED_BIT) != 0;
+    image_barrier(o->command_buffer, present->image.handle,
+                  direct ? VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT : VK_PIPELINE_STAGE_2_COPY_BIT,
+                  direct ? VK_ACCESS_2_SHADER_SAMPLED_READ_BIT : VK_ACCESS_2_TRANSFER_READ_BIT,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+                  VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT
+                      | VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT,
+                  direct ? VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                  VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ);
+}
+
+static bool record_backdrop(struct walle_vk_output* o, VkImageView source)
 {
     auto    r            = o->renderer;
     auto    cmd          = o->command_buffer;
     auto    c            = &o->capture_plan;
     auto    p            = &o->pyramid_plan;
-    uint8_t uniforms[80] = {};
+    uint8_t uniforms[160] = {};
     memcpy(uniforms, c->taps, sizeof c->taps);
     const uint16_t weights[] = {0x3400, 0x3400, 0x3400, 0x3400, 0, 0, 0, 0};
     memcpy(uniforms + 64, weights, sizeof weights);
+    memcpy(uniforms + 80, c->projection, sizeof c->projection);
+    memcpy(uniforms + 144, c->texture_matrix, sizeof c->texture_matrix);
     VkDeviceSize u = stage_bytes(
         o, uniforms, sizeof uniforms, r->properties.limits.minUniformBufferOffsetAlignment);
     VkDescriptorSet set = allocate_set(o, LAYOUT_CAPTURE);
     if (!set || u == UINT64_MAX)
         return false;
-    write_uniform(o, set, 0, u, 80);
+    write_uniform(o, set, 0, u, sizeof uniforms);
     write_image(r->device,
                 set,
                 1,
                 VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
-                o->incoming.view,
+                source,
                 VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
                 VK_NULL_HANDLE);
     write_image(r->device,
@@ -2743,26 +3127,23 @@ static bool record_backdrop(struct walle_vk_output* o)
                   VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
                   VK_IMAGE_LAYOUT_UNDEFINED,
                   VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ);
-    begin_render(
-        cmd, o->capture.view, VK_NULL_HANDLE, c->texture[0], c->texture[1], true, false, false);
+    discard_auxiliary_contents(o);
+    begin_render(cmd, o->capture.view, o->auxiliary.view,
+                 c->extent[0], c->extent[1], true, false, AUXILIARY_DISCARD);
     uint32_t ci = c->tap_count == 0 ? 3 : c->tap_count == 8 ? 2 : c->tap_count == 6 ? 1 : 0;
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, r->capture_pipelines[ci]);
     set_viewport(
-        cmd, c->texture[0], c->texture[1], (VkRect2D){{0, 0}, {c->texture[0], c->texture[1]}});
+        cmd, c->texture[0], c->texture[1], (VkRect2D){{0, 0}, {c->extent[0], c->extent[1]}});
     struct walle_vk_vertex vertices[36];
     uint32_t               indices[54];
     const uint32_t         quad_indices[] = {0, 1, 2, 0, 2, 3};
     for (uint32_t q = 0; q < c->quad_count; q++) {
-        float uv[4] = {c->quads[q].texcoord[0] * c->texture_matrix[0],
-                       c->quads[q].texcoord[1] * c->texture_matrix[1],
-                       c->quads[q].texcoord[2] * c->texture_matrix[0],
-                       c->quads[q].texcoord[3] * c->texture_matrix[1]};
-        quad_vertices(vertices + 4 * q, c->quads[q].position, uv);
+        quad_vertices(vertices + 4 * q, c->quads[q].position, c->quads[q].texcoord);
         for (uint32_t j = 0; j < 6; j++)
             indices[6 * q + j] = 4 * q + quad_indices[j];
     }
     struct glass_push push = {.resolution = {(float)c->texture[0], (float)c->texture[1]}, .edr = 1};
-    bool              ok   = issue_geometry(o,
+    bool              ok   = !c->quad_count || issue_geometry(o,
                                             r->pipeline_layout[LAYOUT_CAPTURE],
                                             set,
                                             vertices,
@@ -2912,27 +3293,133 @@ static bool record_backdrop(struct walle_vk_output* o)
                 VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
     return true;
 }
-static bool ensure_tint(struct walle_vk_output* o)
+static bool surface_plan_valid(struct walle_vk_output* o, const struct walle_vk_surface_plan* p)
 {
-    VkImageUsageFlags usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-                              | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-    if (!o->tint.handle
-        && !create_image(o->renderer,
-                         o->extent.width,
-                         o->extent.height,
-                         WALLE_VK_WALLPAPER_FORMAT,
-                         usage,
-                         &o->tint))
-        return false;
-    if (!o->mask.handle
-        && !create_image(o->renderer,
-                         o->extent.width,
-                         o->extent.height,
-                         WALLE_VK_WALLPAPER_FORMAT,
-                         usage,
-                         &o->mask))
-        return false;
+    if (!p || p->rect[0] < 0 || p->rect[1] < 0 || p->rect[2] <= 0 || p->rect[3] <= 0
+        || (int64_t)p->rect[0] + p->rect[2] > o->extent.width
+        || (int64_t)p->rect[1] + p->rect[3] > o->extent.height
+        || !graphics_extent_valid(o->renderer, p->texture[0], p->texture[1])) return false;
+    for (unsigned i = 0; i < 2; ++i)
+        if (p->extent[i] < (uint32_t)p->rect[i + 2] || p->extent[i] > p->texture[i]) return false;
     return true;
+}
+static bool ensure_sized_image(struct walle_vk_output* o, struct walle_vk_image* image,
+                               const uint32_t size[2], VkFormat format, VkImageUsageFlags usage)
+{
+    if (image->handle && image->width == size[0] && image->height == size[1]) return true;
+    struct walle_vk_image next = {};
+    if (!create_image(o->renderer, size[0], size[1], format, usage, &next)) return false;
+    destroy_image(o->renderer->device, image);
+    *image = next;
+    return true;
+}
+static bool ensure_tint(struct walle_vk_output* o, const struct walle_vk_frame* frame)
+{
+    const struct walle_vk_surface_plan* m = frame->tint_mask_surface;
+    const struct walle_vk_surface_plan* g = frame->tint_group_surface;
+    if (!surface_plan_valid(o, m) || !surface_plan_valid(o, g)) return false;
+    constexpr VkImageUsageFlags usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+                                    | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+    if (!ensure_sized_image(o, &o->tint, g->texture, WALLE_VK_WALLPAPER_FORMAT, usage)
+        || !ensure_sized_image(o, &o->mask, m->texture, WALLE_VK_WALLPAPER_FORMAT, usage)
+        || !ensure_sized_image(o, &o->tint_backdrop, g->texture, VK_FORMAT_R16G16B16A16_SFLOAT,
+                               VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT)
+        || !ensure_scene_copy(o)) return false;
+    o->tint_mask_plan = *m; o->tint_group_plan = *g;
+    return true;
+}
+static bool ensure_reveal(struct walle_vk_output* o, const struct walle_vk_frame* frame)
+{
+    const struct walle_vk_surface_plan* p = frame->reveal_surface;
+    if (!surface_plan_valid(o,p)) return false;
+    constexpr VkImageUsageFlags usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+                                    | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+    if (!ensure_sized_image(o,&o->reveal_mask,p->texture,WALLE_VK_WALLPAPER_FORMAT,usage)
+        || !ensure_sized_image(o,&o->reveal_image,p->texture,WALLE_VK_WALLPAPER_FORMAT,usage)) return false;
+    o->reveal_plan = *p;
+    return true;
+}
+static bool sdf_plan_metadata_valid(const struct walle_vk_surface_plan* p)
+{
+    if (!p || p->rect[2] <= 0 || p->rect[3] <= 0
+        || p->texture[0] > INT32_MAX || p->texture[1] > INT32_MAX
+        || p->texture[0] != (uint32_t)p->rect[2] || p->texture[1] != (uint32_t)p->rect[3]
+        || p->extent[0] != p->texture[0] || p->extent[1] != p->texture[1]) return false;
+    return true;
+}
+static bool reject_sdf_resource(struct walle_vk_output* o)
+{
+    destroy_image(o->renderer->device, &o->sdf);
+    o->sdf_ready = false;
+    o->sdf_replan = !o->renderer->fatal;
+    return false;
+}
+static bool ensure_sdf(struct walle_vk_output* o, const struct walle_vk_frame* frame)
+{
+    const struct walle_vk_surface_plan* p = frame->sdf_surface;
+    if (!sdf_plan_metadata_valid(p)) return false;
+    if (!frame->sdf_redraw)
+        return o->sdf_ready && o->sdf.handle
+            && memcmp(p->rect,o->sdf_plan.rect,sizeof p->rect)==0
+            && o->sdf.width==p->texture[0] && o->sdf.height==p->texture[1];
+    constexpr VkImageUsageFlags usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+                                      | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT
+                                      | VK_IMAGE_USAGE_SAMPLED_BIT | STAGE_READBACK_USAGE;
+    if (!graphics_extent_valid(o->renderer,p->texture[0],p->texture[1])
+        || !ensure_sized_image(o,&o->sdf,p->texture,VK_FORMAT_R16G16B16A16_SFLOAT,usage)) {
+        /* The user selected analytic recovery for this resource failure.
+         * Prior submissions have completed before frame_resources runs.
+         * Drop incompatible retained storage without changing the scene. */
+        return reject_sdf_resource(o);
+    }
+    o->sdf_plan=*p;
+    o->sdf_ready=false;
+    return true;
+}
+
+static bool create_auxiliary_image(struct walle_vk_renderer* r, uint32_t width, uint32_t height,
+                                    struct walle_vk_image* out)
+{
+    constexpr VkImageUsageFlags usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+                                      | VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+    if (!graphics_extent_valid(r, width, height)) return false;
+    VkImageFormatProperties p;
+    if (!resource_check(r, vkGetPhysicalDeviceImageFormatProperties(r->physical_device,
+            VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_OPTIMAL,
+            usage, 0, &p), "vkGetPhysicalDeviceImageFormatProperties(auxiliary)")) return false;
+    VkDeviceSize bytes;
+    if (width > p.maxExtent.width || height > p.maxExtent.height || p.maxExtent.depth < 1
+        || p.maxMipLevels < 1 || p.maxArrayLayers < 1 || !(p.sampleCounts & VK_SAMPLE_COUNT_1_BIT)
+        || ckd_mul(&bytes, (VkDeviceSize)width, (VkDeviceSize)height)
+        || ckd_mul(&bytes, bytes, (VkDeviceSize)8) || bytes > p.maxResourceSize) return false;
+    return create_image(r, width, height, VK_FORMAT_R16G16B16A16_SFLOAT, usage, out);
+}
+
+static bool ensure_auxiliary(struct walle_vk_output* o, uint32_t width, uint32_t height)
+{
+    if (o->frame_pending || !width || !height) return false;
+    if (o->auxiliary.handle && o->auxiliary.width >= width && o->auxiliary.height >= height)
+        return true;
+    uint32_t grown_width = width > o->auxiliary.width ? width : o->auxiliary.width;
+    uint32_t grown_height = height > o->auxiliary.height ? height : o->auxiliary.height;
+    struct walle_vk_image next = {};
+    if (!create_auxiliary_image(o->renderer, grown_width, grown_height, &next)) {
+        /* Retained capacity from another frame must not make the current
+         * request inadmissible. Try its exact covering extent before failing. */
+        if (o->renderer->fatal || (grown_width == width && grown_height == height)
+            || !create_auxiliary_image(o->renderer, width, height, &next)) return false;
+    }
+    /* frame_resources runs only after this output's preceding fence completed.
+     * No other output can reference this image. Failed growth preserves it. */
+    destroy_image(o->renderer->device, &o->auxiliary);
+    o->auxiliary = next;
+    return true;
+}
+
+static void cover_extent(uint32_t current[2], const uint32_t required[2])
+{
+    for (unsigned i = 0; i < 2; ++i)
+        if (required[i] > current[i]) current[i] = required[i];
 }
 static bool record_ramp(struct walle_vk_output* o, const uint8_t* bytes)
 {
@@ -2979,7 +3466,18 @@ static bool record_ramp(struct walle_vk_output* o, const uint8_t* bytes)
                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                   VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
     memcpy(o->ramp_bytes, bytes, 2048);
+    /* Classification changes only with the uploaded bytes. The existing warm
+     * cache comparison above avoids another2048-byte compare on each frame. */
+    o->ramp_native = memcmp(bytes, native_tint_ramp, sizeof native_tint_ramp) == 0;
     return true;
+}
+static bool native_ramp_draw(const struct walle_vk_output* o, const struct walle_vk_draw* draw)
+{
+    /* Original Float4 lies at effect+136. Gate only coordinate x/y/w, by raw
+     * bits: +0 is distinct from -0. Coverage z and Half4 colour stay dynamic. */
+    return o->ramp_native && draw->pass == WALLE_VK_TINT_GRADIENT
+        && memcmp(draw->effect + 136, native_tint_gradient, 8) == 0
+        && memcmp(draw->effect + 148, native_tint_gradient + 12, 4) == 0;
 }
 static VkDescriptorSet graphics_set(struct walle_vk_output*     o,
                                     const struct walle_vk_draw* draw,
@@ -3002,13 +3500,14 @@ static VkDescriptorSet graphics_set(struct walle_vk_output*     o,
                 source,
                 VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
                 VK_NULL_HANDLE);
-    write_image(r->device,
-                set,
-                2,
-                VK_DESCRIPTOR_TYPE_SAMPLER,
-                VK_NULL_HANDLE,
-                VK_IMAGE_LAYOUT_UNDEFINED,
-                r->linear_sampler);
+    bool nearest = draw && (draw->pass == WALLE_VK_TINT_APPLY_MASK
+                            || draw->pass == WALLE_VK_TINT_COMPOSITE
+                            || draw->pass == WALLE_VK_REVEAL || draw->pass == WALLE_VK_PRODUCT_FINISH
+                            || draw->pass == WALLE_VK_REVEAL_IMAGE || draw->pass == WALLE_VK_FINISH_IMAGE
+                            || (draw->cached_sdf && (draw->pass == WALLE_VK_TINT_MASK
+                                                    || draw->pass == WALLE_VK_HIGHLIGHT)));
+    write_image(r->device, set, 2, VK_DESCRIPTOR_TYPE_SAMPLER, VK_NULL_HANDLE,
+                VK_IMAGE_LAYOUT_UNDEFINED, nearest ? r->nearest_sampler : r->linear_sampler);
     write_image(r->device,
                 set,
                 3,
@@ -3029,7 +3528,7 @@ static VkDescriptorSet graphics_set(struct walle_vk_output*     o,
                 VK_DESCRIPTOR_TYPE_SAMPLER,
                 VK_NULL_HANDLE,
                 VK_IMAGE_LAYOUT_UNDEFINED,
-                r->linear_sampler);
+                r->linear_level0_sampler);
     write_image(r->device,
                 set,
                 7,
@@ -3041,24 +3540,34 @@ static VkDescriptorSet graphics_set(struct walle_vk_output*     o,
                 set,
                 8,
                 VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
-                o->tint.handle ? o->tint.view : o->incoming.view,
+                o->sdf.handle ? o->sdf.view : o->incoming.view,
                 VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
                 VK_NULL_HANDLE);
     return set;
 }
+static struct glass_push graphics_push(uint32_t width, uint32_t height, int32_t x, int32_t y)
+{
+    float left = (float)x, top = (float)y;
+    float right = (float)((double)x + width), bottom = (float)((double)y + height);
+    float ix = 1.f / (right - left), iy = 1.f / (bottom - top);
+    return (struct glass_push){.resolution = {ix + ix, iy * -2.f}, .edr = 1,
+        .projection_offset = {-((right + left) * ix), (bottom + top) * iy}};
+}
+
 static bool record_wallpaper(struct walle_vk_output* o, VkImageView scene, VkImageView source)
 {
     VkDescriptorSet set = graphics_set(o, nullptr, source, scene);
     if (!set)
         return false;
+    discard_auxiliary_contents(o);
     begin_render(o->command_buffer,
                  scene,
-                 VK_NULL_HANDLE,
+                 o->auxiliary.view,
                  o->extent.width,
                  o->extent.height,
                  true,
                  false,
-                 false);
+                 AUXILIARY_DISCARD);
     vkCmdBindPipeline(
         o->command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, o->renderer->pipelines[PIPE_WALLPAPER]);
     set_viewport(
@@ -3067,13 +3576,51 @@ static bool record_wallpaper(struct walle_vk_output* o, VkImageView scene, VkIma
     const float p[] = {0, 0, (float)o->extent.width, (float)o->extent.height}, uv[] = {0, 0, 1, 1};
     quad_vertices(v, p, uv);
     const uint32_t    indices[] = {0, 1, 2, 0, 2, 3};
-    struct glass_push push
-        = {.resolution = {(float)o->extent.width, (float)o->extent.height}, .edr = 1};
+    struct glass_push push = graphics_push(o->extent.width, o->extent.height, 0, 0);
     bool ok = issue_geometry(
         o, o->renderer->pipeline_layout[LAYOUT_GRAPHICS], set, v, 4, indices, 6, &push, 32);
     vkCmdEndRendering(o->command_buffer);
     return ok;
 }
+static bool record_tint_backdrop(struct walle_vk_output* o,
+                                  struct walle_vk_present_image* present)
+{
+    auto cmd = o->command_buffer;
+    const struct walle_vk_surface_plan* p = &o->tint_group_plan;
+    VkImageView source = begin_scene_capture(o, present);
+    VkDescriptorSet set = graphics_set(o, nullptr, source, o->tint_backdrop.view);
+    if (!set) return false;
+    write_image(o->renderer->device, set, 2, VK_DESCRIPTOR_TYPE_SAMPLER, VK_NULL_HANDLE,
+                VK_IMAGE_LAYOUT_UNDEFINED, o->renderer->nearest_sampler);
+    image_barrier(cmd, o->tint_backdrop.handle, VK_PIPELINE_STAGE_2_NONE, 0,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+                  VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                  VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ);
+    discard_auxiliary_contents(o);
+    begin_render(cmd, o->tint_backdrop.view, o->auxiliary.view,
+                 p->extent[0], p->extent[1], true, false, AUXILIARY_DISCARD);
+    set_viewport(cmd, p->texture[0], p->texture[1],
+                 (VkRect2D){{0,0},{(uint32_t)p->rect[2],(uint32_t)p->rect[3]}});
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, o->renderer->pipelines[PIPE_TINT_BACKDROP]);
+    float x = (float)p->rect[0], y = (float)p->rect[1];
+    float right = (float)((double)p->rect[0] + p->rect[2]);
+    float bottom = (float)((double)p->rect[1] + p->rect[3]);
+    float sx = 1.f/(float)o->extent.width, sy = 1.f/(float)o->extent.height;
+    const float positions[4] = {x,y,right,bottom}, uv[4] = {x*sx,y*sy,right*sx,bottom*sy};
+    struct walle_vk_vertex vertices[4]; quad_vertices(vertices, positions, uv);
+    constexpr uint32_t indices[6] = {0,1,2,0,2,3};
+    struct glass_push push = graphics_push(p->texture[0], p->texture[1], p->rect[0], p->rect[1]);
+    bool ok = issue_geometry(o, o->renderer->pipeline_layout[LAYOUT_GRAPHICS], set,
+                              vertices,4,indices,6,&push,sizeof push);
+    vkCmdEndRendering(cmd);
+    end_scene_capture(o, present);
+    image_barrier(cmd, o->tint_backdrop.handle,
+                  VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT, VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
+                  VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT, VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT,
+                  VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ, VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ);
+    return ok;
+}
+
 static bool record_draw(struct walle_vk_output*     o,
                         VkImageView                 scene,
                         const struct walle_vk_draw* draw,
@@ -3083,17 +3630,38 @@ static bool record_draw(struct walle_vk_output*     o,
     auto r    = o->renderer;
     auto cmd  = o->command_buffer;
     bool tint = draw->pass == WALLE_VK_TINT_GRADIENT, mask = draw->pass == WALLE_VK_TINT_MASK;
-    bool local         = draw->pass == WALLE_VK_FACE || draw->pass == WALLE_VK_HIGHLIGHT
-                         || draw->pass == WALLE_VK_PRODUCT_FINISH;
+    bool apply_mask = draw->pass == WALLE_VK_TINT_APPLY_MASK;
+    bool reveal_mask = draw->pass == WALLE_VK_REVEAL_MASK;
+    bool reveal_image = draw->pass == WALLE_VK_REVEAL_IMAGE || draw->pass == WALLE_VK_FINISH_IMAGE;
+    bool image_composite = draw->pass == WALLE_VK_REVEAL || draw->pass == WALLE_VK_PRODUCT_FINISH;
+    bool sdf = draw->pass == WALLE_VK_SDF_CACHE;
+    const struct walle_vk_surface_plan* plan = sdf ? &o->sdf_plan : (reveal_mask || reveal_image) ? &o->reveal_plan
+        : mask ? &o->tint_mask_plan : (tint || apply_mask) ? &o->tint_group_plan : nullptr;
+    bool local = draw->pass == WALLE_VK_FACE || draw->pass == WALLE_VK_HIGHLIGHT
+                 || draw->pass == WALLE_VK_TINT_COMPOSITE || draw->pass == WALLE_VK_GLASS_REGULAR
+                 || draw->pass == WALLE_VK_GLASS_CLEAR || apply_mask || image_composite;
     VkImageView source = o->incoming.view;
     if (draw->pass == WALLE_VK_GLASS_REGULAR || draw->pass == WALLE_VK_GLASS_CLEAR)
         source = o->pyramid.handle ? o->pyramid.view : o->capture.view;
-    VkDescriptorSet set = graphics_set(o, draw, source, scene);
+    if (apply_mask) source = o->mask.view;
+    if (draw->pass == WALLE_VK_TINT_COMPOSITE) source = o->tint.view;
+    if (image_composite) source = o->reveal_image.view;
+    VkDescriptorSet set = graphics_set(o, draw, source,
+        tint ? o->tint_backdrop.view : apply_mask ? o->tint.view : scene);
     if (!set)
         return false;
-    VkImageView target = tint ? o->tint.view : mask ? o->mask.view : scene;
-    if (tint || mask) {
-        struct walle_vk_image* image = tint ? &o->tint : &o->mask;
+    if (image_composite)
+        write_image(r->device,set,7,VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,o->reveal_mask.view,
+                    VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,VK_NULL_HANDLE);
+    VkImageView target = sdf ? o->sdf.view : reveal_mask ? o->reveal_mask.view : reveal_image ? o->reveal_image.view
+        : (tint || apply_mask) ? o->tint.view : mask ? o->mask.view : scene;
+    uint32_t width = plan ? plan->texture[0] : o->extent.width;
+    uint32_t height = plan ? plan->texture[1] : o->extent.height;
+    int32_t origin_x = plan ? plan->rect[0] : 0, origin_y = plan ? plan->rect[1] : 0;
+    bool clear = (tint || mask || reveal_mask || reveal_image || sdf) && clear_target;
+    if (plan) {
+        struct walle_vk_image* image = sdf ? &o->sdf : reveal_mask ? &o->reveal_mask : reveal_image ? &o->reveal_image
+            : mask ? &o->mask : &o->tint;
         image_barrier(cmd,
                       image->handle,
                       VK_PIPELINE_STAGE_2_ALL_GRAPHICS_BIT,
@@ -3101,40 +3669,52 @@ static bool record_draw(struct walle_vk_output*     o,
                       VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
                       VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT
                           | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
-                      clear_target ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
+                      clear ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,
                       VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ);
     }
     local_read_barrier(cmd);
+    if (!tint) discard_auxiliary_contents(o);
     begin_render(cmd,
                  target,
-                 scene,
-                 o->extent.width,
-                 o->extent.height,
-                 (tint || mask) && clear_target,
+                 tint ? o->tint_backdrop.view : o->auxiliary.view,
+                 plan ? plan->extent[0] : width,
+                 plan ? plan->extent[1] : height,
+                 clear,
                  local,
-                 tint);
-    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, r->pipelines[draw->pass]);
-    int64_t x0 = draw->scissor[0], y0 = draw->scissor[1], x1 = x0 + draw->scissor[2],
-            y1 = y0 + draw->scissor[3];
+                 tint ? AUXILIARY_READ_BACKDROP : AUXILIARY_DISCARD);
+    unsigned pipeline=draw->pass;
+    if (draw->cached_sdf) {
+        switch (draw->pass) {
+        case WALLE_VK_GLASS_REGULAR: pipeline=PIPE_REGULAR_CACHED; break;
+        case WALLE_VK_GLASS_CLEAR: pipeline=PIPE_CLEAR_CACHED; break;
+        case WALLE_VK_TINT_MASK: pipeline=PIPE_MASK_CACHED; break;
+        case WALLE_VK_HIGHLIGHT: pipeline=PIPE_HIGHLIGHT_CACHED; break;
+        default: return false; /* Checked before command recording by frame_resources. */
+        }
+    }
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, r->pipelines[pipeline]);
+    int64_t x0 = (int64_t)draw->scissor[0] - origin_x;
+    int64_t y0 = (int64_t)draw->scissor[1] - origin_y;
+    int64_t x1 = x0 + draw->scissor[2], y1 = y0 + draw->scissor[3];
     if (x0 < 0)
         x0 = 0;
     if (y0 < 0)
         y0 = 0;
-    if (x1 > o->extent.width)
-        x1 = o->extent.width;
-    if (y1 > o->extent.height)
-        y1 = o->extent.height;
+    uint32_t clip_width = plan ? (uint32_t)plan->rect[2] : width;
+    uint32_t clip_height = plan ? (uint32_t)plan->rect[3] : height;
+    if (x1 > clip_width) x1 = clip_width;
+    if (y1 > clip_height) y1 = clip_height;
     bool ok = true;
     if (x1 > x0 && y1 > y0) {
         set_viewport(
             cmd,
-            o->extent.width,
-            o->extent.height,
+            width, height,
             (VkRect2D){{(int32_t)x0, (int32_t)y0}, {(uint32_t)(x1 - x0), (uint32_t)(y1 - y0)}});
-        struct glass_push push = {.resolution = {(float)o->extent.width, (float)o->extent.height},
-                                  .edr        = draw->edr_scale,
-                                  .mode       = draw->shape_mode,
-                                  .material_opacity = material_opacity};
+        struct glass_push push = graphics_push(width, height, origin_x, origin_y);
+        push.edr = draw->edr_scale; push.mode = draw->shape_mode;
+        push.material_opacity = material_opacity;
+        push.native_ramp = native_ramp_draw(o, draw);
+        if (reveal_image) memcpy(&push.material_opacity,draw->effect+176,sizeof(float));
         ok                     = issue_geometry(o,
                                                 r->pipeline_layout[LAYOUT_GRAPHICS],
                                                 set,
@@ -3146,9 +3726,10 @@ static bool record_draw(struct walle_vk_output*     o,
                                                 32);
     }
     vkCmdEndRendering(cmd);
-    if (tint || mask)
+    if (plan)
         image_barrier(cmd,
-                      tint ? o->tint.handle : o->mask.handle,
+                      sdf ? o->sdf.handle : reveal_mask ? o->reveal_mask.handle : reveal_image ? o->reveal_image.handle
+                          : mask ? o->mask.handle : o->tint.handle,
                       VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
                       VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
                       VK_PIPELINE_STAGE_2_ALL_GRAPHICS_BIT,
@@ -3156,6 +3737,15 @@ static bool record_draw(struct walle_vk_output*     o,
                       VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ,
                       VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
     return ok;
+}
+
+static bool record_scene_draw(struct walle_vk_output* o,
+                               struct walle_vk_present_image* present,
+                               const struct walle_vk_draw* draw, float opacity, bool first)
+{
+    if (draw->pass == WALLE_VK_TINT_GRADIENT && first && !record_tint_backdrop(o, present))
+        return false;
+    return record_draw(o, present->image.view, draw, opacity, first);
 }
 
 static int retry_ioctl(int fd, unsigned long operation, void* argument)
@@ -3248,9 +3838,11 @@ static bool frame_resources(struct walle_vk_output*      o,
         return false;
     VkDeviceSize alignment = o->renderer->properties.limits.minUniformBufferOffsetAlignment;
     VkDeviceSize bytes     = (frame->draw_count + 40) * (alignment * 2 + 512) + 8192;
-    bool         backdrop = false, tint = false;
+    bool         backdrop = false, tint = false, reveal = false, sdf = false, sdf_draw = false;
     for (size_t i = 0; i < frame->draw_count; i++) {
         auto         d = &frame->draws[i];
+        if (d->cached_sdf && d->pass != WALLE_VK_GLASS_REGULAR && d->pass != WALLE_VK_GLASS_CLEAR
+            && d->pass != WALLE_VK_TINT_MASK && d->pass != WALLE_VK_HIGHLIGHT) return false;
         VkDeviceSize vb, ib;
         if (d->pass >= WALLE_VK_PASS_COUNT || !isfinite(d->edr_scale) || d->edr_scale <= 0
             || !d->vertices || !d->indices || !d->vertex_count || !d->index_count
@@ -3269,13 +3861,41 @@ static bool frame_resources(struct walle_vk_output*      o,
             if (d->indices[j] >= d->vertex_count)
                 return false;
         backdrop |= d->pass == WALLE_VK_GLASS_REGULAR || d->pass == WALLE_VK_GLASS_CLEAR;
+        sdf |= d->cached_sdf || d->pass == WALLE_VK_SDF_CACHE;
+        sdf_draw |= d->pass == WALLE_VK_SDF_CACHE;
+        reveal |= d->pass == WALLE_VK_REVEAL || d->pass == WALLE_VK_REVEAL_MASK
+                   || d->pass == WALLE_VK_REVEAL_IMAGE || d->pass == WALLE_VK_FINISH_IMAGE
+                   || d->pass == WALLE_VK_PRODUCT_FINISH;
         tint |= d->pass == WALLE_VK_TINT_MASK || d->pass == WALLE_VK_TINT_GRADIENT
-                || d->pass == WALLE_VK_TINT_COMPOSITE;
+                || d->pass == WALLE_VK_TINT_COMPOSITE || d->pass == WALLE_VK_TINT_APPLY_MASK;
     }
-    if (backdrop && !ensure_backdrop(o, frame))
+    if (backdrop && (!ensure_backdrop(o, frame) || !ensure_scene_copy(o)))
         return false;
-    if (tint && (!frame->tint_ramp_rgba16f || !ensure_tint(o)))
+    if (reveal && !ensure_reveal(o,frame)) return false;
+    if (tint && (!frame->tint_ramp_rgba16f || !ensure_tint(o, frame)))
         return false;
+    if (sdf && (sdf_draw != frame->sdf_redraw || !sdf_plan_metadata_valid(frame->sdf_surface)))
+        return false;
+    if (sdf && !frame->sdf_redraw && !ensure_sdf(o, frame)) return false;
+    /* Native attachment1 matches physical primary allocation, including its
+     * padding. A larger unused view preserves that limiting primary extent;
+     * renderArea remains bounded by both. All ordinary passes need this state,
+     * including the endpoint wallpaper copy and the separate tint producer. */
+    uint32_t required[2] = {o->extent.width, o->extent.height};
+    if (backdrop) cover_extent(required, o->capture_plan.texture);
+    if (reveal) cover_extent(required, o->reveal_plan.texture);
+    if (tint) {
+        cover_extent(required, o->tint_mask_plan.texture);
+        cover_extent(required, o->tint_group_plan.texture);
+    }
+    if (RETAIN_DISCARD_ATTACHMENT && !ensure_auxiliary(o, required[0], required[1])) return false;
+    if (sdf && frame->sdf_redraw && !ensure_sdf(o,frame)) return false;
+    if (RETAIN_DISCARD_ATTACHMENT && sdf_draw) {
+        cover_extent(required, o->sdf_plan.texture);
+        /* Mandatory passes already have adequate storage. Only this extra
+         * cache-generation growth belongs to the approved analytic REPLAN. */
+        if (!ensure_auxiliary(o, required[0], required[1])) return reject_sdf_resource(o);
+    }
     if (!prepare_pool(o, (uint32_t)frame->draw_count + 40)
         || !ensure_buffer(o->renderer,
                           &o->frame_buffer,
@@ -3291,6 +3911,35 @@ static bool frame_resources(struct walle_vk_output*      o,
     o->cursor = 0;
     return true;
 }
+#if defined(WALLE_STAGE_READBACK)
+static bool record_stage_readback(struct walle_vk_output* o, struct walle_vk_image* image,
+                                  VkDeviceSize offset)
+{
+    if (!image->handle) return false;
+    mip_barrier(o->command_buffer,image,VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+                VK_ACCESS_2_MEMORY_WRITE_BIT | VK_ACCESS_2_MEMORY_READ_BIT,
+                VK_PIPELINE_STAGE_2_COPY_BIT,VK_ACCESS_2_TRANSFER_READ_BIT,
+                VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL,VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    VkBufferImageCopy copies[32] = {};
+    uint32_t levels = image->mip_count ? image->mip_count : 1;
+    for (uint32_t i=0;i<levels;++i) {
+        uint32_t w=image->width>>i, h=image->height>>i;
+        if(!w)w=1;
+        if(!h)h=1;
+        copies[i]=(VkBufferImageCopy){.bufferOffset=offset,
+            .imageSubresource={.aspectMask=VK_IMAGE_ASPECT_COLOR_BIT,.mipLevel=i,.layerCount=1},
+            .imageExtent={w,h,1}};
+        uint32_t pixel_bytes=image->format==VK_FORMAT_R16G16B16A16_SFLOAT?8u:4u;
+        offset+=(VkDeviceSize)w*h*pixel_bytes;
+    }
+    vkCmdCopyImageToBuffer(o->command_buffer,image->handle,VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                           o->readback_buffer.handle,levels,copies);
+    mip_barrier(o->command_buffer,image,VK_PIPELINE_STAGE_2_COPY_BIT,VK_ACCESS_2_TRANSFER_READ_BIT,
+                VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,VK_ACCESS_2_SHADER_SAMPLED_READ_BIT,
+                VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL);
+    return true;
+}
+#endif
 enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o,
                                                   const struct walle_vk_frame* frame)
 {
@@ -3321,11 +3970,47 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
             || ckd_mul(&rb, rb, (VkDeviceSize)4) || frame->composition_readback_size != rb)
             return WALLE_VK_FRAME_FATAL;
     }
+    VkDeviceSize composition_bytes = rb;
+#if defined(WALLE_STAGE_READBACK)
+    VkDeviceSize capture_offset=rb, pyramid_offset=rb, sdf_offset=rb;
+    if(frame->capture_readback) {
+        if(!frame->capture || frame->plain_incoming) return WALLE_VK_FRAME_FATAL;
+        VkDeviceSize bytes;
+        if(ckd_mul(&bytes,(VkDeviceSize)frame->capture->texture[0],(VkDeviceSize)frame->capture->texture[1])
+            || ckd_mul(&bytes,bytes,(VkDeviceSize)4) || bytes!=frame->capture_readback_size
+            || ckd_add(&rb,rb,bytes)) return WALLE_VK_FRAME_FATAL;
+    }
+    pyramid_offset=rb;
+    if(frame->pyramid_readback) {
+        if(!frame->pyramid || !frame->pyramid->mip_count || frame->pyramid->mip_count>32 || frame->plain_incoming)
+            return WALLE_VK_FRAME_FATAL;
+        VkDeviceSize total=0;
+        for(uint32_t i=0;i<frame->pyramid->mip_count;++i) {
+            uint32_t w=frame->pyramid->texture[0]>>i,h=frame->pyramid->texture[1]>>i;
+            if(!w)w=1;
+            if(!h)h=1;
+            VkDeviceSize bytes;
+            if(ckd_mul(&bytes,(VkDeviceSize)w,(VkDeviceSize)h) || ckd_mul(&bytes,bytes,(VkDeviceSize)4)
+               || ckd_add(&total,total,bytes)) return WALLE_VK_FRAME_FATAL;
+        }
+        if(total!=frame->pyramid_readback_size || ckd_add(&rb,rb,total)) return WALLE_VK_FRAME_FATAL;
+    }
+    if(frame->sdf_readback) {
+        if(!frame->sdf_surface || frame->plain_incoming || ckd_add(&rb,rb,(VkDeviceSize)7))
+            return WALLE_VK_FRAME_FATAL;
+        rb&=~(VkDeviceSize)7; sdf_offset=rb;
+        VkDeviceSize bytes;
+        if(ckd_mul(&bytes,(VkDeviceSize)frame->sdf_surface->texture[0],(VkDeviceSize)frame->sdf_surface->texture[1])
+           || ckd_mul(&bytes,bytes,(VkDeviceSize)8) || bytes!=frame->sdf_readback_size
+           || ckd_add(&rb,rb,bytes)) return WALLE_VK_FRAME_FATAL;
+    }
+#endif
     uint32_t index;
     if (!take_present_image(o, &index))
         return r->fatal ? WALLE_VK_FRAME_FATAL : WALLE_VK_FRAME_RETRY;
+    o->sdf_replan=false;
     if (!frame_resources(o, frame, rb))
-        return WALLE_VK_FRAME_FATAL;
+        return o->sdf_replan ? WALLE_VK_FRAME_REPLAN : WALLE_VK_FRAME_FATAL;
     if (!vk_check(vkResetCommandBuffer(o->command_buffer, 0), "vkResetCommandBuffer(frame)"))
         goto fail;
     VkCommandBufferBeginInfo bi = {.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
@@ -3333,7 +4018,7 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
     if (!vk_check(vkBeginCommandBuffer(o->command_buffer, &bi), "vkBeginCommandBuffer(frame)"))
         goto fail;
     if (o->timestamp_pool) {
-        vkCmdResetQueryPool(o->command_buffer, o->timestamp_pool, 0, 4);
+        vkCmdResetQueryPool(o->command_buffer, o->timestamp_pool, 0, 5);
         vkCmdWriteTimestamp2(
             o->command_buffer, VK_PIPELINE_STAGE_2_TOP_OF_PIPE_BIT, o->timestamp_pool, 0);
     }
@@ -3342,13 +4027,17 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
                    VK_ACCESS_2_HOST_WRITE_BIT,
                    VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
                    VK_ACCESS_2_UNIFORM_READ_BIT | VK_ACCESS_2_VERTEX_ATTRIBUTE_READ_BIT
-                       | VK_ACCESS_2_INDEX_READ_BIT | VK_ACCESS_2_TRANSFER_READ_BIT);
-    bool build_backdrop = o->capture.handle && !o->backdrop_ready;
-    if (build_backdrop && !record_backdrop(o))
-        goto fail;
-    if (o->timestamp_pool)
-        vkCmdWriteTimestamp2(
-            o->command_buffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, o->timestamp_pool, 1);
+                       | VK_ACCESS_2_INDEX_READ_BIT | VK_ACCESS_2_TRANSFER_READ_BIT
+                       | VK_ACCESS_2_SHADER_STORAGE_READ_BIT);
+    size_t first_glass = frame->draw_count;
+    if (!frame->plain_incoming)
+        for (size_t i = 0; i < frame->draw_count; ++i)
+            if (frame->draws[i].pass == WALLE_VK_GLASS_REGULAR
+                || frame->draws[i].pass == WALLE_VK_GLASS_CLEAR) {
+                first_glass = i;
+                break;
+            }
+    bool build_backdrop = !frame->plain_incoming && first_glass < frame->draw_count;
     if (!record_ramp(o, frame->tint_ramp_rgba16f))
         goto fail;
     struct walle_vk_present_image* present = &o->present_images[index];
@@ -3367,22 +4056,40 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
             o, present->image.view, frame->plain_incoming ? o->incoming.view : o->current.view))
         goto fail;
     if (!frame->plain_incoming)
-        for (size_t i = 0; i < frame->draw_count; i++)
-            if (!record_draw(o,
-                             present->image.view,
+        for (size_t i = 0; i < first_glass; i++)
+            if (!record_scene_draw(o,
+                             present,
                              &frame->draws[i],
                              frame->material_opacity,
                              i == 0 || frame->draws[i - 1].pass != frame->draws[i].pass))
                 goto fail;
     if (o->timestamp_pool)
         vkCmdWriteTimestamp2(
+            o->command_buffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, o->timestamp_pool, 1);
+    if (build_backdrop) {
+        bool samples_scene = o->capture_plan.quad_count != 0;
+        VkImageView source = samples_scene ? begin_scene_capture(o, present) : o->incoming.view;
+        if (!record_backdrop(o, source))
+            goto fail;
+        if (samples_scene) end_scene_capture(o, present);
+    }
+    if (o->timestamp_pool)
+        vkCmdWriteTimestamp2(
             o->command_buffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, o->timestamp_pool, 2);
+    if (!frame->plain_incoming)
+        for (size_t i = first_glass; i < frame->draw_count; ++i)
+            if (!record_scene_draw(o, present, &frame->draws[i], frame->material_opacity,
+                             i == 0 || frame->draws[i - 1].pass != frame->draws[i].pass))
+                goto fail;
+    if (o->timestamp_pool)
+        vkCmdWriteTimestamp2(
+            o->command_buffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, o->timestamp_pool, 3);
     VkImageLayout         layout = VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ;
     VkPipelineStageFlags2 stage
         = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT;
     VkAccessFlags2 access
         = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT;
-    if (rb) {
+    if (composition_bytes) {
         image_barrier(o->command_buffer,
                       present->image.handle,
                       stage,
@@ -3409,6 +4116,14 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
         stage  = VK_PIPELINE_STAGE_2_COPY_BIT;
         access = VK_ACCESS_2_TRANSFER_READ_BIT;
     }
+#if defined(WALLE_STAGE_READBACK)
+    if ((frame->capture_readback && !record_stage_readback(o,&o->capture,capture_offset))
+        || (frame->pyramid_readback && !record_stage_readback(o,&o->pyramid,pyramid_offset))
+        || (frame->sdf_readback && !record_stage_readback(o,&o->sdf,sdf_offset))) goto fail;
+    if(frame->capture_readback || frame->pyramid_readback || frame->sdf_readback)
+        buffer_barrier(o->command_buffer,VK_PIPELINE_STAGE_2_COPY_BIT,VK_ACCESS_2_TRANSFER_WRITE_BIT,
+                       VK_PIPELINE_STAGE_2_HOST_BIT,VK_ACCESS_2_HOST_READ_BIT);
+#endif
     image_barrier_queues(o->command_buffer,
                          present->image.handle,
                          stage,
@@ -3422,7 +4137,7 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
                                             : VK_QUEUE_FAMILY_IGNORED);
     if (o->timestamp_pool)
         vkCmdWriteTimestamp2(
-            o->command_buffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, o->timestamp_pool, 3);
+            o->command_buffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, o->timestamp_pool, 4);
     if (walle_vk_renderer_validation_errors(r) || !submit_frame(o, present)
         || walle_vk_renderer_validation_errors(r))
         goto fail;
@@ -3433,14 +4148,20 @@ enum walle_vk_frame_status walle_vk_output_render(struct walle_vk_output*      o
     }
     present->layout        = VK_IMAGE_LAYOUT_GENERAL;
     present->foreign_owned = o->wayland_surface != nullptr;
-    if (build_backdrop)
-        o->backdrop_ready = true;
     if (frame->tint_ramp_rgba16f)
         o->ramp_ready = true;
+    if (frame->sdf_surface) o->sdf_ready=frame->sdf_retain;
     if (rb) {
         if (!wait_submission(r, o->frame_fence, &o->frame_pending))
             goto fail;
-        memcpy(frame->composition_readback, o->readback_buffer.memory.mapped, (size_t)rb);
+        if(composition_bytes)
+            memcpy(frame->composition_readback,o->readback_buffer.memory.mapped,(size_t)composition_bytes);
+#if defined(WALLE_STAGE_READBACK)
+        const uint8_t* data=o->readback_buffer.memory.mapped;
+        if(frame->capture_readback)memcpy(frame->capture_readback,data+capture_offset,frame->capture_readback_size);
+        if(frame->pyramid_readback)memcpy(frame->pyramid_readback,data+pyramid_offset,frame->pyramid_readback_size);
+        if(frame->sdf_readback)memcpy(frame->sdf_readback,data+sdf_offset,frame->sdf_readback_size);
+#endif
     }
     if (o->wayland_surface) {
         wl_surface_attach(o->wayland_surface, present->buffer, 0, 0);
@@ -3527,8 +4248,11 @@ void walle_vk_output_destroy(struct walle_vk_output* o)
         vkDestroySurfaceKHR(r->instance, o->surface, nullptr);
     free(o);
 }
-uint64_t walle_vk_renderer_destroy_checked(struct walle_vk_renderer* r)
+uint64_t walle_vk_renderer_destroy_report(struct walle_vk_renderer* r,
+                                         struct walle_vk_memory_stats* memory)
 {
+    if (memory)
+        *memory = (struct walle_vk_memory_stats){};
     if (!r)
         return 0;
     if (r->device) {
@@ -3539,6 +4263,10 @@ uint64_t walle_vk_renderer_destroy_checked(struct walle_vk_renderer* r)
             vkDestroyCommandPool(r->device, r->upload_command_pool, nullptr);
         if (r->linear_sampler)
             vkDestroySampler(r->device, r->linear_sampler, nullptr);
+        if (r->linear_level0_sampler)
+            vkDestroySampler(r->device, r->linear_level0_sampler, nullptr);
+        if (r->nearest_sampler)
+            vkDestroySampler(r->device, r->nearest_sampler, nullptr);
         for (uint32_t i = 0; i < PIPE_COUNT; i++)
             if (r->pipelines[i])
                 vkDestroyPipeline(r->device, r->pipelines[i], nullptr);
@@ -3566,9 +4294,16 @@ uint64_t walle_vk_renderer_destroy_checked(struct walle_vk_renderer* r)
     if (r->instance)
         vkDestroyInstance(r->instance, nullptr);
     uint64_t validation_errors = walle_vk_renderer_validation_errors(r);
+    if (memory)
+        *memory = r->memory_stats;
     free(r->device_selector);
     free(r);
     return validation_errors;
+}
+
+uint64_t walle_vk_renderer_destroy_checked(struct walle_vk_renderer* renderer)
+{
+    return walle_vk_renderer_destroy_report(renderer, nullptr);
 }
 
 void walle_vk_renderer_destroy(struct walle_vk_renderer* renderer)
@@ -3591,11 +4326,11 @@ static bool collect_timing(struct walle_vk_output* output)
 {
     if (!output->timestamp_pool || !output->timing_pending || output->frame_pending)
         return true;
-    uint64_t ticks[4];
+    uint64_t ticks[5];
     if (!vk_check(vkGetQueryPoolResults(output->renderer->device,
                                         output->timestamp_pool,
                                         0,
-                                        4,
+                                        5,
                                         sizeof ticks,
                                         ticks,
                                         sizeof ticks[0],
@@ -3610,12 +4345,12 @@ static bool collect_timing(struct walle_vk_output* output)
         .timing_available = true,
         .built_backdrop   = output->pending_built_backdrop,
         .timed_frame_id   = output->timed_frame_id,
-        .gpu_capture_ns
-        = output->pending_built_backdrop ? (double)((ticks[1] - ticks[0]) & mask) * period : 0,
-        .gpu_draw_ns  = (double)((ticks[2] - ticks[1]) & mask) * period,
-        .gpu_frame_ns = (double)((ticks[2] - ticks[0]) & mask) * period,
-        .gpu_tail_ns  = (double)((ticks[3] - ticks[2]) & mask) * period,
-        .gpu_total_ns = (double)((ticks[3] - ticks[0]) & mask) * period,
+        .gpu_scene_ns = (double)((ticks[1] - ticks[0]) & mask) * period,
+        .gpu_capture_ns = (double)((ticks[2] - ticks[1]) & mask) * period,
+        .gpu_draw_ns  = (double)((ticks[3] - ticks[2]) & mask) * period,
+        .gpu_frame_ns = (double)((ticks[3] - ticks[0]) & mask) * period,
+        .gpu_tail_ns  = (double)((ticks[4] - ticks[3]) & mask) * period,
+        .gpu_total_ns = (double)((ticks[4] - ticks[0]) & mask) * period,
     };
     output->timing_pending = false;
     return true;
@@ -3653,7 +4388,7 @@ bool walle_vk_output_enable_timing(struct walle_vk_output* output, bool enabled)
     VkQueryPoolCreateInfo create = {
         .sType      = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
         .queryType  = VK_QUERY_TYPE_TIMESTAMP,
-        .queryCount = 4,
+        .queryCount = 5,
     };
     if (!vk_check(vkCreateQueryPool(renderer->device, &create, nullptr, &output->timestamp_pool),
                   "vkCreateQueryPool(frame diagnostics)"))
@@ -3694,11 +4429,19 @@ bool walle_vk_output_diagnostics(struct walle_vk_output*      output,
     result->timing_enabled  = output->timestamp_pool != VK_NULL_HANDLE;
     result->timing_pending  = output->timing_pending;
     result->renderer_memory = output->renderer->memory_stats;
+    result->shared_math_bytes = 0;
+    result->shared_math_memory_flags = 0;
+    result->auxiliary_bytes = output->auxiliary.memory.size;
+    result->auxiliary_memory_flags = output->auxiliary.memory.properties;
+    result->auxiliary_width = output->auxiliary.width;
+    result->auxiliary_height = output->auxiliary.height;
     result->source_bytes    = output->current.memory.size + output->incoming.memory.size;
     result->backdrop_bytes  = output->capture.memory.size + output->pyramid.memory.size;
-    result->scratch_bytes   = output->blur_scratch.memory.size;
+    result->scratch_bytes   = output->blur_scratch.memory.size + output->scene_copy.memory.size;
     result->effect_bytes
-        = output->tint.memory.size + output->mask.memory.size + output->ramp.memory.size;
+        = output->tint.memory.size + output->mask.memory.size + output->ramp.memory.size
+          + output->tint_backdrop.memory.size + output->reveal_image.memory.size
+          + output->reveal_mask.memory.size + output->sdf.memory.size;
     result->frame_buffer_bytes = output->frame_buffer.memory.size;
     result->readback_bytes     = output->readback_buffer.memory.size;
     for (uint32_t i = 0; i < 2; ++i) {
@@ -3709,6 +4452,6 @@ bool walle_vk_output_diagnostics(struct walle_vk_output*      output,
     }
     result->output_bytes = result->source_bytes + result->backdrop_bytes + result->scratch_bytes
                            + result->effect_bytes + result->frame_buffer_bytes
-                           + result->readback_bytes + result->present_bytes;
+                           + result->readback_bytes + result->present_bytes + result->auxiliary_bytes;
     return true;
 }

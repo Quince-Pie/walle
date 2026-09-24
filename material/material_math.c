@@ -6,6 +6,7 @@
 #include <string.h>
 #include "powf_tables.h"
 #include "trig_tables.h"
+#include "log2f_tables.h"
 float wm_float(uint32_t u)
 {
     float v;
@@ -44,6 +45,34 @@ uint16_t wm_half(float v)
     uint32_t q = ((uint32_t)(exponent + 15) << 10) | ((mag >> 13) & 0x3ff), rem = mag & 0x1fff;
     q += rem > 0x1000 || (rem == 0x1000 && (q & 1));
     return (uint16_t)(sign | q);
+}
+float wm_log2f(float x)
+{
+    /* libsystem_m log2f: finite reduction/polynomial is in Double, followed
+     * by one FCVT to Float. Preserve the original special-result words. */
+    uint32_t word = wm_float_bits(x), reduced = word - UINT32_C(0x00800000);
+    if (reduced >= UINT32_C(0x7f000000)) {
+        uint32_t magnitude = word & UINT32_C(0x7fffffff);
+        if (magnitude > UINT32_C(0x7f800000))
+            return x;
+        if (!magnitude)
+            return wm_float(UINT32_C(0xff800000));
+        if (word & UINT32_C(0x80000000))
+            return wm_float(UINT32_C(0x7fc00000));
+        if (!(reduced & UINT32_C(0x80000000)))
+            return x;
+        float scaled = wm_float(word | UINT32_C(0x3f800000)) - 1.f;
+        word = wm_float_bits(scaled) - UINT32_C(0x3f000000);
+    }
+    int32_t exponent = (int32_t)(word + L2_BIAS) >> 23;
+    uint32_t mantissa = word & UINT32_C(0x7fffff);
+    uint32_t index = (mantissa + UINT32_C(0x10000)) >> 17;
+    double residual = fma(wm_float(mantissa | UINT32_C(0x3f800000)),
+                          wm_double(L2_TABLE[index][0]), -1.);
+    double polynomial = fma(residual, wm_double(L2_POLY[0]), wm_double(L2_POLY[1]));
+    polynomial = fma(residual, polynomial, wm_double(L2_POLY[2]));
+    polynomial = fma(residual, polynomial, wm_double(L2_POLY[3]));
+    return (float)((double)exponent + fma(residual, polynomial, wm_double(L2_TABLE[index][1])));
 }
 float wm_powf(float x, float y)
 {
@@ -378,4 +407,95 @@ void wm_tint_matrix(const uint8_t rgba[4], bool dark, bool active, float opacity
         }
     }
     m[18] = (c[3] * opacity) * m[18];
+}
+
+void wm_ca_color_matrix_concat(const float a[20], const float b[20], float out[20])
+{
+    /* CA::concat @18a77f2b4..18a77f4f8. Preserve each emitted lane order. */
+    float c[20];
+    c[0] = fmaf(b[0], a[0], fmaf(b[5], a[1], fmaf(b[10], a[2], (b[15] * a[3]))));
+    c[1] = fmaf(b[1], a[0], fmaf(b[6], a[1], fmaf(b[11], a[2], (b[16] * a[3]))));
+    c[2] = fmaf(b[2], a[0], fmaf(b[7], a[1], fmaf(b[12], a[2], (b[17] * a[3]))));
+    c[3] = fmaf(b[3], a[0], fmaf(b[8], a[1], fmaf(b[13], a[2], (b[18] * a[3]))));
+    c[4] = fmaf(b[4], a[0], fmaf(b[9], a[1], fmaf(b[14], a[2], fmaf(b[19], a[3], a[4]))));
+    c[5] = fmaf(b[0], a[5], fmaf(a[6], b[5], fmaf(a[7], b[10], (a[8] * b[15]))));
+    c[6] = fmaf(b[1], a[5], fmaf(b[6], a[6], fmaf(b[11], a[7], (b[16] * a[8]))));
+    c[7] = fmaf(b[2], a[5], fmaf(a[6], b[7], fmaf(b[12], a[7], (b[17] * a[8]))));
+    c[8] = fmaf(b[3], a[5], fmaf(a[7], b[13], fmaf(b[8], a[6], (b[18] * a[8]))));
+    c[9] = fmaf(b[4], a[5], fmaf(a[8], b[19], fmaf(b[9], a[6], fmaf(b[14], a[7], a[9]))));
+    c[10] = fmaf(a[10], b[0], fmaf(b[5], a[11], fmaf(a[12], b[10], (a[13] * b[15]))));
+    c[11] = fmaf(a[10], b[1], fmaf(b[6], a[11], fmaf(b[11], a[12], (b[16] * a[13]))));
+    c[12] = fmaf(b[7], a[11], fmaf(b[2], a[10], fmaf(b[12], a[12], (b[17] * a[13]))));
+    c[13] = fmaf(b[8], a[11], fmaf(a[12], b[13], fmaf(b[3], a[10], (b[18] * a[13]))));
+    c[14] = fmaf(b[9], a[11], fmaf(a[13], b[19], fmaf(b[4], a[10], fmaf(b[14], a[12], a[14]))));
+    c[15] = fmaf(a[15], b[0], fmaf(a[16], b[5], fmaf(b[10], a[17], (a[18] * b[15]))));
+    c[16] = fmaf(a[15], b[1], fmaf(b[11], a[17], fmaf(b[6], a[16], (b[16] * a[18]))));
+    c[17] = fmaf(a[16], b[7], fmaf(b[12], a[17], fmaf(b[2], a[15], (b[17] * a[18]))));
+    c[18] = fmaf(b[13], a[17], fmaf(b[8], a[16], fmaf(b[3], a[15], (b[18] * a[18]))));
+    c[19] = fmaf(b[14], a[17], fmaf(a[18], b[19], fmaf(b[9], a[16], fmaf(b[4], a[15], a[19]))));
+    memcpy(out, c, sizeof c);
+}
+
+void wm_ca_ycc_composite(float white, float black, float saturation, const float fill[4], float out[20])
+{
+    static const float m1[20] = {.212599993f,
+                                 .715200007f,
+                                 .0722000003f,
+                                 0,
+                                 0,
+                                 -.114600003f,
+                                 -.385399997f,
+                                 .5f,
+                                 0,
+                                 .5f,
+                                 .5f,
+                                 -.4542f,
+                                 -.0458000004f,
+                                 0,
+                                 .5f,
+                                 0,
+                                 0,
+                                 0,
+                                 1,
+                                 0};
+    static const float m2[20] = {1,
+                                 0,
+                                 1.57480001f,
+                                 0,
+                                 -.787400007f,
+                                 1,
+                                 -.187324002f,
+                                 -.468124002f,
+                                 0,
+                                 .32772401f,
+                                 1,
+                                 1.8556f,
+                                 0,
+                                 0,
+                                 -.9278f,
+                                 0,
+                                 0,
+                                 0,
+                                 1,
+                                 0};
+    float              a[20], b[20], c[20];
+    memset(a, 0, sizeof a);
+    memset(b, 0, sizeof b);
+    a[0] = a[6] = a[12] = a[18] = 1.f;
+    b[0] = b[6] = b[12] = b[18] = 1.f;
+    a[0] = white - black;
+    a[4] = black;
+    b[6] = b[12] = saturation;
+    b[9] = b[14] = (float)fma(-(double)saturation, .5, .5);
+    wm_ca_color_matrix_concat(a, m1, c);
+    wm_ca_color_matrix_concat(b, c, c);
+    wm_ca_color_matrix_concat(m2, c, c);
+    float k = 1.f - fill[3];
+    for (unsigned i = 0; i < 20; i++)
+        c[i] *= k;
+    c[4] += fill[0];
+    c[9] += fill[1];
+    c[14] += fill[2];
+    c[18] += fill[3];
+    memcpy(out, c, sizeof c);
 }

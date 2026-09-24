@@ -44,7 +44,7 @@ public vector<T, 4> glassForeground<T : __BuiltinFloatingPointType>(
     where vector<T, 4> : ITexelElement
 {
     let dist = sdf.x.toFloat();
-    let coverage = saturate(0.5f - dist / max(fwidth(dist), 0.0001f));
+    let coverage = saturate(0.5f - dist / max(glassFwidth(dist), 0.0001f));
     let sdfAlpha = sdf.w.toFloat();
     if (sdfAlpha < 0.001f)
         return vector<T, 4>(T(0.0));

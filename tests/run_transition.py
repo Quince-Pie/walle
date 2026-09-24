@@ -34,7 +34,7 @@ def main() -> int:
     library = [root / name for name in (
         'transition.c', 'material/material.c', 'material/material_math.c',
         'material/applelog.c', 'material/capture.c', 'material/geometry.c',
-        'material/scissor.c')]
+        'material/scissor.c', 'material/sdf_cache.c', 'material/clip.c')]
     sources = [tests / 'transition_contracts.c', tests / 'transition_fortify_bounds.c',
                tests / 'transition_check.h', *library, root / 'transition.h',
                root / 'vulkan_renderer.h', *sorted((root / 'material').glob('*.h'))]

@@ -89,6 +89,10 @@
           "type": "number",
           "minimum": 0
         },
+        "gpu_scene_ns": {
+          "type": "number",
+          "minimum": 0
+        },
         "gpu_draw_ns": {
           "type": "number",
           "minimum": 0
@@ -145,11 +149,13 @@
         "index",
         "progress",
         "built_backdrop",
+        "required_backdrop",
         "timed_frame_id",
         "retries",
         "gpu_total_ns",
         "gpu_frame_ns",
         "gpu_capture_ns",
+        "gpu_scene_ns",
         "gpu_draw_ns",
         "gpu_tail_ns",
         "cpu_build_ns",
@@ -185,6 +191,8 @@
         "type",
         "run",
         "owned_bytes_after_output_destroy",
+        "owned_bytes_after_renderer_destroy",
+        "owned_allocations_after_renderer_destroy",
         "validation_errors",
         "status"
       ]

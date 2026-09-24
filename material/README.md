@@ -1,135 +1,156 @@
 # Walle C23 material implementation
 
-This library implements the declared Walle shader boundary using the
-retained macOS 26.6.1 (25G76) extraction. It does not resume or complete the paused
-full Apple extraction. No Walle logs, deleted implementation, web sources, new
-native process, or GPU captures were used for this implementation.
+**Final accepted scoped choice: `hw_circle`.** The user selected hardware blending and retained the documented portrait exception ([final user choice](/tmp/walle-work/fidelity-completion/resume_1400/USER_FINAL_DEFAULT.json)). [final delivery acceptance](/tmp/walle-work/fidelity-completion/resume_1400/FINAL_DELIVERY.json) supersedes earlier provisional/pending status. [retained-source verification](/tmp/walle-work/fidelity-completion/resume_1400/final-promotion/retained-hw-circle/ORCHESTRATION.json) confirms unchanged behavior/source and reuses the completed checks. This is a scoped engineering selection, not universal dominance or global optimality.
 
-## Inputs and lifetime
+This library implements the declared regular/clear wallpaper scene from the
+retained macOS 26.6.1(25G76) extraction. Its host mechanisms have independent
+original-function and original-scene controls. The provisional `hw_circle` integration has passed its recorded build, CPU,
+native-execution and application checks; final scoped selection is complete. Native image comparisons are diagnostic under the extracted-algorithm
+contract, not a whole-image equality gate. The broader Apple
+environment/owner extraction remains paused.
 
-Include `material.h`. Link `material.c`, `material_math.c`, `applelog.c`,
-`capture.c`, `geometry.c`, and `scissor.c` with `-lm`. Required compiler semantics are C23,
-IEEE binary32/binary64, little endian, round to nearest/even, no reassociation,
-and `-ffp-contract=off`; explicit `fma`/`fmaf` calls implement source fused sites.
-The tested compiler is GCC 15.2 with `-O2 -Wall -Wextra -Werror`.
+## Inputs and ownership
 
-The supported material inputs are public regular/clear, incoming light/dark,
-active context, source tuning defaults, fixed appearance, positive logical
-layout bounds/backing scale, and optional straight sRGB RGBA bytes. `active=false`
-is rejected. Portal `auto` must be resolved to incoming light/dark outside this
-library. The optional adaptive luma owner is disabled, not approximated.
+Recipes accept regular/clear, resolved light/dark, **active or inactive**,
+positive logical bounds/backing scale, and optional straight encoded-sRGB
+RGBA byte tint. `D=min(width_points,height_points)` drives the source size
+maps. Tint presence differs from present alpha0; tint alpha is a source
+color-matrix input, not a blur multiplier. Inactive recipes preserve their
+own blur/refraction/tint branches. `has_highlight` describes topology and is
+distinct from `highlight_opacity`: an inactive copied owner can count toward
+cache eligibility even when no highlight draw is emitted.
 
-`wm_recipe_create/update` evaluates `D=min(width_points,height_points)` and all
-source size maps. Four typed SpecV1 definitions are generated from
-`source_spec_templates.json`; these contain unevaluated maps, not sampled output
-grids. `generate_specs.py` emits `material_specs.h`. `check_specs.py` independently
-reconstructs the definitions through the retained source dispatch.
+Activity is supplied by the caller. The application currently declares
+`active=true`; this library does not acquire desktop/window activity. Portal
+`auto` resolves the incoming light/dark value outside the library, and the
+application snapshots that choice for a transition.
 
-`wm_recipe_pack` produces the glass216, face/tint/highlight matrices48,
-key/fill40, gradient24, fill16 and tint ramp2048 bytes. The domain specifies
-source extent/scale, root transform, headroom/gamma and optional explicit light.
-Use headroom1/gamma2.2 for the declared SDR boundary. The source image contains
-encoded sRGB values in UNORM storage; an automatic hardware sRGB transfer would
-change this boundary. The packet supports a shared current/stored SDF transform;
-it does not implement a separately retained SDF transform lifecycle.
+The selected fixed-appearance route corresponds to original
+`set_adaptiveAppearance:1`: configuration option0x4000 is omitted, environment
+bit16 is clear, and the adaptive small-glass/luminance observer is disabled
+at **every D**. Separately, the default adaptive route clears tracksLuminance
+above64. Large-D agreement alone would not justify omitting small-D feedback;
+the explicit fixed-appearance counterpart does. General adaptive history,
+foreground ownership and Apple animation springs are not implemented here.
 
-Tint presence is distinct from present alpha0. Tint alpha feeds the source color
-matrix; it is not a blur multiplier. The full HSL/endpoints/matrix arithmetic is
-ported, including the original Apple Float powf/trig implementations. There is
-no platform `powf`, fitted RGB grid, or captured color-output table. The three-stop
-tint ramp uses the source cubic timing solver and half packing.
+The image boundary is opaque encoded-sRGB RGBA8 in UNORM storage, headroom1,
+gamma2.2, draw EDR scale1 and default global-light=false. Hardware sRGB decoding
+would change the shader input. Display/ICC, HDR/headroom acquisition, dynamic
+system colors, accessibility and other environment producers remain outside
+this selected boundary and are not declared complete.
 
-Effect opacity is already included before half conversion in the key/fill
-colors. These public presets emit face/tint-group opacity1 and highlight0/1;
-skip a zero-opacity highlight. Product reveal opacity belongs to a separate
-final composition stage, not to a postmultiply of destination-aware VCM output.
+## APIs and arithmetic
 
-## Stable capture, moving geometry
+[material.h](material.h) exposes recipe/capture/geometry;
+[scissor.h](scissor.h), [sdf_cache.h](sdf_cache.h) and [clip.h](clip.h) expose
+the additional host helpers. Link `material.c`, `material_math.c`, `applelog.c`,
+`capture.c`, `geometry.c`, `scissor.c`, `sdf_cache.c` and `clip.c` with `-lm`.
+Required semantics are C23, IEEE binary32/binary64, little endian,
+round-to-nearest/even, no reassociation and `-ffp-contract=off`. Explicit
+`fma`/`fmaf` calls retain original fused sites. Controls use GCC15 and
+UUID-gated original Apple functions.
 
-Build `wm_capture_full` with physical canvas size, `plan.backdrop_scale` (.25
-regular/.5 clear), and `plan.maximum_refraction>0` for edge replication. This is
-an explicit full-image input boundary with zero capture margin/origin. It does
-not reproduce QuartzCore's moving crop lattice. The API checks computed signed32 surface bounds and rounded allocations before
-narrowing, and rejects an empty scaled interior. Live blur plans must also fit
-the original signed16 coordinate and unsigned16 destination packet fields.
-The Vulkan backend separately checks actual image, framebuffer and viewport
-limits. Failed constructors leave a zero output; use distinct input/output objects.
+`wm_recipe_create/update` owns typed source parameters. `wm_recipe_pack`
+emits glass216, face/tint/highlight matrices48, key/fill40, gradient24, fill16
+and tint-ramp2048 bytes. `wm_recipe_pack_glass` refreshes only the domain-dependent
+216 bytes and selector. `wm_recipe_pack_glass_texture` emits the cached
+texture-SDF glass variant. Nonnull narrow-packer outputs are zeroed on failure.
 
-Pass the resulting capture and `plan.blur_min/max` to `wm_pyramid_build`, with
-the fixed root transform scale. Both source allocations round to64 texels.
-Copy dispatches cover32×32 with20×20 threads; later downsample dispatches cover
-16×32 with16×16 threads. Use the returned extents, clamp, origin, dimensions,
-`no_base`, sample scale and mip indices rather than deriving replacement values.
-A zero mip count means there is no filtered pyramid. Plans must originate from
-these constructors, not unchecked external structs.
+Source coefficient maps, byte-tint conversion, Apple powf/trig, per-lane matrix
+FMA order and half packing are retained. Pyramid planning uses the original
+Apple log2f instructions/table, Float narrowing and Double fused expansion;
+capture clamp/tap setup follows the original Float schedule.
 
-For static incoming wallpaper B, capture/pyramid and material packets can be
-prepared once. Translation changes mesh positions/source UV. A lens changes
-the element-to-SDF-root matrix; keep its local layout bounds and the outer
-backing-scale transform fixed. Compute the grid scale with `wm_sdf_scale`, whose
-Float rounding can differ from the requested Double scale. Zero scale bypasses
-the SDF path.
+## Capture and geometry
 
-`wm_sdf_arguments` produces48 bytes. `wm_sdf_grid_build` returns the source
-partition groups with already triangle-expanded indices. `wm_sdf_vertices`
-maps the grid through an explicit application affine and evaluates source UV.
-The affine is product geometry, not an emulated AppKit owner transform history.
-The inline image21/20 partitions are normalized to shader mode4/0; glass also
-uses outside/shadow mode−4. Positive infinity is valid for tint maximum distance.
-Only uniform-radius geometry is exported; per-corner radii are not implemented.
+One fixed-local-size circular material root owns element and backdrop. Sweep
+translates it; lens scales the **whole root**, including optical distances.
+Clipping does not redefine recipe dimension D. Each optical frame derives
+capture from opaque A plus the masked B reveal, before glass and later effects.
 
-For a circle, use equal width/height, radius=width/2, continuous=false. The SDF
-uses mode4 with circular selectors(1,1). Its face is native image10 with one
-quad, not image11 with zero circularity. Local SDF Y points upward; reflect Y
-in both application screen geometry and the glass displacement domain.
+`wm_backdrop_bounds` narrows margin to Float, expands local G with the original
+width/height arithmetic, then transforms it. Pass expanded world G to
+`wm_capture_clipped` with margin0. Group ROI has separate expanded-backdrop
+and padded-element contributors; the first uses G, not the unexpanded element.
+The renderer honors returned origin, projection, extent, allocation, clamp
+and quads. Contents are recomputed per frame. `wm_capture_full` remains an
+explicit full-canvas helper; it is not the moving controller's capture policy.
 
-The packet's plan exposes output, highlight, tint-mask and tint-gradient bounds,
-shadow expansion/offset, and maximum refraction. Source DOD and AA scissor helpers are ported in `scissor.c`: `glass_dod`
-(18a78c65c), `gaussian_expansion_factor` (18a78adc4), and `aa_round` (18a7a621c).
-The controller transforms those root-coordinate bounds and intersects them with
-the glass mesh scissor. Face, tint and highlight retain their own geometry.
-The full-image capture boundary does not emulate a moving cropped-capture graph.
+An empty rounded capture does not automatically remove glass.
+`wm_capture_filter_fallback` derives a cleared offscreen source from native
+source DOD/filter ROI, using scale1, no capture quads and no pyramid. Its
+derived allocation can exceed64². This is distinct from SDF cache allocation
+failure. `wm_glass_filter_dod` retains the native transform/raster order and
+bias255/512. Empty integer DOD suppresses only glass background. Other effects
+retain their own bounds; there is no invented subpixel-radius cutoff.
+Exactly zero root scale is a collapsed shape.
 
-## Source mapping
+`wm_clip_rect_quad` preserves the native CPU clip for the one-part,
+no-source-surface analytic emitter. Identity/translation narrows positions
+before clipping; scale/reflection retains Double endpoints until emission.
+Each branch preserves its Float FMA schedule. Nine-part and surface-backed
+emitters retain their separate source paths; this is not a universal GPU-space
+clipping rule. The selected idle face draw is omitted under its
+[zero-alpha covering argument](IDLE_FACE.md), preserving the native packet.
 
-| C implementation | Retained source |
-| --- | --- |
-| Spec definitions and evaluator/finishing | `lg_material/specs.py`, `evalspec.py`, `evalfull.py`, `recipes.py`, `post.py`, `resolve.py`; regular240965348/spec240963eb8, clear240951e38, evaluator240946344 |
-| Layer/filter fields and bounds | `lg_material/layers.py`240922488; `material_adapter.render_inputs` |
-| Byte tint and matrices | `lg_material/lg_tintmatrix.py`, `lg_applepowf.py`; source literals and original scalar instruction order |
-| Scalar log/trig | original `applelog.c` retained under `work/agents/gpu_tuning/applelog`; `lg_trig.py` and `lg_trig_tables.json` |
-| Glass216 normalization | `lg_host.glass_background_uniforms`18a78ae94 and `pack_glass_background_lph` |
-| Effect packets/ramp | `lg_host.key_fill_highlight_params`, `gradient_params`, `fill_params`, `vibrant_color_matrix_uniforms`; `lg_colormap.py` |
-| Capture/pyramid | `lg_host.capture_plan`, `capture_quads`, `blur_pyramid_plan` |
-| SDF and face geometry | `lg_host.sdf_element_uniforms`18a85e900, `sdf_bounds_geometry`, `sdf_src_uv`, `round_rect_fill`18a8a27cc |
+## Cache lifecycle and resource recovery
 
-## Qualification
+`sdf_cache.[ch]` models actual scene time, clipped prepared element bounds,
+root transform, the four-duration ring, changed/eligible predicates, shared
+padding, copied-effect DOD, allocation/containment and translated reuse origin.
+The original anchor rounds ties away. Cache-item bounds, creation bounds and
+mutable surface origins are distinct. Two source copies are required, with
+an optional third tint-fill copy; gradient/reveal owners each have one.
 
-Local controls compare C output against the separately retained Python source
-implementation; they do not compare the new Vulkan backend to native pixels.
+The controller separates pending and committed history. Only successful
+rendering commits a frame; RETRY rebuilds from committed history. Successful
+context updates reset ownership; failed updates preserve the old object.
+The native 192 MiB budget controls **retention**: a larger successfully
+allocated SDF remains a transient texture-SDF frame.
 
-| Control | Cases |
-| --- | ---: |
-| Unevaluated source constructor reconstruction |24|
-| Complete material packets, both styles/appearances and size edges |184|
-| Transformed domains, headroom and explicit lighting |288|
-| Capture plans |236|
-| Blur pyramid plans |1416|
-| SDF/mesh/face/UV and element-scale controls |1000|
-| Source powf, trig, half controls |5000 each|
-| Tint matrices including grayscale/inactive branches |13072|
-| Every byte-channel decode and source reencode |512|
-| Literal source arithmetic table words |553|
+The user approved a separate resource exception: if cached SDF storage exceeds
+device limits or cannot be allocated, request one analytic replan at the same
+scene/material/pose/time. `walle_transition_recover_analytic` rejects a second
+recovery of that build and preserves one committed eligibility update.
+Failed retained storage is invalidated immediately. Invalid metadata,
+unrelated resource failures and device loss remain fatal. Apple's original
+child/constant allocation fallback is preserved as reference evidence outside
+runtime; it is not the selected production policy.
 
-The checked-bounds follow-up adds 69 capture/232 pyramid matches and explicit
-source-packet rejection/failure-state controls. The scissor follow-up adds 19,078
-source-oracle controls. All reported controls have zero mismatches; their JSON results and checkers are
-retained beside the source. These finite corpora support the source port, and are
-not an exhaustive proof of every RGB matrix or cross-GPU floating behavior.
-`source_manifest.json` identifies the extraction inputs; `../provenance/runtime-sources.json`
-identifies the delivered implementation; `../VERIFICATION.md` records its checks.
+Reveal/departure uses separately stored B and mask surfaces, native byte/half
+layer opacity and multiply-alpha/source-over. Tint has its own cropped
+mask/group, RGBA16F backdrop attachment, dest-in RGBA8 store and composition.
+Product timing, circle geometry and exact A/B endpoints remain wallpaper
+choreography, not Apple springs or a continuous rounded-square.
 
-The application still owns image decoding/profile policy, portal appearance,
-motion/reveal/terminal-frame policy, pass ordering/composition and actual GPU
-validation. Arbitrary ICC, dynamic system colors, hardware headroom/lighting,
-adaptive owner state, and native capture/topology lifecycle are not claimed.
+## Qualification and references
+
+Shipped controls are [run_material.py](../tests/run_material.py),
+[run_cache_controller.py](../tests/run_cache_controller.py),
+[run_quad_clip.py](../tests/run_quad_clip.py) and
+[run_sdf_replan.py](../tests/run_sdf_replan.py). Their fixture documents state
+inputs and scope. Renderer tests require generated shader/protocol inputs.
+Qualified normal and ASan/UBSan runs pass; CPU success implies no pixel tolerance.
+
+| Independent host control | Scope |
+|---|---|
+| Original log2f / blur |1,097,551 log2f inputs;36,810 complete blur outputs |
+| YCC / concat |20,032 original YCC calls;20,000 original matrix products |
+| Capture / backdrop |20,346 arithmetic-block controls;20,480 backdrop/transform calls |
+| Activity recipes |160 original cases;416 full C/source packet comparisons |
+| Cache lifecycle |6,000 original state calls;100 exact-input native frames /250 state updates |
+| CPU quad clipping |3,109 original enabled-clipping cases, including21 scene calls |
+| Analytic recovery |20 controller cases plus CPU-injected renderer failure controls |
+
+Task evidence is retained outside the installed library at
+`/tmp/walle-work/fidelity-fix`: `material-evidence/NUMERIC_REPAIR.md` and
+`GLASS_PACK_ADDENDUM.md`, `cache-evidence/CONTROLLER_V9_REVIEW.md`,
+`clip-evidence/README.md`, `recovery-evidence/README.md` and
+`fallback-evidence/README.md`. Their manifests retain identities, commands,
+hashes and failed evaluators. Primary extraction maps remain under
+`/tmp/extract-liquidglass/work/reports/`: `material_model.md`,
+`cpu_backdrop*.md`, `cpu_sdf_effects*.md` and `tint_dod.md`.
+
+Current integration and remaining decisions are recorded in [REMAINING_WORK.md](../REMAINING_WORK.md), [VERIFICATION.md](../VERIFICATION.md), and [PLATFORM_OPERATIONS.md](../shaders/PLATFORM_OPERATIONS.md). The provisional runtime uses native functions/filtering, protected promoted-Float32 half division and guarded circular removal; coverage removal is off. It has no shared scalar buffer or discard-only attachment, preserves READ_BACKDROP and uses capability-gated hardware plain blending with the shader fallback. Direct capture retains copy fallback.
+
+[M1_MATH.md](../shaders/M1_MATH.md) preserves the earlier exact scalar reconstruction, not a claim that the current runtime allocates its table. The 192 MiB retention budget does not cap transient/native-field allocation; the measured peak scope is documented in [PERFORMANCE.md](../PERFORMANCE.md). Private variants, adaptive owners and display/ICC producers remain in the paused broader extraction.

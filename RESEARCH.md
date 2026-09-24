@@ -1,107 +1,62 @@
-# Liquid Glass source boundary
+# Liquid Glass research boundary
 
-Reference identity: supplied Apple M1 Max, macOS26.6.1(25G76), QuartzCore1195.17,
-DesignLibrary/SwiftUICore/AppKit and associated numeric routines. The retained
-extraction workspace is `/tmp/extract-liquidglass`; its `liquidglass/EXTRACTION.md`
-and `work/continue/verification/SUMMARY.json` inventory native source identities
-and the independently checked mechanisms. No Walle logs, history, removed shader
-implementation, fitted optical constants or old calibration tables were used.
+**Final accepted scoped choice: `hw_circle`.** The user selected hardware blending and retained the documented portrait exception ([final user choice](/tmp/walle-work/fidelity-completion/resume_1400/USER_FINAL_DEFAULT.json)). [final delivery acceptance](/tmp/walle-work/fidelity-completion/resume_1400/FINAL_DELIVERY.json) supersedes earlier provisional/pending status. [retained-source verification](/tmp/walle-work/fidelity-completion/resume_1400/final-promotion/retained-hw-circle/ORCHESTRATION.json) confirms unchanged behavior/source and reuses the completed checks. This is a scoped engineering selection, not universal dominance or global optimality.
 
-## Mechanism map
+**Current status: accepted `hw_circle` retains the verified source and checks.** Walle's requirement is the extracted Apple material algorithm and its source-derived operations, precision boundaries, stores, ordering and ownership. The user permits identified platform opcode/raster differences. Neither a whole-image equality gate nor a numerical tolerance replaces that requirement; fitted image corrections remain prohibited.
 
-| Walle mechanism | Retained source |
+The primary reference is the supplied M1 Max running macOS 26.6.1 build 25G76, QuartzCore 1195.17. Research uses original binaries/AIR, decoded G13S-B0 instructions, UUID-gated original CPU functions and independent detached native scenes. It does not use internet recreations, Walle history or the intentionally removed implementation. [Current authority](/tmp/walle-work/fidelity-completion/resume_1400/CONTRACT.md) and the [historical audit closure map](/tmp/walle-work/fidelity-completion/resume_1400/final-audit/D_E_I_N_CLOSURE_MAP.md) define the scope. Preserve [FIDELITY_AUDIT.md](FIDELITY_AUDIT.md) as historical evidence.
+
+## Source-to-implementation map
+
+| Mechanism | Implementation and strongest relevant record |
 | --- | --- |
-| SDF/distance/normal and shape grids | `lg_sdf.slang`, `lg_host.sdf_element_uniforms`, `sdf_bounds_geometry`, `round_rect_fill`, `sdf_src_uv` |
-| Glass refraction, variable blur, bleed and shadow | `lg_glass_background.slang`, `glass_background_uniforms`, `glass_shadow_offset` |
-| Face/highlight/tint arithmetic | `lg_sdf_effects.slang`, native VCM/key-fill/fill/gradient parameter builders |
-| Regular/clear recipes and size maps | `lg_material` SpecV1 constructors, evaluators, recipe/layer/material adapter |
-| Tint matrix/ramp | `lg_tintmatrix.py`, `lg_colormap.py`, original Apple powf/log/trig and half-conversion mechanisms |
-| Capture and blur pyramid | `capture_plan`, `blur_pyramid_plan`, `lg_blur.slang`, copy and AGX2 downsample kernels |
-| Effect clipping | Original glass DOD, Gaussian expansion and AA rounding helpers |
-| Quantization/pass order | Qualified `lg_renderer.py` and `lg_multitint.py` stage composition |
+| Material packets and fixed appearance | [material.c](material/material.c), [material contract](material/README.md); original activity/size/appearance/tint controls and [material model](/tmp/extract-liquidglass/work/reports/material_model.md). Regular/clear and portal auto do not imply all private AppKit variants or adaptive temporal ownership. |
+| Composed backdrop and capture planning | [transition.c](transition.c), [capture.c](material/capture.c); original capture/filter DOD/ROI and [numeric repair](/tmp/walle-work/fidelity-fix/material-evidence/NUMERIC_REPAIR.md). The native [scene contract](/tmp/walle-work/fidelity-fix/native-scene/SCHEMA.md) derives its own graph from exact image/scene inputs. |
+| Root geometry and clipping | [geometry.c](material/geometry.c), [clip.c](material/clip.c); [original emitter controls](/tmp/walle-work/fidelity-fix/clip-evidence/README.md). Moving/scaling the whole material root differs from resizing only its SDF. Other emitter paths retain their separate rules. |
+| SDF cache and recovery | [sdf_cache.c](material/sdf_cache.c), transition/renderer ownership; [controller review](/tmp/walle-work/fidelity-fix/cache-evidence/CONTROLLER_V9_REVIEW.md). Approved analytic REPLAN is an explicit application policy at cache allocation failure, not a replacement for normal native caching. |
+| Tint stores and pass attachments | [vulkan_renderer.c](vulkan_renderer.c), [local shader adapter](shaders/walle_glass_local.slang); [original attachment inventory](/tmp/walle-work/fidelity-completion/native-scene/ATTACHMENT_INVENTORY.json). RGBA16F backdrop, RGBA8 dest-in group and final composition remain distinct. |
+| Shader arithmetic and precision | [source closure](shaders/M1_SOURCE_CLOSURE.md), [half FMA](shaders/M1_FMA.md), [division](shaders/M1_DIVISION.md), [conversion boundaries](shaders/M1_BOUNDARIES.md). Source FMA/order/narrowing cannot be removed under the platform allowance. |
+| Scalar functions and filtering | [original scalar extraction](shaders/M1_MATH.md), [sampler encoding](/tmp/walle-work/fidelity-completion/native-scene/sampler_encoding/README.md), [fixed ramp extraction](/tmp/walle-work/fidelity-completion/native-scene/tint_ramp_sampling/README.md). Extracted truth tables encode primitive functions, not per-image residuals; native-operation challengers retain the same source mechanism and declared boundaries. |
+| Idle face | [source covering argument](material/IDLE_FACE.md). Zero alpha and bounded finite evaluation justify this selected omission; interactive/custom foregrounds are not covered. |
 
-Four immutable recipe definitions retain their unevaluated size maps; runtime C
-still evaluates size-dependent behavior. Numeric tables are original algorithm
-coefficients/resources, not observed-output correction tables. C23 uses explicit
-fused operations and disables implicit contraction where source rounding matters.
-The tests identify source inputs and retained expected results independently of
-production rendering.
+Finite controls support their declared input domains. Exhaustive claims and covering arguments identify their premises in their own records. Component equality does not imply complete-frame equality, and an unexplained image difference is not automatically a raster effect.
 
-## Application choices and translations
+The currently integrated implementation is **accepted `hw_circle`**: native sqrt/rsqrt and filtering, promoted-Float32 half division, guarded circular work removal enabled, coverage work removal disabled, no shared scalar buffer or discard-only attachment, hardware plain source-over with its shader fallback, and adaptive direct capture with copy fallback. These are the final measured choices within the documented scope and exceptions.
 
-Walle's sweep/lens paths, easing, source-image reveal and final removal of the
-material are application choreography. They are not extracted Apple transitions.
-The local material bounds stay fixed while its element moves/scales, preserving
-recipe size inputs. The active material context is explicit; it does not depend
-on the wallpaper window gaining keyboard focus.
+## Shared candidate mechanisms
 
-Appearance is fixed for each transition. Portal automatic appearance supplies
-that incoming light/dark choice. The native adaptive luminance observer and
-AppKit owner lifecycle are not replaced by an image-average heuristic.
+The common repaired graph is held fixed across credible alternatives. [Native-all](/tmp/walle-work/fidelity-completion/resume_1400/final-audit/native-all/README.md) records the source state/coordinate mapping for hardware scalar and sampler operations, fixed-ramp eligibility, half boundaries and removal of the now-unread shared buffer. The [matched table host control](/tmp/walle-work/fidelity-completion/resume_1400/final-audit/scalar-buffer-control/README.md) restores only a representation-sized normalized scalar buffer for table challengers on that same graph; it does not restore an obsolete ramp-response tail or older sampling path.
 
-The backdrop is the complete static incoming image. Native capture scales and
-pyramid rules are used under this explicit full-image boundary, rather than
-claiming QuartzCore's moving cropped-capture lattice. For tiny canvases, Walle
-raises capture scale only enough to retain a nonempty interior, then runs the
-same extracted constructors. One-mip plans use an independent discarded scratch
-blur output; sampled and writable outputs never alias.
+The [MRT2 review](/tmp/walle-work/fidelity-completion/resume_1400/final-audit/MRT2_ELISION_REVIEW.md) distinguishes the discard-only secondary target from tint's required READ_BACKDROP target. Elision is justified by absence of observable reads/writes/resolve, with code-generation effects classified separately. It is not permission to delete a source store or a readable attachment.
 
-Metal framebuffer fetch becomes Vulkan1.4 dynamic-rendering local read. Native
-half derivatives are represented by float derivatives followed by separate half
-rounding and half abs/add; this follows retained AIR/AGX evidence rather than a
-single final narrowing. Derivative quad behavior, texture interpolation and GPU
-transcendentals remain hardware-specific. No M1/Vulkan bit-identity claim is made.
+The [hardware-blend contender](/tmp/walle-work/fidelity-completion/resume_1400/final-audit/hardware-blend/README.md) maps original half fragment outputs and ONE / ONE_MINUS_SRC_ALPHA ADD pipeline state. It retains half mask multiplication and intermediate stores. The same shader source-over remains the capability fallback, and the conservative gate does not reject a previously supported device/modifier. Raw-half clamp/widen controls cover every binary16 source word on all three tested Vulkan devices. Actual DISPLAY-path modifier evidence is retained alongside headless scene evidence.
 
-## Acceptance scope
+[Guarded work removal](/tmp/walle-work/fidelity-completion/resume_1400/arithmetic/work_removal/QUALIFICATION.md) and [exact half-FMA reuse](/tmp/walle-work/fidelity-completion/resume_1400/arithmetic/attachment_reuse/PROOF_AND_QUALIFICATION.md) have separate applicability predicates and fallback proofs. Their checks establish candidate correctness within those scopes; their timing does not transfer from an unrelated primitive benchmark or an older graph.
 
-Regular and clear, light/dark/resolved-auto, byte RGB(A) tint, uniform-radius
-sweep/lens geometry and SDR opaque image inputs are the application contract.
-The other private AppKit variants and complete Apple system-host behavior are
-not required for this selected product scope; their extraction remains paused,
-not declared finished. Vulkan support boundaries and failure handling are
-validated separately from mathematical source correspondence.
+The installed primary Vulkan/driver source, pinned Slang toolchain and direct original controls support this qualification. No alternative gains value merely from newer syntax, fewer instructions in a source listing, or a smaller table. Final selection must use matched source/state/resource boundaries and complete workload/lifecycle evidence.
 
-The supporting verification record distinguishes source-oracle arithmetic,
-SPIR-V/ABI checks, actual GPU images, actual layer-shell transport, injected
-failures and performance measurements. Finite matches do not prove universal
-optimality or universal visual preference. The source-faithful optical path is
-mandatory; motion preference is configurable.
+## Platform findings and ownership
 
-## Design qualification
+Original M1 center interpolation, explicit-offset interpolation and coefficient controls demonstrate a raster implementation boundary. The general per-tile coefficient producer remains unextracted; no global snap, fitted offset or per-scene coefficient map is used to conceal it. The [residual classification](/tmp/walle-work/fidelity-completion/resume_1400/final-audit/RESIDUAL_CLASSIFICATION.md) preserves this distinction.
 
-The retained Apple implementations and the checked local Slang repository are
-primary evidence for this task. Online recreations cannot satisfy the required
-source identity. The original Walle tree could not build because its referenced
-shader/calibration directories were absent; it is preserved as a source baseline,
-not presented as a measured performance control.
+The pinned llvmpipe Float32 FMA difference has a causal diagnostic: replacing only that operation closes the 16 matched-coordinate CPU source pixels. The two AMDs and the diagnostic agree over all 147,456 compared half components. That finding is scoped to this control, not all full-scene differences. Native scalar functions, texture filtering and attachment arithmetic likewise need their own selected-source mechanism records; the platform allowance does not waive a missing operation.
 
-| Choice | Decisive evidence and cost |
-| --- | --- |
-| Extracted capture/pyramid versus a CPU Gaussian | A Gaussian does not preserve the extracted filter kernels, LOD selection, edge replication or rounding. It fails the optical contract. The GPU path retains those mechanisms and caches preparation for each incoming image. |
-| Runtime recipe evaluation versus sampled parameter tables | Retaining the SpecV1 maps supports continuous material size and byte tint inputs. A sampled table would leave permitted combinations unestablished; exact literal algorithm tables remain valid source resources. |
-| Local attachment reads versus scene ping-pong | Both can represent the stage dependency if intermediate quantization is preserved. Local reads keep the same-pixel dependency and RGBA8 stores without an explicit whole-image copy. A copied full canvas would add at least one read and write per copied byte, under that implementation's assumptions. This is a data-movement argument, not a measured universal GPU-speed claim. |
-| Sweep versus expanding lens | Both preserve the same native optics. Actual-image previews show different movement/distraction tradeoffs; the user selected both. Sweep is the default, lens is an equal config option. No universal beauty ranking is asserted. |
-| Strict optimized Slang versus unoptimized compiler control | All 21 entry points validate, resource layouts match, and 216 paired GPU frames are byte-identical on three tested devices. Production uses the 18 needed entries. This comparison qualifies compiler settings, not identity to Apple's driver. |
+Walle compiles its local `shaders/liquidglass.slang` module tree. These verified port changes do not silently reconcile every artifact in the paused shared extraction library.
 
-No throughput or latency superiority over every rendering architecture is
-claimed. The mandatory qualification here is source correspondence and a valid,
-usable Vulkan adaptation. Actual GPU timing, memory lifecycle and application
-checks are recorded separately in VERIFICATION.md. Changing the optical algorithm,
-framebuffer format, precision settings or pass order requires fresh qualification.
+The broad blue response of regular/dark material was independently reproduced
+by the original M1 programs under held inputs. It is preserved and is separate
+from adaptive temporal luminance feedback. That observation did not validate
+the old B-only backdrop; the repaired renderer captures the actual composed
+scene and preserves the original material coefficients.
 
-## Ownership and progress
+The event thread serializes renderer/controller calls. Borrowed frame memory, submitted GPU resources, retries, history commit and teardown retain their explicit lifetimes. Analytic REPLAN preserves pose/time and commits once after success. Upload/readback/teardown may wait; there is no lock-free or wait-free claim.
 
-The Wayland event-loop thread calls renderer/controller entry points serially;
-they are not an API for concurrent host submissions. A decode worker owns its
-job's dimensions/items, publishes its result, and is joined before the event
-thread consumes or replaces it. Output teardown defers freeing an active
-worker's owner until completion and cancellation of its event slots.
+## Qualification and delivery status
 
-A controller owns its borrowed frame data until the next build/update/destroy.
-The renderer copies that data before returning and retains GPU buffers until
-submission completion. Normal presentation polls the prior frame and returns
-RETRY while necessary; upload, explicit readback and teardown may wait for owned
-submitted work. No lock-free or wait-free end-to-end claim is made. Compositor
-release and dma-buf reservation fences jointly govern reuse of presentation
-images. Error paths retain or release objects according to that ownership; the
-caller decides whether to stop a preview or keep the last visible wallpaper.
+The [648-case exploratory matrix](/tmp/walle-work/fidelity-completion/resume_1400/native-instructions/screening-v1/results/STATUS.json) and [84-case scalar matrix](/tmp/walle-work/fidelity-completion/resume_1400/native-instructions/scalar-controls/results-v2/STATUS.json) passed. Fresh confirmation completed 216 math/work-removal cells and 108 blend/copy cells, each with five measured lifecycles. All180 additional circle/unit-composition confirmation cells now pass; [complete180-cell receipt](/tmp/walle-work/fidelity-completion/resume_1400/native-instructions/circle-controls-v1/confirmation-final/STATUS.json) and [raw-backed final comparisons](/tmp/walle-work/fidelity-completion/resume_1400/native-instructions/circle-controls-v1/COMPARISONS.json) retain their five-lifecycle observations. The user has selected hardware blending with the documented portrait exception. [Qualification evidence](/tmp/walle-work/fidelity-completion/resume_1400/native-instructions/DELIVERY_EVIDENCE.md) retains the comparisons and their temporal/statistical limits.
+
+The [provisional integration record](/tmp/walle-work/fidelity-completion/resume_1400/provisional-integration-2305/INTEGRATION.json) pins the code. [Build/test/analyzer/package checks](/tmp/walle-work/fidelity-completion/resume_1400/final-verification/provisional-circle/RESULTS.json),492 [native diagnostic comparisons](/tmp/walle-work/fidelity-completion/resume_1400/final-native-confirmation-circle/CONFIRMATION.json), and the [actual-app records](/tmp/walle-work/fidelity-completion/resume_1400/final-app/run_records) are complete for that provisional snapshot. Native execution success is not algorithm or pixel-identity certification. See [VERIFICATION.md](VERIFICATION.md) for exact scopes, hashes and endpoints.
+
+The user explicitly [prioritized RX 9070 XT and extended the total stop to 00:45 UTC](/tmp/walle-work/fidelity-completion/resume_1400/USER_FINAL_SCOPE_AND_BUDGET.json). Integrated GPU support/results remain. Earlier reports' pending-authority and23:30 deadline text is historical. The [frame-time-over-startup priority](/tmp/walle-work/fidelity-completion/resume_1400/USER_PERFORMANCE_PRIORITY.json) remains, and the user's [conditional GPU-tail priority](/tmp/walle-work/fidelity-completion/resume_1400/USER_TAIL_PRIORITY.json) now favors lower GPU tails over lower median time if matched circle-only confirmation preserves the portrait regular-sweep tradeoff. That conditional authority does not waive other workloads/objectives or select shader blending universally. The [final scoped qualification](/tmp/walle-work/fidelity-completion/resume_1400/native-instructions/FINAL_SCOPED_QUALIFICATION.json) selects hardware after the subsequent complete-data user choice; no universal optimality/beauty claim is made.
+
+The broader standalone host goal remains paused: Apple ICC/ColorSync and system colors, display/HDR/accessibility/environment production, private variants, interactive/adaptive owners and Apple springs are not supplied by this opaque SDR, fixed-appearance wallpaper subset. Sweep/lens movement and reveal timing are Walle choreography. [FIDELITY_REPAIR.md](FIDELITY_REPAIR.md) distinguishes completed repairs from the remaining decision.

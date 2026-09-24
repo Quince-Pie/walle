@@ -15,8 +15,13 @@ for device in ('discrete','integrated'):
         material=('regular_dark_untinted' if c['style']==0 else 'clear_light_tinted' if c['tint_hex']!='0' else 'clear_light_untinted')
         row=dict(device=device,device_name=s['device']['name'],width=c['width'],height=c['height'],scope='5K stress' if c['width']==5120 else 'current output',material=material,motion='lens' if c['motion'] else 'sweep',samples=g['count'],gpu_median_ms=g['median']/1e6,gpu_p95_ms=g['p95']/1e6,gpu_p99_ms=g['p99']/1e6,gpu_max_ms=g['max']/1e6,
             first_use_gpu_median_ms=s['first_use']['gpu_total_ns']['median']/1e6,first_use_capture_median_ms=s['first_use']['gpu_capture_ns']['median']/1e6,
+            startup_median_ms=s['lifecycle']['startup_ns']['median']/1e6,teardown_median_ms=s['lifecycle']['teardown_ns']['median']/1e6,
+            scene_gpu_median_ms=s['pooled_warm']['gpu_scene_ns']['median']/1e6,capture_gpu_median_ms=s['pooled_warm']['gpu_capture_ns']['median']/1e6,
             cpu_render_median_ms=s['pooled_warm']['cpu_render_calls_ns']['median']/1e6,cpu_completion_median_ms=s['pooled_warm']['cpu_completion_wait_ns']['median']/1e6,warm_retries=s['warm_retries'],
-            active_owned_mib=max(m['output_bytes'] for m in mem if m['checkpoint']=='active_after_warm')/(1024**2),idle_owned_mib=max(m['output_bytes'] for m in mem if m['checkpoint']=='promoted_idle')/(1024**2),peak_owned_mib=max(m['renderer_peak_bytes'] for m in mem)/(1024**2),cadence_reference_ms=c['cadence_ms'],samples_above_reference=s['cadence_comparison']['samples_above'],
+            active_owned_mib=max(m['renderer_bytes'] for m in mem if m['checkpoint']=='active_after_warm')/(1024**2),idle_owned_mib=max(m['renderer_bytes'] for m in mem if m['checkpoint']=='promoted_idle')/(1024**2),
+            shared_math_mib=max(m['shared_math_bytes'] for m in mem)/(1024**2),
+            shared_math_memory_flags=sorted({m['shared_math_memory_flags'] for m in mem}),
+            peak_owned_mib=max(m['renderer_peak_bytes'] for m in mem)/(1024**2),cadence_reference_ms=c['cadence_ms'],samples_above_reference=s['cadence_comparison']['samples_above'],
             gpu_p95_run_min_ms=s['run_range']['gpu_total_ns']['p95'][0]/1e6,gpu_p95_run_max_ms=s['run_range']['gpu_total_ns']['p95'][1]/1e6,device_sha256=s['device_sha256'],summary=str(path))
         rows.append(row)
 assert len(rows)==36
@@ -24,8 +29,8 @@ with (ROOT/'RESULTS.csv').open('w',newline='') as out:
     writer=csv.DictWriter(out,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
 (ROOT/'RESULTS.json').write_text(json.dumps(rows,indent=2)+'\n')
 text=['# Scoped renderer measurements — '+args.label,'',
-      'Five fresh runs per case, each with one first-use frame at progress0.5 and119 warm points1..119/120. One complete untimed transition precedes each case. All validation counters including teardown are zero; all output destruction checkpoints report zero owned allocations. No readback. No samples were discarded or repeated.','',
-      'GPU columns below are pooled warm timestamp intervals in milliseconds. Active/idle memory is owned Vulkan allocation MiB, not total driver VRAM; this offscreen path retains one optimal presentation image. Production dma-buf may retain two modifier images. `RESULTS.csv` adds first-use capture, CPU timing, retry, per-run range and cadence-count columns; per-case JSON retains every run.','']
+      'Five fresh runs per case, each with one first-use frame at progress0.5 and119 warm points1..119/120. One complete untimed transition precedes each case. All validation counters including teardown are zero; all complete renderer destruction checkpoints report zero owned allocations. Shared function data, when present in a reference control, lives until renderer destruction; the delivered native-operation path has none. No readback. No samples were discarded or repeated.','',
+      'GPU columns below are pooled warm timestamp intervals in milliseconds. Active/idle memory includes all renderer-owned Vulkan allocations, including any shared function data; it is not total driver VRAM. This offscreen path retains one optimal presentation image. Production dma-buf may retain two modifier images. `RESULTS.csv` adds shared-function memory/flags, first-use capture, CPU timing, retry, per-run range and cadence-count columns; per-case JSON retains every run.','']
 for device in ('discrete','integrated'):
     selected=[r for r in rows if r['device']==device]
     text.extend(['## '+selected[0]['device_name'],''])

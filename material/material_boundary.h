@@ -25,7 +25,7 @@ struct wm_material_input
 {
     enum wm_style  style;
     bool           dark;   /* incoming appearance; portal auto resolved outside */
-    bool           active; /* current specialization requires true */
+    bool           active; /* Resolved app/window key-like activity. */
     double         width_points, height_points, backing_scale;
     struct wm_tint tint;
 };
@@ -87,6 +87,13 @@ bool              wm_recipe_update(struct wm_recipe* recipe, const struct wm_mat
 bool              wm_recipe_pack(const struct wm_recipe*        recipe,
                                  const struct wm_render_domain* domain,
                                  struct wm_shader_packet*       packet);
+/* Refresh only the source-domain glass-background bytes and selector. This is
+ * sufficient when a frame changes source size/scale/root transform while the
+ * recipe and other rendering-domain inputs remain fixed. The full packer also
+ * updates matrices, highlights and tint resources. Nonnull outputs are zeroed
+ * on failure; successful calls write all216 bytes. */
+bool wm_recipe_pack_glass(const struct wm_recipe* recipe, const struct wm_render_domain* domain,
+                           uint8_t glass_lph[216], uint32_t* texture_function);
 
 /* Geometry entry points are declared in geometry.h. An adaptive-owner module
  * is a separate optional extension; no unimplemented entry points are exported.

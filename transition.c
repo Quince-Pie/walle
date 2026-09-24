@@ -1,6 +1,8 @@
 #include "transition.h"
 #include "geometry.h"
 #include "scissor.h"
+#include "sdf_cache.h"
+#include "clip.h"
 
 #include <float.h>
 #include <math.h>
@@ -23,13 +25,28 @@ struct walle_transition
 {
     uint32_t width, height;
     double   backing_scale, local_radius, path_start, path_end, lens_end_scale;
-    double   origin[2], direction[2];
+    double   origin[2], direction[2], root_transform[6];
+    bool capture_ready;
+    double frame_time;
+    int32_t cache_bounds[4];
+    struct wm_sdf_cache_state cache_state, cache_pending;
+    bool cache_pending_valid;
+    bool suppress_cache;
+    struct walle_transition_geometry last_geometry;
+    struct wm_sdf_cache_plan cache_plan, cache_pending_plan, cache_requested_plan;
+    struct walle_transition_geometry cache_geometry, cache_pending_geometry;
+    double cache_transform[6], cache_pending_transform[6];
+    bool cache_retained, cache_pending_retained, cached_sdf;
+    int32_t sdf_origin[2];
+    int32_t glass_scissor[4];
     struct walle_transition_options options;
     struct wm_recipe*               recipe;
     struct wm_shader_packet         packet;
     struct wm_glass_extent          glass_extent;
     struct wm_capture_plan          capture;
     struct wm_pyramid_plan          pyramid;
+    struct walle_vk_surface_plan tint_mask_surface, tint_group_surface, reveal_surface;
+    struct walle_vk_surface_plan sdf_surface;
     double                          source_scale, source_origin[2];
     uint32_t                        source_size[2];
     struct walle_vk_frame           frame;
@@ -89,6 +106,7 @@ static bool prepare(struct walle_transition*               t,
     t->backing_scale = backing_scale;
     t->local_radius  = radius;
     t->options       = *options;
+    wm_sdf_cache_init(&t->cache_state,false);
     for (unsigned i = 0; i < 2; ++i) {
         t->direction[i] = options->direction[i] / length;
         t->origin[i]    = options->origin[i] * (i ? h : w);
@@ -120,29 +138,10 @@ static bool prepare(struct walle_transition*               t,
     };
     if (!wm_recipe_pack(t->recipe, &domain, &t->packet) || !t->packet.plan.has_backdrop)
         return false;
-    bool replicate = t->packet.plan.maximum_refraction > 0;
-    /* Application full-image policy: retain the source preferred scale except
-     * when it would create an empty capture on a positive tiny output. */
-    double minimum_capture_scale = 1.0 / (width < height ? width : height);
-    double capture_scale = fmin(1, fmax(t->packet.plan.backdrop_scale, minimum_capture_scale));
-    if (!wm_capture_full(width, height, capture_scale, replicate, &t->capture)
-        || !wm_pyramid_build(&t->capture,
-                             (float)t->packet.plan.blur_min,
-                             (float)t->packet.plan.blur_max,
-                             backing_scale,
-                             &t->pyramid))
-        return false;
-    bool pyramid    = t->pyramid.mip_count != 0;
-    t->source_scale = pyramid ? t->pyramid.sample_scale : t->capture.scale;
-    for (unsigned i = 0; i < 2; ++i) {
-        t->source_size[i]   = pyramid ? t->pyramid.texture[i] : t->capture.texture[i];
-        t->source_origin[i] = pyramid ? t->pyramid.bounds[i] : t->capture.surface[i];
-    }
-    domain.source_width  = t->source_size[0];
-    domain.source_height = t->source_size[1];
-    domain.source_scale  = t->source_scale;
-    if (!wm_recipe_pack(t->recipe, &domain, &t->packet)
-        || !wm_recipe_glass_extent(t->recipe, &t->glass_extent))
+    t->source_scale = 1;
+    t->source_size[0] = width;
+    t->source_size[1] = height;
+    if (!wm_recipe_glass_extent(t->recipe, &t->glass_extent))
         return false;
     /* Face/group opacity is not encoded in their matrices. Selected source
      * recipes use binary layer visibility; never silently ignore another value. */
@@ -285,6 +284,8 @@ static void white_fill(uint8_t bytes[16])
     memcpy(bytes + 8, white, sizeof white);
 }
 
+static bool element_scissor(struct walle_transition*,double,int32_t[4]);
+
 static bool sdf_draws(struct walle_transition*                t,
                       const struct walle_transition_geometry* g,
                       enum walle_vk_pass                      pass,
@@ -292,9 +293,10 @@ static bool sdf_draws(struct walle_transition*                t,
                       double                                  maximum,
                       bool                                    glass_surface)
 {
-    double        matrix[4]      = {g->scale, 0, 0, g->scale};
-    const double* element_matrix = g->scale == 1 ? nullptr : matrix;
-    float         element_scale  = wm_sdf_scale(element_matrix);
+    /* The circle is unchanged inside its material root. The root's affine
+     * applies to the whole object, including backdrop, effects and capture. */
+    const double* element_matrix = nullptr;
+    float element_scale = 1;
     float         arguments[12];
     double        outset = fmin(pad, 4096), radius = t->local_radius;
     if (!(element_scale > 0)
@@ -313,8 +315,8 @@ static bool sdf_draws(struct walle_transition*                t,
     if (glass_surface) {
         shadow = t->packet.plan.shadow_grow;
         /* Recipe offsets are root points; geometry expects local element units. */
-        offset[0] = t->packet.plan.shadow_offset[0] / g->scale;
-        offset[1] = t->packet.plan.shadow_offset[1] / g->scale;
+        offset[0] = t->packet.plan.shadow_offset[0];
+        offset[1] = t->packet.plan.shadow_offset[1];
     }
     struct wm_sdf_grid grid;
     if (!wm_sdf_grid_build(radius * 2,
@@ -337,31 +339,42 @@ static bool sdf_draws(struct walle_transition*                t,
                                   t->backing_scale * g->center[0] - scale * radius,
                                   t->backing_scale * g->center[1] + scale * radius};
     struct wm_vertex vertices[36];
-    uint32_t         count = wm_sdf_vertices(
-        &grid, affine, t->source_scale, t->source_origin, t->source_size, vertices);
+    bool one_part=!glass_surface && grid.nx==2 && grid.ny==2;
+    bool empty_clip=false;
+    uint32_t count;
+    constexpr uint32_t quad_indices[6]={0,1,2,2,3,0};
+    if(one_part) {
+        if(grid.group_count!=1) return false;
+        double endpoints[4]={grid.x[0],grid.y[0],grid.x[1],grid.y[1]};
+        float uv[4]={grid.sx[0],grid.sy[0],grid.sx[1],grid.sy[1]};
+        int32_t clip[4];
+        if(pass==WALLE_VK_SDF_CACHE)
+            memcpy(clip,t->cache_pending_plan.child_dod,sizeof clip);
+        else if(!element_scissor(t,pad,clip)) return false;
+        enum wm_quad_clip_status status=wm_clip_rect_quad(endpoints,uv,affine,clip,vertices);
+        if(status==WM_QUAD_CLIP_INVALID) return false;
+        empty_clip=status==WM_QUAD_CLIP_EMPTY;
+        count=4;
+        /* Keep an empty target pass so masks/cache/gradient surfaces still
+         * receive their native clear even when CPU clipping removes the quad. */
+    } else count=wm_sdf_vertices(
+        &grid,affine,t->source_scale,t->source_origin,t->source_size,vertices);
     for (uint32_t i = 0; i < grid.group_count; ++i) {
         const struct wm_mesh_group* group = &grid.groups[i];
         uint32_t                    mode  = (uint32_t)(int32_t)group->mode;
         struct walle_vk_draw*       d
-            = append(t, pass, vertices, count, group->indices, group->index_count, mode);
+            = append(t,pass,vertices,count,one_part?quad_indices:group->indices,
+                       one_part?6:group->index_count,mode);
         if (!d)
             return false;
+        if (pass == WALLE_VK_SDF_CACHE)
+            memcpy(d->scissor,t->sdf_surface.rect,sizeof d->scissor);
+        if(empty_clip) d->scissor[2]=d->scissor[3]=0;
         if (glass_surface) {
             memcpy(d->glass, arguments, sizeof arguments);
             store_float(d->glass, 8, group->mode);
             memcpy(d->glass + 48, t->packet.glass_lph, sizeof t->packet.glass_lph);
-            double content[4] = {
-                g->center[0] - g->radius, -g->center[1] - g->radius, 2 * g->radius, 2 * g->radius};
-            double  backdrop[4]  = {0,
-                                    -(double)t->height / t->backing_scale,
-                                    t->width / t->backing_scale,
-                                    t->height / t->backing_scale};
-            double  transform[6] = {t->backing_scale, 0, 0, -t->backing_scale, 0, 0};
-            double  dod[4];
-            int32_t scissor[4];
-            if (!wm_glass_dod(&t->glass_extent, content, backdrop, dod)
-                || !wm_scissor_transform(dod, transform, t->width, t->height, false, scissor))
-                return false;
+            const int32_t* scissor=t->glass_scissor;
             for (unsigned axis = 0; axis < 2; ++axis) {
                 int32_t start = d->scissor[axis] > scissor[axis] ? d->scissor[axis] : scissor[axis];
                 int32_t end0  = d->scissor[axis] + d->scissor[axis + 2];
@@ -388,81 +401,415 @@ static bool sdf_draws(struct walle_transition*                t,
     return true;
 }
 
-static bool face_draw(struct walle_transition* t, const struct walle_transition_geometry* g)
+static bool offscreen_surface(const int32_t rect[4], const int32_t parent[4],
+                              struct walle_vk_surface_plan* surface)
 {
-    /* Native circular one-part face. Its normalized image coordinates are
-     * circle_image10, not the continuous-corner image11 parameterization. */
-    double           radius = g->radius * t->backing_scale;
-    double           cx = g->center[0] * t->backing_scale, cy = g->center[1] * t->backing_scale;
-    struct wm_vertex v[4] = {
-        {{(float)(cx - radius), (float)(cy + radius)}, {-1, -1}, {0, 0}},
-        {{(float)(cx + radius), (float)(cy + radius)}, {1, -1}, {0, 0}},
-        {{(float)(cx + radius), (float)(cy - radius)}, {1, 1}, {0, 0}},
-        {{(float)(cx - radius), (float)(cy - radius)}, {-1, 1}, {0, 0}},
-    };
-    constexpr uint32_t    indices[6] = {0, 1, 2, 2, 3, 0};
-    struct walle_vk_draw* d          = append(t, WALLE_VK_FACE, v, 4, indices, 6, 10);
-    if (!d)
-        return false;
-    memcpy(d->effect + 48, t->packet.face_vcm, 48);
+    *surface = (struct walle_vk_surface_plan){};
+    if (rect[2] <= 0 || rect[3] <= 0) return true;
+    memcpy(surface->rect, rect, sizeof surface->rect);
+    for (unsigned a = 0; a < 2; ++a) {
+        uint64_t rounded = ((uint64_t)(uint32_t)rect[a + 2] + 63) & ~UINT64_C(63);
+        if (rounded > UINT32_MAX) return false;
+        surface->texture[a] = (uint32_t)rounded;
+        int64_t extra = ((int64_t)parent[a] + parent[a + 2])
+                          - ((int64_t)rect[a] + rect[a + 2]);
+        if (extra < 0) extra = 0;
+        uint64_t extent = (uint64_t)(uint32_t)rect[a + 2] + (uint64_t)extra + 1;
+        surface->extent[a] = extent < rounded ? (uint32_t)extent : (uint32_t)rounded;
+    }
     return true;
+}
+
+static bool element_bounds(struct walle_transition* t, double pad, double world[4])
+{
+    double base[4] = {0,0,2*t->local_radius,2*t->local_radius};
+    if (!wm_uniform_rect_transform(base,t->root_transform,world)) return false;
+    /* LayerNode::compute_dod @18a68f54c..64c transforms the base first.
+     * Target-space Float padding follows, preserving each Double rounding. */
+    double delta = -fabs(t->root_transform[0]) * (double)(float)pad;
+    world[0] += delta; world[1] += delta;
+    world[2] = delta * -2. + world[2];
+    world[3] = delta * -2. + world[3];
+    return true;
+}
+static bool element_scissor(struct walle_transition* t, double pad, int32_t rect[4])
+{
+    double world[4];
+    constexpr double identity[6] = {1,0,0,1,0,0};
+    return element_bounds(t,pad,world)
+        && wm_scissor_transform(world,identity,t->width,t->height,false,rect);
+}
+static void clip_scissor(const struct walle_transition* t, int32_t rect[4])
+{
+    for (unsigned a=0;a<2;++a) {
+        int64_t lo=rect[a],hi=lo+rect[a+2],limit=a?t->height:t->width;
+        if(lo<0)lo=0;
+        if(lo>limit)lo=limit;
+        if(hi>limit)hi=limit;
+        rect[a]=(int32_t)lo;
+        rect[a+2]=hi>lo?(int32_t)(hi-lo):0;
+    }
+}
+static bool cached_effect_scissor(struct walle_transition* t, double own_pad, int32_t rect[4])
+{
+    if (!wm_sdf_cache_copy_dod(t->cache_requested_plan.child_dod,fabs(t->root_transform[0]),
+                               t->cache_requested_plan.padding,(float)own_pad,rect)) return false;
+    clip_scissor(t,rect);
+    return true;
+}
+static bool prepare_tint_surfaces(struct walle_transition* t)
+{
+    const struct wm_plan_parameters* p = &t->packet.plan;
+    int32_t mask[4], gradient[4], group[4];
+    const double pads[2] = {p->tint_mask_pad, p->tint_gradient_pad};
+    int32_t* rects[2] = {mask, gradient};
+    for (unsigned i = 0; i < 2; ++i) {
+        if (!(i==0 && t->cached_sdf ? cached_effect_scissor(t,pads[i],rects[i])
+                                    : element_scissor(t,pads[i],rects[i])))
+            return false;
+    }
+    bool m = mask[2] > 0 && mask[3] > 0, g = gradient[2] > 0 && gradient[3] > 0;
+    if (!m) memcpy(group, gradient, sizeof group);
+    else if (!g) memcpy(group, mask, sizeof group);
+    else for (unsigned a = 0; a < 2; ++a) {
+        group[a] = mask[a] < gradient[a] ? mask[a] : gradient[a];
+        int64_t end = (int64_t)mask[a] + mask[a + 2];
+        int64_t other = (int64_t)gradient[a] + gradient[a + 2];
+        if (other > end) end = other;
+        group[a + 2] = (int32_t)(end - group[a]);
+    }
+    int32_t canvas[4] = {0, 0, (int32_t)t->width, (int32_t)t->height};
+    return offscreen_surface(mask, group, &t->tint_mask_surface)
+        && offscreen_surface(group, canvas, &t->tint_group_surface);
+}
+
+static bool surface_quad(struct walle_transition* t, enum walle_vk_pass pass,
+                         const int32_t rect[4], const struct walle_vk_surface_plan* source,
+                         uint32_t mode)
+{
+    if (rect[2] <= 0 || rect[3] <= 0) return true;
+    float x0 = (float)rect[0], y0 = (float)rect[1];
+    float x1 = (float)((double)rect[0] + rect[2]), y1 = (float)((double)rect[1] + rect[3]);
+    float u0 = 0, v0 = 0, u1 = 0, v1 = 0;
+    if (source) {
+        float sx = 1.f / (float)source->texture[0], sy = 1.f / (float)source->texture[1];
+        u0 = (float)((double)rect[0] - source->rect[0]) * sx;
+        v0 = (float)((double)rect[1] - source->rect[1]) * sy;
+        u1 = (float)((double)rect[0] + rect[2] - source->rect[0]) * sx;
+        v1 = (float)((double)rect[1] + rect[3] - source->rect[1]) * sy;
+    }
+    struct wm_vertex v[4] = {{{x0,y0},{0,0},{u0,v0}}, {{x1,y0},{0,0},{u1,v0}},
+                             {{x1,y1},{0,0},{u1,v1}}, {{x0,y1},{0,0},{u0,v1}}};
+    constexpr uint32_t indices[6] = {0,1,2,0,2,3};
+    return append(t, pass, v, 4, indices, 6, mode) != nullptr;
+}
+
+static bool prepare_reveal_surface(struct walle_transition* t)
+{
+    double local[4] = {-1, -1, 2 * (t->local_radius + 1), 2 * (t->local_radius + 1)};
+    int32_t rect[4], soft[4];
+    if (!element_scissor(t,1,rect)) return false;
+    /* Updater::aa_round @18a7a61cc is applied to the transformed padded
+     * circle BEFORE output clipping. Its soft ROI is retained independently
+     * of the logical integer DOD, then set_dest derives the pass extension. */
+    double world[4];
+    if (!wm_uniform_rect_transform(local,t->root_transform,world)
+        || !wm_aa_round(world,true,soft)) return false;
+    for (unsigned i=0;i<2;++i) {
+        int64_t lo=soft[i], hi=(int64_t)soft[i]+soft[i+2];
+        int64_t limit=i?t->height:t->width;
+        if(lo<0)lo=0;
+        if(hi>limit)hi=limit;
+        if(lo>limit)lo=limit;
+        soft[i]=(int32_t)lo;
+        soft[i+2]=hi>lo?(int32_t)(hi-lo):0;
+    }
+    return offscreen_surface(rect, soft, &t->reveal_surface);
+}
+static bool masked_image_draw(struct walle_transition* t, bool finish, float opacity)
+{
+    const int32_t* rect = t->reveal_surface.rect;
+    struct walle_vk_surface_plan incoming = {.rect={0,0,(int32_t)t->width,(int32_t)t->height},
+        .texture={t->width,t->height}};
+    enum walle_vk_pass image = finish ? WALLE_VK_FINISH_IMAGE : WALLE_VK_REVEAL_IMAGE;
+    if (!surface_quad(t, image, rect, &incoming, 1)) return false;
+    /* This source image is already output-sized and uses native nearest
+     * sampling at 1:1. Preserve its exact global texel mapping independently
+     * of the native CGImage's bottom-up storage and normalized-UV rounding. */
+    uint32_t origin[2]={(uint32_t)rect[0],(uint32_t)rect[1]};
+    memcpy(t->draws[t->frame.draw_count-1].effect,origin,sizeof origin);
+    /* CALayer opacity byte: Float clamp, FMADD*255+.5, integer conversion;
+     * Render::Layer expands by Float(1/255) before the vertex half narrowing. */
+    float value = fminf(fmaxf(opacity,0),1);
+    uint8_t encoded = (uint8_t)(int32_t)fmaf(value,255,.5f);
+    float expanded = (float)encoded * 0.003921569f;
+    store_float(t->draws[t->frame.draw_count-1].effect,176,expanded);
+    return surface_quad(t, finish ? WALLE_VK_PRODUCT_FINISH : WALLE_VK_REVEAL,
+                        rect,&t->reveal_surface,1);
 }
 
 static bool tint_composite(struct walle_transition* t)
 {
-    float              w = (float)t->width, h = (float)t->height;
-    struct wm_vertex   v[4]       = {{{0, 0}, {0, 0}, {0, 0}},
-                                     {{w, 0}, {0, 0}, {1, 0}},
-                                     {{w, h}, {0, 0}, {1, 1}},
-                                     {{0, h}, {0, 0}, {0, 1}}};
-    constexpr uint32_t indices[6] = {0, 1, 2, 2, 3, 0};
-    return append(t, WALLE_VK_TINT_COMPOSITE, v, 4, indices, 6, 0) != nullptr;
+    const struct walle_vk_surface_plan* mask = &t->tint_mask_surface;
+    const struct walle_vk_surface_plan* group = &t->tint_group_surface;
+    const int32_t* m = mask->rect;
+    const int32_t* g = group->rect;
+    if (!surface_quad(t, WALLE_VK_TINT_APPLY_MASK, m, mask, 1)) return false;
+    /* emit_combine's transparent outside pieces: top, left, right, bottom. */
+    int32_t pieces[4][4] = {
+        {g[0], g[1], g[2], m[1] - g[1]},
+        {g[0], m[1], m[0] - g[0], m[3]},
+        {m[0]+m[2], m[1], g[0]+g[2]-(m[0]+m[2]), m[3]},
+        {g[0], m[1]+m[3], g[2], g[1]+g[3]-(m[1]+m[3])},
+    };
+    for (unsigned i = 0; i < 4; ++i)
+        if (!surface_quad(t, WALLE_VK_TINT_APPLY_MASK, pieces[i], nullptr, 0)) return false;
+    return surface_quad(t, WALLE_VK_TINT_COMPOSITE, g, group, 1);
 }
 
-bool walle_transition_build(struct walle_transition*      t,
-                            double                        progress,
-                            bool                          first_boot,
-                            const struct walle_vk_frame** result)
+static bool prepare_capture(struct walle_transition* t,
+                            const struct walle_transition_geometry* g)
 {
-    if (!t || !result || !isfinite(progress))
+    double scale = t->backing_scale * g->scale;
+    double radius = t->local_radius;
+    if (!isfinite(scale) || scale <= 0)
         return false;
-    *result  = nullptr;
-    t->frame = (struct walle_vk_frame){};
-    if (first_boot || progress >= 1) {
-        t->frame.plain_incoming = true;
-        *result                 = &t->frame;
+    double affine[6] = {scale, 0, 0, -scale,
+        t->backing_scale * g->center[0] - scale * radius,
+        t->backing_scale * g->center[1] + scale * radius};
+    memcpy(t->root_transform, affine, sizeof affine);
+    const struct wm_plan_parameters* plan = &t->packet.plan;
+    double base_bounds[4] = {0,0,2*radius,2*radius};
+    double backdrop[4], world_backdrop[4];
+    if (!wm_backdrop_bounds(base_bounds,plan->margin,affine,backdrop,world_backdrop)) return false;
+    double outer = (double)((float)plan->smoothness + (float)plan->output_maximum);
+    double content[2][4] = {{0, 0, 2 * radius, 2 * radius},
+                            {-outer, -outer, 2 * (radius + outer), 2 * (radius + outer)}};
+    /* Updater::FilterOp applies the first glass DOD to get_backdrop_bounds
+     * (already expanded by margin), not the unexpanded element bounds. */
+    memcpy(content[0],backdrop,sizeof backdrop);
+    int32_t regions[2][4];
+    for (unsigned i = 0; i < 2; ++i) {
+        double dod[4];
+        if (!wm_glass_dod(&t->glass_extent, content[i], backdrop, dod)
+            || !wm_scissor_transform(dod, affine, t->width, t->height, true, regions[i]))
+            return false;
+    }
+    /* Shared SDFState receives the element contribution, not the broader
+     * first backdrop contribution. Original moving-scene traces distinguish
+     * them once screen clipping and the giant-circle margin are involved. */
+    memcpy(t->cache_bounds,regions[1],sizeof t->cache_bounds);
+    double region[4] = {0};
+    for (unsigned i = 0; i < 2; ++i) {
+        const int32_t* r = regions[i];
+        if (r[2] <= 0 || r[3] <= 0) continue;
+        if (region[2] <= 0 || region[3] <= 0) {
+            for (unsigned j = 0; j < 4; ++j) region[j] = r[j];
+        } else {
+            double x = fmin(region[0], r[0]), y = fmin(region[1], r[1]);
+            region[2] = fmax(region[0] + region[2], (double)r[0] + r[2]) - x;
+            region[3] = fmax(region[1] + region[3], (double)r[1] + r[3]) - y;
+            region[0] = x; region[1] = y;
+        }
+    }
+    struct wm_capture_request request = {
+        .source_size = {t->width, t->height},
+        .frame = {world_backdrop[0],world_backdrop[1],world_backdrop[2],world_backdrop[3]},
+        .margin = 0, .scale = plan->backdrop_scale,
+        .renderer_scale = 1, .replicate_edges = plan->maximum_refraction > 0,
+        .raster_flipped = false, .region = region,
+    };
+    if (!wm_glass_filter_dod(t->recipe,affine,t->glass_scissor)) return false;
+    for (unsigned i=0;i<2;++i) {
+        int64_t lo=t->glass_scissor[i], hi=lo+t->glass_scissor[i+2];
+        int64_t limit=i?t->height:t->width;
+        if(lo<0)lo=0;
+        if(hi>limit)hi=limit;
+        if(lo>limit)lo=limit;
+        t->glass_scissor[i]=(int32_t)lo;
+        t->glass_scissor[i+2]=hi>lo?(int32_t)(hi-lo):0;
+    }
+    enum wm_capture_status status = WM_CAPTURE_EMPTY;
+    if(t->glass_scissor[2]>0 && t->glass_scissor[3]>0) {
+        status=wm_capture_clipped(&request,&t->capture);
+        if(status==WM_CAPTURE_EMPTY)
+            status=wm_capture_filter_fallback(t->recipe,affine,t->glass_scissor,&t->capture);
+        if(status==WM_CAPTURE_INVALID)return false;
+    } else t->capture=(struct wm_capture_plan){};
+    t->capture_ready=status==WM_CAPTURE_READY || status==WM_CAPTURE_FILTER_FALLBACK;
+    t->pyramid = (struct wm_pyramid_plan){};
+    t->source_origin[0] = t->source_origin[1] = 0;
+    t->source_size[0] = t->width; t->source_size[1] = t->height;
+    t->source_scale = 1;
+    if (t->capture_ready) {
+        if (status == WM_CAPTURE_READY
+            && !wm_pyramid_build(&t->capture, (float)plan->blur_min, (float)plan->blur_max,
+                                  scale, &t->pyramid)) return false;
+        bool pyramid = t->pyramid.mip_count != 0;
+        t->source_scale = pyramid ? t->pyramid.sample_scale : t->capture.scale;
+        for (unsigned i = 0; i < 2; ++i) {
+            t->source_size[i] = pyramid ? t->pyramid.texture[i] : t->capture.texture[i];
+            t->source_origin[i] = pyramid ? t->pyramid.bounds[i] : t->capture.surface[i];
+        }
+    }
+    struct wm_render_domain domain = {
+        .source_width = t->source_size[0], .source_height = t->source_size[1],
+        .source_scale = t->source_scale, .transform = {scale, 0, 0, -scale},
+        .headroom = 1, .gamma = 2.2, .global_light = false, .light_angle = PI / 2,
+        .light_opacity = nan(""), .light_spread = nan(""), .light_height = nan(""),
+    };
+    return wm_recipe_pack_glass(t->recipe,&domain,t->packet.glass_lph,
+                                &t->packet.glass_texture_function);
+}
+
+static struct wm_render_domain glass_domain(const struct walle_transition* t)
+{
+    return (struct wm_render_domain){
+        .source_width=t->source_size[0],.source_height=t->source_size[1],
+        .source_scale=t->source_scale,
+        .transform={t->root_transform[0],0,0,t->root_transform[3]},
+        .headroom=1,.gamma=2.2,.light_angle=PI/2,
+        .light_opacity=NAN,.light_spread=NAN,.light_height=NAN,
+    };
+}
+static bool prepare_sdf_cache(struct walle_transition* t, const struct walle_transition_geometry* g)
+{
+    const struct wm_plan_parameters* p=&t->packet.plan;
+    t->cache_pending=t->cache_state;
+    t->cache_pending_plan=t->cache_plan;
+    t->cache_pending_geometry=t->cache_geometry;
+    memcpy(t->cache_pending_transform,t->cache_transform,sizeof t->cache_transform);
+    t->cache_pending_retained=t->cache_retained;
+    t->cached_sdf=false;
+    t->cache_pending_valid=true;
+    if (t->cache_bounds[2]<=0 || t->cache_bounds[3]<=0) return true;
+    const double* m=t->root_transform;
+    double matrix[16]={m[0],m[1],0,0,m[2],m[3],0,0,0,0,1,0,m[4],m[5],0,1};
+    /* One owner plus the highlight copy and optional tint-fill copy. The
+     * gradient and product reveal each own separate single-copy SDF states. */
+    uint64_t copies=1u+(uint64_t)p->has_highlight+(uint64_t)p->has_tint;
+    if (!wm_sdf_cache_advance(&t->cache_pending,t->frame_time,matrix,t->cache_bounds,1,copies,false))
+        return true;
+    if(t->suppress_cache) {
+        t->cache_pending_retained=false;
         return true;
     }
-    if (progress <= 0) {
+    float pad=(float)p->smoothness+(float)p->output_maximum;
+    if (p->has_highlight) pad=fmaxf(pad,(float)p->highlight_pad);
+    if (p->has_tint) pad=fmaxf(pad,(float)p->tint_mask_pad);
+    double local[4]={0,0,2*t->local_radius,2*t->local_radius};
+    if (!wm_sdf_cache_plan_build(local,m,pad,p->shadow_offset,&t->cache_requested_plan)) return false;
+    bool same_linear=true;
+    for (unsigned i=0;i<4;++i) same_linear=same_linear && m[i]==t->cache_transform[i];
+    /* retain_surface18a85bcfc..d00 skips cache lookup when this frame's
+     * SDFState changed flag is set, even when the old surface contains it. */
+    bool hit=t->cache_retained && !t->cache_pending.changed && same_linear
+        && wm_sdf_cache_plan_contains(&t->cache_plan,&t->cache_requested_plan);
+    if (!hit) {
+        t->cache_pending_plan=t->cache_requested_plan;
+        t->cache_pending_geometry=*g;
+        memcpy(t->cache_pending_transform,m,sizeof t->cache_pending_transform);
+        /* MetalContext::update18a646c28..2c sets Context+0x3d8 to192MiB.
+         * A retention miss still uses a transient texture SDF this frame. */
+        int32_t cost=t->cache_pending_plan.native_cost;
+        t->cache_pending_retained=cost>=0 && (uint64_t)cost<=UINT64_C(0x0c000000);
+    }
+    if (!wm_sdf_cache_reuse_origin(local,m,t->cache_pending_plan.relative_origin,t->sdf_origin)) return false;
+    t->sdf_surface=(struct walle_vk_surface_plan){};
+    memcpy(t->sdf_surface.rect,t->cache_pending_plan.surface,sizeof t->sdf_surface.rect);
+    memcpy(t->sdf_surface.texture,t->cache_pending_plan.texture,sizeof t->sdf_surface.texture);
+    memcpy(t->sdf_surface.extent,t->cache_pending_plan.texture,sizeof t->sdf_surface.extent);
+    t->frame.sdf_surface=&t->sdf_surface;
+    t->frame.sdf_redraw=!hit;
+    t->frame.sdf_retain=t->cache_pending_retained;
+    t->cached_sdf=true;
+    struct wm_render_domain domain=glass_domain(t);
+    return wm_recipe_pack_glass_texture(t->recipe,&domain,1,t->sdf_surface.texture,
+                                        t->packet.glass_lph,&t->packet.glass_texture_function);
+}
+static bool cached_glass_draw(struct walle_transition* t, enum walle_vk_pass pass)
+{
+    struct wm_render_domain domain=glass_domain(t);
+    const int32_t* bounds=t->pyramid.mip_count ? t->pyramid.bounds : t->capture.surface;
+    struct wm_vertex v[4];
+    if (!wm_sdf_cache_glass_quad(t->recipe,&domain,bounds,t->sdf_origin,t->sdf_surface.texture,1,1,v))
+        return false;
+    constexpr uint32_t indices[6]={0,1,2,2,3,0};
+    struct walle_vk_draw* d=append(t,pass,v,4,indices,6,0);
+    if (!d) return false;
+    d->cached_sdf=true;
+    memcpy(d->glass+48,t->packet.glass_lph,sizeof t->packet.glass_lph);
+    memcpy(d->scissor,t->glass_scissor,sizeof d->scissor);
+    return true;
+}
+static bool cached_effect_draw(struct walle_transition* t, enum walle_vk_pass pass, double pad)
+{
+    float x=(float)t->sdf_origin[0], y=(float)t->sdf_origin[1];
+    float right=(float)((double)t->sdf_origin[0]+t->sdf_surface.texture[0]);
+    float bottom=(float)((double)t->sdf_origin[1]+t->sdf_surface.texture[1]);
+    float u=(float)t->sdf_surface.texture[0]*(1.f/(float)t->sdf_surface.texture[0]);
+    float v=(float)t->sdf_surface.texture[1]*(1.f/(float)t->sdf_surface.texture[1]);
+    struct wm_vertex vertices[4]={{{x,y},{0,0},{0,0}},{{right,y},{u,0},{0,0}},
+                                  {{right,bottom},{u,v},{0,0}},{{x,bottom},{0,v},{0,0}}};
+    constexpr uint32_t indices[6]={0,1,2,2,3,0};
+    struct walle_vk_draw* d=append(t,pass,vertices,4,indices,6,0);
+    if (!d || !cached_effect_scissor(t,pad,d->scissor)) return false;
+    d->cached_sdf=true;
+    if(pass==WALLE_VK_HIGHLIGHT) {
+        memcpy(d->effect+48,t->packet.highlight_vcm,48);
+        memcpy(d->effect+96,t->packet.key_fill,40);
+    } else memcpy(d->effect+160,t->packet.tint_mask_fill,16);
+    return true;
+}
+
+static bool build_geometry(struct walle_transition* t,
+                           const struct walle_transition_geometry* g,
+                           const struct walle_vk_frame** result)
+{
+    t->last_geometry=*g;
+    /* A zero root scale is a collapsed shape. Positive subpixel geometry is
+     * submitted to native-shaped coverage; no invented radius cutoff. */
+    if (g->scale == 0) {
         *result = &t->frame;
         return true;
     }
-    struct walle_transition_geometry g;
-    if (!walle_transition_geometry_at(t, progress, &g))
+    if (!prepare_capture(t, g))
         return false;
-    /* At sub-float geometry, padding subtraction can make the SDF half-size
-     * zero. No singular source evaluation is submitted for that invisible span. */
-    if (g.radius * t->backing_scale < 0.001) {
-        *result = &t->frame;
-        return true;
-    }
     t->frame.draws                     = t->draws;
-    t->frame.capture                   = &t->capture;
-    t->frame.pyramid                   = &t->pyramid;
-    t->frame.material_opacity          = (float)g.material_opacity;
+    t->frame.capture                   = t->capture_ready ? &t->capture : nullptr;
+    t->frame.pyramid                   = t->capture_ready ? &t->pyramid : nullptr;
+    t->frame.material_opacity          = (float)g->material_opacity;
     const struct wm_plan_parameters* p = &t->packet.plan;
-    if (!sdf_draws(t, &g, WALLE_VK_REVEAL, 1, 4096, false))
-        return false;
+    if (!prepare_sdf_cache(t,g)) return false;
+    if (t->frame.sdf_redraw
+        && !sdf_draws(t,&t->cache_pending_geometry,WALLE_VK_SDF_CACHE,
+                      t->cache_pending_plan.padding,4096,false)) return false;
+    if (!prepare_reveal_surface(t)) return false;
+    bool reveal = t->reveal_surface.rect[2] > 0 && t->reveal_surface.rect[3] > 0;
+    if (reveal) {
+        t->frame.reveal_surface = &t->reveal_surface;
+        if (!sdf_draws(t,g,WALLE_VK_REVEAL_MASK,1,4096,false)
+            || !masked_image_draw(t,false,1)) return false;
+    }
     enum walle_vk_pass glass
-        = t->packet.glass_texture_function == 0x47 ? WALLE_VK_GLASS_CLEAR : WALLE_VK_GLASS_REGULAR;
+        = (t->packet.glass_texture_function == 0x47 || t->packet.glass_texture_function == 0x46)
+              ? WALLE_VK_GLASS_CLEAR : WALLE_VK_GLASS_REGULAR;
     double inner = p->smoothness - p->output_minimum;
-    if (!sdf_draws(t, &g, glass, 0, inner, true))
+    if (t->capture_ready && !(t->cached_sdf ? cached_glass_draw(t,glass)
+                                          : sdf_draws(t,g,glass,0,inner,true)))
         return false;
     if (p->has_tint && p->tint_group_opacity != 0) {
+        if (!prepare_tint_surfaces(t)) return false;
+    }
+    if (p->has_tint && p->tint_group_opacity != 0
+        && t->tint_mask_surface.rect[2] > 0 && t->tint_mask_surface.rect[3] > 0) {
+        t->frame.tint_mask_surface = &t->tint_mask_surface;
+        t->frame.tint_group_surface = &t->tint_group_surface;
         t->frame.tint_ramp_rgba16f = t->packet.tint_ramp_rgba16f;
-        if (!sdf_draws(t, &g, WALLE_VK_TINT_MASK, p->tint_mask_pad, p->tint_mask_maximum, false)
+        if (!(t->cached_sdf ? cached_effect_draw(t,WALLE_VK_TINT_MASK,p->tint_mask_pad)
+                           : sdf_draws(t,g,WALLE_VK_TINT_MASK,p->tint_mask_pad,p->tint_mask_maximum,false))
             || !sdf_draws(t,
-                          &g,
+                          g,
                           WALLE_VK_TINT_GRADIENT,
                           p->tint_gradient_pad,
                           p->tint_gradient_maximum,
@@ -470,13 +817,61 @@ bool walle_transition_build(struct walle_transition*      t,
             || !tint_composite(t))
             return false;
     }
-    if (p->face_opacity != 0 && !face_draw(t, &g))
-        return false;
+    /* The extracted idle foreground has an identically zero VCM alpha row,
+     * independent of style, appearance, activity and byte tint. Its native
+     * finite-coverage face is a pure identity on this opaque SDR destination.
+     * Omit that pass; do not substitute a different face tessellation.
+     * Source/domain argument: material/IDLE_FACE.md. The native packet is kept. */
     if (p->has_highlight && p->highlight_opacity != 0
-        && !sdf_draws(t, &g, WALLE_VK_HIGHLIGHT, p->highlight_pad, p->highlight_maximum, false))
+        && !(t->cached_sdf ? cached_effect_draw(t,WALLE_VK_HIGHLIGHT,p->highlight_pad)
+                          : sdf_draws(t,g,WALLE_VK_HIGHLIGHT,p->highlight_pad,p->highlight_maximum,false)))
         return false;
-    if (g.material_opacity < 1 && !sdf_draws(t, &g, WALLE_VK_PRODUCT_FINISH, 1, 4096, false))
-        return false;
+    if (reveal && g->material_opacity < 1
+        && !masked_image_draw(t,true,(float)(1-g->material_opacity))) return false;
     *result = &t->frame;
     return true;
+}
+
+bool walle_transition_build(struct walle_transition* t, double progress, double scene_time, bool first_boot,
+                            const struct walle_vk_frame** result)
+{
+    if (!t || !result || !isfinite(progress) || !isfinite(scene_time)) return false;
+    *result = nullptr;
+    t->cache_pending_valid=false;
+    t->suppress_cache=false;
+    t->frame_time=scene_time;
+    t->frame = (struct walle_vk_frame){};
+    if (first_boot || progress >= 1) {
+        t->frame.plain_incoming = true; *result = &t->frame; return true;
+    }
+    if (progress <= 0) { *result = &t->frame; return true; }
+    struct walle_transition_geometry g;
+    if (!walle_transition_geometry_at(t, progress, &g)) return false;
+    return build_geometry(t, &g, result);
+}
+
+bool walle_transition_recover_analytic(struct walle_transition* t,const struct walle_vk_frame** result)
+{
+    if(!t || !result || !t->cache_pending_valid || !t->frame.sdf_surface || t->suppress_cache)
+        return false;
+    *result=nullptr;
+    /* REPLAN means the renderer no longer has usable retained SDF storage.
+     * Invalidate that ownership fact even if the analytic submission retries;
+     * the eligibility clock itself still commits only on successful rendering. */
+    t->cache_retained=false;
+    t->suppress_cache=true;
+    t->frame=(struct walle_vk_frame){};
+    return build_geometry(t,&t->last_geometry,result);
+}
+
+void walle_transition_commit(struct walle_transition* t)
+{
+    if (t && t->cache_pending_valid) {
+        t->cache_state=t->cache_pending;
+        t->cache_plan=t->cache_pending_plan;
+        t->cache_geometry=t->cache_pending_geometry;
+        memcpy(t->cache_transform,t->cache_pending_transform,sizeof t->cache_transform);
+        t->cache_retained=t->cache_pending_retained;
+        t->cache_pending_valid=false;
+    }
 }

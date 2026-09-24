@@ -62,7 +62,8 @@ static void bench_device(struct walle_vk_renderer* renderer, unsigned run)
     bench_hex(ids.driverUUID, VK_UUID_SIZE);
     printf(",\"pipeline_cache_uuid\":");
     bench_hex(properties.properties.pipelineCacheUUID, VK_UUID_SIZE);
-    printf(",\"timestamp_period_ns\":%.9g,\"queue_family\":%u}\n",
+    printf(",\"native_half_fma\":%s,\"timestamp_period_ns\":%.9g,\"queue_family\":%u}\n",
+           renderer->native_half_fma ? "true" : "false",
            (double)properties.properties.limits.timestampPeriod,
            renderer->queue_family);
 }
@@ -77,7 +78,8 @@ static bool bench_memory(struct walle_vk_output* output, unsigned run, const cha
         ",\"renderer_bytes\":%llu,\"renderer_peak_bytes\":%llu,\"renderer_allocations\":%u,"
         "\"output_bytes\":%llu,\"source_bytes\":%llu,\"backdrop_bytes\":%llu,\"scratch_bytes\":%"
         "llu,\"effect_bytes\":%llu,\"frame_buffer_bytes\":%llu,\"readback_bytes\":%llu,\"present_"
-        "bytes\":%llu,\"present_images\":%u}\n",
+        "bytes\":%llu,\"present_images\":%u,\"shared_math_bytes\":%llu,"
+        "\"shared_math_memory_flags\":%u}\n",
         (unsigned long long)d.renderer_memory.allocated_bytes,
         (unsigned long long)d.renderer_memory.peak_bytes,
         d.renderer_memory.allocation_count,
@@ -89,7 +91,9 @@ static bool bench_memory(struct walle_vk_output* output, unsigned run, const cha
         (unsigned long long)d.frame_buffer_bytes,
         (unsigned long long)d.readback_bytes,
         (unsigned long long)d.present_bytes,
-        d.present_image_count);
+        d.present_image_count,
+        (unsigned long long)d.shared_math_bytes,
+        d.shared_math_memory_flags);
     if (d.readback_bytes)
         return false;
     if (!strcmp(checkpoint, "promoted_idle") || !strcmp(checkpoint, "aborted_idle"))
@@ -100,25 +104,36 @@ struct bench_sample
 {
     uint64_t                    build_ns, render_ns, retry_wait_ns, completion_ns, total_ns;
     unsigned                    retries;
+    bool                        required_backdrop;
     struct walle_vk_diagnostics gpu;
 };
 static bool bench_frame(struct walle_vk_output*  output,
                         struct walle_transition* transition,
                         double                   progress,
+                        double                   scene_time,
                         bool                     timed,
                         struct bench_sample*     sample)
 {
     *sample                            = (struct bench_sample){};
     uint64_t                     start = bench_now();
     const struct walle_vk_frame* frame;
-    if (!walle_transition_build(transition, progress, false, &frame) || frame->composition_readback)
+    if (!walle_transition_build(transition, progress, scene_time, false, &frame) || frame->composition_readback)
         return false;
+    for (size_t i = 0; i < frame->draw_count; ++i)
+        sample->required_backdrop |= frame->draws[i].pass == WALLE_VK_GLASS_REGULAR
+                                    || frame->draws[i].pass == WALLE_VK_GLASS_CLEAR;
     sample->build_ns = bench_now() - start;
     enum walle_vk_frame_status status;
     do {
         uint64_t before = bench_now();
         status          = walle_vk_output_render(output, frame);
         sample->render_ns += bench_now() - before;
+        if(status==WALLE_VK_FRAME_REPLAN) {
+            before=bench_now();
+            if(!walle_transition_recover_analytic(transition,&frame))return false;
+            sample->build_ns+=bench_now()-before;
+            continue;
+        }
         if (status == WALLE_VK_FRAME_RETRY) {
             sample->retries++;
             before                = bench_now();
@@ -129,9 +144,10 @@ static bool bench_frame(struct walle_vk_output*  output,
         }
         if (bench_now() - start > UINT64_C(30000000000))
             return false;
-    } while (status == WALLE_VK_FRAME_RETRY);
+    } while (status == WALLE_VK_FRAME_RETRY || status == WALLE_VK_FRAME_REPLAN);
     if (status != WALLE_VK_FRAME_OK)
         return false;
+    walle_transition_commit(transition);
     uint64_t before = bench_now();
     if (timed && !walle_vk_output_diagnostics(output, true, &sample->gpu))
         return false;
@@ -139,7 +155,8 @@ static bool bench_frame(struct walle_vk_output*  output,
     sample->total_ns      = bench_now() - start;
     return !timed
            || (sample->gpu.timing_available && !sample->gpu.timing_pending
-               && sample->gpu.gpu_total_ns > 0);
+               && sample->gpu.gpu_total_ns > 0
+               && sample->gpu.built_backdrop == sample->required_backdrop);
 }
 static void bench_sample_record(
     unsigned run, const char* phase, unsigned index, double progress, const struct bench_sample* s)
@@ -147,16 +164,18 @@ static void bench_sample_record(
     printf("{\"type\":\"sample\",\"run\":%u,\"phase\":", run);
     bench_string(phase);
     printf(
-        ",\"index\":%u,\"progress\":%.17g,\"built_backdrop\":%s,\"timed_frame_id\":%llu,\"gpu_"
-        "total_ns\":%.9f,\"gpu_frame_ns\":%.9f,\"gpu_capture_ns\":%.9f,\"gpu_draw_ns\":%.9f,\"gpu_"
+        ",\"index\":%u,\"progress\":%.17g,\"built_backdrop\":%s,\"required_backdrop\":%s,\"timed_frame_id\":%llu,\"gpu_"
+        "total_ns\":%.9f,\"gpu_frame_ns\":%.9f,\"gpu_scene_ns\":%.9f,\"gpu_capture_ns\":%.9f,\"gpu_draw_ns\":%.9f,\"gpu_"
         "tail_ns\":%.9f,\"cpu_build_ns\":%llu,\"cpu_render_calls_ns\":%llu,\"cpu_retry_wait_ns\":%"
         "llu,\"cpu_completion_wait_ns\":%llu,\"cpu_total_ns\":%llu,\"retries\":%u}\n",
         index,
         progress,
         s->gpu.built_backdrop ? "true" : "false",
+        s->required_backdrop ? "true" : "false",
         (unsigned long long)s->gpu.timed_frame_id,
         s->gpu.gpu_total_ns,
         s->gpu.gpu_frame_ns,
+        s->gpu.gpu_scene_ns,
         s->gpu.gpu_capture_ns,
         s->gpu.gpu_draw_ns,
         s->gpu.gpu_tail_ns,
@@ -177,6 +196,9 @@ static bool bench_run(unsigned                               run,
 {
     bool                      timed = run != 0, ok = false;
     unsigned                  warmup_retries = 0;
+    uint64_t lifecycle_start=bench_now(), prepared=0;
+    const double scene_origin=(double)lifecycle_start*1e-9;
+    const double duration=(double)2.4f;
     struct walle_vk_renderer* renderer       = nullptr;
     struct walle_vk_output*   output         = nullptr;
     struct walle_transition*  transition     = nullptr;
@@ -192,9 +214,11 @@ static bool bench_run(unsigned                               run,
         || !walle_transition_create(width, height, 1, options, &transition))
         goto done;
     struct bench_sample sample;
+    prepared=bench_now();
     if (!timed) {
         for (unsigned i = 0; i <= 120; i++) {
-            if (!bench_frame(output, transition, (double)i / 120, false, &sample))
+            if (!bench_frame(output, transition, (double)i / 120,
+                             scene_origin+(double)i/120*duration, false, &sample))
                 goto done;
             warmup_retries += sample.retries;
         }
@@ -207,28 +231,31 @@ static bool bench_run(unsigned                               run,
         goto done;
     }
     if (!walle_vk_output_enable_timing(output, true)
-        || !bench_frame(output, transition, .5, true, &sample))
+        || !bench_frame(output, transition, .5, scene_origin, true, &sample))
         goto done;
     bench_sample_record(run, "first_use", 0, .5, &sample);
     if (!sample.gpu.built_backdrop || !bench_memory(output, run, "active_first"))
         goto done;
+    /* First-use probes a midpoint. Warm samples are a new complete scene
+     * timeline; retain GPU allocations, reset controller history explicitly. */
+    if (!walle_transition_update(transition,width,height,1,options)) goto done;
     for (unsigned i = 1; i < 120; i++) {
         double progress = (double)i / 120;
-        if (!bench_frame(output, transition, progress, true, &sample))
+        if (!bench_frame(output, transition, progress,
+                         scene_origin+progress*duration, true, &sample))
             goto done;
         bench_sample_record(run, "warm", i, progress, &sample);
-        if (sample.gpu.built_backdrop)
-            goto done;
     }
     if (!bench_memory(output, run, "active_after_warm")
         || !walle_vk_output_enable_timing(output, false)
-        || !bench_frame(output, transition, 1, false, &sample))
+        || !bench_frame(output, transition, 1, scene_origin+duration, false, &sample))
         goto done;
     walle_vk_output_promote(output);
     if (!bench_memory(output, run, "promoted_idle")
         || !walle_vk_output_restore_current(output, source_a, &layer)
         || !walle_vk_output_upload(output, source_b, &layer)
-        || !bench_frame(output, transition, .5, false, &sample)
+        || !walle_transition_update(transition,width,height,1,options)
+        || !bench_frame(output, transition, .5, scene_origin+duration+1, false, &sample)
         || !bench_memory(output, run, "active_before_abort"))
         goto done;
     walle_vk_output_abort_transition(output);
@@ -236,33 +263,40 @@ static bool bench_run(unsigned                               run,
         goto done;
     ok = true;
 done:
+    uint64_t teardown_start=bench_now();
     walle_transition_destroy(transition);
     walle_vk_output_destroy(output);
-    struct walle_vk_memory_stats memory;
-    walle_vk_renderer_memory_stats(renderer, &memory);
-    uint64_t errors = walle_vk_renderer_destroy_checked(renderer);
+    struct walle_vk_memory_stats memory, after_outputs;
+    walle_vk_renderer_memory_stats(renderer, &after_outputs);
+    uint64_t errors = walle_vk_renderer_destroy_report(renderer, &memory);
     ok = ok && errors == 0 && memory.allocated_bytes == 0 && memory.allocation_count == 0;
     printf(
         "{\"type\":\"run_end\",\"run\":%u,\"owned_bytes_after_output_destroy\":%llu,\"owned_"
-        "allocations_after_output_destroy\":%u,\"peak_owned_bytes\":%llu,\"validation_errors\":%"
-        "llu,\"status\":\"%s\"}\n",
+        "allocations_after_output_destroy\":%u,\"owned_bytes_after_renderer_destroy\":%llu,"
+        "\"owned_allocations_after_renderer_destroy\":%u,\"peak_owned_bytes\":%llu,\"validation_errors\":%"
+        "llu,\"startup_ns\":%llu,\"teardown_ns\":%llu,\"status\":\"%s\"}\n",
         run,
+        (unsigned long long)after_outputs.allocated_bytes,
+        after_outputs.allocation_count,
         (unsigned long long)memory.allocated_bytes,
         memory.allocation_count,
         (unsigned long long)memory.peak_bytes,
         (unsigned long long)errors,
+        (unsigned long long)(prepared?prepared-lifecycle_start:0),
+        (unsigned long long)(bench_now()-teardown_start),
         ok ? "PASS" : "FAIL");
     fflush(stdout);
     return ok;
 }
 int main(int argc, char** argv)
 {
-    if (argc != 11) {
+    if (argc != 11 && (argc != 12 || strcmp(argv[11], "--pilot") != 0)) {
         fprintf(stderr,
                 "usage: benchmark DEVICE WIDTH HEIGHT A.rgba B.rgba STYLE MOTION DARK TINT_HEX "
-                "CADENCE_MS\n");
+                "CADENCE_MS [--pilot]\n");
         return 2;
     }
+    const unsigned measured_runs = argc == 12 ? 1 : 5;
     uint32_t width  = (uint32_t)strtoul(argv[2], nullptr, 10),
              height = (uint32_t)strtoul(argv[3], nullptr, 10);
     if (!width || !height || width > 16384 || height > 16384)
@@ -305,15 +339,15 @@ int main(int argc, char** argv)
         options.direction[1]);
     printf(
         ",\"cadence_ms\":%.9g,\"first_use_progress\":0.5,\"warm_progress_denominator\":120,\"warm_"
-        "samples_per_run\":119,\"runs\":5,\"readback\":false,\"validation_required\":true,\"source_"
+        "samples_per_run\":119,\"runs\":%u,\"readback\":false,\"validation_required\":true,\"source_"
         "a\":",
-        strtod(argv[10], nullptr));
+        strtod(argv[10], nullptr), measured_runs);
     bench_string(argv[4]);
     printf(",\"source_b\":");
     bench_string(argv[5]);
     printf("}\n");
     bool ok = true;
-    for (unsigned run = 0; ok && run <= 5; run++)
+    for (unsigned run = 0; ok && run <= measured_runs; run++)
         ok = bench_run(run, argv[1], width, height, af, bf, &options);
     close(af);
     close(bf);

@@ -18,8 +18,9 @@ bool   wm_glass_dod(const struct wm_glass_extent* parameters,
                     double                        output[4]);
 bool   wm_aa_round(const double rectangle[4], bool antialias, int32_t output[4]);
 
-/* Explicit application transform after source DOD, then canvas intersection,
- * then source aa_round. affine={a,b,c,d,tx,ty}; negative Y scale is supported.
+/* Explicit application transform after source DOD. With antialias=true, apply
+ * Updater AA rounding before canvas intersection. Plain scissors use exterior
+ * integer bounds after intersection. affine={a,b,c,d,tx,ty}; negative Y scale is supported.
  * Scissor output is top-left target-pixel x,y,width,height. Canvas is positive
  * and bounded by INT32_MAX. Glass uses antialias=false.
  */

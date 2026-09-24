@@ -1780,7 +1780,11 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
     struct walle_vk_frame frame = {.plain_incoming = true};
     if (output->transition) {
         const struct walle_vk_frame* borrowed = nullptr;
-        if (!walle_transition_build(output->transition, progress, first_boot, &borrowed)) {
+        double scene_time = process_capture
+            ? (double)output->render.anim_start_ns * 1e-9
+                + progress * (double)output->render.duration_seconds
+            : (double)now.tv_sec + (double)now.tv_nsec * 1e-9;
+        if (!walle_transition_build(output->transition, progress, scene_time, first_boot, &borrowed)) {
             stop_failed_transition(output, "transition frame construction failed");
 #if defined(WALLE_TRACY)
             TracyCZoneEnd(tracy_transition_frame);
@@ -1803,6 +1807,20 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
     TracyCZoneN(tracy_present, "Vulkan render and present", true);
 #endif
     enum walle_vk_frame_status status = walle_vk_output_render(output->render.vk_output, &frame);
+    if(status==WALLE_VK_FRAME_REPLAN) {
+        const struct walle_vk_frame* recovered=nullptr;
+        uint8_t* pixels=frame.composition_readback;
+        size_t bytes=frame.composition_readback_size;
+        if(!walle_transition_recover_analytic(output->transition,&recovered))
+            status=WALLE_VK_FRAME_FATAL;
+        else {
+            frame=*recovered;
+            frame.composition_readback=pixels;
+            frame.composition_readback_size=bytes;
+            status=walle_vk_output_render(output->render.vk_output,&frame);
+            if(status==WALLE_VK_FRAME_REPLAN)status=WALLE_VK_FRAME_FATAL;
+        }
+    }
 #if defined(WALLE_TRACY)
     TracyCZoneEnd(tracy_present);
 #endif
@@ -1825,6 +1843,7 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
         return RENDER_FRAME_RETRY;
     }
 
+    walle_transition_commit(output->transition);
     if (process_capture) {
         if (!write_preview_capture(output)) {
             char reason[160];
@@ -1877,9 +1896,12 @@ static enum render_frame_result render_frame(struct wallpaper_output* output)
                         O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC | O_NOFOLLOW, 0600);
         if (fd < 0 || dprintf(fd,
                 "{\"width\":%d,\"height\":%d,\"frames\":%u,"
-                "\"format\":\"BGRA8 top-left\",\"callbacks\":%u}\n",
+                "\"format\":\"BGRA8 top-left\",\"callbacks\":%u,"
+                "\"scene_clock_start\":%.17g,\"duration_seconds\":%.17g}\n",
                 output->render.width, output->render.height,
-                state->preview_capture_swap_count, state->preview_capture_callback_count) < 0) {
+                state->preview_capture_swap_count, state->preview_capture_callback_count,
+                (double)output->render.anim_start_ns * 1e-9,
+                (double)output->render.duration_seconds) < 0) {
             state->preview_capture_status = 1;
         }
         if (fd >= 0 && close(fd) < 0)

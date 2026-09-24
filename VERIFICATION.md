@@ -1,139 +1,56 @@
-# Liquid Glass verification
+# Verification of the accepted hw_circle integration
 
-The accepted product scope is regular/clear, light/dark/portal-resolved automatic
-appearance, optional byte RGB(A) tint, and both sweep/lens motions. The optics and
-material evaluation follow the retained extraction; movement, image reveal and
-settling are Walle behavior. [RESEARCH.md](RESEARCH.md) records that boundary and
-the design alternatives. This is not an M1/Vulkan bit-identity or universal
-beauty/performance claim.
+**Final accepted scoped choice: `hw_circle`.** The user selected hardware blending and retained the documented portrait exception ([final user choice](/tmp/walle-work/fidelity-completion/resume_1400/USER_FINAL_DEFAULT.json)). [final delivery acceptance](/tmp/walle-work/fidelity-completion/resume_1400/FINAL_DELIVERY.json) supersedes earlier provisional/pending status. [retained-source verification](/tmp/walle-work/fidelity-completion/resume_1400/final-promotion/retained-hw-circle/ORCHESTRATION.json) confirms unchanged behavior/source and reuses the completed checks. This is a scoped engineering selection, not universal dominance or global optimality.
 
-This record applies to the source hashes in
-[provenance/runtime-sources.json](provenance/runtime-sources.json). Source
-correspondence, Vulkan correctness, application behavior and measured performance
-are separate findings. The original full Apple-host extraction remains paused;
-its unimplemented ICC, system-color, display and ownership work is retained at
-`/tmp/extract-liquidglass/work/continue/TABLED.md`.
+The currently integrated `hw_circle` snapshot passes the checks below. **Final scoped selection is complete.** The fidelity contract is the extracted Apple algorithm and its graph/precision/ownership semantics; identified GPU/OS opcode and raster differences are allowed. Native image equality is not the acceptance gate, and no image tolerance or fitted correction has been introduced.
 
-## Build and CPU checks
+## Source and build identity
 
-The locked environment provides GCC15.2, Make4.4.1, Slang2026.12, SPIR-V Tools/
-Vulkan headers1.4.341, libvips8.18.3 and Wayland1.25. Actual runtime checks used
-Linux6.18.51 and Mesa26.1.8 on RX9070XT, the Ryzen9950X3D integrated GPU, and
-lavapipe. Tests run with explicit C23 and source-sensitive contraction disabled.
+The [integration record](/tmp/walle-work/fidelity-completion/resume_1400/provisional-integration-2305/INTEGRATION.json) pins the provisional changes. Its older verification-pending label is superseded, for these checks, by the [completed verification receipt](/tmp/walle-work/fidelity-completion/resume_1400/final-verification/provisional-circle/RESULTS.json): release, normal tests, ASan/UBSan tests, analyzer and Nix package all PASS, with checked sources unchanged during that run.
+
+| Artifact | Recorded identity |
+| --- | --- |
+| Release executable SHA256 | `8b303a297a356a69e40d83fbbc9e05463ef125e9069d57fc2f6c23dbb7ee1c45` |
+| Package | `/nix/store/5mf4zw2nn4yv7r585zx66zvdl77kx4pn-walle-0.0.1` |
+| Package executable SHA256 | `87d30f174509ab97eb0451e9509c8582e48728b00e6b9496d8153b10d52a03e9` |
+
+These identify the verified provisional build, not a future selection. Documentation integration does not replace those pinned receipts. A later behavior change requires its affected checks and identities to be refreshed.
 
 ```sh
-nix develop -c make MODE=release -j6
-nix develop -c make MODE=release test
-nix develop -c make test-sanitize
-nix develop -c make MODE=release ANALYZE=1 -j6
-nix build path:.
+nix develop --offline path:. -c make MODE=release -j8
+nix develop --offline path:. -c make MODE=release test test-sanitize
+nix develop --offline path:. -c make MODE=release ANALYZE=1 -j4
+nix build --offline --no-link --print-out-paths path:.
 ```
 
-`nix build path:.` includes the current working tree, including newly added
-files. The package excludes generated build/protocol artifacts, compiles fresh,
-and runs the display-free test suite before installation. The clean package's
-check phase and installed executable were exercised. GCC's analyzer and the
-full ASan/UBSan application build produced no compiler diagnostics.
+The flake pins GCC15.2, Make4.4.1, Slang2026.12, Python3.14.4 and Vulkan headers1.4.341. All 27 generated shader entries are validated before C23 `#embed` consumes them. CPU fixtures need neither a Mac nor a live compositor. They cover renderer limits, retained/elided auxiliary attachment policies, scalar-buffer absence, both blend/FMA selectors, cache recovery, material/transition/cache/clip, application contracts and configuration.
 
-| Check | Actual coverage/result |
-| --- | --- |
-| Source host arithmetic | 184 material packets, 288 transformed domains, 236 capture/1416 pyramid plans, 1000 geometry cases, 5000 each powf/trig/half, 13072 tint matrices, 512 byte transfer cases, 24 constructors and 553 literal table words: zero mismatches. |
-| Source clipping | 19078 DOD/Gaussian/AA/affine/recipe controls: zero mismatches. |
-| Checked bounds follow-up | 69 capture/232 pyramid matches, 5 capture/251 pyramid representation rejections and 8 invalid/overflow failure-state cases. Packet bounds are derived from native field types, not an arbitrary image-size cap. |
-| Shipped material fixtures | 32 independently generated cases, 62784 packet bytes and 776 scalar comparisons pass release O3/LTO and ASan/UBSan. No production C output generated their expected values. |
-| Shipped transition tests | 144 trajectories/28800 frames, 26 invalid configurations, 12 wide/update cases and 1000 separate Fortify bounds controls. Sanitizer and NDEBUG variants also pass. |
-| Shipped app checks | 74 assertions and 11 display-free configuration cases. Three deliberate regression mutants were rejected. |
-| Shipped renderer bounds | 40 synthetic boundary/entrypoint checks; invalid graphics extents cause no allocation/destruction/fence wait. Storage-only images retain their separate limits. |
+## Independent mechanism evidence
 
-The material fixtures reproduce byte for byte from the retained source using
-`tools/generate_material_fixtures.py`. Regeneration is optional research work;
-normal builds/tests have no dependency on that workspace or Apple frameworks.
-Formatting of the new host modules preserved their C token sequences; the
-before/after mapping is retained in `provenance/formatting.json`.
+The reference is M1 Max, macOS 26.6.1 build 25G76, QuartzCore 1195.17. Retained original-function controls cover1,097,551 log2f inputs,36,810 blur plans,20,032 YCC calls,20,000 matrix products,20,346 capture arithmetic controls,20,480 backdrop/transform calls,3,109 clipping calls,6,000 cache-state calls and100 exact-input cache frames/250 updates. Their source mappings and premises are linked by [RESEARCH.md](RESEARCH.md) and the [D/E/I/N closure map](/tmp/walle-work/fidelity-completion/resume_1400/final-audit/D_E_I_N_CLOSURE_MAP.md).
 
-## GPU and real application checks
+[PLATFORM_OPERATIONS.md](shaders/PLATFORM_OPERATIONS.md) records the active scalar/division/sampler/blend paths and archived exact controls. Source FMA/order/narrowing remain required. The hardware-blend source-boundary test covers every binary16 word in each of four lanes on all three Vulkan devices; the original clamp/widen result is exact in that control. The actual DISPLAY gate is true on all nine advertised attachable modifiers of the 9070XT and all five of Raphael/Mendocino. These facts are separately scoped from complete-frame correspondence.
 
-All21 qualified shader entry points compile and validate. Production embeds18;
-all18 final modules are byte-identical to the accepted strict compiler outputs.
-Final release O3/LTO source was tested for1188 frames with validation required
-and checked through teardown:216 optical frames match the accepted reference
-bytes on all three devices;108 tiny-output/endpoint configurations add972 frames.
-Near-zero and near-one endpoints are exact. A further24 near-one cases at
-1920×1080,2560×2880 and5120×2880 on both AMDs checked193536000 pixels: every
-pixel was exact B while the optical path remained active, with zero validation
-errors. This tests the Vulkan adaptation,
-not equality to Apple's Metal driver. The earlier cross-device corpus found the
-two AMD outputs equal; lavapipe had intermediate differences up to14 byte levels
-(mean absolute byte difference0.0721).
+## Native diagnostic corpus
 
-The actual layer-shell program was also run under a private headless Labwc:
+The [provisional-circle corpus receipt](/tmp/walle-work/fidelity-completion/resume_1400/final-native-confirmation-circle/CONFIRMATION.json) completes492 comparisons:164 per device, covering54 static scenes, four25-frame trajectories, five endpoints and five visible cached interiors. Checked sources remained unchanged; executions, validation and owned-resource teardown were clean. Original native scenes derive their own graph/capture from exact inputs rather than accepting candidate packets as an oracle.
 
-- Both packaged clear/sweep and regular/dark/tinted/lens runs produced61 full
-  frames and exited successfully. Every frame matches the earlier accepted
-  application run. An instrumented run matches those61 frames as well.
-- First and last frames match an independent libvips memory-render oracle
-  byte for byte. Transparent alpha0/128/255 fixtures additionally match analytic
-  black compositing and finish with opaque alpha.
-- Reload during visible motion changes all four material controls on the next
-  transition. Repeated timer expirations coalesce rather than restart motion.
-  Resize and scale changes produce fresh images. SIGTERM during motion exits
-  cleanly. A two-output run independently progresses both outputs.
-- All three application upload-failure stages terminate automatically with the
-  expected nonzero status, no retained observed source fd, and no validation
-  error. The first test exposed a shutdown wait bug; the fixed path reaps dead
-  outputs before blocking again. The failed control remains retained.
-- Lower-level queue-submit and sync-file import/export failures, a legitimate
-  signaled fd=-1, resource promotion/abort/resize/destruction and120-frame dma-buf
-  transport controls pass. The transport control retained a stable17→17 fd count.
-- Actual graphics-limit rejection leaves allocation counts unchanged on all
-  three devices. On the discrete GPU, a16385×1 storage-only image succeeds even
-  though graphics framebuffer dimensions stop at16384. Per-axis viewport and
-  framebuffer checks avoid rejecting valid asymmetric rectangles.
+| Device | Comparisons | Byte-identical frames | Largest recorded `max_byte` difference |
+| --- | ---: | ---: | ---: |
+| RX 9070 XT |164|49|16|
+| Raphael/Mendocino |164|49|16|
+| llvmpipe CPU |164|39|107|
 
-Every private process is bounded and its actual child exit status is checked;
-Labwc's own exit status alone is insufficient. No live desktop process or
-configuration was used for these integration runs. Optional reproducers are in
-`tests/lifecycle`, `tests/upload_faults` and `tests/run_walle_preview.py`.
-Labwc/grim and NumPy/Pillow are additional tools for those opt-in GPU checks.
+These are raw diagnostic counts, not quality percentages, tolerances or algorithm certification. The receipt explicitly leaves algorithm acceptance separate. The [platform classification](/tmp/walle-work/fidelity-completion/resume_1400/final-audit/RESIDUAL_CLASSIFICATION.md) does not assert every differing byte has been individually attributed. The matched-coordinate16-pixel CPU FMA residual has its own causal intervention; that result does not explain all complete-frame differences.
 
-The full sanitizer run initially reported512 bytes during Vulkan driver
-unloading. A standalone create/enumerate/destroy program reproduced the same
-report, and RADV-only enumeration reproduced256 bytes. Keeping the RADV library
-loaded for that test makes both the minimal control and full application pass
-ASan/UBSan/LSan without suppressions or disabled checks. This test-only preload
-is recorded in the receipts; production has no preload or leak suppression.
-The original unsuppressed failures remain evidence of the installed driver
-unload limitation, not a passing leak test.
+## Actual application and failures
 
-An early GPU evaluator also missed a missing demote-feature enablement because
-it searched the wrong diagnostic spelling. Those v1/v2 validation-clean claims
-were invalidated. Feature querying/enabling, atomic validation-error accounting,
-checked teardown, and subsequent clean reruns replace them. Pixel agreement
-alone was never used to waive the Vulkan error.
+The [actual-app records](/tmp/walle-work/fidelity-completion/resume_1400/final-app/run_records) contain nine passing release controls: clear preview, regular/tinted preview, SDF allocation recovery, scalar-storage absence, lifecycle/reload/resize/cancellation, multiple outputs, and three upload-failure stages. They use private compositor sockets/configuration and owned artifacts. Live services and configuration remain unchanged.
 
-## Measurements and limits
+Independent preparation confirms exact opaque A/B endpoints in all five recorded preview directories: [clear](/tmp/walle-work/fidelity-completion/resume_1400/final-app/endpoints/preview_clear/result.json), [regular/tinted](/tmp/walle-work/fidelity-completion/resume_1400/final-app/endpoints/p/result.json), [cache recovery](/tmp/walle-work/fidelity-completion/resume_1400/final-app/endpoints/c/result.json), [storage absence](/tmp/walle-work/fidelity-completion/resume_1400/final-app/endpoints/a/result.json), and [package](/tmp/walle-work/fidelity-completion/resume_1400/final-app/endpoints/q/result.json). The [package preview](/tmp/walle-work/fidelity-completion/resume_1400/final-app/run_records/package_preview.json) passes and all 61 frames equal the release preview byte-for-byte. Different executable hashes are not a frame-equivalence failure.
 
-Final timing results are in [PERFORMANCE.md](PERFORMANCE.md), with a machine-
-readable table and reproduction tools under `tools/benchmark`. The fixed matrix
-keeps all36 device/resolution/material/motion cases separate: current1920×1080
-at239.760Hz and2560×2880 at59.967Hz, plus a labeled5120×2880 stress scenario.
-Each case has one warmup, five first-use samples and595 warm samples; all samples,
-run dispersion and tails are retained. Final measurements use the application's
-horizontal direction and a fixed center origin. Random origins are not assigned
-invented workload weights. Initial slanted-center data remains exploratory and
-is not presented as a matched before/after comparison.
+Expected injected failures follow their declared recovery/fatal paths; successful checked teardown has zero owned allocations. Driver/compositor-private allocations are outside those counters. The absence control expects zero obsolete scalar-buffer allocations, not failure of a resource the implementation no longer creates.
 
-Samples submit and wait sequentially without display-rate pacing. These are
-renderer GPU intervals, separate CPU API/completion measurements and owned Vulkan
-allocations. Decode, upload, device startup, driver-internal memory
-and compositor scheduling are outside those frame intervals. Offscreen timing
-uses one optimal presentation image; production may retain a second modifier image until the compositor
-releases it. No full-desktop frame-rate guarantee or architecture dominance is
-inferred. The integrated GPU's observed tails exceed some current-output cadence
-references; automatic device selection prefers a suitable discrete GPU.
+## Final acceptance
 
-The selected contract and source/implementation qualification are supported by
-the checks above. General Apple-host completion, M1 pixel identity on Vulkan,
-and literal universal optimality are not established or claimed. Full raw
-qualification records, retained failed controls and image frames remain under
-`/tmp/walle-work`; compact source/evidence records are shipped in `provenance/`.
+The source is unchanged from the verified `hw_circle` baseline. [retained-source verification](/tmp/walle-work/fidelity-completion/resume_1400/final-promotion/retained-hw-circle/ORCHESTRATION.json) verifies147 CPU and152 application source identities and retains17 completed receipts. [final user choice](/tmp/walle-work/fidelity-completion/resume_1400/USER_FINAL_DEFAULT.json) selects hardware while keeping the portrait exception; [final delivery acceptance](/tmp/walle-work/fidelity-completion/resume_1400/FINAL_DELIVERY.json) records final scoped acceptance. No global optimality, universal dominance or universal aesthetic claim follows. The broad standalone host extraction remains paused.

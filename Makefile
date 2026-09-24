@@ -44,11 +44,13 @@ ACTIVE_TARGET ::= $(BIN_DIR)/walle
 # Core Application Sources (Located in root)
 APP_SOURCES ::= walle.c shiro.c vulkan_renderer.c transition.c \
     material/material.c material/material_math.c material/applelog.c \
-    material/capture.c material/geometry.c material/scissor.c
+    material/capture.c material/geometry.c material/scissor.c material/sdf_cache.c material/clip.c
 
-GLASS_ENTRIES ::= glassVertex revealFragment regularFragment clearFragment \
-    tintMaskFragment tintCompositeFragment wallpaperFragment
-LOCAL_ENTRIES ::= faceFragment tintGradientFragment highlightFragment productFinishFragment
+GLASS_ENTRIES ::= glassVertex effectsVertex tintMaskFragment tintBackdropFragment maskedImageFragment wallpaperFragment \
+    sdfCacheFragment tintMaskCachedFragment
+LOCAL_ENTRIES ::= revealFragment regularFragment clearFragment faceFragment tintGradientFragment \
+    tintApplyMaskFragment tintCompositeFragment highlightFragment productFinishFragment \
+    regularCachedFragment clearCachedFragment highlightCachedFragment
 CAPTURE_ENTRIES ::= captureVertex captureCopyFragment capture4Fragment capture6Fragment capture8Fragment
 BLUR_ENTRIES ::= lg_blur_copy_base_mip lg_blur_downsample_agx2
 SPIRV_TARGETS ::= $(addprefix $(SPIRV_DIR)/,$(addsuffix .spv,$(GLASS_ENTRIES) $(CAPTURE_ENTRIES) $(BLUR_ENTRIES))) \
@@ -341,14 +343,29 @@ check-config: $(TARGET)
 # Display-free contract checks. GPU/layer-shell checks are documented separately.
 test: $(TARGET) $(GENERATED_HEADERS)
 	$(PYTHON) tests/run_renderer_bounds.py --repo-root . --cc "$(CC)"
+	$(PYTHON) tests/run_mrt2.py --repo-root . --cc "$(CC)"
+	$(PYTHON) tests/run_no_discard.py --repo-root . --cc "$(CC)"
+	$(PYTHON) tests/run_plain_blend.py --repo-root . --cc "$(CC)"
+	$(PYTHON) tests/run_native_ramp.py --repo-root . --cc "$(CC)"
+	$(PYTHON) tests/run_sdf_replan.py --repo-root . --cc "$(CC)"
 	$(PYTHON) tests/run_material.py --cc "$(CC)"
 	$(PYTHON) tests/run_transition.py --repo-root . --cc "$(CC)"
+	$(PYTHON) tests/run_cache_controller.py --repo-root . --cc "$(CC)" --require-matched-inputs
+	$(PYTHON) tests/run_quad_clip.py --repo-root . --cc "$(CC)"
 	$(PYTHON) tests/run_app.py --repo-root . --cc "$(CC)"
 	$(PYTHON) tests/check_config.py --binary "$(abspath $(TARGET))"
 
 test-sanitize: $(GENERATED_HEADERS)
+	$(PYTHON) tests/run_renderer_bounds.py --repo-root . --cc "$(CC)" --profile sanitize
+	$(PYTHON) tests/run_mrt2.py --repo-root . --cc "$(CC)" --profile sanitize
+	$(PYTHON) tests/run_no_discard.py --repo-root . --cc "$(CC)" --profile sanitize
+	$(PYTHON) tests/run_plain_blend.py --repo-root . --cc "$(CC)" --profile sanitize
+	$(PYTHON) tests/run_native_ramp.py --repo-root . --cc "$(CC)" --profile sanitize
+	$(PYTHON) tests/run_sdf_replan.py --repo-root . --cc "$(CC)" --profile sanitize
 	$(PYTHON) tests/run_material.py --sanitize --cc "$(CC)"
 	$(PYTHON) tests/run_transition.py --repo-root . --cc "$(CC)" --profile sanitize
+	$(PYTHON) tests/run_cache_controller.py --repo-root . --cc "$(CC)" --profile sanitize --require-matched-inputs
+	$(PYTHON) tests/run_quad_clip.py --repo-root . --cc "$(CC)" --profile sanitize
 	$(PYTHON) tests/run_app.py --repo-root . --cc "$(CC)" --profile sanitize
 
 # --- Linking Rule ---
@@ -365,15 +382,17 @@ $(OBJ_DIR)/%.c.o: %.c
 	@mkdir -p $(@D)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
-$(OBJ_DIR)/vulkan_renderer.c.o: $(SPIRV_TARGETS)
+$(OBJ_DIR)/vulkan_renderer.c.o: $(SPIRV_TARGETS) $(SHADER_DIR)/native_tint_ramp.rgba16f \
+	$(SHADER_DIR)/native_tint_gradient.bin
 
 # Preserve source rounding except at explicit fma/fmaf sites.
 $(OBJ_DIR)/material/%.c.o: CFLAGS += -ffp-contract=off
 $(OBJ_DIR)/transition.c.o: CFLAGS += -ffp-contract=off
+$(OBJ_DIR)/vulkan_renderer.c.o: CFLAGS += -ffp-contract=off
 
 SLANG_COMMON ::= -target spirv -profile spirv_1_6 -std 2026 -O2 \
     -capability vk_mem_model -emit-spirv-directly -fp-mode precise \
-    -fvk-use-c-layout -fvk-use-entrypoint-name
+    -fvk-use-c-layout -fvk-use-entrypoint-name -default-image-format-unknown
 SHADER_INPUTS ::= $(wildcard $(SHADER_DIR)/*.slang)
 BLUR_BINDINGS ::= -fvk-b-shift 0 0 -fvk-t-shift 16 0 -fvk-u-shift 32 0 -fvk-s-shift 48 0
 
@@ -385,11 +404,11 @@ $(SPIRV_DIR)/$(1).spv: $(SHADER_DIR)/$(2) $(SHADER_INPUTS) Makefile | $(SPIRV_DI
 	mv $$@.tmp $$@
 endef
 
-$(foreach entry,$(GLASS_ENTRIES),$(eval $(call SHADER_RULE,$(entry),walle_glass.slang,$(entry),$(if $(filter glassVertex,$(entry)),vertex,fragment),)))
-$(foreach entry,$(LOCAL_ENTRIES),$(eval $(call SHADER_RULE,$(entry)_local,walle_glass_local.slang,$(entry),fragment,)))
+$(foreach entry,$(GLASS_ENTRIES),$(eval $(call SHADER_RULE,$(entry),walle_glass.slang,$(entry),$(if $(filter glassVertex effectsVertex,$(entry)),vertex,fragment),-DLG_M1_SF_EMULATION=1)))
+$(foreach entry,$(LOCAL_ENTRIES),$(eval $(call SHADER_RULE,$(entry)_local,walle_glass_local.slang,$(entry),fragment,-DLG_M1_SF_EMULATION=1)))
 $(foreach entry,$(CAPTURE_ENTRIES),$(eval $(call SHADER_RULE,$(entry),walle_capture.slang,$(entry),$(if $(filter captureVertex,$(entry)),vertex,fragment),)))
-$(eval $(call SHADER_RULE,lg_blur_copy_base_mip,lg_metal_blur.slang,lg_blur_copy_base_mip,compute,-DLG_KERNEL=1 $(BLUR_BINDINGS)))
-$(eval $(call SHADER_RULE,lg_blur_downsample_agx2,lg_metal_blur.slang,lg_blur_downsample_agx2,compute,-DLG_KERNEL=4 $(BLUR_BINDINGS)))
+$(eval $(call SHADER_RULE,lg_blur_copy_base_mip,lg_metal_blur.slang,lg_blur_copy_base_mip,compute,-DLG_KERNEL=1 -DLG_NATIVE_UNORM8_INPUT=1 $(BLUR_BINDINGS)))
+$(eval $(call SHADER_RULE,lg_blur_downsample_agx2,lg_metal_blur.slang,lg_blur_downsample_agx2,compute,-DLG_KERNEL=4 -DLG_NATIVE_UNORM8_INPUT=1 $(BLUR_BINDINGS)))
 
 # Cold-start correctness: on the first build no .d files exist yet, so objects
 # must explicitly depend on the generated protocol headers or a parallel build
