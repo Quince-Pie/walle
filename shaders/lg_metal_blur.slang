@@ -17,6 +17,10 @@
 module lg_metal_blur;
 
 import liquidglass;
+#ifndef LG_NATIVE_UNORM8_INPUT
+#define LG_NATIVE_UNORM8_INPUT 0
+#endif
+
 
 // Vulkan transport ABI widens narrow host integers; the original kernels
 // perform their addressing in 32-bit integers. Host constructors retain the
@@ -38,6 +42,16 @@ struct VulkanBlurDownsampleUniforms {
 [[vk::image_format("rgba8")]] WTexture2D<half4> blurOut : register(u2);
 ConstantBuffer<VulkanBlurCopyBaseMipUniforms> u : register(b0);
 groupshared half4 boxes[400];
+half4 readBlurInput(int2 coordinate)
+{
+    half4 value=textureIn.Load(int3(coordinate,0));
+#if LG_NATIVE_UNORM8_INPUT
+    return unorm8TexelHalf(value);
+#else
+    return value;
+#endif
+}
+
 
 /// Each 20x20 group covers a 32x32 tile of mip 0 plus a 4-texel apron (as 2x2 boxes), and
 /// writes the 16x16 tile of the blurred level.
@@ -50,10 +64,10 @@ void lg_blur_copy_base_mip(uint3 tid3 : SV_GroupThreadID, uint3 tg3 : SV_GroupID
     let src = p + int2(tg3.xy) * 32 + int2(u.tex_coord_base);
     let lo = int2(u.tex_coord_clamp.xy);
     let hi = int2(u.tex_coord_clamp.zw);
-    let a = textureIn.Load(int3(clamp(src, lo, hi), 0));
-    let b = textureIn.Load(int3(clamp(src + int2(1, 0), lo, hi), 0));
-    let c = textureIn.Load(int3(clamp(src + int2(0, 1), lo, hi), 0));
-    let d = textureIn.Load(int3(clamp(src + int2(1, 1), lo, hi), 0));
+    let a = readBlurInput(clamp(src, lo, hi));
+    let b = readBlurInput(clamp(src + int2(1, 0), lo, hi));
+    let c = readBlurInput(clamp(src + int2(0, 1), lo, hi));
+    let d = readBlurInput(clamp(src + int2(1, 1), lo, hi));
     let row = tid.y * 20 + tid.x;
     boxes[row] = box2x2(a, b, c, d);
 
@@ -89,7 +103,11 @@ groupshared half4 boxes[720];
 
 half4 box(float2 uv)
 {
-    return textureIn.SampleLevel(boxSampler, uv, float(u.src_level));
+    #if LG_NATIVE_UNORM8_INPUT
+    return sampleGlassBackdrop<half,true>(textureIn,boxSampler,uv,half(u.src_level));
+#else
+    return textureIn.SampleLevel(boxSampler,uv,float(u.src_level));
+#endif
 }
 
 // variable_blur_downsample_compute reads its tile size from threads_per_threadgroup. QuartzCore binds it only on
@@ -166,7 +184,11 @@ groupshared half4 cache[720];
 
 half4 boxAt(float2 uv)
 {
-    return textureIn.SampleLevel(boxSampler, uv, float(u.src_level));
+    #if LG_NATIVE_UNORM8_INPUT
+    return sampleGlassBackdrop<half,true>(textureIn,boxSampler,uv,half(u.src_level));
+#else
+    return textureIn.SampleLevel(boxSampler,uv,float(u.src_level));
+#endif
 }
 
 half4 diamondAt(uint i)

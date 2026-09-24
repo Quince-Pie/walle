@@ -1,9 +1,18 @@
 # Walle
 
+**Final accepted scoped choice: `hw_circle`.** The user selected hardware blending and retained the documented portrait exception ([final user choice](/tmp/walle-work/fidelity-completion/resume_1400/USER_FINAL_DEFAULT.json)). [final delivery acceptance](/tmp/walle-work/fidelity-completion/resume_1400/FINAL_DELIVERY.json) supersedes earlier provisional/pending status. [retained-source verification](/tmp/walle-work/fidelity-completion/resume_1400/final-promotion/retained-hw-circle/ORCHESTRATION.json) confirms unchanged behavior/source and reuses the completed checks. This is a scoped engineering selection, not universal dominance or global optimality.
+
 A C23/Wayland wallpaper engine with source-derived Liquid Glass materials and
 Slang shaders compiled offline for Vulkan 1.4.
 
-The glass implementation comes from the macOS26.6.1/M1 Max extraction: analytic
+The provisional `hw_circle` implementation is integrated. Release, normal and
+sanitizer tests, analyzer, package, native execution and actual-application
+checks pass for this snapshot. Final scoped selection is complete;
+see [current acceptance status](REMAINING_WORK.md). The user permits identified
+platform numerical differences while requiring the extracted algorithm and
+its source-defined precision boundaries.
+
+The glass implementation comes from the macOS 26.6.1/M1 Max extraction: analytic
 SDFs, refraction, variable blur, native blur-pyramid kernels, shadows, vibrant
 color matrices, highlights and the complete tint-gradient/mask composition.
 Walle supplies its own transition movement and final settle into the incoming
@@ -15,8 +24,8 @@ or that Vulkan produces bit-identical pixels to the M1 Metal implementation.
 The flake and lock file define the dependencies and compiler versions.
 
 ```sh
-nix develop -c make MODE=release -j
-nix develop -c make MODE=release test
+nix develop path:. -c make MODE=release -j
+nix develop path:. -c make MODE=release test
 nix build path:.
 ```
 
@@ -106,9 +115,10 @@ validation can be enabled with `VK_LAYER_VALIDATE_SYNC=1`.
 
 ## Resources and provenance
 
-Wallpapers are decoded once into opaque encoded-sRGB RGBA8. The extracted
-capture/pyramid is prepared on the GPU when the incoming image/material changes;
-it is not a fitted CPU Gaussian blur. Automatic sRGB texture conversion is
+Wallpapers are decoded once into opaque encoded-sRGB RGBA8. Each optical frame
+captures the composed current scene after the masked next-image reveal and
+rebuilds its native blur pyramid. Allocation reuse does not cache changing pixels.
+Automatic sRGB texture conversion is
 intentionally disabled because the extracted shader expects encoded values.
 The final image is the unchanged incoming wallpaper, with no idle veil.
 
@@ -116,9 +126,20 @@ Local attachment reads preserve the intermediate 8-bit stores between optical
 stages. Direct dma-buf presentation uses at most two images and returns to one idle
 image after the compositor releases the previous one. Compositor reservation fences are bridged to Vulkan
 sync-file semaphores; a compositor-owned image is never overwritten. Sampled
-images and transition resources are released after promotion/abort. Timing
+images and transition resources are released after promotion/abort. The current native-operation path has no shared scalar lookup buffer or
+discard-only secondary attachment; the readable tint backdrop remains.
+Plain source-over uses hardware blending only when the conservative capability
+gate permits it, with the existing shader operation as fallback. Capture uses
+the composed image directly when supported, otherwise its copy fallback. Timing
 queries are opt-in; allocation diagnostics count owned Vulkan allocations,
 not opaque driver/compositor memory.
+
+The currently integrated implementation is **accepted `hw_circle`**: native sqrt/rsqrt and filtering, promoted-Float32 half division, guarded circular work removal enabled, coverage work removal disabled, no shared scalar buffer or discard-only attachment, hardware plain source-over with its shader fallback, and adaptive direct capture with copy fallback. These are the final measured choices within the documented scope and exceptions.
+
+The native SDF retention budget is 192 MiB, not a transient-allocation cap. The
+recorded confirmation scope reached 1,692,133,936 owned Vulkan bytes (1.576 GiB);
+see [memory scope](PERFORMANCE.md#resource-scope) before treating that budget as
+a total-memory limit.
 
 [RESEARCH.md](RESEARCH.md) separates extracted mechanisms from Walle choices and
 records the qualification boundaries. The full Apple system-host extraction is

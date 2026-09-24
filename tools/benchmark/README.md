@@ -59,20 +59,39 @@ comparison with this final confirmation.
 
 Each case has one untimed complete transition, then five fresh renderer/output/
 controller runs. Each run records a first-use frame at progress0.5 separately,
-then all119 warm progress points1..119/120. Capture must remain cached in warm
-samples. The final endpoint, promote, abort and destruction checks run with
+then all119 warm progress points1..119/120. Each frame containing a glass
+background draw must capture the current pre-glass composition and rebuild its
+pyramid; allocation reuse does not make those changing pixels cacheable.
+The final endpoint, promote, abort and destruction checks run with
 timestamp diagnostics disabled. Source preparation and upload are outside the
 sample timers. Validation must be active, every error is fatal, and checked
 teardown is included in the result gate.
 
+Cache decisions receive an explicit scene clock at a positive monotonic epoch
+plus progress×Float(2.4), matching the current configured duration. Submission
+remains unpaced. Controller history is reset after the separate midpoint
+first-use probe; GPU allocations remain available for the warm trajectory.
+Run-end records separately include startup (device/output, upload, controller)
+and teardown wall time. They are lifecycle costs, not frame intervals.
+
 `schema.json` describes the JSONL records. All samples/retries are retained.
 The evaluator requires five complete runs,595 warm samples, five first-use
-samples, zero validation errors and zero owned allocations after destruction.
+samples, zero validation errors and zero owned allocations after full renderer
+destruction. Output teardown retains only renderer-shared resources. Shared
+function-buffer bytes and memory flags are reported separately when present
+in a reference control; the delivered native-operation path reports zero.
+Device records include the qualified native-half-FMA
+selection; unknown backend builds retain the exact portable helper.
 Quantiles linearly interpolate at(n−1)q. Reports keep per-run and pooled
 median/p95/p99/max, run ranges, first-use GPU/capture, CPU API/wait timing, retries,
 and active/idle/abort memory separately. No averaging across cases occurs.
 
-GPU time comes from command-buffer timestamps. CPU submission/completion time
+GPU time comes from five command-buffer timestamps. The scene interval includes
+the resource prelude, wallpaper and reveal; the capture interval includes scene
+sampling/copy, capture and pyramid; the draw interval includes later material
+passes. Frame is their sum; the tail contains optional readback/release. Even
+an empty interval retains its measured timestamp overhead.
+CPU submission/completion time
 is reported separately and includes validation overhead. Memory means owned
 VkDeviceMemory allocations, not total driver VRAM. This offscreen path retains
 one optimal presentation image; real dma-buf presentation can retain two
@@ -82,4 +101,12 @@ superiority or universal equivalence.
 Existing result directories are not overwritten. A demonstrated implementation
 or evaluator change requires a new work/result directory and invalidating its
 affected earlier results. Stop after five runs; do not discard slow samples or
-rerun merely to improve a number. Each owned case has a180-second timeout.
+rerun merely to improve a number. Each owned case has a480-second timeout.
+The earlier180-second records remain historical; the completion comparison
+declared the larger common cap before new measurements.
+
+The executable's optional final `--pilot` argument keeps the same untimed
+transition and runs one measured lifecycle. Its JSON declares `runs:1`; the
+ordinary five-run evaluator deliberately rejects that as confirmation data.
+The two fixed completion pilots are scheduling diagnostics and never replace
+any of the216 required variant/workload comparisons.

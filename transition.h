@@ -16,7 +16,7 @@ struct walle_transition_options
 {
     enum wm_style                style;
     bool                         dark;      /* Resolved desktop appearance; no portal query here. */
-    bool                         active;    /* Current source specialization requires true. */
+    bool                         active;    /* Explicit native active/inactive material input. */
     struct wm_tint               tint;      /* Straight encoded sRGB bytes, no fitted colors. */
     enum walle_transition_motion motion;
     double                       origin[2]; /* Normalized output location, each in [0,1]. */
@@ -40,8 +40,9 @@ bool walle_transition_create(uint32_t                               width,
                              const struct walle_transition_options* options,
                              struct walle_transition**              result);
 
-/* A successful update invalidates borrowed frames and regenerates the recipe,
- * image-capture plan and geometry for the new output/options. No GPU work.
+/* A successful update invalidates borrowed frames and regenerates the recipe
+ * for the new output/options. Capture geometry is derived for each frame.
+ * No GPU work occurs in this controller.
  */
 [[nodiscard]]
 bool walle_transition_update(struct walle_transition*               transition,
@@ -52,13 +53,26 @@ bool walle_transition_update(struct walle_transition*               transition,
 
 /* Frame storage remains owned by transition until the next build/update or
  * destroy. The renderer copies spans before returning. No allocation in build.
- * Progress0 is plain A, progress1 and first_boot are exact plain B.
+ * Progress0 is plain A, progress1 and first_boot are exact plain B. scene_time
+ * is a finite timestamp from the renderer's monotonic scene clock, in seconds.
+ * The caller commits only after a successful render. RETRY/failure leaves
+ * retained cache history unchanged; another build replaces pending history.
  */
 [[nodiscard]]
 bool walle_transition_build(struct walle_transition*      transition,
                             double                        progress,
+                            double                        scene_time,
                             bool                          first_boot,
                             const struct walle_vk_frame** result);
+
+void walle_transition_commit(struct walle_transition* transition);
+/* User-selected resource recovery after WALLE_VK_FRAME_REPLAN. Rebuilds the
+ * most recent optical frame analytically at its original pose and timestamp;
+ * valid at most once before commit or a new build. Unavailable retained storage
+ * is invalidated immediately; eligibility history still waits for commit.
+ * No GPU operation occurs. */
+[[nodiscard]]
+bool walle_transition_recover_analytic(struct walle_transition*,const struct walle_vk_frame**);
 
 void walle_transition_destroy(struct walle_transition* transition);
 

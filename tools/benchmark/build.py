@@ -13,6 +13,8 @@ parser=argparse.ArgumentParser()
 parser.add_argument('--repo-root',type=Path,required=True)
 parser.add_argument('--work-dir',type=Path,required=True)
 parser.add_argument('--cc',default='gcc')
+parser.add_argument('--capture-copy-control', action='store_true',
+                    help='force the conventional pre-glass scene-copy path')
 args=parser.parse_args()
 repo=args.repo_root.expanduser().resolve();work=args.work_dir.expanduser().resolve()
 if repo==work or repo in work.parents:
@@ -41,16 +43,21 @@ for name in shader_names:shutil.copy2(repo/'build/shaders'/name,source/'build/sh
 # Retain all shader source text alongside binaries for reproducibility.
 (source/'shaders').mkdir(exist_ok=True)
 for path in sorted((repo/'shaders').glob('*.slang')):shutil.copy2(path,source/'shaders'/path.name)
+for name in ('native_tint_ramp.rgba16f', 'native_tint_gradient.bin'):
+    shutil.copy2(repo/'shaders'/name, source/'shaders'/name)
 flags=['-std=c23','-O3','-DNDEBUG','-flto=auto','-fno-plt','-ffp-contract=off','-Wall','-Wextra','-Wpedantic',
        '-Wshadow','-Wimplicit-fallthrough','-Werror','-fstack-protector-strong','-D_FORTIFY_SOURCE=3']
+if args.capture_copy_control:
+    flags.append('-DWALLE_FORCE_CAPTURE_COPY=1')
 pkg=shlex.split(subprocess.check_output(['pkg-config','--cflags','--libs','vulkan','wayland-client','libdrm'],text=True))
 run([args.cc,*flags,'-I'+str(source),'-I'+str(source/'material'),str(TOOLS/'benchmark.c'),
-     str(source/'transition.c'),*[str(source/'material'/name) for name in ('material.c','material_math.c','applelog.c','capture.c','geometry.c','scissor.c')],
+     str(source/'transition.c'),*[str(source/'material'/name) for name in ('material.c','material_math.c','applelog.c','capture.c','geometry.c','scissor.c','sdf_cache.c','clip.c')],
      str(source/'protocols/linux-dmabuf-v1.c'),'-o',str(work/'build/benchmark'),*pkg,'-lm'])
 vips=shlex.split(subprocess.check_output(['pkg-config','--cflags','--libs','vips'],text=True))
 run([args.cc,*flags,str(TOOLS/'prepare.c'),'-o',str(work/'build/prepare'),*vips])
 def digest(path):return dict(path=str(path),sha256=hashlib.sha256(path.read_bytes()).hexdigest(),size=path.stat().st_size)
-record=dict(repo_root=str(repo),commands=commands,compiler_path=shutil.which(args.cc),
+record=dict(repo_root=str(repo),capture_copy_control=args.capture_copy_control,
+ commands=commands,compiler_path=shutil.which(args.cc),
  compiler_version=subprocess.check_output([args.cc,'--version'],text=True),
  shader_compiler_path=shutil.which('slangc'),shader_compiler_version=subprocess.check_output(['slangc','-version'],text=True,stderr=subprocess.STDOUT),
  package_versions=subprocess.check_output(['pkg-config','--modversion','vulkan','wayland-client','libdrm','vips'],text=True),

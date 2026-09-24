@@ -35,7 +35,21 @@ enum walle_vk_pass : uint8_t
     WALLE_VK_TINT_COMPOSITE,
     WALLE_VK_HIGHLIGHT,
     WALLE_VK_PRODUCT_FINISH,
+    WALLE_VK_TINT_APPLY_MASK,
+    WALLE_VK_REVEAL_MASK,
+    WALLE_VK_REVEAL_IMAGE,
+    WALLE_VK_FINISH_IMAGE,
+    WALLE_VK_SDF_CACHE,
     WALLE_VK_PASS_COUNT
+};
+
+/* Native integer offscreen geometry: global target-pixel bounds, rounded
+ * allocation and actual render extent. Projection maps global vertices into
+ * that allocation; the logical rectangle is not an allocation size. */
+struct walle_vk_surface_plan
+{
+    int32_t rect[4];
+    uint32_t texture[2], extent[2];
 };
 
 /* All spans are borrowed until render returns, and copied before GPU use.
@@ -54,6 +68,7 @@ struct walle_vk_draw
     int32_t                       scissor[4];
     uint32_t                      shape_mode;
     float                         edr_scale;
+    bool                          cached_sdf; /* GB, tint fill and highlight only. */
     uint8_t                       glass[272];
     uint8_t                       effect[184];
 };
@@ -64,17 +79,32 @@ struct walle_vk_frame
     const struct wm_capture_plan* capture;
     const struct wm_pyramid_plan* pyramid;
     const uint8_t*                tint_ramp_rgba16f; /* 256 * 4 binary16 values, or nullptr */
+    const struct walle_vk_surface_plan *tint_mask_surface, *tint_group_surface;
+    const struct walle_vk_surface_plan* reveal_surface;
+    /* Creation-coordinate bounds; unlike group surfaces, may be offscreen.
+     * Cached draws carry current translated sampling coordinates separately.
+     * A retained image can be reused only after a successful prior frame. */
+    const struct walle_vk_surface_plan* sdf_surface;
+    bool sdf_redraw, sdf_retain;
     float    material_opacity;     /* product finish only; optical packets are unchanged */
     bool     plain_incoming;       /* first boot / completed transition: exact B copy */
     uint8_t* composition_readback; /* optional BGRA8, top-left rows */
     size_t   composition_readback_size;
+#if defined(WALLE_STAGE_READBACK)
+    /* Test-only stage observation. Never compiled into the installed program. */
+    uint8_t *capture_readback, *pyramid_readback, *sdf_readback;
+    size_t capture_readback_size, pyramid_readback_size, sdf_readback_size;
+#endif
 };
 enum walle_vk_frame_status : uint8_t
 {
     WALLE_VK_FRAME_OK,
     WALLE_VK_FRAME_RETRY,
+    WALLE_VK_FRAME_REPLAN,
     WALLE_VK_FRAME_FATAL
 };
+/* REPLAN records no GPU frame and commits no history. The owner rebuilds
+ * that same scene/time with the extracted analytic path, at most once. */
 [[nodiscard]]
 bool walle_vk_renderer_create(struct wl_display*, const char*, struct walle_vk_renderer**);
 /* Same device, shaders and frame recorder; no Wayland object or export image. */
@@ -132,18 +162,30 @@ struct walle_vk_memory_stats
     uint64_t allocated_bytes, peak_bytes;
     uint32_t allocation_count, peak_allocation_count;
 };
+/* Full renderer teardown, with final owned-memory counters. Outputs must have
+ * been destroyed first. Includes validation errors raised during teardown. */
+[[nodiscard]]
+uint64_t walle_vk_renderer_destroy_report(struct walle_vk_renderer*, struct walle_vk_memory_stats*);
 struct walle_vk_diagnostics
 {
     struct walle_vk_memory_stats renderer_memory;
+    uint64_t                     shared_math_bytes; /* All shared native function data, including ramp response. */
+    uint32_t                     shared_math_memory_flags;
+    /* Transient native target1 allocation, private to this output. Lazy
+     * memory reports its VkDeviceMemory allocation size, not committed bytes. */
+    uint64_t                     auxiliary_bytes;
+    uint32_t                     auxiliary_memory_flags, auxiliary_width, auxiliary_height;
     uint64_t                     output_bytes, source_bytes, backdrop_bytes, scratch_bytes;
     uint64_t                     effect_bytes, frame_buffer_bytes, readback_bytes, present_bytes;
     uint32_t                     present_image_count;
     bool                         timing_enabled, timing_available, timing_pending, built_backdrop;
     uint64_t                     timed_frame_id;
-    double gpu_capture_ns, gpu_draw_ns, gpu_frame_ns, gpu_tail_ns, gpu_total_ns;
+    double gpu_scene_ns, gpu_capture_ns, gpu_draw_ns, gpu_frame_ns, gpu_tail_ns, gpu_total_ns;
 };
-/* Timing is off by default. Explicit enabling creates four timestamp queries.
- * The frame interval includes capture plus draws, excludes readback/release.
+/* Timing is off by default. Explicit enabling creates five timestamp queries.
+ * Scene measures the wallpaper/reveal and resource prelude; capture measures
+ * the following capture/pyramid, and draw measures the remaining material
+ * passes. The frame interval includes all three, excludes readback/release.
  * The tail reports optional readback and final ownership release separately;
  * gpu_total_ns includes that tail.
  * Timestamp pool reuse occurs only after the owning submission completes. */

@@ -20,32 +20,32 @@ public struct DownsampleBlurUniforms<T : __BuiltinFloatingPointType>
 
 /// downsample_4_frag: four bilinear taps accumulated with fused multiply-adds, color scaled by the EDR
 /// factor. QuartzCore uses offsets of +-1 source texel and weights 0.25 (see README).
-public vector<T, 4> downsample4<T : __BuiltinFloatingPointType>(Texture2D<vector<T, 4>> tex, SamplerState s, float2 uv, DownsampleBlurUniforms<T> u, T edrScale)
+public vector<T, 4> downsample4<T : __BuiltinFloatingPointType, let kNativeUnorm8 : bool = false>(Texture2D<vector<T, 4>> tex, SamplerState s, float2 uv, DownsampleBlurUniforms<T> u, T edrScale)
     where vector<T, 4> : ITexelElement
 {
-    var acc = fma(tex.SampleLevel(s, u.offset[0] + uv, 0.0f), vector<T, 4>(u.weight[0].x), vector<T, 4>(T(0.0)));
-    acc = fma(tex.SampleLevel(s, u.offset[1] + uv, 0.0f), vector<T, 4>(u.weight[0].y), acc);
-    acc = fma(tex.SampleLevel(s, u.offset[2] + uv, 0.0f), vector<T, 4>(u.weight[0].z), acc);
-    acc = fma(tex.SampleLevel(s, u.offset[3] + uv, 0.0f), vector<T, 4>(u.weight[0].w), acc);
+    var acc = glassFma(sampleGlassBackdrop<T,kNativeUnorm8>(tex,s,u.offset[0]+uv,T(0)), vector<T, 4>(u.weight[0].x), vector<T, 4>(T(0.0)));
+    acc = glassFma(sampleGlassBackdrop<T,kNativeUnorm8>(tex,s,u.offset[1]+uv,T(0)), vector<T, 4>(u.weight[0].y), acc);
+    acc = glassFma(sampleGlassBackdrop<T,kNativeUnorm8>(tex,s,u.offset[2]+uv,T(0)), vector<T, 4>(u.weight[0].z), acc);
+    acc = glassFma(sampleGlassBackdrop<T,kNativeUnorm8>(tex,s,u.offset[3]+uv,T(0)), vector<T, 4>(u.weight[0].w), acc);
     return vector<T, 4>(vector<T, 3>(edrScale) * acc.xyz, acc.w);
 }
 
 /// downsample_6_frag (texture function 28, `ds6`): three symmetric tap pairs uv -+ offset[k], k = 0..2, sampled
 /// with the implicit LOD (bias 0; the other downsample shaders use level 0), each pair summed and scaled by
 /// weight[0][k]. Color scaled by the EDR factor, alpha kept.
-public vector<T, 4> downsample6<T : __BuiltinFloatingPointType>(Texture2D<vector<T, 4>> tex, SamplerState s, float2 uv, DownsampleBlurUniforms<T> u, T edrScale)
+public vector<T, 4> downsample6<T : __BuiltinFloatingPointType, let kNativeUnorm8 : bool = false>(Texture2D<vector<T, 4>> tex, SamplerState s, float2 uv, DownsampleBlurUniforms<T> u, T edrScale)
     where vector<T, 4> : ITexelElement
 {
     // The six taps in QuartzCore's order, uv - offset[2] ... uv + offset[2], stored before the weights are read: the
     // order of these loads decides how the Metal compiler orders the commutative operands below (and so which
     // products it fuses). The array keeps Slang from folding the samples into the expression.
     vector<T, 4> tap[6];
-    tap[0] = tex.Sample(s, uv - u.offset[2]);
-    tap[1] = tex.Sample(s, uv - u.offset[1]);
-    tap[2] = tex.Sample(s, uv - u.offset[0]);
-    tap[3] = tex.Sample(s, u.offset[0] + uv);
-    tap[4] = tex.Sample(s, u.offset[1] + uv);
-    tap[5] = tex.Sample(s, u.offset[2] + uv);
+    tap[0] = kNativeUnorm8 && T is half ? sampleGlassBackdrop<T,true>(tex,s,uv - u.offset[2],T(0)) : tex.Sample(s, uv - u.offset[2]);
+    tap[1] = kNativeUnorm8 && T is half ? sampleGlassBackdrop<T,true>(tex,s,uv - u.offset[1],T(0)) : tex.Sample(s, uv - u.offset[1]);
+    tap[2] = kNativeUnorm8 && T is half ? sampleGlassBackdrop<T,true>(tex,s,uv - u.offset[0],T(0)) : tex.Sample(s, uv - u.offset[0]);
+    tap[3] = kNativeUnorm8 && T is half ? sampleGlassBackdrop<T,true>(tex,s,u.offset[0] + uv,T(0)) : tex.Sample(s, u.offset[0] + uv);
+    tap[4] = kNativeUnorm8 && T is half ? sampleGlassBackdrop<T,true>(tex,s,u.offset[1] + uv,T(0)) : tex.Sample(s, u.offset[1] + uv);
+    tap[5] = kNativeUnorm8 && T is half ? sampleGlassBackdrop<T,true>(tex,s,u.offset[2] + uv,T(0)) : tex.Sample(s, u.offset[2] + uv);
     let w = u.weight[0];
     let acc = (vector<T, 4>(w.x) * (tap[3] + tap[2]) + vector<T, 4>(w.y) * (tap[4] + tap[1])) + (tap[5] + tap[0]) * vector<T, 4>(w.z);
     return vector<T, 4>(acc.xyz * vector<T, 3>(edrScale), acc.w);
@@ -55,23 +55,23 @@ public vector<T, 4> downsample6<T : __BuiltinFloatingPointType>(Texture2D<vector
 /// four offsets offset[0..3] mirrored into all four quadrants (+x +y, +x -y, -x +y, -x -y in that order), each with
 /// the fixed weight 1/16 (the weight[] uniforms are not read), accumulated with fused multiply-adds. Color scaled by
 /// the EDR factor, alpha kept.
-public vector<T, 4> downsample8<T : __BuiltinFloatingPointType>(Texture2D<vector<T, 4>> tex, SamplerState s, float2 uv, DownsampleBlurUniforms<T> u, T edrScale)
+public vector<T, 4> downsample8<T : __BuiltinFloatingPointType, let kNativeUnorm8 : bool = false>(Texture2D<vector<T, 4>> tex, SamplerState s, float2 uv, DownsampleBlurUniforms<T> u, T edrScale)
     where vector<T, 4> : ITexelElement
 {
     let w = vector<T, 4>(T(0.0625));
     var acc = vector<T, 4>(T(0.0));
     [ForceUnroll]
     for (int k = 0; k < 4; k++)
-        acc = fma(tex.SampleLevel(s, u.offset[k] + uv, 0.0f), w, acc);
+        acc = glassFma(sampleGlassBackdrop<T,kNativeUnorm8>(tex,s,u.offset[k] + uv,T(0)), w, acc);
     [ForceUnroll]
     for (int k = 0; k < 4; k++)
-        acc = fma(tex.SampleLevel(s, float2(u.offset[k].x, -u.offset[k].y) + uv, 0.0f), w, acc);
+        acc = glassFma(sampleGlassBackdrop<T,kNativeUnorm8>(tex,s,float2(u.offset[k].x, -u.offset[k].y) + uv,T(0)), w, acc);
     [ForceUnroll]
     for (int k = 0; k < 4; k++)
-        acc = fma(tex.SampleLevel(s, float2(-u.offset[k].x, u.offset[k].y) + uv, 0.0f), w, acc);
+        acc = glassFma(sampleGlassBackdrop<T,kNativeUnorm8>(tex,s,float2(-u.offset[k].x, u.offset[k].y) + uv,T(0)), w, acc);
     [ForceUnroll]
     for (int k = 0; k < 4; k++)
-        acc = fma(tex.SampleLevel(s, float2(-u.offset[k].x, -u.offset[k].y) + uv, 0.0f), w, acc);
+        acc = glassFma(sampleGlassBackdrop<T,kNativeUnorm8>(tex,s,float2(-u.offset[k].x, -u.offset[k].y) + uv,T(0)), w, acc);
     return vector<T, 4>(vector<T, 3>(edrScale) * acc.xyz, acc.w);
 }
 
@@ -93,7 +93,7 @@ public half4 diamond13(half4 center, half4 left, half4 up, half4 right, half4 do
     let far = ((left2 + up2) + right2) + down2;
     // G13S-B0: Apple's decoded half FMA chain is centre, diagonal, axial, far.
     // Direct instruction/constant-bank derivation: work/finish/provenance/ARITHMETIC.md.
-    let v = fma(far, half4(kDiamondFar), fma(axial, half4(kDiamondAxial), fma(diag, half4(kDiamondDiagonal), center * kDiamondCenter)));
+    let v = glassFma(far, half4(kDiamondFar), glassFma(axial, half4(kDiamondAxial), glassFma(diag, half4(kDiamondDiagonal), center * kDiamondCenter)));
     return half4(select(abs(v.xyz) < half3(half(0.0001)), half3(0.0h), v.xyz), v.w);
 }
 
@@ -106,7 +106,7 @@ public half4 diamond13Unflushed(half4 center, half4 left, half4 up, half4 right,
     let diag = ((upRight + upLeft) + downLeft) + downRight;
     let axial = ((left + up) + right) + down;
     let far = ((left2 + up2) + right2) + down2;
-    return fma(far, half4(kDiamondFar), fma(axial, half4(kDiamondAxial), fma(diag, half4(kDiamondDiagonal), center * kDiamondCenter)));
+    return glassFma(far, half4(kDiamondFar), glassFma(axial, half4(kDiamondAxial), glassFma(diag, half4(kDiamondDiagonal), center * kDiamondCenter)));
 }
 
 /// Diamond filter with the summation order of the per-level kernel's single-texel path.
@@ -117,7 +117,7 @@ public half4 diamond13Single(half4 center, half4 left, half4 up, half4 right, ha
     let diag = ((downLeft + upLeft) + upRight) + downRight;
     let axial = ((up + left) + down) + right;
     let far = ((up2 + left2) + down2) + right2;
-    let v = fma(far, half4(kDiamondFar), fma(diag, half4(kDiamondDiagonal), fma(axial, half4(kDiamondAxial), center * kDiamondCenter)));
+    let v = glassFma(far, half4(kDiamondFar), glassFma(diag, half4(kDiamondDiagonal), glassFma(axial, half4(kDiamondAxial), center * kDiamondCenter)));
     return half4(select(abs(v.xyz) < half3(half(0.0001)), half3(0.0h), v.xyz), v.w);
 }
 

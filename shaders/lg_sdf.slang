@@ -26,6 +26,16 @@ float zeroIfZero(float hi, float v)
     return selectFast(hi == 0.0f, 0.0f, v);
 }
 
+// The original half-template Float32 mix uses two separately rounded
+// FMA1402 operations. Public float and non-native compilation retain lerp.
+float sdfMixF32<T : __BuiltinFloatingPointType>(float a,float b,float t)
+{
+#if LG_M1_SF_EMULATION
+    if(T is half)return fmaSafeFused(t,b,fmaSafeFused(-t,a,a));
+#endif
+    return lerp(a,b,t);
+}
+
 /// SDF of the first-quadrant corner of a rounded box. `circular` blends each axis between a
 /// continuous corner (0) and a circular arc (1). Returns (distance, gradient).
 ///
@@ -43,33 +53,87 @@ vector<T, 3> supercircleSDFBody<T : __BuiltinFloatingPointType>(float2 p, float2
 {
     let r = abs(radius);
     let rk = r * kContinuousCornerExtent;
-    let extent = lerp(rk, r, max(circular.x, circular.y));
+    let extent = sdfMixF32<T>(rk,r,max(circular.x,circular.y));
     let pb = p - halfSize;
     let q = float2(extent) + pb;
 
     // Position inside the corner cell, 0 at the corner-cell origin, 1 at the box edge.
     let c = abs(max(float2(0.0f), (pb + float2(rk)) / float2(rk)));
-    let len = sqrt(dot(c, c));
+    bool circularOnly=false;
+#if LG_M1_SF_EMULATION
+    if(T is half){
+        uint2 words=asuint(c);
+        circularOnly=asuint(circular.x)==0x3f800000u && asuint(circular.y)==0x3f800000u
+            && words.x<=0x5d800000u && words.y<=0x5d800000u
+            && max(words.x,words.y)>=0x30800000u;
+    }
+#endif
+    // This guard proves continuous finite, so both selector-1 axis mixes
+    // reduce to circle. Preserve the later weight-dependent paired mix.
+    float len=0.0f;
+    [branch]if(!circularOnly)len=sdfSqrtF32<T>(sdfDotF32<T>(c));
     let hi = max(c.x, c.y);
     let lo = min(c.x, c.y);
     let t = zeroIfZero(hi, saturate(lo / hi));
 
     // Continuous-corner distance: radial length corrected by a quartic in the aspect ratio t.
-    let poly = (((3.15601f - t * 0.926054f) * t + -3.64122f) * t + 1.26803f) * t + 0.268531f;
-    let continuous = (len + 1.0f) + -1.0f / (1.0f - t * t * saturate(len) * poly);
+    float continuous=0.0f;
+    [branch]if(!circularOnly){
+#if LG_M1_SF_EMULATION
+    if(T is half){
+        // Original0x6fc/70a/71a/726 evaluates the negative polynomial.
+        float stage=fmaSafeFused(t,-0.926054f,3.15601f);
+        stage=fmaSafeFused(stage,t,-3.64122f);
+        stage=fmaSafeFused(stage,t,1.26803f);
+        float negativePolynomial=fmaSafeFused(stage,-t,-0.268531f);
+        float factor=orderedMultiply(orderedMultiply(t,t),saturate(len));
+        float denominator=fmaSafeFused(negativePolynomial,factor,1.0f);
+        // Preserve AIR sqrt(norm)+1. M1's fast-sqrt product contracts
+        // at0x75a; that backend lowering has different special handling.
+        float lengthPlusOne=fmaSafeAdd(len,1.0f);
+        continuous=fmaSafeSubtract(lengthPlusOne,1.0f/denominator);
+    }else
+#endif
+    {
+        let poly=(((3.15601f-t*0.926054f)*t+-3.64122f)*t+1.26803f)*t+0.268531f;
+        continuous=(len+1.0f)+-1.0f/(1.0f-t*t*saturate(len)*poly);
+    }
+
+    }
 
     // Circular-arc distance in the same normalized cell.
-    let a = max(float2(0.0f), c * kContinuousCornerExtent + float2(-0.528665f));
-    let circle = sqrt(dot(a, a)) * 0.65416557f + 0.34583443f;
+    float2 a;
+#if LG_M1_SF_EMULATION
+    if(T is half)a=max(float2(0.0f),float2(
+        fmaSafeFused(c.x,kContinuousCornerExtent,-0.528665f),
+        fmaSafeFused(c.y,kContinuousCornerExtent,-0.528665f)));
+    else
+#endif
+        a=max(float2(0.0f),c*kContinuousCornerExtent+float2(-0.528665f));
+    float circle;
+#if LG_M1_SF_EMULATION
+    if(T is half)circle=fmaSafeFused(sdfSqrtF32<T>(sdfDotF32<T>(a)),0.65416557f,0.34583443f);
+    else
+#endif
+        circle=sdfSqrtF32<T>(sdfDotF32<T>(a))*0.65416557f+0.34583443f;
 
-    let dx = lerp(continuous, circle, circular.x);
-    let dy = lerp(continuous, circle, circular.y);
+    let dx = circularOnly ? circle : sdfMixF32<T>(continuous,circle,circular.x);
+    let dy = circularOnly ? circle : sdfMixF32<T>(continuous,circle,circular.y);
     let s = float(c.y > c.x ? 1 : -1);
-    let w = saturate((0.5f - s) + s * t);
-    let cornerDist = half(lerp(dx, dy, w) + -1.0f);
+    float w;
+#if LG_M1_SF_EMULATION
+    if(T is half)w=saturate(fmaSafeFused(t,s,fmaSafeSubtract(0.5f,s)));
+    else
+#endif
+        w=saturate((0.5f-s)+s*t);
+    half cornerDist;
+    if (T is half)
+        cornerDist = roundToHalf(sdfMixF32<T>(dx,dy,w) + -1.0f);
+    else
+        cornerDist = half(sdfMixF32<T>(dx,dy,w) + -1.0f);
 
     let m = max(float2(0.0f), q);
-    let n = vector<T, 2>(m * rsqrt(dot(m, m)));
+    let n = vector<T, 2>(m * sdfRsqrtF32<T>(sdfDotF32<T>(m)));
     let axis = selectFast(q.x > q.y, vector<T, 2>(T(1.0), T(0.0)), vector<T, 2>(T(0.0), T(1.0)));
     let d = min(max(T(q.x), T(q.y)), T(0.0)) + T(rk * float(cornerDist));
     let g = selectFast((n.x + n.y) > T(0.0), n, axis);
@@ -80,8 +144,33 @@ vector<T, 3> supercircleSDFBody<T : __BuiltinFloatingPointType>(float2 p, float2
 vector<T, 4> finishSDF<T : __BuiltinFloatingPointType>(float2 p, T dist, vector<T, 2> g0, SdfFragmentUniforms u)
 {
     let pe = float2(p.x, u.arg.x * p.y / u.arg.y);
-    let ne = vector<T, 2>(pe * rsqrt(dot(pe, pe)));
-    let g = normalize(lerp(g0, ne, vector<T, 2>(T(u.arg.w))));
+    let ne = vector<T, 2>(pe * sdfRsqrtF32<T>(sdfDotF32<T>(pe)));
+    vector<T, 2> g;
+    if (T is half)
+    {
+        // Original half SDF: two half mix FMAs, rounded x*x, y FMA,
+        // half rsqrt, then two half products (clear GB0x07c4..0x0834;
+        // specialized key/fill0x0236..0x0354). Keep the float path unchanged.
+        let blend = vector<T, 2>(T(u.arg.w));
+        let mixed = glassFma(blend, ne, glassFma(-blend, g0, g0));
+        let norm2 = glassFma(mixed.y, mixed.y, orderedMultiply(mixed.x, mixed.x));
+        let inverseLength = glassRsqrt(norm2);
+        g = vector<T, 2>(orderedMultiply(mixed.x, inverseLength),
+                          orderedMultiply(mixed.y, inverseLength));
+    }
+    else
+        g = normalize(lerp(g0, ne, vector<T, 2>(T(u.arg.w))));
+#if LG_M1_SF_EMULATION
+    if(T is half){
+        // Native half products feed y-product then x-FMA transforms;
+        // their results narrow at0x1056/105c before GB consumes them.
+        float gx=nativeHalfToFloat(half(g.x.toFloat()));
+        float gy=nativeHalfToFloat(half(g.y.toFloat()));
+        float x=fmaSafeFused(u.tr.x,gx,orderedMultiply(u.tr.y,gy));
+        float y=fmaSafeFused(u.tr.z,gx,orderedMultiply(u.tr.w,gy));
+        return vector<T,4>(dist,T(roundToHalf(x)),T(roundToHalf(y)),T(1.0));
+    }
+#endif
     let gx = g.x.toFloat();
     let gy = g.y.toFloat();
     return vector<T, 4>(dist, T(u.tr.x * gx + u.tr.y * gy), T(u.tr.z * gx + u.tr.w * gy), T(1.0));
@@ -154,10 +243,10 @@ public T sdfCoverage<T : __BuiltinFloatingPointType>(T dist, T alpha)
     // SPIR-V derivatives require float32. Native half fwidth lowers to
     // half-result derivatives followed by a half abs/add (retained AGX
     // G.code.pretty @0xf200..0xf208). Keep both narrowing points.
-    let dx = T(ddx(dist.toFloat()));
-    let dy = T(ddy(dist.toFloat()));
+    let dx = T(ddx_fine(dist.toFloat()));
+    let dy = T(ddy_fine(dist.toFloat()));
     let fw = max(abs(dx) + abs(dy), T(0.0001f));
-    return T(saturate((-dist / fw).toFloat() + 0.5f)) * alpha;
+    return T(saturate(glassDivide(-dist,fw).toFloat()+0.5f))*alpha;
 }
 
 /// Image function 46 `dfr` (CA::OGL::Metal::ShaderUtils<T>::sdf_rgba_image, fixed_frag_lph_cph.ll line 8853): a
@@ -177,4 +266,12 @@ public vector<T, 4> sdfAlphaImage<T : __BuiltinFloatingPointType>(vector<T, 4> t
 {
     let d = T(arg.x * t.w.toFloat() + arg.y);
     return vector<T, 4>(d, t.y, t.z, T(1.0));
+}
+
+float sdfDotF32<T : __BuiltinFloatingPointType>(float2 value)
+{
+#if LG_M1_SF_EMULATION
+    if (T is half) return fmaSafeFused(value.y,value.y,orderedMultiply(value.x,value.x));
+#endif
+    return dot(value,value);
 }

@@ -3,6 +3,7 @@
  */
 #include "scissor.h"
 #include "material_internal.h"
+#include "capture.h"
 #include <float.h>
 #include <limits.h>
 #include <math.h>
@@ -79,6 +80,12 @@ bool wm_glass_dod(const struct wm_glass_extent* q,
 {
     if (!q || !out || !finite_rect(R) || !finite_rect(backdrop))
         return false;
+    /* Native 18a78c828..854 skips the shifted-shadow union for an empty
+     * content rectangle and returns its original coordinates at 18a78ca1c. */
+    if (empty(R)) {
+        memmove(out,R,4*sizeof(double));
+        return true;
+    }
     bool   live = bounded(R) && !empty(R);
     double e    = wm_gaussian_expansion(q->shadow_opacity, false) * q->shadow_radius;
     double S[4], B[4], G[4];
@@ -173,20 +180,38 @@ bool wm_scissor_transform(
         memset(out, 0, 4 * sizeof(int32_t));
         return true;
     }
-    double lo[2] = {INFINITY, INFINITY}, hi[2] = {-INFINITY, -INFINITY};
-    for (unsigned y = 0; y < 2; ++y)
-        for (unsigned x = 0; x < 2; ++x) {
-            double px = r[0] + (x ? r[2] : 0), py = r[1] + (y ? r[3] : 0);
-            double v[2] = {(px * m[0] + py * m[2]) + m[4], (px * m[1] + py * m[3]) + m[5]};
-            for (unsigned i = 0; i < 2; ++i) {
-                lo[i] = fmin(lo[i], v[i]);
-                hi[i] = fmax(hi[i], v[i]);
+    double transformed[4];
+    if (!wm_uniform_rect_transform(r,m,transformed)) {
+        double lo[2] = {INFINITY, INFINITY}, hi[2] = {-INFINITY, -INFINITY};
+        for (unsigned y = 0; y < 2; ++y)
+            for (unsigned x = 0; x < 2; ++x) {
+                double px = r[0] + (x ? r[2] : 0), py = r[1] + (y ? r[3] : 0);
+                double v[2] = {(px * m[0] + py * m[2]) + m[4], (px * m[1] + py * m[3]) + m[5]};
+                for (unsigned i = 0; i < 2; ++i) {
+                    lo[i] = fmin(lo[i], v[i]);
+                    hi[i] = fmax(hi[i], v[i]);
+                }
             }
+        transformed[0]=lo[0]; transformed[1]=lo[1];
+        transformed[2]=hi[0]-lo[0]; transformed[3]=hi[1]-lo[1];
+    }
+    if (antialias && transformed[2] > 0 && transformed[3] > 0) {
+        /* Updater::aa_round runs before source/output intersection. Keep its
+         * intermediate as Double so far-offscreen finite bounds can still
+         * clip to a representable output, rather than imposing an int32 gate. */
+        double x = floor(transformed[0]), y = floor(transformed[1]);
+        double rounded[4] = {x,y,ceil(transformed[0]+transformed[2])-x,
+                                   ceil(transformed[1]+transformed[3])-y};
+        bool equal = true;
+        for (unsigned i=0;i<4;++i) equal = equal && rounded[i]==transformed[i];
+        if (!equal) {
+            rounded[0]-=1; rounded[1]-=1; rounded[2]+=2; rounded[3]+=2;
         }
-    double transformed[4] = {lo[0], lo[1], hi[0] - lo[0], hi[1] - lo[1]};
+        memcpy(transformed,rounded,sizeof transformed);
+    }
     double canvas[4]      = {0, 0, w, h};
     rect_intersection(transformed, canvas, transformed);
-    if (!wm_aa_round(transformed, antialias, out))
+    if (!wm_aa_round(transformed, false, out))
         return false;
     /* An AA outset may cross the target boundary; intersect the integer result. */
     int64_t x0 = out[0] > 0 ? out[0] : 0, y0 = out[1] > 0 ? out[1] : 0;

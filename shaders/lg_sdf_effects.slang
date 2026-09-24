@@ -17,7 +17,7 @@ implementing liquidglass;
 /// sdf_fill, sdf_gradient and sdf_gradient_contour.
 float edgeCoverage(float nd)
 {
-    let fw = saturate(max(fwidth(nd), 0.0001f));
+    let fw = saturate(max(glassFwidth(nd), 0.0001f));
     return saturate(nd / fw + 0.5f);
 }
 
@@ -83,7 +83,7 @@ public T supercircleCoverage<T : __BuiltinFloatingPointType>(float2 p, float2 ci
     let circle = sqrt(dot(m, m)) * 0.65416557f + 0.34583443f;
     // QuartzCore rounds the curve distance to half in both pixel variants.
     let d = float(half(lerp(continuous, circle, a.y > a.x ? circular.x : circular.y) + -1.0f));
-    return T(saturate(0.5f - d / max(fwidth(d + 1.0f), 0.0001f)));
+    return T(saturate(0.5f - d / max(glassFwidth(d + 1.0f), 0.0001f)));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ float fwidthPerLight(float x)
     case metal:
         __intrinsic_asm "fwidth($0)";
     default:
-        return fwidth(x);
+        return glassFwidth(x);
     }
 }
 
@@ -193,7 +193,13 @@ public vector<T, 4> sdfKeyFillHighlight<T : __BuiltinFloatingPointType>(vector<T
     let p1 = p.params[1];
     let p2 = p.params[2];
     let depth = (-(p2.w + sdf.x)).toFloat();
-    let invLen = T(1.0) / sqrt(dot(sdf.yz, sdf.yz));
+    T invLen;
+#if LG_M1_SF_EMULATION
+    if (T is half)
+        invLen=glassRsqrt(glassFma(sdf.z,sdf.z,orderedMultiply(sdf.y,sdf.y)));
+    else
+#endif
+        invLen=T(1.0)/sqrt(dot(sdf.yz,sdf.yz));
     let n = vector<T, 2>(invLen) * sdf.yz;
     let ds = invLen.toFloat() * depth;
     let curvature = p2.z.toFloat();
@@ -225,7 +231,7 @@ public vector<T, 4> sdfGlassDisplacement<T : __BuiltinFloatingPointType>(vector<
 {
     let depth = (-(p.params0.z + sdf.x)).toFloat();
     let e = depth - p.params0.w.toFloat();
-    let fw = max(fwidth(e), 0.0001f);
+    let fw = max(glassFwidth(e), 0.0001f);
     let cov = zeroBelowMinusFive(e, saturate(e / fw + 0.5f) * sdf.w.toFloat());
     let h = p.params0.x.toFloat();
     let x = saturate(depth / h);
@@ -263,7 +269,7 @@ public vector<T, 4> sdfShadowPunchout<T : __BuiltinFloatingPointType>(vector<T, 
     let p0 = p.params0;
     let shadow = T(shadowFalloff(sdf.x, p0)) * sdf.w;
     let e = ((p0.z + shape.x) * p0.w).toFloat();
-    let cut = T(saturate((1.0f - e) / max(fwidth(e), 0.0001f) + 0.5f) * shape.w.toFloat());
+    let cut = T(saturate((1.0f - e) / max(glassFwidth(e), 0.0001f) + 0.5f) * shape.w.toFloat());
     return vector<T, 4>(shadow * cut) * p.color;
 }
 
@@ -291,7 +297,7 @@ static inline half4 lg_generic_punchout_product(half cut, half coverage, half fa
 public half4 sdfShadowPunchoutGeneric(half4 sdf, half4 shape, SdfShadowParams<half> p)
 {
     let e = float((p.params0.z + shape.x) * p.params0.w);
-    let cut = half(saturate((1.0f - e) / max(fwidth(e), 0.0001f) + 0.5f) * float(shape.w));
+    let cut = half(saturate((1.0f - e) / max(glassFwidth(e), 0.0001f) + 0.5f) * float(shape.w));
     return genericPunchoutProduct(cut, sdf.w, shadowFalloff<half>(sdf.x, p.params0), p.color);
 }
 
@@ -311,6 +317,27 @@ public vector<T, 4> sdfGradient<T : __BuiltinFloatingPointType>(vector<T, 4> sdf
     let e = depth + p.params0.z;
     return c * vector<T, 4>(T(edgeCoverage(e) * sdf.w.toFloat()));
 }
+
+#if LG_M1_SF_EMULATION
+// The invariant texture/coordinate gate preserves the measured nonfinite
+// coordinate policy. Filtering uses the source linear/no-mip/clamp sampler.
+// Coverage, SDF alpha and the current gradient color remain live.
+public half4 sdfGradientHardwareFixedRamp(half4 sdf,Texture2D<half4> ramp,
+    SamplerState rampSampler,SdfGradientParams<half> p)
+{
+    float depth=fmaSafeSubtract(nativeHalfToFloat(-sdf.x),p.params0.x);
+    float coordinate=orderedMultiply(fmaSafeAdd(depth,p.params0.y),p.params0.w);
+    // Every NaN distance in this extracted fixed profile selects the high edge.
+    if((nativeHalfWord(sdf.x)&0x7fffu)>0x7c00u)coordinate=1.0f;
+    float2 position=float2(nativeClampSamplerCoordinate(coordinate),0.5f);
+    let sampled=ramp.Sample(rampSampler,position);
+    let value=half4(roundToHalf(sampled.x.toFloat()),roundToHalf(sampled.y.toFloat()),
+        roundToHalf(sampled.z.toFloat()),roundToHalf(sampled.w.toFloat()));
+    let c=value*p.color;
+    let e=fmaSafeAdd(depth,p.params0.z);
+    return c*half4(half(edgeCoverage(e)*sdf.w.toFloat()));
+}
+#endif
 
 /// CASDFGradientContourEffect. params[0] = (distance offset, 1 / radius, gradient start, gradient
 /// end), params[1] = (contour offset, opacity, -, midpoint), params[2].xy = gradient direction.
@@ -354,7 +381,7 @@ public vector<T, 4> sdfVisualization<T : __BuiltinFloatingPointType>(vector<T, 4
 public vector<T, 4> sdfRim<T : __BuiltinFloatingPointType>(vector<T, 4> sdf, vector<T, 4> color, T width, bool soft)
 {
     let d = sdf.x.toFloat();
-    let fw = T(max(fwidth(d), 0.0001f)).toFloat();
+    let fw = T(max(glassFwidth(d), 0.0001f)).toFloat();
     let w = width.toFloat();
     var r = T(saturate(d / fw + 0.5f)) * T(saturate((w - d) / fw + 0.5f));
     if (soft)
@@ -426,9 +453,23 @@ public struct VibrantColorMatrix<T : __BuiltinFloatingPointType>
 public vector<T, 4> vibrantColorMatrixSourceOver<T : __BuiltinFloatingPointType>(vector<T, 4> src, vector<T, 4> dst, VibrantColorMatrix<T> vcm) where T : IGlassReal
 {
     let u = dst.xyz / vector<T, 3>(max(dst.w, T.glassEps()));
-    let lin = vector<T, 4>(u.x) * vcm.m[0] + vector<T, 4>(u.y) * vcm.m[1] + vector<T, 4>(u.z) * vcm.m[2] + vcm.m[3] * vector<T, 4>(dst.w) + vcm.m[4];
+    var lin = vector<T, 4>(u.x) * vcm.m[0] + vector<T, 4>(u.y) * vcm.m[1] + vector<T, 4>(u.z) * vcm.m[2] + vcm.m[3] * vector<T, 4>(dst.w) + vcm.m[4];
+    // Original half VCM: G+bias, R, B, A are four distinct FMAs.
+    // Preserve the prior float specialization until its schedule is qualified.
+    if (T is half)
+        lin = glassFma(vcm.m[3], vector<T, 4>(dst.w),
+                  glassFma(vcm.m[2], vector<T, 4>(u.z),
+                      glassFma(vcm.m[0], vector<T, 4>(u.x),
+                          glassFma(vcm.m[1], vector<T, 4>(u.y), vcm.m[4]))));
     let a = saturate(lin.w);
     var c = vector<T, 4>(lin.xyz * vector<T, 3>(a), a) * vector<T, 4>(src.w);
+    if (T is half)
+    {
+        let alpha = orderedMultiply(a, src.w);
+        c = vector<T, 4>(orderedMultiply(lin.x, alpha),
+                         orderedMultiply(lin.y, alpha),
+                         orderedMultiply(lin.z, alpha), alpha);
+    }
     let limit = vcm.opts.x;
     if (limit > T(0.0))
     {
@@ -442,11 +483,24 @@ public vector<T, 4> vibrantColorMatrixSourceOver<T : __BuiltinFloatingPointType>
         }
         else
         {
-            let rgb = clamp(c.xyz / vector<T, 3>(max(c.w, T.glassEps())), vector<T, 3>(T(-0.75)), vector<T, 3>(limit));
+            var unpremultiplied = c.xyz / vector<T, 3>(max(c.w, T.glassEps()));
+            if (T is half)
+            {
+                // Native reciprocal returns float; each mixed product narrows
+                // only after multiplication (opcodes1863 and1798).
+                let reciprocal = 1.0f / max(c.w, T.glassEps()).toFloat();
+                unpremultiplied = vector<T, 3>(
+                    T(roundToHalf(c.x.toFloat() * reciprocal)),
+                    T(roundToHalf(c.y.toFloat() * reciprocal)),
+                    T(roundToHalf(c.z.toFloat() * reciprocal)));
+            }
+            let rgb = clamp(unpremultiplied, vector<T, 3>(T(-0.75)), vector<T, 3>(limit));
             c = vector<T, 4>(rgb * vector<T, 3>(c.w), c.w);
         }
     }
-    let o = vector<T, 4>(T(1.0) - c.w) * dst + c;
+    var o = vector<T, 4>(T(1.0) - c.w) * dst + c;
+    if (T is half)
+        o = glassFma(vector<T, 4>(orderedSubtract(T(1.0), c.w)), dst, c);
     return vector<T, 4>(o.xyz, saturate(o.w));
 }
 
@@ -457,9 +511,23 @@ public vector<T, 4> vibrantColorMatrixSourceOver<T : __BuiltinFloatingPointType>
 public vector<T, 4> backdropAwareVibrantColorMatrixSourceOver<T : __BuiltinFloatingPointType>(vector<T, 4> src, vector<T, 4> backdrop, vector<T, 4> dst, VibrantColorMatrix<T> vcm) where T : IGlassReal
 {
     let u = backdrop.xyz / vector<T, 3>(max(backdrop.w, T.glassEps()));
-    let lin = vector<T, 4>(u.x) * vcm.m[0] + vector<T, 4>(u.y) * vcm.m[1] + vector<T, 4>(u.z) * vcm.m[2] + vcm.m[3] * vector<T, 4>(backdrop.w) + vcm.m[4];
+    var lin = vector<T, 4>(u.x) * vcm.m[0] + vector<T, 4>(u.y) * vcm.m[1] + vector<T, 4>(u.z) * vcm.m[2] + vcm.m[3] * vector<T, 4>(backdrop.w) + vcm.m[4];
+    // Original half VCM: G+bias, R, B, A are four distinct FMAs.
+    // Preserve the prior float specialization until its schedule is qualified.
+    if (T is half)
+        lin = glassFma(vcm.m[3], vector<T, 4>(backdrop.w),
+                  glassFma(vcm.m[2], vector<T, 4>(u.z),
+                      glassFma(vcm.m[0], vector<T, 4>(u.x),
+                          glassFma(vcm.m[1], vector<T, 4>(u.y), vcm.m[4]))));
     let a = saturate(lin.w);
     var c = vector<T, 4>(lin.xyz * vector<T, 3>(a), a) * vector<T, 4>(src.w);
+    if (T is half)
+    {
+        let alpha = orderedMultiply(a, src.w);
+        c = vector<T, 4>(orderedMultiply(lin.x, alpha),
+                         orderedMultiply(lin.y, alpha),
+                         orderedMultiply(lin.z, alpha), alpha);
+    }
     let limit = vcm.opts.x;
     if (limit > T(0.0))
     {
@@ -473,11 +541,24 @@ public vector<T, 4> backdropAwareVibrantColorMatrixSourceOver<T : __BuiltinFloat
         }
         else
         {
-            let rgb = clamp(c.xyz / vector<T, 3>(max(c.w, T.glassEps())), vector<T, 3>(T(-0.75)), vector<T, 3>(limit));
+            var unpremultiplied = c.xyz / vector<T, 3>(max(c.w, T.glassEps()));
+            if (T is half)
+            {
+                // Native reciprocal returns float; each mixed product narrows
+                // only after multiplication (opcodes1863 and1798).
+                let reciprocal = 1.0f / max(c.w, T.glassEps()).toFloat();
+                unpremultiplied = vector<T, 3>(
+                    T(roundToHalf(c.x.toFloat() * reciprocal)),
+                    T(roundToHalf(c.y.toFloat() * reciprocal)),
+                    T(roundToHalf(c.z.toFloat() * reciprocal)));
+            }
+            let rgb = clamp(unpremultiplied, vector<T, 3>(T(-0.75)), vector<T, 3>(limit));
             c = vector<T, 4>(rgb * vector<T, 3>(c.w), c.w);
         }
     }
-    let o = vector<T, 4>(T(1.0) - c.w) * dst + c;
+    var o = vector<T, 4>(T(1.0) - c.w) * dst + c;
+    if (T is half)
+        o = glassFma(vector<T, 4>(orderedSubtract(T(1.0), c.w)), dst, c);
     return vector<T, 4>(o.xyz, saturate(o.w));
 }
 

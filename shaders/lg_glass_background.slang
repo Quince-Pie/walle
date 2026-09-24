@@ -73,7 +73,16 @@ public struct GlassBackgroundUniformsSdf<T : __BuiltinFloatingPointType>
 
 vector<T, 3> applyColorMatrix<T : __BuiltinFloatingPointType>(vector<T, 3> c, half4 m0, half4 m1, half4 m2)
 {
-    return vector<T, 3>(dot(c, vector<T, 3>(m0.xyz)), dot(c, vector<T, 3>(m1.xyz)), dot(c, vector<T, 3>(m2.xyz)));
+    if (T is float)
+        return vector<T, 3>(dot(c, vector<T, 3>(m0.xyz)),
+                            dot(c, vector<T, 3>(m1.xyz)),
+                            dot(c, vector<T, 3>(m2.xyz)));
+    // Original half row schedule: red multiply, green FMA, blue FMA; the bias
+    // is added separately by the caller (clear GB 0x1c48..0x1c82).
+    return vector<T, 3>(
+        glassFma(c.z, T(m0.z), glassFma(c.y, T(m0.y), orderedMultiply(c.x, T(m0.x)))),
+        glassFma(c.z, T(m1.z), glassFma(c.y, T(m1.y), orderedMultiply(c.x, T(m1.x)))),
+        glassFma(c.z, T(m2.z), glassFma(c.y, T(m2.y), orderedMultiply(c.x, T(m2.x)))));
 }
 
 vector<T, 3> colorMatrixBias<T : __BuiltinFloatingPointType>(half4 m0, half4 m1, half4 m2)
@@ -81,11 +90,27 @@ vector<T, 3> colorMatrixBias<T : __BuiltinFloatingPointType>(half4 m0, half4 m1,
     return vector<T, 3>(T(m0.w), T(m1.w), T(m2.w));
 }
 
+float2 displacedSampleUV<T : __BuiltinFloatingPointType>(T lift, vector<T, 2> n, float2 srcUV)
+{
+    if (T is float)
+        return float2(vector<T, 2>(lift) * n + vector<T, 2>(srcUV));
+    return glassFma(float2(lift.toFloat()), float2(n), srcUV);
+}
+
 /// Blur-radius modulation for a refracted tap: the base radius is attenuated by up to three ramps
 /// over the refracted depth (`blur_dist*` breakpoints, `blur_alpha*` weights).
 T refractedBlurRadius<T : __BuiltinFloatingPointType>(T depth, float3 invSpan, float3 bias, GlassBackgroundUniforms<T> u)
 {
-    let w = vector<T, 3>(saturate(fma(float3(depth.toFloat()), invSpan, bias)));
+    let w = vector<T, 3>(saturate(glassFma(float3(depth.toFloat()), invSpan, bias)));
+    if(T is half){
+        // Original inner0x1a22..0x1a40 / outer0x1ae6..0x1b04:
+        // z multiply, then y FMA, then x FMA, then separate subtraction.
+        let sum=glassFma(u.blur_alpha1,w.x,
+            glassFma(u.blur_alpha2,w.y,orderedMultiply(u.blur_alpha3,w.z)));
+        let alpha=orderedSubtract(u.blur_alpha0,sum);
+        // Original mixed MUL1796 writes a half radius before the LOD remap.
+        return T(roundToHalf(orderedMultiply(u.blur_radius,alpha.toFloat())));
+    }
     let a = vector<T, 3>(u.blur_alpha1, u.blur_alpha2, u.blur_alpha3) * w;
     let alpha = u.blur_alpha0 - (a.x + a.y + a.z);
     return T(u.blur_radius * alpha.toFloat());
@@ -99,15 +124,26 @@ T refractedBlurRadius<T : __BuiltinFloatingPointType>(T depth, float3 invSpan, f
 ///  coverage:  antialiased shape coverage.
 /// Returns premultiplied colour: the drop shadow outside the shape, the refracted/blurred/tinted
 /// backdrop inside, blended by coverage.
-public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed : bool>(
+public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed : bool, let kNativeUnorm8 : bool = false>(
     float2 srcUV, vector<T, 2> shadowSDF, T dist, float2 grad, T coverage,
     Texture2D<vector<T, 4>> source, SamplerState sourceSampler, GlassBackgroundUniforms<T> u, T edrScale)
     where T : IGlassReal
     where vector<T, 4> : ITexelElement
 {
     let x86 = u.x86_workaround.toFloat() != 0.0f;
-    let n = vector<T, 2>(T(dot(grad, u.displacement_mat.xy)), T(dot(grad, u.displacement_mat.zw)));
-    let uv = vector<T, 2>(srcUV);
+    var n = vector<T, 2>(T(dot(grad, u.displacement_mat.xy)), T(dot(grad, u.displacement_mat.zw)));
+    // Original clear0x17b0/0x17b8 mixed-FMA results are HALF registers.
+    // Preserve this narrowing before those registers feed Float32 UV FMAs.
+    if(T is half)n=vector<T,2>(
+        T(roundToHalf(fmaSafeFused(grad.y,u.displacement_mat.y,
+                                  orderedMultiply(grad.x,u.displacement_mat.x)))),
+        T(roundToHalf(fmaSafeFused(grad.y,u.displacement_mat.w,
+                                  orderedMultiply(grad.x,u.displacement_mat.z)))));
+
+    // The original compiled sampler-coordinate path retains srcUV in float.
+    // M1 opcode 1414 forms half*half + float with a float result (for example
+    // clear GB 0x187a, 0x1882, 0x1a60, 0x1a68, 0x1b24, 0x1b2c). Explicitly
+    // preserve that FMA instead of rounding the source UV/product/sum to half.
 
     // Drop shadow, drawn where the shape is not fully opaque.
     vector<T, 4> shadow = vector<T, 4>(T(0.0));
@@ -115,13 +151,15 @@ public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed :
     {
         let depth = -(u.shadow_dist_offset + dist);
         let lift = bevelProfile(depth * T(u.shadow_inv_height), T(u.shadow_amount));
-        let shadowUV = vector<T, 2>(lift) * n + uv;
+        let shadowUV = displacedSampleUV(lift, n, srcUV);
 
         // Gaussian-like falloff of the shadow edge: an odd polynomial in half precision.
         let x = half(u.shadow_inv_radius * shadowSDF.x.toFloat());
         let s = saturate(x * 0.25h + 0.5h) * 4.0h + -2.0h;
         let s2 = s * s;
-        let falloff = fma(fma(fma(fma(0.002954h, s2, -0.03445h), s2, 0.1682h), s2, -0.5605h), s, 0.5h);
+        half falloff;
+        if (T is half) { falloff = glassFma(glassFma(glassFma(glassFma(0.002954h, s2, -0.03445h), s2, 0.1682h), s2, -0.5605h), s, 0.5h); }
+        else { falloff = fma(fma(fma(fma(0.002954h, s2, -0.03445h), s2, 0.1682h), s2, -0.5605h), s, 0.5h); }
         let alpha = T(falloff) * shadowSDF.y * u.shadow_opacity;
         if (alpha < T.glassEps() && coverage == T(0.0))
             discard;
@@ -129,7 +167,7 @@ public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed :
         vector<T, 4> c;
         if (u.shadow_contribution > T.glassEps().toFloat())
         {
-            let tap = source.SampleLevel(sourceSampler, float2(shadowUV), blurLevel(T(u.shadow_blur_radius)).toFloat());
+            let tap = sampleGlassBackdrop<T,kNativeUnorm8>(source,sourceSampler,float2(shadowUV),blurLevel(T(u.shadow_blur_radius)));
             let rgb = flushNegligible(unpremultiply(tap));
             let tinted = applyColorMatrix(rgb, u.shadow_cm0, u.shadow_cm1, u.shadow_cm2) * T(u.shadow_contribution)
                 + colorMatrixBias<T>(u.shadow_cm0, u.shadow_cm1, u.shadow_cm2);
@@ -158,8 +196,8 @@ public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed :
             let invSpan = float3(1.0f) / span;
             let bias = -d0 / span;
             let innerRadius = refractedBlurRadius(inner + dist, invSpan, bias, u);
-            let innerUV = uv + vector<T, 2>(inner) * n;
-            var tap = source.SampleLevel(sourceSampler, float2(innerUV), blurLevel(innerRadius).toFloat());
+            let innerUV = displacedSampleUV(inner, n, srcUV);
+            var tap = sampleGlassBackdrop<T,kNativeUnorm8>(source,sourceSampler,float2(innerUV),blurLevel(innerRadius));
             c = vector<T, 4>(flushNegligible(tap.rgb), tap.a);
 
             if (u.refraction_opacity > T(0.0))
@@ -168,8 +206,8 @@ public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed :
                 let outerAmount = T(u.outer_refraction_amount);
                 let outer = bevelProfile(T(u.outer_refraction_inv_height) * -dist, outerAmount);
                 let outerRadius = refractedBlurRadius(outer + dist, invSpan, bias, u);
-                let outerUV = vector<T, 2>(outer) * n + uv;
-                let tap2 = source.SampleLevel(sourceSampler, float2(outerUV), blurLevel(outerRadius).toFloat());
+                let outerUV = displacedSampleUV(outer, n, srcUV);
+                let tap2 = sampleGlassBackdrop<T,kNativeUnorm8>(source,sourceSampler,float2(outerUV),blurLevel(outerRadius));
                 let c2 = vector<T, 4>(flushNegligible(tap2.rgb), tap2.a);
                 let fade = T(glassRamp(float1(dist.toFloat()), float1(u.refraction_threshold0), float1(u.refraction_threshold1)).x);
                 c = glassMix(c, c2, u.refraction_opacity * fade, x86);
@@ -177,7 +215,7 @@ public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed :
         }
         else
         {
-            let tap = source.SampleLevel(sourceSampler, srcUV, blurLevel(T(u.blur_radius)).toFloat());
+            let tap = sampleGlassBackdrop<T,kNativeUnorm8>(source,sourceSampler,srcUV,blurLevel(T(u.blur_radius)));
             c = vector<T, 4>(flushNegligible(tap.rgb), tap.a);
         }
 
@@ -186,7 +224,7 @@ public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed :
         vector<T, 4> col;
         if (u.face_opacity > T(0.0))
         {
-            let face = applyColorMatrix(rgb, u.face_cm0, u.face_cm1, u.face_cm2) + colorMatrixBias<T>(u.face_cm0, u.face_cm1, u.face_cm2);
+            let face = orderedAdd(applyColorMatrix(rgb, u.face_cm0, u.face_cm1, u.face_cm2), colorMatrixBias<T>(u.face_cm0, u.face_cm1, u.face_cm2));
             col = vector<T, 4>(glassMix(rgb, face, u.face_opacity, x86), T(1.0));
         }
         else
@@ -199,13 +237,20 @@ public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed :
         {
             let bleedAmount = T(u.edge_bleed_amount);
             let bleed = bevelProfile(-dist * T(u.edge_bleed_inv_height), bleedAmount);
-            let bleedUV = vector<T, 2>(bleed) * n + uv;
-            let tap = source.SampleLevel(sourceSampler, float2(bleedUV), blurLevel(T(u.edge_bleed_blur_radius)).toFloat());
+            let bleedUV = displacedSampleUV(bleed, n, srcUV);
+            let tap = sampleGlassBackdrop<T,kNativeUnorm8>(source,sourceSampler,float2(bleedUV),blurLevel(T(u.edge_bleed_blur_radius)));
             let brgb = flushNegligible(unpremultiply(tap));
-            let tint = applyColorMatrix(brgb, u.bleed_cm0, u.bleed_cm1, u.bleed_cm2) + colorMatrixBias<T>(u.bleed_cm0, u.bleed_cm1, u.bleed_cm2);
+            let tint = orderedAdd(applyColorMatrix(brgb, u.bleed_cm0, u.bleed_cm1, u.bleed_cm2), colorMatrixBias<T>(u.bleed_cm0, u.bleed_cm1, u.bleed_cm2));
             let ramp = T(glassRamp(float1(dist.toFloat()), float1(u.edge_bleed_dist0.toFloat()), float1(u.edge_bleed_dist1.toFloat())).x);
-            let luma = saturate(dot(col.rgb, vector<T, 3>(T(0.2125f), T(0.7154f), T(0.0721f))));
-            var k = u.bleed_darken.x * luma + u.bleed_darken.y;
+            T luma;
+            if (T is float)
+                luma = saturate(dot(col.rgb, vector<T, 3>(T(0.2125f), T(0.7154f), T(0.0721f))));
+            else
+                luma = saturate(glassFma(col.b, T(0.0721f), glassFma(col.g, T(0.7154f), col.r * T(0.2125f))));
+            T k;
+            // Original regular0x1e06 is a fused half operation.
+            if(T is half)k=glassFma(u.bleed_darken.x,luma,u.bleed_darken.y);
+            else k=u.bleed_darken.x*luma+u.bleed_darken.y;
             k = k * k;
             k = k * ramp;
             k = k * k;
@@ -224,23 +269,23 @@ public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed :
         if (u.sdr_shadow_dist0 > dist)
             h = T(1.0);
         else if (!(u.sdr_shadow_dist1 <= dist))
-            h = glassMixS(T(1.0), T(0.0), (dist - u.sdr_shadow_dist0) / (u.sdr_shadow_dist1 - u.sdr_shadow_dist0), x86);
+            h = glassMixS(T(1.0), T(0.0), glassDivide(dist-u.sdr_shadow_dist0,u.sdr_shadow_dist1-u.sdr_shadow_dist0), x86);
         else
             h = T(0.0);
         let a = saturate(o.a);
-        let held = vector<T, 4>(vector<T, 3>(u.sdr_white_value) * o.rgb * vector<T, 3>(a) / vector<T, 3>(max(o.a, T.glassEps())), a);
+        let held = vector<T, 4>(glassDivide(vector<T,3>(u.sdr_white_value)*o.rgb*vector<T,3>(a),vector<T,3>(max(o.a,T.glassEps()))), a);
         o = glassMix(o, held, h * u.holding_tone_opacity, x86);
     }
 
     // Clamp un-premultiplied colour to clamp_limit (optionally preserving hue).
     if (u.clamp_limit > T(0.0))
     {
-        var rgb = o.rgb / vector<T, 3>(max(o.a, T.glassEps()));
+        var rgb = glassDivide(o.rgb,vector<T,3>(max(o.a,T.glassEps())));
         if (u.preserve_hue > T(0.0))
         {
             let m = max(max(rgb.x, rgb.y), rgb.z);
             if (m > u.clamp_limit)
-                rgb = vector<T, 3>(u.clamp_limit / m) * rgb;
+                rgb = vector<T, 3>(glassDivide(u.clamp_limit,m)) * rgb;
         }
         else
         {
@@ -253,7 +298,7 @@ public vector<T, 4> glassBackground<T : __BuiltinFloatingPointType, let kBleed :
 }
 
 /// Entry-point body for the analytic-SDF variants (`glass_background_sdf*`).
-public vector<T, 4> glassBackgroundSDF<T : __BuiltinFloatingPointType, let kBleed : bool>(
+public vector<T, 4> glassBackgroundSDF<T : __BuiltinFloatingPointType, let kBleed : bool, let kNativeUnorm8 : bool = false>(
     float2 sdfPos, float2 srcUV, Texture2D<vector<T, 4>> source, SamplerState sourceSampler,
     GlassBackgroundUniformsSdf<T> u, T edrScale)
     where T : IGlassReal
@@ -276,21 +321,30 @@ public vector<T, 4> glassBackgroundSDF<T : __BuiltinFloatingPointType, let kBlee
         let s = computeSDFWithMode<T>(u.glass.shadow_offset + sdfPos, abs(mode) | 4, u.sdf);
         shadowSDF = s.xw;
     }
-    return glassBackground<T, kBleed>(srcUV, shadowSDF, dist, grad, coverage, source, sourceSampler, u.glass, edrScale);
+    return glassBackground<T, kBleed, kNativeUnorm8>(srcUV, shadowSDF, dist, grad, coverage, source, sourceSampler, u.glass, edrScale);
 }
 
 /// Entry-point body for the SDF-texture variants (`glass_background`, `glass_background_no_bleed`).
 /// The SDF texture holds (distance, gradient.x, gradient.y, alpha).
-public vector<T, 4> glassBackgroundTexture<T : __BuiltinFloatingPointType, let kBleed : bool>(
+public vector<T, 4> glassBackgroundTexture<T : __BuiltinFloatingPointType, let kBleed : bool, let kNativeUnorm8 : bool = false, let kNativeHalfSdf : bool = false>(
     float2 srcUV, float2 sdfUV, Texture2D<vector<T, 4>> source, SamplerState sourceSampler,
     Texture2D<vector<T, 4>> sdf, SamplerState sdfSampler, GlassBackgroundUniforms<T> u, T edrScale)
     where T : IGlassReal
     where vector<T, 4> : ITexelElement
 {
+    if(kNativeHalfSdf && T is half)
+    {
+        let s = sampleCachedSdf<T,true>(sdf,sdfSampler,sdfUV);
+        let coverage = sdfCoverage(s.x, s.w);
+        vector<T, 2> shadowSDF = vector<T, 2>(T(0.0));
+        if (coverage < T(1.0))
+            shadowSDF = sampleCachedSdf<T,true>(sdf,sdfSampler,u.shadow_offset+sdfUV).xw;
+        return glassBackground<T, kBleed, kNativeUnorm8>(srcUV, shadowSDF, s.x, float2(s.yz), coverage, source, sourceSampler, u, edrScale);
+    }
     let s = sdf.Sample(sdfSampler, sdfUV);
     let coverage = sdfCoverage(s.x, s.w);
     vector<T, 2> shadowSDF = vector<T, 2>(T(0.0));
     if (coverage < T(1.0))
         shadowSDF = sdf.Sample(sdfSampler, u.shadow_offset + sdfUV).xw;
-    return glassBackground<T, kBleed>(srcUV, shadowSDF, s.x, float2(s.yz), coverage, source, sourceSampler, u, edrScale);
+    return glassBackground<T, kBleed, kNativeUnorm8>(srcUV, shadowSDF, s.x, float2(s.yz), coverage, source, sourceSampler, u, edrScale);
 }

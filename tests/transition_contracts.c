@@ -9,15 +9,20 @@
 static unsigned pass_order(enum walle_vk_pass pass)
 {
     switch (pass) {
-        case WALLE_VK_REVEAL: return 0;
+        case WALLE_VK_SDF_CACHE: return 0; /* Independent geometry prelude. */
+        case WALLE_VK_REVEAL_MASK: return 0;
+        case WALLE_VK_REVEAL_IMAGE: return 1;
+        case WALLE_VK_REVEAL: return 2;
         case WALLE_VK_GLASS_REGULAR:
-        case WALLE_VK_GLASS_CLEAR: return 1;
-        case WALLE_VK_TINT_MASK: return 2;
-        case WALLE_VK_TINT_GRADIENT: return 3;
-        case WALLE_VK_TINT_COMPOSITE: return 4;
-        case WALLE_VK_FACE: return 5;
-        case WALLE_VK_HIGHLIGHT: return 6;
-        case WALLE_VK_PRODUCT_FINISH: return 7;
+        case WALLE_VK_GLASS_CLEAR: return 3;
+        case WALLE_VK_TINT_MASK: return 4;
+        case WALLE_VK_TINT_GRADIENT: return 5;
+        case WALLE_VK_TINT_APPLY_MASK: return 6;
+        case WALLE_VK_TINT_COMPOSITE: return 7;
+        case WALLE_VK_FACE: return 8;
+        case WALLE_VK_HIGHLIGHT: return 9;
+        case WALLE_VK_FINISH_IMAGE: return 10;
+        case WALLE_VK_PRODUCT_FINISH: return 11;
         case WALLE_VK_PASS_COUNT: break;
     }
     CHECK(false);
@@ -29,13 +34,16 @@ static void inspect(const struct walle_vk_frame *frame, uint32_t width, uint32_t
     CHECK(frame);
     if (!frame->draw_count)
         return;
-    CHECK(frame->draws && frame->capture && frame->pyramid);
-    CHECK(frame->capture->scale > 0 && frame->capture->scale <= 1);
-    CHECK(frame->capture->surface[2] > 0 && frame->capture->surface[3] > 0);
-    CHECK(frame->capture->texture[0] > 0 && frame->capture->texture[1] > 0);
-    CHECK(frame->pyramid->down_count <= 32);
+    CHECK(frame->draws);
+    if (frame->capture) {
+        CHECK(frame->pyramid);
+        CHECK(frame->capture->scale > 0 && frame->capture->scale <= 1);
+        CHECK(frame->capture->surface[2] > 0 && frame->capture->surface[3] > 0);
+        CHECK(frame->capture->texture[0] > 0 && frame->capture->texture[1] > 0);
+        CHECK(frame->pyramid->down_count <= 32);
+    }
     CHECK(frame->material_opacity >= 0 && frame->material_opacity <= 1);
-    CHECK(frame->draws[0].pass == WALLE_VK_REVEAL);
+    /* Empty/collapsed mask and GB DODs may cull those nodes independently. */
     unsigned previous_pass = 0;
     for (size_t i = 0; i < frame->draw_count; ++i) {
         const struct walle_vk_draw *d = &frame->draws[i];
@@ -45,6 +53,8 @@ static void inspect(const struct walle_vk_frame *frame, uint32_t width, uint32_t
         CHECK(d->vertex_count > 0 && d->vertex_count <= 36);
         CHECK(d->index_count > 0 && d->index_count <= 96 && d->index_count % 3 == 0);
         CHECK(d->vertices && d->indices);
+        /* Original idle foreground is a zero-alpha VCM operator; see IDLE_FACE.md. */
+        CHECK(d->pass != WALLE_VK_FACE);
         CHECK(d->scissor[0] >= 0 && d->scissor[1] >= 0 && d->scissor[2] >= 0 && d->scissor[3] >= 0);
         CHECK((uint64_t)d->scissor[0] + (uint64_t)d->scissor[2] <= width);
         CHECK((uint64_t)d->scissor[1] + (uint64_t)d->scissor[3] <= height);
@@ -57,36 +67,17 @@ static void inspect(const struct walle_vk_frame *frame, uint32_t width, uint32_t
                 CHECK(isfinite(d->vertices[j].source_uv[k]));
             }
         if (d->pass == WALLE_VK_GLASS_REGULAR || d->pass == WALLE_VK_GLASS_CLEAR) {
+            CHECK(frame->capture && frame->pyramid);
             float mode;
             memcpy(&mode, d->glass + 8, 4);
             CHECK(mode == 4 || mode == -4 || mode == 0);
             CHECK(d->shape_mode == (uint32_t)(int32_t)mode);
-        } else if (d->pass == WALLE_VK_FACE) {
-            CHECK(d->shape_mode == 10);
+        } else if (d->pass == WALLE_VK_REVEAL || d->pass == WALLE_VK_REVEAL_IMAGE
+                   || d->pass == WALLE_VK_FINISH_IMAGE || d->pass == WALLE_VK_PRODUCT_FINISH
+                   || d->pass == WALLE_VK_TINT_APPLY_MASK || d->pass == WALLE_VK_TINT_COMPOSITE) {
+            CHECK(d->shape_mode == 0 || d->shape_mode == 1);
         } else {
             CHECK(d->shape_mode == 0 || d->shape_mode == 4 || d->shape_mode == 5);
-        }
-    }
-}
-
-static void face_coordinates(const struct walle_vk_frame *frame,
-                             const struct walle_transition_geometry *geometry, double backing)
-{
-    for (size_t i = 0; i < frame->draw_count; ++i) {
-        const struct walle_vk_draw *draw = &frame->draws[i];
-        if (draw->pass != WALLE_VK_FACE)
-            continue;
-        CHECK(draw->vertex_count == 4);
-        for (size_t v = 0; v < draw->vertex_count; ++v) {
-            const struct walle_vk_vertex *vertex = &draw->vertices[v];
-            double expected[2] = {
-                backing * (geometry->center[0] + geometry->radius * vertex->local[0]),
-                backing * (geometry->center[1] - geometry->radius * vertex->local[1]),
-            };
-            for (unsigned axis = 0; axis < 2; ++axis) {
-                double tolerance = fmax(.001, fabs(expected[axis]) * 8 * FLT_EPSILON);
-                CHECK(fabs(vertex->position[axis] - expected[axis]) <= tolerance);
-            }
         }
     }
 }
@@ -113,7 +104,7 @@ static size_t invalid_contracts(void)
     struct walle_transition *stable = nullptr;
     CHECK(walle_transition_create(641, 421, 1.5, &good, &stable));
     const struct walle_vk_frame *retained;
-    CHECK(walle_transition_build(stable, .5, false, &retained));
+    CHECK(walle_transition_build(stable, .5, 0, false, &retained));
     CHECK(retained->draw_count > 0);
     size_t retained_count = retained->draw_count;
     float retained_x = retained->draws[0].vertices[0].position[0];
@@ -139,7 +130,7 @@ static size_t invalid_contracts(void)
             case 17: options.direction[0] = NAN; break;
             case 18: options.direction[1] = INFINITY; break;
             case 19: options.direction[0] = options.direction[1] = DBL_MAX; break;
-            case 20: options.active = false; break;
+            case 20: options.direction[0] = -INFINITY; break;
             case 21: options.origin[1] = -INFINITY; break;
         }
         snprintf(test_case, sizeof test_case, "invalid configuration %u, atomic update", k);
@@ -163,27 +154,31 @@ static size_t invalid_contracts(void)
     CHECK(!walle_transition_geometry_at(nullptr, .5, &after));
     CHECK(!walle_transition_geometry_at(stable, .5, nullptr));
     CHECK(!walle_transition_geometry_at(stable, NAN, &after));
-    CHECK(!walle_transition_build(nullptr, .5, false, &retained));
-    CHECK(!walle_transition_build(stable, .5, false, nullptr));
-    CHECK(!walle_transition_build(stable, INFINITY, false, &retained));
-    CHECK(!walle_transition_build(stable, -INFINITY, false, &retained));
-    CHECK(!walle_transition_build(stable, NAN, false, &retained));
-    CHECK(walle_transition_build(stable, -10, false, &retained));
+    CHECK(!walle_transition_build(nullptr, .5, 0, false, &retained));
+    CHECK(!walle_transition_build(stable, .5, 0, false, nullptr));
+    CHECK(!walle_transition_build(stable, INFINITY, 0, false, &retained));
+    CHECK(!walle_transition_build(stable, -INFINITY, 0, false, &retained));
+    CHECK(!walle_transition_build(stable, NAN, 0, false, &retained));
+    CHECK(walle_transition_build(stable, -10, 0, false, &retained));
     CHECK(!retained->plain_incoming && retained->draw_count == 0);
-    CHECK(walle_transition_build(stable, 10, false, &retained));
+    CHECK(walle_transition_build(stable, 10, 0, false, &retained));
     CHECK(retained->plain_incoming && retained->draw_count == 0);
     walle_transition_destroy(nullptr);
     walle_transition_destroy(stable);
-    /* A one-pixel side raises capture scale to1. The other side's clamp then
-     * must fit the source signed16 field, even though Vulkan transport is32. */
-    constexpr uint32_t too_wide[][2] = {{1, 32769}, {32769, 1}, {1, 65536}, {65536, 1}};
-    for (unsigned i = 0; i < sizeof too_wide / sizeof *too_wide; ++i) {
-        snprintf(test_case, sizeof test_case, "unrepresentable source clamp %ux%u", too_wide[i][0], too_wide[i][1]);
-        struct walle_transition *t = nullptr;
-        CHECK(!walle_transition_create(too_wide[i][0], too_wide[i][1], 1, &good, &t));
-        CHECK(t == nullptr);
-        ++cases;
-    }
+    /* Native packet limits remain checked at the source-planning boundary.
+     * The old thin-output rejection relied on the now-removed scale override. */
+    struct wm_capture_plan capture;
+    struct wm_pyramid_plan pyramid;
+    CHECK(wm_capture_full(32769,64,1,true,&capture));
+    CHECK(!wm_pyramid_build(&capture,1,80,1,&pyramid));
+    ++cases;
+    struct walle_transition_options inactive=good;
+    inactive.active=false;
+    struct walle_transition* inactive_transition=nullptr;
+    CHECK(walle_transition_create(641,421,1.5,&inactive,&inactive_transition));
+    CHECK(walle_transition_build(inactive_transition,.5, 0, false,&retained));
+    inspect(retained,641,421);
+    walle_transition_destroy(inactive_transition);
     return cases;
 }
 
@@ -213,7 +208,7 @@ static size_t extended_contracts(void)
                 CHECK(walle_transition_create(sizes[s][0], sizes[s][1], scales[s], &options, &t));
                 for (unsigned p = 0; p < sizeof samples / sizeof *samples; ++p) {
                     const struct walle_vk_frame *frame;
-                    CHECK(walle_transition_build(t, samples[p], false, &frame));
+                    CHECK(walle_transition_build(t, samples[p], 0, false, &frame));
                     inspect(frame, sizes[s][0], sizes[s][1]);
                 }
                 /* A successful update adopts the new output and origin. This
@@ -227,7 +222,7 @@ static size_t extended_contracts(void)
                 CHECK(fabs(g.center[0] - .25 * 333 / 1.25) < 1e-12);
                 CHECK(fabs(g.center[1] - .75 * 199 / 1.25) < 1e-12);
                 const struct walle_vk_frame *frame;
-                CHECK(walle_transition_build(t, .5, false, &frame));
+                CHECK(walle_transition_build(t, .5, 0, false, &frame));
                 inspect(frame, 333, 199);
                 walle_transition_destroy(t);
                 ++cases;
@@ -259,16 +254,16 @@ int main(void)
                     struct walle_transition *t = nullptr;
                     CHECK(walle_transition_create(sizes[size][0], sizes[size][1], backing, &options, &t));
                     const struct walle_vk_frame *frame;
-                    CHECK(walle_transition_build(t, 0, false, &frame));
+                    CHECK(walle_transition_build(t, 0, 0, false, &frame));
                     CHECK(frame->draw_count == 0 && !frame->plain_incoming && !frame->capture);
-                    CHECK(walle_transition_build(t, 1, false, &frame));
+                    CHECK(walle_transition_build(t, 1, 0, false, &frame));
                     CHECK(frame->draw_count == 0 && frame->plain_incoming && !frame->capture);
-                    CHECK(walle_transition_build(t, 0.3, true, &frame));
+                    CHECK(walle_transition_build(t, 0.3, 0, true, &frame));
                     CHECK(frame->draw_count == 0 && frame->plain_incoming);
-                    CHECK(!walle_transition_build(t, nan(""), false, &frame));
+                    CHECK(!walle_transition_build(t, nan(""), 0, false, &frame));
                     constexpr double close_values[] = {1e-15,1e-9,1e-6,0.919999999,0.999,0.999999,0.999999999999};
                     for (unsigned close = 0; close < sizeof close_values / sizeof *close_values; ++close) {
-                        CHECK(walle_transition_build(t, close_values[close], false, &frame));
+                        CHECK(walle_transition_build(t, close_values[close], 0, false, &frame));
                         inspect(frame, sizes[size][0], sizes[size][1]);
                     }
                     struct walle_transition_geometry last;
@@ -302,9 +297,8 @@ int main(void)
                                 CHECK(!covered[y*3+x] || inside);
                                 covered[y*3+x] = inside;
                             }
-                        CHECK(walle_transition_build(t, p, false, &frame));
+                        CHECK(walle_transition_build(t, p, 0, false, &frame));
                         inspect(frame, sizes[size][0], sizes[size][1]);
-                        face_coordinates(frame, &g, backing);
                         last = g;
                         ++frames;
                     }
@@ -326,7 +320,7 @@ int main(void)
                     CHECK(hypot(a.center[0]-b.center[0],a.center[1]-b.center[1]) < 0.1);
                     CHECK(fabs(a.radius-b.radius) < 0.1);
                     CHECK(!walle_transition_update(t, 0, 100, 1, &options));
-                    CHECK(walle_transition_build(t, 0.5, false, &frame));
+                    CHECK(walle_transition_build(t, 0.5, 0, false, &frame));
                     inspect(frame, sizes[size][0], sizes[size][1]);
                     walle_transition_destroy(t);
                     ++trajectories;

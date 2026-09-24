@@ -20,6 +20,11 @@ assert hashlib.sha256(Path(build['binary']['path']).read_bytes()).hexdigest()==b
 for item in build['harness_sources']+build['repository_build_files']+build['repository_application_sources']:
     if hashlib.sha256(Path(item['path']).read_bytes()).hexdigest()!=item['sha256']:
         raise SystemExit('source/provenance drift; rebuild before measurement: '+item['path'])
+for item in build['sources']:
+    relative=Path(item['path']).relative_to(work/'build/source')
+    current=repo/relative
+    if not current.is_file() or hashlib.sha256(current.read_bytes()).hexdigest()!=item['sha256']:
+        raise SystemExit('compiled input drift; rebuild before measurement: '+str(current))
 
 for item in inputs['inputs']:assert hashlib.sha256(Path(item['prepared']).read_bytes()).hexdigest()==item['prepared_sha256']
 materials=(('clear_light_untinted',1,0,'0'),('regular_dark_untinted',0,1,'0'),('clear_light_tinted',1,0,'20bc9b96'))
@@ -40,7 +45,7 @@ results=[];start=time.monotonic()
 for case in cases:
  before=time.monotonic();stdout=out/(case['tag']+'.jsonl');stderr=out/(case['tag']+'.stderr')
  with stdout.open('w') as a,stderr.open('w') as b:
-  try:process=subprocess.run(case['command'],env=env,stdout=a,stderr=b,timeout=180);code=process.returncode
+  try:process=subprocess.run(case['command'],env=env,stdout=a,stderr=b,timeout=480);code=process.returncode
   except subprocess.TimeoutExpired:code=124
  row=dict(case=case['tag'],returncode=code,elapsed_seconds=time.monotonic()-before)
  results.append(row);(out/'execution.json').write_text(json.dumps(results,indent=2)+'\n');print(row,flush=True)

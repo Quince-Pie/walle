@@ -22,14 +22,17 @@ static unsigned char fake_transition, fake_output;
 
 /* Device entry points fail closed. The frame test intentionally stops after
  * recording the source-calculated progress, before rendering or display work. */
-bool walle_transition_build(struct walle_transition *t, double progress, bool first,
+bool walle_transition_build(struct walle_transition *t, double progress, double scene_time, bool first,
                             const struct walle_vk_frame **out)
 {
-    (void)t; (void)first; (void)out;
+    (void)t; (void)first; (void)out; (void)scene_time;
     observed_progress = progress;
     ++builds;
     return false;
 }
+void walle_transition_commit(struct walle_transition *t) { (void)t; abort(); }
+bool walle_transition_recover_analytic(struct walle_transition* t,const struct walle_vk_frame** frame)
+{ (void)t; (void)frame; abort(); }
 void walle_transition_destroy(struct walle_transition *t) { (void)t; ++destroys; }
 void walle_vk_output_abort_transition(struct walle_vk_output *o) { (void)o; ++aborts; }
 void walle_vk_output_promote(struct walle_vk_output *o) { (void)o; abort(); }

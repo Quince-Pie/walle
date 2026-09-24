@@ -188,15 +188,46 @@ static void ranges(struct wm_recipe* r)
     double bleed   = r->bleed_opacity > 0 ? fabs(r->bleed_amount) : 0;
     r->plan.margin = fmax(fmax(sh, blur), fmax(refr, bleed));
 }
+static void inactive_spec(struct wm_spec* s, uint8_t style, bool dark)
+{
+    /* Default regular: SpecV1 sub_240963900, then the regular recipe's
+     * non-key tail @240965670. Default clear: post_a::inactive @240916330.
+     * Both routes retain the inner refraction and hide the highlights. */
+    s->shadow.opacity.out[0] = s->shadow.opacity.out[1] = 0;
+    s->refraction.outer_height = s->refraction.outer_amount = 0;
+    s->refraction.outer_opacity = 0;
+    s->bleed.opacity.out[0] = s->bleed.opacity.out[1] = 0;
+    for (unsigned i = 0; i < 5; i++) {
+        s->blur.distances[i] = 0;
+        s->blur.distance_kinds[i] = 0;
+        s->blur.opacities[i] = 1;
+    }
+    s->highlight.key_opacity = s->highlight.fill_opacity = 0;
+    if (style == WM_REGULAR) {
+        s->blur.radius.out[0] = 2;
+        s->blur.radius.out[1] = 4;
+        if (!dark)
+            s->face.ycc.white = .95f;
+        s->face.ycc.fill[0][3] = .35f;
+    } else {
+        s->blur.radius = (struct wm_map){.in = {48, 120}, .out = {5, 10}};
+        s->face.ycc = (struct wm_ycc){.black = dark ? .05f : .2f,
+                                     .white = dark ? .8f : .95f,
+                                     .saturation = 1,
+                                     .fill = {{1, 1, 1, dark ? .05f : .1f}}, .mask = 1};
+    }
+}
 bool wm_recipe_update(struct wm_recipe* r, const struct wm_material_input* in)
 {
-    if (!r || !in || in->style > WM_CLEAR || !in->active || !isfinite(in->width_points)
+    if (!r || !in || in->style > WM_CLEAR || !isfinite(in->width_points)
         || !isfinite(in->height_points) || in->width_points <= 0 || in->height_points <= 0
         || !isfinite(in->backing_scale) || in->backing_scale <= 0)
         return false;
     memset(r, 0, sizeof *r);
     r->input                = *in;
     r->spec                 = wm_specs[in->style * 2 + (in->dark ? 1 : 0)];
+    if (!in->active)
+        inactive_spec(&r->spec, in->style, in->dark);
     r->D                    = fmin(in->width_points, in->height_points);
     r->pixel_length         = 1. / in->backing_scale;
     const struct wm_spec* s = &r->spec;
@@ -250,7 +281,7 @@ bool wm_recipe_update(struct wm_recipe* r, const struct wm_material_input* in)
         r->shadow_blur = 0;
     adjust_blur(r);
     const struct wm_map sdr = {.in = {48, 160}, .out = {0x1.47ae14p-4, 0x1.eb851ep-3}};
-    r->sdr_shadow           = mapf(&sdr, D);
+    r->sdr_shadow           = in->active ? mapf(&sdr, D) : 0;
     r->key_height           = iom(&s->highlight.key_height, D);
     r->fill_height          = iom(&s->highlight.fill_height, D);
     r->spread               = iom(&s->highlight.spread, D);
@@ -259,7 +290,7 @@ bool wm_recipe_update(struct wm_recipe* r, const struct wm_material_input* in)
     wm_ycc_adjust(1, light * .95f + inv * 0.f, light + inv * .1f, 1, r->face_matrix);
     r->face_matrix[18] = 0;
     if (in->tint.present)
-        wm_tint_matrix(in->tint.srgb, in->dark, true, 1, r->tint_matrix);
+        wm_tint_matrix(in->tint.srgb, in->dark, in->active, 1, r->tint_matrix);
     r->plan.backdrop_scale     = s->backdrop_scale;
     r->plan.smoothness         = 0;
     r->plan.ovalization        = r->bleed_opacity > 0 ? .5 : 0;
@@ -286,7 +317,10 @@ bool wm_recipe_update(struct wm_recipe* r, const struct wm_material_input* in)
           bl                      = r->bleed_opacity > 0 ? (float)(r->bleed_blur * .5) : 0,
           br                      = (float)(r->blur_radius * .5);
     r->plan.blur_max              = fmaxf(fmaxf(sh, bl), br);
-    r->plan.blur_min              = fminf(fminf(sh, bl), r->blur_opacities[3]);
+    bool uniform = r->shadow_opacity <= 0 && r->bleed_opacity <= 0
+        && r->blur_opacities[0] == 1 && r->blur_opacities[2] == 1
+        && r->blur_opacities[3] == 1 && r->blur_opacities[4] == 1;
+    r->plan.blur_min = uniform ? br : fminf(fminf(sh, bl), r->blur_opacities[3]);
     ranges(r);
     return true;
 }
@@ -304,19 +338,6 @@ void wm_recipe_destroy(struct wm_recipe* r)
     free(r);
 }
 
-static void concat(const float a[20], const float b[20], float out[20])
-{
-    float c[20];
-    for (unsigned r = 0; r < 4; r++)
-        for (unsigned j = 0; j < 5; j++) {
-            float v
-                = j < 4 ? a[5 * r + 3] * b[15 + j] : fmaf(a[5 * r + 3], b[15 + j], a[5 * r + 4]);
-            for (int k = 2; k >= 0; k--)
-                v = fmaf(a[5 * r + (unsigned)k], b[5 * (unsigned)k + j], v);
-            c[5 * r + j] = v;
-        }
-    memcpy(out, c, 80);
-}
 static void fill_color(const struct wm_ycc* y, float out[4])
 {
     memset(out, 0, 16);
@@ -329,63 +350,8 @@ static void fill_color(const struct wm_ycc* y, float out[4])
 }
 static void composite_ycc(const struct wm_ycc* y, const float fill[4], uint8_t out[24])
 {
-    static const float m1[20] = {.212599993f,
-                                 .715200007f,
-                                 .0722000003f,
-                                 0,
-                                 0,
-                                 -.114600003f,
-                                 -.385399997f,
-                                 .5f,
-                                 0,
-                                 .5f,
-                                 .5f,
-                                 -.4542f,
-                                 -.0458000004f,
-                                 0,
-                                 .5f,
-                                 0,
-                                 0,
-                                 0,
-                                 1,
-                                 0};
-    static const float m2[20] = {1,
-                                 0,
-                                 1.57480001f,
-                                 0,
-                                 -.787400007f,
-                                 1,
-                                 -.187324002f,
-                                 -.468124002f,
-                                 0,
-                                 .32772401f,
-                                 1,
-                                 1.8556f,
-                                 0,
-                                 0,
-                                 -.9278f,
-                                 0,
-                                 0,
-                                 0,
-                                 1,
-                                 0};
-    float              a[20], b[20], c[20];
-    identity(a);
-    identity(b);
-    a[0] = y->white - y->black;
-    a[4] = y->black;
-    b[6] = b[12] = y->saturation;
-    b[9] = b[14] = (float)(.5 - (double)y->saturation * .5);
-    concat(a, m1, c);
-    concat(b, c, c);
-    concat(m2, c, c);
-    float k = 1.f - fill[3];
-    for (unsigned i = 0; i < 20; i++)
-        c[i] *= k;
-    c[4] += fill[0];
-    c[9] += fill[1];
-    c[14] += fill[2];
-    c[18] += fill[3];
+    float c[20];
+    wm_ca_ycc_composite(y->white, y->black, y->saturation, fill, c);
     unsigned n = 0;
     for (unsigned i = 0; i < 3; i++)
         for (unsigned j = 0; j < 4; j++) {
@@ -491,15 +457,17 @@ static void tint_ramp(uint8_t bytes[2048])
         x += step;
     }
 }
-bool wm_recipe_pack(const struct wm_recipe*        r,
-                    const struct wm_render_domain* d,
-                    struct wm_shader_packet*       o)
+bool wm_recipe_pack_glass(const struct wm_recipe* r, const struct wm_render_domain* d,
+                           uint8_t glass_lph[216], uint32_t* texture_function)
 {
-    if (!r || !d || !o || !d->source_width || !d->source_height || d->source_scale <= 0
-        || d->gamma <= 0)
+    if (!r || !d || !glass_lph || !texture_function || !d->source_width || !d->source_height
+        || d->source_scale <= 0 || d->gamma <= 0) {
+        if (glass_lph)
+            memset(glass_lph, 0, 216);
+        if (texture_function)
+            *texture_function = 0;
         return false;
-    memset(o, 0, sizeof *o);
-    o->plan     = r->plan;
+    }
     float sc    = (float)d->source_scale,
           mf[4] = {(float)d->transform[0],
                    (float)d->transform[2],
@@ -532,7 +500,7 @@ bool wm_recipe_pack(const struct wm_recipe*        r,
     f[17]   = -(float)r->shadow_offset[1];
     f[18]   = k * (float)(r->shadow_opacity > 0 ? r->shadow_blur * .5 : 0);
     f[19]   = (float)(1. / r->shadow_radius);
-    memcpy(o->glass_lph, f, 80);
+    memcpy(glass_lph, f, 80);
     float hr = (float)d->headroom, m = hr > 9999.f ? 9999.f : hr;
     float t = (m < 1 ? 0 : m - 1.f) / (9999.f - 1.f), face[4], bleed[4], shadow[4];
     fill_color(&r->spec.face.ycc, face);
@@ -540,14 +508,16 @@ bool wm_recipe_pack(const struct wm_recipe*        r,
     fill_color(&r->spec.shadow.ycc, shadow);
     if (r->sdr_shadow > 0)
         shadow[3] += fmaf(-t, r->sdr_shadow, r->sdr_shadow);
-    composite_ycc(&r->spec.face.ycc, face, o->glass_lph + 80);
-    composite_ycc(&r->spec.bleed.ycc, bleed, o->glass_lph + 104);
-    composite_ycc(&r->spec.shadow.ycc, shadow, o->glass_lph + 128);
+    composite_ycc(&r->spec.face.ycc, face, glass_lph + 80);
+    composite_ycc(&r->spec.bleed.ycc, bleed, glass_lph + 104);
+    composite_ycc(&r->spec.shadow.ycc, shadow, glass_lph + 128);
     float extra[2] = {(float)r->shadow_vibrancy, shadow[3]};
-    memcpy(o->glass_lph + 152, extra, 8);
-    float bo[4];
-    for (unsigned i = 0; i < 4; i++)
-        bo[i] = r->blur_opacities[i] * r->spec.blur.opacity;
+    memcpy(glass_lph + 152, extra, 8);
+    float blur_opacity = r->spec.blur.opacity;
+    float bo[4] = {r->blur_opacities[0] * blur_opacity,
+                   r->blur_opacities[1] * blur_opacity,
+                   r->blur_opacities[2] * blur_opacity,
+                   r->blur_opacities[3] * blur_opacity};
     float clamp = fmaxf(wm_srgb_decode(r->spec.face.ycc.white), 1.f),
           h[28] = {bo[0],
                    bo[0] - bo[1],
@@ -566,12 +536,12 @@ bool wm_recipe_pack(const struct wm_recipe*        r,
                    0,
                    r->shadow_opacity,
                    r->refraction_opacity,
-                   1.f - t,
-                   (float)(r->pixel_length * -2),
-                   (float)-r->pixel_length,
+                   r->input.active ? 1.f - t : 0,
+                   r->input.active ? (float)(r->pixel_length * -2) : 0,
+                   r->input.active ? (float)-r->pixel_length : 0,
                    wm_powf(clamp, 1.f / (float)d->gamma),
                    0,
-                   .97f,
+                   r->input.active ? .97f : 1,
                    0,
                    1,
                    0,
@@ -579,9 +549,23 @@ bool wm_recipe_pack(const struct wm_recipe*        r,
                    0};
     for (unsigned i = 0; i < 28; i++) {
         uint16_t v = wm_half(h[i]);
-        memcpy(o->glass_lph + 160 + 2 * i, &v, 2);
+        memcpy(glass_lph + 160 + 2 * i, &v, 2);
     }
-    o->glass_texture_function = r->bleed_opacity > 0 ? 0x45 : 0x47;
+    *texture_function = r->bleed_opacity > 0 ? 0x45 : 0x47;
+    return true;
+}
+
+bool wm_recipe_pack(const struct wm_recipe*        r,
+                    const struct wm_render_domain* d,
+                    struct wm_shader_packet*       o)
+{
+    if (!r || !d || !o || !d->source_width || !d->source_height || d->source_scale <= 0
+        || d->gamma <= 0)
+        return false;
+    memset(o, 0, sizeof *o);
+    o->plan     = r->plan;
+    if (!wm_recipe_pack_glass(r, d, o->glass_lph, &o->glass_texture_function))
+        return false;
     pack_matrix(r->face_matrix, 0, (float)d->gamma, o->face_vcm);
     pack_matrix(r->highlight_matrix, 1, (float)d->gamma, o->highlight_vcm);
     if (r->input.tint.present)
